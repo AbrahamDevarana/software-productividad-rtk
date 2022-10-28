@@ -1,0 +1,5 @@
+.ant-select-selector{
+    border: 0!important;
+    border-bottom: 1px solid rgb(81, 81, 81, .2)!important;
+    width: 100%;
+}

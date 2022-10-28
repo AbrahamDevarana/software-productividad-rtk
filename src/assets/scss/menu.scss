@@ -1,0 +1,111 @@
+@import './variables.scss';
+
+.ant-menu-sub.ant-menu-inline{
+    background-color: transparent!important;
+}
+
+.ant-menu-inline{
+    border: 0!important;; 
+}
+
+.ant-menu-title-content, .ant-menu-submenu-arrow{
+    color: white !important;
+}
+.ant-menu-title-content{
+    font-weight: 300!important;
+    
+    
+}
+
+.ant-menu-sub.ant-menu-inline > .ant-menu-item, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-item{
+   height: 45px!important;
+}
+.ant-menu-submenu-title, .ant-menu-item{
+    padding: 10px 15px!important;
+
+    &:hover{
+        color: white !important;
+    }
+}
+
+.ant-menu-light .ant-menu-item:hover, .ant-menu-light .ant-menu-item-active, .ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-light .ant-menu-submenu-active{
+    color: white !important;
+}
+
+.ant-menu-item svg:not(.text-2xl-forced){
+    font-size: 18px!important
+}
+
+.ant-menu-submenu-title .ant-menu-item-icon, .text-2xl-forced {
+    @apply text-2xl #{!important};
+}
+
+
+.menu-opt{
+    .ant-menu-title-content, .ant-menu-submenu-arrow{
+        display: none;
+        @apply group-hover:block;
+    }
+
+    .ant-menu-submenu-title{
+        justify-content: center;
+    }
+
+}
+
+.ant-menu-item, .ant-menu-submenu-title{
+    border-radius: 10px;
+    &:hover{
+        background-color: rgba(255,255,255,0.5) !important;
+    }
+}
+
+.ant-menu-submenu-selected .ant-menu-submenu-title{
+    background-color: rgba(255,255,255,0.5) !important;
+    border-radius: 10px;
+}
+
+.ant-menu-item-divider { 
+    @apply w-full h-0.5;
+    flex-shrink: 0!important;
+	border-top: 0px solid rgba(0, 0, 0, 0.08)!important;
+	border-right: 0px solid rgba(0, 0, 0, 0.08)!important;
+	border-left: 0px solid rgba(0, 0, 0, 0.08)!important;
+	height: 0.0625rem!important;
+	margin: 1rem 0px!important;
+	border-bottom: none!important;
+	opacity: 0.25!important;
+	background-color: transparent!important;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgb(255, 255, 255), rgba(255, 255, 255, 0)) !important;
+}
+
+.ant-menu-submenu-selected, .ant-menu-item {
+    color: white !important;
+    
+}
+.ant-menu-item-selected{
+
+    .ant-menu-title-content{
+        font-weight: 400!important;
+    }
+    &:after{
+        border-right: 0!important;
+    }
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
+    background-color: $blue !important;
+}
+
+.ant-menu-root{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.ant-menu-submenu{
+    &:last-child{
+        margin-top: auto;
+    }
+}
