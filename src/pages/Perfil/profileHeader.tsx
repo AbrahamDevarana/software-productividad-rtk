@@ -4,29 +4,14 @@ import Avatar from "../../components/ui/Avatar";
 import Box from "../../components/ui/Box";
 
 interface HeaderProps {
-    selectedUser: User;
+    selectedUser?: any;
     value: string;
-    setValue: () => void
-    visit: boolean;
-}
-
-interface User {
-    name: string
-    email: string
-    avatar: string
-    picture: string
-    lastName: string
-    secondLastName: string
-    position: Position
+    setValue: React.SetStateAction<any>;
+    visit?: boolean;
 }
 
 
-interface Position {
-    nombre: string
-}
-
-
-const ProfileHeader = ({ selectedUser, value, setValue, visit}: HeaderProps) => {
+const ProfileHeader = ({ selectedUser, value, setValue, visit = false}: HeaderProps) => {
     return ( 
         <>
             <Box className="h-60 w-full z-auto bg-[url('http://picsum.photos/2000/244')]">

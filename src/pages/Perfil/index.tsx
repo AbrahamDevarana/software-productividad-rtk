@@ -1,32 +1,39 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useGetProfileQuery } from "../../redux/features/profile/profileThunk";
-import { useAppSelector } from "../../redux/hooks";
+import { fetchProfile } from "../../redux/features/profile/profileThunk";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Actividad from "./actividad";
-import ProfileHeader from "./header";
+import ProfileHeader from "./profileHeader";
 import Profile from "./profile";
+import { EditProfile } from "./editProfile";
+
 
 const Perfil = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch();
     
     const [value, setValue] = useState('Perfil');
-    const user = useAppSelector(state => state.auth)
+    const { user } = useAppSelector(state => state.auth)
+    const profile = useAppSelector(state => state.profile)
+
     useEffect(() => {
-    }, [])
-    dispatch(useGetProfileQuery(1))
-    // const {selectedUser, isLoading} = useAppSelector(state => state.users.profile)
+        if(user){   
+            dispatch(fetchProfile(user.id))
+        }
+    }, [user])
+
 
 
 
     return ( 
         <>
-            {/* <ProfileHeader selectedUser={ undefined } value={""} setValue={() => {}}  /> */}
+            <ProfileHeader selectedUser={ profile } value={value} setValue={setValue}  />
             { value === 'Perfil' ?
-                <Profile /> 
+                <Profile selectedUser={ profile } /> 
                 :
                 value === 'Actividad' ?
                 <Actividad />
-                : null
+                :
+                value === 'Configuración' ? 
+                <EditProfile selectedUser={ profile } /> : null 
                 
             
             }

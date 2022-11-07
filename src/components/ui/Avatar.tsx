@@ -2,7 +2,7 @@ import React from 'react'
 
 
 interface AvatarProps{
-    picture: string;
+    picture?: string;
     userName?: string;
     className?: string;
     key?: number;

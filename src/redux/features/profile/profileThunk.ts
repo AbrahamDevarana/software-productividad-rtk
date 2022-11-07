@@ -1,26 +1,17 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../../store";
-import { selectCurrentToken } from "../auth/authSlice";
 
+import { AppDispatch, RootState } from "../../store";
+import { setProfileProvider } from "./profileProvider";
+import { checkingProfile, setProfile, setProfileError } from "./profileSlice";
 
-export const profileApi = createApi({
-    reducerPath: 'profileApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_API_URL,
-        credentials: 'include',
-        // prepareHeaders: (headers, { getState }) => {
-        //     const token = selectCurrentToken(getState() as RootState);
-        //         console.log(token);           
-        //     return headers;
-        // }
-
-    }),
-    endpoints: (builder) => ({
-        getProfile: builder.query({
-            query: () => 'profile',
-        }),
-    })
     
-})
 
-export const { useGetProfileQuery } = profileApi;
+
+export const fetchProfile = (userId:number) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(checkingProfile())
+        const result = await setProfileProvider(userId, getState)        
+        if(!result.ok) return dispatch( setProfileError(result.errorMessage) )
+        
+        dispatch( setProfile(result.profile) )
+    }
+}

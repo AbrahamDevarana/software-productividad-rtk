@@ -15,23 +15,15 @@ export default function LayoutApp({ children }: LayoutAppProps) {
    
     const navigate = useNavigate();
     useGetValidationQuery('')
-    const { loading, user } = useAppSelector((state: any) => state.auth);   
+    const { loading, user } = useAppSelector((state: any) => state.auth); 
 
     const [settingVisible, setSettingVisible] = useState(false);
     const [active, isActive] = useState(false)
-    const [visible, setVisible] = useState({
-        state: false,
-        component: '',
-        titulo: ''
-    });
 
     if(!loading && !user){
         navigate('/login')
     }
     
-  
-    const {state,  component, titulo} = visible
-
 	const onClose = () => {
 		setSettingVisible(false);
 	};
