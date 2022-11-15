@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { Avatar, Image } from 'antd';
+import brokenUser from '../../helpers/brokenUser';
 
 interface AvatarProps{
     picture?: string;
@@ -7,21 +8,15 @@ interface AvatarProps{
     className?: string;
     key?: number;
     children?: React.ReactNode | React.ReactNode[];
+    size?: 'large' | 'small' | 'default';
 }
 
-const Avatar = ({picture, userName, ...props}: AvatarProps) => {
+const AvatarProfile = ({picture = '', userName, size='large', ...props}: AvatarProps) => {
+
     return ( 
-        <>
-            {picture ? 
-                <img  key={props.key} src={picture} alt={userName} className={`rounded-full shadow ${props.className ?? props.className}`} />
-            :
-                <div key={props.key} className={`flex bg-gradient-to-tr from-gray-600 to-gray-400 rounded-full  ${props.className ?? props.className}`}>
-                    <span className="text-white m-auto">{props.children}</span>
-                </div>
-            }
-        </>
+        <Avatar size={size} src={ <Image fallback={brokenUser()} src={picture} /> } />
      );
 }
  
 
-export default Avatar;
+export default AvatarProfile;

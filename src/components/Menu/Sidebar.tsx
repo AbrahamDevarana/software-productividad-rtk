@@ -11,7 +11,7 @@ import { FaProjectDiagram, FaTasks, FaEarlybirds, FaUserFriends } from 'react-ic
 import { BiTargetLock } from 'react-icons/bi'
 import { BsGearFill } from 'react-icons/bs'
 import { TbLetterP, TbLetterT, TbLetterE } from "react-icons/tb";
-import Avatar from "../ui/Avatar";
+import AvatarProfile from "../ui/Avatar";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -74,11 +74,11 @@ export const Sidebar = ({active}:LayoutSidebar) => {
         ]),
         getItem('Objetivos', 'sub6', <BiTargetLock className={`${ active ? "justify-center" : ""}`}/>, [
             getItem('Profesionales', '/profesionales', <TbLetterP className="text-white"/>),
-            getItem('Personales', '/personales', <TbLetterP className="text-white"/> ),
+            getItem('Personales', '/objetivos-personales', <TbLetterP className="text-white"/> ),
         ]),
         getItem('','sub7', null, undefined, 'divider'),
         getItem('Configuración', 'sub8', <BsGearFill className={`${ active ? "justify-center" : ""}`}/>, [
-            getItem('Usuarios', '/usuarios', <FaUserFriends/>),
+            getItem('Usuarios', '/admin/usuarios', <FaUserFriends/>),
             // getItem('Option 6', '/usuarios'),
         ]),
       ]; 
@@ -91,7 +91,7 @@ export const Sidebar = ({active}:LayoutSidebar) => {
             <div className='divider w-full h-0.5'></div>
             
             <Link to={"/perfil"} className={`hover:text-white hover:bg-white hover:bg-opacity-50 ${url === '/perfil'? 'bg-white bg-opacity-50' : ''} rounded-ext text-center text-white flex align-middle items-center px-5 py-2 ${ active ? "justify-center px-0 group-hover:px-5" : "ml-1"}`}>
-                <Avatar picture={userAuth? userAuth.picture : ''} className="w-[30px]" /> 
+                <AvatarProfile picture={userAuth? userAuth.picture : ''} className="w-[30px]" /> 
                     <span className={ `${ active ? "hidden" : ""} mx-auto group-hover:block` }> {`${userAuth? `${userAuth.nick_name  || userAuth.name + ' ' + userAuth.lastName}`  : ''}`} 
                 </span>
             </Link>

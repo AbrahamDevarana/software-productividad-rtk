@@ -1,6 +1,6 @@
 import { Segmented } from "antd";
 
-import Avatar from "../../components/ui/Avatar";
+import AvatarProfile from "../../components/ui/Avatar";
 import Box from "../../components/ui/Box";
 
 interface HeaderProps {
@@ -18,11 +18,11 @@ const ProfileHeader = ({ selectedUser, value, setValue, visit = false}: HeaderPr
             
             </Box>
             <div className="w-full px-4 z-10">
-                <Box className="w-full -mt-8 flex mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5" >
-                    <div className="md:w-16 w-full">
-                        <Avatar picture={selectedUser.picture } userName={"Colaborador"} className="m-auto"/>
+                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-3 px-5 mr-5 justify-center" >
+                    <div className="justify-center align-middle flex">
+                        <AvatarProfile picture={selectedUser.picture } userName={"Colaborador"} className="m-auto"/>
                     </div>
-                    <div className="my-auto px-5 md:w-fit w-full text-center md:text-left">
+                    <div className="my-auto px-5 text-center md:text-left">
                         <p className="font-bold text-custom-dark2">{`${selectedUser.name} ${selectedUser.lastName || ''} ${selectedUser.secondLastName || ''}`} </p>
                         <p className="text-sm font-light text-custom-dark2"> { selectedUser.position.nombre }</p>
                     </div>

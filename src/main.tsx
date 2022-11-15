@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ConfigProvider } from "antd";
 import es_ES from 'antd/es/locale/es_ES';

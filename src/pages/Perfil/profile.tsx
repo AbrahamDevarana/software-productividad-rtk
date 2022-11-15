@@ -5,7 +5,7 @@ import {   GiPodiumWinner } from 'react-icons/gi'
 import Box from "../../components/ui/Box";
 import moment from "moment";
 import { Button } from "../../components/ui/Button";
-import Avatar from "../../components/ui/Avatar";
+import AvatarProfile from "../../components/ui/Avatar";
 import { FaProjectDiagram } from "react-icons/fa";
 import { Badge } from "../../components/ui/Badge";
 import { ProfileProps } from "../../interfaces";
@@ -142,11 +142,11 @@ const Profile = ({selectedUser}: any) => {
                     <div className="py-3 grid grid-cols-2 gap-x-5">
                         <Button btnType="primary-outline"> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
                         </div>
                     </div>
                 </div>
@@ -167,11 +167,11 @@ const Profile = ({selectedUser}: any) => {
                     <div className="py-3 grid grid-cols-2 gap-x-5">
                         <Button btnType="primary-outline"> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
                         </div>
                     </div>
                 </div>
@@ -192,11 +192,11 @@ const Profile = ({selectedUser}: any) => {
                     <div className="py-3 grid grid-cols-2 gap-x-5">
                         <Button btnType="primary-outline"> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
                         </div>
                     </div>
                 </div>
@@ -219,11 +219,11 @@ const Profile = ({selectedUser}: any) => {
                     <div className="py-3 grid grid-cols-2 gap-x-5">
                         <Button btnType="primary-outline"> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
-                            <Avatar className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
+                            <AvatarProfile className="w-7 h-7 -mx-1"/>
                         </div>
                     </div>
                 </div>
