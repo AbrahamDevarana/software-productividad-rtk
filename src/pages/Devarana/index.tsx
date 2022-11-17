@@ -29,7 +29,7 @@ export const Devarana = () => {
 
 
   return (
-    <>
+    <div className="animate__animated animate__fadeIn">
         <div>
             <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20">
             </Box>
@@ -294,6 +294,6 @@ export const Devarana = () => {
                 />
             <TextArea maxLength={modalConfig.maxLength  || 220 } showCount={true} value={Object.values(devarana)[0]} name={Object.keys(devarana)[0]} onChange={handleChange} />
         </Modal> */}
-        </>
+    </div>
   )
 }

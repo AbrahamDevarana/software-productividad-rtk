@@ -7,6 +7,8 @@ import {useState} from 'react'
 import { Sidebar } from "../Menu/Sidebar";
 import { Navbar } from "../Menu/Navbar";
 
+import 'animate.css';
+
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
 }
@@ -38,7 +40,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                     <Sidebar active={active} />
                     <div className={`p-4 transition-all duration-300 ease-in-out ml-auto ${active? "layout-size-90 group-hover:layout-size-260":"layout-size-260"} w-full relative `}> 
                         <Navbar active={active} isActive={isActive} settingVisible={settingVisible} setSettingVisible={setSettingVisible} />
-                        {children}
+                        <main  className="animate__animated animate__fadeIn">{children}</main>
                     </div>
                 </div>
             </div>

@@ -69,8 +69,6 @@ export const Sidebar = ({active}:LayoutSidebar) => {
         getItem('','sub3', null, undefined, 'divider'),
         getItem('Somos DEVARANA', '/somos-devarana', <FaEarlybirds className={` text-2xl-forced ${ active ? "justify-center text-2xl " : ""}`}/>),
         getItem('Estrategía', 'sub5', <IoIosRocket className={`${ active ? "justify-center" : ""}`}/>, [
-            // getItem('Option 5', '/'),
-            // getItem('Option 6', '/'),
         ]),
         getItem('Objetivos', 'sub6', <BiTargetLock className={`${ active ? "justify-center" : ""}`}/>, [
             getItem('Profesionales', '/profesionales', <TbLetterP className="text-white"/>),
@@ -78,8 +76,7 @@ export const Sidebar = ({active}:LayoutSidebar) => {
         ]),
         getItem('','sub7', null, undefined, 'divider'),
         getItem('Configuración', 'sub8', <BsGearFill className={`${ active ? "justify-center" : ""}`}/>, [
-            getItem('Usuarios', '/admin/usuarios', <FaUserFriends/>),
-            // getItem('Option 6', '/usuarios'),
+            getItem('Usuarios', '/admin', <FaUserFriends/>),
         ]),
       ]; 
 
@@ -90,9 +87,9 @@ export const Sidebar = ({active}:LayoutSidebar) => {
             <a href="" className='text-center text-white'>Logo</a>
             <div className='divider w-full h-0.5'></div>
             
-            <Link to={"/perfil"} className={`hover:text-white hover:bg-white hover:bg-opacity-50 ${url === '/perfil'? 'bg-white bg-opacity-50' : ''} rounded-ext text-center text-white flex align-middle items-center px-5 py-2 ${ active ? "justify-center px-0 group-hover:px-5" : "ml-1"}`}>
-                <AvatarProfile picture={userAuth? userAuth.picture : ''} className="w-[30px]" /> 
-                    <span className={ `${ active ? "hidden" : ""} mx-auto group-hover:block` }> {`${userAuth? `${userAuth.nick_name  || userAuth.name + ' ' + userAuth.lastName}`  : ''}`} 
+            <Link to={"/perfil"} className={`hover:text-white hover:bg-white hover:bg-opacity-50 ${url === '/perfil'? 'bg-white bg-opacity-50' : ''} rounded-ext text-center text-white flex align-middle items-center px-2 py-2 ${ active ? "justify-center px-0 group-hover:px-5" : "ml-1"}`}>
+                <AvatarProfile picture={userAuth? userAuth.picture : ''} /> 
+                    <span className={ `${ active ? "hidden" : ""} mx-auto group-hover:block px-1` }> {`${userAuth? `${userAuth.nick_name  || userAuth.name + ' ' + userAuth.lastName}`  : ''}`} 
                 </span>
             </Link>
             <div className='divider w-full h-0.5'></div>

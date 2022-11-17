@@ -24,7 +24,7 @@ const Perfil = () => {
 
 
     return ( 
-        <>
+        <div className="animate__animated animate__fadeIn">
             <ProfileHeader selectedUser={ profile } value={value} setValue={setValue}  />
             { value === 'Perfil' ?
                 <Profile selectedUser={ profile } /> 
@@ -34,10 +34,8 @@ const Perfil = () => {
                 :
                 value === 'Configuración' ? 
                 <EditProfile selectedUser={ profile } /> : null 
-                
-            
             }
-        </>
+        </div>
     );
 }
  

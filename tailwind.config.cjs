@@ -9,7 +9,7 @@ module.exports = {
             fontFamily: {
               mulish: ['Mulish', 'sans-serif'],
               playfair: ['Playfair Display', 'sans-serif'],
-      
+              roboto: ['Roboto', 'sans-serif'],      
             },
             colors:{
               'custom-gray': '#A6AFC3',

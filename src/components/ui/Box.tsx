@@ -4,6 +4,7 @@ interface BoxProps {
     children: React.ReactNode;
 }
 
+
 const Box = ({id, className, children}: BoxProps) => {
     return ( 
         <div id={id} className={`p-5 shadow-ext bg-white rounded-ext ${className ? className : ""}` }>

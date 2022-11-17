@@ -4,7 +4,7 @@ import Box from "../../components/ui/Box";
 
 const Actividad = () => {
     return ( 
-    <>
+    <div className="animate__animated animate__fadeIn">
        <Box>
             <h1 className='text-2xl'>Actividad</h1>
             <Timeline className='p-10'>
@@ -34,7 +34,7 @@ const Actividad = () => {
                 </Timeline.Item>
             </Timeline>
         </Box>
-    </>
+    </div>
      );
 }
  

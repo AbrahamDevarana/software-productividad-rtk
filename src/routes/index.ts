@@ -5,7 +5,7 @@ import { LayoutLoginProps } from '../interfaces';
 import { Areas } from '../pages/admin/Areas';
 import { Departamentos } from '../pages/admin/Departamentos';
 import { Puestos } from '../pages/admin/Puestos';
-import { Usuarios } from '../pages/admin/Usuarios';
+import { Admin } from '../pages/admin';
 import Login from '../pages/Auth/Login'
 import LoginError from '../pages/Auth/LoginError';
 import LoginSuccess from '../pages/Auth/LoginSuccess';
@@ -55,9 +55,9 @@ const  rutaPrivada:RouteProps[] = [
         component: Perfil
     },
     {
-        path: '/admin/usuarios',
+        path: '/admin/',
         layout: LayoutApp,
-        component: Usuarios
+        component: Admin
     },
     {
         path: '/admin/departamentos',

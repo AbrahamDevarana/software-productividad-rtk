@@ -14,7 +14,8 @@ import { ProfileProps } from "../../interfaces";
 
 const Profile = ({selectedUser}: any) => {
 
-    return ( <>
+    return ( 
+    <div className="animate__animated animate__fadeIn">
      <div className="grid grid-cols-4 gap-10 pt-10">
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
             <div className="flex sm:justify-between justify-center flex-wrap">
@@ -229,7 +230,7 @@ const Profile = ({selectedUser}: any) => {
                 </div>
             </Box>
         </div>
-    </> );
+    </div> );
 }
  
 export default Profile;

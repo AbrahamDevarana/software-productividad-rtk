@@ -23,7 +23,7 @@ export const ProfileInfo = ({selectedUser}: any) => {
         validationSchema={profileSchema}
     >
    {
-        ({ errors, touched, handleSubmit, handleChange, handleBlur, values, ...props }) => (                                            
+        ({ errors, handleSubmit, handleChange, handleBlur, values }) => (                                            
             <form className='col-span-12 grid grid-cols-12 sm:gap-x-10 gap-y-10' noValidate onSubmit={handleSubmit}>
                 <div className="col-span-12 xl:col-span-4 md:col-span-6">
                     <Input title="Nombre" className="w-full" inputName="name" fn={handleChange} value={values.name || ''} onBlur={handleBlur}/>

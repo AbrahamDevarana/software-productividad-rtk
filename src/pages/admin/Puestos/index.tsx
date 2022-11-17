@@ -7,14 +7,6 @@ export const Puestos = () => {
     const navigate = useNavigate()
     return (
         <Box>
-            <div className="flex justify-between pb-5">
-                <Button btnType="primary-outline" fn={()=>navigate("/admin/usuarios")}>
-                Volver
-                </Button>
-                <Button btnType="secondary" fn={()=>navigate("registrar")}>
-                Registrar Puesto
-                </Button>
-            </div>
             {/* {
                 puestos.length > 0 && dataSource && dataSource.length > 0 ?
                     <Table 
