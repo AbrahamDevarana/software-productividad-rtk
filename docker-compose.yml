@@ -1,9 +1,15 @@
+version: '3.0'
 
 services:
   app:
     image: app
     build: .
     ports:
-      - "3001:3001"
+      - "3000:80"
     environment:
       - NODE_ENV=development
+    networks:
+      - productividadNetwork
+
+networks:
+  productividadNetwork:

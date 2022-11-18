@@ -16,4 +16,5 @@ export interface UsuarioProps {
     titulo:          number;
     fechaIngreso:    string;
     lider:           boolean;
+    [key: string]: any;
 }

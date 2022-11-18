@@ -10,7 +10,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions);
     if(result.error?.status === 401) {
-        const refreshAccessToken =  await baseQuery('refresh-access-token', api, extraOptions);
+        const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
             if(refreshAccessToken.data) {
                 const { accessToken, refreshToken }:any = refreshAccessToken.data;
                 localStorage.setItem('accessToken', accessToken);
@@ -24,6 +24,7 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch(logOut());
             }       
     }
+
     const { accessToken, refreshToken }:any = result.data;
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
