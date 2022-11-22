@@ -54,7 +54,7 @@ export const NuevoUsuario = () => {
     
 
     return (
-        <Box className="animate__animated animate__fadeIn">
+        <Box className="animate__animated animate__fadeIn animate__faster">
             <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
                 <Steps current={current} progressDot={true} size="small">
                     <Step title="Contacto" onStepClick={setCurrent} />

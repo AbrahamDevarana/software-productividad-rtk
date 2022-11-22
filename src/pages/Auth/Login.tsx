@@ -11,7 +11,7 @@ export default function Login() {
 
 
     return (
-        <Box className="bg-white max-w-[470px] w-full">
+        <Box className="bg-white max-w-[470px] w-full animate__animated animate__fadeIn animate__faster">
             <Box className="-my-10 mb-3 h-28 bg-gradient-to-tr from-custom-blue to-custom-blue2 flex" >
                 <h1 className='text-white text-2xl align-middle m-auto'>Software</h1>
             </Box>

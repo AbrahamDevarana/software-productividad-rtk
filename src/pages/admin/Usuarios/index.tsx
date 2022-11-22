@@ -94,12 +94,12 @@ export const Usuarios = () => {
         }
     ]
     const columns = [
-      {
-        title: 'Foto',
-        render: (data:any) => <Avatar picture={data.picture} > {data.short_name} </Avatar>
-        
-      },
-      {
+        {
+            title: 'Foto',
+            render: (data:any) => <Avatar picture={data.picture} > {data.short_name} </Avatar>
+            
+        },
+        {
           title: 'Nombre',
           render: (data:any) => data.name + ' ' + data.lastName + ' ' + data.secondLastName
         },

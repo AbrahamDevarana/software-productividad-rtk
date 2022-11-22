@@ -14,7 +14,7 @@ export const EditProfile = ({selectedUser}:any) => {
 
 
     return (
-        <div className="animate__animated animate__fadeIn">
+        <div className="animate__animated animate__fadeIn animate__faster">
             <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10">
                 <div className="xl:col-span-3 md:col-span-4 col-span-12 relative">
                     <div className="sticky top-0 w-full">

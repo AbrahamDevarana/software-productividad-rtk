@@ -1,20 +1,65 @@
 import { Table } from "antd"
+import { AiFillDelete, AiFillEdit } from "react-icons/ai"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Box, Button } from "../../../components/ui"
 
+
 export const Areas = () => {
     const navigate = useNavigate()
+    
+    const columns = [
+        {
+            title: "Areas",
+            render: (data: any) => data.nombre
+        },
+        {
+            title: "Acciones",
+            render: (data: any) => (
+                <div>
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => {} }
+                    >
+                        <AiFillEdit />
+                    </Button>
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => {} }
+                    >
+                        <AiFillDelete />
+                    </Button>
+                </div>
+            )
+        },
+    ]
+
+    const dataSource = [
+        {
+            key: "1",
+            id: 1,
+            nombre: "Finanzas",
+        },
+        {
+            key: "2",
+            id: 2,
+            nombre: "Ventas",
+        },
+        {
+            key: "3",
+            id: 3,
+            nombre: "Compras",
+        }
+    ]            
+
     return (
-        <Box>
-        {/* {
-            areas.length > 0 && dataSource && dataSource.length > 0 ?
+        <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
+            {
                 <Table 
                     columns={columns}
                     dataSource={dataSource} 
-                    loading={loading}
                 />
-            : ""
-        } */}
-    </Box>
+            }
+        </Box>
     )
-}
+    }

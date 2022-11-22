@@ -34,6 +34,9 @@ export const authSlice = createSlice({
         setLoading: (state) => {
             state.loading = true
         },
+        setAuthError: (state, action) => {
+            state.error = action.payload
+        },
         setCredentials: (state, action) => {
             const { user, accessToken } = action.payload;
             state.user = user;
@@ -41,15 +44,17 @@ export const authSlice = createSlice({
             state.loading = false;
         },
         logOut: (state) => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
             state.user = null;
             state.token = null;
-            state.loading = false;
+            state.loading = false;           
         }
     }
 });
 
 
-export const { setLoading, setCredentials, logOut } = authSlice.actions;
+export const { setLoading, setCredentials, setAuthError, logOut } = authSlice.actions;
 
 export default authSlice.reducer
 

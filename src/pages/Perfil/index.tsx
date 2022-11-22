@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchProfile } from "../../redux/features/profile/profileThunk";
+import { fetchProfileThunk } from "../../redux/features/profile/profileThunk";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Actividad from "./actividad";
 import ProfileHeader from "./profileHeader";
 import Profile from "./profile";
 import { EditProfile } from "./editProfile";
+import { useNotification } from "../../hooks/useNotification";
 
 
 const Perfil = () => {
@@ -16,15 +17,13 @@ const Perfil = () => {
 
     useEffect(() => {
         if(user){   
-            dispatch(fetchProfile(user.id))
+            dispatch(fetchProfileThunk(user.id))
         }
     }, [user])
 
 
-
-
     return ( 
-        <div className="animate__animated animate__fadeIn">
+        <div className="animate__animated animate__fadeIn animate__faster">
             <ProfileHeader selectedUser={ profile } value={value} setValue={setValue}  />
             { value === 'Perfil' ?
                 <Profile selectedUser={ profile } /> 

@@ -1,21 +1,65 @@
 import { Table } from "antd"
+import { AiFillDelete, AiFillEdit } from "react-icons/ai"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Box, Button } from "../../../components/ui"
 
 
 export const Departamentos = () => {
     const navigate = useNavigate()
+    
+    const columns = [
+        {
+            title: "Departamentos",
+            render: (data: any) => data.nombre
+        },
+        {
+            title: "Acciones",
+            render: (data: any) => (
+                <div>
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => {} }
+                    >
+                        <AiFillEdit />
+                    </Button>
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => {} }
+                    >
+                        <AiFillDelete />
+                    </Button>
+                </div>
+            )
+        },
+    ]
+
+    const dataSource = [
+        {
+            key: "1",
+            id: 1,
+            nombre: "Gerente General",
+        },
+        {
+            key: "2",
+            id: 2,
+            nombre: "Director de Ventas",
+        },
+        {
+            key: "3",
+            id: 3,
+            nombre: "Director de Operaciones",
+        }
+    ]            
+
     return (
-        <Box>
-            {/* {
-                departamentos.length > 0 && dataSource && dataSource.length > 0 ?
-                    <Table 
-                        columns={columns}
-                        dataSource={dataSource} 
-                        loading={loading}
-                    />
-                : ""
-            } */}
+        <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
+            {
+                <Table 
+                    columns={columns}
+                    dataSource={dataSource} 
+                />
+            }
         </Box>
     )
-}
+    }

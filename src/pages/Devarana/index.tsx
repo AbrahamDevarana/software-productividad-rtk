@@ -29,7 +29,7 @@ export const Devarana = () => {
 
 
   return (
-    <div className="animate__animated animate__fadeIn">
+    <div className="animate__animated animate__fadeIn animate__faster">
         <div>
             <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20">
             </Box>

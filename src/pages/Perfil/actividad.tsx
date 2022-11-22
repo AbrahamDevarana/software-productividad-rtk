@@ -4,7 +4,7 @@ import Box from "../../components/ui/Box";
 
 const Actividad = () => {
     return ( 
-    <div className="animate__animated animate__fadeIn">
+    <div className="animate__animated animate__fadeIn animate__faster">
        <Box>
             <h1 className='text-2xl'>Actividad</h1>
             <Timeline className='p-10'>

@@ -1,6 +1,8 @@
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import jwtDecode from 'jwt-decode';
-import { logOut, setCredentials } from './authSlice';
+import { AppDispatch, RootState } from '../../store';
+import { logOutProvider } from './authProvider';
+import { logOut, setAuthError, setCredentials } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
@@ -24,7 +26,8 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch(logOut());
             }       
     }
-
+    
+    
     const { accessToken, refreshToken }:any = result.data;
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
@@ -48,4 +51,16 @@ export const authApi = createApi({
 
 
 export const { useGetValidationQuery } = authApi;
+
+
+
+export const logoutThunk = () => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+
+        const result = await logOutProvider(getState)        
+        if(!result.ok) return dispatch( setAuthError(result.errorMessage) )
+        
+        dispatch( logOut() )
+    }
+}
 

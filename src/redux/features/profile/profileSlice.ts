@@ -4,6 +4,7 @@ import { ProfileProps } from '../../../interfaces';
 
 const initialState:ProfileProps = {
     isLoading: false,
+    updated: false,
     errorMesssage: '',
     id: 0,
     name: '',
@@ -70,11 +71,17 @@ const profileSlice = createSlice({
     // add reducers here
     checkingProfile: (state) => {
         state.isLoading = true
+        state.updated = false
     },
     setProfileError: (state, action) => {
         state.errorMesssage = action.payload
     },
     setProfile: (state, action) => {
+        Object.assign(state, action.payload)
+        state.isLoading = false
+    },
+    // on update profile
+    updateProfile: (state, action) => {
         Object.assign(state, action.payload)
         state.isLoading = false
     }
@@ -84,6 +91,6 @@ const profileSlice = createSlice({
 
 
 
-export const {setProfile, checkingProfile, setProfileError} = profileSlice.actions
+export const {setProfile, checkingProfile, setProfileError, updateProfile} = profileSlice.actions
 
 export default profileSlice.reducer

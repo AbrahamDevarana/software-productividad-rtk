@@ -8,6 +8,9 @@ import { Areas } from "./Areas"
 import { Departamentos } from "./Departamentos"
 import { Puestos } from "./Puestos"
 import { NuevoUsuario } from "./Usuarios/components/NuevoUsuario"
+import { FormPuestos } from "./Puestos/components/FormPuestos"
+import { FormAreas } from "./Areas/components/FormAreas"
+import { FormDepartamentos } from "./Departamentos/components/FormDepartamentos"
 
 export const Admin = () => {
     const navigate = useNavigate()
@@ -17,7 +20,7 @@ export const Admin = () => {
 
 
     return (
-        <div className="animate__animated animate__fadeIn">
+        <div className="animate__animated animate__fadeIn animate__faster">
             <div className="">
                 <Collapse defaultActiveKey={['1']} className="col-span-2" bordered={false} ghost>
                     <Panel header={<p className="font-roboto"> Ver más </p>} key="1" collapsible="header" >
@@ -47,6 +50,9 @@ export const Admin = () => {
                             <div className="col-span-2 sm:col-span-1 row-span-2">
                                 <div className="h-full">
                                     { panelAdmin === 'usuarios' && <NuevoUsuario/> }
+                                    { panelAdmin === 'areas' && <FormAreas/> }
+                                    { panelAdmin === 'departamentos' && <FormDepartamentos/> }
+                                    { panelAdmin === 'puestos' && <FormPuestos /> }
                                 </div>
                             </div>
                         </div>

@@ -4,6 +4,8 @@ import { Input } from '../../../components/ui'
 import * as Yup from "yup";
 import { Alert, DatePicker } from 'antd';
 import moment from 'moment';
+import { updateProfileThunk } from '../../../redux/features/profile/profileThunk';
+import { useAppDispatch } from '../../../redux/hooks';
 
 
 const profileSchema = Yup.object().shape({
@@ -16,10 +18,13 @@ const profileSchema = Yup.object().shape({
 })
 
 export const ProfileInfo = ({selectedUser}: any) => {
+
+    const dispatch = useAppDispatch();
+
   return (
     <Formik
         initialValues={selectedUser}
-        onSubmit={values => console.log(values)}
+        onSubmit={values => dispatch(updateProfileThunk( values ))}
         validationSchema={profileSchema}
     >
    {

@@ -1,5 +1,6 @@
 export interface ProfileProps {
     isLoading:           boolean;
+    updated:             boolean;
     errorMesssage:       string;
     id:                  number;
     name:                string;

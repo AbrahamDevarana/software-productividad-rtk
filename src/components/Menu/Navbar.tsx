@@ -1,18 +1,20 @@
 import { Dropdown, Menu, Space } from "antd";
-import { useDispatch } from "react-redux";
+
 import { LayoutNavbarProps } from "../../interfaces"
-import { logOut } from "../../redux/features/auth/authSlice";
 import Box from "../ui/Box";
 import {AiOutlineMenu, AiOutlineMenuFold} from 'react-icons/ai'
 import {FiLogOut } from 'react-icons/fi'
 import { FaBell } from 'react-icons/fa';
 import { GoSettings} from 'react-icons/go'
 
+import { useAppDispatch } from "../../redux/hooks";
+import { logoutThunk } from "../../redux/features/auth/authThunks";
+
 
 
 export const Navbar = ({active, isActive, setSettingVisible}:LayoutNavbarProps) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const menu = (
         <Menu
@@ -20,7 +22,7 @@ export const Navbar = ({active, isActive, setSettingVisible}:LayoutNavbarProps) 
             {
               key: '1',
               label: (
-                <button onClick={() => dispatch(logOut())}>
+                <button onClick={() => dispatch(logoutThunk())} >
                   Logout
                 </button>
               ),

@@ -9,7 +9,8 @@ interface NotificationProps {
 export const useNotification = ({type, message}:NotificationProps) => {
        notification[type]({
         message: message,
-        placement: 'bottomRight',
+        placement: 'topRight',
         duration: 2,
+        key: 'notification',
     });
 }

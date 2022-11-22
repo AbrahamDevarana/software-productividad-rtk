@@ -15,7 +15,7 @@ const usuarioSchema = Yup.object().shape({
 
 export const Domicilio = ({usuario, handleSteps}:any) => {
   return (
-    <div className='animate__animated animate__fadeIn'>
+    <div className='animate__animated animate__fadeIn animate__faster'>
         <Formik
         initialValues={usuario}
         onSubmit={(values) =>  handleSteps(values)}
