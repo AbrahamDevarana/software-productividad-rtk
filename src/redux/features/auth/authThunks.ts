@@ -1,7 +1,7 @@
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import jwtDecode from 'jwt-decode';
 import { AppDispatch, RootState } from '../../store';
-import { logOutProvider } from './authProvider';
+import { logOutProvider, validateProvider } from './authProvider';
 import { logOut, setAuthError, setCredentials } from './authSlice';
 
 const baseQuery = fetchBaseQuery({
@@ -9,33 +9,30 @@ const baseQuery = fetchBaseQuery({
     credentials: 'include'
 });
 
-const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
-    let result = await baseQuery(args, api, extraOptions);
-    if(result.error?.status === 401) {
+const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { 
+    const result = await baseQuery(args, api, extraOptions);    
+
+        if( result.error && result.error.status === 401 ) {
         const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
-            if(refreshAccessToken.data) {
-                const { accessToken, refreshToken }:any = refreshAccessToken.data;
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken);
-                const user = jwtDecode(accessToken)
-                api.dispatch(setCredentials({user, accessToken}))   
-                result = await baseQuery(args, api, extraOptions);
-            } else {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                api.dispatch(logOut());
-            }       
+        if( refreshAccessToken.data ) {
+            const { accessToken }:any = refreshAccessToken.data;
+            localStorage.setItem('accessToken', accessToken);
+            const user = jwtDecode(accessToken);
+            api.dispatch( setCredentials({ user, accessToken }) );
+            return baseQuery(args, api, extraOptions);
+        }else{ 
+            api.dispatch( logOut() );
+        }
     }
-    
-    
+
     const { accessToken, refreshToken }:any = result.data;
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
-
-    const user = jwtDecode(accessToken)
-    api.dispatch(setCredentials({user, accessToken}))   
-
-    return result;
+    if( accessToken ) localStorage.setItem('accessToken', accessToken);
+    if( refreshToken ) localStorage.setItem('refreshToken', refreshToken);
+    if( accessToken ) {
+        const user = jwtDecode(accessToken);
+        api.dispatch( setCredentials({ user, accessToken }) );
+    }
+    return result
 }
 
 
@@ -64,3 +61,21 @@ export const logoutThunk = () => {
     }
 }
 
+export const validateTokenThunk = () => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+
+        // if getstate.loggedOut return
+        if( getState().auth.loggedOut ) return;
+
+        const result = await validateProvider()     
+        if(!result.ok) return dispatch( setAuthError(result.errorMessage) )
+        const { accessToken, refreshToken }:any = result.response?.data;
+        if( accessToken ) localStorage.setItem('accessToken', accessToken);
+        if( refreshToken ) localStorage.setItem('refreshToken', refreshToken);
+        if( accessToken ) {
+            const user = jwtDecode(accessToken);
+            dispatch( setCredentials({ user, accessToken }) );
+        }        
+    }
+
+}

@@ -109,3 +109,18 @@
         margin-top: auto;
     }
 }
+
+
+
+// NuevoSideBar
+
+.menuSidebar .link {
+    color:rgb(255, 255, 255, .8)
+}
+
+.menuSidebar .active{
+    color: $blue2 !important;
+}
+.menuSidebar .active.profile{
+    background-color: rgb(255, 255, 255, .2);
+}

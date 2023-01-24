@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
+import Cookies from 'js-cookie';
 
 interface IUser{
     id: number;
@@ -13,17 +14,20 @@ interface IUser{
 }
 
 interface AuthState {
+    accessToken: string | null;
     loading: boolean | null;
     error: string | null;
     user: IUser | null;
-    token: string | null;
+    loggedOut: boolean;
 }
 
 const initialState: AuthState = {
     loading: true,
     error: null,
     user: null,
-    token: null,
+    accessToken: null,
+    loggedOut: false
+
 };
 
 
@@ -35,20 +39,22 @@ export const authSlice = createSlice({
             state.loading = true
         },
         setAuthError: (state, action) => {
-            state.error = action.payload
+            state.error = action.payload,
+            state.loading = false
         },
         setCredentials: (state, action) => {
             const { user, accessToken } = action.payload;
             state.user = user;
-            state.token = accessToken;
             state.loading = false;
+            state.accessToken = accessToken;
         },
         logOut: (state) => {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             state.user = null;
-            state.token = null;
-            state.loading = false;           
+            state.accessToken = null;
+            state.loading = false;  
+            state.loggedOut = true;
         }
     }
 });
@@ -59,4 +65,4 @@ export const { setLoading, setCredentials, setAuthError, logOut } = authSlice.ac
 export default authSlice.reducer
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;
-export const selectCurrentToken = (state: RootState) => state.auth.token;
+export const selectCurrentToken = (state: RootState) => state.auth.accessToken;

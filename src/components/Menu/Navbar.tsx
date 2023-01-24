@@ -92,9 +92,9 @@ export const Navbar = ({active, isActive, setSettingVisible}:LayoutNavbarProps) 
                 <GoSettings className='text-2xl ml-2 mr-3 cursor-pointer hover:text-custom-dark2 text-custom-dark2' onClick={ showDrawer } />
                 <Dropdown overlay={menu} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()}>
-                    <Space>
-                        <FiLogOut className='text-2xl hover:text-custom-dark2 text-custom-dark2'/>
-                    </Space>
+                        <Space>
+                            <FiLogOut className='text-2xl hover:text-custom-dark2 text-custom-dark2'/>
+                        </Space>
                     </a>
                 </Dropdown>
             </div>

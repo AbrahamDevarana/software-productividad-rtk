@@ -1,13 +1,14 @@
 import Loading from "../antd/Loading";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { useGetValidationQuery } from "../../redux/features/auth/authThunks";
+import { validateTokenThunk } from '../../redux/features/auth/authThunks';
 import { Drawer, Dropdown, Menu, Modal } from "antd";
-import {useState} from 'react'
+import { useState, useEffect } from 'react';
 import { Sidebar } from "../Menu/Sidebar";
 import { Navbar } from "../Menu/Navbar";
 
 import 'animate.css';
+import { NewSidebar } from "../Menu/NewSidebar";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -16,7 +17,13 @@ interface LayoutAppProps{
 export default function LayoutApp({ children }: LayoutAppProps) {
    
     const navigate = useNavigate();
-    useGetValidationQuery('')
+    // useGetValidationQuery(null)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(validateTokenThunk())
+    }, [dispatch])
+
     const { loading, user } = useAppSelector((state: any) => state.auth); 
 
     const [settingVisible, setSettingVisible] = useState(false);
@@ -34,13 +41,18 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     if (loading) return <Loading />;
     return (
         <>
-             <div className='w-full'>  
+        <div className='w-full'>  
             <div className='bg-devarana-background w-full min-h-screen'>
-                <div className="flex relative">
-                    <Sidebar active={active} />
-                    <div className={`p-4 transition-all duration-300 ease-in-out ml-auto ${active? "layout-size-90 group-hover:layout-size-260":"layout-size-260"} w-full relative `}> 
-                        <Navbar active={active} isActive={isActive} settingVisible={settingVisible} setSettingVisible={setSettingVisible} />
-                        <main  className="animate__animated animate__fadeIn">{children}</main>
+                <div className="flex h-screen">
+                    {/* <Sidebar active={active} /> */}
+                    <NewSidebar />
+                    <div className={`transition-all duration-300 ease-in-out w-full overflow-hidden`}> 
+                        <div className="p-4">
+                            <Navbar active={active} isActive={isActive} settingVisible={settingVisible} setSettingVisible={setSettingVisible} />
+                            <main  className="animate__animated animate__fadeIn overflow-y-auto"
+                                style={{ height: 'calc(100vh - 100px)' }}
+                            >{children}</main>
+                        </div>
                     </div>
                 </div>
             </div>
