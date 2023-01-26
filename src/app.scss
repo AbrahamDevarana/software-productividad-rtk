@@ -196,3 +196,21 @@ p, li, span, a{
   .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-tail::after {
       background: rgba(255, 255, 255, 0.25)!important;
   }
+
+
+
+
+
+
+
+//   Menu Theme Mode
+
+
+.menu_sidebar{
+    .nav-link{
+        @apply hover:bg-opacity-50 rounded-xl py-2 w-full text-center dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white
+    }
+    .svg-icon{
+        @apply dark:fill-white fill-devarana-blue dark:hover:fill-devarana-graph hover:fill-white
+    }
+}

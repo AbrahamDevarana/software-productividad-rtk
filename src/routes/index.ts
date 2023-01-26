@@ -1,6 +1,6 @@
-import LayoutApp from '../components/layouts/LayoutApp';
+import LayoutApp from '../components/layouts/LayoutPrivate';
 import LayoutEmpty from '../components/layouts/LayoutEmpty';
-import LayoutLogin from '../components/layouts/LayoutLogin'
+import LayoutLogin from '../components/layouts/LayoutPublic'
 import { LayoutLoginProps } from '../interfaces';
 import { Areas } from '../pages/admin/Areas';
 import { Departamentos } from '../pages/admin/Departamentos';

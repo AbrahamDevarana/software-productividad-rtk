@@ -4,6 +4,9 @@ module.exports = {
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
     ],
+    // activar modo oscuro
+    darkMode: 'class', // or 'media' or 'class'
+
     theme: {
         extend: {
             fontFamily: {
@@ -37,6 +40,7 @@ module.exports = {
               'devarana-hazelnut' : '#eadfd4',
               'devarana-pearl' : '#f9f9f7',
               'devarana-graph' : '#656a76',
+              'devarana-dark-graph' : '#2e3136',
               'devarana-pollito' : '#ffdea4',
               'devarana-salmon' : '#fabcab',
             },
@@ -44,10 +48,11 @@ module.exports = {
               base: ['14px', '24px'],
             },
             transitionProperty: {
-              'height': 'height',
-              'width': 'width',
-              'max-width': 'max-width',
-              'objectPosition': 'objectPosition',
+                'height': 'height',
+                'width': 'width',
+                'max-width': 'max-width',
+                'objectPosition': 'objectPosition',
+                'backgroundColor': 'background-color',
             },
             borderRadius: {
               'ext' : '10px'
@@ -64,6 +69,7 @@ module.exports = {
               'w-mision': "url('./assets/img/watermark/mision.svg')",
               'w-vision': "url('./assets/img/watermark/Futuro.svg')",
               'w-legendario': "url('./assets/img/watermark/ServicioLegendario.svg')",
+              'dark-gradient' : 'linear-gradient(190deg, #656a76 0%, #2e3136 50%, #2e3136 100%)'
             }
             
           },

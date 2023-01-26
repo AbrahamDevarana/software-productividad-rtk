@@ -12,14 +12,14 @@ const Perfil = () => {
     const dispatch = useAppDispatch();
     
     const [value, setValue] = useState('Perfil');
-    const { user } = useAppSelector(state => state.auth)
+    const { userAuth } = useAppSelector(state => state.auth)
     const profile = useAppSelector(state => state.profile)
 
     useEffect(() => {
-        if(user){   
-            dispatch(fetchProfileThunk(user.id))
+        if(userAuth){   
+            dispatch(fetchProfileThunk(userAuth.id))
         }
-    }, [user])
+    }, [userAuth])
 
 
     return ( 

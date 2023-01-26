@@ -5,9 +5,6 @@ export interface LayoutLoginProps {
 }
 
 export interface LayoutNavbarProps{
-    active: boolean;
-    isActive: (active: boolean) => void;
-    settingVisible: boolean;
     setSettingVisible: (settingVisible: boolean) => void;
 }
 

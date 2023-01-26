@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../redux/hooks";
 export default function Login() {
         
     const redirectToGoogleSSO = async() => {
-        const googleLoginUrl = `${import.meta.env.VITE_API_URL}/auth/google`
+        const googleLoginUrl = `${import.meta.env.VITE_API_URL}/login`
         window.location.href = googleLoginUrl;
     }
 

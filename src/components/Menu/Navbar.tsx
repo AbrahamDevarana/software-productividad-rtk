@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Space } from "antd";
+import { Dropdown, Input, Menu, Select, Space } from "antd";
 
 import { LayoutNavbarProps } from "../../interfaces"
 import Box from "../ui/Box";
@@ -9,10 +9,11 @@ import { GoSettings} from 'react-icons/go'
 
 import { useAppDispatch } from "../../redux/hooks";
 import { logoutThunk } from "../../redux/features/auth/authThunks";
+import { SearchOutlined } from "@ant-design/icons";
 
 
 
-export const Navbar = ({active, isActive, setSettingVisible}:LayoutNavbarProps) => {
+export const Navbar = ({setSettingVisible}:LayoutNavbarProps) => {
 
     const dispatch = useAppDispatch()
 
@@ -76,29 +77,36 @@ export const Navbar = ({active, isActive, setSettingVisible}:LayoutNavbarProps) 
 
 
   return (
-    <Box className='h-16 p-5 mb-4'>
-        <div className="flex">
-            <div className='sm:ml-0 ml-auto'>
-                <button onClick={ () => isActive(!active) }> {!active? <AiOutlineMenuFold className='text-2xl'/> : <AiOutlineMenu className='text-2xl'/> } </button>
+    <div className='h-16 bg-white dark:bg-dark-gradient px-5 mb-4 drop-shadow-md shadow-devarana-graph 
+                    transition-all duration-200 ease-in-out'>
+        <div className="flex h-full items-center">
+            <div>
+                <Select placeholder="Buscar" showSearch suffixIcon={<SearchOutlined />} className='transition-all duration-200 ease-in-out w-32'
+                    style={{
+                        maxWidth: '300px',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.width = '300px'}
+                    onMouseLeave={(e) => e.currentTarget.style.width = '120px'}
+                />
             </div>
-            <div className="sm:ml-auto flex">
+            <div className="sm:ml-auto flex items-center">
                 <Dropdown overlay={notificaciones} trigger={['click']} className="px-2">
-                    <a onClick={(e) => e.preventDefault()}>
+                    <a onClick={(e) => e.preventDefault()} className="items-center flex">
                     <Space>
-                        <FaBell className='text-2xl hover:text-custom-dark2 text-custom-dark2'/>
+                        <FaBell className='text-2xl text-devarana-blue dark:text-white'/>
                     </Space>
                     </a>
                 </Dropdown>
-                <GoSettings className='text-2xl ml-2 mr-3 cursor-pointer hover:text-custom-dark2 text-custom-dark2' onClick={ showDrawer } />
+                <GoSettings className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue dark:text-white' onClick={ showDrawer } />
                 <Dropdown overlay={menu} trigger={['click']}>
-                    <a onClick={(e) => e.preventDefault()}>
+                    <a onClick={(e) => e.preventDefault()} className="items-center flex">
                         <Space>
-                            <FiLogOut className='text-2xl hover:text-custom-dark2 text-custom-dark2'/>
+                            <FiLogOut className='text-2xl text-devarana-blue dark:text-white'/>
                         </Space>
                     </a>
                 </Dropdown>
             </div>
         </div>
-    </Box>
+    </div>
   )
 }

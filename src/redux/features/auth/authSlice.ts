@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import Cookies from 'js-cookie';
 
-interface IUser{
+interface IuserAuth{
     id: number;
     name: string;
     email: string;
@@ -15,18 +15,20 @@ interface IUser{
 
 interface AuthState {
     accessToken: string | null;
-    loading: boolean | null;
     error: string | null;
-    user: IUser | null;
     loggedOut: boolean;
+    userAuth: IuserAuth | null,
+    isAuthenticated: boolean,
+    isLoading: boolean,
 }
 
 const initialState: AuthState = {
-    loading: true,
+    isLoading: true,
     error: null,
-    user: null,
+    userAuth: null,
     accessToken: null,
-    loggedOut: false
+    loggedOut: false,
+    isAuthenticated: false, 
 
 };
 
@@ -35,34 +37,35 @@ export const authSlice = createSlice({
     initialState,
     name: 'authSlice',
     reducers: {
-        setLoading: (state) => {
-            state.loading = true
+        setisLoading: (state) => {
+            state.isLoading = true
         },
         setAuthError: (state, action) => {
             state.error = action.payload,
-            state.loading = false
+            state.isLoading = false
         },
         setCredentials: (state, action) => {
-            const { user, accessToken } = action.payload;
-            state.user = user;
-            state.loading = false;
+            const { userAuth, accessToken } = action.payload;
+            state.userAuth = userAuth;
+            state.isLoading = false;
             state.accessToken = accessToken;
+            state.isAuthenticated = true;
         },
         logOut: (state) => {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            state.user = null;
+            state.userAuth = null;
             state.accessToken = null;
-            state.loading = false;  
+            state.isLoading = false;  
             state.loggedOut = true;
         }
     }
 });
 
 
-export const { setLoading, setCredentials, setAuthError, logOut } = authSlice.actions;
+export const { setisLoading, setCredentials, setAuthError, logOut } = authSlice.actions;
 
 export default authSlice.reducer
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentuserAuth = (state: RootState) => state.auth.userAuth;
 export const selectCurrentToken = (state: RootState) => state.auth.accessToken;

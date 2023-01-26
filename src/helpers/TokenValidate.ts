@@ -5,20 +5,11 @@ import { clientAxios } from '../config/axios';
 
 export function getAccessToken() {
     const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if(accessToken)  return willExpireToken(accessToken) ? null : accessToken;
-    
-    if(!accessToken && !refreshToken) {
-
+    if (!accessToken || accessToken === 'null' || accessToken === 'undefined') {
         return null;
     }
-    
-    if(!accessToken && refreshToken) {
-        return willExpireToken(refreshToken) ? null : refreshToken
-    }
 
-    
+    return willExpireToken(accessToken) ? null : accessToken;
 
 }
 
