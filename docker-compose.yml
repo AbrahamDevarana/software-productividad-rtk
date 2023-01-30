@@ -1,8 +1,7 @@
 version: '3.0'
-
 services:
   app:
-    image: app
+    image: cliente-productividad
     build: .
     ports:
       - "3000:80"
