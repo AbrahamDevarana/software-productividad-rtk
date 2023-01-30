@@ -5,6 +5,9 @@ import routes from './routes';
 import './app.scss'
 
 export default function App() {
+
+    console.log(import.meta.env.NODE_ENV);
+    
     return (
         <BrowserRouter>
             <Provider store={store}>

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "tsc && vite build && serve -s dist"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

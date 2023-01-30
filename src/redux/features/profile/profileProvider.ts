@@ -5,7 +5,7 @@ import { RootState } from "../../store";
 export const setProfileProvider =  async (userId:number, getState: () => RootState) => {
     try {
         const response = await clientAxios.get(`/user/${userId}`,
-            { headers: { "accessToken": `${getState().auth.token}` } }
+            { headers: { "accessToken": `${getState().auth.accessToken}` } }
         );
         return {
             ok: true,
@@ -26,7 +26,7 @@ export const setProfileProvider =  async (userId:number, getState: () => RootSta
 export const updateProfileProvider =  async (profile:any, getState: () => RootState) => {
     try {
         const response = await clientAxios.put(`/user/update`, profile,
-            { headers: { "accessToken": `${getState().auth.token}` } }
+            { headers: { "accessToken": `${getState().auth.accessToken}` } }
         );
         return {
             ok: true,

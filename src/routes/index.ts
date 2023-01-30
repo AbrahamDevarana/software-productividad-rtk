@@ -13,6 +13,7 @@ import { Devarana } from '../pages/Devarana';
 import Home from '../pages/Home';
 import { Objetivos } from '../pages/Objetivos';
 import Perfil from '../pages/Perfil';
+import { ErrorPage } from '../pages/ErrorPage';
 
 interface RouteProps {
     path: string;
@@ -80,9 +81,14 @@ const  rutaPrivada:RouteProps[] = [
         component: Devarana
     },
     {
-        path: '/objetivos-personales',
+        path: '/objetivos',
         layout: LayoutApp,
         component: Objetivos
+    },
+    {
+        path: '*',
+        layout: LayoutApp,
+        component: ErrorPage
     }
 ]
 
