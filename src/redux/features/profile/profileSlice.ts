@@ -68,7 +68,6 @@ const profileSlice = createSlice({
   name: 'profileSlice',
   initialState,
   reducers: {
-    // add reducers here
     checkingProfile: (state) => {
         state.isLoading = true
         state.updated = false

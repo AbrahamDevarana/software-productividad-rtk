@@ -14,6 +14,7 @@ import Home from '../pages/Home';
 import { Objetivos } from '../pages/Objetivos';
 import Perfil from '../pages/Perfil';
 import { ErrorPage } from '../pages/ErrorPage';
+import { NuevoUsuario } from '../pages/admin/Usuarios/components/NuevoUsuario';
 
 interface RouteProps {
     path: string;

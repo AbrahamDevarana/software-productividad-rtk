@@ -1,5 +1,6 @@
-import { Card, Progress } from 'antd'
-import { Avatar, Box } from '../../components/ui'
+import { Card, Progress, Tooltip } from 'antd'
+import { Avatar, Badge, Box } from '../../components/ui'
+import { Avatar as Avt } from 'antd'
 import { Segmented } from 'antd';
 import { useState } from 'react';
 import { Button } from '../../components/ui/Button';
@@ -8,6 +9,8 @@ import * as Icon from '@ant-design/icons'
 
 
 export const Objetivos = () => {
+
+    const {Group} = Avt
 
     const [value, setValue] = useState<string | number>('Estrategicos'); 
 
@@ -101,28 +104,37 @@ export const Objetivos = () => {
 
                     <div className='grid grid-cols-4 gap-5 my-8 animate__animated animate__fadeIn aniname__faster'>
                         <Box className='flex flex-col align-middle'>
-                            <Progress percent={15} className="py-5 mx-auto" strokeWidth={15} type="circle" strokeColor="#d64767"/>
-                            <h1 className='text-center font-extrabold'>Objetivo 1</h1>
-                            <p className='text-center font-semibold text-devarana-graph'>Ponderación <span> 33% </span></p>
-                        </Box>
-                        <Box className='flex flex-col align-middle'>
-                            <Progress percent={50} className="py-5 mx-auto" strokeWidth={15} type="circle" strokeColor="#d64767"/>
-                            <h1 className='text-center font-extrabold'>Objetivo 2</h1>
-                            <p className='text-center font-semibold text-devarana-graph'>Ponderación <span> 33% </span></p>
-                        </Box>
-                        <Box className='flex flex-col align-middle items-center'>
-                            <Progress percent={95} className="py-5 mx-auto" strokeWidth={15} type="circle" strokeColor="#d64767"/>
-                            <h1 className='text-center font-extrabold'>Objetivo 3</h1>
-                            <p className='text-center font-semibold text-devarana-graph'>Ponderación <span> 33% </span></p>
+                            <Badge badgeType='orange' className='mx-auto -mt-10 mb-5'>
+                                <Icon.AccountBookOutlined className='text-2xl '/>
+                            </Badge>
+                            <h1 className='text-center font-medium text-xl' >Objetivo 1</h1>
+                            <p className='text-center font-extralight text-devarana-graph'>Ponderación <span> 33% </span></p>
+                            <Group maxCount={3} size={'large'} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf'}} className='justify-center mx-auto' >
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                                <Avatar picture='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'>K </Avatar>
+                            </Group>
 
-                            <div>
-                                <Avatar size='small' />
-                                <Avatar size='small' />
+                            <p className='text-devarana-graph'>Progreso:</p>
+                            <Progress percent={15} className="mx-auto" strokeWidth={10} type="line" strokeColor="#52c41a"/>
+
+                            <div className='flex gap-3 pt-5'>
+                                <Tooltip title={` 3 Tareas Pendientes `}>
+                                    <span className='flex items-center gap-2'>
+                                        <Icon.CheckCircleOutlined className='text-devarana-graph'/>
+                                        <span className='text-devarana-graph'> 0 / 3 </span>
+                                    </span>
+                                </Tooltip>
+                                <span className='flex items-center gap-2 bg-gray-300 px-2 rounded-3xl ml-auto'>
+                                    <Icon.ClockCircleOutlined className='text-devarana-graph'/>
+                                    <span className='text-devarana-graph'> 2 días restantes </span>                                    
+                                </span>
                             </div>
-                            
                         </Box>
-
-
                     </div>
                     </>
                 )

@@ -5,7 +5,7 @@ import "../../assets/scss/links.scss";
 
 interface ButtonProps {
     className?: string;
-    children: ReactElement | string;
+    children: ReactElement | string | string [];
     type?: "button" | "submit" | "reset";
     btnType?: "primary" | "secondary" | "danger" | "success" | "warning" | "primary-outline" | "secondary-outline";
     fn?: () => void;

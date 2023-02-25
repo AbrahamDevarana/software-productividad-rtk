@@ -7,6 +7,7 @@ import SvgIsotipo from '../svg/Isotipo';
 import { Link, NavLink} from 'react-router-dom';
 
 import "../../assets/scss/menu.scss"
+import { IconGallery } from '../IconGallery';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -15,7 +16,7 @@ interface LayoutSidebarProps {
 
 export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) => {
 
-    const handleOptBar = () => {
+    const handleOptBar = (opt = 'admin') => {
         setOptBarVisible(!optBarVisible)
     }
 
@@ -29,41 +30,43 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
 
                 <div className='divider w-full h-0.5' />
 
-                <NavLink to={'/actividades'} className={`link nav-link`}>
+                <NavLink to={'/actividades'} className={`link nav-link text-center`}>
                     <FaTasks className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Actividades</span>
                 </NavLink>
-                <NavLink to={'/proyectos'} className={`link nav-link`}>
+                <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
                     <FaProjectDiagram className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Proyectos</span>
                 </NavLink>
-                <NavLink to={'/somos-devarana'} className={`link nav-link`}>
+                <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
                     <FaEarlybirds className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Devarana</span>
                 </NavLink>
-                <NavLink to={'/estrategia'} className={`link nav-link`}>
+                <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
                     <IoIosRocket className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Estrategia</span>
                 </NavLink>
-                <NavLink to={'/objetivos'} className={`link nav-link`}>
+                <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <BiTargetLock className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Objetivos</span>
                 </NavLink>
                 {/* Chat button */}
-                <div className='nav-link cursor-pointer' onClick={handleOptBar}>
+                <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
                     <BiChat className="h-5 w-5 mx-auto" />
                     <span className="text-xs text-center font-light">Chat</span>
                 </div>
 
                 <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
-                    <NavLink to={'/admin'} className={`link nav-link`}>
+                    <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>
                         <BsGearFill className="h-5 w-5 mx-auto" />
                         <span className="text-xs text-center font-light">Admin</span>
-                    </NavLink>
-                    <NavLink to={'/perfil'} className={`link profile nav-link`}>
+                    </div>
+                    <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
                         <AvatarProfile className="h-5 w-5 mx-auto" />
                     </NavLink>
+                    
                 </div>
+
             </div>
         </div>
     </div>

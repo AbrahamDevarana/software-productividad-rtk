@@ -1,7 +1,5 @@
 import { Divider, Popconfirm } from 'antd'
 export const ResponsabilidadesInfo = ({responsabilidades}: any ) => {
-
-    console.log(responsabilidades)
     
   return (
     <>

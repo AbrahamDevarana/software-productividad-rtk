@@ -198,7 +198,12 @@ p, li, span, a{
   }
 
 
-
+.ant-avatar-string{
+    position: unset;
+}
+.ant-image-preview-img{
+    display: unset!important;
+}
 
 
 
@@ -208,7 +213,7 @@ p, li, span, a{
 
 .menu_sidebar{
     .nav-link{
-        @apply hover:bg-opacity-50 rounded-xl py-2 w-full text-center dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white
+        @apply hover:bg-opacity-50 rounded-xl py-2 w-full  dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white
     }
     .svg-icon{
         @apply dark:fill-white fill-devarana-blue dark:hover:fill-devarana-graph hover:fill-white

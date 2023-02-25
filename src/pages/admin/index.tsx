@@ -11,6 +11,7 @@ import { NuevoUsuario } from "./Usuarios/components/NuevoUsuario"
 import { FormPuestos } from "./Puestos/components/FormPuestos"
 import { FormAreas } from "./Areas/components/FormAreas"
 import { FormDepartamentos } from "./Departamentos/components/FormDepartamentos"
+import { EditOutlined, EyeOutlined } from "@ant-design/icons"
 
 export const Admin = () => {
     const navigate = useNavigate()

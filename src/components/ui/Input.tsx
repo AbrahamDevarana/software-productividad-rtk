@@ -19,7 +19,7 @@ export const Input = ({title, inputName, className, fn, value, disabled, type="t
         <input id={id} disabled={disabled || false} required name={inputName} value={value} type={type} className={`input ${className?? className}`} onChange={fn} onBlur={onBlur}/>
         <span className="highlight"></span>
         <span className="bar"></span>
-        <label className='label'>{title}</label>
+        <label className='label text-devarana-midnight font-light text-opacity-50'>{title}</label>
     </div>
   )
 }

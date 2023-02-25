@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import routes from './routes';
 import './app.scss'
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 export default function App() {
 
