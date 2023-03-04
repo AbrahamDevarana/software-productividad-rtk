@@ -9,9 +9,10 @@ interface AvatarProps{
     key?: number;
     children?: React.ReactNode | React.ReactNode[];
     size?: 'large' | 'small' | 'default';
+    preview?: boolean;
 }
 
-const AvatarProfile = ({picture = '', userName, size='large', ...props}: AvatarProps) => {
+const AvatarProfile = ({picture = '', userName, size='large', preview = true , ...props}: AvatarProps) => {
 
     return ( 
         <Avatar size={size} src={ <Image fallback={brokenUser()} src={picture} preview /> } />

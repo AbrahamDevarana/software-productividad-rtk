@@ -1,7 +1,6 @@
 import Box from "../../components/ui/Box";
 import Logo from '../../assets/img/logos/devarana_login.svg'
 import { Button } from "../../components/ui/Button";
-import { useAppDispatch } from "../../redux/hooks";
 export default function Login() {
         
     const redirectToGoogleSSO = async() => {

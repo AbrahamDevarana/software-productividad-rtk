@@ -1,8 +1,7 @@
 import { Table } from "antd"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Box, Button } from "../../../components/ui"
+import { Icon } from '../../../components/Icon';
 
 
 export const Puestos = () => {
@@ -21,13 +20,13 @@ export const Puestos = () => {
                         btnType="primary-outline"
                         fn={() => {} }
                     >
-                        <AiFillEdit />
+                        <Icon iconName="faPen" />
                     </Button>
                     <Button
                         btnType="primary-outline"
                         fn={() => {} }
                     >
-                        <AiFillDelete />
+                        <Icon iconName="faTrash" />
                     </Button>
                 </div>
             )

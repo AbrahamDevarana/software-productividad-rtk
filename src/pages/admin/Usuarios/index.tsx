@@ -121,13 +121,12 @@ export const Usuarios = () => {
   return (
     <Box className="overflow-auto animate__animated animate__fadeIn">
         {
-            dataSource && dataSource.length > 0 ?
+            (dataSource && dataSource.length > 0) ??
                 <Table 
                     columns={columns}
                     dataSource={dataSource}
                     rowKey={record => record.id}
                 />
-            : ""
         }
     </Box>
   )

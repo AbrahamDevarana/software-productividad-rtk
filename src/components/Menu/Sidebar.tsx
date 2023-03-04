@@ -7,7 +7,8 @@ import SvgIsotipo from '../svg/Isotipo';
 import { Link, NavLink} from 'react-router-dom';
 
 import "../../assets/scss/menu.scss"
-import { IconGallery } from '../IconGallery';
+import { Icon } from '../Icon';
+
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -31,38 +32,38 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
                 <div className='divider w-full h-0.5' />
 
                 <NavLink to={'/actividades'} className={`link nav-link text-center`}>
-                    <FaTasks className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Actividades</span>
+                    <Icon iconName="faTasks" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Actividades</span>
                 </NavLink>
                 <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
-                    <FaProjectDiagram className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Proyectos</span>
+                    <Icon iconName="faProjectDiagram" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Proyectos</span>
                 </NavLink>
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
-                    <FaEarlybirds className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Devarana</span>
+                    <Icon iconName="faDove" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Devarana</span>
                 </NavLink>
                 <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
-                    <IoIosRocket className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Estrategia</span>
+                    <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Estrategia</span>
                 </NavLink>
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
-                    <BiTargetLock className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Objetivos</span>
+                    <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Objetivos</span>
                 </NavLink>
                 {/* Chat button */}
                 <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
-                    <BiChat className="h-5 w-5 mx-auto" />
-                    <span className="text-xs text-center font-light">Chat</span>
+                    <Icon iconName='faComment' className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Chat</span>
                 </div>
 
                 <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
                     <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>
-                        <BsGearFill className="h-5 w-5 mx-auto" />
-                        <span className="text-xs text-center font-light">Admin</span>
+                        <Icon iconName='faGear' className="h-5 w-5 mx-auto text-2xl" />
+                        <span className="text-xs text-center font-light block">Admin</span>
                     </div>
                     <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                        <AvatarProfile className="h-5 w-5 mx-auto" />
+                        <AvatarProfile preview={false} className="h-5 w-5 mx-auto" />
                     </NavLink>
                     
                 </div>

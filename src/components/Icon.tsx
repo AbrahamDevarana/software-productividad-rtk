@@ -1,27 +1,31 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faUserNinja, faUserAstronaut } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import * as icons from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
-  iconName: string;
-  className?: string;
+    iconName: IconName;
+    className?: string;
+    onClick?: () => void;
 }
 
-const iconMap: Record<string, IconDefinition> = {
-  faUserNinja,
-  faUserAstronaut
-  // Agrega aquí los demás iconos que necesites
+type IconName = keyof typeof icons;
+
+export const Icon = ({ iconName, className, onClick }: Props) => {
+    const icon = icons[iconName] as IconProp;
+
+    if (!icon) {
+        throw new Error(`Icon ${iconName} not found`);
+    }
+
+    return (
+        <FontAwesomeIcon
+            icon={icon}
+            className={className}
+            onClick={onClick}
+        />
+    );
 };
 
-function Icon({ iconName, className }: Props) {
-  const icon = iconMap[iconName];
 
-  if (!icon) {
-    // Si el icono no existe en el mapa, puedes mostrar un icono por defecto o un mensaje de error
-    return <div>Icono no encontrado</div>;
-  }
 
-  return <FontAwesomeIcon icon={icon} className={className} />;
-}
 
-export default Icon;

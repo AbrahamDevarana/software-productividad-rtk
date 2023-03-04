@@ -1,10 +1,10 @@
 import { Table } from "antd"
-import { AiFillDelete, AiFillEdit } from "react-icons/ai"
 import { Box, Button } from "../../../components/ui"
 import { useEffect } from 'react';
 import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '../../../redux/features/admin/areas/areasThunks';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import Swal from "sweetalert2";
+import { Icon } from "../../../components/Icon";
 
 
 export const Areas = () => {
@@ -28,13 +28,13 @@ export const Areas = () => {
                             dispatch(getAreaThunk(data.id))
                         } }
                     >
-                        <AiFillEdit />
+                        <Icon iconName="faPen" />
                     </Button>
                     <Button
                         btnType="primary-outline"
                         fn={() => handleDelete(data.id) }
                     >
-                        <AiFillDelete />
+                        <Icon iconName="faTrash" />
                     </Button>
                 </div>
             )

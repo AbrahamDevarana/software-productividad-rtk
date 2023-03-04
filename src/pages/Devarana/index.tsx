@@ -1,6 +1,4 @@
-import { Modal } from 'antd';
-import React from 'react'
-import { AiFillEdit } from 'react-icons/ai';
+
 import { Link } from 'react-router-dom';
 import { Avatar, Box, Button } from '../../components/ui';
 
