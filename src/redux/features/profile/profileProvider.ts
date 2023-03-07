@@ -2,9 +2,9 @@ import { clientAxios } from "../../../config/axios";
 import { RootState } from "../../store";
 
 
-export const setProfileProvider =  async (userId:number, getState: () => RootState) => {
+export const getProfileProvider =  async (userId:number, getState: () => RootState) => {
     try {
-        const response = await clientAxios.get(`/user/${userId}`,
+        const response = await clientAxios.get(`/usuarios/${userId}`,
             { headers: { "accessToken": `${getState().auth.accessToken}` } }
         );
         return {
@@ -25,7 +25,7 @@ export const setProfileProvider =  async (userId:number, getState: () => RootSta
 
 export const updateProfileProvider =  async (profile:any, getState: () => RootState) => {
     try {
-        const response = await clientAxios.put(`/user/update`, profile,
+        const response = await clientAxios.put(`/usuarios/update`, profile,
             { headers: { "accessToken": `${getState().auth.accessToken}` } }
         );
         return {

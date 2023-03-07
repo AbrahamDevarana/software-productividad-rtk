@@ -14,8 +14,9 @@ interface AvatarProps{
 
 const AvatarProfile = ({picture = '', userName, size='large', preview = true , ...props}: AvatarProps) => {
 
+    
     return ( 
-        <Avatar size={size} src={ <Image fallback={brokenUser()} src={picture} preview /> } />
+        <Avatar size={size} src={ <Image fallback={brokenUser()} src={picture} preview={preview} /> } />
      );
 }
  

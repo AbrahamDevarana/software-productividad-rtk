@@ -8,9 +8,9 @@ import { ResponsabilidadesInfo } from './components/ResponsabilidadesInfo'
 import { SocialInfo } from './components/SocialInfo'
 
 
-export const EditProfile = ({selectedUser}:any) => {
+export const EditProfile = ({activeUser}:any) => {
 
-    const { responsabilidades } = selectedUser
+ 
 
 
     return (
@@ -37,7 +37,7 @@ export const EditProfile = ({selectedUser}:any) => {
                         </div>    
 
                         <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10">
-                            <ProfileInfo selectedUser={selectedUser} />
+                            <ProfileInfo activeUser={activeUser} />
                         </div>
                     </Box>
 
@@ -50,14 +50,13 @@ export const EditProfile = ({selectedUser}:any) => {
                         </div>  
                         
                         <div className="">
-                            <SocialInfo selectedUser={selectedUser} />
+                            {/* <SocialInfo activeUser={activeUser} /> */}
                         </div> 
                     </Box>
                     <Box className="mb-5 snap-center" id="responsibilidades">
                         <h1 className="text-2xl pb-8">Responsabilidades</h1>   
                         <div>
 
-                            <ResponsabilidadesInfo responsabilidades={responsabilidades} />
                         </div>                     
                     </Box>
                     <Box className="mb-5 snap-center" id="notificaciones">

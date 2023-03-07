@@ -1,10 +1,11 @@
 import { Table } from "antd"
 import { Box, Button } from "../../../components/ui"
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '../../../redux/features/admin/areas/areasThunks';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import Swal from "sweetalert2";
 import { Icon } from "../../../components/Icon";
+import { FormAreas } from './components/FormAreas';
 
 
 export const Areas = () => {
@@ -12,6 +13,8 @@ export const Areas = () => {
     const dispatch = useAppDispatch();
 
     const { areas } = useAppSelector((state: any) => state.areas)
+    const [formVisible, setFormVisible] = useState<boolean>(false)
+    const [filtros, setFiltros] = useState<any>({})
 
     const columns = [
         {
@@ -25,7 +28,7 @@ export const Areas = () => {
                     <Button
                         btnType="primary-outline"
                         fn={() => {
-                            dispatch(getAreaThunk(data.id))
+                            handleEdit(data.id)
                         } }
                     >
                         <Icon iconName="faPen" />
@@ -37,12 +40,13 @@ export const Areas = () => {
                         <Icon iconName="faTrash" />
                     </Button>
                 </div>
-            )
+            ),
+            width: 100
         },
     ]
 
     useEffect(() => {
-        dispatch(getAreasThunk())
+        dispatch(getAreasThunk(filtros))
         
         return () => {
             dispatch(cleanAreaThunk())
@@ -66,17 +70,27 @@ export const Areas = () => {
         })
     }
 
-    
+    const handleModal = (status : boolean) => {
+        setFormVisible(status)
+    }
+
+    const handleEdit = (id: any) => {
+        dispatch(getAreaThunk(id))
+        setFormVisible(true)
+    }
 
     return (
-        <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
-            {
-                <Table 
-                    columns={columns}
-                    dataSource={areas}
-                    rowKey={(data: any) => data.id}
-                />
-            }
-        </Box>
+        <>
+            <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
+                {
+                    <Table 
+                        columns={columns}
+                        dataSource={areas}
+                        rowKey={(data: any) => data.id}
+                    />
+                }
+            </Box>
+            <FormAreas visible={formVisible} handleModal={handleModal}/>
+        </>
     )
-    }
+}

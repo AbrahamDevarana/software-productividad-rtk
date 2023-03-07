@@ -6,6 +6,7 @@ import ProfileHeader from "./profileHeader";
 import Profile from "./profile";
 import { EditProfile } from "./editProfile";
 import { useNotification } from "../../hooks/useNotification";
+import Loading from "../../components/antd/Loading";
 
 
 const Perfil = () => {
@@ -13,26 +14,28 @@ const Perfil = () => {
     
     const [value, setValue] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
-    const profile = useAppSelector(state => state.profile)
+    const { usuario, isLoading } = useAppSelector(state => state.profile)
 
     useEffect(() => {
         if(userAuth){   
             dispatch(fetchProfileThunk(userAuth.id))
         }
-    }, [userAuth])
-
+    }, [userAuth])    
+    
+    
+    if(isLoading) return <Loading />
 
     return ( 
         <div className="animate__animated animate__fadeIn animate__faster">
-            <ProfileHeader selectedUser={ profile } value={value} setValue={setValue}  />
+            <ProfileHeader activeUser={ usuario } value={value} setValue={setValue}  />
             { value === 'Perfil' ?
-                <Profile selectedUser={ profile } /> 
+                <Profile activeUser={ usuario } /> 
                 :
                 value === 'Actividad' ?
                 <Actividad />
                 :
                 value === 'Configuración' ? 
-                <EditProfile selectedUser={ profile } /> : null 
+                <EditProfile activeUser={ usuario } /> : null 
             }
         </div>
     );

@@ -11,8 +11,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { 
-    const result = await baseQuery(args, api, extraOptions);    
-    
+    const result = await baseQuery(args, api, extraOptions);           
 
         if( result.error && result.error.status === 401 ) {
             const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
@@ -34,6 +33,7 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch( setCredentials({ userAuth, accessToken }) );
             }
         }
+        
     return result
 }
 
@@ -50,6 +50,18 @@ export const authApi = createApi({
 
 
 export const { useGetValidationQuery } = authApi;
+
+
+export const loginThunk = (tokens: any ) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        const { access_token, refresh_token } = tokens;
+        localStorage.setItem('accessToken', access_token);
+        localStorage.setItem('refreshToken', refresh_token);
+        const user = jwtDecode(access_token);
+        dispatch( setCredentials({ user, access_token }) );
+    }
+}
+
 
 
 export const logoutThunk = () => {

@@ -11,7 +11,10 @@ export default function LayoutLogin({ children }: LayoutLoginProps) {
     const location = useLocation()
     const { isLoading, userAuth } = useAppSelector((state: any) => state.auth);
     
-    useGetValidationQuery(null)
+    useGetValidationQuery({
+        refetchOnReconnect: true,
+        pollingInterval: 180000,
+    })
 
     const { from } = location.state || { from: { pathname: "/" } };
     

@@ -15,6 +15,7 @@ import { Objetivos } from '../pages/Objetivos';
 import Perfil from '../pages/Perfil';
 import { ErrorPage } from '../pages/ErrorPage';
 import { NuevoUsuario } from '../pages/admin/Usuarios/components/NuevoUsuario';
+import { Provider } from '../pages/Auth/Provider';
 
 interface RouteProps {
     path: string;
@@ -27,6 +28,11 @@ const rutaPublica:RouteProps[] = [
         path: "/login",
         layout: LayoutLogin,
         component: Login,
+    },
+    {
+        path: "/loginv2",
+        layout: LayoutLogin,
+        component: Provider,
     },
     {
         path: "/success",

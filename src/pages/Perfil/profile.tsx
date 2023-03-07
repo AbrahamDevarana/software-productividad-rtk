@@ -12,7 +12,7 @@ import { ProfileProps } from "../../interfaces";
 
 
 
-const Profile = ({selectedUser}: any) => {
+const Profile = ({activeUser}: any) => {
 
     return ( 
     <div className="animate__animated animate__fadeIn animate__faster">
@@ -27,8 +27,7 @@ const Profile = ({selectedUser}: any) => {
                     <h1 className="text-2xl text-custom-dark">15 %</h1>
                 </div>
             </div>
-            {/* <div className="divider-2"></div>
-            <p className="font-light sm:text-left text-center"> No sé que poner aquí </p> */}
+
             </Box>
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
                 <div className="flex sm:justify-between justify-center flex-wrap">
@@ -51,8 +50,6 @@ const Profile = ({selectedUser}: any) => {
                             <h1 className="text-2xl text-custom-dark">14</h1>
                         </div>
                 </div>
-                {/* <div className="divider-2"></div>
-                <p className="font-light sm:text-left text-center"> No sé que poner aquí </p> */}
             </Box>
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
                 <div className="flex sm:justify-between justify-center flex-wrap">
@@ -64,8 +61,6 @@ const Profile = ({selectedUser}: any) => {
                         <h1 className="text-2xl text-custom-dark">45</h1>
                     </div>
                 </div>
-                {/* <div className="divider-2"></div>
-                <p className="font-light sm:text-left text-center"> No sé que poner aquí </p> */}
             </Box>
         </div>
 
@@ -75,41 +70,33 @@ const Profile = ({selectedUser}: any) => {
 
                 <div className="py-4 font-light">
                     <p>
-                        { selectedUser.profile_description }
+                        { activeUser.descripcionPerfil }
                     </p>
                 </div>
                 <div>
                     <p className="font-bold py-2 text-custom-dark2">
                         Nombre: 
-                        <span className="font-light"> {`${selectedUser.name} ${selectedUser.lastName} ${selectedUser.secondLastName} ` } </span>
+                        <span className="font-light"> {`${activeUser.nombre} ${activeUser.apellidoPaterno} ${activeUser.apellidoMaterno} ` } </span>
                     </p>
                 </div>
                 <div>
                     <p className="font-bold py-2 text-custom-dark2">
                         Teléfono: 
-                        <span className="font-light"> {selectedUser.phone  } </span>
+                        <span className="font-light"> {activeUser.telefono  } </span>
                     </p>
                 </div>
                 <div>
                     <p className="font-bold py-2 text-custom-dark2">Email: 
-                    <span className="font-light"> {selectedUser.email } </span></p>
+                    <span className="font-light"> {activeUser.email } </span></p>
                 </div>
                 <div>
                     <p className="font-bold py-2 text-custom-dark2">
                         Fecha de Ingreso: 
-                        <span className="font-light"> { selectedUser.admission_date ? moment(selectedUser.admission_date).format("LL") : 'No se ha asignado fecha' } </span>
+                        <span className="font-light"> { activeUser.fechaIngreso ? moment(activeUser.fechaIngreso).format("LL") : 'No se ha asignado fecha' } </span>
                     </p>
                 </div>
                 <div>
                     <p className="font-bold py-2 text-custom-dark2 flex">Social: </p>
-                    <div className="flex px-2">
-                        { selectedUser.social_linkedin? <AiFillLinkedin className="text-2xl" /> : null }
-                        { selectedUser.social_facebook? < AiFillFacebook className="text-2xl" /> : null }
-                        { selectedUser.social_instagram? <AiFillInstagram className="text-2xl"  /> : null }
-                        { selectedUser.social_twitter? <AiFillTwitterSquare className="text-2xl" /> : null  }
-
-                    </div>
-                    {/* <span className="font-light"> No registradas </span> */}
                 </div>
                 <div>
                    <p className="font-bold py-2 text-custom-dark2"> Originario: 

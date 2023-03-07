@@ -5,10 +5,10 @@ import { checkingAreas, setAreasError, getCurrentArea, createArea, deleteArea, g
 
 
 // Get Areas
-export const getAreasThunk = () => {
+export const getAreasThunk = (filtros: any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingAreas())
-        const result = await getAreasProvider(getState)        
+        const result = await getAreasProvider(filtros, getState)
         if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
         
         dispatch( getAreas(result.areas) )

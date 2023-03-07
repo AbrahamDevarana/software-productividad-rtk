@@ -28,12 +28,60 @@
       background-color: transparent;
       color: $dark2;
       border: 1px $dark2 solid;
+
+        &:hover{
+             background-color: $dark2;
+             color: white;
+             border: 1px $dark2 solid;
+        }
    }
    
    &-secondary-outline{
       background-color: transparent;
       color: $blue2;
       border: 1px $blue2 solid;
+
+        &:hover{
+             background-color: $blue2;
+             color: white;
+             border: 1px $blue2 solid;
+        }
+   }
+
+   &-success-outline{
+      background-color: transparent;
+      color: $green2;
+      border: 1px $green2 solid;
+
+        &:hover{
+             background-color: $green2;
+             color: white;
+             border: 1px $green2 solid;
+        }
+   }
+
+   &-danger-outline{
+      background-color: transparent;
+      color: $red2;
+      border: 1px $red2 solid;
+      
+      &:hover{
+         background-color: $red2;
+         color: white;
+         border: 1px $red2 solid;
+      }
+   }
+
+   &-warning-outline{
+      background-color: transparent;
+      color: $orange2;
+      border: 1px $orange2 solid;
+
+        &:hover{
+             background-color: $orange2;
+             color: white;
+             border: 1px $orange2 solid;
+        }
    }
  
 }
@@ -59,3 +107,19 @@
      opacity: 0;
    }
  }
+
+
+ 
+
+.ant-modal-footer{   
+    .ant-btn{
+        @apply rounded-xl
+    }
+    .ant-btn-primary{
+        @apply btn-primary
+    }
+    .ant-btn-default{
+        @apply btn-danger-outline;
+    }
+}
+

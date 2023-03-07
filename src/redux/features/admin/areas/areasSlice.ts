@@ -14,7 +14,7 @@ interface AreasState {
 interface Area {
     id: number;
     nombre: string;
-    descripcion: string;
+    parentId: number | null;
 }
 
 
@@ -29,7 +29,7 @@ const initialState: AreasState = {
     currentArea: {
         id: 0,
         nombre: '',
-        descripcion: ''
+        parentId: null
     }
 }
 
@@ -81,14 +81,14 @@ const areasSlice = createSlice({
             state.currentArea = {
                 id: 0,
                 nombre: '',
-                descripcion: ''
+                parentId: null
             }
         },
         clearCurrentArea: (state) => {
             state.currentArea = {
                 id: 0,
                 nombre: '',
-                descripcion: ''
+                parentId: null
             }
         }
     }

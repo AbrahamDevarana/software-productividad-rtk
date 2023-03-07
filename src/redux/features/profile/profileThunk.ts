@@ -1,16 +1,16 @@
 
 import { useNotification } from "../../../hooks/useNotification";
 import { AppDispatch, RootState } from "../../store";
-import { setProfileProvider, updateProfileProvider } from "./profileProvider";
-import { checkingProfile, setProfile, setProfileError, updateProfile } from "./profileSlice";
+import { getProfileProvider, updateProfileProvider } from "./profileProvider";
+import { checkingProfile, getProfile, getProfileError, updateProfile } from "./profileSlice";
 
 export const fetchProfileThunk = (userId:number) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingProfile())
-        const result = await setProfileProvider(userId, getState)        
-        if(!result.ok) return dispatch( setProfileError(result.errorMessage) )
+        const result = await getProfileProvider(userId, getState)        
+        if(!result.ok) return dispatch( getProfileError(result.errorMessage) )
         
-        dispatch( setProfile(result.profile) )
+        dispatch( getProfile(result.profile) )
     }
 }
 
@@ -20,7 +20,7 @@ export const updateProfileThunk = (profile:any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingProfile())
         const result = await updateProfileProvider(profile, getState)        
-        if(!result.ok) return dispatch( setProfileError(result.errorMessage) )
+        if(!result.ok) return dispatch( getProfileError(result.errorMessage) )
 
         useNotification({type: 'success', message: 'Información de perfil actualizada'})
         dispatch( updateProfile(result.profile.user) )
