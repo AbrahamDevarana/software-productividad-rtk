@@ -1,9 +1,10 @@
-import { Alert, Modal, Select } from 'antd'
+import { Alert, Modal, Select, Input, Form } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
-import { Box, Button, Input } from '../../../../components/ui'
+import { Box, Button } from '../../../../components/ui'
+
 import * as Yup from "yup";
 import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
-import { createAreaThunk, updateAreaThunk } from '../../../../redux/features/admin/areas/areasThunks';
+import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '../../../../redux/features/admin/areas/areasThunks';
 import { ModalProps } from '../../../../interfaces/modal';
 import { ModalFooter } from '../../../../components/ModalFooter';
 
@@ -12,30 +13,24 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
 
     const dispatch = useAppDispatch();
     
-    const { currentArea, errorMessage } = useAppSelector((state: any) => state.areas)
+    const { currentArea } = useAppSelector((state: any) => state.areas)
     const { areas } = useAppSelector((state: any) => state.areas)
 
-    const handleOnSubmit = (values: any) => {
-
-        console.log(values);
-        
-        
-        // if (currentArea.id) {
-        //     dispatch(updateAreaThunk(values))
-        // } else {
-        //     dispatch(createAreaThunk(values))
-        //     values.nombre = ''
-        //     values.descripcion = ''
-        // }       
-        // handleModal(false) 
-    }
-
-    console.log(currentArea);
-    
+    const handleOnSubmit = async (values: any) => {
+       
+        if (currentArea.id) {
+            dispatch(updateAreaThunk(values))
+        }else {
+            dispatch(createAreaThunk(values))
+        }
+        handleCancel()
+    } 
 
     const handleCancel = () => {
         handleModal(false)
-    }
+        dispatch(clearCurrentAreaThunk())
+    }    
+
 
     return (
         <Modal 
@@ -53,51 +48,54 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                     </h1>
                     <Formik
                         initialValues={currentArea}
-                        onSubmit={ handleOnSubmit }
+                        onSubmit={ (values) => handleOnSubmit(values) }
                         validationSchema={Yup.object({
                             nombre: Yup.string().required("El nombre es requerido"),
-                            parentId: Yup.number(),
                         })}
                         enableReinitialize={true}
 
                     >
                         {
                             ({ values, handleChange, handleBlur, handleSubmit, validateForm }) => (
-                                <form onSubmit={handleSubmit} noValidate>
+                                <Form onFinish={handleSubmit} noValidate layout='vertical'>
                                     <div className='flex pt-4 flex-col gap-y-10'>
-                                        <div>
+                                        <Form.Item
+                                            label="Nombre"
+                                            >
                                             <Input
-                                                title="Nombre"
-                                                inputName="nombre"
                                                 value={values.nombre}
-                                                fn={handleChange}
+                                                onChange={handleChange}
                                                 onBlur={handleBlur}
+                                                name="nombre"
+                                                
                                             />
                                             <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
-                                        </div>
-                                        <div>
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Área padre"
+                                        >
                                             <Select
                                                 showSearch
-                                                style={{ width: '100%' }}
-                                                placeholder="Selecciona un área"
-                                                onChange={(value: any) => { values.parentId = value }}
+                                                onChange={ (value) => handleChange({target: {name: 'parentId', value}}) }
                                                 filterOption={(input, option) => option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                                defaultValue={currentArea.parentId}
+                                                value={values.parentId}
+                                                placeholder="Selecciona una opción"
+                                                allowClear
+
                                             >
-                                                <Select.Option value={null}>Ninguna</Select.Option>
                                                 {
                                                     areas.map((area: any) => (
                                                         <Select.Option key={area.id} value={area.id}>{area.nombre}</Select.Option>
                                                     ))
                                                 }
                                             </Select>
-                                        </div>
+                                        </Form.Item>
                                     </div>
                                     <div className='py-4'>
-                                        <Button btnType="secondary" fn={ () => { validateForm().then((values) => (Object.keys(values).length === 0) ?? handleSubmit() )} }  type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
+                                        <Button btnType="secondary" type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
                                     </div>
 
-                                </form>
+                                </Form>
                         )}
                     </Formik>
             </div>

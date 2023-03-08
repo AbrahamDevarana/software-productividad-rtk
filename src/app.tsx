@@ -6,8 +6,6 @@ import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
 export default function App() {
-
-    console.log(import.meta.env.NODE_ENV);
     
     return (
         <BrowserRouter>

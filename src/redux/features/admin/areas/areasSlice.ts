@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Paginate } from '../../../../interfaces';
 
 interface AreasState {
     areas: Area[];
+    paginate: Paginate;
     isLoading: boolean;
-    errorMessage: string;
+    error: boolean;
     infoMessage: string;
     updated: boolean;
     created: boolean;
@@ -17,12 +19,16 @@ interface Area {
     parentId: number | null;
 }
 
-
 const initialState: AreasState = {
     areas: [],
+    paginate: {
+        totalItems: 0,
+        totalPages: 0,
+        currentPage: 0,
+    },
     isLoading: false,
-    errorMessage: '',
     infoMessage: '',
+    error: false,
     updated: false,
     created: false,
     deleted: false,
@@ -42,10 +48,17 @@ const areasSlice = createSlice({
             state.updated = false
         },
         setAreasError: (state, action) => {
-            state.errorMessage = action.payload
+            state.isLoading = false
+            state.infoMessage = action.payload
+            state.error = true
         },
         getAreas: (state, action) => {
-            state.areas = action.payload.areas
+            state.areas = action.payload.areas.rows
+            state.paginate = {
+                totalItems: action.payload.areas.totalItems,
+                totalPages: action.payload.areas.totalPages,
+                currentPage: action.payload.areas.currentPage
+            }
             state.isLoading = false
         },
         getCurrentArea: (state, action) => {
@@ -75,7 +88,7 @@ const areasSlice = createSlice({
         clearAreas: (state) => {
             state.areas = []
             state.isLoading = false
-            state.errorMessage = ''
+            state.error = false
             state.infoMessage = ''
             state.updated = false
             state.currentArea = {

@@ -2,17 +2,22 @@ import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError 
 import jwtDecode from 'jwt-decode';
 import { AppDispatch, RootState } from '../../store';
 import { logOutProvider } from './authProvider';
-import { logOut, setAuthError, setCredentials } from './authSlice';
+import { logOut, setAuthError, setCredentials, setisLoading } from './authSlice';
+import { useNotification } from '../../../hooks/useNotification';
 
 
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
-    credentials: 'include',
+    prepareHeaders: (headers, { getState }) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if( accessToken ) headers.set('Authorization', `${accessToken}`);  
+        return headers;
+    }
+
 });
 
 const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { 
     const result = await baseQuery(args, api, extraOptions);           
-
         if( result.error && result.error.status === 401 ) {
             const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
             if( refreshAccessToken.data ) {
@@ -22,15 +27,19 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch( setCredentials({ user, accessToken }) );
                 return baseQuery(args, api, extraOptions);
             }else{ 
+
+                if( localStorage.getItem('accessToken') ) useNotification({type: 'error', message: 'Su sesión ha expirado, por favor vuelva a iniciar sesión' });
+                
                 api.dispatch( logOut() );
             }
         }else{
-            const { accessToken, refreshToken }:any = result.data;
+            const { accessToken }:any = result.data;
             if( accessToken ) localStorage.setItem('accessToken', accessToken);
-            if( refreshToken ) localStorage.setItem('refreshToken', refreshToken);
             if( accessToken ) {
                 const userAuth = jwtDecode(accessToken);
                 api.dispatch( setCredentials({ userAuth, accessToken }) );
+                api.dispatch( setisLoading(false) );
+                
             }
         }
         
@@ -54,11 +63,10 @@ export const { useGetValidationQuery } = authApi;
 
 export const loginThunk = (tokens: any ) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
-        const { access_token, refresh_token } = tokens;
-        localStorage.setItem('accessToken', access_token);
-        localStorage.setItem('refreshToken', refresh_token);
-        const user = jwtDecode(access_token);
-        dispatch( setCredentials({ user, access_token }) );
+        const { accessToken, refreshToken } = tokens;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        dispatch( setCredentials({ accessToken, refreshToken }) );
     }
 }
 

@@ -1,15 +1,35 @@
 import { useEffect } from "react";
+import Loading from "../../components/antd/Loading";
+import { loginThunk } from "../../redux/features/auth/authThunks";
+import { useAppDispatch } from "../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
 const LoginSuccess = () => {
+
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate();
+
+    // Get params from url
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('accessToken');
+    const refreshToken = urlParams.get('refreshToken');
+    
+    if(accessToken && refreshToken){
+        dispatch(loginThunk({accessToken, refreshToken}))
+        // sin regresar a la pagina anterior
+    }
+
     useEffect(() => {
         setTimeout(() => {
-            window.close()
-        }, 100)
-    })
+            navigate("/", {
+                replace: true,
+            })
+        }, 500)
+    }, [])
+
+    
     return ( 
-        <div className="p-5 text-white text-center">
-            <h1 className="text-3xl">Inicio de sesión correcto</h1>
-        </div>
+        <Loading texto="Iniciando Sesión" />
     );
 }
  

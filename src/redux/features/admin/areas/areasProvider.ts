@@ -4,7 +4,7 @@ import { RootState } from "../../../store";
 
 export const getAreasProvider = async (filtros: any, getState: () => RootState) => {
     try {
-        const response = await clientAxios.get(`/areas`, { headers: { "accessToken": `${getState().auth.accessToken}` }, params: {filtros } });     
+        const response = await clientAxios.get(`/areas`, { headers: { "accessToken": `${getState().auth.accessToken}` }, params: filtros });
         return {
             ok: true,
             areas: response.data
@@ -40,7 +40,13 @@ export const getAreaProvider = async (areaId: number, getState: () => RootState)
 
 export const createAreaProvider = async (area: any, getState: () => RootState) => {
     try {
+
+        console.log(area);
+        
         const response = await clientAxios.post(`/areas`, area, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+
+        console.log(response);
+        
         return {
             ok: true,
             area: response.data

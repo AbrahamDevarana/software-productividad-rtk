@@ -15,6 +15,7 @@ interface IuserAuth{
 
 interface AuthState {
     accessToken: string | null;
+    refreshToken: string | null;
     error: string | null;
     loggedOut: boolean;
     userAuth: IuserAuth | null,
@@ -27,6 +28,7 @@ const initialState: AuthState = {
     error: null,
     userAuth: null,
     accessToken: null,
+    refreshToken: null,
     loggedOut: false,
     isAuthenticated: false, 
 
@@ -37,18 +39,18 @@ export const authSlice = createSlice({
     initialState,
     name: 'authSlice',
     reducers: {
-        setisLoading: (state) => {
-            state.isLoading = true
+        setisLoading: (state, action) => {
+            state.isLoading = false
         },
         setAuthError: (state, action) => {
             state.error = action.payload,
             state.isLoading = false
         },
         setCredentials: (state, action) => {
-            const { userAuth, accessToken } = action.payload;
+            const { userAuth, accessToken, refreshToken } = action.payload;
             state.userAuth = userAuth;
-            state.isLoading = false;
             state.accessToken = accessToken;
+            state.refreshToken = refreshToken;
             state.isAuthenticated = true;
         },
         logOut: (state) => {

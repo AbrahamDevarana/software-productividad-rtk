@@ -4,6 +4,7 @@ import { useGetValidationQuery } from '../../redux/features/auth/authThunks';
 import { useAppSelector } from '../../redux/hooks';
 import Loading from "../antd/Loading";
 import { useEffect } from 'react';
+import { useAuth } from "../../hooks/useAuth";
 
 export default function LayoutLogin({ children }: LayoutLoginProps) {
 
@@ -11,10 +12,7 @@ export default function LayoutLogin({ children }: LayoutLoginProps) {
     const location = useLocation()
     const { isLoading, userAuth } = useAppSelector((state: any) => state.auth);
     
-    useGetValidationQuery({
-        refetchOnReconnect: true,
-        pollingInterval: 180000,
-    })
+    useAuth()
 
     const { from } = location.state || { from: { pathname: "/" } };
     

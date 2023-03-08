@@ -10,6 +10,7 @@ import 'animate.css';
 import { OptBar } from '../Menu/Optionbar';
 import { useSocket } from "../../hooks/useSocket";
 import { connectSocketThunk } from '../../redux/features/socket/socketThunk';
+import { useAuth } from "../../hooks/useAuth";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -20,10 +21,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    useGetValidationQuery(null, {
-        refetchOnReconnect: true,
-        pollingInterval: 180000,
-    })
+    useAuth()
 
     const { isLoading, userAuth } = useAppSelector((state: any) => state.auth); 
     const [settingVisible, setSettingVisible] = useState(false);
@@ -71,7 +69,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     }, [])
 
    
-    if (isLoading) return <Loading />;
+    if (isLoading && !userAuth) return <Loading />;
     return (
         <>
         <div className='w-full'>  

@@ -1,10 +1,10 @@
 import { Spin } from "antd";
 
-const Loading = () => {
+const Loading = ({ texto = "Cargando" }) => {
     return ( 
         <div className="flex w-full h-screen justify-center align-middle flex-col">
             <Spin size="large" spinning/>
-            <p className="text-center">Cargando</p>
+            <p className="text-center"> {texto} </p>
         </div>
      );
 }
