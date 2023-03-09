@@ -51,7 +51,7 @@ export const Admin = () => {
                             <div className="col-span-2 sm:col-span-1 row-span-2">
                                 <div className="h-full">
                                     { panelAdmin === 'usuarios' && <NuevoUsuario/> }
-                                    { panelAdmin === 'areas' && <FormAreas/> }
+                                    {/* { panelAdmin === 'areas' && <FormAreas /> } */}
                                     { panelAdmin === 'departamentos' && <FormDepartamentos/> }
                                     { panelAdmin === 'puestos' && <FormPuestos /> }
                                 </div>

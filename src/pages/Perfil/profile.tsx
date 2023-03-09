@@ -3,7 +3,6 @@ import { BiTargetLock } from "react-icons/bi";
 import { ImStatsBars2 } from 'react-icons/im'
 import {   GiPodiumWinner } from 'react-icons/gi'
 import Box from "../../components/ui/Box";
-import moment from "moment";
 import { Button } from "../../components/ui/Button";
 import AvatarProfile from "../../components/ui/Avatar";
 import { FaProjectDiagram } from "react-icons/fa";
@@ -92,7 +91,7 @@ const Profile = ({activeUser}: any) => {
                 <div>
                     <p className="font-bold py-2 text-custom-dark2">
                         Fecha de Ingreso: 
-                        <span className="font-light"> { activeUser.fechaIngreso ? moment(activeUser.fechaIngreso).format("LL") : 'No se ha asignado fecha' } </span>
+                        {/* <span className="font-light"> { activeUser.fechaIngreso ? moment(activeUser.fechaIngreso).format("LL") : 'No se ha asignado fecha' } </span> */}
                     </p>
                 </div>
                 <div>

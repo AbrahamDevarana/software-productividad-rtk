@@ -77,7 +77,7 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                             <Select
                                                 showSearch
                                                 onChange={ (value) => handleChange({target: {name: 'parentId', value}}) }
-                                                filterOption={(input, option) => option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                                // filterOption={(input, option) => option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                                 value={values.parentId}
                                                 placeholder="Selecciona una opción"
                                                 allowClear

@@ -6,6 +6,7 @@ const initialState = {
     isLoading: true,
     updated: false,
     errorMesssage: '',
+    usuario: '',
 }
 
 const profileSlice = createSlice({

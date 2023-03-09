@@ -3,7 +3,6 @@ import { Button } from '../../../components/ui/'
 import { Input } from '../../../components/ui'
 import * as Yup from "yup";
 import { Alert, DatePicker } from 'antd';
-import moment from 'moment';
 import { updateProfileThunk } from '../../../redux/features/profile/profileThunk';
 import { useAppDispatch } from '../../../redux/hooks';
 
