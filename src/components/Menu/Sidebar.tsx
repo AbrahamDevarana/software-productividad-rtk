@@ -8,6 +8,7 @@ import { Link, NavLink} from 'react-router-dom';
 
 import "../../assets/scss/menu.scss"
 import { Icon } from '../Icon';
+import { Divider } from 'antd';
 
 
 interface LayoutSidebarProps {
@@ -26,11 +27,25 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
         <div className="w-[90px] h-screen bg-white p-2 shadow-lg dark:bg-dark-gradient">
             <div className="flex flex-col menuSidebar items-center h-full gap-y-1 menu_sidebar">
                 <NavLink to={'/'} className={`link nav-link`}>
-                    <SvgIsotipo className={`h-10 mx-auto svg-icon`} />
+                    <SvgIsotipo className={`h-10 w-full block svg-icon brand`} />
                 </NavLink>
 
-                <div className='divider w-full h-0.5' />
+                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
 
+                <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
+                    <AvatarProfile preview={false} className="h-5 w-5 mx-auto" />
+                </NavLink>
+
+                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
+                <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
+                    {/* <Icon iconName="faDove" className="h-5 w-5 mx-auto text-2xl" /> */}
+                    <SvgIsotipo className={`h-6 w-full block svg-icon`} />
+                    <span className="text-xs text-center font-light block">Devarana</span>
+                </NavLink>
+                <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
+                    <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Estrategia</span>
+                </NavLink>
                 <NavLink to={'/actividades'} className={`link nav-link text-center`}>
                     <Icon iconName="faTasks" className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Actividades</span>
@@ -38,14 +53,6 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
                 <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
                     <Icon iconName="faProjectDiagram" className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Proyectos</span>
-                </NavLink>
-                <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
-                    <Icon iconName="faDove" className="h-5 w-5 mx-auto text-2xl" />
-                    <span className="text-xs text-center font-light block">Devarana</span>
-                </NavLink>
-                <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
-                    <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
-                    <span className="text-xs text-center font-light block">Estrategia</span>
                 </NavLink>
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
@@ -62,9 +69,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
                         <Icon iconName='faGear' className="h-5 w-5 mx-auto text-2xl" />
                         <span className="text-xs text-center font-light block">Admin</span>
                     </div>
-                    <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                        <AvatarProfile preview={false} className="h-5 w-5 mx-auto" />
-                    </NavLink>
+                   
                     
                 </div>
 

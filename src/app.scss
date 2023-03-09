@@ -93,17 +93,17 @@ p, li, span, a{
 	background: linear-gradient(190deg, #656a76 0%, #2e3136 50%, #2e3136 100%);
 }
 
+
 .divider{
-	flex-shrink: 0;
+    flex-shrink: 0;
 	border-top: 0px solid rgba(0, 0, 0, 0.08);
 	border-right: 0px solid rgba(0, 0, 0, 0.08);
 	border-left: 0px solid rgba(0, 0, 0, 0.08);
-	height: 0.0625rem;
-	margin: 1rem 0px;
+	height: 1.5px;
 	border-bottom: none;
-	opacity: 0.25;
 	background-color: transparent;
-	background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgb(255, 255, 255), rgba(255, 255, 255, 0)) !important;
+	opacity: 0.25;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(255, 255, 255), rgba(0, 0, 0, 0)) !important;
 }
 
 .divider-2{
@@ -213,9 +213,21 @@ p, li, span, a{
 
 .menu_sidebar{
     .nav-link{
-        @apply hover:bg-opacity-50 rounded-xl py-2 w-full  dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white
+        @apply hover:bg-opacity-50 rounded-xl py-2 w-full  dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white;
+        &.active span {
+            @apply dark:text-devarana-blue text-devarana-blue
+        }
     }
     .svg-icon{
-        @apply dark:fill-white fill-devarana-blue dark:hover:fill-devarana-graph hover:fill-white
+        @apply dark:fill-white fill-devarana-blue dark:hover:fill-devarana-graph hover:fill-white; 
     }
+    .active .svg-icon:not(.brand){
+        @apply dark:fill-devarana-blue fill-devarana-blue 
+    }
+
+}
+
+.ant-pagination li{
+    display: grid!important;
+    align-items: center!important;
 }

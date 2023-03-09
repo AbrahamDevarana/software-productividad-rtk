@@ -16,6 +16,7 @@ import Perfil from '../pages/Perfil';
 import { ErrorPage } from '../pages/ErrorPage';
 import { NuevoUsuario } from '../pages/admin/Usuarios/components/NuevoUsuario';
 import { Provider } from '../pages/Auth/Provider';
+import { EstrategíaHome } from '../pages/Estrategia';
 
 interface RouteProps {
     path: string;
@@ -91,6 +92,11 @@ const  rutaPrivada:RouteProps[] = [
         path: '/objetivos',
         layout: LayoutApp,
         component: Objetivos
+    },
+    {
+        path: '/estrategia',
+        layout: LayoutApp,
+        component: EstrategíaHome
     },
     {
         path: '*',

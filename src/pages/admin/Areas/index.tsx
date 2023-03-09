@@ -8,10 +8,20 @@ import { Icon } from "../../../components/Icon";
 import { FormAreas } from './components/FormAreas';
 import useNotify from "../../../hooks/useNotify";
 
+import type { ColumnsType } from 'antd/es/table';
+import type { TableRowSelection } from 'antd/es/table/interface';
+
 
 const initialValues = {
     size: 10,
     page: 0,
+}
+
+interface DataType {
+    key: React.Key;
+    nombre: string;
+    acciones: string;
+    subArea?: DataType[]
 }
 
 export const Areas = () => {
@@ -22,13 +32,15 @@ export const Areas = () => {
     const [formVisible, setFormVisible] = useState<boolean>(false)
     const [filtros, setFiltros] = useState<any>(initialValues)
 
-    const columns = [
+    const columns: ColumnsType <DataType> = [
         {
             title: "Areas",
+            key: "areas",
             render: (data: any) => data.nombre
         },
         {
             title: "Acciones",
+            key: "acciones",
             render: (data: any) => (
                 <div className="flex gap-2">
                     <Button
@@ -112,13 +124,41 @@ export const Areas = () => {
                     </Button>
                 </div>
                 <Table 
-                        columns={columns}
-                        dataSource={areas}
-                        rowKey={(data: any) => data.id}
-                        pagination={false}
+
+                    columns={columns}
+                    dataSource={ areas.map((area: any) => ({
+                        ...area,
+                        key: area.id,
+                        children: area.subAreas,
+                        subArea: undefined
+                    })) }
+                    rowKey={(data: any) => data.id}
+                    pagination={false}
+                //     expandable={
+                //         {
+                //             expandedRowRender: (data: any) => {
+                //                 return (
+                //                     data.subAreas && data.subAreas.map((subArea: any) => (
+                //                         <div className="flex gap-5">
+                //                             <div className="flex-1">
+                //                                 <p className="font-bold">Sub Area</p>
+                //                                 <p>{subArea.nombre}</p>
+                //                             </div>
+                //                             <div className="flex-1">
+                //                                 <p className="font-bold">Descripción</p>
+                //                                 <p>{subArea.descripcion}</p>
+                //                             </div>
+                //                         </div>
+                //                     ))
+                //                 )
+                //             },
+                //             rowExpandable: (record) => record.subAreas && 'Not Expandable',
+
+                //     }
+                // }   
                     />
                     <Pagination
-                        className="flex"
+                        className="flex justify-end mt-5"
                         current={paginate.currentPage + 1}
                         total={paginate.totalItems}
                         pageSize={filtros.size}

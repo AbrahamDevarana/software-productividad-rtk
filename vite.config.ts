@@ -21,7 +21,6 @@ export default defineConfig({
     build: {
     rollupOptions: {
         manualChunks: {
-            "moment": ["moment"],
             "react-dom": ["react-dom"],
             "chart.js": ["chart.js"],
             "animate.css": ["animate.css"],
