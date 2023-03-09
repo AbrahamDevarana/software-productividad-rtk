@@ -3,7 +3,6 @@ import { ErrorMessage, Formik } from "formik"
 import { AntdSelect } from "../../../../components/antd/Select";
 import * as Yup from "yup";
 import { Button } from "../../../../components/ui";
-import moment from "moment";
 
 const usuarioSchema = Yup.object().shape({
     area:  Yup.number().required("El area es requerido").positive('El area es requerido'),
@@ -56,8 +55,8 @@ export const Profesional = ({usuario, handleSteps}:any) => {
                                 <ErrorMessage name="titulo" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </div>
                             <div>
-                                <DatePicker className="w-full" onChange={(date, dateString) => setFieldValue('fechaIngreso', dateString)} placeholder="Seleccionar Fecha de Ingreso"
-                                    format={clientFormat} defaultValue={ values.fechaIngreso ? moment(values.fechaIngreso, clientFormat) : undefined }/>
+                                {/* <DatePicker className="w-full" onChange={(date, dateString) => setFieldValue('fechaIngreso', dateString)} placeholder="Seleccionar Fecha de Ingreso"
+                                    format={clientFormat} defaultValue={ values.fechaIngreso ? moment(values.fechaIngreso, clientFormat) : undefined }/> */}
                                 <ErrorMessage name="fechaIngreso" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </div>
 
