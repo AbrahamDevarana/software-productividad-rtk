@@ -50,10 +50,10 @@ export const NuevoUsuario = () => {
     //         Object.keys(usuarioSinLider).every((key) => usuario[key] !== initialValues[key] ) ? 
     //         console.log("Guardar") : console.log("No guardar")
     //     }        
-    }
+    // }
     
 
-    return (
+    return (<></>
         // <Box className="animate__animated animate__fadeIn animate__faster">
         //     <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
         //         <Steps current={current} progressDot={true} size="small">
