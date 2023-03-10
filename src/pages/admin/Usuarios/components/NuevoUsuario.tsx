@@ -28,46 +28,46 @@
 //         lider: false,
 // }
 
-// export const NuevoUsuario = () => {
+export const NuevoUsuario = () => {
 
-//     const [ current, setCurrent] = useState<number>(0);
-//     const [ usuario, setUsuario ] = useState (initialValues);
+    // const [ current, setCurrent] = useState<number>(0);
+    // const [ usuario, setUsuario ] = useState (initialValues);
 
-//     const { Step } = Steps;
+    // const { Step } = Steps;
 
 
-//     const handleSteps = (values:any) => {
-//         setUsuario({
-//             ...usuario,
-//             ...values
-//         })
-//         // Max 2 steps
-//         setCurrent(Math.min(current + 1, 2));
+    // const handleSteps = (values:any) => {
+    //     setUsuario({
+    //         ...usuario,
+    //         ...values
+    //     })
+    //     // Max 2 steps
+    //     setCurrent(Math.min(current + 1, 2));
 
-//         // Cuando se llega al último paso comparar los valores del usuario con los valores iniciales excepto lider
-//         const {lider, ...usuarioSinLider} = values;      
-//         if (current === 2) {
-//             Object.keys(usuarioSinLider).every((key) => usuario[key] !== initialValues[key] ) ? 
-//             console.log("Guardar") : console.log("No guardar")
-//         }        
-//     }
+    //     // Cuando se llega al último paso comparar los valores del usuario con los valores iniciales excepto lider
+    //     const {lider, ...usuarioSinLider} = values;      
+    //     if (current === 2) {
+    //         Object.keys(usuarioSinLider).every((key) => usuario[key] !== initialValues[key] ) ? 
+    //         console.log("Guardar") : console.log("No guardar")
+    //     }        
+    }
     
 
-//     return (
-//         <Box className="animate__animated animate__fadeIn animate__faster">
-//             <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
-//                 <Steps current={current} progressDot={true} size="small">
-//                     <Step title="Perfil" onStepClick={setCurrent} />
-//                     <Step title="Domicilio" onStepClick={setCurrent} />
-//                     <Step title="Profesional" onStepClick={setCurrent} />
-//                 </Steps>
-//             </Box>
+    return (
+        // <Box className="animate__animated animate__fadeIn animate__faster">
+        //     <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
+        //         <Steps current={current} progressDot={true} size="small">
+        //             <Step title="Perfil" onStepClick={setCurrent} />
+        //             <Step title="Domicilio" onStepClick={setCurrent} />
+        //             <Step title="Profesional" onStepClick={setCurrent} />
+        //         </Steps>
+        //     </Box>
 
-//             <div className={`pt-24`}>                
-//                 {current === 0 ? <Contacto usuario={usuario} handleSteps={handleSteps} /> : ""}
-//                 {current === 1 ? <Domicilio usuario={usuario} handleSteps={handleSteps} /> : ""}
-//                 {current === 2 ? <Profesional usuario={usuario} handleSteps={handleSteps} /> : ""}
-//             </div>  
-//         </Box>
-//     )
-// }
+        //     <div className={`pt-24`}>                
+        //         {current === 0 ? <Contacto usuario={usuario} handleSteps={handleSteps} /> : ""}
+        //         {current === 1 ? <Domicilio usuario={usuario} handleSteps={handleSteps} /> : ""}
+        //         {current === 2 ? <Profesional usuario={usuario} handleSteps={handleSteps} /> : ""}
+        //     </div>  
+        // </Box>
+    )
+}
