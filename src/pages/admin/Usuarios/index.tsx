@@ -1,133 +1,143 @@
-import { Table } from "antd"
-import { useNavigate } from "react-router-dom"
-import { Avatar, Box, Button } from "../../../components/ui"
+import { Pagination, Table, Tooltip } from "antd"
+import { Box, Button } from "@/components/ui"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { useEffect, useState } from "react"
+import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
+import { ColumnsType } from "antd/es/table"
+import { Icon } from "@/components/Icon"
+import { useDelete } from "@/hooks/useDelete"
+import useNotify from "@/hooks/useNotify"
+
+
+const initialValues = {
+  size: 10,
+  page: 0,
+}
+
+interface DataType {
+  key: React.Key;
+  id: string;
+  nombre: string;
+  email: string;
+  fechaNacimiento: string;
+  fechaIngreso: string;
+  acciones: string;
+}
+
 
 export const Usuarios = () => {
-    const navigate = useNavigate()
+    const [filtros, setFiltros] = useState<any>(initialValues)
+	const [formVisible, setFormVisible] = useState<boolean>(false)
+	const { usuarios, infoMessage, paginate } = useAppSelector((state: any) => state.usuarios)
+    const dispatch = useAppDispatch()
 
-    const dataSource = [
+    useEffect(() => {
+      dispatch(getUsuariosThunk(filtros))
+	  return () => {
+		  dispatch(clearUsuariosThunk())
+	  }
+    }, [filtros])
+
+
+	async function handleDelete(id: number) {
+		const confirmed = await useDelete('¿Estás seguro que deseas eliminar este elemento?');
+		if (confirmed) {
+			dispatch(deleteUsuarioThunk(id))
+		}
+	}
+    
+    const columns: ColumnsType <DataType> = [
+		{
+			render: (data: any) => Object.values(data).some(val => val === null) ? 
+			<Tooltip title="Este usuario no ha completado su registro">
+				<span><Icon iconName="faExclamationTriangle" className="text-yellow-300" /></span>
+			</Tooltip>
+			: null,
+			width: 35
+		},
         {
-          id: 4,
-          name: 'Abraham',
-          lastName: 'Alvarado',
-          secondLastName: 'Guevara',
-          nick_name: null,
-          email: 'abrahamalvarado@devarana.mx',
-          short_name: null,
-          password: 'Devarana#1234*',
-          active: 0,
-          birth_date: '1990-01-01',
-          admission_date: null,
-          phone: '1234567890',
-          profile_description: null,
-          google_id: '108153392098700518345',
-          slug: 'abraham_alvarado_12345',
-          social_facebook: null,
-          social_linkedin: '213123',
-          social_twitter: null,
-          social_instagram: null,
-          street: 'Centro #1',
-          suburb: 'Centro',
-          bachelor_degree: 'asfsdfsadf',
-          birth_place: 'Toluca',
-          picture: '',
-          rol_id: 4,
-          position_id: 1,
-          department_id: 2,
-          town_id: 1810,
-          createdAt: '2022-06-23T15:17:49.000Z',
-          updatedAt: '2022-07-14T14:25:40.000Z',
-          deletedAt: null,
-          position: {
-            id: 1,
-            nombre: 'Desarrollador Web',
-            descripcion: 'Test',
-            slug: 'desarrollador-web',
-            estatus_id: 1,
-            createdAt: '2022-06-22T16:16:13.000Z',
-            updatedAt: '2022-06-22T16:16:13.000Z',
-            deletedAt: null
-          }
+            title: "Nombre",
+            key: "nombre",
+			render: (data: any) => `${data.nombre} ${data.apellidoPaterno} ${data.apellidoMaterno}`,
+			ellipsis: true
         },
-        {
-          id: 5,
-          name: 'Fátima',
-          lastName: 'Benitez',
-          secondLastName: 'Ortiz',
-          nick_name: null,
-          email: 'fatimaortiz@devarana.mx',
-          short_name: 'FBO',
-          password: 'Devarana#1234*',
-          active: 0,
-          birth_date: '1990-01-02',
-          admission_date: '2022-07-01',
-          phone: '1234567890',
-          profile_description: null,
-          google_id: '105294255793409066896',
-          slug: 'fatima_benitez_dvejn',
-          social_facebook: null,
-          social_linkedin: null,
-          social_twitter: null,
-          social_instagram: null,
-          street: 'Centro #1',
-          suburb: 'Centro',
-          bachelor_degree: 'Ing.',
-          birth_place: 'Veracrú',
-          picture: 'https://lh3.googleusercontent.com/a-/AFdZucr1v6nn_ZtJrbpn_61w1bX76FUAvT6RhIOp4V64fsPP9sObJmbkxKLMoNmJSvmk8BKww85kB8zrPJmy_NhxBQTTAWdZ0SBw_p9XZqFV9GyBO-04rCXz0hnehpQYA3aFj6DrtyOJ8whCxMPBrkHhS1zytbnvrCEUkv1Glei7CwI-oqGKAZKfLlQ8PE8TybVU-z9YdJp0jZrVr75A5k5EdxrQMFZF7MtubpOdZ-bNn2wVV3TkA7Pn0yI-qYwEBDpREigHntMCxptuZsgjYAVYyLpiHF81iDzQaLkvc8ERXKz7zX25Q3DMd7Nr2VtiFKpTCz9P6eeSPyCr0ZY-QW2x4YmVwYibsVFPpBiGhAK9pF3HrtrLWAUrUHGYmMibbNjYnVSGKVW93vYjrW5yxhoMnmxOMXfN-BQhajK0uwotUuZW5enLxHo3zygLELbvjZXkhbdFB3sSzy163xKmUUXMSXr8lEKEQYX6SOSovta6QdcvvVw0clwBnOXRMVArhlTVhqMygs4DHC6_xusWM5UXOEixJyj4kzz_ULco-n92AHQniHVvrLaWIK75wd3neWZiC5ibOmZeHF5BkXaRW2fQNGyWpXQgTs8lcLX66cY0db53McX_v_YtwnkL6OUeuKIMb5p9YjZGJVZv-nnkIfRvyfdDC9NOEFq4BzCVkOAl04bF1e0MP3nxSRZlwxgqHCTxulT7zCC4bcY0P3Q8SjHzHtACCXbzBx_NpU7qHRKyiq-4pXxFxo6EDofKXLI56KnaoxXE5J0g4Q=s96-c',
-          rol_id: 3,
-          position_id: 3,
-          department_id: 2,
-          town_id: 1810,
-          createdAt: '2022-07-01T20:01:17.000Z',
-          updatedAt: '2022-07-13T14:40:03.000Z',
-          deletedAt: null,
-          position: {
-            id: 3,
-            nombre: 'Gerente de Innovación y Calidad',
-            descripcion: 'Test Especial',
-            slug: 'gerente-de-innovacion-y-calidad',
-            estatus_id: 1,
-            createdAt: '2022-06-27T14:34:23.000Z',
-            updatedAt: '2022-06-27T14:34:23.000Z',
-            deletedAt: null
-          }
-        }
+		{
+			title: "Email",
+			key: "email",
+			dataIndex: "email",
+			ellipsis: true
+		},
+		{
+			title: "Fecha Nacimiento",
+			key: "fechaNacimiento",
+			dataIndex: "fechaNacimiento",
+			ellipsis: true
+		},
+		{
+			title: "Fecha Ingreso",
+			key: "fechaIngreso",
+			dataIndex: "fechaIngreso",
+			ellipsis: true
+		},
+		{
+            title: "Acciones",
+            key: "acciones",
+			render: (data: any) => (
+				<div className="flex gap-2">
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => {
+                            // handleEdit(data.id)
+                        } }
+                    >
+                        <Icon iconName="faPen" />
+                    </Button>
+                    <Button
+                        btnType="primary-outline"
+                        fn={() => handleDelete(data.id) }
+                    >
+                        <Icon iconName="faTrash" />
+                    </Button>
+                </div>
+			),
+			width: 150
+		}
+
     ]
-    const columns = [
-        {
-            title: 'Foto',
-            render: (data:any) => <Avatar picture={data.picture} > {data.short_name} </Avatar>
-            
-        },
-        {
-          title: 'Nombre',
-          render: (data:any) => data.name + ' ' + data.lastName + ' ' + data.secondLastName
-        },
-        {
-          title: 'Puesto',
-          render: (data:any) => data.position.nombre
-        },
-        {
-          title: 'Email',
-          render: (data:any) => data.email
-        },
 
-      {
-        title: 'Acciones',
-      },
-    ];
+	useEffect(() => {
+        useNotify({ infoMessage })
+    }, [infoMessage])
+   
+	const handleEdit = (id: any) => {
+        dispatch(getUsuarioThunk(id))
+        setFormVisible(true)
+    }
 
 
   return (
     <Box className="overflow-auto animate__animated animate__fadeIn">
-        {
-            (dataSource && dataSource.length > 0) ??
-                <Table 
-                    columns={columns}
-                    dataSource={dataSource}
-                    rowKey={record => record.id}
-                />
-        }
+       <Table
+			columns={columns}
+			dataSource={usuarios}
+			rowKey={(record) => record.id}
+			pagination={false}
+	   >
+
+       </Table>
+       <Pagination
+			className="flex justify-end mt-5"
+			current={paginate.currentPage + 1}
+			total={paginate.totalItems}
+			pageSize={filtros.size}
+			onChange={(page, pageSize) => {
+				setFiltros({
+					...filtros,
+					page: page - 1,
+					size: pageSize
+				})
+		}}
+       />
     </Box>
   )
 }

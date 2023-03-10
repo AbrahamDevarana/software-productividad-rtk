@@ -1,12 +1,12 @@
 import { Input, Pagination, Table } from "antd"
-import { Box, Button } from "../../../components/ui"
+import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
-import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '../../../redux/features/admin/areas/areasThunks';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Swal from "sweetalert2";
-import { Icon } from "../../../components/Icon";
+import { Icon } from "@/components/Icon";
 import { FormAreas } from './components/FormAreas';
-import useNotify from "../../../hooks/useNotify";
+import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';
 import type { TableRowSelection } from 'antd/es/table/interface';
@@ -134,28 +134,6 @@ export const Areas = () => {
                     })) }
                     rowKey={(data: any) => data.id}
                     pagination={false}
-                //     expandable={
-                //         {
-                //             expandedRowRender: (data: any) => {
-                //                 return (
-                //                     data.subAreas && data.subAreas.map((subArea: any) => (
-                //                         <div className="flex gap-5">
-                //                             <div className="flex-1">
-                //                                 <p className="font-bold">Sub Area</p>
-                //                                 <p>{subArea.nombre}</p>
-                //                             </div>
-                //                             <div className="flex-1">
-                //                                 <p className="font-bold">Descripción</p>
-                //                                 <p>{subArea.descripcion}</p>
-                //                             </div>
-                //                         </div>
-                //                     ))
-                //                 )
-                //             },
-                //             rowExpandable: (record) => record.subAreas && 'Not Expandable',
-
-                //     }
-                // }   
                     />
                     <Pagination
                         className="flex justify-end mt-5"

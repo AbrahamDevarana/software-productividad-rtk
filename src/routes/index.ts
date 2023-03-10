@@ -3,9 +3,6 @@ import LayoutEmpty from '../components/layouts/LayoutEmpty';
 import LayoutLogin from '../components/layouts/LayoutPublic'
 import { LayoutLoginProps } from '../interfaces';
 import { Areas } from '../pages/admin/Areas';
-import { Departamentos } from '../pages/admin/Departamentos';
-import { Puestos } from '../pages/admin/Puestos';
-import { Admin } from '../pages/admin';
 import Login from '../pages/Auth/Login'
 import LoginError from '../pages/Auth/LoginError';
 import LoginSuccess from '../pages/Auth/LoginSuccess';
@@ -14,9 +11,9 @@ import Home from '../pages/Home';
 import { Objetivos } from '../pages/Objetivos';
 import Perfil from '../pages/Perfil';
 import { ErrorPage } from '../pages/ErrorPage';
-import { NuevoUsuario } from '../pages/admin/Usuarios/components/NuevoUsuario';
 import { Provider } from '../pages/Auth/Provider';
 import { EstrategíaHome } from '../pages/Estrategia';
+import { Usuarios } from '../pages/admin/Usuarios';
 
 interface RouteProps {
     path: string;
@@ -64,24 +61,14 @@ const  rutaPrivada:RouteProps[] = [
         component: Perfil
     },
     {
-        path: '/admin/',
-        layout: LayoutApp,
-        component: Admin
-    },
-    {
-        path: '/admin/departamentos',
-        layout: LayoutApp,
-        component: Departamentos
-    },
-    {
         path: '/admin/areas',
         layout: LayoutApp,
         component: Areas
     },
     {
-        path: '/admin/puestos',
+        path: '/admin/usuarios',
         layout: LayoutApp,
-        component: Puestos
+        component: Usuarios
     },
     {
         path: '/somos-devarana',

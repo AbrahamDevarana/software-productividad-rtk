@@ -91,18 +91,10 @@ const areasSlice = createSlice({
             state.error = false
             state.infoMessage = ''
             state.updated = false
-            state.currentArea = {
-                id: 0,
-                nombre: '',
-                parentId: null
-            }
+            state.currentArea = initialState.currentArea
         },
         clearCurrentArea: (state) => {
-            state.currentArea = {
-                id: 0,
-                nombre: '',
-                parentId: null
-            }
+            state.currentArea = initialState.currentArea
         }
     }
 })
