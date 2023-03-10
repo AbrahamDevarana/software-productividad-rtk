@@ -4,128 +4,225 @@ import { Table, Progress, Avatar } from 'antd';
 import { useGetColorByStatus } from '../../hooks/useGetColorByStatus';
 import { DateTime } from 'luxon';
 
-// Resizable
 
 import type { ColumnsType } from 'antd/es/table';
+import { useState } from 'react';
+
+import '@/assets/css/ResizableTable.css';
+import { useResizable } from '../../hooks/useResizable';
+
+type DataType = {
+    key: React.Key;
+    tareas: string;
+    status: string;
+    progreso: React.ReactNode;
+    fechaEntrega: string;
+    objetivo: string;
+    responsables: React.ReactNode;
+};
 
 
 export const EstrategíaHome = () => {
-  return (
-    <>
-        <Box>
 
-        </Box>
+    const [columns, setColumns] = useState<ColumnsType<DataType>>([
+        {
+            title: 'Tareas',
+            dataIndex: 'tareas',
+            width: 80,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            width: 150,
+        },
+        {
+            title: 'Progreso',
+            dataIndex: 'progreso',
+            width: 150,
+        },
+        {
+            title: 'Fecha de Entrega',
+            dataIndex: 'fechaEntrega',
+            width: 150,
+        },
+        {
+            title: 'Objetivo',
+            dataIndex: 'objetivo',
+            width: 150,
+        },
+        {
+            title: 'Responsables',
+            dataIndex: 'responsables',
+            width: 150,
+        },
+    ]);
 
-        <div className='rounded-l-ext grid grid-cols-12 gap-x-5 mt-5'>
-            <div className="grid grid-cols-12 col-span-2 shadow-md bg-white">
-                <div className='bg-devarana-blue rounded-l-ext col-span-3 h-80 flex flex-col justify-center items-center'>
-                    <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
-                </div>
-                <div className="col-span-9 flex justify-center items-center flex-col">
-                    <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
-                    <p className='text-devarana-graph'>Ver más...</p>
-                </div>
-            </div>
-            <div className='col-span-10 shadow-md bg-white p-5'>
-                <table className='w-full'>
-                    <thead>
-                        <tr>
-                            <th className='text-devarana-graph'>Tareas</th>
-                            <th className='text-devarana-graph'>Status</th>
-                            <th className='text-devarana-graph'>Progreso</th>
-                            <th className='text-devarana-graph'>Fecha de Entrega</th>
-                            <th className='text-devarana-graph'>Objetivo</th>
-                            <th className='text-devarana-graph'>Responsables</th>
-                        </tr>
-                    </thead>
-                    <tbody className='text-center'>
-                        <tr>
-                            <td className='text-devarana-graph border-l-4 border-devarana-blue'>Tarea 1</td>
-                            <td className='text-devarana-blue font-bold'>En Progreso</td>
-                            <td className=''>  
-                                <Progress percent={30}  strokeColor={`${ useGetColorByStatus('success', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('success', .5).rgba }`} />
-                            </td>
-                            <td className='text-devarana-graph'>{ DateTime.local().toFormat('DDD') }</td>
-                            <td className='text-devarana-graph'>Objetivo 1</td>
-                            <td className='text-devarana-graph'>
-                                <Avatar.Group maxCount={2}>
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                </Avatar.Group>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className='text-devarana-graph border-l-4 border-devarana-dark-graph'>Tarea 1</td>
-                            <td className='text-devarana-dark-graph font-bold'>En Progreso</td>
-                            <td className=''>  
-                                <Progress percent={30}  strokeColor={`${ useGetColorByStatus('black', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('black', .5).rgba }`} />
-                            </td>
-                            <td className='text-devarana-graph'>{ DateTime.local().toFormat('DDD') }</td>
-                            <td className='text-devarana-graph'>Objetivo 1</td>
-                            <td className='text-devarana-graph'>
-                                <Avatar.Group maxCount={2}>
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                </Avatar.Group>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className='text-devarana-graph border-l-4 border-red-500'>Tarea 1</td>
-                            <td className='text-red-500 font-bold'>En Progreso</td>
-                            <td className=''>  
-                                <Progress percent={30}  strokeColor={`${ useGetColorByStatus('error', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('error', .5).rgba }`} />
-                            </td>
-                            <td className='text-devarana-graph'>{ DateTime.local().toFormat('DDD') }</td>
-                            <td className='text-devarana-graph'>Objetivo 1</td>
-                            <td className='text-devarana-graph'>
-                                <Avatar.Group maxCount={2}>
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                </Avatar.Group>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className='text-devarana-graph border-l-4 border-devarana-blue'>Tarea 1</td>
-                            <td className='text-devarana-blue font-bold'>En Progreso</td>
-                            <td className=''>  
-                                <Progress percent={30}  strokeColor={`${ useGetColorByStatus('primary', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('primary', .5).rgba }`} />
-                            </td>
-                            <td className='text-devarana-graph'>{ DateTime.local().toFormat('DDD') }</td>
-                            <td className='text-devarana-graph'>Objetivo 1</td>
-                            <td className='text-devarana-graph'>
-                                <Avatar.Group maxCount={2}>
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                </Avatar.Group>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    const data: DataType[] = [
+        {
+            key: '1',
+            tareas: 'Tarea 1',
+            status: 'En Progreso',
+            progreso: <Progress percent={30}  strokeColor={`${ useGetColorByStatus('success', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('success', .5).rgba }`} />,
+            fechaEntrega: DateTime.local().toFormat('DDD'),
+            objetivo: 'Objetivo 1',
+            responsables: <Avatar.Group maxCount={2}>
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                        </Avatar.Group>,
+        },
+        {
+            key: '2',
+            tareas: 'Tarea 2',
+            status: 'En Progreso',
+            progreso: <Progress percent={30}  strokeColor={`${ useGetColorByStatus('success', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('success', .5).rgba }`} />,
+            fechaEntrega: DateTime.local().toFormat('DDD'),
+            objetivo: 'Objetivo 2',
+            responsables: <Avatar.Group maxCount={2}>
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />   
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                        </Avatar.Group>,
+        },
+        {
+            key: '3',
+            tareas: 'Tarea 3',
+            status: 'En Progreso',
+            progreso: <Progress percent={30}  strokeColor={`${ useGetColorByStatus('success', 1).rgba }`} strokeWidth={15} trailColor={`${ useGetColorByStatus('success', .5).rgba }`} />,
+            fechaEntrega: DateTime.local().toFormat('DDD'),
+            objetivo: 'Objetivo 3',
+            responsables: <Avatar.Group maxCount={2}>
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                        </Avatar.Group>,
+        },
+    ]   
 
-        <div className='rounded-l-ext gap-x-5 mt-5 flex flex-row'>
-            <div className='flex shadow'>
-                <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
-                    <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+    const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
+
+    return (
+        <>
+            <div className='rounded-l-ext gap-x-5 flex flex-row'>
+                <div className='flex shadow'>
+                    <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
+                        <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+                    </div>
+                    <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
+                        <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                        <p className='text-devarana-graph'>Ver más...</p>
+                    </div>
                 </div>
-                <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
-                    <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
-                    <p className='text-devarana-graph'>Ver más...</p>
+                <div className='bg-white p-5 w-full shadow'>
+                    <Table  
+                        className='table-resizable'
+                        columns={mergeColumns}
+                        dataSource={data}
+                        pagination={false}
+                        components={{
+                            header: {
+                              cell: ResizableTitle,
+                            },
+                        }}
+                    />
                 </div>
             </div>
-            <div className='bg-white p-5 w-full shadow'>
-                <Table
-                    
-                >
-
-                </Table>
+            <div className='rounded-l-ext gap-x-5 mt-5 flex flex-row'>
+                <div className='flex shadow'>
+                    <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
+                        <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+                    </div>
+                    <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
+                        <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                        <p className='text-devarana-graph'>Ver más...</p>
+                    </div>
+                </div>
+                <div className='bg-white p-5 w-full shadow'>
+                    <Table  
+                        className='table-resizable'
+                        columns={mergeColumns}
+                        dataSource={data}
+                        pagination={false}
+                        components={{
+                            header: {
+                              cell: ResizableTitle,
+                            },
+                        }}
+                    />
+                </div>
             </div>
-        </div>
-    </>
-  )
+            <div className='rounded-l-ext gap-x-5 mt-5 flex flex-row'>
+                <div className='flex shadow'>
+                    <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
+                        <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+                    </div>
+                    <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
+                        <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                        <p className='text-devarana-graph'>Ver más...</p>
+                    </div>
+                </div>
+                <div className='bg-white p-5 w-full shadow'>
+                    <Table  
+                        className='table-resizable'
+                        columns={mergeColumns}
+                        dataSource={data}
+                        pagination={false}
+                        components={{
+                            header: {
+                              cell: ResizableTitle,
+                            },
+                        }}
+                    />
+                </div>
+            </div>
+            <div className='rounded-l-ext gap-x-5 mt-5 flex flex-row'>
+                <div className='flex shadow'>
+                    <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
+                        <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+                    </div>
+                    <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
+                        <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                        <p className='text-devarana-graph'>Ver más...</p>
+                    </div>
+                </div>
+                <div className='bg-white p-5 w-full shadow'>
+                    <Table  
+                        className='table-resizable'
+                        columns={mergeColumns}
+                        dataSource={data}
+                        pagination={false}
+                        components={{
+                            header: {
+                              cell: ResizableTitle,
+                            },
+                        }}
+                    />
+                </div>
+            </div>
+            <div className='rounded-l-ext gap-x-5 mt-5 flex flex-row'>
+                <div className='flex shadow'>
+                    <div className='bg-devarana-blue rounded-l-ext min-h-[120px] h-full flex flex-col justify-center items-center w-10'>
+                        <h1 className='inline-block transform -rotate-90 text-white font-normal tracking-wider py-2'>Estrategia</h1>
+                    </div>
+                    <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
+                        <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                        <p className='text-devarana-graph'>Ver más...</p>
+                    </div>
+                </div>
+                <div className='bg-white p-5 w-full shadow'>
+                    <Table  
+                        className='table-resizable'
+                        columns={mergeColumns}
+                        dataSource={data}
+                        pagination={false}
+                        components={{
+                            header: {
+                              cell: ResizableTitle,
+                            },
+                        }}
+                    />
+                </div>
+            </div>
+        </>
+    )
 }

@@ -26,7 +26,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     const { isLoading, userAuth } = useAppSelector((state: any) => state.auth); 
     const [settingVisible, setSettingVisible] = useState(false);
     const [optBarVisible, setOptBarVisible] = useState(false);
-
+    const [navbarClass, setNavbarClass] = useState('');
 
     useEffect(() => {
         if(!isLoading && !userAuth){
@@ -67,6 +67,15 @@ export default function LayoutApp({ children }: LayoutAppProps) {
             document.documentElement.classList.remove('dark')
         }
     }, [])
+    
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        if(e.currentTarget.scrollTop > 30){
+            setNavbarClass('bg-opacity-25');
+        }else{
+            setNavbarClass('');
+        }
+    }
 
    
     if (isLoading && !userAuth) return <Loading />;
@@ -77,11 +86,12 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                 <div className="flex h-screen">
                     <Sidebar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible}/>
                     <OptBar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible}/>
-                    <div className={`transition-all duration-300 ease-in-out w-full overflow-hidden`}> 
+                    <div className={`transition-all duration-300 ease-in-out w-full overflow-y-scroll`} id="mainEl" onScroll={handleScroll}> 
                         <div className="p-2">
-                            <Navbar setSettingVisible={setSettingVisible} />
-                            <main  className="animate__animated animate__fadeIn overflow-y-auto px-4"
-                                style={{ height: 'calc(100vh - 100px)' }}
+                            <Navbar setSettingVisible={setSettingVisible} navbarClass={navbarClass}/>
+                            <main className="animate__animated animate__fadeIn px-4"
+                                style={{ paddingTop: '80px', paddingBottom: '20px' }}
+                                
                             >{children}</main>
                         </div>
                     </div>
