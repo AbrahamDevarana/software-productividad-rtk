@@ -1,4 +1,4 @@
-import { Pagination, Table, Tooltip } from "antd"
+import { Pagination, Table, Tooltip, Input } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
@@ -7,6 +7,8 @@ import { ColumnsType } from "antd/es/table"
 import { Icon } from "@/components/Icon"
 import { useDelete } from "@/hooks/useDelete"
 import useNotify from "@/hooks/useNotify"
+import { FormUsuarios } from './components/FormUsuarios';
+
 
 
 const initialValues = {
@@ -114,30 +116,58 @@ export const Usuarios = () => {
         setFormVisible(true)
     }
 
+    
+    const handleModal = (status : boolean) => {
+        setFormVisible(status)
+    }
 
-  return (
-    <Box className="overflow-auto animate__animated animate__fadeIn">
-       <Table
-			columns={columns}
-			dataSource={usuarios}
-			rowKey={(record) => record.id}
-			pagination={false}
-	   >
 
-       </Table>
-       <Pagination
-			className="flex justify-end mt-5"
-			current={paginate.currentPage + 1}
-			total={paginate.totalItems}
-			pageSize={filtros.size}
-			onChange={(page, pageSize) => {
-				setFiltros({
-					...filtros,
-					page: page - 1,
-					size: pageSize
-				})
-		}}
-       />
-    </Box>
-  )
+    return (
+        <>
+            <Box className="overflow-auto animate__animated animate__fadeIn">
+                <div className="flex justify-end gap-5 pb-3">
+                    <Input
+                        placeholder="Buscar"
+                        className="max-w-xs w-full"
+                        onChange={(e: any) => {
+                            setFiltros({
+                                ...filtros,
+                                nombre: e.target.value
+                            })
+                        }}
+                    />
+                    <Button
+                        btnType="primary"
+                        fn={() => handleModal(true)}
+                    >
+                        <Icon iconName="faPlus" />
+                    </Button>
+                </div>
+            <Table
+                    columns={columns}
+                    dataSource={usuarios}
+                    rowKey={(record) => record.id}
+                    pagination={false}
+            >
+
+            </Table>
+            <Pagination
+                    className="flex justify-end mt-5"
+                    current={paginate.currentPage + 1}
+                    total={paginate.totalItems}
+                    pageSize={filtros.size}
+                    onChange={(page, pageSize) => {
+                        setFiltros({
+                            ...filtros,
+                            page: page - 1,
+                            size: pageSize
+                        })
+                }}
+            />
+            </Box>
+            <FormUsuarios visible={formVisible} handleModal={handleModal}/>
+        </>
+
+        
+    )
 }

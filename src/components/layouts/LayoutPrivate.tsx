@@ -100,7 +100,6 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         </div>
 
         <Drawer title="Configuración" placement="right" onClose={onClose} open={settingVisible} contentWrapperStyle={{ width: '300px' }}
-        // className to de contentWrapperStyle={{ width: '300px' }}
         >
             <div className="flex">
                 <p> Modo Oscuro </p>

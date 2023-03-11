@@ -43,6 +43,16 @@ module.exports = {
               'devarana-dark-graph' : '#2e3136',
               'devarana-pollito' : '#ffdea4',
               'devarana-salmon' : '#fabcab',
+
+            'primary':'#EC407A',
+            'secondary':'#fde045',
+            'info':'#49a3f1',
+            'success':'#66BB6A',
+            'warning':'#FFA726',
+            'error':'#EF5350', 
+            'light':'#EBEFF4',
+            'dark':'#344767',
+            'black':'#42424a'  , 
             },
             fontSize: {
               base: ['14px', '24px'],
@@ -61,7 +71,7 @@ module.exports = {
               'ext' : 'rgb(0 0 0 / 10%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(0 0 0 / 6%) 0rem 0.125rem 0.25rem -0.0625rem'
             },
             backgroundImage:{
-              'login': "url('./assets/img/background/Devarana-Website.jpg')",
+              'login': "url('./assets/img/background/Devarana-Website.png')",
               // watermark 
               'w-isotipo': "url('./assets/img/watermark/Devarana.svg')",
               'w-logotipo': "url('./assets/img/watermark/Logotipo.svg')",

@@ -8,7 +8,7 @@ interface Color {
     gradient?: string;
 }
 
-type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'light' | 'dark' | 'black';
+type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'light' | 'dark' | 'black' | 'default';
   
   const statusColors: Record<string, Color> = {
 
@@ -20,9 +20,9 @@ type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'erro
     },
     secondary: {
         name: 'secondary',
-        rgba: 'rgba(116, 123, 138, 1)',
-        hex: '#747b8a',
-        gradient: 'linear-gradient(45deg, #747b8a, #495361)',    
+        rgba: 'rgba(253, 224, 69, 1)',
+        hex: '#fde045',
+        gradient: 'linear-gradient(45deg, #fde045, #fde045)'
     },
     info: {
         name: 'info',
@@ -65,6 +65,12 @@ type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'erro
         rgba: 'rgba(66, 66, 74, 1)',
         hex: '#42424a',
         gradient: 'linear-gradient(45deg, #42424a, #191919)'
+    },
+    default: {
+        name: 'default',
+        rgba: 'rgba(116, 123, 138, 1)',
+        hex: '#747b8a',
+        gradient: 'linear-gradient(45deg, #747b8a, #495361)'
     }
 
 

@@ -1,12 +1,12 @@
 import { Alert, Modal, Select, Input, Form } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
-import { Box, Button } from '../../../../components/ui'
+import { Box, Button } from '@/components/ui'
 
 import * as Yup from "yup";
-import { useAppSelector, useAppDispatch } from '../../../../redux/hooks';
-import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '../../../../redux/features/admin/areas/areasThunks';
-import { ModalProps } from '../../../../interfaces/modal';
-import { ModalFooter } from '../../../../components/ModalFooter';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { ModalProps } from '@/interfaces/modal';
+import { ModalFooter } from '@/components/ModalFooter';
 
 
 export const FormAreas = ({visible, handleModal} : ModalProps ) => {
