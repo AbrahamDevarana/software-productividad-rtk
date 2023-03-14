@@ -1,5 +1,5 @@
-import { useNotification } from '../../../../hooks/useNotification';
-import { AppDispatch, RootState } from '../../../store';
+import { useNotification } from '@/hooks/useNotification';
+import { AppDispatch, RootState } from '@/redux/store';
 import { getAreasProvider, getAreaProvider, createAreaProvider, deleteAreaProvider, updateAreaProvider } from './areasProvider';
 import { checkingAreas, setAreasError, getCurrentArea, createArea, deleteArea, getAreas, updateArea, clearAreas, clearCurrentArea } from './areasSlice';
 

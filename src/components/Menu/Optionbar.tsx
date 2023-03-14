@@ -39,12 +39,6 @@ export const OptBar = ({optBarVisible, setOptBarVisible}:OptBarProps) => {
                                 <span>Departamentos</span>
                             </div>
                         </NavLink>
-                        <NavLink to={'/admin/puestos'} onClick={handleBar}>
-                            <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
-                                <Icon iconName="faBriefcase" />
-                                <span>Puestos</span>
-                            </div>
-                        </NavLink>
                         <NavLink to={'/admin/usuarios'} onClick={handleBar}>
                             <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
                                 <Icon iconName="faUsers" />

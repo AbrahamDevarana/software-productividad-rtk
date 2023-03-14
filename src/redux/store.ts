@@ -6,6 +6,7 @@ import profileSlice from "./features/profile/profileSlice";
 import socketSlice from "./features/socket/socketSlice";
 import areasSlice from './features/admin/areas/areasSlice';
 import usuariosSlice from './features/admin/usuarios/usuariosSlice';
+import departamentosSlice from "./features/admin/departamentos/departamentosSlice";
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         areas: areasSlice,
         profile: profileSlice,
         socket: socketSlice,
-        usuarios: usuariosSlice
+        usuarios: usuariosSlice,
+        departamentos: departamentosSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })

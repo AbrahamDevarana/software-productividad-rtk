@@ -62,7 +62,10 @@ const usuariosSlice = createSlice({
             state.error = false
         },
         createUsuario: (state, action) => {
+            console.log(action.payload.usuario);
+            
             state.usuarios.push(action.payload.usuario)
+            state.currentUsuario = action.payload.usuario
             state.created = true
             state.isLoading = false
             state.error = false
@@ -72,6 +75,7 @@ const usuariosSlice = createSlice({
             state.updated = true
             state.isLoading = false
             state.error = false
+            state.currentUsuario = action.payload.usuario
         },
         deleteUsuario: (state, action) => {
             state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload.id)

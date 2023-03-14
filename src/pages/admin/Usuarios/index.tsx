@@ -89,7 +89,7 @@ export const Usuarios = () => {
                     <Button
                         btnType="primary-outline"
                         fn={() => {
-                            // handleEdit(data.id)
+                            handleEdit(data.id)
                         } }
                     >
                         <Icon iconName="faPen" />

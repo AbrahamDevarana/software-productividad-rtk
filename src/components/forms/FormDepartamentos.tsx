@@ -1,34 +1,41 @@
 import { Alert, Modal, Select, Input, Form } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
-import { Box, Button } from '@/components/ui'
+import { Button } from '@/components/ui'
 
 import * as Yup from "yup";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { ModalProps } from '@/interfaces/modal';
-import { ModalFooter } from '@/components/ModalFooter';
+import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { useEffect } from 'react';
 
 
-export const FormAreas = ({visible, handleModal} : ModalProps ) => {
+export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
 
     const dispatch = useAppDispatch();
     
-    const { currentArea } = useAppSelector((state: any) => state.areas)
-    const { areas } = useAppSelector((state: any) => state.areas)
+    const { currentDepartamento } = useAppSelector((state: any) => state.departamentos)
+    const { areas } = useAppSelector((state: any) => state.areas)       
 
-    const handleOnSubmit = async (values: any) => {
-       
-        if (currentArea.id) {
-            dispatch(updateAreaThunk(values))
+    useEffect(() => {
+        dispatch(getAreasThunk({}))
+
+        return () => {dispatch(clearCurrentDepartamentoThunk())}
+    }, [dispatch])
+
+
+    const handleOnSubmit = async (values: any) => {       
+        if (currentDepartamento.id) {
+            dispatch(updateDepartamentoThunk(values))
         }else {
-            dispatch(createAreaThunk(values))
+            dispatch(createDepartamentoThunk(values))
         }
         handleCancel()
     } 
 
     const handleCancel = () => {
         handleModal(false)
-        dispatch(clearCurrentAreaThunk())
+        dispatch(clearCurrentDepartamentoThunk())
     }    
 
 
@@ -43,14 +50,15 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
             <div className='animate__animated animate__fadeIn animate__faster'>
                     <h1 className='pb-3'>
                         {
-                            currentArea.id ? 'Editar Área' : 'Crear Área'
+                            currentDepartamento.id ? 'Editar Departamento' : 'Crear Departamento'
                         }
                     </h1>
                     <Formik
-                        initialValues={currentArea}
+                        initialValues={currentDepartamento}
                         onSubmit={ (values) => handleOnSubmit(values) }
                         validationSchema={Yup.object({
                             nombre: Yup.string().required("El nombre es requerido"),
+                            areaId: Yup.string().required("El departamento es requerido"),
                         })}
                         enableReinitialize={true}
 
@@ -58,7 +66,7 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                         {
                             ({ values, handleChange, handleBlur, handleSubmit, validateForm }) => (
                                 <Form onFinish={handleSubmit} noValidate layout='vertical'>
-                                    <div className='flex pt-4 flex-col gap-y-10'>
+                                    <div className='flex pt-4 flex-col gap-y-2'>
                                         <Form.Item
                                             label="Nombre"
                                             >
@@ -72,16 +80,15 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                             <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                                         </Form.Item>
                                         <Form.Item
-                                            label="Área padre"
+                                            label="Departamento"
                                         >
                                             <Select
                                                 showSearch
-                                                onChange={ (value) => handleChange({target: {name: 'parentId', value}}) }
-                                                // filterOption={(input, option) => option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                                value={values.parentId}
+                                                onChange={ (value) => handleChange({target: {name: 'areaId', value}}) }
+                                                value={values.areaId}
                                                 placeholder="Selecciona una opción"
                                                 allowClear
-
+                                                
                                             >
                                                 {
                                                     areas.map((area: any) => (
@@ -89,10 +96,11 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                                     ))
                                                 }
                                             </Select>
+                                            <ErrorMessage name="areaId" render={msg => <Alert type="error" message={msg} showIcon />} />
                                         </Form.Item>
                                     </div>
                                     <div className='py-4'>
-                                        <Button btnType="secondary" type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
+                                        <Button btnType="secondary" type="submit" className="mr-2"> { currentDepartamento.id ? 'Editar' : 'Crear' } </Button>
                                     </div>
 
                                 </Form>

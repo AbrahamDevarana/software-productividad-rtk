@@ -5,11 +5,10 @@ import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Swal from "sweetalert2";
 import { Icon } from "@/components/Icon";
-import { FormAreas } from './components/FormAreas';
+import { FormAreas } from '@/components/forms/FormAreas';
 import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';
-import type { TableRowSelection } from 'antd/es/table/interface';
 
 
 const initialValues = {
@@ -59,7 +58,7 @@ export const Areas = () => {
                     </Button>
                 </div>
             ),
-            width: 100
+            width: 150
         },
     ]
 
@@ -74,6 +73,7 @@ export const Areas = () => {
     useEffect(() => {
         useNotify({ infoMessage })
     }, [infoMessage])
+
 
 
     const handleDelete = (id: any) => {
@@ -101,6 +101,7 @@ export const Areas = () => {
         dispatch(getAreaThunk(id))
         setFormVisible(true)
     }
+    
 
     return (
         <>
@@ -126,14 +127,17 @@ export const Areas = () => {
                 <Table 
 
                     columns={columns}
-                    dataSource={ areas.map((area: any) => ({
-                        ...area,
-                        key: area.id,
-                        children: area.subAreas,
-                        subArea: undefined
-                    })) }
+                    dataSource={ areas }
                     rowKey={(data: any) => data.id}
                     pagination={false}
+                    expandable={{
+                        expandedRowRender: (record: any) => record.subAreas && record.subAreas.map(
+                            (data: any) => (
+                                <p className="border-l-8 pl-5"> {data.nombre} </p>
+                            )
+                        ),
+                        rowExpandable: (record: any) => record.subAreas && record.subAreas.length > 0,
+                    }}
                     />
                     <Pagination
                         className="flex justify-end mt-5"

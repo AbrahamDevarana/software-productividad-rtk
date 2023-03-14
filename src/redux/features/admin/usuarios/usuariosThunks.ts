@@ -29,6 +29,8 @@ export const createUsuarioThunk = (usuario: any) => {
         const result = await createUsuarioProvider(usuario, getState)
 
         if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
+
+        
         dispatch( createUsuario(result.usuario) )
     }
 }
