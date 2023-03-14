@@ -38,6 +38,11 @@ export const Areas = () => {
             render: (data: any) => data.nombre
         },
         {
+            title: "Lider",
+            key: "leader",
+            render: (data: any) => data.leader && data.leader.nombre + ' ' + data.leader.apellidoPaterno
+        },
+        {
             title: "Acciones",
             key: "acciones",
             render: (data: any) => (
@@ -106,7 +111,7 @@ export const Areas = () => {
     return (
         <>
             <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
-                <div className="flex justify-end gap-5">
+                <div className="flex justify-end gap-5 pb-5">
                     <Input
                         placeholder="Buscar"
                         className="max-w-xs w-full"

@@ -39,9 +39,14 @@ export const Departamentos = () => {
             ellipsis: true
         },
         {
+            title: "Lider",
+            key: "leader",
+            render: (data: any) => data.leader && data.leader.nombre + ' ' + data.leader.apellidoPaterno,
+        },
+        {
             title: "Area",
             key: "area",
-            render: (data: any) => data.area.nombre,
+            render: (data: any) => data.area && data.area.nombre,
             ellipsis: true
         },
         {
@@ -112,7 +117,7 @@ export const Departamentos = () => {
     return (
         <>
         <Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
-                    <div className="flex justify-end gap-5">
+                    <div className="flex justify-end gap-5 pb-5">
                         <Input
                             placeholder="Buscar"
                             className="max-w-xs w-full"

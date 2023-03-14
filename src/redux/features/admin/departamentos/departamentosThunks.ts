@@ -1,7 +1,7 @@
 import { useNotification } from '../../../../hooks/useNotification';
 import { AppDispatch, RootState } from '../../../store';
-import { getDepartamentosProvider, getDepartamentoProvider, createDepartamentoProvider, deleteDepartamentoProvider, updateDepartamentoProvider } from './departamentosProvider';
-import { checkingDepartamentos, setDepartamentosError, getCurrentDepartamento, createDepartamento, deleteDepartamento, getDepartamentos, updateDepartamento, clearDepartamentos, clearCurrentDepartamento } from './departamentosSlice';
+import { getDepartamentosProvider, getDepartamentoProvider, createDepartamentoProvider, deleteDepartamentoProvider, updateDepartamentoProvider, getLideresDepartamentoProvider } from './departamentosProvider';
+import { checkingDepartamentos, setDepartamentosError, getCurrentDepartamento, createDepartamento, deleteDepartamento, getDepartamentos, updateDepartamento, clearDepartamentos, clearCurrentDepartamento, getLideresDepartamento } from './departamentosSlice';
 
 
 // Get Departamentos
@@ -60,6 +60,17 @@ export const updateDepartamentoThunk = (departamento: any) => {
         dispatch( clearCurrentDepartamento() )
     }
 }
+
+
+export const getLideresDepartamentoThunk = (departamentoId: number) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(checkingDepartamentos())
+        const result = await getLideresDepartamentoProvider(departamentoId, getState)
+        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
+        dispatch( getLideresDepartamento(result.lideres) )
+    }
+}
+        
 
 
 //  Clean Departamento

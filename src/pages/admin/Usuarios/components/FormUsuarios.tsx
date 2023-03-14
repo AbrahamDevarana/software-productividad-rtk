@@ -4,9 +4,11 @@ import { Box } from "@/components/ui"
 
 
 import { General } from "./General";
-import { Domicilio } from "./Domicilio";
+import { Perfil } from "./Perfil";
 import { Profesional } from "./Profesional";
 import { ModalProps } from '@/interfaces/modal';
+import { useAppDispatch } from '@/redux/hooks';
+import { cleanCurrentUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
 
 
@@ -14,17 +16,19 @@ import { ModalProps } from '@/interfaces/modal';
 export const FormUsuarios = ({visible, handleModal}: ModalProps) => {
 
     const [ current, setCurrent] = useState<number>(0);
-
+    const dispatch = useAppDispatch()
     const { Step } = Steps;
 
 
     const handleSteps = (values:any) => {
-        setCurrent(Math.min(current + 1, 2)); 
+        setCurrent(Math.min(values, 2)); 
     }
     
     const handleCancel = () => {
         handleModal(false)
-        // dispatch(clearCurrentAreaThunk())
+        dispatch(cleanCurrentUsuarioThunk())
+        handleSteps(0)
+        
     }   
 
     return (
@@ -43,14 +47,14 @@ export const FormUsuarios = ({visible, handleModal}: ModalProps) => {
                     <Steps current={current} progressDot={true} size="small" onChange={ (current) => setCurrent(current) }>
                         <Step title="General" onStepClick={setCurrent} />
                         <Step title="Profesional" onStepClick={setCurrent} />
-                        <Step title="Domicilio" onStepClick={setCurrent} />
+                        <Step title="Personal" onStepClick={setCurrent} />
                     </Steps>
                 </Box>
 
                 <div className={`pt-24`}>                
-                    {current === 0 ? <General handleSteps={handleSteps} /> : ""}
-                    {current === 1 ? <Profesional handleSteps={handleSteps} /> : ""}
-                    {current === 2 ? <Domicilio handleSteps={handleSteps} /> : ""}
+                    {current === 0 ? <General handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
+                    {current === 1 ? <Profesional handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
+                    {current === 2 ? <Perfil handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
                 </div>  
             </div>
         </Modal>

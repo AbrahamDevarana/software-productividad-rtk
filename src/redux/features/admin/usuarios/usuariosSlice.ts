@@ -28,8 +28,8 @@ const initialState: UsuariosState = {
         fechaIngreso: new Date(),
         telefono: '',
         descripcionPerfil: '',
-        areaId: 0,
-        leaderId: 0
+        departamentoId: null,
+        leaderId: null
     }
 }
 

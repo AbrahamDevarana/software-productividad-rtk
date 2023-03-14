@@ -24,9 +24,9 @@ export const General = ({handleSteps}:any) => {
 
     const handleOnSubmit = async (values: any) => {
         if(currentUsuario.id) {
-            dispatch(updateUsuarioThunk(values))
+            await dispatch(updateUsuarioThunk(values))
         }else {
-            dispatch(createUsuarioThunk(values))
+            await dispatch(createUsuarioThunk(values))
         }
         handleSteps(1)
         

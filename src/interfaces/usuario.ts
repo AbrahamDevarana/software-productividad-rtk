@@ -26,6 +26,13 @@ export interface Usuario {
     fechaIngreso: Date;
     telefono: string;
     descripcionPerfil: string;
-    areaId: number;
-    leaderId: number;
+    departamentoId: number | null;
+    leaderId: number | null ;
+}
+
+export interface Lider {
+    id: number;
+    nombre: string;
+    apellidoPaterno: string;
+    apellidoMaterno: string;
 }

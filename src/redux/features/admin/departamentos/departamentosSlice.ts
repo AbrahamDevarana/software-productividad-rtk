@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Paginate } from '../../../../interfaces';
+import { Paginate } from '@/interfaces';
+import { Lider } from '@/interfaces/usuario';
 
 interface DepartamentoState {
     departamentos: Departamento[];
@@ -11,13 +12,17 @@ interface DepartamentoState {
     created: boolean;
     deleted: boolean;
     currentDepartamento: Departamento;
+    lideres: Lider[];
 }
 
 interface Departamento {
     id: number;
     nombre: string;
     areaId: number | null;
+    departamentoId: number | null;
+    leaderId: number | null;
 }
+
 
 const initialState: DepartamentoState = {
     departamentos: [],
@@ -35,8 +40,11 @@ const initialState: DepartamentoState = {
     currentDepartamento: {
         id: 0,
         nombre: '',
-        areaId: null
-    }
+        areaId: null,
+        departamentoId: null,
+        leaderId: null,
+    },
+    lideres: []
 }
 
 const departamentosSlice = createSlice({
@@ -95,6 +103,10 @@ const departamentosSlice = createSlice({
         },
         clearCurrentDepartamento: (state) => {
             state.currentDepartamento = initialState.currentDepartamento
+        },
+        getLideresDepartamento: (state, action) => {
+            state.lideres = action.payload.lideres
+            state.isLoading = false
         }
     }
 })
@@ -108,7 +120,8 @@ export const {
     updateDepartamento,
     deleteDepartamento,
     clearDepartamentos,
-    clearCurrentDepartamento
+    clearCurrentDepartamento,
+    getLideresDepartamento
 } = departamentosSlice.actions
 
 export default departamentosSlice.reducer

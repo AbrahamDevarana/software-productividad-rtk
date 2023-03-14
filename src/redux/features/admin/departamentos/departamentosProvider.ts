@@ -97,3 +97,21 @@ export const deleteDepartamentoProvider = async (departamentoId: number, getStat
         }
     }
 }
+
+export const getLideresDepartamentoProvider = async (departamentoId: number, getState: () => RootState) => {
+    try {
+        const response = await clientAxios.get(`/departamentos/getLeader/${departamentoId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            lideres: response.data
+        }
+    } catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}

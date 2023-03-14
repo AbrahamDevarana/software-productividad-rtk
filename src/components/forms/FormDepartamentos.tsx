@@ -8,6 +8,7 @@ import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartame
 import { ModalProps } from '@/interfaces/modal';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { useEffect } from 'react';
+import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
 
 export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
@@ -15,13 +16,19 @@ export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
     const dispatch = useAppDispatch();
     
     const { currentDepartamento } = useAppSelector((state: any) => state.departamentos)
+    const { usuarios } = useAppSelector((state: any) => state.usuarios)
     const { areas } = useAppSelector((state: any) => state.areas)       
 
     useEffect(() => {
         dispatch(getAreasThunk({}))
 
         return () => {dispatch(clearCurrentDepartamentoThunk())}
-    }, [dispatch])
+    }, [])
+
+
+    useEffect(() => {   
+        dispatch(getUsuariosThunk({}))
+    }, [])
 
 
     const handleOnSubmit = async (values: any) => {       
@@ -64,11 +71,11 @@ export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
 
                     >
                         {
-                            ({ values, handleChange, handleBlur, handleSubmit, validateForm }) => (
+                            ({ values, handleChange, handleBlur, handleSubmit, validateForm, validateField }) => (
                                 <Form onFinish={handleSubmit} noValidate layout='vertical'>
                                     <div className='flex pt-4 flex-col gap-y-2'>
                                         <Form.Item
-                                            label="Nombre"
+                                            label="Nombre del departamento"
                                             >
                                             <Input
                                                 value={values.nombre}
@@ -80,15 +87,32 @@ export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
                                             <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                                         </Form.Item>
                                         <Form.Item
-                                            label="Departamento"
+                                            label="Lider Departamento"
                                         >
                                             <Select
                                                 showSearch
-                                                onChange={ (value) => handleChange({target: {name: 'areaId', value}}) }
-                                                value={values.areaId}
+                                                onChange={ (value) => handleChange({target: {name: 'leaderId', value}}) }
+                                                value={values.leaderId}
                                                 placeholder="Selecciona una opción"
                                                 allowClear
+                                            >
+                                                {
+                                                    usuarios.map((usuario: any) => (
+                                                        <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
+                                                    ))
+                                                }
                                                 
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item
+                                            label="Área"
+                                        >
+                                            <Select
+                                                showSearch
+                                                onChange={ (value) =>  handleChange({target: {name: 'areaId', value}}) }
+                                                value={values.areaId}
+                                                placeholder="Selecciona una opción"
+                                                allowClear                                            
                                             >
                                                 {
                                                     areas.map((area: any) => (
@@ -96,7 +120,7 @@ export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
                                                     ))
                                                 }
                                             </Select>
-                                            <ErrorMessage name="areaId" render={msg => <Alert type="error" message={msg} showIcon />} />
+                                            <ErrorMessage name="areaId" render={msg => <Alert type="error" message={"El departamento es requerido"} showIcon />} />
                                         </Form.Item>
                                     </div>
                                     <div className='py-4'>

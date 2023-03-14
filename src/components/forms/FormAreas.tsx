@@ -18,8 +18,8 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
     const { areas } = useAppSelector((state: any) => state.areas)
     const { usuarios } = useAppSelector((state: any) => state.usuarios)
 
-    const handleOnSubmit = (values: any) => {
-       
+    const handleOnSubmit = (values: any) => {       
+
         if (currentArea.id) {
             dispatch(updateAreaThunk(values))
         }else {
@@ -65,7 +65,7 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                 <Form onFinish={handleSubmit} noValidate layout='vertical'>
                                     <div className='flex pt-4 flex-col gap-y-2'>
                                         <Form.Item
-                                            label="Nombre"
+                                            label="Nombre del área"
                                             >
                                             <Input
                                                 value={values.nombre}
@@ -80,8 +80,8 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                         >
                                             <Select
                                                 showSearch
-                                                onChange={ (value) => handleChange({target: {name: 'liderId', value}}) }
-                                                value={values.liderId}
+                                                onChange={ (value) => handleChange({target: {name: 'leaderId', value}}) }
+                                                value={values.leaderId}
                                                 placeholder="Selecciona una opción"
                                                 allowClear
                                             >

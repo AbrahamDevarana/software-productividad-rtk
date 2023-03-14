@@ -1,29 +1,19 @@
-import { Alert, Checkbox, DatePicker, Select, Form, Input } from 'antd';
-import { ErrorMessage, Formik } from "formik"
-import * as Yup from "yup";
+import { Select, Form, Input } from 'antd';
+import { Formik } from "formik"
 import { Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect } from 'react';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { useAppDispatch } from '@/redux/hooks';
-import { getDepartamentosThunk } from '../../../../redux/features/admin/departamentos/departamentosThunks';
-
-const usuarioSchema = Yup.object().shape({
-    area:  Yup.number().required("El area es requerido").positive('El area es requerido'),
-    departamento: Yup.number().required("El departamento es requerido").positive('El departamento es requerido'),
-    rol: Yup.number().required("El rol es requerido").positive('El rol es requerido'),
-    puesto: Yup.number().required("El puesto es requerido").positive('El puesto es requerido'),
-    titulo: Yup.number().required("El departamento es requerido").positive('El departamento es requerido'),
-    fechaIngreso: Yup.string().required("La fecha de ingreso es requerida"),
-})
-
+import { getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
+import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
 export const Profesional = ({handleSteps}:any) => {
 
     const dispatch = useAppDispatch();
     const { currentUsuario } = useAppSelector((state: any) => state.usuarios)
     const { areas } = useAppSelector((state: any) => state.areas)
-    const { departamentos } = useAppSelector((state: any) => state.departamentos)
+    const { departamentos, lideres } = useAppSelector((state: any) => state.departamentos)    
     
     useEffect(() => {
         dispatch(getAreasThunk({}))
@@ -33,30 +23,46 @@ export const Profesional = ({handleSteps}:any) => {
         dispatch(getDepartamentosThunk({areaId: value}))
     }
 
+    const handleChangeDepartamento = (value: number) => {
+        dispatch(getLideresDepartamentoThunk(value))
+    }
+
+    const handleOnSubmit = (values: any) => {
+        dispatch(updateUsuarioThunk(values))        
+        handleSteps(2)
+    }
+
+    if(currentUsuario.id === 0) return null;
 
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
             <Formik 
                 initialValues={currentUsuario}
-                onSubmit={values => {
-                    handleSteps(values)
-                }}
-                validationSchema={ usuarioSchema }
+                onSubmit={handleOnSubmit}
                 enableReinitialize={true}
             >
                 {({values, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
-                    <Form layout='vertical'>
+                    <Form layout='vertical' onFinish={handleSubmit}>
                         <div className='grid grid-cols-2 gap-5'>
                             <Form.Item
                                 label="Area"
                                 className='col-span-1'
                             >
                                 <Select
-                                    onChange={(values) => { handleChangeArea(values); setFieldValue('departamentoId', null)}}
+                                    showSearch
+                                    onChange={ (value) => { 
+                                        handleChange({target: {name: 'areaId', value}}), 
+                                        handleChangeArea(value), 
+                                        setFieldValue('departamentoId', null), 
+                                        setFieldValue('leaderId', null) 
+                                    }}
+                                    value={values.areaId}
+                                    placeholder="Selecciona una opción"
+                                    allowClear
                                 >
                                     {
                                         areas.map((area:any) => (
-                                            <Select.Option value={area.id}>{area.nombre}</Select.Option>
+                                            <Select.Option key={area.id} value={area.id}>{area.nombre}</Select.Option>
                                         ))
                                     }                                        
                                 </Select>
@@ -66,13 +72,20 @@ export const Profesional = ({handleSteps}:any) => {
                                 className='col-span-1'
                             >
                                 <Select
-                                    onChange={(value: number) => setFieldValue('departamentoId', value)}
+                                    showSearch
+                                    onChange={ (value) => {
+                                        handleChange({target: {name: 'departamentoId', value}}), 
+                                        handleChangeDepartamento(value), 
+                                        setFieldValue('leaderId', null) 
+                                    }}
                                     value={values.departamentoId}
+                                    placeholder="Selecciona una opción"
+                                    allowClear
                                     disabled={departamentos.length === 0}
                                 >
                                     {
                                         departamentos.map((departamento:any) => (
-                                            <Select.Option value={departamento.id}>{departamento.nombre}</Select.Option>
+                                            <Select.Option key={departamento.id} value={departamento.id}>{departamento.nombre}</Select.Option>
                                         ))
                                     }
                                 </Select>
@@ -81,17 +94,25 @@ export const Profesional = ({handleSteps}:any) => {
                                 label="Puesto"
                                 className='col-span-1'
                             >
-                                <Input name='puesto' value={values.puesto} />
+                                <Input name='puesto' onChange={handleChange} value={values.puesto} />
                             </Form.Item>
                             <Form.Item
                                 label="Jefe Directo"
                                 className='col-span-1'
                             >
                                 <Select 
-                                    onChange={(value: number) => setFieldValue('leaderId', value)}
+                                    showSearch
+                                    onChange={ (value) => handleChange({target: {name: 'leaderId', value}}) }
                                     value={values.leaderId}
-                                    disabled={departamentos.length === 0}
+                                    placeholder="Selecciona una opción"
+                                    allowClear
+                                    disabled={lideres.length === 0}
                                 >
+                                    {
+                                        lideres && lideres.map((lider:any) => (
+                                            <Select.Option key={lider.id} value={lider.id}>{lider.nombre}</Select.Option>
+                                        ))
+                                    }
                                 </Select>
 
                             </Form.Item>                                
