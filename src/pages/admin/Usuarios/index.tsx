@@ -8,7 +8,9 @@ import { Icon } from "@/components/Icon"
 import { useDelete } from "@/hooks/useDelete"
 import useNotify from "@/hooks/useNotify"
 import { FormUsuarios } from './components/FormUsuarios';
-
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
 
 
 const initialValues = {
@@ -47,6 +49,10 @@ export const Usuarios = () => {
 			dispatch(deleteUsuarioThunk(id))
 		}
 	}
+
+    const isComplete = (data: any) => ( (Object.values(data).some(val => val === null) ? false : true ) ||
+    data.fechaNacimiento === null || data.fechaIngreso === null || data.leaderId === null || 
+    data.departamentoId === null) ? false : true
     
     const columns: ColumnsType <DataType> = [
 		{
@@ -55,6 +61,7 @@ export const Usuarios = () => {
 				<span><Icon iconName="faExclamationTriangle" className="text-yellow-300" /></span>
 			</Tooltip>
 			: null,
+
 			width: 35
 		},
         {
@@ -72,13 +79,13 @@ export const Usuarios = () => {
 		{
 			title: "Fecha Nacimiento",
 			key: "fechaNacimiento",
-			dataIndex: "fechaNacimiento",
+            render: (data: any) => data.fechaNacimiento ? `${dayjs(data.fechaNacimiento, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
 			ellipsis: true
 		},
 		{
 			title: "Fecha Ingreso",
 			key: "fechaIngreso",
-			dataIndex: "fechaIngreso",
+			render: (data: any) => data.fechaIngreso ? `${dayjs(data.fechaIngreso, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
 			ellipsis: true
 		},
 		{

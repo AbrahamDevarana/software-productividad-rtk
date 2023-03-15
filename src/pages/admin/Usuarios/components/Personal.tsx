@@ -9,17 +9,16 @@ import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThun
 dayjs.extend(customParseFormat)
 
 
-export const Perfil = ({handleSteps, handleCancel}:any) => {
+export const Personal = ({handleSteps, handleCancel}:any) => {
 
     const dispatch = useAppDispatch();
     const { currentUsuario } = useAppSelector((state: any) => state.usuarios)
 
-    const handleOnSubmit = (values: any) => {
-        console.log(values);
-        
-        // dispatch(updateUsuarioThunk(values))
+    const handleOnSubmit = (values: any) => {        
+        dispatch(updateUsuarioThunk(values))
         handleCancel()
     }
+   
 
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
@@ -30,7 +29,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
             >
                 {
                     ({values, handleChange, handleSubmit, errors, setFieldValue}) => (
-                        <Form onFinish={handleSubmit} noValidate onChange={handleChange} layout='vertical'>
+                        <Form onFinish={handleSubmit} noValidate layout='vertical'>
                             <Divider orientation="center">Perfil</Divider>
                             <div className="grid grid-cols-12 w-full gap-5">
                                 <Form.Item
@@ -57,7 +56,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-8'
                                     name="calle"
                                 >
-                                    <Input value={values.direccion.calle} name="calle" />
+                                    <Input value={values.direccion?.calle || ''} name="calle" onChange={ (value) => setFieldValue('direccion.calle', value.target.value) }/>
                                     <ErrorMessage name="calle" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                                 <Form.Item
@@ -65,7 +64,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-2'
                                     name="numeroExterior"
                                 >
-                                    <Input value={values.direccion.numeroExterior} name="numeroExterior" />
+                                    <Input value={values.direccion?.numeroExterior || ''} name="numeroExterior" onChange={ (value) => setFieldValue('direccion.numeroExterior', value.target.value) }/>
                                     <ErrorMessage name="v" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                                 <Form.Item
@@ -73,7 +72,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-2'
                                     name="numeroInterior"
                                 >
-                                    <Input value={values.direccion.numeroInterior} name="numeroInterior" />
+                                    <Input value={values.direccion?.numeroInterior || ''} name="numeroInterior" onChange={ (value) => setFieldValue('direccion.numeroInterior', value.target.value) }/>
                                     <ErrorMessage name="numeroInterior" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                                 <Form.Item
@@ -81,7 +80,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-4'
                                     name="colonia"
                                 >
-                                    <Input value={values.direccion.colonia}  name='colonia'/>
+                                    <Input value={values.direccion?.colonia || ''}  name='colonia' onChange={ (value) => setFieldValue('direccion.colonia', value.target.value) }/>
                                     <ErrorMessage name="colonia" render={msg => <Alert type="error" message={msg} showIcon />} />    
                                 </Form.Item>
                                 <Form.Item
@@ -89,7 +88,7 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-2'
                                     name="codigoPostal"
                                 >
-                                    <Input value={values.direccion.codigoPostal}  name="codigoPostal"/>
+                                    <Input value={values.direccion?.codigoPostal || ''}  name="codigoPostal" onChange={ (value) => setFieldValue('direccion.codigoPostal', value.target.value) }/>
                                     <ErrorMessage name="codigoPostal" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                                 <Form.Item
@@ -97,14 +96,14 @@ export const Perfil = ({handleSteps, handleCancel}:any) => {
                                     className='col-span-3'
                                     name="estado"
                                 >
-                                    <Input value={values.direccion.estado}  name="estado"/>
+                                    <Input value={values.direccion?.estado || ''}  name="estado" onChange={ (value) => setFieldValue('direccion.estado', value.target.value) }/>
                                     <ErrorMessage name="estado" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                                 <Form.Item
                                     label="Ciudad"
                                     className='col-span-3'
                                 >
-                                    <Input value={values.direccion.ciudad} name="ciudad" />
+                                    <Input value={values.direccion?.ciudad || ''} name="ciudad" onChange={ (value) => setFieldValue('direccion.ciudad', value.target.value) }/>
                                     <ErrorMessage name="ciudad" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                             </div>

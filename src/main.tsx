@@ -3,7 +3,7 @@ import { ConfigProvider } from "antd";
 import es_ES from 'antd/es/locale/es_ES';
 import App from './app';
 import { Settings } from "luxon";
-
+import 'dayjs/locale/es'
 Settings.defaultLocale = "es";
 
 

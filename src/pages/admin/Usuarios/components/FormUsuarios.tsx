@@ -4,7 +4,7 @@ import { Box } from "@/components/ui"
 
 
 import { General } from "./General";
-import { Perfil } from "./Perfil";
+import { Personal } from "./Personal";
 import { Profesional } from "./Profesional";
 import { ModalProps } from '@/interfaces/modal';
 import { useAppDispatch } from '@/redux/hooks';
@@ -54,7 +54,7 @@ export const FormUsuarios = ({visible, handleModal}: ModalProps) => {
                 <div className={`pt-24`}>                
                     {current === 0 ? <General handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
                     {current === 1 ? <Profesional handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
-                    {current === 2 ? <Perfil handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
+                    {current === 2 ? <Personal handleSteps={handleSteps} handleCancel={handleCancel}/> : ""}
                 </div>  
             </div>
         </Modal>

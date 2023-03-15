@@ -28,6 +28,25 @@ export interface Usuario {
     descripcionPerfil: string;
     departamentoId: number | null;
     leaderId: number | null ;
+    direccion: Direccion;
+    departamento: Departamento;
+}
+
+export interface Direccion {
+    id: number;
+    calle: string;
+    numeroExterior: string;
+    numeroInterior: string;
+    colonia: string;
+    codigoPostal: string;
+    ciudad: string;
+    estado: string;
+}
+
+export interface Departamento {
+    id: number | null;
+    nombre: string;
+    leaderId: number | null;
 }
 
 export interface Lider {

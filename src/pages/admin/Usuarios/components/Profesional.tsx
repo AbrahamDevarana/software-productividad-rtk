@@ -19,6 +19,14 @@ export const Profesional = ({handleSteps}:any) => {
         dispatch(getAreasThunk({}))
     }, [])
 
+    useEffect(() => {
+        dispatch(getDepartamentosThunk({areaId: currentUsuario.departamento.areaId}))
+    }, [currentUsuario.departamento.areaId])
+
+    useEffect(() => {
+        dispatch(getLideresDepartamentoThunk(currentUsuario.departamentoId))
+    }, [currentUsuario.departamentoId])
+
     const handleChangeArea = (value: number) => {
         dispatch(getDepartamentosThunk({areaId: value}))
     }
@@ -28,11 +36,14 @@ export const Profesional = ({handleSteps}:any) => {
     }
 
     const handleOnSubmit = (values: any) => {
-        dispatch(updateUsuarioThunk(values))        
+        dispatch(updateUsuarioThunk(values))  
+        console.log(currentUsuario);
+              
         handleSteps(2)
     }
 
     if(currentUsuario.id === 0) return null;
+  
 
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
@@ -56,9 +67,11 @@ export const Profesional = ({handleSteps}:any) => {
                                         setFieldValue('departamentoId', null), 
                                         setFieldValue('leaderId', null) 
                                     }}
-                                    value={values.areaId}
+                                    value={values.departamento.areaId}
                                     placeholder="Selecciona una opción"
                                     allowClear
+                                    
+                                    
                                 >
                                     {
                                         areas.map((area:any) => (

@@ -29,7 +29,22 @@ const initialState: UsuariosState = {
         telefono: '',
         descripcionPerfil: '',
         departamentoId: null,
-        leaderId: null
+        leaderId: null,
+        direccion: {
+            id: 0,
+            calle: '',
+            numeroExterior: '',
+            numeroInterior: '',
+            colonia: '',
+            codigoPostal: '',
+            ciudad: '',
+            estado: ''
+        },
+        departamento: {
+            id: null,
+            nombre: '',
+            leaderId: null,
+        }
     }
 }
 
