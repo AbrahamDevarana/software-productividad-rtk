@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Paginate } from '../../../../interfaces';
+import { Paginate } from '@/interfaces';
 
 interface AreasState {
     areas: Area[];
