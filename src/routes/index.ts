@@ -11,7 +11,6 @@ import Home from '../pages/Home';
 import { Objetivos } from '../pages/Objetivos';
 import Perfil from '../pages/Perfil';
 import { ErrorPage } from '../pages/ErrorPage';
-import { Provider } from '../pages/Auth/Provider';
 import { EstrategíaHome } from '../pages/Estrategia';
 import { Usuarios } from '../pages/admin/Usuarios';
 import { Departamentos } from '../pages/admin/Departamentos/index';
@@ -27,11 +26,6 @@ const rutaPublica:RouteProps[] = [
         path: "/login",
         layout: LayoutLogin,
         component: Login,
-    },
-    {
-        path: "/loginv2",
-        layout: LayoutLogin,
-        component: Provider,
     },
     {
         path: "/success",

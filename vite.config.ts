@@ -11,12 +11,12 @@ export default defineConfig({
         viteCompression()
     ],
     server: {
-    port: 5173,
-    proxy: {
-        '/api': {
-            target: 'http://localhost',
-            changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/api/, '')
+        port: 5173,
+        proxy: {
+            '/api': {
+                target: 'http://localhost',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
             }
         }
     },
@@ -24,20 +24,20 @@ export default defineConfig({
         rollupOptions: {
             manualChunks: {
                 "react-dom": ["react-dom"],
-                "chart.js": ["chart.js"],
+                // "chart.js": ["chart.js"],
                 "animate.css": ["animate.css"],
                 "formik": ["formik"],
-                // font awesome
                 "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
+                "sweetalert2": ["sweetalert2"],
+                "react-icons": ["react-icons"],
+                "antd": ["antd"],
             }
         },
-        chunkSizeWarningLimit: 1000,
+        chunkSizeWarningLimit: 1500,
     },
     resolve: {
         alias: [
             { find: '@', replacement: path.resolve(__dirname, 'src') }
         ]
-           
-           
     },
 })
