@@ -71,7 +71,7 @@ module.exports = {
               'ext' : 'rgb(0 0 0 / 10%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(0 0 0 / 6%) 0rem 0.125rem 0.25rem -0.0625rem'
             },
             backgroundImage:{
-              'login': "url('./assets/img/background/Devarana-Website.png')",
+              'login': "url('./assets/img/background/Devarana-Website.webp')",
               // watermark 
               'w-isotipo': "url('./assets/img/watermark/Devarana.svg')",
               'w-logotipo': "url('./assets/img/watermark/Logotipo.svg')",

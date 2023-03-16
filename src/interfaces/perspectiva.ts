@@ -14,15 +14,18 @@ export interface Perspectiva {
     nombre: string;
     descripcion: string;
     color: string;
+    status?: number;
+    icono?: string; 
 }
 
 export type TableDataType = {
     key: React.Key;
-    tareas: string;
+    nombre: string;
     status: number;
     progreso: number
-    fechaEntrega: string;
-    objetivo: string;
+    fechaInicio: string;
+    fechaFin: string;
+    clave: string;
     responsables: {
         picture: string;
     }[]

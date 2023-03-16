@@ -1,13 +1,14 @@
 import { Avatar, Drawer, Progress, Table } from 'antd';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import type { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { TableDataType } from '@/interfaces';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getPerspectivaThunk } from '@/redux/features/perspectivas/perspectivasThunk';
+import { useAppDispatch } from '../../redux/hooks';
 import { EstrategiaDrawer } from './EstrategiaDrawer';
+import dayjs from 'dayjs';
+
 
 
 
@@ -27,22 +28,23 @@ const statusString: any = {
     5 :'Detenido'
 }
 
-export const TablaEstrategia = ({data, color}: any) => {
-
+export const TablaEstrategia = ({data, color, perspectivaId}: any) => {
+    
     const dispatch = useAppDispatch();
+
+    const [dataSource, setDataSource] = useState<TableDataType[]>(data);
 
     const [columns, setColumns] = useState<ColumnsType<TableDataType>>([
         {
             title: 'Estategía',
-            dataIndex: 'tareas',
-            width: 200,
+            width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
                 props: {
                     className: 'border-l-primary',
                     style: { borderLeft: `5px solid ${useGetColorByStatus(status[record.status]).hex}`}
                 },
-                children: <div>{text}</div>,
+                children: <div>{record.nombre}</div>,
             }),
         },
         {
@@ -69,22 +71,18 @@ export const TablaEstrategia = ({data, color}: any) => {
             dataIndex: 'fechaEntrega',
             ellipsis: true,
             width: 80,
-        },
-        {
-            title: 'Objetivo',
-            dataIndex: 'objetivo',
-            width: 50,
-            ellipsis: true,
+            render: (text, record, index) => record.fechaFin ? `${dayjs(record.fechaFin, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
         },
         {
             title: 'Responsables',
             width: 50,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={2}>
-                    {record.responsables.map((responsable, index) => (
-                        <Avatar key={index} src={responsable.picture} />
-                    ))}
-                </Avatar.Group>
+                <></>
+                // <Avatar.Group maxCount={2}>
+                //     {record.responsables.map((responsable, index) => (
+                //         <Avatar key={index} src={responsable.picture} />
+                //     ))}
+                // </Avatar.Group>
             ),
             ellipsis: true,
         },
@@ -100,15 +98,20 @@ export const TablaEstrategia = ({data, color}: any) => {
     const handleCloseDrawer = () => {
         setShowDrawer(false)
     }
-
-
+    
+    useEffect(() => {
+        setDataSource(data.filter((item: any) => item.perspectivas.find((perspectiva: any) => perspectiva.id === perspectivaId)))
+    }, [data])
+    
     return (
         <>
             <Table
                 size='small'
                 className='table-resizable w-full'
+                loading={ data.length === 0 ? true : false }
                 columns={mergeColumns}
-                dataSource={data}
+                dataSource={dataSource}
+                rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {

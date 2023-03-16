@@ -21,7 +21,7 @@ export const Estrategia = ({perspectivas, data}: any) => {
                     </div>
                 </div>
                 <div className='bg-white p-5 w-full shadow'>
-                    <TablaEstrategia data={data} color={perspectiva.color} />
+                    <TablaEstrategia data={data} color={perspectiva.color} perspectivaId={perspectiva.id} />
                 </div>
             </div>
         ))
