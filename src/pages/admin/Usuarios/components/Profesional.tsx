@@ -20,8 +20,11 @@ export const Profesional = ({handleSteps}:any) => {
     }, [])
 
     useEffect(() => {
-        dispatch(getDepartamentosThunk({areaId: currentUsuario.departamento.areaId}))
-    }, [currentUsuario.departamento.areaId])
+        if(currentUsuario.departamento && currentUsuario.departamento.areaId)
+        {
+            dispatch(getDepartamentosThunk({areaId: currentUsuario.departamento.areaId}))
+        }        
+    }, [currentUsuario.departamento])
 
     useEffect(() => {
         dispatch(getLideresDepartamentoThunk(currentUsuario.departamentoId))
@@ -67,7 +70,7 @@ export const Profesional = ({handleSteps}:any) => {
                                         setFieldValue('departamentoId', null), 
                                         setFieldValue('leaderId', null) 
                                     }}
-                                    value={values.departamento.areaId}
+                                    value={values.departamento?.areaId}
                                     placeholder="Selecciona una opción"
                                     allowClear
                                     
