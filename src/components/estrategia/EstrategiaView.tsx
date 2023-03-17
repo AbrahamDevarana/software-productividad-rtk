@@ -4,7 +4,7 @@ import { Progress, Divider, Slider, Avatar } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '../../interfaces/perspectiva';
 
-export const EstrategiaDrawer = ({estrategico, perspectiva}: {estrategico: Estrategico, perspectiva:Perspectiva}) => {
+export const EstrategiaView = ({estrategico, perspectiva}: {estrategico: Estrategico, perspectiva:Perspectiva}) => {
 
     
   return (

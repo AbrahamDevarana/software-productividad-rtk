@@ -1,12 +1,12 @@
 import { Avatar, Drawer, Progress, Table } from 'antd';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import type { ColumnsType } from 'antd/es/table';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { Estrategico, TableDataType } from '@/interfaces';
 import { useAppDispatch } from '../../redux/hooks';
-import { EstrategiaDrawer } from './EstrategiaDrawer';
+import { EstrategiaView } from './EstrategiaView';
 import dayjs from 'dayjs';
 import { Icon } from '../Icon';
 import { Perspectiva } from '../../interfaces/perspectiva';
@@ -121,7 +121,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
             <Table
                 size='small'
                 className='table-resizable w-full'
-                loading={ perspectiva.objetivo_estr.length === 0 ? true : false }
+                loading={ perspectiva.objetivo_estr?.length === 0 ? true : false }
                 columns={mergeColumns}
                 dataSource={perspectiva.objetivo_estr}
                 rowKey={(record) => record.id}
@@ -157,7 +157,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
                 }}
                 className='rounded-l-ext'
             >
-                <EstrategiaDrawer estrategico={estrategico} perspectiva={perspectiva}/>
+                <EstrategiaView estrategico={estrategico} perspectiva={perspectiva}/>
             </Drawer>
         </>
     )
