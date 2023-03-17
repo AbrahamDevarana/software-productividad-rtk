@@ -1,15 +1,8 @@
 import AvatarProfile from '../ui/Avatar'
-import { FaTasks, FaProjectDiagram, FaEarlybirds } from 'react-icons/fa';
-import { IoIosRocket } from 'react-icons/io';
-import { BiChat, BiTargetLock } from 'react-icons/bi';
-import { BsGearFill } from 'react-icons/bs';
 import SvgIsotipo from '../svg/Isotipo';
-import { Link, NavLink} from 'react-router-dom';
-
-import "../../assets/scss/menu.scss"
+import { NavLink} from 'react-router-dom';
+import "@/assets/scss/menu.scss"
 import { Icon } from '../Icon';
-import { Divider } from 'antd';
-
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -46,17 +39,21 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
                     <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Estrategia</span>
                 </NavLink>
-                <NavLink to={'/actividades'} className={`link nav-link text-center`}>
-                    <Icon iconName="faTasks" className="h-5 w-5 mx-auto text-2xl" />
-                    <span className="text-xs text-center font-light block">Actividades</span>
-                </NavLink>
-                <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
-                    <Icon iconName="faProjectDiagram" className="h-5 w-5 mx-auto text-2xl" />
-                    <span className="text-xs text-center font-light block">Proyectos</span>
+                <NavLink to={'/tactica'} className={`link nav-link text-center`}>
+                    <Icon iconName="faBrain" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Táctica</span>
                 </NavLink>
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Objetivos</span>
+                </NavLink>
+                <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
+                    <Icon iconName="faPuzzlePiece" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Proyectos</span>
+                </NavLink>
+                <NavLink to={'/actividades'} className={`link nav-link text-center`}>
+                    <Icon iconName="faSquareCheck" className="h-5 w-5 mx-auto text-2xl" />
+                    <span className="text-xs text-center font-light block">Actividades</span>
                 </NavLink>
                 {/* Chat button */}
                 <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>

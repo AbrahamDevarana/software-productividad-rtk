@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { LayoutLoginProps } from "../../interfaces";
-import { useGetValidationQuery } from '../../redux/features/auth/authThunks';
-import { useAppSelector } from '../../redux/hooks';
+import { LayoutLoginProps } from "@/interfaces";
+import { useAppSelector } from '@/redux/hooks';
 import Loading from "../antd/Loading";
 import { useEffect } from 'react';
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LayoutLogin({ children }: LayoutLoginProps) {
 

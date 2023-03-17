@@ -1,3 +1,5 @@
+import { Estrategico } from "./estrategicos";
+
 export interface PerspectivasState {
     perspectivas: Perspectiva[];
     isLoading: boolean;
@@ -16,6 +18,7 @@ export interface Perspectiva {
     color: string;
     status?: number;
     icono?: string; 
+    objetivo_estr?: Estrategico[];
 }
 
 export type TableDataType = {

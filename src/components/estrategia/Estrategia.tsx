@@ -3,18 +3,19 @@ import { Perspectiva } from '@/interfaces'
 import { TablaEstrategia } from './TablaEstrategia'
 import { Drawer } from 'antd'
 import { useState } from 'react'
+import { FormEstrategia } from './FormEstrategia'
 
-export const Estrategia = ({perspectivas, data}: any) => {
+export const Estrategia = ({perspectivas}: any) => {
 
-    const [open, setOpen] = useState(false)
-    const [color, setColor] = useState('')
-    const [perspectivaId, setPerspectivaId] = useState(0)
+    const [open, setOpen] = useState<boolean>(false)
+    const [color, setColor] = useState<string>('')
+    const [perspectiva, setPerspectiva] = useState<Perspectiva>()
 
-    const handleNewEstrategia = (perspectiva: Perspectiva) => {
+    const handleNewEstrategia = (perspectivaObj: Perspectiva) => {
         setOpen(true)
-        setColor(perspectiva.color)
-        setPerspectivaId(perspectiva.id)
-    }
+        setColor(perspectivaObj.color)
+        setPerspectiva(perspectivaObj)
+    }    
 
     
     return (
@@ -36,7 +37,7 @@ export const Estrategia = ({perspectivas, data}: any) => {
                     </div>
                     <div className='bg-white py-10 px-5 w-full shadow relative'>
                         <button className='absolute -right-2 -top-2 border rounded-full px-2 text-2xl text-white' onClick={ () => handleNewEstrategia(perspectiva)} style={{ backgroundColor: perspectiva.color}}> + </button>
-                        <TablaEstrategia data={data} color={perspectiva.color} perspectivaId={perspectiva.id} />
+                        <TablaEstrategia perspectiva={perspectiva} />
                     </div>
                 </div>
             ))}
@@ -44,15 +45,19 @@ export const Estrategia = ({perspectivas, data}: any) => {
             <Drawer
                 onClose={() => setOpen(false)}
                 open={open}
+                closeIcon={
+                    <Icon iconName="faAngleLeft" className='text-white' />
+                }
                 width={window.innerWidth > 1200 ? 600 : '100%'}
                 headerStyle={{
                     backgroundColor: color,
+                    
                 }}
-                className='rounded-2xl'
-                contentWrapperStyle={{
-                    borderRadius: '0 0 2rem 2rem',
-                }}
+                className='rounded-l-ext'
+                destroyOnClose={true}
             >
+
+                <FormEstrategia perspectiva={perspectiva} setOpen={()=>setOpen}/>
 
             </Drawer>
         </>

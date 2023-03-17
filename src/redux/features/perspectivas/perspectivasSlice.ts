@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Paginate, PerspectivasState } from '@/interfaces';
+import { PerspectivasState } from '@/interfaces';
 
 const initialState: PerspectivasState = {
     perspectivas: [],
@@ -13,7 +13,9 @@ const initialState: PerspectivasState = {
         id: 0,
         nombre: '',
         descripcion: '',
-        color: ''
+        color: '',
+        status: 0,
+        objetivo_estr: [],
     }
 }
 
@@ -59,7 +61,19 @@ const perspectivasSlice = createSlice({
         },
         clearCurrentPerspectiva: (state) => {
             state.currentPerspectiva = initialState.currentPerspectiva
-        },          
+        },   
+        createEstrategicoFromProvider: (state, action) => {
+            state.perspectivas = state.perspectivas.map((perspectiva) => perspectiva.id === action.payload.perspectivaId
+              ? {
+                  ...perspectiva,
+                  objetivo_estr: perspectiva.objetivo_estr ? [...perspectiva.objetivo_estr, action.payload.objetivoEstrategico] : [action.payload.objetivoEstrategico]
+                }
+              : perspectiva
+            );
+
+            state.created = true
+            state.isLoading = false 
+        }     
         
     }
 })
@@ -73,7 +87,8 @@ export const {
     updatePerspectiva,
     deletePerspectiva,
     clearPerspectivas,
-    clearCurrentPerspectiva
+    clearCurrentPerspectiva,
+    createEstrategicoFromProvider
 } = perspectivasSlice.actions
 
 export default perspectivasSlice.reducer

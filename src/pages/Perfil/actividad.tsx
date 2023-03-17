@@ -1,6 +1,6 @@
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Timeline } from "antd";
-import Box from "../../components/ui/Box";
+import Box from "@/components/ui/Box";
 
 const Actividad = () => {
     return ( 

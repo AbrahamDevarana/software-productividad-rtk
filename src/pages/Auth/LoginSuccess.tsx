@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Loading from "../../components/antd/Loading";
-import { loginThunk } from "../../redux/features/auth/authThunks";
-import { useAppDispatch } from "../../redux/hooks";
+import Loading from "@/components/antd/Loading";
+import { loginThunk } from "@/redux/features/auth/authThunks";
+import { useAppDispatch } from "@/redux/hooks";
 import { useNavigate } from "react-router-dom";
 
 const LoginSuccess = () => {

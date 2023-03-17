@@ -1,4 +1,4 @@
-import '../../assets/css/Input.css'
+import '@/assets/css/Input.css'
 
 interface InputProps {
     id?: any;

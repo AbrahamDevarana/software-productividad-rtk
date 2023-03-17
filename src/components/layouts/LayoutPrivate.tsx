@@ -1,16 +1,15 @@
 import Loading from "../antd/Loading";
-import { useAppSelector, useAppDispatch } from '../../redux/hooks';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { useGetValidationQuery } from '../../redux/features/auth/authThunks';
 import { Drawer } from "antd";
 import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
 import 'animate.css';
 import { OptBar } from '../Menu/Optionbar';
-import { useSocket } from "../../hooks/useSocket";
-import { connectSocketThunk } from '../../redux/features/socket/socketThunk';
-import { useAuth } from "../../hooks/useAuth";
+import { useSocket } from "@/hooks/useSocket";
+import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
+import { useAuth } from "@/hooks/useAuth";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];

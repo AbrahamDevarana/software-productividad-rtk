@@ -1,9 +1,9 @@
 import { Card, Progress, Tooltip } from 'antd'
-import { Avatar, Badge, Box } from '../../components/ui'
+import { Avatar, Badge, Box } from '@/components/ui'
 import { Avatar as Avt } from 'antd'
 import { Segmented } from 'antd';
 import { useState } from 'react';
-import { Button } from '../../components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { DashOutlined, PlusOutlined } from '@ant-design/icons';
 import * as Icon from '@ant-design/icons'
 

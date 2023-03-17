@@ -17,20 +17,20 @@ export const EstrategíaHome = () => {
     const dispatch = useAppDispatch();
 
     const { perspectivas, isLoading } = useAppSelector(state => state.perspectivas);
-    const { estrategicos } = useAppSelector(state => state.estrategicos);
+
 
 
     useEffect(() => {
         dispatch(getPerspectivasThunk({}));
     }, []);
 
-    useEffect(() => {
-        dispatch(getEstrategicosThunk({}))
-    }, []);
+    // useEffect(() => {
+    //     dispatch(getEstrategicosThunk({}))
+    // }, []);
 
     return (
         <>
-            <Estrategia perspectivas={perspectivas} data={estrategicos} />
+            <Estrategia perspectivas={perspectivas} />
         </>
     )
 }

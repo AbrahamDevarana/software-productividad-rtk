@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { fetchProfileThunk } from "../../redux/features/profile/profileThunk";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { fetchProfileThunk } from "@/redux/features/profile/profileThunk";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import ProfileHeader from "./profileHeader";
 import Profile from "./profile";
 import { EditProfile } from "./editProfile";
-import { useNotification } from "../../hooks/useNotification";
-import Loading from "../../components/antd/Loading";
+import { useNotification } from "@/hooks/useNotification";
+import Loading from "@/components/antd/Loading";
 
 
 const Perfil = () => {

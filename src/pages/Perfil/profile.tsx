@@ -1,13 +1,12 @@
-import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiFillTwitterSquare } from "react-icons/ai";
 import { BiTargetLock } from "react-icons/bi";
 import { ImStatsBars2 } from 'react-icons/im'
 import {   GiPodiumWinner } from 'react-icons/gi'
-import Box from "../../components/ui/Box";
-import { Button } from "../../components/ui/Button";
-import AvatarProfile from "../../components/ui/Avatar";
+import Box from "@/components/ui/Box";
+import { Button } from "@/components/ui/Button";
+import AvatarProfile from "@/components/ui/Avatar";
 import { FaProjectDiagram } from "react-icons/fa";
-import { Badge } from "../../components/ui/Badge";
-import { ProfileProps } from "../../interfaces";
+import { Badge } from "@/components/ui/Badge";
+import { ProfileProps } from "@/interfaces";
 
 
 

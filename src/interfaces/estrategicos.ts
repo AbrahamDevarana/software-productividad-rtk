@@ -24,3 +24,16 @@ export interface EstrategicosState {
     deleted:      boolean;
     currentEstrategico: EstrategicoProps;
 }
+
+export interface Estrategico {
+    id: string;
+    nombre: string;
+    clave: string;
+    descripcion: string;
+    progreso: number;
+    fechaInicio: Date;
+    fechaFin: Date;
+    status: number;
+    perspectivas?: Perspectiva[];
+}
+

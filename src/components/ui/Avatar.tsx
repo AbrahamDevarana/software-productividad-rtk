@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar, Image } from 'antd';
-import brokenUser from '../../helpers/brokenUser';
+import brokenUser from '@/helpers/brokenUser';
 
 interface AvatarProps{
     picture?: string;

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
-import '../../assets/scss/button.scss'
-import "../../assets/scss/links.scss";
+import '@/assets/scss/button.scss'
+import "@/assets/scss/links.scss";
 
 
 interface ButtonProps {

@@ -1,4 +1,4 @@
-import { SVGElement } from "../../interfaces";
+import { SVGElement } from "@/interfaces";
 
 
 const SvgIsotipo = ({className}:SVGElement ) => (

@@ -1,30 +1,36 @@
-import { Perspectiva } from '@/interfaces'
-import { Progress, Divider, Slider, Avatar } from 'antd';
 
-export const EstrategiaDrawer = () => {
+import { Estrategico } from '@/interfaces';
+import { Progress, Divider, Slider, Avatar } from 'antd';
+import dayjs from 'dayjs';
+import { Perspectiva } from '../../interfaces/perspectiva';
+
+export const EstrategiaDrawer = ({estrategico, perspectiva}: {estrategico: Estrategico, perspectiva:Perspectiva}) => {
+
+    
   return (
     <>
         <div className='w-full'>
-            <h1 className='text-2xl'>Estrategía Title</h1>
+            <h1 className='text-2xl'>{estrategico.nombre}</h1>
 
             <Divider />
 
-            <Slider defaultValue={30}  />
+            <Slider defaultValue={estrategico.progreso}  />
 
             <Divider />
 
             <div className='grid grid-cols-3 gap-10'>
                 <div className='flex flex-col col-span-1'>
                     <p>Fecha Inicio: </p>
-                    <span className='bg-gray-300 p-2'>01/01/2021</span>
+                    <span className='bg-gray-300 p-2'>{dayjs(estrategico.fechaInicio).format('DD/MM/YYYY')}</span>
                 </div>
                 <div className='flex flex-col col-span-1'>
                     <p>Fecha Inicio: </p>
-                    <span className='bg-gray-300 p-2'>01/01/2021</span>
+                    <span className='bg-gray-300 p-2'>{dayjs(estrategico.fechaFin).format('DD/MM/YYYY')}</span>
                 </div>
                 <div className='flex flex-col col-span-1'>
-                    <p>Perspectiva </p>
-                    <span className='bg-devarana-blue rounded-ext text-white text-center text-lg'>Financiera</span>
+                    <span className='rounded-ext text-white text-center text-lg' style={{ backgroundColor: perspectiva.color }}>
+                        { perspectiva.nombre }
+                    </span>
                 </div>
 
                 <div className='col-span-3'>
@@ -39,9 +45,7 @@ export const EstrategiaDrawer = () => {
                 <div className='col-span-3'>
                     <p>Meta:</p>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                    { estrategico.descripcion }
                     </p>
                 </div>
 

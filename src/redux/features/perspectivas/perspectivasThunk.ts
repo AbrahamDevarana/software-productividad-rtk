@@ -52,6 +52,16 @@ export const updatePerspectivaThunk = (perspectiva: any) => {
     }   
 }
 
+export const createPerspectivaAndClearThunk = (perspectiva: any) => {
+    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
+        dispatch(checkingPerspectivas())
+        const result = await createPerspectivaProvider(perspectiva, getState)
+        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
+        useNotification({type: 'success', message: 'Perspectiva creada correctamente'})
+        dispatch( createPerspectiva(result.perspectiva) )
+        dispatch( clearCurrentPerspectiva() )
+    }
+}
 
 export const clearPerspectivasThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {

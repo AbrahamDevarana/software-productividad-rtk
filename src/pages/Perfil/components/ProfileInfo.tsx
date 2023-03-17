@@ -1,10 +1,10 @@
 import { Formik, ErrorMessage,Field } from 'formik'
-import { Button } from '../../../components/ui/'
-import { Input } from '../../../components/ui'
+import { Button } from '@/components/ui/'
+import { Input } from '@/components/ui'
 import * as Yup from "yup";
 import { Alert, DatePicker } from 'antd';
-import { updateProfileThunk } from '../../../redux/features/profile/profileThunk';
-import { useAppDispatch } from '../../../redux/hooks';
+import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
+import { useAppDispatch } from '@/redux/hooks';
 
 
 const profileSchema = Yup.object().shape({

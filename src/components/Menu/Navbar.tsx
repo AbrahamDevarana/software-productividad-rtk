@@ -1,7 +1,7 @@
 import { Dropdown, Menu, Select, Space } from "antd";
-import { LayoutNavbarProps } from "../../interfaces"
-import { useAppDispatch } from "../../redux/hooks";
-import { logoutThunk } from "../../redux/features/auth/authThunks";
+import { LayoutNavbarProps } from "@/interfaces"
+import { useAppDispatch } from "@/redux/hooks";
+import { logoutThunk } from "@/redux/features/auth/authThunks";
 import { Icon } from '../Icon';
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {

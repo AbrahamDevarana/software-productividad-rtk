@@ -4,10 +4,12 @@ import type { ColumnsType } from 'antd/es/table';
 import { useState, useEffect } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
-import { TableDataType } from '@/interfaces';
+import { Estrategico, TableDataType } from '@/interfaces';
 import { useAppDispatch } from '../../redux/hooks';
 import { EstrategiaDrawer } from './EstrategiaDrawer';
 import dayjs from 'dayjs';
+import { Icon } from '../Icon';
+import { Perspectiva } from '../../interfaces/perspectiva';
 
 
 
@@ -28,11 +30,24 @@ const statusString: any = {
     5 :'Detenido'
 }
 
-export const TablaEstrategia = ({data, color, perspectivaId}: any) => {
+export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
+
+    const {color } = perspectiva
     
     const dispatch = useAppDispatch();
 
-    const [dataSource, setDataSource] = useState<TableDataType[]>(data);
+    // const [dataSource, setDataSource] = useState<TableDataType[]>();
+    const [estrategico, setEstrategico] = useState<Estrategico>({
+        id: '',
+        clave: '',
+        nombre: '',
+        descripcion: '',
+        fechaInicio: new Date(),
+        fechaFin: new Date(),
+        progreso: 0,
+        perspectivas: [],
+        status: 1,
+    });
 
     const [columns, setColumns] = useState<ColumnsType<TableDataType>>([
         {
@@ -92,30 +107,28 @@ export const TablaEstrategia = ({data, color, perspectivaId}: any) => {
 
     const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
 
-    const handleViewEstrategia = (id:number) => {
+    const handleViewEstrategia = (record:Estrategico) => {
+        setEstrategico(record)
         setShowDrawer(true)
     }
     const handleCloseDrawer = () => {
         setShowDrawer(false)
     }
     
-    useEffect(() => {
-        setDataSource(data.filter((item: any) => item.perspectivas.find((perspectiva: any) => perspectiva.id === perspectivaId)))
-    }, [data])
-    
+
     return (
         <>
             <Table
                 size='small'
                 className='table-resizable w-full'
-                loading={ data.length === 0 ? true : false }
+                loading={ perspectiva.objetivo_estr.length === 0 ? true : false }
                 columns={mergeColumns}
-                dataSource={dataSource}
+                dataSource={perspectiva.objetivo_estr}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            handleViewEstrategia(record.id)                            
+                            handleViewEstrategia(record)                            
                         }
                     }}
                 }
@@ -128,10 +141,13 @@ export const TablaEstrategia = ({data, color, perspectivaId}: any) => {
             />
             <Drawer
                 title={
-                    <span className='text-white text-xl tracking-wider drop-shadow'>  F1 </span>
+                    <span className='text-white text-xl tracking-wider drop-shadow'>  {estrategico?.clave} </span>
                 }
                 placement='right'
                 closable={true}
+                closeIcon={
+                    <Icon iconName="faAngleLeft" className='text-white' />
+                }
                 onClose={handleCloseDrawer}
                 open={showDrawer}
                 width={window.innerWidth > 1200 ? 600 : '100%'}
@@ -139,12 +155,9 @@ export const TablaEstrategia = ({data, color, perspectivaId}: any) => {
                 headerStyle={{
                     backgroundColor: color,
                 }}
-                className='rounded-2xl'
-                contentWrapperStyle={{
-                    borderRadius: '0 0 2rem 2rem',
-                }}
+                className='rounded-l-ext'
             >
-                <EstrategiaDrawer />
+                <EstrategiaDrawer estrategico={estrategico} perspectiva={perspectiva}/>
             </Drawer>
         </>
     )

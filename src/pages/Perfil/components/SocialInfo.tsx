@@ -1,6 +1,6 @@
 import { ErrorMessage, Formik } from 'formik'
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiFillTwitterSquare } from 'react-icons/ai'
-import { Button, Input } from '../../../components/ui'
+import { Button, Input } from '@/components/ui'
 import * as Yup from "yup";
 import { Alert } from 'antd';
 

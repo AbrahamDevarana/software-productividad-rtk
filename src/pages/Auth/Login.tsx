@@ -1,6 +1,6 @@
-import Box from "../../components/ui/Box";
-import Logo from '../../assets/img/logos/devarana_login.svg'
-import { Button } from "../../components/ui/Button";
+import Box from "@/components/ui/Box";
+import Logo from '@/assets/img/logos/devarana_login.svg'
+import { Button } from "@/components/ui/Button";
 export default function Login() {
         
     const redirectToGoogleSSO = async() => {

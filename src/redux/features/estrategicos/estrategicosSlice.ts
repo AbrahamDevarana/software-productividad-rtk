@@ -54,7 +54,7 @@ const estrategicosSlice = createSlice({
             state.isLoading = false
         },
         createEstrategico: (state, action) => {
-            state.estrategicos.push(action.payload.estrategico)
+            state.estrategicos = [...state.estrategicos, action.payload.objetivoEstrategico]
             state.created = true
             state.isLoading = false
         },
