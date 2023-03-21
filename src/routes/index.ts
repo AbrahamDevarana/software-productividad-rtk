@@ -14,6 +14,7 @@ import { ErrorPage } from '../pages/ErrorPage';
 import { EstrategíaHome } from '../pages/Estrategia';
 import { Usuarios } from '../pages/admin/Usuarios';
 import { Departamentos } from '../pages/admin/Departamentos/index';
+import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 
 interface RouteProps {
     path: string;
@@ -84,6 +85,11 @@ const  rutaPrivada:RouteProps[] = [
         path: '/estrategia',
         layout: LayoutApp,
         component: EstrategíaHome
+    },
+    {
+        path: '/estrategia/:id',
+        layout: LayoutApp,
+        component: ObjEstrategico
     },
     {
         path: '*',

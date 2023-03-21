@@ -1,6 +1,6 @@
 import { Icon } from '../Icon'
 import { Perspectiva } from '@/interfaces'
-import { TablaEstrategia } from './TablaEstrategia'
+import { TablaEstrategia } from './TablaPerspectiva'
 import { Drawer } from 'antd'
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'

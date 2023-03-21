@@ -6,10 +6,11 @@ import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
 import 'animate.css';
-import { OptBar } from '../Menu/Optionbar';
+import { SecondNav } from '../Menu/SecondNav';
 import { useSocket } from "@/hooks/useSocket";
 import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { useAuth } from "@/hooks/useAuth";
+import { optionalContent } from "@/interfaces";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -23,9 +24,10 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     useAuth()
 
     const { isLoading, userAuth } = useAppSelector((state: any) => state.auth); 
-    const [settingVisible, setSettingVisible] = useState(false);
-    const [optBarVisible, setOptBarVisible] = useState(false);
-    const [navbarClass, setNavbarClass] = useState('');
+    const [ settingVisible, setSettingVisible ] = useState<boolean>(false);
+    const [ optBarVisible, setOptBarVisible ] = useState<boolean>(false);
+    const [ navbarClass, setNavbarClass ] = useState<string>('');
+    const [ optionalContent, setOptionalContent ] = useState<optionalContent>('admin')
 
     useEffect(() => {
         if(!isLoading && !userAuth){
@@ -83,11 +85,11 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         <div className='w-full'>  
             <div className='bg-devarana-background w-full min-h-screen'>
                 <div className="flex h-screen">
-                    <Sidebar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible}/>
-                    <OptBar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible}/>
+                    <Sidebar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible} setOptionalContent={setOptionalContent}/>
+                    <SecondNav optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible} optionalContent={optionalContent}/>
                     <div className={`transition-all duration-300 ease-in-out w-full overflow-y-scroll`} id="mainEl" onScroll={handleScroll}> 
                         <div className="p-2">
-                            <Navbar setSettingVisible={setSettingVisible} navbarClass={navbarClass}/>
+                            <Navbar setSettingVisible={setSettingVisible} navbarClass={navbarClass} />
                             <main className="animate__animated animate__fadeIn px-4"
                                 style={{ paddingTop: '80px', paddingBottom: '20px' }}
                                 

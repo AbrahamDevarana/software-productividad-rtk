@@ -50,7 +50,7 @@ const estrategicosSlice = createSlice({
             }
         },
         getCurrentEstrategico: (state, action) => {
-            state.currentEstrategico = action.payload.estrategico
+            state.currentEstrategico = action.payload.objetivoEstrategico
             state.isLoading = false
         },
         createEstrategico: (state, action) => {

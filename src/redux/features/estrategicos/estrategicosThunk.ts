@@ -14,10 +14,10 @@ export const getEstrategicosThunk = (filtros: any) => {
     }   
 }
 
-export const getEstrategicoThunk = (estrategicosId: number) => {
+export const getEstrategicoThunk = (estrategicosId: string) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingEstrategicos())
-        const result = await getEstrategicoProvider(estrategicosId, getState)
+        const result = await getEstrategicoProvider(estrategicosId, getState)        
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
         dispatch( getCurrentEstrategico(result.estrategico) )
     }   

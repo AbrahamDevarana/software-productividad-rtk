@@ -13,3 +13,5 @@ export interface LayoutNavbarProps{
 export interface LayoutSidebar{
     active: boolean;
 }
+
+export type optionalContent = 'chat' | 'admin' | 'tactica'

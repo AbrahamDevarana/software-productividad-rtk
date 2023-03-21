@@ -5,3 +5,4 @@ export * from "./svg";
 export * from "./slice";
 export * from "./perspectiva";
 export * from "./estrategicos";
+export * from "./table";

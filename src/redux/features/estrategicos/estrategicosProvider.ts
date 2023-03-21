@@ -19,7 +19,7 @@ export const getEstrategicosProvider = async (filtros: any, getState: () => Root
     }
 }
 
-export const getEstrategicoProvider = async (estrategicoId: number, getState: () => RootState) => {
+export const getEstrategicoProvider = async (estrategicoId: string, getState: () => RootState) => {
     try {
         const response = await clientAxios.get(`/estrategicos/${estrategicoId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
         return {

@@ -1,14 +1,7 @@
-import { DateTime } from 'luxon';
 import { useEffect } from 'react';
-
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-import { TableDataType } from '@/interfaces';
-import Loading from '@/components/antd/Loading';
-import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-
-
 
 
 
@@ -29,8 +22,8 @@ export const EstrategíaHome = () => {
     // }, []);
 
     return (
-        <>
+        <div className='animate__animated ' id="Estrategia">
             <Estrategia perspectivas={perspectivas} />
-        </>
+        </div>
     )
 }

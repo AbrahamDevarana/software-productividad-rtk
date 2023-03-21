@@ -4,31 +4,16 @@ import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
-import { Estrategico, TableDataType } from '@/interfaces';
+import { Estrategico, PerspectivaType } from '@/interfaces';
 import { useAppDispatch } from '../../redux/hooks';
 import { EstrategiaView } from './EstrategiaView';
 import dayjs from 'dayjs';
 import { Icon } from '../Icon';
 import { Perspectiva } from '../../interfaces/perspectiva';
+import { Link } from 'react-router-dom';
+import { status, statusString } from '@/helpers/status';
 
 
-
-
-const status: any = {
-    1 :'default',
-    2 :'secondary',
-    3 :'success',
-    4 :'error',
-    5 :'warning'
-}
-
-const statusString: any = {
-    1 :'Sin Iniciar',
-    2 :'En Proceso',
-    3 :'Finalizado',
-    4 :'Cancelado',
-    5 :'Detenido'
-}
 
 export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
 
@@ -49,7 +34,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
         status: 1,
     });
 
-    const [columns, setColumns] = useState<ColumnsType<TableDataType>>([
+    const [columns, setColumns] = useState<ColumnsType<PerspectivaType>>([
         {
             title: 'Estategía',
             width: 150,
@@ -156,8 +141,14 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
                     backgroundColor: color,
                 }}
                 className='rounded-l-ext'
+                footer={
+                    <div className='flex justify-end'>
+                        <Link to={`${estrategico.id}`} className='btn btn-primary py-1 px-5 rounded-ext' onClick={handleCloseDrawer}>Ver más</Link>
+                    </div>
+                }
             >
                 <EstrategiaView estrategico={estrategico} perspectiva={perspectiva}/>
+                
             </Drawer>
         </>
     )

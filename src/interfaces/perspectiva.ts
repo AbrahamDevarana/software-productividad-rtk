@@ -21,15 +21,3 @@ export interface Perspectiva {
     objetivo_estr?: Estrategico[];
 }
 
-export type TableDataType = {
-    key: React.Key;
-    nombre: string;
-    status: number;
-    progreso: number
-    fechaInicio: string;
-    fechaFin: string;
-    clave: string;
-    responsables: {
-        picture: string;
-    }[]
-};

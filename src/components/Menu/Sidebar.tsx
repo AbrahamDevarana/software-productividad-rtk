@@ -3,15 +3,18 @@ import SvgIsotipo from '../svg/Isotipo';
 import { NavLink} from 'react-router-dom';
 import "@/assets/scss/menu.scss"
 import { Icon } from '../Icon';
+import { optionalContent } from '@/interfaces';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
     optBarVisible: boolean;
+    setOptionalContent: (value: optionalContent) => void;
 }
 
-export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) => {
+export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:LayoutSidebarProps) => {
 
-    const handleOptBar = (opt = 'admin') => {
+    const handleOptBar = (opt:optionalContent) => {
+        setOptionalContent(opt)
         setOptBarVisible(!optBarVisible)
     }
 
@@ -39,10 +42,10 @@ export const Sidebar = ({optBarVisible, setOptBarVisible}:LayoutSidebarProps) =>
                     <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Estrategia</span>
                 </NavLink>
-                <NavLink to={'/tactica'} className={`link nav-link text-center`}>
+                <div className={`nav-link cursor-pointer text-center`} onClick={() => handleOptBar('tactica')}>
                     <Icon iconName="faBrain" className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Táctica</span>
-                </NavLink>
+                </div>
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Objetivos</span>
