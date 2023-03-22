@@ -14,7 +14,7 @@ import { ErrorPage } from '../pages/ErrorPage';
 import { EstrategíaHome } from '../pages/Estrategia';
 import { Usuarios } from '../pages/admin/Usuarios';
 import { Departamentos } from '../pages/admin/Departamentos/index';
-import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
+import { ObjEstrategico } from '@/pages/Estrategia/objEstrategico';
 import { Tactico } from '@/pages/Tactico';
 
 interface RouteProps {

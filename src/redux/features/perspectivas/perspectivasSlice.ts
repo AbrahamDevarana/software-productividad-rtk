@@ -13,6 +13,7 @@ const initialState: PerspectivasState = {
         id: 0,
         nombre: '',
         descripcion: '',
+        progreso: 0,
         color: '',
         status: 0,
         objetivo_estr: [],
