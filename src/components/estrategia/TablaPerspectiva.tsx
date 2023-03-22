@@ -4,12 +4,11 @@ import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
-import { Estrategico, PerspectivaType } from '@/interfaces';
+import { Estrategico, Perspectiva } from '@/interfaces';
 import { useAppDispatch } from '../../redux/hooks';
 import { EstrategiaView } from './EstrategiaView';
 import dayjs from 'dayjs';
 import { Icon } from '../Icon';
-import { Perspectiva } from '../../interfaces/perspectiva';
 import { Link } from 'react-router-dom';
 import { status, statusString } from '@/helpers/status';
 
@@ -34,7 +33,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
         status: 1,
     });
 
-    const [columns, setColumns] = useState<ColumnsType<PerspectivaType>>([
+    const [columns, setColumns] = useState<ColumnsType<Perspectiva>>([
         {
             title: 'Estategía',
             width: 150,

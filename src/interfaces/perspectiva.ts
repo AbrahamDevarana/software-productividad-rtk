@@ -15,9 +15,13 @@ export interface Perspectiva {
     id: number;
     nombre: string;
     descripcion: string;
+    progreso: number;
     color: string;
-    status?: number;
+    status: number;
     icono?: string; 
+    fechaInicio?: Date;
+    fechaFin?: Date;
+    clave?: string;
     objetivo_estr?: Estrategico[];
 }
 

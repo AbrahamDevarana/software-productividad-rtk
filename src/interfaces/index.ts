@@ -6,3 +6,4 @@ export * from "./slice";
 export * from "./perspectiva";
 export * from "./estrategicos";
 export * from "./table";
+export * from "./tacticos";

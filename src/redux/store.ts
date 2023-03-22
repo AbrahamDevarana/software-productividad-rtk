@@ -9,6 +9,7 @@ import usuariosSlice from './features/admin/usuarios/usuariosSlice';
 import departamentosSlice from "./features/admin/departamentos/departamentosSlice";
 import perspectivasSlice from "./features/perspectivas/perspectivasSlice";
 import estrategicosSlice from "./features/estrategicos/estrategicosSlice";
+import tacticosSlice from "./features/tacticos/tacticosSlice";
 
 export const store = configureStore({
     reducer: {
@@ -21,7 +22,8 @@ export const store = configureStore({
         usuarios: usuariosSlice,
         departamentos: departamentosSlice,
         perspectivas: perspectivasSlice,
-        estrategicos: estrategicosSlice
+        estrategicos: estrategicosSlice,
+        tacticos: tacticosSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })

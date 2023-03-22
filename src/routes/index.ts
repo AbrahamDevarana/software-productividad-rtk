@@ -15,6 +15,7 @@ import { EstrategíaHome } from '../pages/Estrategia';
 import { Usuarios } from '../pages/admin/Usuarios';
 import { Departamentos } from '../pages/admin/Departamentos/index';
 import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
+import { Tactico } from '@/pages/Tactico';
 
 interface RouteProps {
     path: string;
@@ -90,6 +91,11 @@ const  rutaPrivada:RouteProps[] = [
         path: '/estrategia/:id',
         layout: LayoutApp,
         component: ObjEstrategico
+    },
+    {
+        path: '/tactica/:slug',
+        layout: LayoutApp,
+        component: Tactico
     },
     {
         path: '*',

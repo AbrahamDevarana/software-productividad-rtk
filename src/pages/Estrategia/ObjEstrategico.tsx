@@ -51,7 +51,7 @@ export const ObjEstrategico = () => {
 				<div className='col-span-8'>
 					<Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>
 					<Box className=''>
-						{ active === 'tacticos' && <TablaTacticos /> }
+						{ active === 'tacticos' && <TablaTacticos  /> }
 					</Box>
 				</div>
 			</div>
