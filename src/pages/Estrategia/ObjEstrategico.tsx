@@ -44,7 +44,7 @@ export const ObjEstrategico = () => {
 
 	return (
 		<>
-			<div className='grid grid-cols-12 gap-5 animate__animated animate__fadeIn'>
+			<div className='grid grid-cols-12 gap-5 animate__fadeInRightBig animate__animated animate__faster'>
 				<Box className='col-span-4'>
 					<EstrategiaView estrategico={currentEstrategico} perspectiva={perspectivas[0]} />
 				</Box>

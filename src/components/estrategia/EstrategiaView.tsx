@@ -1,13 +1,18 @@
 
 import { Estrategico } from '@/interfaces';
-import { Progress, Divider, Slider, Avatar } from 'antd';
+import { Progress, Divider, Slider, Avatar, Drawer } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '../../interfaces/perspectiva';
 import Loading from '../antd/Loading';
+import { useState } from 'react';
+import { FormEstrategia } from './FormEstrategia';
+import { Link } from 'react-router-dom';
 
 export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategico: Estrategico, perspectiva:Perspectiva, isLoading?:boolean}) => {
 
     
+    const [ showChildrenDrawer, setShowChildrenDrawer ] = useState<boolean>(false);
+
     if(isLoading){
         return <Loading />
     }
@@ -58,8 +63,21 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategi
                         <p>Indicador:</p>
                         <p> Prioridad 1</p>
                     </div>
+
+                    <Link to={`/estrategia/${estrategico.id}`} > Ver más </Link>
+
+                    <button onClick={() => setShowChildrenDrawer(true)}>Editar</button>
                     
                 </div>
+
+                <Drawer
+                    open={showChildrenDrawer}
+                    width={window.innerWidth > 1200 ? 600 : '100%'}
+                    closable={false}
+                    onClose={() => setShowChildrenDrawer(false)}
+                >
+                    <FormEstrategia estrategico={ estrategico } perspectiva={ perspectiva } />
+                </Drawer>
             </div>
         </>
     )

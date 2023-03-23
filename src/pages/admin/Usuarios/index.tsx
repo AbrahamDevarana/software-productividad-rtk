@@ -9,8 +9,7 @@ import { useDelete } from "@/hooks/useDelete"
 import useNotify from "@/hooks/useNotify"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-dayjs.extend(customParseFormat)
+
 
 
 const initialValues = {

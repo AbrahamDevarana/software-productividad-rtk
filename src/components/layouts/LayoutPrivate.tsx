@@ -1,7 +1,7 @@
 import Loading from "../antd/Loading";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { Drawer } from "antd";
+import { Drawer, FloatButton } from "antd";
 import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
@@ -11,6 +11,7 @@ import { useSocket } from "@/hooks/useSocket";
 import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { useAuth } from "@/hooks/useAuth";
 import { optionalContent } from "@/interfaces";
+import { Icon } from "../Icon";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -107,6 +108,10 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                 <input type="checkbox" className="ml-2" onChange={setTheme} defaultChecked={localStorage.getItem('theme') == "dark" ? true : false} />
             </div>
         </Drawer>
+
+        <FloatButton 
+            icon={<Icon iconName="faPlus"/>} 
+        />
         </>
     )
 };

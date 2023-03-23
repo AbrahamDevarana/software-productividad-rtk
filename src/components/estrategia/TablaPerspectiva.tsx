@@ -30,10 +30,11 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
         fechaFin: new Date(),
         progreso: 0,
         perspectivas: [],
+        responsables: [],
         status: 1,
     });
 
-    const [columns, setColumns] = useState<ColumnsType<Perspectiva>>([
+    const [columns, setColumns] = useState<ColumnsType<Estrategico>>([
         {
             title: 'Estategía',
             width: 150,
@@ -52,7 +53,8 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
             width: 50,
             ellipsis: true,
             render: (text, record, index) => (
-                <span style={{
+                <span className='font-semibold'
+                 style={{
                     color: useGetColorByStatus(status[record.status]).hex,
                 }}>{statusString[record.status]}</span>
             ),
@@ -62,7 +64,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
             dataIndex: 'progreso',
             width: 150,
             render: (text, record, index) => (
-                <Progress percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} />
+                <Progress className='drop-shadow' percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} trailColor={useGetColorByStatus(status[record.status], .2).rgba} />
             ),
         },
         {
@@ -76,12 +78,17 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
             title: 'Responsables',
             width: 50,
             render: (text, record, index) => (
-                <></>
-                // <Avatar.Group maxCount={2}>
-                //     {record.responsables.map((responsable, index) => (
-                //         <Avatar key={index} src={responsable.picture} />
-                //     ))}
-                // </Avatar.Group>
+                <Avatar.Group maxCount={3}>
+                    {record.responsables?.map((responsable, index) => (
+                        // <span key={index} onClick={  } className='z-50' >
+                            <Avatar src={`https://i.pravatar.cc/300`}   onClick={
+                                (e) => {
+                                    e?.stopPropagation();
+                                }
+                            } />
+                        // </span>
+                    ))}
+                </Avatar.Group>
             ),
             ellipsis: true,
         },
@@ -140,14 +147,8 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
                     backgroundColor: color,
                 }}
                 className='rounded-l-ext'
-                footer={
-                    <div className='flex justify-end'>
-                        <Link to={`${estrategico.id}`} className='btn btn-primary py-1 px-5 rounded-ext' onClick={handleCloseDrawer}>Ver más</Link>
-                    </div>
-                }
             >
                 <EstrategiaView estrategico={estrategico} perspectiva={perspectiva}/>
-                
             </Drawer>
         </>
     )

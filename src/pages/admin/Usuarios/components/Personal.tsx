@@ -4,9 +4,8 @@ import { Button } from "@/components/ui"
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-dayjs.extend(customParseFormat)
+
 
 
 export const Personal = ({handleSteps, handleCancel}:any) => {

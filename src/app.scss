@@ -231,3 +231,10 @@ p, li, span, a{
     display: grid!important;
     align-items: center!important;
 }
+.ant-table-cell{
+    background-color: transparent!important;
+
+    &::before{
+        content: none!important;
+    }
+}

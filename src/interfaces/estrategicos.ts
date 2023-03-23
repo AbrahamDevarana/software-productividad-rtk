@@ -1,5 +1,5 @@
 
-import { Perspectiva, Paginate } from '@/interfaces';
+import { Perspectiva, Paginate, Usuario } from '@/interfaces';
 
 export interface EstrategicoProps {
     id:           string;
@@ -35,5 +35,6 @@ export interface Estrategico {
     fechaFin: Date;
     status: number;
     perspectivas?: Perspectiva[];
+    responsables?: Usuario[];
 }
 

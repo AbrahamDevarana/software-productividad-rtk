@@ -28,7 +28,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
         {
             title: 'Progreso',
             render: (text, record, index) => (
-                <Progress percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} />
+                <Progress className='drop-shadow' percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} trailColor={useGetColorByStatus(status[record.status], .2).rgba} />
             ),
         },
         {
@@ -57,7 +57,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 columns={mergeColumns}
                 dataSource={tacticos}
                 size='small'
-                className='table-resizable w-full animate__animated animate__fadeIn'
+                className='table-resizable w-full'
                 rowKey={(record) => record.key}
                 onRow={(record, rowIndex) => {
                     return {

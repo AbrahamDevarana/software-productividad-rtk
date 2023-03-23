@@ -17,10 +17,6 @@ export const EstrategíaHome = () => {
         dispatch(getPerspectivasThunk({}));
     }, []);
 
-    // useEffect(() => {
-    //     dispatch(getEstrategicosThunk({}))
-    // }, []);
-
     return (
         <div className='animate__animated ' id="Estrategia">
             <Estrategia perspectivas={perspectivas} />

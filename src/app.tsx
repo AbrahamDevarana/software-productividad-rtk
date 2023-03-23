@@ -4,6 +4,10 @@ import { store } from './redux/store';
 import routes from './routes';
 import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
+
 
 export default function App() {
     
