@@ -5,22 +5,21 @@ import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { Estrategico, Perspectiva } from '@/interfaces';
-import { useAppDispatch } from '../../redux/hooks';
 import { EstrategiaView } from './EstrategiaView';
 import dayjs from 'dayjs';
 import { Icon } from '../Icon';
-import { Link } from 'react-router-dom';
 import { status, statusString } from '@/helpers/status';
+import { ProgressBar } from '../ui/Progress';
 
 
 
 export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
 
     const {color } = perspectiva
-    
-    const dispatch = useAppDispatch();
 
-    // const [dataSource, setDataSource] = useState<TableDataType[]>();
+    console.log(perspectiva);
+    
+    
     const [estrategico, setEstrategico] = useState<Estrategico>({
         id: '',
         clave: '',
@@ -36,19 +35,24 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
 
     const [columns, setColumns] = useState<ColumnsType<Estrategico>>([
         {
-            title: 'Estategía',
+            title: 'Objetivos',
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
-                props: {
-                    className: 'border-l-primary',
-                    style: { borderLeft: `5px solid ${useGetColorByStatus(status[record.status]).hex}`}
-                },
-                children: <div>{record.nombre}</div>,
+                children: <div className='flex'> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColorByStatus(status[record.status]).rgba }}/> 
+                    <p className='text-default'>{record.nombre}</p>
+                </div>,
             }),
         },
         {
-            title: 'Status',
+            title: 'Tácticos',
+            width: 40,
+            ellipsis: true,
+            render: (text, record, index) => ( <p className='text-default'> 0 </p>   ),
+        },
+        {
+            title: 'Estatus',
             dataIndex: 'status',
             width: 50,
             ellipsis: true,
@@ -62,31 +66,31 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
         {
             title: 'Progreso',
             dataIndex: 'progreso',
-            width: 150,
+            width: 100,
             render: (text, record, index) => (
-                <Progress className='drop-shadow' percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} trailColor={useGetColorByStatus(status[record.status], .2).rgba} />
+                <Progress 
+                    className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                    strokeColor={{
+                        from: useGetColorByStatus(status[record.status]).hex,
+                        to: useGetColorByStatus(status[record.status]).hexLow,
+                    }}
+                    trailColor={useGetColorByStatus(status[record.status], .3).rgba} 
+                />
             ),
-        },
-        {
-            title: 'Fecha de Entrega',
-            dataIndex: 'fechaEntrega',
-            ellipsis: true,
-            width: 80,
-            render: (text, record, index) => record.fechaFin ? `${dayjs(record.fechaFin, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
         },
         {
             title: 'Responsables',
             width: 50,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={3}>
+                <Avatar.Group maxCount={3} key={index}>
                     {record.responsables?.map((responsable, index) => (
-                        // <span key={index} onClick={  } className='z-50' >
+                        <span key={index} className='z-50' >
                             <Avatar src={`https://i.pravatar.cc/300`}   onClick={
                                 (e) => {
                                     e?.stopPropagation();
                                 }
                             } />
-                        // </span>
+                        </span>
                     ))}
                 </Avatar.Group>
             ),
@@ -148,7 +152,7 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
                 }}
                 className='rounded-l-ext'
             >
-                <EstrategiaView estrategico={estrategico} perspectiva={perspectiva}/>
+                <EstrategiaView estrategico={estrategico} perspectiva={perspectiva} edit={true} view={true} setShowDrawer={setShowDrawer}/>
             </Drawer>
         </>
     )

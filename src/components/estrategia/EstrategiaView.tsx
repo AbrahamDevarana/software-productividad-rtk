@@ -1,14 +1,28 @@
 
 import { Estrategico } from '@/interfaces';
-import { Progress, Divider, Slider, Avatar, Drawer } from 'antd';
+import { Progress, Divider, Slider, Avatar, Drawer, Button } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '../../interfaces/perspectiva';
 import Loading from '../antd/Loading';
 import { useState } from 'react';
 import { FormEstrategia } from './FormEstrategia';
 import { Link } from 'react-router-dom';
+import { Icon } from '../Icon';
+import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
+import { status, statusString } from '@/helpers/status';
 
-export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategico: Estrategico, perspectiva:Perspectiva, isLoading?:boolean}) => {
+interface EstrategiaViewProps{
+    estrategico: Estrategico;
+    perspectiva: Perspectiva;
+    isLoading?: boolean;
+    edit?: boolean;
+    view?: boolean;
+    setOpen?: any;
+    setShowDrawer?: any;
+}
+
+
+export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view, setOpen, setShowDrawer}: EstrategiaViewProps) => {
 
     
     const [ showChildrenDrawer, setShowChildrenDrawer ] = useState<boolean>(false);
@@ -23,9 +37,14 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategi
                 <h1 className='text-2xl'>{estrategico.nombre}</h1>
 
                 <Divider />
-
-                <Slider defaultValue={estrategico.progreso}  />
-
+                    <Progress 
+                    className='drop-shadow progressStyle' percent={estrategico.progreso} strokeWidth={20} 
+                    strokeColor={{
+                        from: useGetColorByStatus(status[estrategico.status]).hex,
+                        to: useGetColorByStatus(status[estrategico.status]).hexLow,
+                    }}
+                    trailColor={useGetColorByStatus(status[estrategico.status], .3).rgba} 
+                />
                 <Divider />
 
                 <div className='grid grid-cols-3 gap-10'>
@@ -46,10 +65,11 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategi
                     <div className='col-span-3'>
                         <p>Pertenece a:</p>
                         <Avatar.Group maxCount={3}>
-                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                           {
+                                 estrategico.responsables?.map((responsable, index) => (
+                                    <Avatar key={index} src={`https://i.pravatar.cc/300`} />
+                                ))
+                           }
                         </Avatar.Group>
                     </div>
                     <div className='col-span-3'>
@@ -63,10 +83,18 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategi
                         <p>Indicador:</p>
                         <p> Prioridad 1</p>
                     </div>
+                        
+                   
+                    
+                    <div className='col-span-3'>
+                        {
+                            view && ( <Link to={`/estrategia/${estrategico.id}`} > <Button icon={<Icon iconName='faArrowRight' />} /> </Link>  )
+                        }
 
-                    <Link to={`/estrategia/${estrategico.id}`} > Ver más </Link>
-
-                    <button onClick={() => setShowChildrenDrawer(true)}>Editar</button>
+                        {
+                            edit && ( <Button icon={<Icon iconName='faPencil' />} className='mx-2' onClick={() => setShowChildrenDrawer(true)} /> )
+                        }
+                    </div>
                     
                 </div>
 
@@ -74,9 +102,9 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading}: {estrategi
                     open={showChildrenDrawer}
                     width={window.innerWidth > 1200 ? 600 : '100%'}
                     closable={false}
-                    onClose={() => setShowChildrenDrawer(false)}
+                    onClose={() =>{ setShowChildrenDrawer(false); }}
                 >
-                    <FormEstrategia estrategico={ estrategico } perspectiva={ perspectiva } />
+                    <FormEstrategia estrategico={ estrategico } perspectiva={ perspectiva } setShowDrawer={setShowDrawer} />
                 </Drawer>
             </div>
         </>

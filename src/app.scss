@@ -231,10 +231,28 @@ p, li, span, a{
     display: grid!important;
     align-items: center!important;
 }
+
+
+// Tabble
 .ant-table-cell{
     background-color: transparent!important;
 
     &::before{
         content: none!important;
     }
+
+}
+
+.ant-table-thead th {
+    color: #848891!important;
+    @apply uppercase font-bold;
+    font-size: 11px;
+}
+
+.progressStyle .ant-progress-text{
+    translate: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-shadow: 1 0 1px #fff
 }

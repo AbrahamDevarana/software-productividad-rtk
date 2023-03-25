@@ -18,20 +18,23 @@ export const Estrategia = ({perspectivas}: any) => {
     }    
 
     
+    
     return (
         <>
             {
                 perspectivas && perspectivas.map((perspectiva: Perspectiva, index: number) => (
-
+                    
+                
                 <div key={index} className='rounded-l-ext gap-x-5 flex flex-row pb-10'>
+                    <p></p>
                     <div className='flex shadow rounded-l-ext'>
                         <div className={`rounded-l-ext min-h-[240px] h-full flex flex-col justify-center items-center w-14`} style={{
                             backgroundColor: perspectiva.color
                         }}>
-                            <h1 className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider py-2'>{ perspectiva.nombre }</h1>
+                            <p className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider py-2 w-[200px] drop-shadow'>{ perspectiva.nombre }</p>
                         </div>
                         <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
-                            <Icon iconName='faChartLine' className='text-devarana-graph text-5xl' />
+                            <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
                             <p className='text-devarana-graph'>Ver más...</p>
                         </div>
                     </div>
@@ -57,7 +60,7 @@ export const Estrategia = ({perspectivas}: any) => {
                 destroyOnClose={true}
             >
 
-                <FormEstrategia perspectiva={perspectiva} setOpen={()=>setOpen}/>
+                <FormEstrategia perspectiva={perspectiva} setOpen={ setOpen }/>
 
             </Drawer>
         </>

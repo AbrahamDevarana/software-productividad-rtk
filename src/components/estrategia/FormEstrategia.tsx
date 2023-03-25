@@ -1,23 +1,26 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Slider } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { createEstrategicoFromPerspectivaThunk } from '../../redux/features/estrategicos/estrategicosThunk';
+import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { useEffect, useState, useMemo } from 'react';
 
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
 
 export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
+    
 
     const [initialValues, setInitialValues] = useState<any>({
         nombre: '',
         clave: '',
         descripcion: '',
+        indicador: '',
+        progreso: 0,
         perspectivaId: perspectiva.id,
-        fechaInicio: '',
-        fechaFin: '',
+        fechaInicio: '01/01/2023',
+        fechaFin: '01/01/2023',
         responsables: []
     })
     
@@ -27,9 +30,13 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
     const { TextArea } = Input;
 
     const handleOnSubmit = (values: any) => {
-        if(!values.id){
-            dispatch(createEstrategicoFromPerspectivaThunk(values))
+
+        if(values.id){
+            dispatch(updateEstrategicoThunk(values))
+            setOpen(false)
+            return
         }
+        dispatch(createEstrategicoFromPerspectivaThunk(values))
         setOpen(false)        
     }
 
@@ -43,11 +50,12 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
             id: estrategico?.id,
             nombre: estrategico?.nombre,
             clave: estrategico?.clave,
+            progreso: estrategico?.progreso,
             descripcion: estrategico?.descripcion,
             perspectivaId: perspectiva.id,
             fechaInicio: estrategico?.fechaInicio,
             fechaFin: estrategico?.fechaFin,
-            responsables: estrategico?.responsables
+            responsables: estrategico?.responsables.map((r: any) => r.id)
         })
 
     }, [estrategico])
@@ -75,7 +83,7 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
                             layout='vertical'
                         >
                             <Form.Item
-                                label="Nombre de la estrategia"
+                                label="Título del objetivo"
                             >
                                 <Input
                                     value={values.nombre}
@@ -85,23 +93,12 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
                                 />
                                 <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
+
                             <Form.Item
-                                label="Clave"
+                                label="Perspectiva"
                             >
-                                <Input
-                                    value={values.clave}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    name="clave"
-                                />
-                                <ErrorMessage name="clave" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                            <Form.Item
-                                label="Descripción"
-                            >
-                                <TextArea rows={4} value={values.descripcion} onChange={handleChange} onBlur={handleBlur} name="descripcion" />
-                                <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
+
                             <div className='grid grid-cols-2 gap-x-10'>
                                 <Form.Item
                                     label="Fecha de inicio"
@@ -131,6 +128,7 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
                                     <ErrorMessage name="fechaFin" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                             </div>
+
                             <Form.Item
                                 label="Responsables"
                             >
@@ -140,7 +138,7 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
                                     placeholder="Selecciona los responsables"
                                     onChange={(value) => setFieldValue('responsables', value)}
                                     allowClear
-                                    defaultValue={ values.responsables?.map((responsable: any) => responsable.id) }
+                                    defaultValue={ values.responsables }
                                 >
                                     {
                                         usuarios.map((usuario: any) => (
@@ -150,6 +148,37 @@ export const FormEstrategia = ({perspectiva, setOpen, estrategico}: any) => {
                                 </Select>
                                 <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
+
+                            <Form.Item
+                                label="Progreso"
+                            >
+                                <Slider defaultValue={values.progreso} onChange={(value) => setFieldValue('progreso', value)} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Clave"
+                            >
+                                <Input
+                                    value={values.clave}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    name="clave"
+                                />
+                                <ErrorMessage name="clave" render={msg => <Alert type="error" message={msg} showIcon />} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Describe la meta a alcanzar"
+                            >
+                                <TextArea rows={4} value={values.descripcion} onChange={handleChange} onBlur={handleBlur} name="descripcion" />
+                                <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Indicador"
+                            >
+                                <TextArea rows={4} value={values.indicador} onChange={handleChange} onBlur={handleBlur} name="indicador" />
+                                <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
+                            </Form.Item>
+                           
+                            
                             <Form.Item 
                                 className='text-right'
                             >

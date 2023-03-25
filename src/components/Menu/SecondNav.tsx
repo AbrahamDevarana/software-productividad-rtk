@@ -4,6 +4,7 @@ import { Icon } from "../Icon";
 import { Admin } from '../secondNav/Admin';
 import { optionalContent } from '@/interfaces';
 import { Tactica } from '../secondNav/Tactica';
+import { DatePicker, Input } from 'antd';
 
 interface OptBarProps{
     optBarVisible: boolean;
@@ -29,6 +30,7 @@ export const SecondNav = ({optBarVisible, setOptBarVisible, optionalContent}:Opt
                     <button className="absolute right-0 top-5 justify-center flex py-5 rounded-l-lg bg-devarana-blue dark:bg-devarana-graph"> 
                         <Icon iconName="faCaretLeft" className="text-white text-xl pl-1" onClick={ handleBar} />
                     </button>
+                    <Input className='w-full' value={'2023'} />
                     {  optionalContent === 'admin' && ( <Admin handleBar={handleBar}/> ) }
                     {  optionalContent === 'tactica' && ( <Tactica handleBar={handleBar}/> ) }
                 </div>

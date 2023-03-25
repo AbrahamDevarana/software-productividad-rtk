@@ -59,10 +59,10 @@ const estrategicosSlice = createSlice({
             state.isLoading = false
         },
         updateEstrategico: (state, action) => {
-            state.estrategicos = state.estrategicos.map(estrategico => estrategico.id === action.payload.estrategico.id ? action.payload.estrategico : estrategico)
+            console.log(action.payload.objetivoEstrategico)            
+            state.currentEstrategico = action.payload.objetivoEstrategico
             state.updated = true
             state.isLoading = false
-            state.currentEstrategico = action.payload.estrategico
         },
         deleteEstrategico: (state, action) => {
             state.estrategicos = state.estrategicos.filter(estrategico => estrategico.id !== action.payload.id)

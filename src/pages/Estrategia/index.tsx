@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-
+import {motion} from 'framer-motion';
 
 
 export const EstrategíaHome = () => {
@@ -18,7 +18,7 @@ export const EstrategíaHome = () => {
     }, []);
 
     return (
-        <div className='animate__animated ' id="Estrategia">
+        <div className='' id="Estrategia">
             <Estrategia perspectivas={perspectivas} />
         </div>
     )

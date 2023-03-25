@@ -12,6 +12,7 @@ import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { useAuth } from "@/hooks/useAuth";
 import { optionalContent } from "@/interfaces";
 import { Icon } from "../Icon";
+import { motion } from 'framer-motion';
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -91,10 +92,20 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                     <div className={`transition-all duration-300 ease-in-out w-full overflow-y-scroll`} id="mainEl" onScroll={handleScroll}> 
                         <div className="p-2">
                             <Navbar setSettingVisible={setSettingVisible} navbarClass={navbarClass} />
-                            <main className="animate__animated animate__fadeIn px-4"
+                            <main className="px-4 overflow-x-hidden relative"
                                 style={{ paddingTop: '80px', paddingBottom: '20px' }}
                                 
-                            >{children}</main>
+                            >
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ ease: "linear" }}
+                                >
+                                    {children}
+
+                                </motion.div>
+                            </main>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import { Estrategico } from "./estrategicos";
+import { IconName } from '../components/Icon';
 
 export interface PerspectivasState {
     perspectivas: Perspectiva[];
@@ -18,7 +19,7 @@ export interface Perspectiva {
     progreso: number;
     color: string;
     status: number;
-    icono?: string; 
+    icono?: IconName; 
     fechaInicio?: Date;
     fechaFin?: Date;
     clave?: string;

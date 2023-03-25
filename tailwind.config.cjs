@@ -52,7 +52,8 @@ module.exports = {
             'error':'#EF5350', 
             'light':'#EBEFF4',
             'dark':'#344767',
-            'black':'#42424a'  , 
+            'black':'#42424a', 
+            'default':'#848891',
             },
             fontSize: {
               base: ['14px', '24px'],

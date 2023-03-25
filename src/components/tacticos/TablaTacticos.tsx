@@ -28,7 +28,14 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
         {
             title: 'Progreso',
             render: (text, record, index) => (
-                <Progress className='drop-shadow' percent={record.progreso} strokeWidth={20} strokeColor={useGetColorByStatus(status[record.status]).hex} trailColor={useGetColorByStatus(status[record.status], .2).rgba} />
+                <Progress 
+                    className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                    strokeColor={{
+                        from: useGetColorByStatus(status[record.status]).hex,
+                        to: useGetColorByStatus(status[record.status]).hexLow,
+                    }}
+                    trailColor={useGetColorByStatus(status[record.status], .3).rgba} 
+                />
             ),
         },
         {

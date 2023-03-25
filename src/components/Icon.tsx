@@ -11,7 +11,7 @@ interface Props {
 
 
 const mergedIcons = { ...iconsSolid, ...iconsRegular };
-type IconName = keyof typeof mergedIcons;
+export type IconName = keyof typeof mergedIcons;
 
 
 export const Icon = ({ iconName, className, onClick }: Props) => {

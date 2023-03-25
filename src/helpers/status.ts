@@ -2,14 +2,14 @@
 export const status: any = {
 
     1 : 'default',
-    2 : 'secondary',
+    2 : 'primary',
     3 : 'success',
     4 : 'error',
     5 : 'warning'
 }
 
 // add type
-export type StatusType = 'default' | 'secondary' | 'success' | 'error' | 'warning';
+export type StatusType = 'default' | 'primary' | 'success' | 'error' | 'warning';
 
 
 

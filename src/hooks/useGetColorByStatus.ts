@@ -4,80 +4,77 @@ interface Color {
     name: string;
     rgba: string;
     hex: string;
-    rgb?: number[];
+    hexLow: string;
     gradient?: string;
 }
 
-type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'light' | 'dark' | 'black' | 'default';
+type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'dark' | 'default';
   
   const statusColors: Record<string, Color> = {
 
     primary: {
         name: 'primary',
-        rgba: 'rgba(236, 64, 122, 1)',
-        hex: '#EC407A',
-        gradient: 'linear-gradient(60deg, #ab47bc, #ec407a)'
+        rgba: 'rgba(9, 103, 201, 1)',
+        hex: '#0967C9',
+        hexLow: '#408FE3',
+        gradient: 'linear-gradient(180.77deg, #408FE3 0%, #0967C9 100%);',
     },
     secondary: {
         name: 'secondary',
-        rgba: 'rgba(253, 224, 69, 1)',
-        hex: '#fde045',
-        gradient: 'linear-gradient(45deg, #fde045, #fde045)'
+        rgba: 'rgba(229, 17, 65, 1)',
+        hex: '#E51141',
+        hexLow: '#FF6E8F',
+        gradient: 'linear-gradient(180.77deg, #FF6E8F 0%, #E51141 100%);',
     },
     info: {
         name: 'info',
-        rgba: 'rgba(73, 163, 241, 1)',
-        hex: '#49a3f1',
-        gradient: 'linear-gradient(45deg, #49a3f1, #1A73E8)',
+        rgba: 'rgba(240, 152, 20, 1)',
+        hex: '#F09814',
+        hexLow: '#F3B860',
+        gradient: 'linear-gradient(180.77deg, #F3B860 0%, #F09814 100%);',
     },
     success: {
         name: 'success',
-        rgba: 'rgba(102, 187, 106, 1)',
-        hex: '#66BB6A',
-        gradient: 'linear-gradient(45deg, #66BB6A, #43A047)', 
+        rgba: 'rgba(17, 195, 28, 1)',
+        hex: '#11C31C',
+        hexLow: '#75DD7B',
+        gradient: 'linear-gradient(180.77deg, #75DD7B 0%, #11C31C 100%);',
     },
     warning: {
         name: 'warning',
-        rgba: 'rgba(255, 167, 38, 1)',
-        hex: '#FFA726',
-        gradient: 'linear-gradient(45deg, #FFA726 , #FB8C00)'
+        rgba: 'rgba(240, 228, 56, 1)',
+        hex: '#F0E438',
+        hexLow: '#F3ED90',
+        gradient: 'linear-gradient(180.77deg, #F3ED90 0%, #F0E438 100%);',
     },
     error: {
         name: 'error',
-        rgba: 'rgba(239, 83, 80, 1)',
-        hex: '#EF5350',
-        gradient: 'linear-gradient(45deg, #EF5350, #E53935)'
-    },
-    light: {
-        name: 'light',
-        rgba: 'rgba(235, 239, 244, 1)',
-        hex: '#EBEFF4',
-        gradient: 'linear-gradient(45deg, #EBEFF4, #BDBDBD)'
+        rgba: 'rgba(203, 0, 7, 1)',
+        hex: '#CB0007',
+        hexLow: '#EC4D49',
+        gradient: 'linear-gradient(180.77deg, #EC4D49 0%, #CB0007 100%);',
     },
     dark: {
         name: 'dark',
-        rgba: 'rgba(52, 71, 103, 1)',
-        hex: '#344767',
-        gradient: 'linear-gradient(45deg, #344767, #1A1A1A)'
+        rgba: 'rgba(46, 49, 54, 1)',
+        hex: '#2E3136',
+        hexLow: '#656A76',
+        gradient: 'linear-gradient(180.77deg, #656A76 0%, #2E3136 100%);',
     },
     black: {
         name: 'black',
         rgba: 'rgba(66, 66, 74, 1)',
         hex: '#42424a',
-        gradient: 'linear-gradient(45deg, #42424a, #191919)'
+        hexLow: '#848891',
+        gradient: 'linear-gradient(180.77deg, #848891 0%, #42424A 100%);',
     },
     default: {
         name: 'default',
-        rgba: 'rgba(116, 123, 138, 1)',
-        hex: '#747b8a',
-        gradient: 'linear-gradient(45deg, #747b8a, #495361)'
-    }
-
-
-
-
-
-    
+        rgba: 'rgba(101, 106, 118, 1)',
+        hex: '#656A76',
+        hexLow: '#848891',
+        gradient: 'linear-gradient(180.77deg, #848891 0%, #656A76 100%);',
+    }    
   };
 
 export const useGetColorByStatus = (statusId: statusId, alpha: number = 1) => {
@@ -89,7 +86,6 @@ export const useGetColorByStatus = (statusId: statusId, alpha: number = 1) => {
       setColor({
         ...color,
         rgba: rgbaString,
-        rgb: [r, g, b],
       });
     }, [statusId, alpha]);
     

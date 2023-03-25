@@ -3,6 +3,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { createEstrategicoProvider, deleteEstrategicoProvider, getEstrategicoProvider, getEstrategicosProvider, updateEstrategicoProvider} from './estrategicosProvider';
 import { checkingEstrategicos, setEstrategicosError, getCurrentEstrategico, createEstrategico, deleteEstrategico, getEstrategicos, updateEstrategico, clearCurrentEstrategico, clearEstrategicos } from './estrategicosSlice';
 import { createEstrategicoFromProvider } from '../perspectivas/perspectivasSlice';
+import { getPerspectivasThunk } from '../perspectivas/perspectivasThunk';
 
 
 export const getEstrategicosThunk = (filtros: any) => {
@@ -62,6 +63,7 @@ export const updateEstrategicoThunk = (estrategico: any) => {
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
         useNotification({type: 'success', message: 'Estrategico actualizada correctamente'})
         dispatch( updateEstrategico(result.estrategico) )
+        dispatch( getPerspectivasThunk({}) )
     }   
 }
 

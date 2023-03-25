@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Segmented } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 export const ObjEstrategico = () => {
 
@@ -43,18 +44,16 @@ export const ObjEstrategico = () => {
     }
 
 	return (
-		<>
-			<div className='grid grid-cols-12 gap-5 animate__fadeInRightBig animate__animated animate__faster'>
-				<Box className='col-span-4'>
-					<EstrategiaView estrategico={currentEstrategico} perspectiva={perspectivas[0]} />
-				</Box>
-				<div className='col-span-8'>
-					<Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>
-					<Box className=''>
-						{ active === 'tacticos' && <TablaTacticos  /> }
-					</Box>
-				</div>
-			</div>
-		</>
+        <div className='grid grid-cols-12 gap-5'>
+            <Box className='col-span-4'>
+                <EstrategiaView estrategico={currentEstrategico} perspectiva={perspectivas[0]} />
+            </Box>
+            <div className='col-span-8'>
+                <Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>
+                <Box className=''>
+                    { active === 'tacticos' && <TablaTacticos  /> }
+                </Box>
+            </div>
+        </div>
 	)
 }

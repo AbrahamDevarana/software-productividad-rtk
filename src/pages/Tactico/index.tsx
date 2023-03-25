@@ -6,6 +6,7 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box, Button } from '@/components/ui';
 import { Drawer } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
+import { motion } from 'framer-motion';
 
 export const Tactico = () => {
 

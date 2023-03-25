@@ -31,6 +31,7 @@ export default defineConfig({
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
+                "framer-motion": ["framer-motion"],
             }
         },
         chunkSizeWarningLimit: 1500,
