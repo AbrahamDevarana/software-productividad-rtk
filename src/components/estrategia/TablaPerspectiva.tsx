@@ -9,7 +9,6 @@ import { EstrategiaView } from './EstrategiaView';
 import dayjs from 'dayjs';
 import { Icon } from '../Icon';
 import { status, statusString } from '@/helpers/status';
-import { ProgressBar } from '../ui/Progress';
 
 
 
