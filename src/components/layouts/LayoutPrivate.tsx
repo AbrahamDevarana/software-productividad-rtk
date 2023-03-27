@@ -1,7 +1,7 @@
 import Loading from "../antd/Loading";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { Drawer, FloatButton } from "antd";
+import { Drawer } from "antd";
 import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
@@ -11,7 +11,6 @@ import { useSocket } from "@/hooks/useSocket";
 import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { useAuth } from "@/hooks/useAuth";
 import { optionalContent } from "@/interfaces";
-import { Icon } from "../Icon";
 import { motion } from 'framer-motion';
 
 interface LayoutAppProps{
@@ -100,7 +99,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    transition={{ ease: "linear" }}
+                                    transition={{ ease: "linear", duration: 0.2 }}
                                 >
                                     {children}
 
@@ -120,9 +119,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
             </div>
         </Drawer>
 
-        <FloatButton 
-            icon={<Icon iconName="faPlus"/>} 
-        />
+        
         </>
     )
 };

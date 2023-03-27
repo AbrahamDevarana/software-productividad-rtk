@@ -17,13 +17,15 @@ const initialState: EstrategicosState = {
     currentEstrategico: {
         id: '',
         nombre: '',
-        clave: '',
+        codigo: '',
         descripcion: '',
         progreso: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
         status: 0,
-        perspectivas: []
+        indicador: '',
+        perspectivas: [],
+        responsables: []
     }
 }
 

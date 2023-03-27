@@ -1,23 +1,17 @@
 import { Icon } from '../Icon'
 import { Perspectiva } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
-import { Drawer } from 'antd'
+import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
 
 export const Estrategia = ({perspectivas}: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
-    const [color, setColor] = useState<string>('')
-    const [perspectiva, setPerspectiva] = useState<Perspectiva>()
 
-    const handleNewEstrategia = (perspectivaObj: Perspectiva) => {
+    const handleNewEstrategia = () => {
         setOpen(true)
-        setColor(perspectivaObj.color)
-        setPerspectiva(perspectivaObj)
-    }    
-
-    
+}    
     
     return (
         <>
@@ -35,12 +29,11 @@ export const Estrategia = ({perspectivas}: any) => {
                         </div>
                         <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
                             <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
-                            <p className='text-devarana-graph'>Ver más...</p>
+                            {/* <p className='text-devarana-graph'>Ver más...</p> */}
                         </div>
                     </div>
                     <div className='bg-white py-10 px-5 w-full shadow relative'>
-                        <button className='absolute -right-2 -top-2 border rounded-full px-2 text-2xl text-white' onClick={ () => handleNewEstrategia(perspectiva)} style={{ backgroundColor: perspectiva.color}}> + </button>
-                        <TablaEstrategia perspectiva={perspectiva} />
+                        <TablaEstrategia perspectiva={perspectiva} setOpen={setOpen}/>
                     </div>
                 </div>
             ))}
@@ -51,18 +44,18 @@ export const Estrategia = ({perspectivas}: any) => {
                 closeIcon={
                     <Icon iconName="faAngleLeft" className='text-white' />
                 }
-                width={window.innerWidth > 1200 ? 600 : '100%'}
-                headerStyle={{
-                    backgroundColor: color,
-                    
-                }}
+                width={window.innerWidth > 1200 ? 800 : '100%'}
                 className='rounded-l-ext'
                 destroyOnClose={true}
             >
-
-                <FormEstrategia perspectiva={perspectiva} setOpen={ setOpen }/>
-
+                <FormEstrategia setOpen={ setOpen } />
             </Drawer>
+
+            <FloatButton
+                onClick={() => handleNewEstrategia()}
+                icon={<Icon iconName="faPlus"/>} 
+                className='bottom-5'
+            />
         </>
     )
 }

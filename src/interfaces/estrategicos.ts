@@ -1,17 +1,6 @@
 
 import { Perspectiva, Paginate, Usuario } from '@/interfaces';
 
-export interface EstrategicoProps {
-    id:           string;
-    nombre:       string;
-    clave:        string;
-    descripcion:  string;
-    progreso:     number;
-    fechaInicio:  Date;
-    fechaFin:     Date;
-    status:       number;
-    perspectivas: Perspectiva[];
-}
 
 export interface EstrategicosState {
     estrategicos: EstrategicoProps[];
@@ -25,15 +14,16 @@ export interface EstrategicosState {
     currentEstrategico: EstrategicoProps;
 }
 
-export interface Estrategico {
+export interface EstrategicoProps {
     id: string;
     nombre: string;
-    clave: string;
+    codigo: string;
     descripcion: string;
     progreso: number;
     fechaInicio: Date;
     fechaFin: Date;
     status: number;
+    indicador: string;
     perspectivas?: Perspectiva[];
     responsables?: Usuario[];
 }

@@ -4,35 +4,43 @@ import type { ColumnsType } from 'antd/es/table';
 import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
-import { Estrategico, Perspectiva } from '@/interfaces';
-import { EstrategiaView } from './EstrategiaView';
-import dayjs from 'dayjs';
+import { EstrategicoProps, Perspectiva } from '@/interfaces';
+import { EstrategiaView } from './EstrategiaView'
 import { Icon } from '../Icon';
 import { status, statusString } from '@/helpers/status';
+import { FormEstrategia } from './FormEstrategia';
+import { motion } from 'framer-motion';
 
 
+interface TablaEstrategiaProps{
+    perspectiva: Perspectiva;
+    setOpen: (open: boolean) => void;
+}
 
-export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
+const MotionDrawer = motion(Drawer);
 
-    const {color } = perspectiva
+export const TablaEstrategia = ({perspectiva, setOpen}: TablaEstrategiaProps) => {
 
-    console.log(perspectiva);
+
+    const { color } = perspectiva
+
+    const [showEdit, setShowEdit] = useState<boolean>(false);
     
-    
-    const [estrategico, setEstrategico] = useState<Estrategico>({
+    const [estrategico, setEstrategico] = useState<EstrategicoProps>({
         id: '',
-        clave: '',
+        codigo: '',
         nombre: '',
         descripcion: '',
         fechaInicio: new Date(),
         fechaFin: new Date(),
         progreso: 0,
+        indicador: '',
         perspectivas: [],
         responsables: [],
         status: 1,
     });
 
-    const [columns, setColumns] = useState<ColumnsType<Estrategico>>([
+    const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
             title: 'Objetivos',
             width: 150,
@@ -101,12 +109,13 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
 
     const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
 
-    const handleViewEstrategia = (record:Estrategico) => {
+    const handleViewEstrategia = (record:EstrategicoProps) => {
         setEstrategico(record)
         setShowDrawer(true)
     }
     const handleCloseDrawer = () => {
         setShowDrawer(false)
+        setShowEdit(false)
     }
     
 
@@ -133,26 +142,32 @@ export const TablaEstrategia = ({perspectiva}: {perspectiva:Perspectiva}) => {
                     },
                 }}
             />
-            <Drawer
-                title={
-                    <span className='text-white text-xl tracking-wider drop-shadow'>  {estrategico?.clave} </span>
-                }
-                placement='right'
-                closable={true}
-                closeIcon={
-                    <Icon iconName="faAngleLeft" className='text-white' />
-                }
-                onClose={handleCloseDrawer}
-                open={showDrawer}
-                width={window.innerWidth > 1200 ? 600 : '100%'}
-                destroyOnClose={true}
-                headerStyle={{
-                    backgroundColor: color,
-                }}
-                className='rounded-l-ext'
-            >
-                <EstrategiaView estrategico={estrategico} perspectiva={perspectiva} edit={true} view={true} setShowDrawer={setShowDrawer}/>
-            </Drawer>
+            
+                <MotionDrawer
+                    title={
+                        <span className='text-white text-xl tracking-wider drop-shadow'>  {estrategico?.codigo} </span>
+                    }
+                    placement='right'
+                    closable={true}
+                    closeIcon={
+                        <Icon iconName="faAngleLeft" className='text-white' />
+                    }
+                    onClose={handleCloseDrawer}
+                    open={showDrawer}
+                    width={window.innerWidth > 1200 ? 800 : '100%'}
+                    destroyOnClose={true}
+                    headerStyle={{
+                        backgroundColor: color,
+                    }}
+                    className='rounded-l-ext'
+                >
+
+                    {
+                        showEdit
+                        ? <FormEstrategia estrategico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                        : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
+                    }
+                </MotionDrawer>
         </>
     )
 }
