@@ -1,4 +1,4 @@
-import { Estrategico } from "./estrategicos";
+import { EstrategicoProps } from "./estrategicos";
 import { IconName } from '../components/Icon';
 
 export interface PerspectivasState {
@@ -23,6 +23,6 @@ export interface Perspectiva {
     fechaInicio?: Date;
     fechaFin?: Date;
     clave?: string;
-    objetivo_estr?: Estrategico[];
+    objetivo_estr?: EstrategicoProps[];
 }
 
