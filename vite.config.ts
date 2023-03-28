@@ -24,14 +24,17 @@ export default defineConfig({
         rollupOptions: {
             manualChunks: {
                 "react-dom": ["react-dom"],
-                // "chart.js": ["chart.js"],
                 "animate.css": ["animate.css"],
                 "formik": ["formik"],
-                "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
+                "font-awesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
+                "free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
+                "react-fontawesome": ["@fortawesome/react-fontawesome"],
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
                 "framer-motion": ["framer-motion"],
+                "@ant-design/icons": ["@ant-design/icons"],
+                "ckeditor": ["@ckeditor/ckeditor5-react", "@ckeditor/ckeditor5-build-classic"],
             }
         },
         chunkSizeWarningLimit: 1500,

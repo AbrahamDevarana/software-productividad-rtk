@@ -31,16 +31,15 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
             <div className='w-full'>
                 <h1 className='text-2xl'>{estrategico.nombre}</h1>
 
-                <Divider />
-                    <Progress 
+                <Progress 
                     className='drop-shadow progressStyle' percent={estrategico.progreso} strokeWidth={20} 
                     strokeColor={{
                         from: useGetColorByStatus(status[estrategico.status]).hex,
                         to: useGetColorByStatus(status[estrategico.status]).hexLow,
                     }}
                     trailColor={useGetColorByStatus(status[estrategico.status], .3).rgba} 
+                    
                 />
-                <Divider />
 
                 <div className='flex flex-col col-span-1'>
                     <span className='rounded-ext text-white text-center text-lg' style={{ backgroundColor: perspectiva.color }}>
@@ -50,17 +49,17 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
 
                 <div className='grid grid-cols-2 gap-10 py-5'>
                     <div className='flex flex-col col-span-1'>
-                        <p>Fecha Inicio: </p>
+                        <p className='text-devarana-graph'>Fecha Inicio: </p>
                         <span className='bg-gray-200 p-2 rounded-ext'>{dayjs(estrategico.fechaInicio).format('DD/MM/YYYY')}</span>
                     </div>
                     <div className='flex flex-col col-span-1'>
-                        <p>Fecha Inicio: </p>
+                        <p className='text-devarana-graph'>Fecha Inicio: </p>
                         <span className='bg-gray-200 p-2 rounded-ext'>{dayjs(estrategico.fechaFin).format('DD/MM/YYYY')}</span>
                     </div>
                     
 
                     <div className='col-span-3'>
-                        <p>Responsable:</p>
+                        <p className='text-devarana-graph'>Responsable:</p>
                         <Avatar.Group maxCount={3}>
                            {
                             estrategico.responsables?.map((responsable, index) => (
@@ -76,7 +75,7 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
                     <div className='col-span-3'>
                         <Divider orientation='left'>Meta:</Divider>
                         <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>
-                            <p>
+                            <p className='text-devarana-graph'>
                                 { estrategico.descripcion }
                             </p>
                         </div>
@@ -85,7 +84,7 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
                     <div className='col-span-3'>
                         <Divider orientation='left'>Indicador:</Divider>
                         <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>
-                            <p>
+                            <p className='text-devarana-graph'>
                                 { estrategico.indicador }
                             </p>
                         </div>

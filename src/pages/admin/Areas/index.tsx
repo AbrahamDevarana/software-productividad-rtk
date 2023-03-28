@@ -9,6 +9,7 @@ import { FormAreas } from '@/components/forms/FormAreas';
 import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';
+import { AreaProps } from "@/interfaces";
 
 
 const initialValues = {
@@ -16,12 +17,7 @@ const initialValues = {
     page: 0,
 }
 
-interface DataType {
-    key: React.Key;
-    nombre: string;
-    acciones: string;
-    subArea?: DataType[]
-}
+
 
 export const Areas = () => {
     
@@ -31,7 +27,7 @@ export const Areas = () => {
     const [formVisible, setFormVisible] = useState<boolean>(false)
     const [filtros, setFiltros] = useState<any>(initialValues)
 
-    const columns: ColumnsType <DataType> = [
+    const columns: ColumnsType <AreaProps> = [
         {
             title: "Areas",
             key: "areas",

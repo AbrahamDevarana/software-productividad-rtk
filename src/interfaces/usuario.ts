@@ -1,7 +1,7 @@
 import { Paginate } from "./slice";
 
 export interface UsuariosState {
-    usuarios: Usuario[];
+    usuarios: UsuarioProps[];
     paginate: Paginate;
     isLoading: boolean;
     error: boolean;
@@ -9,10 +9,10 @@ export interface UsuariosState {
     updated: boolean;
     created: boolean;
     deleted: boolean;
-    currentUsuario: Usuario;
+    currentUsuario: UsuarioProps;
 }
 
-export interface Usuario {
+export interface UsuarioProps {
     id: number;
     nombre: string;
     apellidoPaterno: string;

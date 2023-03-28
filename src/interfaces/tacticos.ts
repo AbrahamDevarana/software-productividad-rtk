@@ -1,4 +1,5 @@
-import { Usuario } from "./usuario";
+import { UsuarioProps,  } from "./usuario";
+import { AreaProps } from "./";
 
 export interface TacticoProps {
     id:           string;
@@ -11,7 +12,9 @@ export interface TacticoProps {
     fechaFin:     Date;
     status:       number;
     tipoObjetivo: number;
-    responsables:  Usuario[];
+    responsables:  UsuarioProps[];
+    areas: AreaProps[]
+    objetivo_tact?: any
 }
 
 export interface TacticosState {

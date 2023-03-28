@@ -6,24 +6,27 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { createTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import useNotify from '@/hooks/useNotify';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { clearAlertTacticos } from '@/redux/features/tacticos/tacticosSlice';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 
 
 interface FormTacticoProps {
     estrategicoId?: string;
     areaId?: string;
+    setShowEdit: (value: boolean) => void
+    currentTactico?: any
+    showEdit?: boolean
 }
 
-export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) => {
+export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showEdit, setShowEdit}: FormTacticoProps) => {
 
     const  dispatch = useAppDispatch()
     const { TextArea } = Input;
 
-    const { currentTactico, created, deleted, infoMessage, updated, error } = useAppSelector(state => state.tacticos)
+    const {  created, deleted, infoMessage, updated, error } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { areas } = useAppSelector(state => state.areas)    
@@ -56,6 +59,7 @@ export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) =
 
         return () => {
             dispatch(clearAlertTacticos())
+            
         }
     }, [created, deleted, infoMessage, updated, error])
 
@@ -64,19 +68,23 @@ export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) =
     }, [])
 
     useEffect(() => {
-        if(currentTactico.id !== ""){
+        if(currentTactico && currentTactico.id !== ""){
             setInitialValues({
                 ...initialValues,
+                id: currentTactico.id,
                 nombre: currentTactico.nombre,
                 codigo: currentTactico.codigo,
                 meta: currentTactico.meta,
                 indicador: currentTactico.indicador,
                 progreso: currentTactico.progreso,
+                tipoObjetivo: currentTactico.tipoObjetivo,
                 fechaInicio: dayjs(currentTactico.fechaInicio).toDate(),
                 fechaFin: dayjs(currentTactico.fechaFin).toDate(),
-                responsables: currentTactico.responsables.map((r:any) => r.id)
+                responsables: currentTactico.responsables.map((r:any) => r.id),
+                areas: currentTactico.areas.map((a:any) => a.id)
             })
         }
+
     }, [currentTactico])
 
     useEffect(() => {
@@ -89,8 +97,9 @@ export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) =
 
     const handleOnSubmit = (values: any) => {
         
-        if(currentTactico.id !== ""){
-            console.log("update")
+        if(currentTactico && currentTactico.id !== ""){
+            console.log(values);
+            dispatch(updateTacticoThunk(values))
             return
         }       
         dispatch(createTacticoThunk(values))
@@ -269,7 +278,7 @@ export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) =
 
                             <Form.Item>
                                 <Checkbox.Group
-                                    defaultValue={values.areas}
+                                    value={values.areas}
                                     onChange={(value) => setFieldValue('areas', value)}
                                     
                                 >
@@ -286,7 +295,7 @@ export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) =
                                 className='text-right'
                             >
                                 <div className='flex'>
-                                    {/* {setShowEdit &&<Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>} */}
+                                    { showEdit &&<Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
                                     <Button btnType="secondary" type='submit' className='ml-auto'>Guardar</Button>
                                 </div>
                             </Form.Item>

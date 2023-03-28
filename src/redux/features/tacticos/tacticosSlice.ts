@@ -22,6 +22,7 @@ const initialState: TacticosState = {
         status: 0,
         tipoObjetivo: 0,
         responsables: [],
+        areas: [],
         
     }
 }
@@ -45,8 +46,6 @@ const tacticosSlice = createSlice({
             state.tacticos_core = action.payload.tacticos_core
         },
         getCurrentTactico: (state, action) => {
-            console.log(action.payload);
-            
             state.currentTactico = action.payload.tactico
             state.isLoading = false
         },

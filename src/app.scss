@@ -58,8 +58,9 @@ h3, h5{
 }
 
 p, li, span, a{
-    @apply text-base
+    @apply text-base 
 }
+
 
 ::placeholder, .ant-select-selection-placeholder{
     font-weight: 300;
@@ -249,14 +250,19 @@ p, li, span, a{
     font-size: 11px;
 }
 
-.progressStyle .ant-progress-text{
-    translate: -50px;
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-    text-shadow: 1 0 1px #fff
-}
+.progressStyle {
+    .ant-progress-text{
+        translate: -10px;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        text-shadow: 1 0 1px #fff
+    }
 
+    .ant-progress-outer{
+        padding: 0!important;
+    }
+}
 .ant-alert-error{
     margin: 10px 0;
 }

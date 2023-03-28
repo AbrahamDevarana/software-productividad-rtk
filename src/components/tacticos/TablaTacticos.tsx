@@ -1,18 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import {Avatar, Progress, Table} from 'antd';
+import {Avatar, Drawer, Progress, Table} from 'antd';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import dayjs from 'dayjs';
 import { status, statusString } from '@/helpers/status';
 import '@/assets/css/ResizableTable.css';
 import { useResizable } from '@/hooks/useResizable';
 import { TacticoProps } from '@/interfaces/tacticos';
+import { TacticosView } from './TacticosView';
+import { FormTactico } from './FormTacticos';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
 }
 
 export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
+
+    const [showDrawer, setShowDrawer] = useState<boolean>(false)
+    const [showEdit, setShowEdit] = useState<boolean>(false);
+    const [currentTactico, setCurrentTactico] = useState<TacticoProps | null>(null);
 
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
@@ -92,7 +100,8 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            
+                            setCurrentTactico (record);
+                            setShowDrawer(true)
                         }
                     }}
                 }
@@ -104,6 +113,25 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                     },
                 }}
             />
+
+            <Drawer
+                open={showDrawer}
+                width={window.innerWidth > 1200 ? 600 : '100%'}
+                destroyOnClose={true}
+                onClose={() => {
+                    setShowDrawer(false)
+                    setShowEdit(false)
+                }}
+            >   
+
+                {
+                    showEdit ? 
+                    <FormTactico currentTactico={currentTactico} setShowEdit={setShowEdit}  showEdit={showEdit}/>
+                    :
+                    <TacticosView currentTactico={currentTactico} setShowEdit={setShowEdit} />
+                }
+
+            </Drawer>
         </>
     )
 }

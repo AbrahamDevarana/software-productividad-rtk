@@ -1,23 +1,16 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { clearTacticosErrorThunk, clearTacticosThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { clearTacticosThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
-import { Box, Button } from '@/components/ui';
+import { Box } from '@/components/ui';
 import { Drawer, FloatButton } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import { Icon } from '@/components/Icon';
 
 export const Tactico = () => {
 
-    let {state} = useLocation() 
-
-
-    const [currentInfo, setCurrentInfo] = useState({
-        state
-    })    
-  
-
+    let {state} = useLocation()   
     const {slug} = useParams<{slug:string}>()
 
     const dispatch = useAppDispatch()
@@ -36,9 +29,11 @@ export const Tactico = () => {
         <>
             <div className='grid gap-10'>
                 <Box>
+                    <h2>Objetivos que contribuyen a la estrategia </h2>
                     <TablaTacticos tacticos={tacticos}/>
                 </Box>
                 <Box>
+                    <h2>Tácticos Core</h2>
                     <TablaTacticos tacticos={tacticos_core}/>
                 </Box>
 
