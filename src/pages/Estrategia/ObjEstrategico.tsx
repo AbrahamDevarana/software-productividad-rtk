@@ -85,7 +85,7 @@ export const ObjEstrategico = () => {
                 destroyOnClose={true}
             >
 
-                <FormTactico estrategicoId={id} />
+                <FormTactico estrategicoId={id} setShowEdit={setShowDrawer} />
 
             </Drawer>
 

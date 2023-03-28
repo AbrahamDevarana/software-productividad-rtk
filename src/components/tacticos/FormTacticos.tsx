@@ -295,7 +295,7 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                                 className='text-right'
                             >
                                 <div className='flex'>
-                                    { showEdit &&<Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
+                                    { showEdit && <Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
                                     <Button btnType="secondary" type='submit' className='ml-auto'>Guardar</Button>
                                 </div>
                             </Form.Item>
