@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ColumnsType } from 'antd/es/table';
-import {Progress, Table} from 'antd';
+import {Avatar, Progress, Table} from 'antd';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import dayjs from 'dayjs';
 import { status, statusString } from '@/helpers/status';
@@ -14,21 +14,40 @@ interface TablaTacticosProps {
 
 export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
-    
-
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
-            title: 'Nombre',
+            title: 'Objetivos',
+            width: 150,
+            ellipsis: true,
             render: (text, record, index) => ({
-                props: {
-                    className: 'border-l-primary',
-                    style: { borderLeft: `5px solid ${useGetColorByStatus(status[record.status]).hex}`}
-                },
-                children: <div>{record.nombre}</div>,
+                children: <div className='flex'> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColorByStatus(status[record.status]).rgba }}/> 
+                    <p className='text-default'>{record.nombre}</p>
+                </div>,
             }),
         },
         {
+            title: 'Tácticos',
+            width: 40,
+            ellipsis: true,
+            render: (text, record, index) => ( <p className='text-default'> 0 </p>   ),
+        },
+        {
+            title: 'Estatus',
+            dataIndex: 'status',
+            width: 50,
+            ellipsis: true,
+            render: (text, record, index) => (
+                <span className='font-semibold'
+                 style={{
+                    color: useGetColorByStatus(status[record.status]).hex,
+                }}>{statusString[record.status]}</span>
+            ),
+        },
+        {
             title: 'Progreso',
+            dataIndex: 'progreso',
+            width: 100,
             render: (text, record, index) => (
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
@@ -41,22 +60,24 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             ),
         },
         {
-            title: 'Estatus',
+            title: 'Responsables',
+            width: 50,
             render: (text, record, index) => (
-                <span style={{
-                    color: useGetColorByStatus(status[record.status]).hex,
-                }}>{statusString[record.status]}</span>
+                <Avatar.Group maxCount={3} key={index}>
+                    {record.responsables?.map((responsable, index) => (
+                        <span key={index} className='z-50' >
+                            <Avatar src={`https://i.pravatar.cc/300`}   onClick={
+                                (e) => {
+                                    e?.stopPropagation();
+                                }
+                            } />
+                        </span>
+                    ))}
+                </Avatar.Group>
             ),
+            ellipsis: true,
         },
-        {
-            title: 'Fecha Inicio',
-            render: (text, record, index) => record.fechaFin ? `${dayjs(record.fechaFin, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
-        },
-        {
-            title: 'Fecha Fin',
-            render: (text, record, index) => record.fechaFin ? `${dayjs(record.fechaFin, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
-        },
-    ])
+    ]);
 
     const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
 
@@ -66,7 +87,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 columns={mergeColumns}
                 dataSource={tacticos}
                 size='small'
-                className='table-resizable w-full'
+                className='table-resizable w-full '
                 rowKey={(record) => record.key}
                 onRow={(record, rowIndex) => {
                     return {

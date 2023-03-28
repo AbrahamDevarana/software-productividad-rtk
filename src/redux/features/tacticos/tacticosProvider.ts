@@ -38,9 +38,12 @@ export const getTacticoProvider = async (tacticoId: string, getState: () => Root
     }
 }
 
-export const getTacticoFromAreaProvider = async (slug: string, getState: () => RootState) => {
+export const getTacticoFromAreaProvider = async (query: { slug: string, quarter: number, year: number }, getState: () => RootState) => {
+
+    const { slug, quarter, year } = query
+
     try {
-        const response = await clientAxios.get(`/tacticos/area/${slug}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        const response = await clientAxios.get(`/tacticos/area/${slug}`, { headers: { "accessToken": `${getState().auth.accessToken}` }, params: { year, quarter} });
         return {
             ok: true,
             tacticos: response.data

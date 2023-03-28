@@ -1,6 +1,6 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { clearTacticosErrorThunk, clearTacticosThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box, Button } from '@/components/ui';
@@ -12,28 +12,28 @@ export const Tactico = () => {
 
     let {state} = useLocation() 
 
-    
 
     const [currentInfo, setCurrentInfo] = useState({
         state
     })    
+  
 
     const {slug} = useParams<{slug:string}>()
+
     const dispatch = useAppDispatch()
     const {tacticos, tacticos_core} = useAppSelector(state => state.tacticos)
     const [visible, setVisible] = useState<boolean>(false)
 
     useEffect(() => {
         if(slug){
-            dispatch(getTacticoFromAreaThunk(slug))
+            dispatch(getTacticoFromAreaThunk(slug, state.quarter, state.year))
         }
+
+        return () => { dispatch(clearTacticosThunk()) }
     }, [slug])
 
     return (
         <>
-            <p>
-                {JSON.stringify(currentInfo)}
-            </p>
             <div className='grid gap-10'>
                 <Box>
                     <TablaTacticos tacticos={tacticos}/>

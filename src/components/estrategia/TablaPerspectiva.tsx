@@ -154,7 +154,7 @@ export const TablaEstrategia = ({perspectiva, setOpen}: TablaEstrategiaProps) =>
                     }
                     onClose={handleCloseDrawer}
                     open={showDrawer}
-                    width={window.innerWidth > 1200 ? 800 : '100%'}
+                    width={window.innerWidth > 1200 ? 600 : '100%'}
                     destroyOnClose={true}
                     headerStyle={{
                         backgroundColor: color,

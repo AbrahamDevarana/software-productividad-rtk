@@ -18,7 +18,7 @@ interface FormTacticoProps {
     areaId?: string;
 }
 
-export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
+export const FormTactico = ({ estrategicoId , areaId = "" }: FormTacticoProps) => {
 
     const  dispatch = useAppDispatch()
     const { TextArea } = Input;
@@ -28,13 +28,15 @@ export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
     const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { areas } = useAppSelector(state => state.areas)    
 
+    
+    
     const [initialValues, setInitialValues] = useState<any>({
         nombre: '',
         codigo: '',
         meta: '',
         indicador: '',
         progreso: 0,
-        estrategicoId: estrategicoId || '',
+        objetivoEstrategico: estrategicoId,
         tipoObjetivo: estrategicoId? 1 : '',
         perspectivaId: '',
         fechaInicio: dayjs().startOf('year'),
@@ -81,9 +83,7 @@ export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
         dispatch(getAreasThunk({}))
     }, [])
 
-    const handleGetEstrategicos = () => {
-        console.log("getEstrategicos");
-        
+    const handleGetEstrategicos = () => {        
         dispatch(getEstrategicosThunk({}))
     }
 
@@ -96,6 +96,7 @@ export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
         dispatch(createTacticoThunk(values))
         
     }
+    
 
     return (
         <>
@@ -228,7 +229,11 @@ export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
                                         label="Tipo de objetivo"
                                     >
                                         <Radio.Group
-                                            onChange={(e) => { setFieldValue('tipoObjetivo', e.target.value); e.target.value === 1 && handleGetEstrategicos() }}
+                                            onChange={(e) => { 
+                                                setFieldValue('tipoObjetivo', e.target.value); 
+                                                e.target.value === 1 && handleGetEstrategicos();
+                                                e.target.value === 2 && setFieldValue('objetivoEstrategico', null); 
+                                            }}
                                             value={values.tipoObjetivo}
                                         >
                                             <Radio value={1}>Táctico</Radio>
@@ -245,9 +250,9 @@ export const FormTactico = ({ estrategicoId, areaId }: FormTacticoProps) => {
                                                     style={{ width: '100%' }}
                                                     placeholder="Selecciona el objetivo estratégico"
                                                     onChange={(value) => {setFieldValue('objetivoEstrategico', value ) }}
+                                                    value={  values.objetivoEstrategico }
+                                                    disabled={estrategicos.length === 0}
                                                     allowClear
-                                                    value={ estrategicoId }
-                                                    disabled={estrategicos.length === 0 || estrategicoId !== '' }
                                                 >
                                                     {
                                                         estrategicos.map((objetivo: any) => (

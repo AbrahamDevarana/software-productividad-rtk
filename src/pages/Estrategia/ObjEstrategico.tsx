@@ -80,7 +80,7 @@ export const ObjEstrategico = () => {
             <Drawer
                 open={showDrawer}
                 onClose={() => setShowDrawer(false)}
-                width={window.innerWidth > 1200 ? 800 : '100%'}
+                width={window.innerWidth > 1200 ? 600 : '100%'}
                 className='rounded-l-ext'
                 destroyOnClose={true}
             >

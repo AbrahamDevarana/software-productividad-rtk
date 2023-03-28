@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider, Radio } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Slider, Radio, Divider } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
@@ -241,9 +241,6 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
                                 </Radio.Group>
                             </Form.Item> */}
                                         
-
-                           
-
                             <Form.Item 
                                 className='text-right'
                             >

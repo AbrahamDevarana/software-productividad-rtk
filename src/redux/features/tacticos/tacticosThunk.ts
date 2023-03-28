@@ -22,10 +22,14 @@ export const getTacticoThunk = (tacticosId: string) => {
     }   
 }
 
-export const getTacticoFromAreaThunk = (slug: string) => {
+export const getTacticoFromAreaThunk = (slug: string, quarter:number, year:number) => {
+
+    const query = {quarter, year, slug}
+    
+
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
-        const result = await getTacticoFromAreaProvider(slug, getState)
+        const result = await getTacticoFromAreaProvider(query, getState)        
         if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
         dispatch( getTacticos(result.tacticos) )
     }

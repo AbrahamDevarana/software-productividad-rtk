@@ -1,6 +1,6 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Progress, Divider, Avatar, Button, Tooltip } from 'antd';
+import { Progress, Divider, Avatar, Button, Tooltip, FloatButton } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '../../interfaces/perspectiva';
 import Loading from '../antd/Loading';
@@ -75,7 +75,7 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
                     </div>
                     <div className='col-span-3'>
                         <Divider orientation='left'>Meta:</Divider>
-                        <div className='w-full border border-t-0 rounded-b-ext py-3 px-5'>
+                        <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>
                             <p>
                                 { estrategico.descripcion }
                             </p>
@@ -84,22 +84,30 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
 
                     <div className='col-span-3'>
                         <Divider orientation='left'>Indicador:</Divider>
-                        <div className='w-full border border-t-0 rounded-b-ext py-3 px-5'>
+                        <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>
                             <p>
                                 { estrategico.indicador }
                             </p>
                         </div>
                     </div>
                         
-                   
-                    
+     
                     <div className='col-span-3'>
-                        {
-                            view && ( <Link to={`/estrategia/${estrategico.id}`} > <Button icon={<Icon iconName='faArrowRight' />} /> </Link>  )
-                        }
 
                         {
-                            edit && ( <Button icon={<Icon iconName='faPencil' />} className='mx-2' onClick={() => setShowEdit(true)} /> )
+                            edit && ( 
+                                <FloatButton
+                                    icon={<Icon iconName='faPencil' className='text-devarana-midnight'/>}
+                                    className='mx-2 absolute bottom-8 right-4 rounded-full'
+                                    onClick={() => setShowEdit(true)}
+                                />
+                            )
+                        }
+                        {
+                            view && ( 
+                            <Link to={`/estrategia/${estrategico.id}`} className='absolute -left-4 top-20' > 
+                                <Button style={{ backgroundColor: perspectiva.color }} className='rounded-full  text-white border-none' icon={<Icon iconName='faArrowRight' />} /> 
+                            </Link>  )
                         }
                     </div>
                     

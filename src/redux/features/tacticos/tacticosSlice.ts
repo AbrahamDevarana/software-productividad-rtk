@@ -42,6 +42,7 @@ const tacticosSlice = createSlice({
         getTacticos: (state, action) => {                 
             state.isLoading = false
             state.tacticos = action.payload.tacticos
+            state.tacticos_core = action.payload.tacticos_core
         },
         getCurrentTactico: (state, action) => {
             console.log(action.payload);
@@ -66,9 +67,11 @@ const tacticosSlice = createSlice({
             state.isLoading = false
         },
         clearTacticos: (state) => {
-            state = initialState
+            state.tacticos = initialState.tacticos
+            state.tacticos_core = initialState.tacticos_core
         },
         clearCurrentTactico: (state) => {
+            
             state.currentTactico = initialState.currentTactico
         },       
         clearAlertTacticos: (state) => {   
