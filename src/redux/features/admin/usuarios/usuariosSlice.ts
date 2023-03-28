@@ -92,8 +92,8 @@ const usuariosSlice = createSlice({
             state.error = false
             state.currentUsuario = action.payload.usuario
         },
-        deleteUsuario: (state, action) => {
-            state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload.id)
+        deleteUsuario: (state, action) => {           
+            state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload)
             state.deleted = true
             state.isLoading = false
             state.error = false
@@ -115,12 +115,19 @@ const usuariosSlice = createSlice({
         },
         cleanCurrentUsuario: (state) => {
             state.currentUsuario = initialState.currentUsuario
+        },
+        clearAlertUsuarios: (state) => {   
+            state.error = false
+            state.updated = false
+            state.created = false
+            state.deleted = false
+            state.infoMessage = ''
         }
 
     }
 })
 
-export const { checkingUsuarios, setUsuariosError, getUsuarios, getUsuario, createUsuario, updateUsuario, deleteUsuario, cleanCurrentUsuario, clearUsuarios } = usuariosSlice.actions
+export const { checkingUsuarios, setUsuariosError, getUsuarios, getUsuario, createUsuario, updateUsuario, deleteUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } = usuariosSlice.actions
 
 
 

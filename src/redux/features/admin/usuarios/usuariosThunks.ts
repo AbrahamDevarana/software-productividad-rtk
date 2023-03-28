@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from '@/redux/store';
 import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider } from './usuariosProvider';
-import { checkingUsuarios, getUsuario, getUsuarios, setUsuariosError, createUsuario, deleteUsuario, updateUsuario, cleanCurrentUsuario, clearUsuarios } from './usuariosSlice';
+import { checkingUsuarios, getUsuario, getUsuarios, setUsuariosError, createUsuario, deleteUsuario, updateUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } from './usuariosSlice';
 
 
 export const getUsuariosThunk = (filtros: any) => {
@@ -48,8 +48,7 @@ export const updateUsuarioThunk = (usuario: any) => {
 export const deleteUsuarioThunk = (usuarioId: number) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingUsuarios())
-        const result = await deleteUsuarioProvider(usuarioId, getState)
-
+        const result = await deleteUsuarioProvider(usuarioId, getState)       
         if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
         dispatch( deleteUsuario(usuarioId) )
     }
@@ -65,5 +64,11 @@ export const cleanCurrentUsuarioThunk = () => {
 export const clearUsuariosThunk = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(clearUsuarios())
+    }
+}
+
+export const clearAlertUsuariosThunk = () => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(clearAlertUsuarios())
     }
 }
