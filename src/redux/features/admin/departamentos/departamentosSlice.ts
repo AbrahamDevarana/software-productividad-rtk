@@ -21,6 +21,7 @@ interface Departamento {
     areaId: number | null;
     departamentoId: number | null;
     leaderId: number | null;
+    slug: string;
 }
 
 
@@ -43,6 +44,7 @@ const initialState: DepartamentoState = {
         areaId: null,
         departamentoId: null,
         leaderId: null,
+        slug: ''
     },
     lideres: []
 }

@@ -1,4 +1,4 @@
-
+import { Usuario } from "./usuario";
 
 export interface TacticoProps {
     id:           string;
@@ -11,6 +11,7 @@ export interface TacticoProps {
     fechaFin:     Date;
     status:       number;
     tipoObjetivo: number;
+    responsables:  Usuario[];
 }
 
 export interface TacticosState {

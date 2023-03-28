@@ -6,6 +6,8 @@ import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
+import quarterOfYear from 'dayjs/plugin/quarterOfYear'
+dayjs.extend(quarterOfYear)
 dayjs.extend(customParseFormat)
 
 import { AnimatePresence } from "framer-motion";

@@ -27,8 +27,8 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
         indicador: '',
         progreso: 0,
         perspectivaId: '',
-        fechaInicio: new Date(),
-        fechaFin: new Date(),
+        fechaInicio: dayjs().startOf('year'),
+        fechaFin: dayjs().endOf('year'),
         responsables: []        
     })
       
@@ -43,7 +43,6 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
             setOpen(false)
             return
         }
-
         dispatch(createEstrategicoFromPerspectivaThunk(values))
         setOpen(false)        
     }
@@ -53,9 +52,6 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
     }, [])
 
     useEffect(() => {
-
-        
-        
         if(estrategico){
             setInitialValues({
                 id: estrategico?.id,

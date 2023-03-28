@@ -1,7 +1,7 @@
 import { useNotification } from '@/hooks/useNotification';
 import { AppDispatch, RootState } from '@/redux/store';
-import { createTacticoProvider, deleteTacticoProvider, getTacticoProvider, getTacticosProvider, updateTacticoProvider, getTacticoFromAreaProvider} from './tacticosProvider';
-import { checkingTacticos, setTacticosError, getCurrentTactico, createTactico, deleteTactico, getTacticos, updateTactico, clearCurrentTactico, clearTacticos } from './tacticosSlice';
+import { createTacticoProvider, deleteTacticoProvider, getTacticoProvider, getTacticosProvider, updateTacticoProvider, getTacticoFromAreaProvider, getTacticoFromEstrategiaProvider} from './tacticosProvider';
+import { checkingTacticos, setTacticosError, getCurrentTactico, createTactico, deleteTactico, getTacticos, updateTactico, clearCurrentTactico, clearTacticos,  clearAlertTacticos } from './tacticosSlice';
 
 
 export const getTacticosThunk = (filtros: any) => {
@@ -31,11 +31,21 @@ export const getTacticoFromAreaThunk = (slug: string) => {
     }
 }
 
+export const getTacticoFromEstrategiaThunk = (estrategiaId: string) => {
+    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
+        dispatch(checkingTacticos())
+        const result = await getTacticoFromEstrategiaProvider(estrategiaId, getState)        
+        if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
+        dispatch( getTacticos(result.tacticos) )
+    }
+}
+
+
 
 export const createTacticoThunk = (tactico: any) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
-        const result = await createTacticoProvider(tactico, getState)
+        const result = await createTacticoProvider(tactico, getState)       
         if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
         useNotification({type: 'success', message: 'Tactico creada correctamente'})
         dispatch( createTactico(result.tactico) )
@@ -74,5 +84,12 @@ export const clearCurrentTacticoThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         dispatch( clearCurrentTactico() )        
+    }   
+}
+
+export const clearTacticosErrorThunk = () => {
+    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
+        dispatch(checkingTacticos())
+        dispatch( clearAlertTacticos() )
     }   
 }

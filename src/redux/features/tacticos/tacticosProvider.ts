@@ -55,6 +55,23 @@ export const getTacticoFromAreaProvider = async (slug: string, getState: () => R
         }
     }
 }
+export const getTacticoFromEstrategiaProvider = async (estrategiaId: string, getState: () => RootState) => {
+    try {
+        const response = await clientAxios.get(`/tacticos/estrategia/${estrategiaId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            tacticos: response.data
+        }
+    } catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}
 
 
 export const createTacticoProvider = async (tactico: any, getState: () => RootState) => {

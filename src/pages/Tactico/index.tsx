@@ -1,14 +1,22 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box, Button } from '@/components/ui';
-import { Drawer } from 'antd';
+import { Drawer, FloatButton } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
-import { motion } from 'framer-motion';
+import { Icon } from '@/components/Icon';
 
 export const Tactico = () => {
+
+    let {state} = useLocation() 
+
+    
+
+    const [currentInfo, setCurrentInfo] = useState({
+        state
+    })    
 
     const {slug} = useParams<{slug:string}>()
     const dispatch = useAppDispatch()
@@ -22,10 +30,10 @@ export const Tactico = () => {
     }, [slug])
 
     return (
-        <div className=''>
-            <div className="flex justify-end pb-5">
-                <Button fn={() => setVisible(true)} btnType='primary'>Agregar</Button>
-            </div>
+        <>
+            <p>
+                {JSON.stringify(currentInfo)}
+            </p>
             <div className='grid gap-10'>
                 <Box>
                     <TablaTacticos tacticos={tacticos}/>
@@ -44,9 +52,13 @@ export const Tactico = () => {
                     destroyOnClose={true}
 
                 >
-                    <FormTactico />
+                    <FormTactico areaId={state.areaId} />
                 </Drawer>
             </div>
-        </div>
+            <FloatButton
+                icon={<Icon iconName='faPlus' />}
+                onClick={() => setVisible(true)}
+            />
+        </>
     )
 }

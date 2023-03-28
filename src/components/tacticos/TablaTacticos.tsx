@@ -14,6 +14,8 @@ interface TablaTacticosProps {
 
 export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
+    
+
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
             title: 'Nombre',

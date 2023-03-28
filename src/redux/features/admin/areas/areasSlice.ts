@@ -17,6 +17,7 @@ interface Area {
     id: number;
     nombre: string;
     parentId: number | null;
+    slug: string;
 }
 
 const initialState: AreasState = {
@@ -35,6 +36,7 @@ const initialState: AreasState = {
     currentArea: {
         id: 0,
         nombre: '',
+        slug: '',
         parentId: null
     }
 }

@@ -20,7 +20,9 @@ const initialState: TacticosState = {
         fechaInicio: new Date(),
         fechaFin: new Date(),
         status: 0,
-        tipoObjetivo: 0
+        tipoObjetivo: 0,
+        responsables: [],
+        
     }
 }
 
@@ -68,7 +70,14 @@ const tacticosSlice = createSlice({
         },
         clearCurrentTactico: (state) => {
             state.currentTactico = initialState.currentTactico
-        },          
+        },       
+        clearAlertTacticos: (state) => {   
+            state.error = false
+            state.updated = false
+            state.created = false
+            state.deleted = false
+            state.infoMessage = ''
+        }
         
     }
 })
@@ -82,7 +91,8 @@ export const {
     updateTactico,
     deleteTactico,
     clearTacticos,
-    clearCurrentTactico
+    clearCurrentTactico,
+    clearAlertTacticos
 } = tacticosSlice.actions
 
 export default tacticosSlice.reducer
