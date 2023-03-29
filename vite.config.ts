@@ -27,17 +27,15 @@ export default defineConfig({
                 "animate.css": ["animate.css"],
                 "formik": ["formik"],
                 "font-awesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
-                "free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
                 "react-fontawesome": ["@fortawesome/react-fontawesome"],
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
                 "framer-motion": ["framer-motion"],
-                "@ant-design/icons": ["@ant-design/icons"],
                 "ckeditor": ["@ckeditor/ckeditor5-react", "@ckeditor/ckeditor5-build-classic"],
             }
         },
-        chunkSizeWarningLimit: 1500,
+        chunkSizeWarningLimit: 1500
     },
     resolve: {
         alias: [

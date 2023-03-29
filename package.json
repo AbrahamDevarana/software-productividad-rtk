@@ -10,7 +10,6 @@
     "serve": "tsc && vite build && serve -s dist"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
     "@ckeditor/ckeditor5-build-classic": "^35.3.0",
     "@ckeditor/ckeditor5-react": "^5.0.2",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Icon } from '@/components/Icon';
 
 
 interface UploadProps {
@@ -23,7 +23,7 @@ export const FileUpload: React.FC<UploadProps> = ({ defaultFileList, onChange, o
   
     const uploadButton = (
       <div>
-        <UploadOutlined />
+        <Icon iconName='faUpload'  />
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
