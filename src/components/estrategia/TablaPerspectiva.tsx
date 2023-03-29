@@ -1,15 +1,14 @@
 import { Avatar, Drawer, Progress, Table } from 'antd';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import type { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, Perspectiva } from '@/interfaces';
 import { EstrategiaView } from './EstrategiaView'
-import { Icon } from '../Icon';
 import { status, statusString } from '@/helpers/status';
 import { FormEstrategia } from './FormEstrategia';
-import { motion } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 interface TablaEstrategiaProps{
@@ -17,13 +16,15 @@ interface TablaEstrategiaProps{
     setOpen: (open: boolean) => void;
 }
 
-const MotionDrawer = motion(Drawer);
 
 export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, setOpen}) => {
 
-
     const { color } = perspectiva
 
+    const {state} = useLocation()
+    const navigate = useNavigate()
+
+   
     const [showEdit, setShowEdit] = useState<boolean>(false);
     
     const [estrategico, setEstrategico] = useState<EstrategicoProps>({
@@ -53,6 +54,12 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             }),
         },
         {
+            title: 'Código',
+            dataIndex: 'codigo',
+            width: 50,
+            ellipsis: true,
+        },
+        {
             title: 'Tácticos',
             width: 40,
             ellipsis: true,
@@ -70,10 +77,11 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 }}>{statusString[record.status]}</span>
             ),
         },
+        
         {
             title: 'Progreso',
             dataIndex: 'progreso',
-            width: 100,
+            width: 60,
             render: (text, record, index) => (
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
@@ -117,7 +125,14 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         setShowDrawer(false)
         setShowEdit(false)
     }
+
+    console.log(state);
     
+
+    // if(state){
+    //     handleViewEstrategia(state.estrategico)
+    //     navigate('', { replace: true })
+    // }
 
     return (
         <>
@@ -143,31 +158,24 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 }}
             />
             
-                <MotionDrawer
-                    title={
-                        <span className='text-white text-xl tracking-wider drop-shadow'>  {estrategico?.codigo} </span>
-                    }
-                    placement='right'
-                    closable={true}
-                    closeIcon={
-                        <Icon iconName="faAngleLeft" className='text-white' />
-                    }
-                    onClose={handleCloseDrawer}
-                    open={showDrawer}
-                    width={window.innerWidth > 1200 ? 600 : '100%'}
-                    destroyOnClose={true}
-                    headerStyle={{
-                        backgroundColor: color,
-                    }}
-                    className='rounded-l-ext'
-                >
+            <Drawer
+                key='right'
+                closable={false}
+                onClose={handleCloseDrawer}
+                open={showDrawer}
+                width={window.innerWidth > 1200 ? 600 : '100%'}
+                headerStyle={{
+                    backgroundColor: color,
+                }}
+                className='rounded-l-ext'
+            >
 
-                    {
-                        showEdit
-                        ? <FormEstrategia estrategico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
-                        : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
-                    }
-                </MotionDrawer>
+                {
+                    showEdit
+                    ? <FormEstrategia estrategico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
+                }
+            </Drawer>
         </>
     )
 }

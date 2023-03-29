@@ -101,7 +101,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                         >
                             <div className="grid grid-cols-6 gap-x-5">
                                 <Form.Item
-                                    label="Título del objetivo"
+                                    label="Objetivo"
                                     className='col-span-5'
                                 >
                                     <Input
@@ -129,7 +129,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                                 label="Perspectiva"
                             >
 
-                            <div className='grid grid-cols-4 gap-3'>
+                            <div className='flex flex-wrap gap-3'>
                                 
                                 {
                                     perspectivas && perspectivas.map((perspectiva: Perspectiva) => (
@@ -137,7 +137,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                                             type='button'
                                             onClick={() => handleSelectPerspectiva(perspectiva.id)}
                                             key={perspectiva.id} 
-                                            className='rounded-ext py-2'
+                                            className='rounded-ext px-3 py-1'
                                             style={{
                                                 backgroundColor: values.perspectivaId === perspectiva.id ? perspectiva.color : '#f0f2f5',
                                                 color: values.perspectivaId === perspectiva.id ? '#fff' : '#000'
@@ -188,7 +188,25 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                             </div>
 
                             <Form.Item
-                                label="Responsables"
+                                label="Propietario"
+                            >
+                                <Select
+                                    style={{ width: '100%' }}
+                                    placeholder="Selecciona los responsables"
+                                    onChange={(value) => setFieldValue('responsables', value)}
+                                    allowClear
+                                    value={ values.responsables }
+                                >
+                                    {
+                                        usuarios.map((usuario: any) => (
+                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
+                                        ))
+                                    }
+                                </Select>
+                                <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Co-Responsables"
                             >
                                 <Select
                                     mode="multiple"

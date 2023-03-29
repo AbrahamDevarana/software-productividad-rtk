@@ -25,7 +25,7 @@ export const ObjEstrategico: React.FC = () => {
 	const { perspectivas = [] } = currentEstrategico
 
 	useEffect(() => {
-		if(id && currentEstrategico.id === "" ){
+		if( id ){
 			getEstrategiaInfo(id)
 		}
 	}, [id])
@@ -61,19 +61,26 @@ export const ObjEstrategico: React.FC = () => {
     }
 
 	return (
-        <div className='grid grid-cols-12 gap-5'>
-            <Box className='col-span-4'>
+        <Box className='flex gap-5'>
+            <div className='p-5 max-w-[600px] w-full' style={{ boxShadow: '5px 0px 5px -5px rgba(0,0,0,0.1)' }} >
                 <EstrategiaView estrategico={currentEstrategico}  perspectiva={perspectivas[0]} />
-            </Box>
-            <div className='col-span-8'>
-                <Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>
-                <Box className=''>
-                    { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> }
-                </Box>
+            </div>
+            <div className='w-full'>
+            
+            <Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>            
+            <div className=''>
+                { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> }
+            </div>
             </div>
             <FloatButton
                 icon={<Icon iconName='faAngleLeft' />}
-                onClick={() => navigate(-1)}
+                onClick={() => navigate( '/estrategia', {
+                    state: {
+                        estrategico: currentEstrategico,
+                        back: true
+                    },
+                    replace: true
+                })}
                 className='left-28 bottom-5'
             />
 
@@ -97,6 +104,6 @@ export const ObjEstrategico: React.FC = () => {
                 
             />
             
-        </div>
+        </Box>
 	)
 }

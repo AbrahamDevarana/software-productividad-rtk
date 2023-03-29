@@ -29,7 +29,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
                         <div className={`rounded-l-ext min-h-[240px] h-full flex flex-col justify-center items-center w-14`} style={{
                             backgroundColor: perspectiva.color
                         }}>
-                            <p className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider py-2 w-[200px] drop-shadow'>{ perspectiva.nombre }</p>
+                            <p className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider leading-4 py-2 w-[170px] drop-shadow '> Perspectiva <br/> { perspectiva.nombre }</p>
                         </div>
                         <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
                             <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
