@@ -11,7 +11,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getTacticoFromEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { FormTactico } from '../../components/tacticos/FormTacticos';
 
-export const ObjEstrategico = () => {
+export const ObjEstrategico: React.FC = () => {
 
 	const [active, setActive] = useState<string | number>('tacticos')
 	const { id } = useParams<{ id: string }>()

@@ -8,7 +8,7 @@ import { Drawer, FloatButton } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import { Icon } from '@/components/Icon';
 
-export const Tactico = () => {
+export const Tactico: React.FC = () => {
 
     let {state} = useLocation()   
     const {slug} = useParams<{slug:string}>()

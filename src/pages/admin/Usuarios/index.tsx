@@ -28,7 +28,7 @@ interface DataType {
 }
 
 
-export const Usuarios = () => {
+export const Usuarios: React.FC = () => {
     const [filtros, setFiltros] = useState<any>(initialValues)
 	const [formVisible, setFormVisible] = useState<boolean>(false)
 	const { usuarios, infoMessage, paginate, created, deleted, updated, error } = useAppSelector((state: any) => state.usuarios)

@@ -15,7 +15,7 @@ const usuarioSchema = Yup.object().shape({
     telefono: Yup.number().required('El teléfono es requerido').typeError('El teléfono debe ser un número').positive('No puedes poner números negativos').integer(' No puede haber decimales '),
 })
 
-export const General = ({handleSteps}:any) => {
+export const General: React.FC<any> = ({handleSteps}) => {
 
     const dispatch = useAppDispatch();
 

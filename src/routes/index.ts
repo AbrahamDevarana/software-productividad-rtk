@@ -19,8 +19,8 @@ import { Tactico } from '@/pages/Tactico';
 
 interface RouteProps {
     path: string;
-    component: () => JSX.Element
-    layout: ({ children }: LayoutLoginProps) => JSX.Element
+    layout: React.FC<LayoutLoginProps>;
+    component: React.FC;
 }
 
 const rutaPublica:RouteProps[] = [

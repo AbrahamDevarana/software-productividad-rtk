@@ -13,7 +13,7 @@ import { cleanCurrentUsuarioThunk } from '@/redux/features/admin/usuarios/usuari
 
 
 
-export const FormUsuarios = ({visible, handleModal}: ModalProps) => {
+export const FormUsuarios: React.FC<ModalProps> = ({visible, handleModal} ) => {
 
     const [ current, setCurrent] = useState<number>(0);
     const dispatch = useAppDispatch()

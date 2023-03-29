@@ -10,7 +10,7 @@ import { ProfileProps } from "@/interfaces";
 
 
 
-const Profile = ({activeUser}: any) => {
+const Profile: React.FC<any> = ({activeUser}) => {
 
     return ( 
     <div className="animate__animated animate__fadeIn animate__faster">

@@ -23,7 +23,7 @@ interface SocialInfoProps {
     social_twitter?: string | null
 }
 
-export const SocialInfo = ({selectedUser}:SocialProsp) => {
+export const SocialInfo: React.FC<SocialProsp> = ({selectedUser}) => {
 
     return (
         <Formik

@@ -19,7 +19,7 @@ interface TablaEstrategiaProps{
 
 const MotionDrawer = motion(Drawer);
 
-export const TablaEstrategia = ({perspectiva, setOpen}: TablaEstrategiaProps) => {
+export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, setOpen}) => {
 
 
     const { color } = perspectiva

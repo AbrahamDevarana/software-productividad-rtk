@@ -23,7 +23,7 @@ interface DataType {
     area?: DataType[]
 }
 
-export const Departamentos = () => {
+export const Departamentos: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const { departamentos, infoMessage, paginate } = useAppSelector((state: any) => state.departamentos)

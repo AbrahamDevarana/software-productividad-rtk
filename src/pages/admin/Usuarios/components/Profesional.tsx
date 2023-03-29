@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
-export const Profesional = ({handleSteps}:any) => {
+export const Profesional: React.FC<any> = ({handleSteps}) => {
 
     const dispatch = useAppDispatch();
     const { currentUsuario } = useAppSelector((state: any) => state.usuarios)

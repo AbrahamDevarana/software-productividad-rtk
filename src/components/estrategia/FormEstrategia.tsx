@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider, Radio, Divider } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Slider } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
@@ -15,7 +15,7 @@ interface FormEstrategiaProps {
     setShowEdit?: (show: boolean) => void;
 }
 
-export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrategiaProps) => {
+export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrategico, setShowEdit}) => {
 
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     
@@ -37,7 +37,7 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { TextArea } = Input;
 
-    const handleOnSubmit = (values: any) => {
+    const handleOnSubmit = ( values: any ) => {
         if(values.id){
             dispatch(updateEstrategicoThunk(values))
             setOpen(false)
@@ -70,7 +70,7 @@ export const FormEstrategia = ({setOpen, estrategico, setShowEdit}: FormEstrateg
     }, [estrategico])
 
 
-    const handleSelectPerspectiva = (id: any) => {
+    const handleSelectPerspectiva = (id: number) => {
         setInitialValues({
             ...initialValues,
             perspectivaId: id

@@ -5,7 +5,11 @@ import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
 
-export const Estrategia = ({perspectivas}: any) => {
+interface EstrategiaProps {
+    perspectivas: Perspectiva[]
+}
+
+export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
 

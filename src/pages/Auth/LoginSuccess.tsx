@@ -4,7 +4,7 @@ import { loginThunk } from "@/redux/features/auth/authThunks";
 import { useAppDispatch } from "@/redux/hooks";
 import { useNavigate } from "react-router-dom";
 
-const LoginSuccess = () => {
+const LoginSuccess: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate();

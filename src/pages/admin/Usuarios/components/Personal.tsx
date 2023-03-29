@@ -8,7 +8,7 @@ import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThun
 
 
 
-export const Personal = ({handleSteps, handleCancel}:any) => {
+export const Personal: React.FC<any> = ({handleSteps, handleCancel}) => {
 
     const dispatch = useAppDispatch();
     const { currentUsuario } = useAppSelector((state: any) => state.usuarios)

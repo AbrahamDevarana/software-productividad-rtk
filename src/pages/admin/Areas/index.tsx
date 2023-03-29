@@ -19,7 +19,7 @@ const initialValues = {
 
 
 
-export const Areas = () => {
+export const Areas: React.FC = () => {
     
     const dispatch = useAppDispatch();
 

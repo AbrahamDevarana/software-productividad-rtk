@@ -8,7 +8,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import createDOMPurify from 'dompurify'
 
 
-export const Devarana = () => {
+export const Devarana: React.FC = () => {
 
     const users = [
         {

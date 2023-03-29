@@ -1,5 +1,5 @@
 import Box from '@/components/ui/Box';
-const Home = () => {
+const Home : React.FC = () => {
     return (
         <>
             <div className="grid grid-cols-6 gap-x-5">

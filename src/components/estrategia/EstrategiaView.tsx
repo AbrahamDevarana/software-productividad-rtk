@@ -19,7 +19,7 @@ interface EstrategiaViewProps{
 }
 
 
-export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit }: EstrategiaViewProps) => {
+export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit }) => {
 
     
     if(isLoading){
@@ -41,7 +41,7 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
                     
                 />
 
-                <div className='flex flex-col col-span-1'>
+                <div className='flex flex-col col-span-1 py-5'>
                     <span className='rounded-ext text-white text-center text-lg' style={{ backgroundColor: perspectiva.color }}>
                         { perspectiva.nombre }
                     </span>
@@ -50,11 +50,11 @@ export const EstrategiaView = ({estrategico, perspectiva, isLoading, edit, view,
                 <div className='grid grid-cols-2 gap-10 py-5'>
                     <div className='flex flex-col col-span-1'>
                         <p className='text-devarana-graph'>Fecha Inicio: </p>
-                        <span className='bg-gray-200 p-2 rounded-ext'>{dayjs(estrategico.fechaInicio).format('DD/MM/YYYY')}</span>
+                        <span className='bg-gray-200 px-2 py-1 rounded-ext'>{dayjs(estrategico.fechaInicio).format('DD/MM/YYYY')}</span>
                     </div>
                     <div className='flex flex-col col-span-1'>
                         <p className='text-devarana-graph'>Fecha Inicio: </p>
-                        <span className='bg-gray-200 p-2 rounded-ext'>{dayjs(estrategico.fechaFin).format('DD/MM/YYYY')}</span>
+                        <span className='bg-gray-200 px-2 py-1 rounded-ext'>{dayjs(estrategico.fechaFin).format('DD/MM/YYYY')}</span>
                     </div>
                     
 

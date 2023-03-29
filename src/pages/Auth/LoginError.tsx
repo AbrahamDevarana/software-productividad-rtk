@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const LoginError = () => {
+const LoginError: React.FC = () => {
     useEffect(() => {
         setTimeout(() => {
             window.close()

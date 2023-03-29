@@ -9,7 +9,7 @@ import { useNotification } from "@/hooks/useNotification";
 import Loading from "@/components/antd/Loading";
 
 
-const Perfil = () => {
+const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
     
     const [value, setValue] = useState('Perfil');

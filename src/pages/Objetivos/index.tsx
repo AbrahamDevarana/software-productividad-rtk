@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 
 
-export const Objetivos = () => {
+export const Objetivos : React.FC = () => {
 
     const {Group} = Avt
 

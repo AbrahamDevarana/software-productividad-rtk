@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 
-const ProfileHeader = ({ activeUser, value, setValue, visit = false}: HeaderProps) => {
+const ProfileHeader: React.FC<HeaderProps> = ({ activeUser, value, setValue, visit = false}) => {
     return ( 
         <>
             <Box className="h-60 w-full z-auto bg-[url('http://picsum.photos/2000/244')]">

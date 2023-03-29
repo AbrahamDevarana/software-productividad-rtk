@@ -5,13 +5,16 @@ import { Estrategia } from '@/components/estrategia/Estrategia';
 import {motion} from 'framer-motion';
 
 
-export const EstrategíaHome = () => {
+export const EstrategíaHome: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
     const { perspectivas, isLoading } = useAppSelector(state => state.perspectivas);
 
-
+    console.log(typeof perspectivas);
+    console.log(perspectivas);
+    
+    
 
     useEffect(() => {
         dispatch(getPerspectivasThunk({}));
