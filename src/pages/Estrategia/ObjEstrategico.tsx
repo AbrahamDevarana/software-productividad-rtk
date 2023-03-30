@@ -61,7 +61,8 @@ export const ObjEstrategico: React.FC = () => {
     }
 
 	return (
-        <Box className='flex gap-5'>
+        <Box className='flex gap-5 relative'>
+
             <div className='p-5 max-w-[600px] w-full' style={{ boxShadow: '5px 0px 5px -5px rgba(0,0,0,0.1)' }} >
                 <EstrategiaView estrategico={currentEstrategico}  perspectiva={perspectivas[0]} />
             </div>
@@ -72,18 +73,6 @@ export const ObjEstrategico: React.FC = () => {
                 { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> }
             </div>
             </div>
-            <FloatButton
-                icon={<Icon iconName='faAngleLeft' />}
-                onClick={() => navigate( '/estrategia', {
-                    state: {
-                        estrategico: currentEstrategico,
-                        back: true
-                    },
-                    replace: true
-                })}
-                className='left-28 bottom-5'
-            />
-
             <Drawer
                 open={showDrawer}
                 onClose={() => setShowDrawer(false)}

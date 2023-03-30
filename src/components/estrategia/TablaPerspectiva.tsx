@@ -9,6 +9,7 @@ import { EstrategiaView } from './EstrategiaView'
 import { status, statusString } from '@/helpers/status';
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useGetColor } from '@/hooks/useGetColor';
 
 
 interface TablaEstrategiaProps{
@@ -40,6 +41,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         responsables: [],
         status: 1,
     });
+    
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
@@ -48,7 +50,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColorByStatus(status[record.status]).rgba }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColor(record.status)?.rgba }}/> 
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -73,7 +75,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             render: (text, record, index) => (
                 <span className='font-semibold'
                  style={{
-                    color: useGetColorByStatus(status[record.status]).hex,
+                    color: useGetColor(record.status)?.hex,
                 }}>{statusString[record.status]}</span>
             ),
         },
@@ -86,10 +88,10 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
-                        from: useGetColorByStatus(status[record.status]).hex,
-                        to: useGetColorByStatus(status[record.status]).hexLow,
+                        from: useGetColor(record.status)?.hex || '#108ee9',
+                        to: useGetColor(record.status)?.hexLow || '#87d068',
                     }}
-                    trailColor={useGetColorByStatus(status[record.status], .3).rgba} 
+                    trailColor={useGetColor(record.status, .3)?.rgba} 
                 />
             ),
         },
@@ -126,13 +128,6 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         setShowEdit(false)
     }
 
-    console.log(state);
-    
-
-    // if(state){
-    //     handleViewEstrategia(state.estrategico)
-    //     navigate('', { replace: true })
-    // }
 
     return (
         <>

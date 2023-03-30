@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation  } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import routes from './routes';
+import routes from './router';
 import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import dayjs from 'dayjs';

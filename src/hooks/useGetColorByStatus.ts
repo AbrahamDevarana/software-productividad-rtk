@@ -79,6 +79,7 @@ type statusId = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'erro
 
 export const useGetColorByStatus = (statusId: statusId, alpha: number = 1) => {
     const [color, setColor] = useState<Color>(statusColors[statusId]);
+    
 
     useEffect(() => {
       const [r, g, b] = color.rgba.match(/\d+/g)!.map(Number) as [number, number, number];

@@ -224,12 +224,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                                 </Select>
                                 <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                                        
-                            <Form.Item
-                                label="Progreso"
-                            >
-                                <Slider value={values.progreso} onChange={(value) => setFieldValue('progreso', value)} />
-                            </Form.Item>
+
                             
                             <Form.Item
                                 label="Describe la meta a alcanzar"

@@ -1,13 +1,25 @@
-import { Dropdown, Menu, Select, Space } from "antd";
+import { Breadcrumb, Dropdown, Menu, Select, Space } from "antd";
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
 import { Icon } from '../Icon';
+import { Link, useLocation } from 'react-router-dom';
+import { rutaPrivada } from "@/router";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
+    const breadcrumbNameMap: Record<string, string> = {}
 
-    
+    rutaPrivada.forEach(route => {
+        if (route.name && route.path) {
+          const path = route.path.replace(/:[a-zA-Z0-9]+/, '');
+        
+          breadcrumbNameMap[path] = route.name;
+        }
+      });
+
+
+
     const dispatch = useAppDispatch()
 
     const menu = (
@@ -67,6 +79,9 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
     const showDrawer = () => {
         setSettingVisible(true);
     };
+
+
+
   return (
     // glassmorphism
     <div className="relative w-full">
@@ -80,6 +95,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                         onMouseEnter={(e) => e.currentTarget.style.width = '300px'}
                         onMouseLeave={(e) => e.currentTarget.style.width = '120px'}
                     />
+
                 </div>
                 <div className="sm:ml-auto flex items-center">
                     <Dropdown overlay={notificaciones} trigger={['click']} className="px-2">

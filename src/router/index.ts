@@ -21,9 +21,10 @@ interface RouteProps {
     path: string;
     layout: React.FC<LayoutLoginProps>;
     component: React.FC;
+    name?: string;
 }
 
-const rutaPublica:RouteProps[] = [
+export const rutaPublica:RouteProps[] = [
     {
         path: "/login",
         layout: LayoutLogin,
@@ -41,68 +42,81 @@ const rutaPublica:RouteProps[] = [
     }
 ]
 
-const  rutaPrivada:RouteProps[] = [
+export const  rutaPrivada:RouteProps[] = [
     {
+        name: "Home",
         path: '/',
         layout: LayoutApp,
         component: Home,
     },
     {
+        name: "Perfil",
         path: "/perfil",
         layout: LayoutApp,
         component: Perfil
     },
     {
+        name: "Perfil de Usuario",
         path: "/perfil/:id",
         layout: LayoutApp,
         component: Perfil
     },
     {
+        name: "Areas",
         path: '/admin/areas',
         layout: LayoutApp,
         component: Areas
     },
     {
+        name: "Departamentos",
         path: '/admin/departamentos',
         layout: LayoutApp,
         component: Departamentos
     },
     {
+        name: "Usuarios",
         path: '/admin/usuarios',
         layout: LayoutApp,
         component: Usuarios
     },
     {
+        name: "Devarana",
         path: '/somos-devarana',
         layout: LayoutApp,
         component: Devarana
     },
     {
+        name: "Objetivos",
         path: '/objetivos',
         layout: LayoutApp,
         component: Objetivos
     },
     {
+        name: "Estrategia",
         path: '/estrategia',
         layout: LayoutApp,
         component: EstrategíaHome
     },
     {
+        name: "Objetivo Estrategico",
         path: '/estrategia/:id',
         layout: LayoutApp,
         component: ObjEstrategico
     },
     {
+        name: "Tactico",
         path: '/tactica/:slug',
         layout: LayoutApp,
         component: Tactico
     },
     {
+        name: "Error",
         path: '*',
         layout: LayoutApp,
         component: ErrorPage
     }
 ]
+
 
 
 const routes = [...rutaPublica, ...rutaPrivada]

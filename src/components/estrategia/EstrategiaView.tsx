@@ -1,13 +1,19 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Progress, Divider, Avatar, Button, Tooltip, FloatButton, Select } from 'antd';
+import { Divider, Avatar, Button, Tooltip, FloatButton, Select, Slider, Dropdown } from 'antd';
 import dayjs from 'dayjs';
-import { Perspectiva } from '../../interfaces/perspectiva';
+import { Perspectiva } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
 import { Link } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import { status, statusString } from '@/helpers/status';
+import { useState } from 'react';
+import { useAppDispatch } from '@/redux/hooks';
+import { updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import type { MenuProps } from 'antd';
+import { TabStatus } from '../ui/TabStatus';
+import { useGetColor } from '@/hooks/useGetColor';
 
 interface EstrategiaViewProps{
     estrategico: EstrategicoProps;
@@ -19,9 +25,74 @@ interface EstrategiaViewProps{
 }
 
 
-export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit }) => {
+export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit}) => {
 
+    const dispatch = useAppDispatch();
     
+    const [statusEstrategico, setStatusEstrategico] = useState<number>(estrategico.status);
+    const [progresoEstrategico, setProgresoEstrategico] = useState<number>(estrategico.progreso);
+
+    const handleChangeProgreso = (value: number) => {
+
+        if(view){
+            
+            setProgresoEstrategico(value); 
+            const updateEstrategico = {
+                ...estrategico,
+                progreso: value
+            }
+    
+            dispatch(updateEstrategicoThunk(updateEstrategico));  
+        }else{
+            setProgresoEstrategico(progresoEstrategico);
+        }
+             
+    }
+
+    const handleChangeStatus = (value: number) => {
+        setStatusEstrategico(value); 
+        const updateEstrategico = {
+            ...estrategico,
+            status: value
+        }
+
+        dispatch(updateEstrategicoThunk(updateEstrategico));       
+    }
+    
+    const items: MenuProps['items'] = [
+        {
+          key: '1',
+          label: (
+            <button onClick={() => handleChangeStatus(1)}> <TabStatus statusId={1} /> </button>
+          ),
+        },
+        {
+            key: '2',
+            label: (
+                <button onClick={() => handleChangeStatus(2)}> <TabStatus statusId={2} /> </button>
+            ),
+        },
+        {
+            key: '3',
+            label: (
+                <button onClick={() => handleChangeStatus(3)}> <TabStatus statusId={3} /> </button>
+            ),
+        },
+        {
+            key: '4',
+            label: (
+                <button onClick={() => handleChangeStatus(4)}> <TabStatus statusId={4} /> </button>
+            ),
+        },
+        {
+            key: '5',
+            label: (
+                <button onClick={() => handleChangeStatus(5)}> <TabStatus statusId={5} /> </button>
+            ),
+        },
+    ]
+
+
     if(isLoading){
         return <Loading />
     }
@@ -29,7 +100,6 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
     return (
         <>
             <div className='w-full'>
-
                 <div className="flex justify-between">
                     <div className='text-xl col-span-7 flex flex-col'>
                         <p className='text-devarana-graph'>Nombre: </p>
@@ -44,21 +114,38 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
 
                 <Divider />
 
-    
-                <Progress 
-                    className='drop-shadow progressStyle' percent={estrategico.progreso} strokeWidth={20} 
-                    strokeColor={{
-                        from: useGetColorByStatus(status[estrategico.status]).hex,
-                        to: useGetColorByStatus(status[estrategico.status]).hexLow,
+                <div className='flex justify-between'>
+                    <p className='text-devarana-graph'><span className='text-3xl'>{progresoEstrategico}</span> % / 100 %</p>
+
+                    <div>
+                        <Dropdown menu={{items}} overlayClassName='bg-transparent' disabled={!view}>
+                            <button onClick={(e) => e.preventDefault()}>
+                                <TabStatus statusId={statusEstrategico} />
+                            </button>
+                        </Dropdown>
+                    </div>
+                </div>
+
+                <Slider
+                    className='drop-shadow progressStyle'
+                    defaultValue={progresoEstrategico}
+                    min={0}
+                    max={100}
+                    onAfterChange={ handleChangeProgreso }
+                    trackStyle={{
+                        backgroundColor: useGetColor(statusEstrategico)?.hex,
+                        borderRadius: 10,
+
                     }}
-                    trailColor={useGetColorByStatus(status[estrategico.status], .3).rgba} 
+                    railStyle={{
+                        backgroundColor: useGetColor(statusEstrategico, .3)?.rgba,
+                        borderRadius: 10,
+                    }}
                     
                 />
 
                 <Divider />
-
                 
-
                 <div className='grid grid-cols-3 gap-10 py-5'>
                     <div className='flex flex-col col-span-1'>
                         <p className='text-devarana-graph'>Fecha Inicio: </p>
