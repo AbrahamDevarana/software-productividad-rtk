@@ -17,12 +17,12 @@ import { editorConfiguration } from '@/helpers/CKEditor';
 
 interface FormEstrategiaProps {
     setOpen: (open: boolean) => void;
-    estrategico?: any;
+    currentTactico?: any;
     setShowEdit?: (show: boolean) => void;
 }
 
 
-export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrategico, setShowEdit}) => {
+export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentTactico, setShowEdit}) => {
 
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     
@@ -59,22 +59,22 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
     }, [])
 
     useEffect(() => {
-        if(estrategico){
+        if(currentTactico){
             setInitialValues({
-                id: estrategico?.id,
-                nombre: estrategico?.nombre,
-                codigo: estrategico?.codigo,
-                progreso: estrategico?.progreso,
-                descripcion: estrategico?.descripcion,
-                fechaInicio: estrategico?.fechaInicio,
-                fechaFin: estrategico?.fechaFin,
-                indicador: estrategico?.indicador,
-                perspectivaId: estrategico?.pivot_persp_estr.perspectivaId,
-                responsables: estrategico?.responsables.map((r: any) => r.id)
+                id: currentTactico?.id,
+                nombre: currentTactico?.nombre,
+                codigo: currentTactico?.codigo,
+                progreso: currentTactico?.progreso,
+                descripcion: currentTactico?.descripcion,
+                fechaInicio: currentTactico?.fechaInicio,
+                fechaFin: currentTactico?.fechaFin,
+                indicador: currentTactico?.indicador,
+                perspectivaId: currentTactico?.pivot_persp_estr.perspectivaId,
+                responsables: currentTactico?.responsables.map((r: any) => r.id)
             })
     }
 
-    }, [estrategico])
+    }, [currentTactico])
 
 
     const handleSelectPerspectiva = (id: number) => {

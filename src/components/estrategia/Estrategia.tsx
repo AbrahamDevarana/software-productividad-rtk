@@ -4,6 +4,7 @@ import { TablaEstrategia } from './TablaPerspectiva'
 import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
+import { CustomDrawer } from '../ui/Drawer';
 
 interface EstrategiaProps {
     perspectivas: Perspectiva[]
@@ -13,9 +14,11 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
 
+    const [openDrawer, setOpenDrawer] = useState<'hidden' | 'minimized' | 'maximized'>('hidden')
+
     const handleNewEstrategia = () => {
         setOpen(true)
-}    
+    }    
     
     return (
         <>
@@ -42,7 +45,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
                 </div>
             ))}
 
-            <Drawer
+            {/* <Drawer
                 onClose={() => setOpen(false)}
                 open={open}
                 closeIcon={
@@ -53,13 +56,17 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
                 destroyOnClose={true}
             >
                 <FormEstrategia setOpen={ setOpen } />
-            </Drawer>
+            </Drawer> */}
 
             <FloatButton
-                onClick={() => handleNewEstrategia()}
+                onClick={() => setOpenDrawer('minimized')}
                 icon={<Icon iconName="faPlus"/>} 
                 className='bottom-5'
             />
+
+            <CustomDrawer open={openDrawer} setOpenDrawer={setOpenDrawer} >
+                {/* <FormEstrategia  /> */}
+            </CustomDrawer>
         </>
     )
 }

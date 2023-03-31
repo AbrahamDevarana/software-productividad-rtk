@@ -89,9 +89,9 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                     <Sidebar optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible} setOptionalContent={setOptionalContent}/>
                     <SecondNav optBarVisible={optBarVisible} setOptBarVisible={setOptBarVisible} optionalContent={optionalContent}/>
                     <div className={`transition-all duration-300 ease-in-out w-full overflow-y-scroll`} id="mainEl" onScroll={handleScroll}> 
-                        <div className="p-2">
+                        <div className="p-2 relative">
                             <Navbar setSettingVisible={setSettingVisible} navbarClass={navbarClass} />
-                            <main className="px-4 overflow-x-hidden relative"
+                            <main className="px-4 overflow-x-hidden"
                                 style={{ paddingTop: '80px', paddingBottom: '20px' }}
                                 
                             >

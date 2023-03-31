@@ -9,6 +9,7 @@ import { status, statusString } from '@/helpers/status';
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useGetColor } from '@/hooks/useGetColor';
+import { CustomDrawer } from '../ui/Drawer';
 
 
 interface TablaEstrategiaProps{
@@ -155,7 +156,6 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             />
             
             <Drawer
-                key='right'
                 closable={false}
                 onClose={handleCloseDrawer}
                 open={showDrawer}
@@ -168,7 +168,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
                 {
                     showEdit
-                    ? <FormEstrategia estrategico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    ? <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
                     : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
                 }
             </Drawer>

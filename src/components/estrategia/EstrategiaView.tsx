@@ -1,6 +1,6 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Divider, Avatar, Button, Tooltip, FloatButton, Select, Slider, Dropdown, Space } from 'antd';
+import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
