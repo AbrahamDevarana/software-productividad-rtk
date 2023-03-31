@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider } from 'antd';
+import { Form, Alert, DatePicker, Input, Select } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
@@ -9,11 +9,18 @@ import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks
 import dayjs from 'dayjs';
 import { Perspectiva } from '@/interfaces';
 
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import Editor from '@ckeditor/ckeditor5-build-classic';
+import { editorConfiguration } from '@/helpers/CKEditor';
+
+
+
 interface FormEstrategiaProps {
     setOpen: (open: boolean) => void;
     estrategico?: any;
     setShowEdit?: (show: boolean) => void;
 }
+
 
 export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrategico, setShowEdit}) => {
 
@@ -229,7 +236,18 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                             <Form.Item
                                 label="Describe la meta a alcanzar"
                             >
-                                <TextArea rows={3} value={values.descripcion} onChange={handleChange} onBlur={handleBlur} name="descripcion" />
+                                <CKEditor
+                                    editor={Editor}
+                                    data={values.descripcion}
+                                    onChange={(event:any, editor:any) => {
+                                        const data = editor.getData();
+                                        setFieldValue('descripcion', data)
+                                    }}
+                                    config={editorConfiguration}
+                                    
+                                />
+
+                                {/* <TextArea rows={3} value={values.descripcion} onChange={handleChange} onBlur={handleBlur} name="descripcion" /> */}
                                 <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                             <Form.Item
@@ -239,7 +257,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, estrateg
                                 <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                            
-{/* 
+                            {/* 
                             <Form.Item
                                 label="Métrica de Seguimiento"
                             >

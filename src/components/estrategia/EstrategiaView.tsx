@@ -1,19 +1,20 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Divider, Avatar, Button, Tooltip, FloatButton, Select, Slider, Dropdown } from 'antd';
+import { Divider, Avatar, Button, Tooltip, FloatButton, Select, Slider, Dropdown, Space } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
 import { Link } from 'react-router-dom';
 import { Icon } from '../Icon';
-import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
-import { status, statusString } from '@/helpers/status';
 import { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import type { MenuProps } from 'antd';
 import { TabStatus } from '../ui/TabStatus';
 import { useGetColor } from '@/hooks/useGetColor';
+import createDOMPurify from 'dompurify';
+
+
 
 interface EstrategiaViewProps{
     estrategico: EstrategicoProps;
@@ -28,6 +29,7 @@ interface EstrategiaViewProps{
 export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit}) => {
 
     const dispatch = useAppDispatch();
+    const DOMPurify = createDOMPurify(window)
     
     const [statusEstrategico, setStatusEstrategico] = useState<number>(estrategico.status);
     const [progresoEstrategico, setProgresoEstrategico] = useState<number>(estrategico.progreso);
@@ -117,8 +119,8 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                 <div className='flex justify-between'>
                     <p className='text-devarana-graph'><span className='text-3xl'>{progresoEstrategico}</span> % / 100 %</p>
 
-                    <div>
-                        <Dropdown menu={{items}} overlayClassName='bg-transparent' disabled={!view}>
+                    <div className='bg-gray-50 rounded-full px-2'>
+                        <Dropdown menu={{items}} overlayClassName='bg-transparent' disabled={!view} >
                             <button onClick={(e) => e.preventDefault()}>
                                 <TabStatus statusId={statusEstrategico} />
                             </button>
@@ -179,9 +181,9 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                 </Avatar.Group>
                 <Divider orientation='left'>Meta:</Divider>
                 <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>
-                    <p className='text-devarana-graph'>
-                        { estrategico.descripcion }
-                    </p>
+                    <div className='text-devarana-graph' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(estrategico.descripcion) }}>
+                        
+                    </div>
                 </div>
                 <Divider orientation='left'>Indicador:</Divider>
                 <div className='w-full border border-t-0 rounded-b-ext py-5 px-5'>

@@ -1,12 +1,13 @@
-import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
+import { useGetColor } from '@/hooks/useGetColor';
 import { TacticoProps } from '@/interfaces'
-import { Avatar, Divider, FloatButton, Progress, Tooltip } from 'antd';
-import { status, statusString } from '@/helpers/status';
+import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loading from '../antd/Loading';
 import { Icon } from '../Icon';
+import { TabStatus } from '../ui/TabStatus';
+import { useState } from 'react';
 
 interface TacticosViewProps {
     setShowEdit: (value: boolean) => void
@@ -16,29 +17,87 @@ interface TacticosViewProps {
 
 export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) => {
 
+    const [statusEstrategico, setStatusEstrategico] = useState<number>(currentTactico?.status || 0);
+    const [progresoEstrategico, setProgresoEstrategico] = useState<number>(currentTactico?.progreso || 0);
+
     if(!currentTactico) return <Loading />
+
+    const handleChangeProgreso = (value: number) => {
+        setProgresoEstrategico(value); 
+    }
+
+    const handleChangeStatus = (value: number) => {
+        setStatusEstrategico(value);   
+    }
+
+    const items: MenuProps['items'] = [
+        {
+          key: '1',
+          label: (
+            <button onClick={() => handleChangeStatus(1)}> <TabStatus statusId={1} /> </button>
+          ),
+        },
+        {
+            key: '2',
+            label: (
+                <button onClick={() => handleChangeStatus(2)}> <TabStatus statusId={2} /> </button>
+            ),
+        },
+        {
+            key: '3',
+            label: (
+                <button onClick={() => handleChangeStatus(3)}> <TabStatus statusId={3} /> </button>
+            ),
+        },
+        {
+            key: '4',
+            label: (
+                <button onClick={() => handleChangeStatus(4)}> <TabStatus statusId={4} /> </button>
+            ),
+        },
+        {
+            key: '5',
+            label: (
+                <button onClick={() => handleChangeStatus(5)}> <TabStatus statusId={5} /> </button>
+            ),
+        },
+    ]
 
     return (
         <>
-            <div className='grid grid-cols-12'>
-                <h1 className='text-2xl col-span-10'> {currentTactico.nombre} </h1>
-                <div className='col-span-1 rounded-ext text-white text-center text-lg' style={{ backgroundColor: useGetColorByStatus(status[currentTactico.status]).hex }} />
+            <div className='flex justify-between'>
+                <h1 className='text-xl font-medium text-devarana-graph'> {currentTactico.nombre} </h1>
+                <div className='bg-gray-50 rounded-full px-2'>
+                    <Dropdown menu={{items}} overlayClassName='bg-transparent'>
+                        <button onClick={(e) => e.preventDefault()}>
+                            <TabStatus statusId={statusEstrategico} />
+                        </button>
+                    </Dropdown>
+                </div>
             </div>
 
             <Divider />
 
-            <Progress 
-                className='drop-shadow progressStyle' percent={currentTactico.progreso} strokeWidth={20} 
-                strokeColor={{
-                    from: useGetColorByStatus(status[currentTactico.status]).hex,
-                    to: useGetColorByStatus(status[currentTactico.status]).hexLow,
+            <Slider
+                className='drop-shadow progressStyle'
+                defaultValue={progresoEstrategico}
+                min={0}
+                max={100}
+                onAfterChange={ handleChangeProgreso }
+                trackStyle={{
+                    backgroundColor: useGetColor(statusEstrategico)?.hex,
+                    borderRadius: 10,
+
+                }}
+                railStyle={{
+                    backgroundColor: useGetColor(statusEstrategico, .3)?.rgba,
+                    borderRadius: 10,
                 }}
                 
-                trailColor={useGetColorByStatus(status[currentTactico.status], .3).rgba} 
             />
 
             <div>
-                { currentTactico.objetivo_tact.length > 0 && currentTactico.objetivo_tact.map( (obj:any, i:number) => ( 
+                { currentTactico.objetivo_tact&& currentTactico.objetivo_tact.length > 0 && currentTactico.objetivo_tact.map( (obj:any, i:number) => ( 
                     <p key={i} className='text-devarana-graph'>
                         Objetivo Estrategico: { obj.nombre }
                     </p>
@@ -46,7 +105,7 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
             </div>
 
             <div>
-                { currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:any, i:number) => ( 
+                {  currentTactico.areas && currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:any, i:number) => ( 
                     <p key={i} className='text-devarana-graph'>
                         Áreas: { obj.nombre }
                     </p>

@@ -25,7 +25,8 @@ const initialState: EstrategicosState = {
         status: 0,
         indicador: '',
         perspectivas: [],
-        responsables: []
+        responsables: [],
+        tacticos_count: 0
     }
 }
 
@@ -60,8 +61,7 @@ const estrategicosSlice = createSlice({
             state.created = true
             state.isLoading = false
         },
-        updateEstrategico: (state, action) => {
-            console.log(action.payload.objetivoEstrategico)            
+        updateEstrategico: (state, action) => {          
             state.currentEstrategico = action.payload.objetivoEstrategico
             state.updated = true
             state.isLoading = false

@@ -1,7 +1,6 @@
 import { Avatar, Drawer, Progress, Table } from 'antd';
-import { useGetColorByStatus } from '@/hooks/useGetColorByStatus';
 import type { ColumnsType } from 'antd/es/table';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, Perspectiva } from '@/interfaces';
@@ -40,6 +39,8 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         perspectivas: [],
         responsables: [],
         status: 1,
+        tacticos_count: 0,
+        
     });
     
 
@@ -65,7 +66,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             title: 'Tácticos',
             width: 40,
             ellipsis: true,
-            render: (text, record, index) => ( <p className='text-default'> 0 </p>   ),
+            render: (text, record, index) => ( <p className='text-default'> { record.tacticos_count } </p>   ),
         },
         {
             title: 'Estatus',

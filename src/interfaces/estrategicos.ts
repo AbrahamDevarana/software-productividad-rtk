@@ -26,5 +26,6 @@ export interface EstrategicoProps {
     indicador: string;
     perspectivas?: Perspectiva[];
     responsables?: UsuarioProps[];
+    tacticos_count?: number;
 }
 

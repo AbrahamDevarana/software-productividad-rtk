@@ -80,8 +80,8 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                 tipoObjetivo: currentTactico.tipoObjetivo,
                 fechaInicio: dayjs(currentTactico.fechaInicio).toDate(),
                 fechaFin: dayjs(currentTactico.fechaFin).toDate(),
-                responsables: currentTactico.responsables.map((r:any) => r.id),
-                areas: currentTactico.areas.map((a:any) => a.id)
+                responsables: currentTactico.responsables ? currentTactico.responsables.map((r:any) => r.id) : [],
+                areas: currentTactico.areas ? currentTactico.areas.map((a:any) => a.id) : []
             })
         }
 
