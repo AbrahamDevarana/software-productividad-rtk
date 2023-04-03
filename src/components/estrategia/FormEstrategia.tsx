@@ -25,6 +25,8 @@ interface FormEstrategiaProps {
 export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentTactico, setShowEdit}) => {
 
     const { perspectivas } = useAppSelector(state => state.perspectivas)
+    const { userAuth } = useAppSelector(state => state.auth)
+    
     
 
     const [initialValues, setInitialValues] = useState<any>({
@@ -36,7 +38,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
         perspectivaId: '',
         fechaInicio: dayjs().startOf('year'),
         fechaFin: dayjs().endOf('year'),
-        responsables: []        
+        responsables: [],
+        propietarioId: userAuth?.id,
     })
       
 
@@ -45,12 +48,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
     const { TextArea } = Input;
 
     const handleOnSubmit = ( values: any ) => {
-        if(values.id){
+        if(values.id){            
             dispatch(updateEstrategicoThunk(values))
             setOpen(false)
             return
         }
-        dispatch(createEstrategicoFromPerspectivaThunk(values))
+        dispatch(createEstrategicoFromPerspectivaThunk(values))        
         setOpen(false)        
     }
 
@@ -70,7 +73,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                 fechaFin: currentTactico?.fechaFin,
                 indicador: currentTactico?.indicador,
                 perspectivaId: currentTactico?.pivot_persp_estr.perspectivaId,
-                responsables: currentTactico?.responsables.map((r: any) => r.id)
+                responsables: currentTactico?.responsables.map((r: any) => r.id),
+                propietarioId: currentTactico?.propietarioId
             })
     }
 
@@ -200,9 +204,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                 <Select
                                     style={{ width: '100%' }}
                                     placeholder="Selecciona los responsables"
-                                    onChange={(value) => setFieldValue('responsables', value)}
+                                    onChange={(value) => setFieldValue('propietarioId', value)}
                                     allowClear
-                                    value={ values.responsables }
+                                    value={ values.propietarioId }
                                 >
                                     {
                                         usuarios.map((usuario: any) => (

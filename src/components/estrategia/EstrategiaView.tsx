@@ -4,7 +4,7 @@ import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown } from 
 import dayjs from 'dayjs';
 import { Perspectiva } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { useState } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
@@ -29,6 +29,7 @@ interface EstrategiaViewProps{
 export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit}) => {
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const DOMPurify = createDOMPurify(window)
     
     const [statusEstrategico, setStatusEstrategico] = useState<number>(estrategico.status);
@@ -60,6 +61,12 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
 
         dispatch(updateEstrategicoThunk(updateEstrategico));       
     }
+    
+    const handleView = (id:string) => {
+        setShowEdit(false);
+        navigate(`/estrategia/${id}`)
+    }
+
     
     const items: MenuProps['items'] = [
         {
@@ -165,9 +172,15 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                         </span>
                     </div>
                 </div>
-                    
 
-                <p className='text-devarana-graph'>Responsable:</p>
+
+
+                <Divider orientation='left'>Propietario:</Divider>
+                <Tooltip title={`${estrategico.propietario?.nombre} ${ estrategico.propietario?.apellidoPaterno }`}>
+                    <Avatar key={estrategico.propietario?.id} src={`https://i.pravatar.cc/300`}  > { estrategico.propietario?.iniciales } </Avatar>
+                </Tooltip>
+
+                <Divider orientation='left'>Co-Responsables:</Divider>
                 <Avatar.Group maxCount={3}>
                     {
                     estrategico.responsables?.map((responsable, index) => (
@@ -202,9 +215,10 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                 }
                 {
                     view && ( 
-                    <Link to={`/estrategia/${estrategico.id}`} className='absolute -left-4 top-20' > 
-                        <Button style={{ backgroundColor: perspectiva.color }} className='rounded-full  text-white border-none' icon={<Icon iconName='faArrowLeft' />} /> 
-                    </Link>  )
+                        <Button onClick={()=>handleView(estrategico.id)} style={{ backgroundColor: perspectiva.color }} className='rounded-full  text-white border-none absolute -left-4 top-20' icon={<Icon iconName='faArrowLeft' />} /> 
+                        // <Link to={`/estrategia/${estrategico.id}`} className='' > 
+                        // </Link>  
+                    )
                 }
             </div>
         </>

@@ -23,6 +23,15 @@ const initialState: TacticosState = {
         tipoObjetivo: 0,
         responsables: [],
         areas: [],
+        propietarioId: '',
+        propietario: {
+            id: '',
+            nombre: '',
+            apellidoMaterno: '',
+            apellidoPaterno: '',
+            email: '',
+            iniciales: '',
+        }
         
     }
 }
@@ -49,7 +58,7 @@ const tacticosSlice = createSlice({
             state.currentTactico = action.payload.tactico
             state.isLoading = false
         },
-        createTactico: (state, action) => {
+        createTactico: (state, action) => {            
             state.tacticos = [...state.tacticos, action.payload.tactico]
             state.created = true
             state.isLoading = false

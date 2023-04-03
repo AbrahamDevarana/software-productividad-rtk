@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { Icon } from '../Icon'
 import { DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
@@ -13,7 +13,7 @@ interface TacticaProps {
 }
 
 
-export const Tactica = ({handleBar}:TacticaProps) => {
+export const Tactica: React.FC<TacticaProps> = ({handleBar}) => {
 
     const dispatch = useAppDispatch();
     const {areas} = useAppSelector(state => state.areas)
@@ -36,14 +36,22 @@ export const Tactica = ({handleBar}:TacticaProps) => {
         dispatch(getAreasThunk({}))
     }, [])
 
+    const disabledDate = ( current: Dayjs ) => {
+        return (
+            current && (
+            current.endOf('quarter') > dayjs().endOf('quarter') ||
+            current.year() < 2023
+            )
+        );
+    };
+
   return (
     <>
     <DatePicker onChange={onChange} picker="quarter" className='w-full mb-2' placeholder='Seleccionar Trimestre' 
-        format={'Qo [Trimestre] YYYY'} defaultValue={dayjs()} clearIcon={false}
+        format={'Qo [Trimestre] YYYY'} defaultValue={dayjs()} clearIcon={false} disabledDate={disabledDate}
     />
 
     <div className="flex flex-col">         
-
         {
             areas && areas.map(area => (
                 <NavLink to={`/tactica/${area.slug}`} onClick={handleBar} state={{
@@ -58,7 +66,6 @@ export const Tactica = ({handleBar}:TacticaProps) => {
                 </NavLink>
             ))
         }
-               
     </div>
     </>
   )

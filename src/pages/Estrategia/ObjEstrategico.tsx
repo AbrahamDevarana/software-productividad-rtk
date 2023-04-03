@@ -9,7 +9,7 @@ import { Segmented, FloatButton, Drawer } from 'antd';
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTacticoFromEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk'
-import { FormTactico } from '../../components/tacticos/FormTacticos';
+import { FormTactico } from '@/components/tacticos/FormTacticos';
 
 export const ObjEstrategico: React.FC = () => {
 
@@ -73,17 +73,18 @@ export const ObjEstrategico: React.FC = () => {
                 { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> }
             </div>
             </div>
-            <Drawer
-                open={showDrawer}
-                onClose={() => setShowDrawer(false)}
-                width={window.innerWidth > 1200 ? 600 : '100%'}
-                className='rounded-l-ext'
-                destroyOnClose={true}
-            >
+            
+     
+                <Drawer
+                    open={showDrawer}
+                    onClose={() => setShowDrawer(false)}
+                    width={window.innerWidth > 1200 ? 600 : '100%'}
+                    className='rounded-l-ext'
+                    destroyOnClose={true}
+                >
+                    <FormTactico estrategicoId={id} setShowEdit={setShowDrawer} />
 
-                <FormTactico estrategicoId={id} setShowEdit={setShowDrawer} />
-
-            </Drawer>
+                </Drawer>
 
     
            <FloatButton 

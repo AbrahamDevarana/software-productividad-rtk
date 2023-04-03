@@ -15,6 +15,10 @@ export interface TacticoProps {
     responsables:  UsuarioProps[];
     areas: AreaProps[]
     objetivo_tact?: any
+    propietario?: UsuarioProps
+    propietarioId?: string
+
+
 }
 
 export interface TacticosState {
@@ -27,4 +31,5 @@ export interface TacticosState {
     created:      boolean;
     deleted:      boolean;
     currentTactico: TacticoProps;
+    
 }

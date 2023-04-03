@@ -7,8 +7,11 @@ import { Box } from '@/components/ui';
 import { Drawer, FloatButton } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import { Icon } from '@/components/Icon';
+import { motion } from 'framer-motion';
 
 export const Tactico: React.FC = () => {
+
+    const CustomDrawer = motion(Drawer)
 
     let {state} = useLocation()   
     const {slug} = useParams<{slug:string}>()
@@ -37,9 +40,7 @@ export const Tactico: React.FC = () => {
                     <TablaTacticos tacticos={tacticos_core}/>
                 </Box>
 
-                <Drawer
-                    title="Basic Drawer"
-                    placement="right"
+                <CustomDrawer
                     closable={false}
                     onClose={() => setVisible(false)}
                     open={visible}
@@ -48,7 +49,7 @@ export const Tactico: React.FC = () => {
 
                 >
                     <FormTactico areaId={state.areaId}  setShowEdit={setVisible}/>
-                </Drawer>
+                </CustomDrawer>
             </div>
             <FloatButton
                 icon={<Icon iconName='faPlus' />}

@@ -10,7 +10,6 @@ export const editorConfiguration = {
                 'link',
                 'bulletedList',
                 '|',
-                'codeBlock',
             ],
         },
         heading: {

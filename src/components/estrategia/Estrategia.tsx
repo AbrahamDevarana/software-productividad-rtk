@@ -5,6 +5,7 @@ import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
 import { CustomDrawer } from '../ui/Drawer';
+import { motion } from 'framer-motion';
 
 interface EstrategiaProps {
     perspectivas: Perspectiva[]
@@ -13,6 +14,7 @@ interface EstrategiaProps {
 export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
 
     const [open, setOpen] = useState<boolean>(false)
+    const MotionDrawer = motion(Drawer);
 
     const [openDrawer, setOpenDrawer] = useState<'hidden' | 'minimized' | 'maximized'>('hidden')
 
@@ -45,28 +47,27 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
                 </div>
             ))}
 
-            {/* <Drawer
+           
+            <Drawer
                 onClose={() => setOpen(false)}
                 open={open}
-                closeIcon={
-                    <Icon iconName="faAngleLeft" className='text-white' />
-                }
                 width={window.innerWidth > 1200 ? 600 : '100%'}
                 className='rounded-l-ext'
                 destroyOnClose={true}
+                // exit={{ opacity: 0 }}
             >
                 <FormEstrategia setOpen={ setOpen } />
-            </Drawer> */}
+            </Drawer>
 
             <FloatButton
-                onClick={() => setOpenDrawer('minimized')}
+                onClick={() => setOpen(true)}
                 icon={<Icon iconName="faPlus"/>} 
                 className='bottom-5'
             />
 
-            <CustomDrawer open={openDrawer} setOpenDrawer={setOpenDrawer} >
-                {/* <FormEstrategia  /> */}
-            </CustomDrawer>
+            {/* <CustomDrawer open={openDrawer} setOpenDrawer={setOpenDrawer} >
+                
+            </CustomDrawer> */}
         </>
     )
 }

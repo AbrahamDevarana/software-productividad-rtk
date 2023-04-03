@@ -11,6 +11,7 @@ import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicos
 import { clearAlertTacticos } from '@/redux/features/tacticos/tacticosSlice';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { UsuarioProps } from '@/interfaces';
 
 
 interface FormTacticoProps {
@@ -21,7 +22,7 @@ interface FormTacticoProps {
     showEdit?: boolean
 }
 
-export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showEdit, setShowEdit}: FormTacticoProps) => {
+export const FormTactico:React.FC<FormTacticoProps> = ({ estrategicoId , areaId = "", currentTactico, showEdit, setShowEdit}) => {
 
     const  dispatch = useAppDispatch()
     const { TextArea } = Input;
@@ -29,8 +30,11 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
     const {  created, deleted, infoMessage, updated, error } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const { areas } = useAppSelector(state => state.areas)    
+    const { areas } = useAppSelector(state => state.areas)
+    const {userAuth} = useAppSelector(state => state.auth)
 
+
+    console.log( dayjs().startOf('quarter').toDate())
     
     
     const [initialValues, setInitialValues] = useState<any>({
@@ -42,10 +46,11 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
         objetivoEstrategico: estrategicoId,
         tipoObjetivo: estrategicoId? 1 : '',
         perspectivaId: '',
-        fechaInicio: dayjs().startOf('year'),
-        fechaFin: dayjs().endOf('year'),
+        fechaInicio: dayjs().startOf('quarter'),
+        fechaFin: dayjs().endOf('quarter'),
         responsables: [],
-        areas: [areaId] || []
+        areas: [areaId] || [],
+        propietarioId: userAuth?.id
     })
       
     useEffect(() => {
@@ -81,7 +86,8 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                 fechaInicio: dayjs(currentTactico.fechaInicio).toDate(),
                 fechaFin: dayjs(currentTactico.fechaFin).toDate(),
                 responsables: currentTactico.responsables ? currentTactico.responsables.map((r:any) => r.id) : [],
-                areas: currentTactico.areas ? currentTactico.areas.map((a:any) => a.id) : []
+                areas: currentTactico.areas ? currentTactico.areas.map((a:any) => a.id) : [],
+                propietarioId: currentTactico.propietarioId
             })
         }
 
@@ -98,12 +104,12 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
     const handleOnSubmit = (values: any) => {
         
         if(currentTactico && currentTactico.id !== ""){
-            console.log(values);
             dispatch(updateTacticoThunk(values))
+            // setShowEdit(false)
             return
         }       
         dispatch(createTacticoThunk(values))
-        
+            
     }
     
 
@@ -130,6 +136,71 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                             noValidate
                             layout='vertical'
                         >
+
+                            <Divider orientation="left">Objetivo </Divider>
+                                {/* Objetivo */}
+                                <Form.Item
+                                        label="Tipo de objetivo"
+                                    >
+                                    <Radio.Group
+                                        onChange={(e) => { 
+                                            setFieldValue('tipoObjetivo', e.target.value); 
+                                            e.target.value === 1 && handleGetEstrategicos();
+                                            e.target.value === 2 && setFieldValue('objetivoEstrategico', null); 
+                                        }}
+                                        value={values.tipoObjetivo}
+                                    >
+                                        <Radio value={1}>Táctico</Radio>
+                                        <Radio value={2}>Core</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                                
+                            { values.tipoObjetivo === 1 && (
+                                <Form.Item
+                                    label="Objetivo estratégico"
+                                >
+                                    <Select
+                                        style={{ width: '100%' }}
+                                        placeholder="Selecciona el objetivo estratégico"
+                                        onChange={(value) => {setFieldValue('objetivoEstrategico', value ) }}
+                                        value={  values.objetivoEstrategico }
+                                        disabled={estrategicos.length === 0}
+                                        allowClear
+                                        showSearch
+                                        // filterOption with typescript
+                                        filterOption={(input, option) =>
+                                            // @ts-ignore
+                                            option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        }
+
+                                    >
+                                        {
+                                            estrategicos.map((objetivo: any) => (
+                                                <Select.Option key={objetivo.id} value={objetivo.id}>{objetivo.nombre}</Select.Option>
+                                            ))
+                                        }
+                                    </Select>
+                                    <ErrorMessage name="objetivoEstrategico" render={msg => <Alert type="error" message={msg} showIcon />} />
+                                </Form.Item>
+                            )}
+                            
+                            <Divider orientation="left">Áreas</Divider>
+
+                            <Form.Item>
+                                <Checkbox.Group
+                                    value={values.areas}
+                                    onChange={(value) => setFieldValue('areas', value)}
+                                    
+                                >
+                                    {
+                                        areas.map((area: any) => (
+                                            <Checkbox key={area.id} value={area.id}> {area.nombre} </Checkbox>
+                                        ))
+                                    }
+                                </Checkbox.Group>
+                        </Form.Item>
+
+                        <Divider />
                             <div className="grid grid-cols-6 gap-x-5">
                                 <Form.Item
                                     label="Título del objetivo táctico"
@@ -194,7 +265,25 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                             </div>
 
                             <Form.Item
-                                label="Responsables"
+                                label="Propietario"
+                            >
+                                <Select
+                                    style={{ width: '100%' }}
+                                    placeholder="Selecciona al propietario"
+                                    onChange={(value) => setFieldValue('propietarioId', value)}
+                                    allowClear
+                                    value={ values.propietarioId }
+                                >
+                                    {
+                                        usuarios.map((usuario: UsuarioProps) => (
+                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre} {usuario.apellidoPaterno} </Select.Option>
+                                        ))
+                                    }
+                                </Select>
+                                <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Co-Responsables"
                             >
                                 <Select
                                     mode="multiple"
@@ -205,20 +294,14 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                                     value={ values.responsables }
                                 >
                                     {
-                                        usuarios.map((usuario: any) => (
-                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
+                                        usuarios.map((usuario: UsuarioProps) => (
+                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre} {usuario.apellidoPaterno}</Select.Option>
                                         ))
                                     }
                                 </Select>
                                 <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                                        
-                            <Form.Item
-                                label="Progreso"
-                            >
-                                <Slider value={values.progreso} onChange={(value) => setFieldValue('progreso', value)} />
-                            </Form.Item>
-                            
+                                    
                             <Form.Item
                                 label="Describe la meta a alcanzar"
                             >
@@ -232,63 +315,7 @@ export const FormTactico = ({ estrategicoId , areaId = "", currentTactico, showE
                                 <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                            
-                           <Divider orientation="left">Objetivo </Divider>
-                                {/* Objetivo */}
-                                <Form.Item
-                                        label="Tipo de objetivo"
-                                    >
-                                        <Radio.Group
-                                            onChange={(e) => { 
-                                                setFieldValue('tipoObjetivo', e.target.value); 
-                                                e.target.value === 1 && handleGetEstrategicos();
-                                                e.target.value === 2 && setFieldValue('objetivoEstrategico', null); 
-                                            }}
-                                            value={values.tipoObjetivo}
-                                        >
-                                            <Radio value={1}>Táctico</Radio>
-                                            <Radio value={2}>Core</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                
-                                {
-                                        values.tipoObjetivo === 1 && (
-                                            <Form.Item
-                                                label="Objetivo estratégico"
-                                            >
-                                                <Select
-                                                    style={{ width: '100%' }}
-                                                    placeholder="Selecciona el objetivo estratégico"
-                                                    onChange={(value) => {setFieldValue('objetivoEstrategico', value ) }}
-                                                    value={  values.objetivoEstrategico }
-                                                    disabled={estrategicos.length === 0}
-                                                    allowClear
-                                                >
-                                                    {
-                                                        estrategicos.map((objetivo: any) => (
-                                                            <Select.Option key={objetivo.id} value={objetivo.id}>{objetivo.nombre}</Select.Option>
-                                                        ))
-                                                    }
-                                                </Select>
-                                                <ErrorMessage name="objetivoEstrategico" render={msg => <Alert type="error" message={msg} showIcon />} />
-                                            </Form.Item>
-                                        )
-                                }
-                            
-                            <Divider orientation="left">Áreas</Divider>
 
-                            <Form.Item>
-                                <Checkbox.Group
-                                    value={values.areas}
-                                    onChange={(value) => setFieldValue('areas', value)}
-                                    
-                                >
-                                    {
-                                        areas.map((area: any) => (
-                                            <Checkbox key={area.id} value={area.id}> {area.nombre} </Checkbox>
-                                        ))
-                                    }
-                                </Checkbox.Group>
-                            </Form.Item>
 
                                 
                             <Form.Item 

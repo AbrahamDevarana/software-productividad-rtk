@@ -26,7 +26,17 @@ const initialState: EstrategicosState = {
         indicador: '',
         perspectivas: [],
         responsables: [],
-        tacticos_count: 0
+        tacticos_count: 0,
+        propietarioId: '',
+        propietario: {
+            id: '',
+            nombre: '',
+            apellidoMaterno: '',
+            apellidoPaterno: '',
+            email: '',
+            iniciales: '',
+        }
+
     }
 }
 

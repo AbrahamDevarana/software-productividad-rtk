@@ -20,7 +20,7 @@ export const EstrategíaHome: React.FC = () => {
     return (
         <div className='' id="Estrategia">
             <div className='max-w-sm pb-5'>
-                <Segmented block options={[123, 456, 'longtext-longtext-longtext-longtext']} />
+                <Segmented block options={['Listado', 'Mapa', 'Gantt']} value={'Listado'} />
             </div>
             <Estrategia perspectivas={perspectivas} />
         </div>

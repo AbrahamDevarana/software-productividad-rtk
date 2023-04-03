@@ -24,7 +24,6 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
     const {state} = useLocation()
     const navigate = useNavigate()
-
    
     const [showEdit, setShowEdit] = useState<boolean>(false);
     

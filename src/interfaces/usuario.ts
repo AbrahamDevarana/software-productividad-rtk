@@ -13,23 +13,23 @@ export interface UsuariosState {
 }
 
 export interface UsuarioProps {
-    id: number;
+    id: string;
     nombre: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
-    nombreCorto: string;
+    nombreCorto?: string;
     iniciales: string;
     email: string;
-    password: string;
-    status: boolean;
-    fechaNacimiento: Date;
-    fechaIngreso: Date;
-    telefono: string;
-    descripcionPerfil: string;
-    departamentoId: number | null;
-    leaderId: number | null ;
-    direccion: Direccion;
-    departamento: Departamento;
+    password?: string;
+    status?: boolean;
+    fechaNacimiento?: Date;
+    fechaIngreso?: Date;
+    telefono?: string;
+    descripcionPerfil?: string;
+    departamentoId?: number | null;
+    leaderId?: number | null ;
+    direccion?: Direccion;
+    departamento?: Departamento;
 }
 
 export interface Direccion {

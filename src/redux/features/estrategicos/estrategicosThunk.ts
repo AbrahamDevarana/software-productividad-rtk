@@ -1,4 +1,4 @@
-import { useNotification } from '@/hooks/useNotification';
+
 import { AppDispatch, RootState } from '@/redux/store';
 import { createEstrategicoProvider, deleteEstrategicoProvider, getEstrategicoProvider, getEstrategicosProvider, updateEstrategicoProvider} from './estrategicosProvider';
 import { checkingEstrategicos, setEstrategicosError, getCurrentEstrategico, createEstrategico, deleteEstrategico, getEstrategicos, updateEstrategico, clearCurrentEstrategico, clearEstrategicos } from './estrategicosSlice';
@@ -29,7 +29,6 @@ export const createEstrategicoThunk = (estrategico: any) => {
         dispatch(checkingEstrategicos())
         const result = await createEstrategicoProvider(estrategico, getState)
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Estrategico creada correctamente'})
         dispatch( createEstrategico(result.estrategico) )
     }   
 }
@@ -40,7 +39,6 @@ export const createEstrategicoFromPerspectivaThunk = (estrategico: any) => {
         dispatch(checkingEstrategicos())
         const result = await createEstrategicoProvider(estrategico, getState)
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Estrategico creada correctamente'})
         dispatch( createEstrategicoFromProvider(result.estrategico) )
     }
 }
@@ -51,7 +49,6 @@ export const deleteEstrategicoThunk = (estrategicosId: number) => {
         dispatch(checkingEstrategicos())
         const result = await deleteEstrategicoProvider(estrategicosId, getState)
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Estrategico eliminada correctamente'})
         dispatch( deleteEstrategico(estrategicosId) )
     }   
 }
@@ -61,7 +58,6 @@ export const updateEstrategicoThunk = (estrategico: any) => {
         dispatch(checkingEstrategicos())
         const result = await updateEstrategicoProvider(estrategico, getState)
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Estrategico actualizada correctamente'})
         dispatch( updateEstrategico(result.estrategico) )
         dispatch( getPerspectivasThunk({}) )
     }   

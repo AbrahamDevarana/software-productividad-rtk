@@ -67,6 +67,14 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
         <>
             <div className='flex justify-between'>
                 <h1 className='text-xl font-medium text-devarana-graph'> {currentTactico.nombre} </h1>
+
+            </div>
+
+            <Divider />
+
+            <div className='flex justify-between'>
+                <p className='text-devarana-graph'><span className='text-3xl'>{progresoEstrategico}</span> % / 100 %</p>
+
                 <div className='bg-gray-50 rounded-full px-2'>
                     <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                         <button onClick={(e) => e.preventDefault()}>
@@ -75,8 +83,6 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
                     </Dropdown>
                 </div>
             </div>
-
-            <Divider />
 
             <Slider
                 className='drop-shadow progressStyle'
@@ -96,20 +102,25 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
                 
             />
 
+
+            <Divider orientation='left'> Objetivo Estrategico:</Divider>
             <div>
                 { currentTactico.objetivo_tact&& currentTactico.objetivo_tact.length > 0 && currentTactico.objetivo_tact.map( (obj:any, i:number) => ( 
                     <p key={i} className='text-devarana-graph'>
-                        Objetivo Estrategico: { obj.nombre }
+                       { obj.nombre }
                     </p>
                 ))}
             </div>
 
-            <div>
-                {  currentTactico.areas && currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:any, i:number) => ( 
-                    <p key={i} className='text-devarana-graph'>
-                        Áreas: { obj.nombre }
-                    </p>
-                ))}
+            <Divider orientation='left'> Áreas:</Divider>
+            <div className='px-5'>
+                <ul>
+                    {  currentTactico.areas && currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:any, i:number) => ( 
+                        <li key={i} className='text-devarana-graph list-disc'>
+                        { obj.nombre }
+                        </li>
+                    ))}
+                </ul>
             </div>
 
             <div className='grid grid-cols-2 gap-10 py-5'>
@@ -123,7 +134,12 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
                 </div>
             </div>
 
-            <p className='text-devarana-graph'>Responsables:</p>
+            <Divider orientation='left'>Propietario:</Divider>
+            <Tooltip title={`${currentTactico.propietario?.nombre} ${ currentTactico.propietario?.apellidoPaterno }`}>
+                <Avatar key={currentTactico.propietario?.id} src={`https://i.pravatar.cc/300`}  > { currentTactico.propietario?.iniciales } </Avatar>
+            </Tooltip>
+
+            <Divider orientation='left'>Co-Responsables:</Divider>
             <Avatar.Group maxCount={3}>
                 {
                 currentTactico.responsables?.map((responsable, index) => (
