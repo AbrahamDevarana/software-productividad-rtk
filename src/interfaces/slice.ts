@@ -3,3 +3,14 @@ export interface Paginate {
     totalPages: number;
     currentPage: number;
 }
+
+
+export interface InitialState {
+    isLoading:    boolean;
+    error:        boolean;
+    infoMessage:  string;
+    updated:      boolean;
+    created:      boolean;
+    deleted:      boolean;
+}
+
