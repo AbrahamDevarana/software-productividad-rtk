@@ -3,7 +3,7 @@ import { RootState } from "../../store";
 import Cookies from 'js-cookie';
 
 interface IuserAuth{
-    id: number;
+    id: string;
     name: string;
     email: string;
     nick_name: string;

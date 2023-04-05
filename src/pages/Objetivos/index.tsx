@@ -1,19 +1,28 @@
 import { Icon } from '@/components/Icon';
 import { Box } from '@/components/ui';
 import { useGetColor } from '@/hooks/useGetColor';
-import { Avatar, Avatar as Avt, DatePicker, Divider, FloatButton, Progress } from 'antd'
-import { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
-import { useAppDispatch } from '@/redux/hooks';
+import { Avatar, Avatar as Avt, DatePicker, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
+import { useState, useEffect, useMemo } from 'react';
+import dayjs, {Dayjs} from 'dayjs';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getOperativosThunk, getProyectosThunk } from '@/redux/features/operativo/operativosThunk';
+import Loading from '@/components/antd/Loading';
+
+import { FormOperativo } from '@/components/operativo/FormOperativo';
+import { Objetivo } from '@/components/operativo/Objetivo';
 
 export const Objetivos : React.FC = () => {
 
     const dispatch = useAppDispatch()
 
-    const [lastDayOfQuarter, setLastDayOfQuarter] = useState<any>()
+    const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
+    const { userAuth } = useAppSelector(state => state.auth)
+    const { operativos, proyectos, isLoading } = useAppSelector(state => state.operativos)
 
-    const validateRangePicker = (date: any, dateString: any) => {
+    const [ isModalVisible, setIsModalVisible ] = useState(false)
+
+
+    const validateRangePicker = (date: [Dayjs, Dayjs], dateString: [string, string]) => {
         setLastDayOfQuarter(dayjs(dateString[0]).endOf('quarter'))
     }
 
@@ -23,62 +32,90 @@ export const Objetivos : React.FC = () => {
         dispatch(getProyectosThunk({}))
     }, [])
 
+
+    
+    const ponderacionTotal = useMemo(() => {
+        let total = 0
+      
+        operativos.forEach(operativo => {
+            
+            operativo.responsables_op?.map(responsable => {
+                if( responsable.id === userAuth?.id ) {
+                    total += responsable.scoreCard?.progresoFinal || 0
+                }
+            })
+        })
+        return total
+        
+    }, [operativos])
+    
+    if (isLoading) return <Loading />
+    
     return (
         <>
             <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
-                <Box className='md:col-span-8 col-span-12'>
-                    <DatePicker.RangePicker onCalendarChange={validateRangePicker} 
+                <Box className='md:col-span-8 col-span-12 flex justify-evenly md:flex-row flex-col'>
+                    {/* <DatePicker.RangePicker onCalendarChange={ () => validateRangePicker} 
                         disabledDate={ (current) => current && current > lastDayOfQuarter }
-                    />
+                    /> */}
 
-                </Box>
-                <Box className='md:col-span-4 col-span-12'>
-                </Box>
-
-                <Box className='md:col-span-8 col-span-12 p-5 grid grid-cols-12'>
-                    <div className='shadow rounded-ext p-5 md:col-span-4 col-span-12'>
-                        <div className='w-full flex justify-around text-devarana-graph text-center'>  
-                            <div className=''>
-                                <p> Resultados Clave </p>
-                                <p> 1 / 2</p>
-                            </div>
-                            <div className='border-x px-5'>
-                                <p>Indicadores </p>
-                                <p> 1 / 2</p>
-                            </div>
-                            <div className=''>
-                                <p>Acciones </p>
-                                <p> 1 / 2</p>
-                            </div>
+                    <div className='px-5 text-devarana-graph text-center'>
+                        <p className='font-medium'>Avance Total de Objetivos</p>
+                        <p className='py-3'>Ponderación  80% </p>
+                        <Progress percent={ponderacionTotal} type='dashboard' className='flex justify-center'/>
+                    </div>
+                        <Divider type='vertical' className='h-full' />
+                    <div className='px-5 text-center text-devarana-graph'>
+                        <p className='font-medium'>Cumplimiento de Objetivos</p>
+                        <p className='py-3'> Decimales Extra </p>
+                        <div>
+                            <p className='text-3xl'>
+                                3/8
+                            </p>
                         </div>
-                        <Divider />
-                        <p className='text-center text-devarana-graph font-medium uppercase'> Objetivo 1 </p>
-                        <Progress 
-                            percent={32}
-                            type='circle'
-                            strokeLinecap='square'
-                            className='flex justify-center py-5'
-                            strokeWidth={10}
-                            strokeColor={{
-                                "0%": useGetColor(2, .8)?.rgba || '#108ee9',
-                                "100%": useGetColor(2, .8)?.rgba || '#108ee9'
-                            }}
-                        />
-                        <Divider />
-                        <Avatar.Group className='flex justify-center'>
-                            <Avt src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            <Avt src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            <Avt src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                        </Avatar.Group>
+                    </div>
+                    <Divider type='vertical' className='h-full' />
+                    <div className='text-devarana-graph text-center px-5'>
+                        <p className='font-medium'>Desempeño</p>
+                        <p className=''> Ponderación 20 %</p>
+                        <div>
+                            <Rate allowHalf defaultValue={3} />
+                        </div>
                     </div>
                 </Box>
-                <Box className='md:col-span-4 col-span-12'>
+                <Box className='md:col-span-4 col-span-12 row-span-3'>
+                    {/* <pre>
+                        {JSON.stringify(operativos, null, 2)}
+                    </pre> */}
+                </Box>
+
+                <Box className='md:col-span-8 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+
+                    {
+                        operativos && operativos.length > 0 && operativos.map((operativo, index) => (
+                            <Objetivo objetivo={operativo} key={index}/>
+                        ))
+                    }
+                    
                 </Box>
             </div>
             
+
+            <Modal 
+                open={isModalVisible}
+                footer={null}
+                onCancel={() => setIsModalVisible(false)}
+                width={1000}
+                closable={false}
+            >
+                <FormOperativo />
+
+            </Modal>
+
             <FloatButton
                 shape="circle"
                 icon={<Icon iconName='faPlus' />}
+                onClick={() => setIsModalVisible(true)}
             />
         </>
     ) 

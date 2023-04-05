@@ -2,7 +2,8 @@ import { InitialState, Paginate, UsuarioProps } from ".";
 
 
 interface CustomUsuarioProps extends UsuarioProps {
-    pivot_op_user: {
+    
+    scoreCard?: {
         propietario:      number;
         progresoFinal:    number;
         progresoAsignado: number;
@@ -22,8 +23,9 @@ export interface OperativoProps {
     createdAt?:       Date;
     updatedAt?:       Date;
     deletedAt?:       Date | null;
-    propietario_op?:  CustomUsuarioProps[];
+    propietario_op?:  CustomUsuarioProps;
     responsables_op?: CustomUsuarioProps[];
+    resultados_clave?: [];
 }
 
 

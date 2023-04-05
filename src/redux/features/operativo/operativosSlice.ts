@@ -1,4 +1,4 @@
-import { OperativoState } from "@/interfaces/Operativo";
+import { OperativoState } from "@/interfaces/operativo";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: OperativoState = {
@@ -16,7 +16,14 @@ const initialState: OperativoState = {
         fechaFin: new Date(),
         fechaInicio: new Date(),
         tacticoId: '',
-        propietario_op: [],
+        propietario_op: {
+            id: '',
+            nombre: '',
+            apellidoMaterno: '',
+            apellidoPaterno: '',
+            iniciales: '',
+            email: '',
+        },
         responsables_op: [],
         indicador: '',
         meta: '',
