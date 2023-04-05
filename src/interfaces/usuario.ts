@@ -46,7 +46,7 @@ export interface Direccion {
 export interface Departamento {
     id: number | null;
     nombre: string;
-    leaderId: number | null;
+    leaderId: string | null;
 }
 
 export interface Lider {

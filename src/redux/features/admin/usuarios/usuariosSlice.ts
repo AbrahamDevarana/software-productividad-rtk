@@ -15,7 +15,7 @@ const initialState: UsuariosState = {
     created: false,
     deleted: false,
     currentUsuario: {
-        id: 0,
+        id: '',
         nombre: '',
         apellidoPaterno: '',
         apellidoMaterno: '',

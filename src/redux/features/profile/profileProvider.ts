@@ -2,7 +2,7 @@ import { clientAxios } from "../../../config/axios";
 import { RootState } from "../../store";
 
 
-export const getProfileProvider =  async (userId:number, getState: () => RootState) => {
+export const getProfileProvider =  async (userId:string, getState: () => RootState) => {
     try {
         const response = await clientAxios.get(`/usuarios/${userId}`,
             { headers: { "accessToken": `${getState().auth.accessToken}` } }

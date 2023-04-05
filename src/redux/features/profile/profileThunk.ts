@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../../store";
 import { getProfileProvider, updateProfileProvider } from "./profileProvider";
 import { checkingProfile, getProfile, getProfileError, updateProfile } from "./profileSlice";
 
-export const fetchProfileThunk = (userId:number) => {
+export const fetchProfileThunk = (userId:string) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingProfile())
         const result = await getProfileProvider(userId, getState)        
