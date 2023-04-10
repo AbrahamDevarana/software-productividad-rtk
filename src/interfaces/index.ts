@@ -10,6 +10,6 @@ export * from "./perspectiva";
 export * from "./estrategicos";
 export * from "./tacticos";
 export * from "./areas";
-export * from "./operativo";
+export * from "./operativos";
 export * from "./resultadoClave";
 

@@ -1,14 +1,14 @@
+import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { Avatar, Divider, Progress } from 'antd'
-import React from 'react'
 
 
 interface ObjetivoProps {
     objetivo: OperativoProps
 }
 
-export const Objetivo: React.FC<ObjetivoProps> = ({objetivo}) => {
+export const Objetivo: FC<ObjetivoProps> = ({objetivo}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
 

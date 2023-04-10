@@ -1,7 +1,6 @@
 import { Icon } from '@/components/Icon';
 import { Box } from '@/components/ui';
-import { useGetColor } from '@/hooks/useGetColor';
-import { Avatar, Avatar as Avt, DatePicker, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
+import { Avatar, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -38,7 +37,6 @@ export const Objetivos : React.FC = () => {
         let total = 0
       
         operativos.forEach(operativo => {
-            
             operativo.responsables_op?.map(responsable => {
                 if( responsable.id === userAuth?.id ) {
                     total += responsable.scoreCard?.progresoFinal || 0

@@ -1,4 +1,4 @@
-import { OperativoState } from "@/interfaces/operativo";
+import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: OperativoState = {
