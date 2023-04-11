@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider, uploadImageProvider } from './usuariosProvider';
+import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider, uploadImageProvider, deleteImageProvider } from './usuariosProvider';
 import { checkingUsuarios, getUsuario, getUsuarios, setUsuariosError, createUsuario, deleteUsuario, updateUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } from './usuariosSlice';
 
 
@@ -61,6 +61,16 @@ export const uploadImageThunk = (usuarioId: string, file: any) => {
         const result = await uploadImageProvider(usuarioId, file, getState)
         if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
         // dispatch( updateUsuario(result.usuario) )
+        return result
+    }
+}
+
+export const deleteProfilePhotoThunk = (usuarioId: string) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(checkingUsuarios())
+        const result = await deleteImageProvider(usuarioId, getState)
+        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
+        // dispatch( updateUsuario(result.usuario) )        
         return result
     }
 }

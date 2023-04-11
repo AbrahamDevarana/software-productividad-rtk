@@ -4,7 +4,7 @@ import { ErrorMessage, Formik } from 'formik'
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '@/components/ui';
-import { createUsuarioThunk, updateUsuarioThunk, uploadImageThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { createUsuarioThunk, deleteProfilePhotoThunk, updateUsuarioThunk, uploadImageThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { Icon } from '@/components/Icon';
 import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { getBase64, uploadUserPicture } from '@/helpers';
@@ -70,6 +70,17 @@ export const General: React.FC<any> = ({handleSteps}) => {
         dispatch(uploadImageThunk(currentUsuario.id, newFileList))
     }
 
+    const handleOnRemove = async (file: UploadFile) => {
+        
+        const res = await dispatch(deleteProfilePhotoThunk(currentUsuario.id))
+
+        console.log(res);
+        
+
+        setFileList([])
+    }
+
+
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
             <Formik
@@ -81,34 +92,36 @@ export const General: React.FC<any> = ({handleSteps}) => {
                 {({ values, handleChange, handleSubmit, errors }) => (
                     <Form onFinish={handleSubmit} noValidate onChange={handleChange} layout='vertical'>
                         <div className="grid grid-cols-4 gap-x-4">
-                            <div className='col-span-1 flex align-middle'>
-                                <Upload
-                                    maxCount={1}
-                                    accept="image/*"
-                                    name="file"
-                                    fileList={fileList}
-                                    listType="picture-circle"
-                                    className="flex"                                 
-                                    onPreview={handlePreview}
-                                    onChange={handleOnChange}
-                                    customRequest={ async ({ file, onSuccess, onError }) => {
-                                        await uploadUserPicture(file, currentUsuario.id).then((res) => {
-                                                onSuccess?.(res)
-                                            }).catch((err) => {
-                                                onError?.(err)
-                                        })
-                                    }}
-                                      
-                                >
-                                    {fileList.length >= 1 ? null
-                                    : uploadButton}
-                                </Upload>
+                            <div className={`${currentUsuario.id !== ''? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
+                                <div className='block'>
+                                    <Upload
+                                        maxCount={1}
+                                        accept="image/*"
+                                        name="file"
+                                        fileList={fileList}
+                                        listType="picture-circle"                                 
+                                        onPreview={handlePreview}
+                                        onChange={handleOnChange}
+                                        onRemove={handleOnRemove}
+                                        customRequest={ async ({ file, onSuccess, onError }) => {
+                                            await uploadUserPicture(file, currentUsuario.id).then((res) => {
+                                                    onSuccess?.(res)
+                                                }).catch((err) => {
+                                                    onError?.(err)
+                                            })
+                                        }}
+                                        
+                                    >
+                                        {fileList.length >= 1 ? null
+                                        : uploadButton}
+                                    </Upload>
                                 <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
                                     <img alt="example" style={{ width: '100%' }} src={preview} />
                                 </Modal>
+                                </div>
                             </div>
 
-                            <div className='col-span-3 grid grid-cols-2 gap-10'>
+                            <div className={`${currentUsuario.id !== ''? 'col-span-3': 'col-span-4'} grid grid-cols-2 gap-10`}>
                                 <Form.Item
                                     label="Nombre"
                                     required
