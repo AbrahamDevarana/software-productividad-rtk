@@ -70,7 +70,7 @@ export const deleteProfilePhotoThunk = (usuarioId: string) => {
         dispatch(checkingUsuarios())
         const result = await deleteImageProvider(usuarioId, getState)
         if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-        // dispatch( updateUsuario(result.usuario) )        
+        // dispatch( updateUsuario(result.usuario) )s        
         return result
     }
 }
