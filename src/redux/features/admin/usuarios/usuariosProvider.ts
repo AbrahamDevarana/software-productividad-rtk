@@ -20,7 +20,7 @@ export const getUsuariosProvider = async (filtros: any, getState: () => RootStat
     }
 }
 
-export const getUsuarioProvider = async (usuarioId: number, getState: () => RootState) => {
+export const getUsuarioProvider = async (usuarioId: string, getState: () => RootState) => {
     try {
         const response = await clientAxios.get(`/usuarios/${usuarioId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
         return {
@@ -74,12 +74,31 @@ export const updateUsuarioProvider = async (usuario: any, getState: () => RootSt
     }
 }
 
-export const deleteUsuarioProvider = async (usuarioId: number, getState: () => RootState) => {
+export const deleteUsuarioProvider = async (usuarioId: string, getState: () => RootState) => {
     try {
         const response = await clientAxios.delete(`/usuarios/${usuarioId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
         return {
             ok: true,
             usuario: response.data
+        }
+    } catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}
+
+
+export const uploadImageProvider = async (usuarioId: string, userPicture:any ,getState: () => RootState) => {
+    try {
+        const response = await clientAxios.post(`/usuarios/upload/${usuarioId}`, userPicture, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            url: response.data
         }
     } catch (error: any) {
         const errorCode = error.code

@@ -42,7 +42,7 @@ export const Usuarios: React.FC = () => {
     }, [filtros])
 
 
-	async function handleDelete(id: number) {
+	async function handleDelete(id: string) {
 		const confirmed = await useDelete('¿Estás seguro que deseas eliminar este elemento?');
 		if (confirmed) {
 			dispatch(deleteUsuarioThunk(id))

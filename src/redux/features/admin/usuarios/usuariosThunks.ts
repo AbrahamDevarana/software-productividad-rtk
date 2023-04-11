@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider } from './usuariosProvider';
+import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider, uploadImageProvider } from './usuariosProvider';
 import { checkingUsuarios, getUsuario, getUsuarios, setUsuariosError, createUsuario, deleteUsuario, updateUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } from './usuariosSlice';
 
 
@@ -13,7 +13,7 @@ export const getUsuariosThunk = (filtros: any) => {
     }
 }
 
-export const getUsuarioThunk = (usuarioId: number) => {
+export const getUsuarioThunk = (usuarioId: string) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingUsuarios())
         const result = await getUsuarioProvider(usuarioId, getState)
@@ -45,12 +45,23 @@ export const updateUsuarioThunk = (usuario: any) => {
     }
 }
 
-export const deleteUsuarioThunk = (usuarioId: number) => {
+export const deleteUsuarioThunk = (usuarioId: string) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingUsuarios())
         const result = await deleteUsuarioProvider(usuarioId, getState)       
         if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
         dispatch( deleteUsuario(usuarioId) )
+    }
+}
+
+
+export const uploadImageThunk = (usuarioId: string, file: any) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(checkingUsuarios())
+        const result = await uploadImageProvider(usuarioId, file, getState)
+        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
+        // dispatch( updateUsuario(result.usuario) )
+        return result
     }
 }
 

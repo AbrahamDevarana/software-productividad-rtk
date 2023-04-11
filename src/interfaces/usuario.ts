@@ -25,6 +25,7 @@ export interface UsuarioProps {
     fechaNacimiento?: Date;
     fechaIngreso?: Date;
     telefono?: string;
+    foto?: string;
     descripcionPerfil?: string;
     departamentoId?: number | null;
     leaderId?: number | null ;
