@@ -1,20 +1,25 @@
 
 
-import { InitialState, Paginate, UsuarioProps } from ".";
+import { InitialState, OperativoProps, Paginate, UsuarioProps } from ".";
 
 
 
 
 export interface ResultadoClaveProps {
-
-    resultados_clave?: [];
+    id?: string
+    nombre: string
+    tipoProgreso: string
+    progreso?: number
+    fechaInicio?: string | Date
+    fechaFin?: string | Date
+    operativoId: string
+    // propietarioId: string
 }
 
 
 
 export interface ResultadoClaveState extends InitialState{
-    operativos: ResultadoClaveProps[];
-    proyectos:  ResultadoClaveProps[];
+    operativos: OperativoProps[];
     paginate?:     Paginate;
     currentResultadoClave: ResultadoClaveProps;
 }

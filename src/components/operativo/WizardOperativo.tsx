@@ -3,6 +3,8 @@ import { Box } from '../ui';
 import { Steps } from 'antd';
 import { FormObjetivo } from './FormObjetivo';
 import { useAppSelector } from '@/redux/hooks';
+import { FormResultados } from '@/components/resultados/FormResultados';
+
 
 export const WizardOperativo:FC = () => {
 
@@ -26,14 +28,17 @@ export const WizardOperativo:FC = () => {
                 items={[
                     { title: 'Objetivo' },
                     { title: 'Resultados Clave' },
+                    { title: 'Organizate'}
                 ]}
                 />
             </Box>
 
             <div className={`pt-24`}>
-                { current === 0 && <FormObjetivo currentOperativo={currentOperativo}/> }
+                { current === 0 && <FormObjetivo currentOperativo={currentOperativo} setCurrent={setCurrent} current={current}/> }
                 
-                { current === 1 && <div>Resultados Clave</div> }
+                { current === 1 && <FormResultados currentOperativo={currentOperativo} /> }
+
+                { current === 2 && <p> Organizate ! </p> }
             </div>
         </>
     )

@@ -16,7 +16,7 @@ export const Objetivos : React.FC = () => {
 
     const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
-    const { operativos, proyectos } = useAppSelector(state => state.operativos)
+    const { operativos, proyectos, isLoading } = useAppSelector(state => state.operativos)
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
@@ -67,7 +67,7 @@ export const Objetivos : React.FC = () => {
                         <p className='py-3'> Decimales Extra </p>
                         <div>
                             <p className='text-3xl'>
-                                3/8
+                                3 / {operativos.length}
                             </p>
                         </div>
                     </div>
@@ -89,9 +89,15 @@ export const Objetivos : React.FC = () => {
                 <Box className='md:col-span-8 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
 
                     {
-                        operativos && operativos.length > 0 && operativos.map((operativo, index) => (
-                            <Objetivo objetivo={operativo} key={index}/>
-                        ))
+                        isLoading ? 
+                            <div className='col-span-12'>
+                                <Loading  />
+                            </div>
+                        : (
+                            operativos && operativos.length > 0 && operativos.map((operativo, index) => (
+                                <Objetivo objetivo={operativo} key={index}/>
+                            ))
+                        )
                     }
                     
                 </Box>

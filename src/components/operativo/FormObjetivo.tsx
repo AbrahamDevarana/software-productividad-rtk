@@ -14,9 +14,11 @@ import { createOperativoThunk } from '@/redux/features/operativo/operativosThunk
 
 interface FormObjetivoProps {
     currentOperativo : OperativoProps
+    current: number
+    setCurrent: (current: number) => void
 }
 
-export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo}) => {
+export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, setCurrent}) => {
 
     const { RangePicker } = DatePicker;
     const dispatch = useAppDispatch()
@@ -36,6 +38,7 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo}) => {
         }
         
         dispatch(createOperativoThunk(query))
+        setCurrent(current + 1)
     }
 
     const disabledDate = ( current: Dayjs ) => {
