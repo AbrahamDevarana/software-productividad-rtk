@@ -16,7 +16,7 @@ const AvatarProfile = ({picture = '', userName, size='large', preview = true , .
 
     
     return ( 
-        <Avatar size={size} src={ <Image fallback={brokenUser()} src={picture} preview={preview} /> } />
+        <Avatar size={size} src={ <Image fallback={brokenUser()} src={`${import.meta.env.VITE_STORAGE_URL}${picture}`} preview={preview} /> } />
      );
 }
  

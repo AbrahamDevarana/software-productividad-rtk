@@ -4,6 +4,8 @@ import { NavLink} from 'react-router-dom';
 import "@/assets/scss/menu.scss"
 import { Icon } from '../Icon';
 import { optionalContent } from '@/interfaces';
+import { useAppSelector } from '@/redux/hooks';
+import { RootState } from '@/redux/store';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -12,6 +14,8 @@ interface LayoutSidebarProps {
 }
 
 export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:LayoutSidebarProps) => {
+
+    const { userAuth } = useAppSelector((state: RootState) => state.auth)
 
     const handleOptBar = (opt:optionalContent) => {
         setOptionalContent(opt)
@@ -29,7 +33,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                 <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                    <AvatarProfile preview={false} className="h-5 w-5 mx-auto" />
+                    <AvatarProfile picture={userAuth?.foto} preview={false} className="h-5 w-5 mx-auto" />
                 </NavLink>
 
                 <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />

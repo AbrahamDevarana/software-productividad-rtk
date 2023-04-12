@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getOperativosThunk, getProyectosThunk } from '@/redux/features/operativo/operativosThunk';
 import Loading from '@/components/antd/Loading';
 
-import { FormOperativo } from '@/components/operativo/FormOperativo';
+import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
 
 export const Objetivos : React.FC = () => {
@@ -106,7 +106,7 @@ export const Objetivos : React.FC = () => {
                 width={1000}
                 closable={false}
             >
-                <FormOperativo />
+                <WizardOperativo />
 
             </Modal>
 

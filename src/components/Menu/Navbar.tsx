@@ -1,4 +1,5 @@
 import { Breadcrumb, Dropdown, Menu, Select, Space } from "antd";
+import type { MenuProps } from 'antd';
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
@@ -22,9 +23,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
     const dispatch = useAppDispatch()
 
-    const menu = (
-        <Menu
-          items={[
+    const menu: MenuProps['items'] = [
             {
               key: '1',
               label: (
@@ -33,13 +32,9 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                 </button>
               ),
             },
-          ]}
-        />
-    );
+          ]
 
-    const notificaciones = (
-        <Menu
-          items={[
+    const notificaciones: MenuProps['items'] = [
             {
               key: '1',
               label: (
@@ -72,9 +67,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                 </span>
               ),
             },
-          ]}
-        />
-    );
+          ]
 
     const showDrawer = () => {
         setSettingVisible(true);
@@ -98,7 +91,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
                 </div>
                 <div className="sm:ml-auto flex items-center">
-                    <Dropdown overlay={notificaciones} trigger={['click']} className="px-2">
+                    <Dropdown menu={{ items:notificaciones }} trigger={['click']} className="px-2">
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                         <Space>
                             <Icon iconName="faBell" className='text-2xl text-devarana-blue' />
@@ -106,7 +99,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                         </a>
                     </Dropdown>
                     <Icon iconName="faSliders" className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue ' onClick={ showDrawer } />
-                    <Dropdown overlay={menu} trigger={['click']}>
+                    <Dropdown menu={{items:menu}} trigger={['click']}>
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                             <Space>
                                 <Icon iconName="faArrowRightFromBracket" className='text-2xl text-devarana-blue '/>

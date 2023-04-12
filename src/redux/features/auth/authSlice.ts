@@ -10,7 +10,7 @@ interface IuserAuth{
     secondLastName: string;
     short_name: string;
     lastName: string;
-    picture: string;
+    foto?: string;
 }
 
 interface AuthState {
