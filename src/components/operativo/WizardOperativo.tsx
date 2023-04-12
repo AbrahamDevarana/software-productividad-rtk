@@ -1,11 +1,14 @@
 import { FC, useState } from 'react';
 import { Box } from '../ui';
 import { Steps } from 'antd';
-import { CrearObjetivo } from './CrearObjetivo';
+import { FormObjetivo } from './FormObjetivo';
+import { useAppSelector } from '@/redux/hooks';
 
 export const WizardOperativo:FC = () => {
 
     const [ current, setCurrent] = useState<number>(0)
+
+    const { currentOperativo } = useAppSelector(state => state.operativos)
 
 
     // Si existe currentOperativo, entonces se edita
@@ -28,7 +31,7 @@ export const WizardOperativo:FC = () => {
             </Box>
 
             <div className={`pt-24`}>
-                { current === 0 && <CrearObjetivo /> }
+                { current === 0 && <FormObjetivo currentOperativo={currentOperativo}/> }
                 
                 { current === 1 && <div>Resultados Clave</div> }
             </div>

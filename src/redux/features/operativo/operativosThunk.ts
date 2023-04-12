@@ -1,6 +1,6 @@
 import { useNotification } from '@/hooks/useNotification';
 import { AppDispatch, RootState } from '@/redux/store';
-import { createObjetivoProvider, getOperativosProvider, getProyectosProvider } from './operativosProvider';
+import { createOperativoProvider, getOperativosProvider, getProyectosProvider } from './operativosProvider';
 import { checkingOperativos, clearOperativo, clearOperativos, clearStatus, createOperativo, deleteOperativo, getOperativo, getOperativos, getProyectos, setOperativosError, updateOperativo } from './operativosSlice';
 
 
@@ -27,9 +27,9 @@ export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch,
 
 export const createOperativoThunk = (operativo: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingOperativos())
-    const response = await createObjetivoProvider(operativo, getState)
+    const response = await createOperativoProvider(operativo, getState)
     if (response.ok) {
-        dispatch(createOperativo(response.objetivo))
+        dispatch(createOperativo(response.operativo))
     } else {
         dispatch(setOperativosError(response.errorMessage))
     }

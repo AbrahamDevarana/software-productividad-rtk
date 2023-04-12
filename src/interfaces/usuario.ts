@@ -56,3 +56,13 @@ export interface Lider {
     apellidoPaterno: string;
     apellidoMaterno: string;
 }
+
+export interface userAuthProps{
+    id: string;
+    nombre: string;
+    email: string;
+    iniciales: string;
+    apellidoPaterno: string;
+    apellidoMaterno: string;
+    foto?: string;
+}

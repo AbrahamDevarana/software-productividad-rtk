@@ -1,7 +1,7 @@
 import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
-import { Avatar, Divider, Progress } from 'antd'
+import { Avatar, Divider, Image, Progress } from 'antd'
 
 
 interface ObjetivoProps {
@@ -50,10 +50,16 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo}) => {
             <Divider />
             <Avatar.Group className='flex justify-center'>
                 {
+                    objetivo.propietario_op && (
+                        <Avatar size={'large'} key={objetivo.propietario_op.id} src={<Image title={objetivo.propietario_op.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${objetivo.propietario_op.foto}`} /> }> {objetivo.propietario_op.iniciales} </Avatar>
+                    )
+                }
+                {
                     
                     objetivo.responsables_op?.map((responsable, index) => (
-                        <Avatar key={index}> {responsable.iniciales} </Avatar>
+                        <Avatar size={'large'} key={index} src={<Image title={responsable.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${responsable.foto}`} /> }> {responsable.iniciales} </Avatar>
                     ))
+                    
                 }
             </Avatar.Group>
         </div>

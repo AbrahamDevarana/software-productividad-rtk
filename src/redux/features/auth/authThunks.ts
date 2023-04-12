@@ -4,6 +4,14 @@ import { AppDispatch, RootState } from '../../store';
 import { logOutProvider } from './authProvider';
 import { logOut, setAuthError, setCredentials, setisLoading } from './authSlice';
 import { useNotification } from '../../../hooks/useNotification';
+import { userAuthProps } from '@/interfaces';
+
+interface IAuthProps {
+    accessToken?: string;
+    refreshToken?: string;
+    usuario?: userAuthProps
+}
+
 
 
 const baseQuery = fetchBaseQuery({
@@ -17,7 +25,8 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { 
-    const result = await baseQuery(args, api, extraOptions);           
+    const result = await baseQuery(args, api, extraOptions);     
+
         if( result.error && result.error.status === 401 ) {
             const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
             if( refreshAccessToken.data ) {
@@ -27,17 +36,14 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch( setCredentials({ user, accessToken }) );
                 return baseQuery(args, api, extraOptions);
             }else{ 
-
                 if( localStorage.getItem('accessToken') ) useNotification({type: 'error', message: 'Su sesión ha expirado, por favor vuelva a iniciar sesión' });
-                
                 api.dispatch( logOut() );
             }
         }else{
-            const { accessToken }:any = result.data;
+            const { accessToken, usuario }  = result.data as IAuthProps;
             if( accessToken ) localStorage.setItem('accessToken', accessToken);
             if( accessToken ) {
-                const userAuth = jwtDecode(accessToken);
-                api.dispatch( setCredentials({ userAuth, accessToken }) );
+                api.dispatch( setCredentials({ usuario, accessToken }) );
                 api.dispatch( setisLoading(false) );
                 
             }

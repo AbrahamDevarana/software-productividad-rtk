@@ -1,24 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import Cookies from 'js-cookie';
+import { userAuthProps } from "@/interfaces";
 
-interface IuserAuth{
-    id: string;
-    name: string;
-    email: string;
-    nick_name: string;
-    secondLastName: string;
-    short_name: string;
-    lastName: string;
-    foto?: string;
-}
+
 
 interface AuthState {
     accessToken: string | null;
     refreshToken: string | null;
     error: string | null;
     loggedOut: boolean;
-    userAuth: IuserAuth | null,
+    userAuth: userAuthProps | null,
     isAuthenticated: boolean,
     isLoading: boolean,
 }
@@ -47,8 +39,8 @@ export const authSlice = createSlice({
             state.isLoading = false
         },
         setCredentials: (state, action) => {
-            const { userAuth, accessToken, refreshToken } = action.payload;
-            state.userAuth = userAuth;
+            const { usuario, accessToken, refreshToken } = action.payload;
+            state.userAuth = usuario;
             state.accessToken = accessToken;
             state.refreshToken = refreshToken;
             state.isAuthenticated = true;

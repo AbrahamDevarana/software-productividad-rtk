@@ -16,7 +16,7 @@ export const Objetivos : React.FC = () => {
 
     const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
-    const { operativos, proyectos, isLoading } = useAppSelector(state => state.operativos)
+    const { operativos, proyectos } = useAppSelector(state => state.operativos)
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
@@ -47,7 +47,6 @@ export const Objetivos : React.FC = () => {
         
     }, [operativos])
     
-    if (isLoading) return <Loading />
     
     return (
         <>
@@ -105,6 +104,7 @@ export const Objetivos : React.FC = () => {
                 onCancel={() => setIsModalVisible(false)}
                 width={1000}
                 closable={false}
+                destroyOnClose={true}
             >
                 <WizardOperativo />
 

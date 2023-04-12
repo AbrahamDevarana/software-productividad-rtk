@@ -56,9 +56,13 @@ const operativoSlice = createSlice({
             state.currentOperativo = action.payload.operativo
         },
         createOperativo: (state, action) => {
+            console.log('action.payload', action.payload);
+            
             state.isLoading = false
             state.created = true
             state.infoMessage = action.payload
+            state.currentOperativo = action.payload
+            state.operativos.push(action.payload)
         },
         updateOperativo: (state, action) => {
             state.isLoading = false

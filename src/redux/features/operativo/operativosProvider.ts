@@ -38,12 +38,12 @@ export const getProyectosProvider = async (filtros: any, getState: () => RootSta
     }
 }
 
-export const createObjetivoProvider = async (objetivo: any, getState: () => RootState) => {
+export const createOperativoProvider = async (operativo: any, getState: () => RootState) => {
     try {
-        const response = await clientAxios.post(`/objetivos`, objetivo, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        const response = await clientAxios.post(`/operativos`, operativo, { headers: { "accessToken": `${getState().auth.accessToken}` } });
         return {
             ok: true,
-            objetivo: response.data
+            operativo: response.data
         }
     } catch (error: any) {
         const errorCode = error.code

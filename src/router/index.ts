@@ -1,20 +1,20 @@
-import LayoutApp from '../components/layouts/LayoutPrivate';
-import LayoutEmpty from '../components/layouts/LayoutEmpty';
-import LayoutLogin from '../components/layouts/LayoutPublic'
-import { LayoutLoginProps } from '../interfaces';
-import { Areas } from '../pages/admin/Areas';
-import Login from '../pages/Auth/Login'
-import LoginError from '../pages/Auth/LoginError';
-import LoginSuccess from '../pages/Auth/LoginSuccess';
-import { Devarana } from '../pages/Devarana';
-import Home from '../pages/Home';
-import { Objetivos } from '../pages/Objetivos';
-import Perfil from '../pages/Perfil';
-import { ErrorPage } from '../pages/ErrorPage';
-import { EstrategíaHome } from '../pages/Estrategia';
-import { Usuarios } from '../pages/admin/Usuarios';
-import { Departamentos } from '../pages/admin/Departamentos';
-import { ObjEstrategico } from '../pages/Estrategia/ObjEstrategico';
+import LayoutApp from '@/components/layouts/LayoutPrivate';
+import LayoutEmpty from '@/components/layouts/LayoutEmpty';
+import LayoutLogin from '@/components/layouts/LayoutPublic'
+import { LayoutLoginProps } from '@/interfaces';
+import { Areas } from '@/pages/admin/Areas';
+import Login from '@/pages/Auth/Login'
+import LoginError from '@/pages/Auth/LoginError';
+import LoginSuccess from '@/pages/Auth/LoginSuccess';
+import { Devarana } from '@/pages/Devarana';
+import Home from '@/pages/Home';
+import { Objetivos } from '@/pages/Operativos';
+import Perfil from '@/pages/Perfil';
+import { ErrorPage } from '@/pages/ErrorPage';
+import { EstrategíaHome } from '@/pages/Estrategia';
+import { Usuarios } from '@/pages/admin/Usuarios';
+import { Departamentos } from '@/pages/admin/Departamentos';
+import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 import { Tactico } from '@/pages/Tactico';
 
 interface RouteProps {

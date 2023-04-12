@@ -25,6 +25,8 @@ export interface OperativoProps {
     deletedAt?:       Date | null;
     propietario_op?:  CustomUsuarioProps;
     responsables_op?: CustomUsuarioProps[];
+    propietarioId?:   string;
+    participantesIds?:    string[];
     resultados_clave?: [];
 }
 
