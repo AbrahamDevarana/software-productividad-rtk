@@ -81,9 +81,7 @@ export const Objetivos : React.FC = () => {
                     </div>
                 </Box>
                 <Box className='md:col-span-4 col-span-12 row-span-3'>
-                    {/* <pre>
-                        {JSON.stringify(operativos, null, 2)}
-                    </pre> */}
+
                 </Box>
 
                 <Box className='md:col-span-8 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>

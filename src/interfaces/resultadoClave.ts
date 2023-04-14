@@ -1,6 +1,6 @@
 
 
-import { InitialState, OperativoProps, Paginate, UsuarioProps } from ".";
+import { InitialState, Paginate } from ".";
 
 
 
@@ -13,13 +13,13 @@ export interface ResultadoClaveProps {
     fechaInicio?: string | Date
     fechaFin?: string | Date
     operativoId: string
-    // propietarioId: string
+    propietarioId: string
 }
 
 
 
 export interface ResultadoClaveState extends InitialState{
-    operativos: OperativoProps[];
+    resultadosClave: ResultadoClaveProps[];
     paginate?:     Paginate;
     currentResultadoClave: ResultadoClaveProps;
 }

@@ -24,6 +24,7 @@ const initialState: OperativoState = {
             iniciales: '',
             email: '',
         },
+        propietarioId: '',
         responsables_op: [],
         indicador: '',
         meta: '',

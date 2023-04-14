@@ -5,6 +5,7 @@ import { Alert, Button, DatePicker, Form, Input, Radio, Select } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
+import { getResultados } from '@/redux/features/resultados/resultadosThunk';
 
 
 
@@ -15,6 +16,7 @@ interface FormResultadosProps {
 export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
 
     const dispatch = useAppDispatch()
+    const { resultadosClave } = useAppSelector(state => state.resultados )
 
     const [ resultado, setResultado ] = useState<ResultadoClaveProps>({
         id: '',
@@ -24,7 +26,14 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
         fechaInicio: dayjs().startOf('quarter').format('YYYY-MM-DD'),
         fechaFin: dayjs().endOf('quarter').format('YYYY-MM-DD'),
         operativoId: currentOperativo.id,
+        propietarioId: currentOperativo.propietarioId,
     })
+
+    useEffect(() => {
+        
+        dispatch( getResultados(currentOperativo.id) )
+
+    }, [currentOperativo.id])
     
 
     const handleOnSubmit = (values: ResultadoClaveProps) => {
@@ -40,11 +49,13 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
             <div className='col-span-2'>
 
                 <ul>
-                    <li className='border p-2 rounded mb-2'>Resultado 1</li>
-                    <li className='border p-2 rounded mb-2'>Resultado 2</li>
-                    <li className='border p-2 rounded mb-2'>Resultado 3</li>
-                    <li className='border p-2 rounded mb-2'>Resultado 4</li>
-
+                   {
+                        resultadosClave.map( resultado => (
+                            <li key={resultado.id}>
+                                {resultado.nombre}
+                            </li>
+                        ))
+                    }
                 </ul>
 
             </div>
@@ -55,7 +66,8 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
                     onSubmit={ handleOnSubmit }
                     validationSchema={ 
                         Yup.object({
-                        
+                            nombre: Yup.string().required('El nombre es requerido'),
+                            tipoProgreso: Yup.string().required('El tipo de progreso es requerido'),
                         })
                     }
                     enableReinitialize={true}
