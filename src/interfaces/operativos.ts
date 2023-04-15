@@ -1,4 +1,4 @@
-import { InitialState, Paginate, UsuarioProps } from ".";
+import { InitialState, Paginate, ResultadoClaveProps, UsuarioProps } from ".";
 
 
 interface CustomUsuarioProps extends UsuarioProps {
@@ -27,7 +27,7 @@ export interface OperativoProps {
     responsables_op?: CustomUsuarioProps[];
     propietarioId:   string;
     participantesIds?:    string[];
-    resultados_clave?: [];
+    resultados_clave?: ResultadoClaveProps[];
 }
 
 
@@ -36,5 +36,7 @@ export interface OperativoState extends InitialState{
     operativos: OperativoProps[];
     proyectos:  OperativoProps[];
     paginate?:     Paginate;
+    isLoadingObjetivo: boolean;
+    errorObjetivo: boolean;
     currentOperativo: OperativoProps;
 }

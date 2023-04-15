@@ -4,11 +4,12 @@ import { Avatar, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getOperativosThunk, getProyectosThunk } from '@/redux/features/operativo/operativosThunk';
+import { clearObjetivoThunk, getOperativosThunk, getProyectosThunk } from '@/redux/features/operativo/operativosThunk';
 import Loading from '@/components/antd/Loading';
 
 import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
+import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 
 export const Objetivos : React.FC = () => {
 
@@ -47,11 +48,17 @@ export const Objetivos : React.FC = () => {
         
     }, [operativos])
     
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+        dispatch(clearObjetivoThunk())
+        dispatch(clearResultadoThunk())
+    }
     
     return (
         <>
             <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
-                <Box className='md:col-span-8 col-span-12 flex justify-evenly md:flex-row flex-col'>
+                <Box className='md:col-span-9 col-span-12 flex justify-evenly md:flex-row flex-col'>
                     {/* <DatePicker.RangePicker onCalendarChange={ () => validateRangePicker} 
                         disabledDate={ (current) => current && current > lastDayOfQuarter }
                     /> */}
@@ -80,11 +87,11 @@ export const Objetivos : React.FC = () => {
                         </div>
                     </div>
                 </Box>
-                <Box className='md:col-span-4 col-span-12 row-span-3'>
+                <Box className='md:col-span-3 col-span-12 row-span-3'>
 
                 </Box>
 
-                <Box className='md:col-span-8 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+                <Box className='md:col-span-9 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
 
                     {
                         isLoading ? 
@@ -93,7 +100,7 @@ export const Objetivos : React.FC = () => {
                             </div>
                         : (
                             operativos && operativos.length > 0 && operativos.map((operativo, index) => (
-                                <Objetivo objetivo={operativo} key={index}/>
+                                <Objetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible}/>
                             ))
                         )
                     }
@@ -105,7 +112,7 @@ export const Objetivos : React.FC = () => {
             <Modal 
                 open={isModalVisible}
                 footer={null}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={handleCancel}
                 width={1000}
                 closable={false}
                 destroyOnClose={true}

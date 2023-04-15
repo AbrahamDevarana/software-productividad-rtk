@@ -4,7 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: OperativoState = {
     operativos: [],
     proyectos: [],
-    isLoading: false,        
+    isLoading: false,
+    isLoadingObjetivo: false,
+    errorObjetivo: false,
     infoMessage: '',
     error: false,
     updated: false,
@@ -39,6 +41,9 @@ const operativoSlice = createSlice({
             state.isLoading = true
             state.updated = false
         },
+        checkingObjetivo: (state) => {
+            state.isLoadingObjetivo = true
+        },
         setOperativosError: (state, action) => {
             state.isLoading = false
             state.infoMessage = action.payload
@@ -52,13 +57,11 @@ const operativoSlice = createSlice({
             state.isLoading = false
             state.proyectos = action.payload.proyectos
         },
-        getOperativo: (state, action) => {
-            state.isLoading = false
-            state.currentOperativo = action.payload.operativo
+        getObjetivo: (state, action) => {            
+            state.isLoadingObjetivo = false
+            state.currentOperativo = action.payload
         },
-        createOperativo: (state, action) => {
-            console.log('action.payload', action.payload);
-            
+        createOperativo: (state, action) => {            
             state.isLoading = false
             state.created = true
             state.infoMessage = action.payload
@@ -75,11 +78,18 @@ const operativoSlice = createSlice({
             state.deleted = true
             state.infoMessage = action.payload
         },
+        setObjetivoError: (state, action) => {
+            state.isLoadingObjetivo = false
+            state.infoMessage = action.payload
+            state.errorObjetivo = true
+        },
         clearOperativos: (state) => {
             state = initialState
         },
         clearOperativo: (state) => {
             state.currentOperativo = initialState.currentOperativo
+            state.errorObjetivo = false
+            
         },
         clearStatus: (state) => {
             state.updated = false
@@ -97,13 +107,15 @@ export const {
     setOperativosError,
     getOperativos,
     getProyectos,
-    getOperativo,
+    getObjetivo,
     createOperativo,
     updateOperativo,
     deleteOperativo,
     clearOperativos,
     clearOperativo,
-    clearStatus
+    clearStatus,
+    checkingObjetivo,
+    setObjetivoError
 } = operativoSlice.actions
 
 export default operativoSlice.reducer

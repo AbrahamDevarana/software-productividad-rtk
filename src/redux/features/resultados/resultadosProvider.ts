@@ -20,6 +20,26 @@ export const getResultadosProvider = async (filtros: any, getState: () => RootSt
     }
 }
 
+export const getResultadoProvider = async (id: string, getState: () => RootState) => {
+    try {
+        const response = await clientAxios.get(`/resultados/${id}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            resultado: response.data
+        }
+    }
+    catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}
+
+
 export const createResultadoProvider = async (resultado: any, getState: () => RootState) => {
     try {
         const response = await clientAxios.post(`/resultados`, resultado, { headers: { "accessToken": `${getState().auth.accessToken}` } });
@@ -42,10 +62,12 @@ export const createResultadoProvider = async (resultado: any, getState: () => Ro
 export const updateResultadoProvider = async (resultado: any, getState: () => RootState) => {
     try {
         const response = await clientAxios.put(`/resultados/${resultado.id}`, resultado, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+                
         return {
             ok: true,
             resultado: response.data
         }
+        
     }
     catch (error: any) {
         const errorCode = error.code

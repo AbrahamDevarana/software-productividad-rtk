@@ -1,9 +1,10 @@
 
 import { AppDispatch, RootState } from "@/redux/store";
-import { createResultadoProvider, getResultadosProvider, updateResultadoProvider } from "./resultadosProvider";
-import { checkingResultados, cleanCurrentResultadoClave, cleanResultadosClave, createResultadoClave, deleteResultadoClave, getResultadoClave, getResultadosClave, setResultadoClaveError, updateResultadoClave } from "./resultadosSlice";
+import { createResultadoProvider, getResultadoProvider, getResultadosProvider, updateResultadoProvider } from "./resultadosProvider";
+import { checkingResultados, cleanCurrentResultadoClave, createResultadoClave, deleteResultadoClave, getResultadoClave, getResultadosClave, setResultadoClaveError, updateResultadoClave } from "./resultadosSlice";
+import { ResultadoClaveProps } from "@/interfaces";
 
-export const getResultados = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const getResultadosThunk = (filtros: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingResultados())
     const response = await getResultadosProvider(filtros, getState)
     if (response.ok) {
@@ -13,7 +14,7 @@ export const getResultados = (filtros: any) => async (dispatch: AppDispatch, get
     }
 }
 
-export const createResultado = (resultado: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const createResultadoThunk = (resultado: ResultadoClaveProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingResultados())
     const response = await createResultadoProvider(resultado, getState)
     if (response.ok) {
@@ -23,7 +24,7 @@ export const createResultado = (resultado: any) => async (dispatch: AppDispatch,
     }
 }
 
-export const updateResultado = (resultado: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const updateResultadoThunk = (resultado: ResultadoClaveProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingResultados())
     const response = await updateResultadoProvider(resultado, getState)
     if (response.ok) {
@@ -33,17 +34,17 @@ export const updateResultado = (resultado: any) => async (dispatch: AppDispatch,
     }
 }
 
-export const getResultado = (id: number) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const getResultadoThunk = (resultadoId: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingResultados())
-    const response = await getResultadosProvider({ id }, getState)
+    const response = await getResultadoProvider(resultadoId, getState)
     if (response.ok) {
-        dispatch(getResultadoClave(response))
+        dispatch(getResultadoClave(response.resultado))
     } else {
         dispatch(setResultadoClaveError(response.errorMessage))
     }
 }
 
-export const deleteResultado = (id: number) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const deleteResultadoThunk = (id: number) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingResultados())
     const response = await getResultadosProvider({ id }, getState)
     if (response.ok) {
@@ -51,4 +52,9 @@ export const deleteResultado = (id: number) => async (dispatch: AppDispatch, get
     } else {
         dispatch(setResultadoClaveError(response.errorMessage))
     }
+}
+
+
+export const clearResultadoThunk = () => async (dispatch: AppDispatch) => {
+    dispatch(cleanCurrentResultadoClave())
 }

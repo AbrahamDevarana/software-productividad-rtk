@@ -8,7 +8,7 @@ import { Sidebar } from "../Menu/Sidebar";
 import 'animate.css';
 import { SecondNav } from '../Menu/SecondNav';
 import { useSocket } from "@/hooks/useSocket";
-import { connectSocketThunk } from '@/redux/features/socket/socketThunk';
+import { connectSocketThunk, disconnectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { useAuth } from "@/hooks/useAuth";
 import { optionalContent } from "@/interfaces";
 import { motion } from 'framer-motion';
@@ -24,7 +24,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 
     useAuth()
 
-    const { isLoading, userAuth } = useAppSelector((state: any) => state.auth); 
+    const { isLoading, userAuth, isAuthenticated  } = useAppSelector(state => state.auth); 
     const [ settingVisible, setSettingVisible ] = useState<boolean>(false);
     const [ optBarVisible, setOptBarVisible ] = useState<boolean>(false);
     const [ navbarClass, setNavbarClass ] = useState<string>('');
@@ -39,11 +39,17 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     const {socket, online} = useSocket(import.meta.env.VITE_SERVER_URL)
     
     useEffect(() => {
-        if(socket){
-            
-            dispatch(connectSocketThunk(socket,  online))
+        if(socket && isAuthenticated){
+            dispatch(connectSocketThunk(socket, online))
         }
-    }, [socket])
+    }, [socket, isAuthenticated])
+
+
+    useEffect(() => {
+        if(!isAuthenticated){
+            dispatch(disconnectSocketThunk())
+        }
+    }, [isAuthenticated])
             
     
 	const onClose = () => {

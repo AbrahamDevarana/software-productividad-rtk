@@ -52,7 +52,8 @@ const resultadoClaveSlice = createSlice({
         },
         updateResultadoClave: (state, action) => {
             state.isLoading = false
-            state.updated = true
+            state.updated = true,
+            state.currentResultadoClave = initialState.currentResultadoClave
         },
         deleteResultadoClave: (state, action) => {
             state.isLoading = false

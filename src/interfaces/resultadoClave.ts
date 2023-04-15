@@ -6,7 +6,7 @@ import { InitialState, Paginate } from ".";
 
 
 export interface ResultadoClaveProps {
-    id?: string
+    id: string
     nombre: string
     tipoProgreso: string
     progreso?: number

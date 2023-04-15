@@ -1,11 +1,12 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useMemo } from 'react';
 import { OperativoProps, ResultadoClaveProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Alert, Button, DatePicker, Form, Input, Radio, Select } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
-import { getResultados } from '@/redux/features/resultados/resultadosThunk';
+import { createResultadoThunk, getResultadoThunk, getResultadosThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
+import { Icon } from '../Icon';
 
 
 
@@ -16,7 +17,9 @@ interface FormResultadosProps {
 export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
 
     const dispatch = useAppDispatch()
-    const { resultadosClave } = useAppSelector(state => state.resultados )
+    const { errorObjetivo } = useAppSelector(state => state.operativos)
+    const { currentResultadoClave } = useAppSelector(state => state.resultados)
+    const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultados_clave || [] )
 
     const [ resultado, setResultado ] = useState<ResultadoClaveProps>({
         id: '',
@@ -29,35 +32,57 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
         propietarioId: currentOperativo.propietarioId,
     })
 
-    useEffect(() => {
-        
-        dispatch( getResultados(currentOperativo.id) )
 
+    useEffect(() => {
+        if ( currentOperativo.id === '' ) return
+        dispatch( getResultadosThunk(currentOperativo.id) )
     }, [currentOperativo.id])
     
-
-    const handleOnSubmit = (values: ResultadoClaveProps) => {
-        console.log(values)
+    
+    
+    const handleOnSubmit = async (values: ResultadoClaveProps) => {
+        
+        console.log(values);
+        
+        if ( currentOperativo.id !== '' ){
+            if(values.id === ''){
+                await dispatch( createResultadoThunk(values) )
+                if(!errorObjetivo){
+                    setResultadoList( [...resultadoList, values] )
+                }
+            }else{
+                dispatch( updateResultadoThunk(values) )
+                setResultadoList( resultadoList.map( resultado => resultado.id === values.id ? values : resultado ) )
+            }
+           
+        }
     }
+
+    const handleEditResultado = (resultadoId: string ) => {
+        dispatch( getResultadoThunk(resultadoId) )
+    }
+
+    useEffect(() => {
+        setResultado(currentResultadoClave)
+    }, [currentResultadoClave])
+
+
 
 
     return (
     <>
 
         <div className="grid grid-cols-4 gap-x-10">
-
             <div className='col-span-2'>
-
-                <ul>
+                <ul className=''>
                    {
-                        resultadosClave.map( resultado => (
-                            <li key={resultado.id}>
-                                {resultado.nombre}
+                        resultadoList && resultadoList.map( resultado => (
+                            <li key={resultado.id} className='flex gap-x-5 p-2 border last-of-type:rounded-b-ext first-of-type:rounded-t-ext'>
+                                <p className='w-full'>{resultado.nombre}</p> <Button type='ghost' className='border-0' onClick={() => handleEditResultado(resultado.id)}> <Icon iconName='faPen' className='text-devarana-midnight' /></Button>
                             </li>
                         ))
                     }
                 </ul>
-
             </div>
 
             <div className='col-span-2'>
@@ -80,7 +105,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
                                 className='col-span-12'
                                 required
                             >
-                                <Input value={values.nombre} onChange={handleChange} onBlur={handleBlur} name="nombre" />
+                                <Input value={values.nombre} onChange={handleChange} name="nombre" />
                                 <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                             <Form.Item
@@ -89,14 +114,29 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
                                 className='col-span-12'
                                 required
                             >
-                                <Radio.Group value={values.tipoProgreso} onChange={handleChange} onBlur={handleBlur} name="tipoProgreso">
+                                <Radio.Group value={values.tipoProgreso} onChange={handleChange} name="tipoProgreso">
                                     <Radio value="porcentaje">Porcentaje</Radio>
                                     <Radio value="cantidad">Cantidad</Radio>
                                 </Radio.Group>
                                 <ErrorMessage name="tipoProgreso" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                        
-
+                            {
+                                resultado.id !== "" 
+                                ? (
+                                    <>
+                                        <Form.Item
+                                            label="Progreso"
+                                            name="progreso"
+                                            className='col-span-12'
+                                            required
+                                        >
+                                            <Input value={values.progreso} onChange={handleChange} name="progreso" />
+                                            <ErrorMessage name="progreso" render={msg => <Alert type="error" message={msg} showIcon />} />
+                                        </Form.Item>
+                                    </>
+                                    )
+                                : null
+                            }
                             <Form.Item className='col-span-12'>
                                 <Button htmlType='submit' className='btn-primary'>Guardar</Button>
                             </Form.Item>

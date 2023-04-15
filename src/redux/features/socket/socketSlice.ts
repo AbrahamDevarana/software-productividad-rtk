@@ -12,6 +12,10 @@ const socketSlice = createSlice({
         connectSocket: (state, action) => {
             state.socket = action.payload.socket
             state.online = action.payload.online
+        },
+        disconnectSocket: (state, action) => {
+            state.socket = null
+            state.online = false
         }
     }
 })

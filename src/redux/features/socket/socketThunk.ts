@@ -9,3 +9,9 @@ export const connectSocketThunk = (socket:any, online:any) => {
         dispatch(connectSocket({socket, online}))
     }
 }
+
+export const disconnectSocketThunk = () => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(connectSocket({socket: null, online: false}))
+    }
+}

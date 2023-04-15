@@ -1,19 +1,33 @@
 import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
-import { useAppSelector } from '@/redux/hooks'
-import { Avatar, Divider, Image, Progress } from 'antd'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { Avatar, Button, Card, Divider, Image, Progress, Space } from 'antd'
+import { Icon, IconName } from '../Icon';
+import { getObjetivoThunk } from '@/redux/features/operativo/operativosThunk';
 
 
 interface ObjetivoProps {
-    objetivo: OperativoProps
+    objetivo: OperativoProps,
+    setIsModalVisible: (value: boolean) => void
 }
 
-export const Objetivo: FC<ObjetivoProps> = ({objetivo}) => {
+export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
+    const { currentOperativo } = useAppSelector(state => state.operativos)
+    const dispatch = useAppDispatch()
+
+    const handleEditObjetivo = (id: string) => {
+        dispatch(getObjetivoThunk(id))
+        setIsModalVisible(true)
+
+    }
 
     return (
-        <div className='shadow rounded-ext p-5 md:col-span-4 col-span-12' key={objetivo.id}>
+        <Card className='md:col-span-4 col-span-12' key={objetivo.id} 
+        actions={
+            [ <Button type='text'  onClick={ () => handleEditObjetivo(objetivo.id) } icon={<Icon iconName='faEdit' className='text-devarana-graph'/> } />]
+        }>
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
                 <div className=''>
                     <p> Resultados Clave </p>
@@ -42,12 +56,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo}) => {
                 strokeLinecap='square'
                 className='flex justify-center py-5'
                 strokeWidth={10}
-                // strokeColor={{
-                //     "0%": useGetColor(2, .8)?.rgba || '#108ee9',
-                //     "100%": useGetColor(2, .8)?.rgba || '#108ee9'
-                // }}
             />
-            <Divider />
             <Avatar.Group className='flex justify-center'>
                 {
                     objetivo.propietario_op && (
@@ -62,6 +71,6 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo}) => {
                     
                 }
             </Avatar.Group>
-        </div>
+        </Card>
     )
 }

@@ -38,6 +38,27 @@ export const getProyectosProvider = async (filtros: any, getState: () => RootSta
     }
 }
 
+
+export const getObjetivoProvider = async (operativoId: any, getState: () => RootState) => {
+    try {
+        const response = await clientAxios.get(`/operativos/${operativoId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            objetivo: response.data
+        }
+    } catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}
+
+
+
 export const createOperativoProvider = async (operativo: any, getState: () => RootState) => {
     try {
         const response = await clientAxios.post(`/operativos`, operativo, { headers: { "accessToken": `${getState().auth.accessToken}` } });
