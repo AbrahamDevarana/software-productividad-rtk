@@ -50,6 +50,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     <Icon iconName="faBrain" className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Táctica</span>
                 </div>
+                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Objetivos</span>

@@ -1,15 +1,12 @@
+import { useState } from 'react';
 import { Avatar, Drawer, Progress, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useState } from 'react';
-import { useResizable } from '@/hooks/useResizable';
 import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, Perspectiva } from '@/interfaces';
 import { EstrategiaView } from './EstrategiaView'
-import { status, statusString } from '@/helpers/status';
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useGetColor } from '@/hooks/useGetColor';
-import { CustomDrawer } from '../ui/Drawer';
+import { useColor, useResizable } from '@/hooks';
 
 
 interface TablaEstrategiaProps{
@@ -51,7 +48,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColor(record.status)?.rgba }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: useColor(record.status).color }}/> 
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -76,8 +73,8 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             render: (text, record, index) => (
                 <span className='font-semibold'
                  style={{
-                    color: useGetColor(record.status)?.hex,
-                }}>{statusString[record.status]}</span>
+                    color: useColor(record.status).color,
+                }}>{useColor(record.status).nombre}</span>
             ),
         },
         
@@ -89,10 +86,11 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
-                        from: useGetColor(record.status)?.hex || '#108ee9',
-                        to: useGetColor(record.status)?.hexLow || '#87d068',
+                        '0%': useColor(record.status).lowColor,
+                        '100%': useColor(record.status, .8).color,
+                        direction: 'to top',
                     }}
-                    trailColor={useGetColor(record.status, .3)?.rgba} 
+                    trailColor={useColor(record.status, .3).color} 
                 />
             ),
         },
@@ -158,7 +156,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 closable={false}
                 onClose={handleCloseDrawer}
                 open={showDrawer}
-                width={window.innerWidth > 1200 ? 600 : '100%'}
+                width={window.innerWidth > 1200 ? 800 : '100%'}
                 headerStyle={{
                     backgroundColor: color,
                 }}
@@ -166,9 +164,10 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             >
 
                 {
-                    showEdit
-                    ? <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
-                    : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
+                    <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    // showEdit
+                    // ? <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    // : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
                 }
             </Drawer>
         </>

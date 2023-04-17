@@ -10,6 +10,7 @@ import Loading from '@/components/antd/Loading';
 import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
+import { useColor } from '@/hooks';
 
 export const Objetivos : React.FC = () => {
 
@@ -66,7 +67,14 @@ export const Objetivos : React.FC = () => {
                     <div className='px-5 text-devarana-graph text-center'>
                         <p className='font-medium'>Avance Total de Objetivos</p>
                         <p className='py-3'>Ponderación  80% </p>
-                        <Progress percent={ponderacionTotal} type='dashboard' className='flex justify-center'/>
+                        <Progress 
+                            percent={ponderacionTotal} 
+                            type='dashboard' 
+                            className='flex justify-center'
+                            strokeColor={useColor(2).color}
+                            strokeWidth={10}
+
+                        />
                     </div>
                         <Divider type='vertical' className='h-full' />
                     <div className='px-5 text-center text-devarana-graph'>
@@ -91,7 +99,7 @@ export const Objetivos : React.FC = () => {
 
                 </Box>
 
-                <Box className='md:col-span-9 col-span-12 p-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+                <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
 
                     {
                         isLoading ? 
@@ -105,7 +113,7 @@ export const Objetivos : React.FC = () => {
                         )
                     }
                     
-                </Box>
+                </div>
             </div>
             
 

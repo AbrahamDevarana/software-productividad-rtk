@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Form, Alert, DatePicker, Input, Select } from 'antd';
@@ -26,9 +26,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
 
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { userAuth } = useAppSelector(state => state.auth)
-    
-    
 
+    const inputRef = useRef<any>(null)
     const [initialValues, setInitialValues] = useState<any>({
         nombre: '',
         codigo: '',
@@ -41,13 +40,15 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
         responsables: [],
         propietarioId: userAuth?.id,
     })
-      
 
     const  dispatch = useAppDispatch()
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { TextArea } = Input;
 
     const handleOnSubmit = ( values: any ) => {
+
+        inputRef.current?.blur();
+        
         if(values.id){            
             dispatch(updateEstrategicoThunk(values))
             setOpen(false)
@@ -93,22 +94,24 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
         <>
             <Formik
                 initialValues={ initialValues }
-
+            
                 onSubmit={ (values) => handleOnSubmit(values) }
                 validationSchema={Yup.object({
                     nombre: Yup.string().required("El nombre es requerido"),
-                    codigo: Yup.string().required("La codigo es requerida"),
+                    codigo: Yup.string().required("El codigo es requerida"),
                     descripcion: Yup.string().required("La descripción es requerida"),
                     perspectivaId: Yup.string().required("La perspectiva es requerida")
                 })}
                 enableReinitialize={true}
+                validateOnBlur={true}
             >
                 {
-                    ({ values, handleChange, handleBlur, handleSubmit, validateForm, setFieldValue }) => (
+                    ({ values, handleChange, handleSubmit, setFieldValue }) => (
                         <Form
-                            onFinish={handleSubmit}
                             noValidate
                             layout='vertical'
+                            onBlur={handleSubmit}
+                            
                         >
                             <div className="grid grid-cols-6 gap-x-5">
                                 <Form.Item
@@ -116,10 +119,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                     className='col-span-5'
                                 >
                                     <Input
+                                        className='border-0 focus:border hover:border'
                                         value={values.nombre}
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
                                         name="nombre"
+                                        ref={inputRef}
+                                        onPressEnter={ () => handleOnSubmit(values) }
                                     />
                                     <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
@@ -128,10 +133,11 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                     className='col-span-1'
                                 >
                                     <Input
+                                        className='border-0 focus:border hover:border'
                                         value={values.codigo}
                                         onChange={handleChange}
-                                        onBlur={handleBlur}
                                         name="codigo"
+                                        ref={inputRef}
                                     />
                                     <ErrorMessage name="codigo" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
@@ -171,12 +177,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                 >
                                     <DatePicker
                                         onChange={(date, dateString) => setFieldValue('fechaInicio', dayjs(dateString, 'DD-MM-YYYY'))}
-                                        onBlur={handleBlur}
                                         value={dayjs(values.fechaInicio)} format={"DD-MM-YYYY"}
                                         defaultValue={dayjs(values.fechaInicio)}
                                         name="fechaInicio"
-                                        className='w-full'
+                                        className='w-full border-0 focus:border hover:border'
                                         clearIcon={false}
+                                        ref={inputRef}
                                     />
                                     <ErrorMessage name="fechaInicio" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
@@ -186,13 +192,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                 >
                                     <DatePicker
                                         onChange={(date, dateString) => setFieldValue('fechaFin', dayjs(dateString, 'DD-MM-YYYY'))}
-                                        onBlur={handleBlur}
                                         value={dayjs(values.fechaFin)} format={"DD-MM-YYYY"}
                                         defaultValue={dayjs(values.fechaFin)}
                                         name="fechaFin"
-                                        className='w-full'
+                                        className='w-full border-0 focus:border hover:border'
                                         clearIcon={false}
-                                        
+                                        ref={inputRef}
                                     />
                                     <ErrorMessage name="fechaFin" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
@@ -206,6 +211,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                     placeholder="Selecciona los responsables"
                                     onChange={(value) => setFieldValue('propietarioId', value)}
                                     allowClear
+                                    className='border-0 focus:border hover:border rounded-md'
+                                    bordered = {false}
                                     value={ values.propietarioId }
                                 >
                                     {
@@ -225,6 +232,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                     placeholder="Selecciona los responsables"
                                     onChange={(value) => setFieldValue('responsables', value)}
                                     allowClear
+                                    className='border-0 focus:border hover:border rounded-md'
+                                    bordered = {false}
                                     value={ values.responsables }
                                 >
                                     {
@@ -251,13 +260,13 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                     
                                 />
 
-                                {/* <TextArea rows={3} value={values.descripcion} onChange={handleChange} onBlur={handleBlur} name="descripcion" /> */}
+                                {/* <TextArea rows={3} value={values.descripcion} onChange={handleChange}  name="descripcion" /> */}
                                 <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                             <Form.Item
                                 label="Indicador"
                             >
-                                <TextArea rows={3} value={values.indicador} onChange={handleChange} onBlur={handleBlur} name="indicador" />
+                                <TextArea rows={3} value={values.indicador} onChange={handleChange}  name="indicador" className='border-0 focus:border hover:border'/>
                                 <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                            
@@ -276,14 +285,14 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, currentT
                                 </Radio.Group>
                             </Form.Item> */}
                                         
-                            <Form.Item 
+                            {/* <Form.Item 
                                 className='text-right'
                             >
                                 <div className='flex'>
                                     {setShowEdit &&<Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
                                     <Button btnType="secondary" type='submit' className='ml-auto'>Guardar</Button>
                                 </div>
-                            </Form.Item>
+                            </Form.Item> */}
                         </Form>
                     )
                 }

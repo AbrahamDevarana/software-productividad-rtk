@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Drawer, Progress, Table} from 'antd';
-import { useGetColor } from '@/hooks/useGetColor';
-import {  statusString } from '@/helpers/status';
-import '@/assets/css/ResizableTable.css';
-import { useResizable } from '@/hooks/useResizable';
+import { useResizable, useColor } from '@/hooks';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
+import {  statusString } from '@/helpers/status';
+import { returnImage } from '@/helpers/returnImage';
+import '@/assets/css/ResizableTable.css';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
@@ -26,7 +26,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: useGetColor(record.status)?.rgba }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: useColor(record.status).color }}/> 
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -45,7 +45,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             render: (text, record, index) => (
                 <span className='font-semibold'
                  style={{
-                    color: useGetColor(record.status)?.hex,
+                    color: useColor(record.status).color,
                 }}>{statusString[record.status]}</span>
             ),
         },
@@ -57,10 +57,10 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
-                        from: useGetColor(record.status)?.hex || '#108ee9',
-                        to: useGetColor(record.status)?.hexLow || '#87d068',
+                        from: useColor(record.status).color || '#108ee9',
+                        to: useColor(record.status).lowColor || '#87d068',
                     }}
-                    trailColor={useGetColor(record.status, .3)?.rgba} 
+                    trailColor={useColor(record.status, .3).color} 
                 />
             ),
         },
@@ -71,7 +71,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <Avatar.Group maxCount={3} key={index}>
                     {record.responsables?.map((responsable, index) => (
                         <span key={index} className='z-50' >
-                            <Avatar src={`https://i.pravatar.cc/300`}   onClick={
+                            <Avatar src={returnImage(responsable.foto)}   onClick={
                                 (e) => {
                                     e?.stopPropagation();
                                 }

@@ -1,13 +1,14 @@
-import { useGetColor } from '@/hooks/useGetColor';
-import { TacticoProps } from '@/interfaces'
-import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
-import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useColor } from '@/hooks';
+import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
+import { TacticoProps } from '@/interfaces'
+import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loading from '../antd/Loading';
 import { Icon } from '../Icon';
 import { TabStatus } from '../ui/TabStatus';
-import { useState } from 'react';
+import { returnImage } from '@/helpers/returnImage';
 
 interface TacticosViewProps {
     setShowEdit: (value: boolean) => void
@@ -91,12 +92,12 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
                 max={100}
                 onAfterChange={ handleChangeProgreso }
                 trackStyle={{
-                    backgroundColor: useGetColor(statusEstrategico)?.hex,
+                    backgroundColor: useColor(statusEstrategico).color,
                     borderRadius: 10,
 
                 }}
                 railStyle={{
-                    backgroundColor: useGetColor(statusEstrategico, .3)?.rgba,
+                    backgroundColor: useColor(statusEstrategico, .3).color,
                     borderRadius: 10,
                 }}
                 
@@ -136,7 +137,7 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
 
             <Divider orientation='left'>Propietario:</Divider>
             <Tooltip title={`${currentTactico.propietario?.nombre} ${ currentTactico.propietario?.apellidoPaterno }`}>
-                <Avatar key={currentTactico.propietario?.id} src={`https://i.pravatar.cc/300`}  > { currentTactico.propietario?.iniciales } </Avatar>
+                <Avatar key={currentTactico.propietario?.id} src={ returnImage(currentTactico.propietario?.foto ) }  > { currentTactico.propietario?.iniciales } </Avatar>
             </Tooltip>
 
             <Divider orientation='left'>Co-Responsables:</Divider>
@@ -145,7 +146,9 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
                 currentTactico.responsables?.map((responsable, index) => (
                     <Link to={`/perfil/${responsable.id}`} key={index}>
                         <Tooltip title={`${responsable.nombre} ${ responsable.apellidoPaterno }`}>
-                            <Avatar key={index} src={`https://i.pravatar.cc/300`}  />
+                            <Avatar key={index} src={responsable.foto} >
+                                {responsable.iniciales}
+                            </Avatar>
                         </Tooltip>
                     </Link>
                 ))

@@ -1,9 +1,10 @@
 import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Avatar, Button, Card, Divider, Image, Progress, Space } from 'antd'
+import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
 import { Icon, IconName } from '../Icon';
 import { getObjetivoThunk } from '@/redux/features/operativo/operativosThunk';
+import { useColor } from '@/hooks';
 
 
 interface ObjetivoProps {
@@ -20,14 +21,31 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     const handleEditObjetivo = (id: string) => {
         dispatch(getObjetivoThunk(id))
         setIsModalVisible(true)
-
     }
 
+    const items: MenuProps['items'] = [
+        {
+            key: 'edit',
+            label: (
+                <Space onClick={ () => handleEditObjetivo(objetivo.id) } >
+                    <Icon iconName='faEdit' className='text-devarana-graph'/>
+                    <span>Editar</span>
+                </Space>
+            )
+            
+        }
+    ]
+
     return (
-        <Card className='md:col-span-4 col-span-12' key={objetivo.id} 
-        actions={
-            [ <Button type='text'  onClick={ () => handleEditObjetivo(objetivo.id) } icon={<Icon iconName='faEdit' className='text-devarana-graph'/> } />]
-        }>
+        <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id}
+        // actions={
+        //     [ <Button type='text'  onClick={ () => handleEditObjetivo(objetivo.id) } icon={<Icon iconName='faEdit' className='text-devarana-graph'/> } />]
+        // }
+        >
+
+          
+
+
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
                 <div className=''>
                     <p> Resultados Clave </p>
@@ -56,6 +74,8 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 strokeLinecap='square'
                 className='flex justify-center py-5'
                 strokeWidth={10}
+                strokeColor={useColor(2).color}
+
             />
             <Avatar.Group className='flex justify-center'>
                 {
@@ -71,6 +91,10 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                     
                 }
             </Avatar.Group>
+
+            <Dropdown className='absolute hidden group-hover:block top-0 right-0' menu={{items}} trigger={['click']} placement='bottomRight'>
+                <Button className='' type='text' icon={<Icon iconName='faEllipsisH' className='text-devarana-graph text-xl'/> } />
+            </Dropdown>
         </Card>
     )
 }

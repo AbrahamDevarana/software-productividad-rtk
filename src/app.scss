@@ -263,6 +263,10 @@ p, li, span, a{
         padding-left:  0!important;
         padding-right:  0!important;
     }
+
+    .ant-progress-bg{
+        background-color: transparent!important;
+    }
 }
 .ant-alert-error{
     margin: 10px 0;

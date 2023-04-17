@@ -1,6 +1,6 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown } from 'antd';
+import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
 import dayjs from 'dayjs';
 import { Perspectiva } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
@@ -11,8 +11,9 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import type { MenuProps } from 'antd';
 import { TabStatus } from '../ui/TabStatus';
-import { useGetColor } from '@/hooks/useGetColor';
 import createDOMPurify from 'dompurify';
+import { returnImage } from '@/helpers/returnImage';
+import { useColor } from '@/hooks';
 
 
 
@@ -34,6 +35,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
     
     const [statusEstrategico, setStatusEstrategico] = useState<number>(estrategico.status);
     const [progresoEstrategico, setProgresoEstrategico] = useState<number>(estrategico.progreso);
+    
 
     const handleChangeProgreso = (value: number) => {
 
@@ -135,23 +137,45 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                     </div>
                 </div>
 
-                <Slider
-                    className='drop-shadow progressStyle'
-                    defaultValue={progresoEstrategico}
-                    min={0}
-                    max={100}
-                    onAfterChange={ handleChangeProgreso }
-                    trackStyle={{
-                        backgroundColor: useGetColor(statusEstrategico)?.hex,
-                        borderRadius: 10,
+                {
+                    !view
+                    ? (
+                        <Progress 
+                            className='drop-shadow progressStyle'
+                            percent={progresoEstrategico}
+                            strokeColor={{
+                                from: useColor(statusEstrategico).color,
+                                to: useColor(statusEstrategico, .5).color,
+                                direction: 'to top'
+                            }}
+                            trailColor={useColor(statusEstrategico, .2)?.color}
+                            strokeWidth={20}
+                            showInfo={false}
+                        />
+                    )
+                    : (
+                    <Slider
+                        className='drop-shadow progressStyle'
+                        defaultValue={progresoEstrategico}
+                        min={0}
+                        max={100}
+                        onAfterChange={ handleChangeProgreso }
+                        trackStyle={{
+                            backgroundColor: useColor(statusEstrategico).color,
+                            borderRadius: 10,
 
-                    }}
-                    railStyle={{
-                        backgroundColor: useGetColor(statusEstrategico, .3)?.rgba,
-                        borderRadius: 10,
-                    }}
-                    
-                />
+                        }}
+                        railStyle={{
+                            backgroundColor: useColor(statusEstrategico, .3).color,
+                            borderRadius: 10,
+                        }}
+                        
+                    />
+                    )
+
+                }
+
+                
 
                 <Divider />
                 
@@ -177,7 +201,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
 
                 <Divider orientation='left'>Propietario:</Divider>
                 <Tooltip title={`${estrategico.propietario?.nombre} ${ estrategico.propietario?.apellidoPaterno }`}>
-                    <Avatar key={estrategico.propietario?.id} src={`https://i.pravatar.cc/300`}  > { estrategico.propietario?.iniciales } </Avatar>
+                    <Avatar key={estrategico.propietario?.id} src={returnImage(estrategico.propietario?.foto)}  > { estrategico.propietario?.iniciales } </Avatar>
                 </Tooltip>
 
                 <Divider orientation='left'>Co-Responsables:</Divider>
@@ -186,7 +210,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                     estrategico.responsables?.map((responsable, index) => (
                         <Link to={`/perfil/${responsable.id}`} key={index}>
                             <Tooltip title={`${responsable.nombre} ${ responsable.apellidoPaterno }`}>
-                                <Avatar key={index} src={`https://i.pravatar.cc/300`}  />
+                                <Avatar key={index} src={returnImage(responsable.foto)}  />
                             </Tooltip>
                         </Link>
                     ))
