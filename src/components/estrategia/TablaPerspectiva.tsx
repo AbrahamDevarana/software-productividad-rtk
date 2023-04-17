@@ -7,6 +7,7 @@ import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useColor, useResizable } from '@/hooks';
+import { returnImage } from '@/helpers/returnImage';
 
 
 interface TablaEstrategiaProps{
@@ -98,17 +99,20 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             title: 'Responsables',
             width: 50,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={3} key={index}>
-                    {record.responsables?.map((responsable, index) => (
-                        <span key={index} className='z-50' >
-                            <Avatar src={`https://i.pravatar.cc/300`}   onClick={
-                                (e) => {
-                                    e?.stopPropagation();
-                                }
-                            } />
-                        </span>
-                    ))}
-                </Avatar.Group>
+                <Avatar 
+                    src={returnImage(record.propietario?.foto)}
+                >
+                    {record.propietario?.iniciales}
+                </Avatar>
+                // <Avatar.Group maxCount={3} key={index}>
+                //     {record.responsables?.map((responsable) => (
+                //         <Avatar
+                //             key={responsable.id}
+                //             src={returnImage(responsable.foto)}
+                //             alt={responsable.nombre}
+                //         />
+                //     ))}
+                // </Avatar.Group>
             ),
             ellipsis: true,
         },
@@ -156,7 +160,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 closable={false}
                 onClose={handleCloseDrawer}
                 open={showDrawer}
-                width={window.innerWidth > 1200 ? 800 : '100%'}
+                width={window.innerWidth > 1200 ? 700 : '100%'}
                 headerStyle={{
                     backgroundColor: color,
                 }}
