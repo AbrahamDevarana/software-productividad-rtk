@@ -10,7 +10,7 @@ const initialState: PerspectivasState = {
     created: false,
     deleted: false,
     currentPerspectiva: {
-        id: 0,
+        id: '',
         nombre: '',
         descripcion: '',
         progreso: 0,
