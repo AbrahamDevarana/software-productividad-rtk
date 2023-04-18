@@ -34,9 +34,7 @@ export default defineConfig({
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
                 "axios": ["axios"],
-                "chart.js": ["chart.js"],
                 "framer-motion": ["framer-motion"],
-                "luxon": ["luxon"],
                 "yup": ["yup"],
                 "ckeditor": ["@ckeditor/ckeditor5-react", "@ckeditor/ckeditor5-build-classic"],
             }
