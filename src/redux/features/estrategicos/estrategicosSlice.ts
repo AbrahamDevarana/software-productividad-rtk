@@ -9,6 +9,7 @@ const initialState: EstrategicosState = {
         currentPage: 0,
     }, 
     isLoading: false,
+    isLoadingCurrent: false,
     infoMessage: '',
     error: false,
     updated: false,
@@ -22,7 +23,7 @@ const initialState: EstrategicosState = {
         progreso: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        status: 0,
+        status: 1,
         indicador: '',
         perspectivas: [],
         responsables: [],
@@ -46,7 +47,9 @@ const estrategicosSlice = createSlice({
     reducers: {
         checkingEstrategicos: (state) => {
             state.isLoading = true
-            state.updated = false
+        },
+        checkingCurrent: (state) => {
+            state.isLoadingCurrent = true
         },
         setEstrategicosError: (state, action) => {
             state.isLoading = false
@@ -64,7 +67,7 @@ const estrategicosSlice = createSlice({
         },
         getCurrentEstrategico: (state, action) => {
             state.currentEstrategico = action.payload.objetivoEstrategico
-            state.isLoading = false
+            state.isLoadingCurrent = false
         },
         createEstrategico: (state, action) => {
             state.estrategicos = [...state.estrategicos, action.payload.objetivoEstrategico]
@@ -100,7 +103,8 @@ export const {
     updateEstrategico,
     deleteEstrategico,
     clearEstrategicos,
-    clearCurrentEstrategico
+    clearCurrentEstrategico,
+    checkingCurrent
 } = estrategicosSlice.actions
 
 export default estrategicosSlice.reducer

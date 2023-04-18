@@ -1,9 +1,10 @@
 
 import { AppDispatch, RootState } from '@/redux/store';
 import { createEstrategicoProvider, deleteEstrategicoProvider, getEstrategicoProvider, getEstrategicosProvider, updateEstrategicoProvider} from './estrategicosProvider';
-import { checkingEstrategicos, setEstrategicosError, getCurrentEstrategico, createEstrategico, deleteEstrategico, getEstrategicos, updateEstrategico, clearCurrentEstrategico, clearEstrategicos } from './estrategicosSlice';
+import { checkingEstrategicos, setEstrategicosError, getCurrentEstrategico, createEstrategico, deleteEstrategico, getEstrategicos, updateEstrategico, clearCurrentEstrategico, clearEstrategicos, checkingCurrent } from './estrategicosSlice';
 import { createEstrategicoFromProvider } from '../perspectivas/perspectivasSlice';
 import { getPerspectivasThunk } from '../perspectivas/perspectivasThunk';
+import { EstrategicoProps } from '@/interfaces';
 
 
 export const getEstrategicosThunk = (filtros: any) => {
@@ -17,7 +18,7 @@ export const getEstrategicosThunk = (filtros: any) => {
 
 export const getEstrategicoThunk = (estrategicosId: string) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingEstrategicos())
+        dispatch(checkingCurrent())
         const result = await getEstrategicoProvider(estrategicosId, getState)        
         if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
         dispatch( getCurrentEstrategico(result.estrategico) )
@@ -34,7 +35,7 @@ export const createEstrategicoThunk = (estrategico: any) => {
 }
 
 
-export const createEstrategicoFromPerspectivaThunk = (estrategico: any) => {
+export const createEstrategicoFromPerspectivaThunk = (estrategico: EstrategicoProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingEstrategicos())
         const result = await createEstrategicoProvider(estrategico, getState)
@@ -53,7 +54,7 @@ export const deleteEstrategicoThunk = (estrategicosId: number) => {
     }   
 }
 
-export const updateEstrategicoThunk = (estrategico: any) => {
+export const updateEstrategicoThunk = (estrategico: EstrategicoProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingEstrategicos())
         const result = await updateEstrategicoProvider(estrategico, getState)

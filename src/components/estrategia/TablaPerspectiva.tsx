@@ -8,6 +8,8 @@ import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useColor, useResizable } from '@/hooks';
 import { returnImage } from '@/helpers/returnImage';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 
 
 interface TablaEstrategiaProps{
@@ -19,28 +21,8 @@ interface TablaEstrategiaProps{
 export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, setOpen}) => {
 
     const { color } = perspectiva
-
-    const {state} = useLocation()
-    const navigate = useNavigate()
-   
-    const [showEdit, setShowEdit] = useState<boolean>(false);
-    
-    const [estrategico, setEstrategico] = useState<EstrategicoProps>({
-        id: '',
-        codigo: '',
-        nombre: '',
-        descripcion: '',
-        fechaInicio: new Date(),
-        fechaFin: new Date(),
-        progreso: 0,
-        indicador: '',
-        perspectivas: [],
-        responsables: [],
-        status: 1,
-        tacticos_count: 0,
-        
-    });
-    
+    const dispatch = useAppDispatch()   
+    const [showEdit, setShowEdit] = useState<boolean>(false);        
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
@@ -104,15 +86,6 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 >
                     {record.propietario?.iniciales}
                 </Avatar>
-                // <Avatar.Group maxCount={3} key={index}>
-                //     {record.responsables?.map((responsable) => (
-                //         <Avatar
-                //             key={responsable.id}
-                //             src={returnImage(responsable.foto)}
-                //             alt={responsable.nombre}
-                //         />
-                //     ))}
-                // </Avatar.Group>
             ),
             ellipsis: true,
         },
@@ -120,15 +93,14 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
     const [showDrawer, setShowDrawer] = useState<boolean>(false);
 
-    const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
-
-    const handleViewEstrategia = (record:EstrategicoProps) => {
-        setEstrategico(record)
+    const handleViewEstrategia = (id: string) => {
+        dispatch(getEstrategicoThunk(id))
         setShowDrawer(true)
     }
     const handleCloseDrawer = () => {
         setShowDrawer(false)
         setShowEdit(false)
+        dispatch(clearCurrentEstrategicoThunk())
     }
 
 
@@ -136,29 +108,25 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         <>
             <Table
                 size='small'
-                className='table-resizable w-full'
+                className=' w-full'
                 loading={ perspectiva.objetivo_estr?.length === 0 ? true : false }
-                columns={mergeColumns}
+                columns={columns}
                 dataSource={perspectiva.objetivo_estr}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            handleViewEstrategia(record)                            
+                            handleViewEstrategia(record.id)                            
                         }
                     }}
                 }
                 pagination={false}
-                components={{
-                    header: {
-                        cell: ResizableTitle,
-                    },
-                }}
             />
             
             <Drawer
                 closable={false}
                 onClose={handleCloseDrawer}
+                destroyOnClose={true}
                 open={showDrawer}
                 width={window.innerWidth > 1200 ? 700 : '100%'}
                 headerStyle={{
@@ -168,7 +136,9 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             >
 
                 {
-                    <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    <FormEstrategia setOpen={setOpen} setShowEdit={setShowEdit}/> 
+
+
                     // showEdit
                     // ? <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
                     // : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>

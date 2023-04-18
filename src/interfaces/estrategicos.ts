@@ -5,6 +5,7 @@ import { Perspectiva, Paginate, UsuarioProps } from '@/interfaces';
 export interface EstrategicosState {
     estrategicos: EstrategicoProps[];
     isLoading:    boolean;
+    isLoadingCurrent: boolean;
     paginate:     Paginate;
     error:        boolean;
     infoMessage:  string;
@@ -30,4 +31,6 @@ export interface EstrategicoProps {
     propietarioId?: string
     propietario?: UsuarioProps;
 }
+
+
 

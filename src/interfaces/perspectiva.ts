@@ -13,7 +13,7 @@ export interface PerspectivasState {
 }
 
 export interface Perspectiva {
-    id: number;
+    id: string;
     nombre: string;
     descripcion: string;
     progreso: number;

@@ -271,3 +271,8 @@ p, li, span, a{
 .ant-alert-error{
     margin: 10px 0;
 }
+
+
+.ck-editor__top.ck-editor__toolbar.hidden {
+    display: none;
+}
