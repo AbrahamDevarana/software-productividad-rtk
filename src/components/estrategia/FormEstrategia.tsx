@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider } from 'antd';
-import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
@@ -147,7 +146,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             noValidate
                             layout='vertical'
                             onBlur={() => handleOnSubmit(values)}
-                            className='w-full grid grid-cols-12'
+                            className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                         >
                  
                             <Form.Item
@@ -155,7 +154,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 className='col-span-10'
                             >
                                 <Input
-                                    className='border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'
+                                    className=''
+                                    bordered={false}
                                     value={values.nombre}
                                     onChange={handleChange}
                                     name="nombre"
@@ -169,7 +169,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 className='col-span-2'
                             >
                                 <Input
-                                    className='border-0 focus:border hover:border'
+                                    className=''
+                                    bordered={false}
                                     value={values.codigo}
                                     onChange={handleChange}
                                     name="codigo"
@@ -253,7 +254,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     value={dayjs(values.fechaInicio)} format={"DD-MM-YYYY"}
                                     defaultValue={dayjs(values.fechaInicio)}
                                     name="fechaInicio"
-                                    className='w-full border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'
+                                    className='w-full editableDatePicker'
+                                bordered={false}
                                     clearIcon={false}
                                     ref={inputRef}
                                 />
@@ -268,7 +270,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     value={dayjs(values.fechaFin)} format={"DD-MM-YYYY"}
                                     defaultValue={dayjs(values.fechaFin)}
                                     name="fechaFin"
-                                    className='w-full border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'
+                                    className='w-full editableDatePicker'
                                     clearIcon={false}
                                     ref={inputRef}
                                 />
@@ -283,8 +285,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     placeholder="Selecciona los responsables"
                                     onChange={(value) => setFieldValue('propietarioId', value)}
                                     allowClear
-                                    className='border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'
-                                    bordered = {false}
+                                bordered = {false}
                                     value={ values.propietarioId }
                                 >
                                     {
@@ -305,8 +306,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     placeholder="Selecciona los responsables"
                                     onChange={(value) => setFieldValue('responsables', value)}
                                     allowClear
-                                    className='border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'
                                     bordered = {false}
+                                    disabled={true}
+                                    
                                     value={ values.responsables }
                                 >
                                     {
@@ -319,7 +321,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             </Form.Item>
                             <Form.Item
                                 label="Meta a alcanzar"
-                                className='col-span-12'
+                                className='col-span-12 form-editor'
                             >
                                 <CKEditor
                                     editor={Editor}
@@ -338,7 +340,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 label="Indicador"
                                 className='col-span-12'
                             >
-                                <TextArea rows={1} value={values.indicador} onChange={handleChange}  name="indicador" className='border-0 border-b rounded-none focus:border hover:border focus:rounded-md hover:rounded-md'/>
+                                <TextArea rows={1} value={values.indicador} disabled onChange={handleChange}  name="indicador" className='editableInput' bordered={false}/>
                                 <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
                            

@@ -276,3 +276,28 @@ p, li, span, a{
 .ck-editor__top.ck-editor__toolbar.hidden {
     display: none;
 }
+
+
+label{
+    color: rgba(46, 49, 54, .5)!important;
+    font-size: 12px!important;
+    font-weight: 500!important;
+}
+
+input {
+    color: #848891!important;
+    // font-size: 14px!important;w
+}
+
+
+.editableForm {
+    .ant-input[disabled],
+    .ant-select[disabled], .ant-select-disabled, .ant-select-disabled .ant-select-selection-item,
+    .ant-picker-disabled .ant-picker-input input, .ant-picker-disabled, .ant-select-selector{
+        color: #848891 !important;
+        cursor: default!important;
+        opacity: 1;
+    }
+
+
+}

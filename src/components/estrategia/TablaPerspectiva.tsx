@@ -38,7 +38,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         },
         {
             title: 'Código',
-            dataIndex: 'codigo',
+            render: (text, record, index) => ( <p className='text-default'> { record.codigo } </p>   ),
             width: 50,
             ellipsis: true,
         },
