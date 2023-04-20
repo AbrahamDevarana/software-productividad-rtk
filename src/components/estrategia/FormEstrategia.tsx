@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
-import { EstrategicoProps, Perspectiva } from '@/interfaces';
+import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { editorConfiguration } from '@/helpers/CKEditor';
 import { useColor } from '@/hooks';
 import { TabStatus } from '../ui/TabStatus';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from '../Icon';
 
 
 
@@ -24,7 +26,8 @@ interface FormEstrategiaProps {
 
 export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowEdit}) => {
 
-    const  dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const { currentEstrategico, isLoadingCurrent } = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { userAuth } = useAppSelector(state => state.auth)
@@ -38,16 +41,14 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     
 
     const handleOnSubmit = ( values: any ) => {
-
-        inputRef.current?.blur();
         delete values.status
+        
+        inputRef.current?.blur();
         if(values.id){            
             dispatch(updateEstrategicoThunk(values))
-            setOpen(false)
-            return
+        }else if(values.nombre.trim() !== '' && values.descripcion.trim() !== '' && values.perspectivaId.trim() !== '' && values.fechaInicio && values.fechaFin && values.propietarioId && values.indicador.trim() !== ''){
+            dispatch(createEstrategicoFromPerspectivaThunk(values))
         }
-        dispatch(createEstrategicoFromPerspectivaThunk(values))        
-        setOpen(false)        
     }
 
     useEffect(() => {
@@ -114,7 +115,11 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
             ),
         },
     ]
-    
+
+    const handleView = (id:string) => {
+        navigate(`/estrategia/${id}`)
+    }
+
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
@@ -124,9 +129,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
             <Formik
                 initialValues={ {
                     ...currentEstrategico,
-                    propietarioId: currentEstrategico?.propietario?.id || userAuth?.id,
-                    responsables: currentEstrategico?.responsables?.map((r: any) => r.id) || [],
-                    perspectivaId: currentEstrategico?.perspectivas?.[0]?.id || '0',
+                    propietarioId: currentEstrategico.propietario?.id || userAuth?.id,
+                    responsables: currentEstrategico.responsables?.map((r: any) => r.id) || [],
+                    perspectivaId: currentEstrategico.perspectivaId
+                    
                 } }
             
                 onSubmit={ (values) => handleOnSubmit(values) }
@@ -178,54 +184,56 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 />
                                 <ErrorMessage name="codigo" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                            <Divider className='col-span-12'  />
-                            <Form.Item 
-                                className='col-span-12'>
-                                <div className='flex justify-between'>
-                                    <p className='text-devarana-graph'>
-                                        <span className='text-3xl'> {values.progreso} </span> 
-                                        % / 100 %
-                                    </p>
-                                    <div className='bg-gray-50 rounded-full px-2'>
-                                        <Dropdown menu={{items}} overlayClassName='bg-transparent'>
-                                            <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
-                                                <TabStatus statusId={statusEstrategico} />
-                                            </button>
-                                        </Dropdown>
+                            <Space className={`${values.id === ''? 'hidden': 'block'} col-span-12`}>
+                                <Divider className='col-span-12'  />
+                                <Form.Item 
+                                    className='col-span-12'>
+                                    <div className='flex justify-between'>
+                                        <p className='text-devarana-graph'>
+                                            <span className='text-3xl'> {values.progreso} </span> 
+                                            % / 100 %
+                                        </p>
+                                        <div className='bg-gray-50 rounded-full px-2'>
+                                            <Dropdown menu={{items}} overlayClassName='bg-transparent'>
+                                                <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
+                                                    <TabStatus statusId={statusEstrategico} />
+                                                </button>
+                                            </Dropdown>
+                                        </div>
                                     </div>
-                                </div>
-                            </Form.Item>
-                            <Form.Item
-                                label="Progreso"
-                                className='col-span-12'
-                            >
-                                <Slider
-                                    className='drop-shadow progressStyle'
-                                    value={values.progreso}
-                                    min={0}
-                                    max={100}
-                                    onAfterChange={ handleChangeProgreso }
-                                    trackStyle={{
-                                        backgroundColor: useColor(values.status).color,
-                                        borderRadius: 10,
+                                </Form.Item>
+                                <Form.Item
+                                    label="Progreso"
+                                    className='col-span-12'
+                                >
+                                    <Slider
+                                        className='drop-shadow progressStyle'
+                                        defaultValue={values.progreso}
+                                        min={0}
+                                        max={100}
+                                        onAfterChange={ handleChangeProgreso }
+                                        trackStyle={{
+                                            backgroundColor: useColor(values.status).color,
+                                            borderRadius: 10,
 
-                                    }}
-                                    railStyle={{
-                                        backgroundColor: useColor(values.status, .3).color,
-                                        borderRadius: 10,
-                                    }}
-                                    
-                                />
+                                        }}
+                                        railStyle={{
+                                            backgroundColor: useColor(values.status, .3).color,
+                                            borderRadius: 10,
+                                        }}
+                                        
+                                    />
 
-                            </Form.Item>
-                            <Divider className='col-span-12' />
+                                </Form.Item>
+                                <Divider className='col-span-12' />
+                            </Space>
                             <Form.Item
                                 label="Perspectiva"
                                 className='col-span-12'
                             >
                                 <div className='flex flex-wrap gap-3'>
                                     {
-                                        perspectivas && perspectivas.map((perspectiva: Perspectiva) => (
+                                        perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
                                             <button 
                                                 type='button'
                                                 onClick={() => setFieldValue('perspectivaId', perspectiva.id)}
@@ -273,6 +281,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     className='w-full editableDatePicker'
                                     clearIcon={false}
                                     ref={inputRef}
+                                    bordered={false}
                                 />
                                 <ErrorMessage name="fechaFin" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
@@ -307,7 +316,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     onChange={(value) => setFieldValue('responsables', value)}
                                     allowClear
                                     bordered = {false}
-                                    disabled={true}
+                                    
                                     
                                     value={ values.responsables }
                                 >
@@ -340,25 +349,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 label="Indicador"
                                 className='col-span-12'
                             >
-                                <TextArea rows={1} value={values.indicador} disabled onChange={handleChange}  name="indicador" className='editableInput' bordered={false}/>
+                                <TextArea rows={1} value={values.indicador} onChange={handleChange}  name="indicador" className='editableInput' bordered={false}/>
                                 <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </Form.Item>
-                           
-                            {/* 
-                            <Form.Item
-                                label="Métrica de Seguimiento"
-                            >
-                            
-                                <Radio.Group
-                                    onChange={(e) => setFieldValue('metricaSeguimiento', e.target.value)}
-                                    value={values.metricaSeguimiento}
-                                    defaultValue={1}
-                                >
-                                    <Radio value={1}>Manual</Radio>
-                                    <Radio value={2}>Cumplimiento de Objetivo Táctico</Radio>
-                                </Radio.Group>
-                            </Form.Item> */}
-                                        
+
                             {/* <Form.Item 
                                 className='text-right'
                             >
@@ -368,9 +362,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 </div>
                             </Form.Item> */}
                         </Form>
-                    )
-                }
+
+                    )}
             </Formik>
+                    <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-devarana-midnight hover:opacity-70 rounded-full text-white border-none absolute -left-4 top-20' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
         </>
     )
 }

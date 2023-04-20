@@ -1,5 +1,5 @@
 import { Icon } from '../Icon'
-import { Perspectiva } from '@/interfaces'
+import { PerspectivaProps } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
 import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
@@ -8,7 +8,7 @@ import { CustomDrawer } from '../ui/Drawer';
 import { motion } from 'framer-motion';
 
 interface EstrategiaProps {
-    perspectivas: Perspectiva[]
+    perspectivas: PerspectivaProps[]
 }
 
 export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
@@ -25,7 +25,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
     return (
         <>
             {
-                perspectivas && perspectivas.map((perspectiva: Perspectiva, index: number) => (
+                perspectivas && perspectivas.map((perspectiva: PerspectivaProps, index: number) => (
                     
                 
                 <div key={index} className='rounded-l-ext gap-x-5 flex flex-row pb-10'>

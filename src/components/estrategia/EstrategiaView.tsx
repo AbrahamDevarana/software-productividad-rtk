@@ -2,7 +2,7 @@
 import { EstrategicoProps } from '@/interfaces';
 import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
 import dayjs from 'dayjs';
-import { Perspectiva } from '@/interfaces/perspectiva';
+import { PerspectivaProps } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
@@ -19,7 +19,7 @@ import { useColor } from '@/hooks';
 
 interface EstrategiaViewProps{
     estrategico: EstrategicoProps;
-    perspectiva: Perspectiva;
+    // perspectiva: PerspectivaProps;
     isLoading?: boolean;
     edit?: boolean;
     view?: boolean;
@@ -27,7 +27,9 @@ interface EstrategiaViewProps{
 }
 
 
-export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, perspectiva, isLoading, edit, view, setShowEdit}) => {
+export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLoading, edit, view, setShowEdit}) => {
+
+  
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -191,8 +193,8 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                     
                     <div className='flex flex-col col-span-1'>
                     <p className='text-devarana-graph'>Perspectiva: </p>
-                        <span className='text-sm rounded-ext text-white text-center p-2' style={{ backgroundColor: perspectiva.color }}>
-                            { perspectiva.nombre }
+                        <span className='text-sm rounded-ext text-white text-center p-2' style={{ backgroundColor: estrategico.perspectivas?.color }}>
+                            { estrategico.perspectivas?.nombre }
                         </span>
                     </div>
                 </div>
@@ -239,7 +241,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, pers
                 }
                 {
                     view && ( 
-                        <Button onClick={()=>handleView(estrategico.id)} style={{ backgroundColor: perspectiva.color }} className='rounded-full  text-white border-none absolute -left-4 top-20' icon={<Icon iconName='faArrowLeft' />} /> 
+                        <Button onClick={()=>handleView(estrategico.id)} style={{ backgroundColor: estrategico.perspectivas?.color }} className='rounded-full  text-white border-none absolute -left-4 top-20' icon={<Icon iconName='faArrowLeft' />} /> 
                         // <Link to={`/estrategia/${estrategico.id}`} className='' > 
                         // </Link>  
                     )

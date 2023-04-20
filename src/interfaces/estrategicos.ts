@@ -1,5 +1,5 @@
 
-import { Perspectiva, Paginate, UsuarioProps } from '@/interfaces';
+import { PerspectivaProps, Paginate, UsuarioProps, TacticoProps } from '@/interfaces';
 
 
 export interface EstrategicosState {
@@ -25,9 +25,10 @@ export interface EstrategicoProps {
     fechaFin: Date;
     status: number;
     indicador: string;
-    perspectivas?: Perspectiva[];
+    perspectivaId: string;
+    perspectivas?: PerspectivaProps;
     responsables?: UsuarioProps[];
-    tacticos_count?: number;
+    tacticos?: TacticoProps[];
     propietarioId?: string
     propietario?: UsuarioProps;
 }

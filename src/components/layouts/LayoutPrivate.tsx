@@ -31,7 +31,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     const [ optionalContent, setOptionalContent ] = useState<optionalContent>('admin')
 
     useEffect(() => {
-        if(!isLoading && !userAuth){
+        if(!isLoading && userAuth.id === ''){
             navigate("/login", { state: { from: window.location.pathname } });
         }
     }, [isLoading, userAuth])
@@ -86,7 +86,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     }
 
    
-    if (isLoading && !userAuth) return <Loading />;
+    if (isLoading && userAuth.id === '') return <Loading />;
     return (
         <>
         <div className='w-full'>  

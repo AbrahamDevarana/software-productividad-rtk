@@ -1,24 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Paginate } from '@/interfaces';
+import { AreasState, Paginate } from '@/interfaces';
 
-interface AreasState {
-    areas: Area[];
-    paginate: Paginate;
-    isLoading: boolean;
-    error: boolean;
-    infoMessage: string;
-    updated: boolean;
-    created: boolean;
-    deleted: boolean;
-    currentArea: Area;
-}
-
-interface Area {
-    id: number;
-    nombre: string;
-    parentId: number | null;
-    slug: string;
-}
 
 const initialState: AreasState = {
     areas: [],

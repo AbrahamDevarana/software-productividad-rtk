@@ -16,7 +16,7 @@ const initialState: PerspectivasState = {
         progreso: 0,
         color: '',
         status: 0,
-        objetivo_estr: [],
+        objetivos_estrategicos: [],
     }
 }
 
@@ -64,14 +64,14 @@ const perspectivasSlice = createSlice({
             state.currentPerspectiva = initialState.currentPerspectiva
         },   
         createEstrategicoFromProvider: (state, action) => {
+           
             state.perspectivas = state.perspectivas.map((perspectiva) => perspectiva.id === action.payload.perspectivaId
               ? {
                   ...perspectiva,
-                  objetivo_estr: perspectiva.objetivo_estr ? [...perspectiva.objetivo_estr, action.payload.objetivoEstrategico] : [action.payload.objetivoEstrategico]
+                  objetivos_estrategicos: perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload.objetivoEstrategico] : [action.payload.objetivoEstrategico]
                 }
               : perspectiva
             );
-
             state.created = true
             state.isLoading = false 
         }     

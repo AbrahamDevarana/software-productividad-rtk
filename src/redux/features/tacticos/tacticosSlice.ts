@@ -24,6 +24,7 @@ const initialState: TacticosState = {
         responsables: [],
         areas: [],
         propietarioId: '',
+        estrategicoId: '',
         propietario: {
             id: '',
             nombre: '',
@@ -31,7 +32,19 @@ const initialState: TacticosState = {
             apellidoPaterno: '',
             email: '',
             iniciales: '',
-        }
+        },
+        estrategico: {
+            id: '',
+            nombre: '',
+            codigo: '',
+            descripcion: '',
+            fechaFin: new Date(),
+            fechaInicio: new Date(),
+            progreso: 0,
+            status: 0,
+            indicador: '',
+            perspectivaId: '',
+        },
         
     }
 }

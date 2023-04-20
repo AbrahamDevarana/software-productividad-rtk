@@ -1,122 +1,61 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Slider, Select, Radio, Divider, Checkbox } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Radio, Divider, Checkbox } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import useNotify from '@/hooks/useNotify';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { clearAlertTacticos } from '@/redux/features/tacticos/tacticosSlice';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { UsuarioProps } from '@/interfaces';
+import { TacticoProps, UsuarioProps } from '@/interfaces';
 
 
 interface FormTacticoProps {
-    estrategicoId?: string;
-    areaId?: string;
     setShowEdit: (value: boolean) => void
-    currentTactico?: any
     showEdit?: boolean
 }
 
-export const FormTactico:React.FC<FormTacticoProps> = ({ estrategicoId , areaId = "", currentTactico, showEdit, setShowEdit}) => {
+export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) => {
 
     const  dispatch = useAppDispatch()
+    const { currentTactico } = useAppSelector(state => state.tacticos)
     const { TextArea } = Input;
-
-    const {  created, deleted, infoMessage, updated, error } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const { areas } = useAppSelector(state => state.areas)
+    const { areas, currentArea } = useAppSelector(state => state.areas)
     const {userAuth} = useAppSelector(state => state.auth)
 
-
-    console.log( dayjs().startOf('quarter').toDate())
+    const [isEstrategico, setIsEstrategico] = useState<number>(currentTactico.estrategicoId ? 1 : 2)
     
-    
-    const [initialValues, setInitialValues] = useState<any>({
-        nombre: '',
-        codigo: '',
-        meta: '',
-        indicador: '',
-        progreso: 0,
-        objetivoEstrategico: estrategicoId,
-        tipoObjetivo: estrategicoId? 1 : '',
-        perspectivaId: '',
-        fechaInicio: dayjs().startOf('quarter'),
-        fechaFin: dayjs().endOf('quarter'),
-        responsables: [],
-        areas: [areaId] || [],
-        propietarioId: userAuth?.id
-    })
-      
-    useEffect(() => {
-        useNotify({
-            created,
-            deleted,
-            infoMessage,
-            updated,
-            error
-        })
-
-        return () => {
-            dispatch(clearAlertTacticos())
-            
-        }
-    }, [created, deleted, infoMessage, updated, error])
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
-    }, [])
-
-    useEffect(() => {
-        if(currentTactico && currentTactico.id !== ""){
-            setInitialValues({
-                ...initialValues,
-                id: currentTactico.id,
-                nombre: currentTactico.nombre,
-                codigo: currentTactico.codigo,
-                meta: currentTactico.meta,
-                indicador: currentTactico.indicador,
-                progreso: currentTactico.progreso,
-                tipoObjetivo: currentTactico.tipoObjetivo,
-                fechaInicio: dayjs(currentTactico.fechaInicio).toDate(),
-                fechaFin: dayjs(currentTactico.fechaFin).toDate(),
-                responsables: currentTactico.responsables ? currentTactico.responsables.map((r:any) => r.id) : [],
-                areas: currentTactico.areas ? currentTactico.areas.map((a:any) => a.id) : [],
-                propietarioId: currentTactico.propietarioId
-            })
-        }
-
-    }, [currentTactico])
-
-    useEffect(() => {
         dispatch(getAreasThunk({}))
+        dispatch(getEstrategicosThunk({}))
     }, [])
 
     const handleGetEstrategicos = () => {        
-        dispatch(getEstrategicosThunk({}))
+        
     }
 
-    const handleOnSubmit = (values: any) => {
-        
-        if(currentTactico && currentTactico.id !== ""){
+    const handleOnSubmit = (values: TacticoProps) => {        
+        if(currentTactico.id !== ""){
             dispatch(updateTacticoThunk(values))
-            // setShowEdit(false)
-            return
-        }       
-        dispatch(createTacticoThunk(values))
-            
+        }else{
+            dispatch(createTacticoThunk(values))        
+        }            
     }
-    
+
 
     return (
         <>
             <Formik
-                initialValues={initialValues}
+                initialValues={{
+                    ...currentTactico,
+                    propietarioId: userAuth.id,
+                }}
 
                 onSubmit={ (values) => handleOnSubmit(values) }
                 validationSchema={Yup.object({
@@ -144,30 +83,29 @@ export const FormTactico:React.FC<FormTacticoProps> = ({ estrategicoId , areaId 
                                     >
                                     <Radio.Group
                                         onChange={(e) => { 
-                                            setFieldValue('tipoObjetivo', e.target.value); 
-                                            e.target.value === 1 && handleGetEstrategicos();
-                                            e.target.value === 2 && setFieldValue('objetivoEstrategico', null); 
+                                            setIsEstrategico(e.target.value)
+                                            setFieldValue('estrategicoId', e.target.value === 1 ? currentTactico.estrategicoId : '') 
+                                            setFieldValue('estrategico', e.target.value === 1 ? currentTactico.estrategico : '')
                                         }}
-                                        value={values.tipoObjetivo}
+                                        value={isEstrategico}
                                     >
                                         <Radio value={1}>Táctico</Radio>
                                         <Radio value={2}>Core</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                                 
-                            { values.tipoObjetivo === 1 && (
+                                { isEstrategico === 1 && (
                                 <Form.Item
                                     label="Objetivo estratégico"
                                 >
                                     <Select
                                         style={{ width: '100%' }}
                                         placeholder="Selecciona el objetivo estratégico"
-                                        onChange={(value) => {setFieldValue('objetivoEstrategico', value ) }}
-                                        value={  values.objetivoEstrategico }
+                                        onChange={(value) => {setFieldValue('estrategicoId', value ) }}
+                                        value={  values.estrategico.id }
                                         disabled={estrategicos.length === 0}
                                         allowClear
                                         showSearch
-                                        // filterOption with typescript
                                         filterOption={(input, option) =>
                                             // @ts-ignore
                                             option?.children?.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -180,7 +118,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({ estrategicoId , areaId 
                                             ))
                                         }
                                     </Select>
-                                    <ErrorMessage name="objetivoEstrategico" render={msg => <Alert type="error" message={msg} showIcon />} />
+                                    <ErrorMessage name="estrategicoId" render={msg => <Alert type="error" message={msg} showIcon />} />
                                 </Form.Item>
                             )}
                             
@@ -188,12 +126,11 @@ export const FormTactico:React.FC<FormTacticoProps> = ({ estrategicoId , areaId 
 
                             <Form.Item>
                                 <Checkbox.Group
-                                    value={values.areas}
-                                    onChange={(value) => setFieldValue('areas', value)}
-                                    
+                                    defaultValue={values.areas.map((area) => area.id)}
+                                    onChange={(value) => { setFieldValue('areas', value) }}
                                 >
                                     {
-                                        areas.map((area: any) => (
+                                        areas.map((area) => (
                                             <Checkbox key={area.id} value={area.id}> {area.nombre} </Checkbox>
                                         ))
                                     }

@@ -1,5 +1,6 @@
 import { UsuarioProps,  } from "./usuario";
-import { AreaProps } from "./";
+import { EstrategicoProps } from "./";
+import { AreaProps } from '@/interfaces';
 
 export interface TacticoProps {
     id:           string;
@@ -14,7 +15,8 @@ export interface TacticoProps {
     tipoObjetivo: number;
     responsables:  UsuarioProps[];
     areas: AreaProps[]
-    objetivo_tact?: any
+    estrategico: EstrategicoProps;
+    estrategicoId: string;
     propietario?: UsuarioProps
     propietarioId?: string
 
@@ -31,5 +33,6 @@ export interface TacticosState {
     created:      boolean;
     deleted:      boolean;
     currentTactico: TacticoProps;
+    
     
 }

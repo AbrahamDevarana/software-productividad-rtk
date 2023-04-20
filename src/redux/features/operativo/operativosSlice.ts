@@ -61,19 +61,20 @@ const operativoSlice = createSlice({
             state.isLoadingObjetivo = false
             state.currentOperativo = action.payload
         },
-        createOperativo: (state, action) => {            
+        createObjetivo: (state, action) => {            
             state.isLoading = false
             state.created = true
             state.infoMessage = action.payload
             state.currentOperativo = action.payload
             state.operativos.push(action.payload)
         },
-        updateOperativo: (state, action) => {
+        updateObjetivo: (state, action) => {
+            state.operativos = state.operativos.map(operativo => operativo.id === action.payload.id ? action.payload : operativo)
             state.isLoading = false
             state.updated = true
             state.infoMessage = action.payload
         },
-        deleteOperativo: (state, action) => {
+        deleteObjetivo: (state, action) => {
             state.isLoading = false
             state.deleted = true
             state.infoMessage = action.payload
@@ -108,9 +109,9 @@ export const {
     getOperativos,
     getProyectos,
     getObjetivo,
-    createOperativo,
-    updateOperativo,
-    deleteOperativo,
+    createObjetivo,
+    updateObjetivo,
+    deleteObjetivo,
     clearOperativos,
     clearOperativo,
     clearStatus,

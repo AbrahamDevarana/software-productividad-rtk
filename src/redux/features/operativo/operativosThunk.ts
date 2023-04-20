@@ -1,6 +1,7 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { createOperativoProvider, getOperativosProvider, getProyectosProvider, getObjetivoProvider } from './operativosProvider';
-import { checkingObjetivo, checkingOperativos, clearOperativo, clearOperativos, clearStatus, createOperativo, deleteOperativo, getObjetivo, getOperativos, getProyectos, setOperativosError, updateOperativo, setObjetivoError } from './operativosSlice';
+import { createObjetivoProvider, getOperativosProvider, getProyectosProvider, getObjetivoProvider, deleteObjetivoProvider, updateObjetivoProvider} from './operativosProvider';
+import { checkingObjetivo, checkingOperativos, clearOperativo, clearOperativos, clearStatus, createObjetivo, deleteObjetivo, getObjetivo, getOperativos, getProyectos, setOperativosError, updateObjetivo, setObjetivoError } from './operativosSlice';
+import { OperativoProps } from '@/interfaces';
 
 
 export const getOperativosThunk = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -35,14 +36,25 @@ export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch,
 }
 
 
-export const createOperativoThunk = (operativo: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
+export const createObjetivoThunk = (operativo: OperativoProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingOperativos())
-    const response = await createOperativoProvider(operativo, getState)
+    const response = await createObjetivoProvider(operativo, getState)
     if (response.ok) {
-        dispatch(createOperativo(response.operativo))
+        dispatch(createObjetivo(response.operativo))
     } else {
         dispatch(setOperativosError(response.errorMessage))
     }
+}
+
+export const updateObjetivoThunk = (operativo: OperativoProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(checkingOperativos())
+    
+    const response = await updateObjetivoProvider(operativo, getState)
+    if (response.ok) {
+        dispatch(updateObjetivo(response.operativo))
+    }else {
+        dispatch(setOperativosError(response.errorMessage))
+    }   
 }
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {

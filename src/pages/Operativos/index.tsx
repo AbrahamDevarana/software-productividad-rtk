@@ -48,7 +48,7 @@ export const Objetivos : React.FC = () => {
         return total
         
     }, [operativos])
-    
+
 
     const handleCancel = () => {
         setIsModalVisible(false)
@@ -100,9 +100,8 @@ export const Objetivos : React.FC = () => {
                 </Box>
 
                 <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
-
                     {
-                        isLoading ? 
+                        isLoading && operativos.length === 0 ? 
                             <div className='col-span-12'>
                                 <Loading  />
                             </div>
@@ -112,7 +111,6 @@ export const Objetivos : React.FC = () => {
                             ))
                         )
                     }
-                    
                 </div>
             </div>
             

@@ -48,7 +48,7 @@ export const Tactico: React.FC = () => {
                     destroyOnClose={true}
 
                 >
-                    <FormTactico areaId={state.areaId}  setShowEdit={setVisible}/>
+                    <FormTactico setShowEdit={setVisible}/>
                 </CustomDrawer>
             </div>
             <FloatButton

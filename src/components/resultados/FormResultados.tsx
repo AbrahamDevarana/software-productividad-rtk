@@ -1,7 +1,7 @@
-import { FC, useEffect, useState, useMemo } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { OperativoProps, ResultadoClaveProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Alert, Button, DatePicker, Form, Input, Radio, Select } from 'antd'
+import { Alert, Button, Form, Input, Radio } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
@@ -12,9 +12,11 @@ import { Icon } from '../Icon';
 
 interface FormResultadosProps {
     currentOperativo : OperativoProps
+    handleCurrent: (current: number) => void
+    current: number
 }
 
-export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
+export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handleCurrent, current}) => {
 
     const dispatch = useAppDispatch()
     const { errorObjetivo } = useAppSelector(state => state.operativos)
@@ -28,8 +30,8 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
         progreso: 0,
         fechaInicio: dayjs().startOf('quarter').format('YYYY-MM-DD'),
         fechaFin: dayjs().endOf('quarter').format('YYYY-MM-DD'),
-        operativoId: currentOperativo.id,
-        propietarioId: currentOperativo.propietarioId,
+        operativoId: '',
+        propietarioId: ''
     })
 
 
@@ -42,17 +44,21 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo}) => {
     
     const handleOnSubmit = async (values: ResultadoClaveProps) => {
         
-        console.log(values);
+        const query = {
+            ...values,
+            operativoId: currentOperativo.id,
+            propietarioId: currentOperativo.propietarioId
+        }
         
         if ( currentOperativo.id !== '' ){
-            if(values.id === ''){
-                await dispatch( createResultadoThunk(values) )
+            if(query.id === ''){
+                await dispatch( createResultadoThunk(query) )
                 if(!errorObjetivo){
-                    setResultadoList( [...resultadoList, values] )
+                    setResultadoList( [...resultadoList, query] )
                 }
             }else{
-                dispatch( updateResultadoThunk(values) )
-                setResultadoList( resultadoList.map( resultado => resultado.id === values.id ? values : resultado ) )
+                dispatch( updateResultadoThunk(query) )
+                setResultadoList( resultadoList.map( resultado => resultado.id === query.id ? query : resultado ) )
             }
            
         }

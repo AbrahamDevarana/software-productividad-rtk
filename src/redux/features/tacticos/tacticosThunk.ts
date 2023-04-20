@@ -1,4 +1,4 @@
-import { useNotification } from '@/hooks/useNotification';
+
 import { AppDispatch, RootState } from '@/redux/store';
 import { createTacticoProvider, deleteTacticoProvider, getTacticoProvider, getTacticosProvider, updateTacticoProvider, getTacticoFromAreaProvider, getTacticoFromEstrategiaProvider} from './tacticosProvider';
 import { checkingTacticos, setTacticosError, getCurrentTactico, createTactico, deleteTactico, getTacticos, updateTactico, clearCurrentTactico, clearTacticos,  clearAlertTacticos } from './tacticosSlice';
@@ -25,8 +25,6 @@ export const getTacticoThunk = (tacticosId: string) => {
 export const getTacticoFromAreaThunk = (slug: string, quarter:number, year:number) => {
 
     const query = {quarter, year, slug}
-    
-
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         const result = await getTacticoFromAreaProvider(query, getState)        
@@ -44,14 +42,11 @@ export const getTacticoFromEstrategiaThunk = (estrategiaId: string) => {
     }
 }
 
-
-
 export const createTacticoThunk = (tactico: any) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         const result = await createTacticoProvider(tactico, getState)       
         if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Tactico creada correctamente'})
         dispatch( createTactico(result.tactico) )
     }   
 }
@@ -61,7 +56,6 @@ export const deleteTacticoThunk = (tacticosId: number) => {
         dispatch(checkingTacticos())
         const result = await deleteTacticoProvider(tacticosId, getState)
         if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Tactico eliminada correctamente'})
         dispatch( deleteTactico(tacticosId) )
     }   
 }
@@ -71,7 +65,6 @@ export const updateTacticoThunk = (tactico: any) => {
         dispatch(checkingTacticos())
         const result = await updateTacticoProvider(tactico, getState)
         if(!result.ok) return dispatch( setTacticosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Tactico actualizada correctamente'})
         dispatch( updateTactico(result.tactico) )
     }   
 }

@@ -8,6 +8,8 @@ import { FormTactico } from './FormTacticos';
 import {  statusString } from '@/helpers/status';
 import { returnImage } from '@/helpers/returnImage';
 import '@/assets/css/ResizableTable.css';
+import { useAppDispatch } from '@/redux/hooks';
+import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
@@ -17,7 +19,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const [showEdit, setShowEdit] = useState<boolean>(false);
-    const [currentTactico, setCurrentTactico] = useState<TacticoProps | null>(null);
+    const dispatch = useAppDispatch()
 
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
@@ -87,8 +89,14 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
     const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
 
     const handleViewTactico = (tactico: TacticoProps) => {
-        setCurrentTactico (tactico);
+        dispatch(getTacticoThunk(tactico.id))        
         setShowDrawer(true)
+    }
+
+    const handleCancel = () => {
+        setShowDrawer(false)
+        setShowEdit(false)
+        dispatch(clearCurrentTacticoThunk())
     }
 
     return (
@@ -98,7 +106,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 dataSource={tacticos}
                 size='small'
                 className='table-resizable w-full '
-                rowKey={(record) => record.key}
+                rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
@@ -119,17 +127,14 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 open={showDrawer}
                 width={window.innerWidth > 1200 ? 600 : '100%'}
                 destroyOnClose={true}
-                onClose={() => {
-                    setShowDrawer(false)
-                    setShowEdit(false)
-                }}
+                onClose={() => handleCancel()}
                 closable={false}
             >   
 
                 {
-                    showEdit 
-                    ? <FormTactico currentTactico={currentTactico} setShowEdit={setShowEdit}  showEdit={showEdit}/>
-                    : <TacticosView currentTactico={currentTactico} setShowEdit={setShowEdit} />
+                    showEdit
+                    ? <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit}/>
+                    : <TacticosView setShowEdit={setShowEdit} />
                 }
 
             </Drawer>

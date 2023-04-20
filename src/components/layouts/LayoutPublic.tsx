@@ -17,7 +17,7 @@ export default function LayoutLogin({ children }: LayoutLoginProps) {
     
 
     useEffect(() => {
-        if(!isLoading && userAuth){
+        if(!isLoading && userAuth.id !== ''){
             navigate(from)
         }
     }, [isLoading, userAuth])

@@ -2,6 +2,7 @@ import { useNotification } from '@/hooks/useNotification';
 import { AppDispatch, RootState } from '@/redux/store';
 import { createPerspectivaProvider, deletePerspectivaProvider, getPerspectivaProvider, getPerspectivasProvider, updatePerspectivaProvider} from './perspectivasProvider';
 import { checkingPerspectivas, setPerspectivasError, getCurrentPerspectiva, createPerspectiva, deletePerspectiva, getPerspectivas, updatePerspectiva, clearCurrentPerspectiva, clearPerspectivas } from './perspectivasSlice';
+import { PerspectivaProps } from '@/interfaces';
 
 
 export const getPerspectivasThunk = (filtros: any) => {
@@ -22,7 +23,7 @@ export const getPerspectivaThunk = (perspectivaId: number) => {
     }   
 }
 
-export const createPerspectivaThunk = (perspectiva: any) => {
+export const createPerspectivaThunk = (perspectiva: PerspectivaProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingPerspectivas())
         const result = await createPerspectivaProvider(perspectiva, getState)
@@ -42,7 +43,7 @@ export const deletePerspectivaThunk = (perspectivaId: number) => {
     }   
 }
 
-export const updatePerspectivaThunk = (perspectiva: any) => {
+export const updatePerspectivaThunk = (perspectiva: PerspectivaProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingPerspectivas())
         const result = await updatePerspectivaProvider(perspectiva, getState)
@@ -52,7 +53,7 @@ export const updatePerspectivaThunk = (perspectiva: any) => {
     }   
 }
 
-export const createPerspectivaAndClearThunk = (perspectiva: any) => {
+export const createPerspectivaAndClearThunk = (perspectiva: PerspectivaProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingPerspectivas())
         const result = await createPerspectivaProvider(perspectiva, getState)

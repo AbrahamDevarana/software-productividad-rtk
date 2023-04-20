@@ -10,7 +10,7 @@ interface AuthState {
     refreshToken: string | null;
     error: string | null;
     loggedOut: boolean;
-    userAuth: userAuthProps | null,
+    userAuth: userAuthProps,
     isAuthenticated: boolean,
     isLoading: boolean,
 }
@@ -18,7 +18,14 @@ interface AuthState {
 const initialState: AuthState = {
     isLoading: true,
     error: null,
-    userAuth: null,
+    userAuth: {
+        id: '',
+        nombre: '',
+        apellidoMaterno: '',
+        apellidoPaterno: '',
+        iniciales: '',
+        email: '',
+    },
     accessToken: null,
     refreshToken: null,
     loggedOut: false,
@@ -48,7 +55,7 @@ export const authSlice = createSlice({
         logOut: (state) => {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            state.userAuth = null;
+            state.userAuth = initialState.userAuth;
             state.accessToken = null;
             state.isLoading = false;  
             state.loggedOut = true;

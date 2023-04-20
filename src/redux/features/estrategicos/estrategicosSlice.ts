@@ -25,9 +25,19 @@ const initialState: EstrategicosState = {
         fechaFin: new Date(),
         status: 1,
         indicador: '',
-        perspectivas: [],
+        perspectivaId: '',
+        perspectivas: [
+            {
+                id: '',
+                nombre: '',
+                descripcion: '',
+                icono: 'faChartLine',
+                color: '',
+                status: 1,
+                progreso: 0,
+            }
+        ],
         responsables: [],
-        tacticos_count: 0,
         propietarioId: '',
         propietario: {
             id: '',

@@ -2,12 +2,13 @@ import { FC, useEffect } from 'react'
 import { OperativoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Alert, Button, DatePicker, Form, Input, Select } from 'antd'
+import { Alert, DatePicker, Form, Input, Select } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
-import { createOperativoThunk } from '@/redux/features/operativo/operativosThunk'
+import { createObjetivoThunk, updateObjetivoThunk } from '@/redux/features/operativo/operativosThunk'
+import { Button } from '../ui'
 
 
 
@@ -15,10 +16,10 @@ import { createOperativoThunk } from '@/redux/features/operativo/operativosThunk
 interface FormObjetivoProps {
     currentOperativo : OperativoProps
     current: number
-    setCurrent: (current: number) => void
+    handleCurrent: (current: number) => void
 }
 
-export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, setCurrent}) => {
+export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, handleCurrent}) => {
 
     const { RangePicker } = DatePicker;
     const dispatch = useAppDispatch()
@@ -34,11 +35,15 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, s
     const handleOnSubmit = (values: OperativoProps) => {
         const query =  {
             ...values,
-            propietarioId: userAuth?.id,
+            propietarioId: userAuth.id,
         }
         
-        dispatch(createOperativoThunk(query))
-        setCurrent(current + 1)
+        if(currentOperativo.id === ''){
+            dispatch(createObjetivoThunk(query))
+            handleCurrent(current + 1)
+        }else{
+            dispatch(updateObjetivoThunk(query))
+        }
     }
 
     const disabledDate = ( current: Dayjs ) => {
@@ -161,8 +166,17 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, s
                         <ErrorMessage name="participantesIds" render={msg => <Alert type="error" message={msg} showIcon />} />
                     </Form.Item>
 
-                    <Form.Item className='col-span-12'>
-                        <Button htmlType='submit' className='btn-primary'>Guardar</Button>
+                    <Form.Item
+                        className='col-span-12'
+                    >
+                        <div className='flex justify-between'>
+                            <Button btnType='primary' type='submit' className='btn-primary'>Guardar</Button>
+                            {
+                                currentOperativo.id !== '' && (
+                                    <Button btnType='secondary' type='button' className='bg-devarana-blue text-white' fn={() => handleCurrent(1)}>Siguiente</Button>
+                                )
+                            }
+                        </div>
                     </Form.Item>
                 </Form>
             )}

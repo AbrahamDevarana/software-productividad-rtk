@@ -1,6 +1,22 @@
+import { Paginate } from "./slice";
+
 export interface AreaProps {
-    key: React.Key;
+    id: number;
     nombre: string;
-    acciones: string;
-    subArea?: AreaProps[]
+    parentId: number | null;
+    slug: string;
+}
+
+export interface AreasState {
+    areas: AreaProps[];
+    paginate: Paginate;
+    isLoading: boolean;
+    error: boolean;
+    infoMessage: string;
+    updated: boolean;
+    created: boolean;
+    deleted: boolean;
+    currentArea: AreaProps;
+    
+    
 }

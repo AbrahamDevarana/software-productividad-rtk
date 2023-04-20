@@ -15,7 +15,6 @@ interface ObjetivoProps {
 export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-    const { currentOperativo } = useAppSelector(state => state.operativos)
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
@@ -37,15 +36,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     ]
 
     return (
-        <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id}
-        // actions={
-        //     [ <Button type='text'  onClick={ () => handleEditObjetivo(objetivo.id) } icon={<Icon iconName='faEdit' className='text-devarana-graph'/> } />]
-        // }
-        >
-
-          
-
-
+        <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
                 <div className=''>
                     <p> Resultados Clave </p>
@@ -92,7 +83,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 }
             </Avatar.Group>
 
-            <Dropdown className='absolute hidden group-hover:block top-0 right-0' menu={{items}} trigger={['click']} placement='bottomRight'>
+            <Dropdown className='absolute hidden group-hover:block top-0 right-0' menu={{items}} trigger={['click']}>
                 <Button className='' type='text' icon={<Icon iconName='faEllipsisH' className='text-devarana-graph text-xl'/> } />
             </Dropdown>
         </Card>

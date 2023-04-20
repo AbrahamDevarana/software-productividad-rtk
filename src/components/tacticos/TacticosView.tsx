@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useColor } from '@/hooks';
 import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
-import { TacticoProps } from '@/interfaces'
+import { AreaProps, EstrategicoProps, TacticoProps } from '@/interfaces'
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loading from '../antd/Loading';
@@ -16,11 +16,12 @@ interface TacticosViewProps {
 }
 
 
-export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) => {
+export const TacticosView = ({setShowEdit}: TacticosViewProps) => {
 
+    const { currentTactico, isLoading } = useAppSelector(state => state.tacticos)
     const [statusEstrategico, setStatusEstrategico] = useState<number>(currentTactico?.status || 0);
     const [progresoEstrategico, setProgresoEstrategico] = useState<number>(currentTactico?.progreso || 0);
-
+    
     if(!currentTactico) return <Loading />
 
     const handleChangeProgreso = (value: number) => {
@@ -106,19 +107,19 @@ export const TacticosView = ({setShowEdit, currentTactico}: TacticosViewProps) =
 
             <Divider orientation='left'> Objetivo Estrategico:</Divider>
             <div>
-                { currentTactico.objetivo_tact&& currentTactico.objetivo_tact.length > 0 && currentTactico.objetivo_tact.map( (obj:any, i:number) => ( 
-                    <p key={i} className='text-devarana-graph'>
-                       { obj.nombre }
-                    </p>
-                ))}
+                { currentTactico.estrategico && (
+                    <Link to={`/estrategia/${currentTactico.estrategico.id}`}>
+                        <p className='text-devarana-graph'> {currentTactico.estrategico.nombre} </p>
+                    </Link>
+                )}
             </div>
 
             <Divider orientation='left'> Áreas:</Divider>
             <div className='px-5'>
                 <ul>
-                    {  currentTactico.areas && currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:any, i:number) => ( 
-                        <li key={i} className='text-devarana-graph list-disc'>
-                        { obj.nombre }
+                    {  currentTactico.areas && currentTactico.areas.length > 0 && currentTactico.areas.map( (obj:AreaProps) => ( 
+                        <li key={obj.id} className='text-devarana-graph list-disc'>
+                           {obj.nombre}
                         </li>
                     ))}
                 </ul>

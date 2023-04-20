@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Avatar, Drawer, Progress, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import '@/assets/css/ResizableTable.css';
-import { EstrategicoProps, Perspectiva } from '@/interfaces';
+import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/featu
 
 
 interface TablaEstrategiaProps{
-    perspectiva: Perspectiva;
+    perspectiva: PerspectivaProps;
     setOpen: (open: boolean) => void;
 }
 
@@ -46,7 +46,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             title: 'Tácticos',
             width: 40,
             ellipsis: true,
-            render: (text, record, index) => ( <p className='text-default'> { record.tacticos_count } </p>   ),
+            render: (text, record, index) => ( <p className='text-default'> { record.tacticos?.length } </p>   ),
         },
         {
             title: 'Estatus',
@@ -109,9 +109,9 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             <Table
                 size='small'
                 className=' w-full'
-                loading={ perspectiva.objetivo_estr?.length === 0 ? true : false }
+                loading={ perspectiva.objetivos_estrategicos?.length === 0 ? true : false }
                 columns={columns}
-                dataSource={perspectiva.objetivo_estr}
+                dataSource={perspectiva.objetivos_estrategicos}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
