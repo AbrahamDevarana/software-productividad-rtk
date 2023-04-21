@@ -4,17 +4,22 @@ import { clearProyectoThunk, getProyectoThunk,  } from '@/redux/features/proyect
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 
-import type { InputRef } from 'antd';
-import { Avatar, Button, Collapse, Form, Input, Popconfirm, Space, Table } from 'antd';
+import type { SelectProps } from 'antd';
+import { Avatar, Button, Collapse, DatePicker, Dropdown, Form, Input, Popconfirm, Select, Space, Table, Tooltip } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { Box } from '@/components/ui';
+import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { useMemo } from 'react';
+import { UsuarioProps } from '@/interfaces';
+import { useColor } from '../../hooks/useColor';
+import dayjs from 'dayjs';
 
 interface DataType {
     key: React.Key;
     titulo: string;
     participantes: any[]
     status: number;
-    fecha: string | Date;
+    fechaFin: string | Date | null;
 }
 type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -38,25 +43,27 @@ export const ProyectoView = () => {
     const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
     const { Panel } = Collapse;
+    const { RangePicker } = DatePicker;
 
     const dispatch = useAppDispatch()
     const { id } = useParams<{ id: string }>()
     const { currentProyecto } = useAppSelector(state => state.proyectos)
+    const { usuarios } = useAppSelector(state => state.usuarios)
 
     const [dataSource, setDataSource] = useState<DataType[]>([
         {
             key: '0',
             titulo: 'Acción 1',
-            participantes: ['Participante 1', 'Participante 2'],
+            participantes: ['17484da4-81c4-4753-9938-a3bdbd8a01cb', '38f96f77-9746-4515-b845-66287c0b3f9a'],
             status: 1,
-            fecha: '2021-01-01'
+            fechaFin: null
         },
         {
             key: '1',
             titulo: 'Acción 2',
-            participantes: ['Participante 1', 'Participante 2'],
+            participantes: ['5d7e2eee-2b3b-4c45-9ea5-0e742813a0e3', '73f50296-37fc-4219-aeae-1232vgdsgf'],
             status: 1,
-            fecha: '2021-01-01'
+            fechaFin: null
         },
 
     ]);
@@ -65,51 +72,77 @@ export const ProyectoView = () => {
       if(id) {
         dispatch(getProyectoThunk(id))
       }
+
+      dispatch(getUsuariosThunk({}))
     
       return () => {
         dispatch(clearProyectoThunk())
       }
     }, [id])
 
-
     const defaultColumns = [
         {
-            title: 'Título',
+            title: 'Actividad',
             dataIndex: 'titulo',
             key: 'nombre',
             editable: true,
         },
         {
-            title: 'Participantes',
+            title: 'Fecha de Cierre',
+            dataIndex: 'fechaFin',
+            key: 'fecha',
+            inputType: 'rangepicker',
+            editable: true,
+            render: (fechaFin: string | Date | null) => (
+                <div className='w-full text-center text-white'>
+                    { fechaFin ? dayjs(fechaFin).format('DD/MM/YYYY') : 'Sin Fecha' }
+                </div>
+            )
+        },
+        {
+            title: 'Responsables',
             dataIndex: 'participantes',
             key: 'participantes',
             editable: true,
             inputType: 'avatar',
             render: (participantes: any[]) => (
-                <Space size="middle">
-                    {participantes.map((participante: any) => (
-                        <Avatar key={participante}>{participante}</Avatar>
-                    ))}
-                </Space>
+                participantes.map((participante: any) => (
+                    <Avatar key={participante}>AAG</Avatar>
+                ))
             )
         },
         {
-            title: 'Estado',
+            title: 'Avance',
+            dataIndex: 'avance',
+            key: 'fecha',
+            inputType: 'text',
+            render: (avance: number) => (
+                <div className='bg-green-500 w-full text-center text-white'>
+                    100%
+                </div>
+            )
+        },
+        {
+            title: 'Estatus',
             dataIndex: 'status',
             key: 'status',
             inputType: 'dropdown',
             editable: true,
+            render: (status: number) => (
+                <div className='bg-red-500 w-full text-center text-white'>
+                    Sin Iniciar
+                </div>
+            )
         },
-        {
-            title: 'Fecha',
-            dataIndex: 'fecha',
-            key: 'fecha',
-            inputType: 'rangepicker',
-            editable: true,
-        },
+
     ]
 
-    const handleSave = () => {}
+    const handleSave = (record: ColumnTypes) => {
+        console.log('save');
+        console.log(record);
+        
+        
+    }
 
     const columns = defaultColumns.map((col) => {
         if (!col.editable) {
@@ -150,7 +183,7 @@ export const ProyectoView = () => {
         ...restProps
     }) => {
         const [editing, setEditing] = useState(false);
-        const inputRef = useRef<InputRef>(null);
+        const inputRef = useRef<any>(null);
         const form = useContext(EditableContext)!;        
       
         useEffect(() => {
@@ -168,7 +201,6 @@ export const ProyectoView = () => {
         const save = async () => {
             try {
                 const values = await form.validateFields();
-        
                 toggleEdit();
                 handleSave({ ...record, ...values });
             } catch (errInfo) {
@@ -195,11 +227,43 @@ export const ProyectoView = () => {
                 ]}
                 >
                 {
-                    inputType === 'text' ? (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) : 
-                    inputType === 'avatar' ? (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) :
-                    inputType === 'dropdown' ? (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) :
-                    inputType === 'rangepicker' ? (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) : 
-                    <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                    inputType === 'text' 
+                    ?   (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) 
+                    :   inputType === 'avatar' 
+                    ?   (<Select
+                            defaultOpen={true}
+                            ref={inputRef}
+                            onChange={save}
+                            defaultValue={record[dataIndex]}
+                            style={{ width: '100%' }}
+                            mode="multiple"
+                            bordered={false}
+                            tagRender={tagRender}
+                            options={userOptions} 
+                        />) 
+                    :   inputType === 'dropdown' 
+                    ?   ( <Select
+                            ref={inputRef}
+                            defaultOpen={true}
+                            onChange={save}
+                            defaultValue={record[dataIndex]}
+                            style={{ width: '100%' }}
+                            bordered={false}
+                            options={statusOptions}                            
+                        /> ) 
+                    :   inputType === 'rangepicker' 
+                    ?   ( 
+                            <DatePicker
+                                defaultValue={dayjs('2021-01-01', 'YYYY-MM-DD')} 
+                                format={'DD-MM-YYYY'}
+                                ref={inputRef}
+                                defaultOpen={true}
+                                onChange={save}
+                                style={{ width: '100%' }}
+                                bordered={false}
+                            />
+                        ) 
+                    :   <Input ref={inputRef} onPressEnter={save} onBlur={save} />
                 }
                 </Form.Item>
             ) : (
@@ -219,6 +283,53 @@ export const ProyectoView = () => {
         },
     };
 
+    const statusOptions:SelectProps['options'] = [
+        {
+            label: 'Sin Iniciar',
+            value: 1,
+        },
+        {
+            label: 'En Proceso',
+            value: 2
+        },
+        {
+            label: 'Detenido',
+            value: 3
+        },
+        {
+            label: 'Finalizado',
+            value: 4
+        },
+        {
+            label: 'Cancelado',
+            value: 5
+        }
+
+    ]
+
+    const userOptions:SelectProps['options'] = useMemo(() => {
+        return usuarios.map((usuario: UsuarioProps) => ({
+            label: (<p> {usuario.nombre} {usuario.apellidoPaterno} </p>),
+            value: usuario.id
+        }))
+    }, [usuarios])
+
+    const tagRender = (props: any) => {
+        const { label, value, closable, onClose } = props;
+        const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
+        return (
+            <Avatar 
+                key={value}
+            >
+                {label}
+            </Avatar>
+        );
+
+    }
 
     return (
         <>
