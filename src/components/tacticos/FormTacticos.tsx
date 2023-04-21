@@ -10,6 +10,7 @@ import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicos
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { TacticoProps, UsuarioProps } from '@/interfaces';
+import {  useParams } from 'react-router-dom';
 
 
 interface FormTacticoProps {
@@ -19,26 +20,22 @@ interface FormTacticoProps {
 
 export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) => {
 
+    
+    const {slug} = useParams<{slug:string}>()
     const  dispatch = useAppDispatch()
     const { currentTactico } = useAppSelector(state => state.tacticos)
     const { TextArea } = Input;
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const { areas, currentArea } = useAppSelector(state => state.areas)
+    const { areas } = useAppSelector(state => state.areas)
     const {userAuth} = useAppSelector(state => state.auth)
 
-    const [isEstrategico, setIsEstrategico] = useState<number>(currentTactico.estrategicoId ? 1 : 2)
-    
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
         dispatch(getAreasThunk({}))
         dispatch(getEstrategicosThunk({}))
     }, [])
-
-    const handleGetEstrategicos = () => {        
-        
-    }
 
     const handleOnSubmit = (values: TacticoProps) => {        
         if(currentTactico.id !== ""){
@@ -47,14 +44,16 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
             dispatch(createTacticoThunk(values))        
         }            
     }
-
-
     return (
         <>
             <Formik
                 initialValues={{
                     ...currentTactico,
                     propietarioId: userAuth.id,
+                    responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
+                    areasArray: [ ...currentTactico.areas.map((area) => area.id), 
+                        areas.find(area => area.slug === slug )?.id || 0 ],
+                    isEstrategico: currentTactico.estrategicoId ? 1 : 2
                 }}
 
                 onSubmit={ (values) => handleOnSubmit(values) }
@@ -75,7 +74,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                             noValidate
                             layout='vertical'
                         >
-
                             <Divider orientation="left">Objetivo </Divider>
                                 {/* Objetivo */}
                                 <Form.Item
@@ -83,18 +81,18 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                                     >
                                     <Radio.Group
                                         onChange={(e) => { 
-                                            setIsEstrategico(e.target.value)
+                                            setFieldValue('isEstrategico', e.target.value)
                                             setFieldValue('estrategicoId', e.target.value === 1 ? currentTactico.estrategicoId : '') 
                                             setFieldValue('estrategico', e.target.value === 1 ? currentTactico.estrategico : '')
                                         }}
-                                        value={isEstrategico}
+                                        value={values.isEstrategico}
                                     >
                                         <Radio value={1}>Táctico</Radio>
                                         <Radio value={2}>Core</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                                 
-                                { isEstrategico === 1 && (
+                                { values.isEstrategico === 1 && (
                                 <Form.Item
                                     label="Objetivo estratégico"
                                 >
@@ -102,7 +100,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                                         style={{ width: '100%' }}
                                         placeholder="Selecciona el objetivo estratégico"
                                         onChange={(value) => {setFieldValue('estrategicoId', value ) }}
-                                        value={  values.estrategico.id }
+                                        value={  values.estrategicoId }
                                         disabled={estrategicos.length === 0}
                                         allowClear
                                         showSearch
@@ -126,8 +124,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
                             <Form.Item>
                                 <Checkbox.Group
-                                    defaultValue={values.areas.map((area) => area.id)}
-                                    onChange={(value) => { setFieldValue('areas', value) }}
+                                    value={values.areasArray}
+                                    onChange={(value) => { setFieldValue('areasArray', value) }}
                                 >
                                     {
                                         areas.map((area) => (
@@ -226,9 +224,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                                     mode="multiple"
                                     style={{ width: '100%' }}
                                     placeholder="Selecciona los responsables"
-                                    onChange={(value) => setFieldValue('responsables', value)}
+                                    onChange={(value) => setFieldValue('responsablesArray', value)}
                                     allowClear
-                                    value={ values.responsables }
+                                    value={ values.responsablesArray }
                                 >
                                     {
                                         usuarios.map((usuario: UsuarioProps) => (

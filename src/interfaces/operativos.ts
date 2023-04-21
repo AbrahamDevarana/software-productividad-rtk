@@ -20,9 +20,6 @@ export interface OperativoProps {
     tacticoId:       string;
     fechaInicio:     Date;
     fechaFin:        Date;
-    createdAt?:       Date;
-    updatedAt?:       Date;
-    deletedAt?:       Date | null;
     propietario_op?:  CustomUsuarioProps;
     responsables_op?: CustomUsuarioProps[];
     propietarioId:   string;

@@ -8,7 +8,7 @@ import { FormTactico } from './FormTacticos';
 import {  statusString } from '@/helpers/status';
 import { returnImage } from '@/helpers/returnImage';
 import '@/assets/css/ResizableTable.css';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 
 interface TablaTacticosProps {
@@ -17,6 +17,7 @@ interface TablaTacticosProps {
 
 export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
+    const { currentTactico } = useAppSelector(state => state.tacticos)
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const dispatch = useAppDispatch()
@@ -64,7 +65,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                     }}
                     trailColor={useColor(record.status, .3).color} 
                 />
-            ),
+            )
         },
         {
             title: 'Responsables',
@@ -73,20 +74,23 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <Avatar.Group maxCount={3} key={index}>
                     {record.responsables?.map((responsable, index) => (
                         <span key={index} className='z-50' >
-                            <Avatar src={returnImage(responsable.foto)}   onClick={
-                                (e) => {
-                                    e?.stopPropagation();
-                                }
-                            } />
+                            <Avatar src={returnImage(responsable.foto)} />
                         </span>
                     ))}
                 </Avatar.Group>
             ),
+            onCell: (record, rowIndex) => {
+                return {
+                    onClick: (event) => {
+                        event.stopPropagation();
+                    },
+                };
+            },
             ellipsis: true,
         },
     ]);
 
-    const {mergeColumns, ResizableTitle} = useResizable(columns, setColumns);
+
 
     const handleViewTactico = (tactico: TacticoProps) => {
         dispatch(getTacticoThunk(tactico.id))        
@@ -102,10 +106,10 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
     return (
         <>
             <Table
-                columns={mergeColumns}
+                columns={columns}
                 dataSource={tacticos}
                 size='small'
-                className='table-resizable w-full '
+                className='w-full '
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
@@ -114,13 +118,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                         }
                     }}
                 }
-
                 pagination={false}
-                components={{
-                    header: {
-                        cell: ResizableTitle,
-                    },
-                }}
             />
 
             <Drawer
@@ -132,7 +130,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             >   
 
                 {
-                    showEdit
+                    currentTactico
                     ? <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit}/>
                     : <TacticosView setShowEdit={setShowEdit} />
                 }

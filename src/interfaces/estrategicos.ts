@@ -27,7 +27,7 @@ export interface EstrategicoProps {
     indicador: string;
     perspectivaId: string;
     perspectivas?: PerspectivaProps;
-    responsables?: UsuarioProps[];
+    responsables: UsuarioProps[];
     tacticos?: TacticoProps[];
     propietarioId?: string
     propietario?: UsuarioProps;

@@ -113,7 +113,7 @@ export const updateTacticoProvider = async (tactico: any, getState: () => RootSt
     }
 }
 
-export const deleteTacticoProvider = async (tacticoId: number, getState: () => RootState) => {
+export const deleteTacticoProvider = async (tacticoId: string, getState: () => RootState) => {
     try {
         const response = await clientAxios.delete(`/tacticos/${tacticoId}`, { headers: { "accessToken": `${getState().auth.accessToken}` } });
         return {

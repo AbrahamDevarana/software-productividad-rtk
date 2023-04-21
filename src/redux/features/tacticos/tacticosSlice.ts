@@ -44,6 +44,7 @@ const initialState: TacticosState = {
             status: 0,
             indicador: '',
             perspectivaId: '',
+            responsables: [],
         },
         
     }
@@ -71,16 +72,35 @@ const tacticosSlice = createSlice({
             state.currentTactico = action.payload.tactico
             state.isLoading = false
         },
-        createTactico: (state, action) => {            
-            state.tacticos = [...state.tacticos, action.payload.tactico]
+        createTactico: (state, action) => {      
+            const {objetivo} = action.payload
+            
+            if(objetivo.estrategicoId){
+                state.tacticos = [ ...state.tacticos, objetivo]
+            }else{
+                state.tacticos_core = [ ...state.tacticos_core, objetivo]
+            }
+
+            state.currentTactico = objetivo
             state.created = true
             state.isLoading = false
         },
         updateTactico: (state, action) => {
-            state.tacticos = state.tacticos.map(tactico => tactico.id === action.payload.tactico.id ? action.payload.tactico : tactico)
+            const {objetivo} = action.payload
+            
+            
+            if(objetivo.estrategicoId){
+                state.tacticos = [ ...state.tacticos, objetivo]
+                state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== objetivo.id )
+            
+            }else{
+                state.tacticos_core = [ ...state.tacticos_core, objetivo]
+                state.tacticos = state.tacticos_core.filter( objetivo => objetivo.id !== objetivo.id )
+            }
+
             state.updated = true
             state.isLoading = false
-            state.currentTactico = action.payload.tactico
+            state.currentTactico = objetivo
         },
         deleteTactico: (state, action) => {
             state.tacticos = state.tacticos.filter(tactico => tactico.id !== action.payload.id)

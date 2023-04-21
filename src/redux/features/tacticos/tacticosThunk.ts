@@ -2,6 +2,7 @@
 import { AppDispatch, RootState } from '@/redux/store';
 import { createTacticoProvider, deleteTacticoProvider, getTacticoProvider, getTacticosProvider, updateTacticoProvider, getTacticoFromAreaProvider, getTacticoFromEstrategiaProvider} from './tacticosProvider';
 import { checkingTacticos, setTacticosError, getCurrentTactico, createTactico, deleteTactico, getTacticos, updateTactico, clearCurrentTactico, clearTacticos,  clearAlertTacticos } from './tacticosSlice';
+import { TacticoProps } from '@/interfaces';
 
 
 export const getTacticosThunk = (filtros: any) => {
@@ -23,7 +24,6 @@ export const getTacticoThunk = (tacticosId: string) => {
 }
 
 export const getTacticoFromAreaThunk = (slug: string, quarter:number, year:number) => {
-
     const query = {quarter, year, slug}
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
@@ -42,7 +42,7 @@ export const getTacticoFromEstrategiaThunk = (estrategiaId: string) => {
     }
 }
 
-export const createTacticoThunk = (tactico: any) => {
+export const createTacticoThunk = (tactico: TacticoProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         const result = await createTacticoProvider(tactico, getState)       
@@ -51,7 +51,7 @@ export const createTacticoThunk = (tactico: any) => {
     }   
 }
 
-export const deleteTacticoThunk = (tacticosId: number) => {
+export const deleteTacticoThunk = (tacticosId: string) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         const result = await deleteTacticoProvider(tacticosId, getState)
@@ -60,7 +60,7 @@ export const deleteTacticoThunk = (tacticosId: number) => {
     }   
 }
 
-export const updateTacticoThunk = (tactico: any) => {
+export const updateTacticoThunk = (tactico: TacticoProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingTacticos())
         const result = await updateTacticoProvider(tactico, getState)

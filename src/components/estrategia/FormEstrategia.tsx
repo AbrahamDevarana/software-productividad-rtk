@@ -15,6 +15,7 @@ import { useColor } from '@/hooks';
 import { TabStatus } from '../ui/TabStatus';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
+import { log } from 'util';
 
 
 
@@ -32,9 +33,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
-        
-
     const [statusEstrategico, setStatusEstrategico] = useState<number>(currentEstrategico.status);
+
+    
     
     const inputRef = useRef<any>(null)
     const { TextArea } = Input;
@@ -42,7 +43,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
     const handleOnSubmit = ( values: any ) => {
         delete values.status
-        
+
         inputRef.current?.blur();
         if(values.id){            
             dispatch(updateEstrategicoThunk(values))
@@ -56,7 +57,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     }, [])
 
     useEffect(() => {
-        if(currentEstrategico.id !== '0'){
+        if(currentEstrategico.id !== ''){
             setStatusEstrategico(currentEstrategico.status)
         }
     }, [currentEstrategico])
@@ -147,7 +148,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
             >
                 {
-                    ({ values, handleChange, setFieldValue }) => (
+                    ({ values, handleChange, setFieldValue, setFieldTouched}) => (
                         <Form
                             noValidate
                             layout='vertical'
@@ -313,11 +314,15 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     mode="multiple"
                                     style={{ width: '100%' }}
                                     placeholder="Selecciona los responsables"
-                                    onChange={(value) => setFieldValue('responsables', value)}
+                                    onChange={(value) => {
+                                        setFieldValue('responsables', value)
+                                    }}           
+                                    onDeselect={(value) => {
+                                        setFieldValue('responsables', values.responsables.filter((item: any) => item !== value))
+                                        
+                                    }}                            
                                     allowClear
                                     bordered = {false}
-                                    
-                                    
                                     value={ values.responsables }
                                 >
                                     {

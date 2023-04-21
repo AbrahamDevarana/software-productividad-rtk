@@ -10,8 +10,8 @@ export interface ResultadoClaveProps {
     nombre: string
     tipoProgreso: string
     progreso?: number
-    fechaInicio?: string | Date
-    fechaFin?: string | Date
+    fechaInicio: string | Date
+    fechaFin: string | Date
     operativoId: string
     propietarioId: string
 }
