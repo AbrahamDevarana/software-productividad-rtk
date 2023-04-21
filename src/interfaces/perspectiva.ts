@@ -15,8 +15,8 @@ export interface PerspectivasState {
 export interface PerspectivaProps {
     id: string;
     nombre: string;
-    descripcion?: string;
     progreso: number;
+    descripcion?: string;
     color?: string;
     status: number;
     icono?: IconName; 

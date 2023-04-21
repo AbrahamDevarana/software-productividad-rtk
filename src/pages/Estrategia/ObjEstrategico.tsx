@@ -64,7 +64,7 @@ export const ObjEstrategico: React.FC = () => {
         <Box className='flex gap-5 relative'>
 
             <div className='p-5 max-w-[600px] w-full' style={{ boxShadow: '5px 0px 5px -5px rgba(0,0,0,0.1)' }} >
-                <EstrategiaView estrategico={currentEstrategico}  perspectiva={perspectivas[0]} />
+                <EstrategiaView estrategico={currentEstrategico}  />
             </div>
             <div className='w-full'>
             
@@ -82,7 +82,7 @@ export const ObjEstrategico: React.FC = () => {
                     className='rounded-l-ext'
                     destroyOnClose={true}
                 >
-                    <FormTactico estrategicoId={id} setShowEdit={setShowDrawer} />
+                    <FormTactico setShowEdit={setShowDrawer} />
 
                 </Drawer>
 

@@ -26,8 +26,7 @@ const initialState: EstrategicosState = {
         status: 1,
         indicador: '',
         perspectivaId: '',
-        perspectivas: [
-            {
+        perspectivas: {
                 id: '',
                 nombre: '',
                 descripcion: '',
@@ -35,8 +34,7 @@ const initialState: EstrategicosState = {
                 color: '',
                 status: 1,
                 progreso: 0,
-            }
-        ],
+            },        
         responsables: [],
         propietarioId: '',
         propietario: {
