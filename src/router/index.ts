@@ -16,6 +16,9 @@ import { Usuarios } from '@/pages/admin/Usuarios';
 import { Departamentos } from '@/pages/admin/Departamentos';
 import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 import { Tactico } from '@/pages/Tactico';
+import { Proyectos } from '@/pages/Proyectos';
+import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
+
 
 interface RouteProps {
     path: string;
@@ -108,6 +111,18 @@ export const  rutaPrivada:RouteProps[] = [
         path: '/tactica/:slug',
         layout: LayoutApp,
         component: Tactico
+    },
+    {
+        name: "Proyectos",
+        path: '/proyectos',
+        layout: LayoutApp,
+        component: Proyectos
+    },
+    {
+        name: "Proyectos",
+        path: '/proyectos/:id',
+        layout: LayoutApp,
+        component: ProyectoView
     },
     {
         name: "Error",

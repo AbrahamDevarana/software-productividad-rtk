@@ -167,6 +167,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                     onChange={handleChange}
                                     name="nombre"
                                     ref={inputRef}
+                                    disabled
                                     onPressEnter={ () => handleOnSubmit(values) }
                                 />
                                 <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />

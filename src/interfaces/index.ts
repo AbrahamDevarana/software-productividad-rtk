@@ -12,4 +12,5 @@ export * from "./tacticos";
 export * from "./areas";
 export * from "./operativos";
 export * from "./resultadoClave";
+export * from "./proyectos";
 
