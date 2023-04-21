@@ -10,6 +10,7 @@ export default defineConfig({
         react(),
         viteCompression()
     ],
+    
     server: {
         port: 5173,
         proxy: {
@@ -18,10 +19,13 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '')
             }
-        }
+        },
     },
     build: {
+        sourcemap: false,
         rollupOptions: {
+            maxParallelFileOps: 2,
+            cache: false,            
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
