@@ -5,20 +5,21 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 
 import type { SelectProps } from 'antd';
-import { Avatar, Button, Collapse, DatePicker, Dropdown, Form, Input, Popconfirm, Segmented, Select, Space, Table, Tooltip } from 'antd';
+import { Avatar, Button, Collapse, DatePicker, Dropdown, Form, Input, Popconfirm, Select, Space, Table, Tooltip } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { Box } from '@/components/ui';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useMemo } from 'react';
-import { HitosProps, UsuarioProps } from '@/interfaces';
+import { UsuarioProps } from '@/interfaces';
 import { useColor } from '../../hooks/useColor';
 import dayjs from 'dayjs';
-import { Icon } from '@/components/Icon';
-import { CustomDropdown } from '@/components/ui/CustomDropdown';
 
-interface DataType extends HitosProps{
+interface DataType {
     key: React.Key;
-    participantes: UsuarioProps[];
+    titulo: string;
+    participantes: any[]
+    status: number;
+    fechaFin: string | Date | null;
 }
 type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -66,12 +67,6 @@ export const ProyectoView = () => {
             dataIndex: 'nombre',
             key: 'nombre',
             editable: true,
-            render: (nombre: string) => (
-                <div className='w-full text-devarana-graph font-light py-1.5'>
-                    { nombre }
-                </div>
-            ),
-            width: '30%'
         },
         {
             title: 'Fecha de Cierre',
@@ -80,11 +75,10 @@ export const ProyectoView = () => {
             inputType: 'rangepicker',
             editable: true,
             render: (fechaFin: string | Date | null) => (
-                <div className='w-full '>
-                    { fechaFin ? dayjs(fechaFin).format('DD/MM/YYYY') : <span className='text-devarana-graph font-light'>Seleccionar fecha</span> }
+                <div className='w-full text-center text-white'>
+                    { fechaFin ? dayjs(fechaFin).format('DD/MM/YYYY') : 'Sin Fecha' }
                 </div>
-            ),
-            width: '20%'
+            )
         },
         {
             title: 'Responsables',
@@ -93,18 +87,10 @@ export const ProyectoView = () => {
             editable: true,
             inputType: 'avatar',
             render: (participantes: any[]) => (
-                <div className='w-full block'>
-                    {
-                        participantes?.length > 0? 
-                            participantes.map((participante: any) => (
-                            <Avatar key={participante}>AAG</Avatar>
-                        ))
-                        :
-                        <span className='text-devarana-graph font-light'>Seleccionar participantes</span>
-                    }
-                </div>
-            ),
-            width: '20%'
+                participantes?.map((participante: any) => (
+                    <Avatar key={participante}>AAG</Avatar>
+                ))
+            )
         },
         {
             title: 'Avance',
@@ -115,8 +101,7 @@ export const ProyectoView = () => {
                 <div className='bg-green-500 w-full text-center text-white'>
                     100%
                 </div>
-            ),
-            width: '10%'
+            )
         },
         {
             title: 'Estatus',
@@ -125,15 +110,10 @@ export const ProyectoView = () => {
             inputType: 'dropdown',
             editable: true,
             render: (status: number) => (
-                <div className='w-full text-center text-white'>
-                    <span className='bg-green-500 px-2 py-1 rounded-full'>
-                        Activo
-                        {/* {useColor(status).color} */}
-                    </span>
+                <div className='bg-red-500 w-full text-center text-white'>
+                    Sin Iniciar
                 </div>
-
-            ),
-            width: '10%'
+            )
         },
 
     ]
@@ -141,6 +121,8 @@ export const ProyectoView = () => {
     const handleSave = (record: ColumnTypes) => {
         console.log('save');
         console.log(record);
+        
+        
     }
 
     const columns = defaultColumns.map((col) => {
@@ -170,7 +152,7 @@ export const ProyectoView = () => {
           </Form>
         );
     };
- 
+
     const EditableCell: React.FC<EditableCellProps> = ({
         title,
         editable,
@@ -184,7 +166,7 @@ export const ProyectoView = () => {
         const [editing, setEditing] = useState(false);
         const inputRef = useRef<any>(null);
         const form = useContext(EditableContext)!;        
-     
+      
         useEffect(() => {
             if (editing) {
                 inputRef.current!.focus();
@@ -209,21 +191,32 @@ export const ProyectoView = () => {
       
         let childNode = children;
 
+        
+        
         if (editable) {            
                         
             
             childNode = editing ? (               
                 <Form.Item
-                    style={{ margin: 0 }}
-                    name={dataIndex}
+                style={{ margin: 0 }}
+                name={dataIndex}
+                rules={[
+                    {
+                    required: true,
+                    message: `${title} is required.`,
+                    },
+                ]}
                 >
                 {
-                   
-                    inputType === 'avatar' 
+                    inputType === 'text' 
+                    ?   (<Input ref={inputRef} onPressEnter={save} onBlur={save} />) 
+                    :   inputType === 'avatar' 
                     ?   (<Select
                             defaultOpen={true}
                             ref={inputRef}
                             onChange={save}
+                            defaultValue={record[dataIndex]}
+                            style={{ width: '100%' }}
                             mode="multiple"
                             bordered={false}
                             tagRender={tagRender}
@@ -234,25 +227,29 @@ export const ProyectoView = () => {
                             ref={inputRef}
                             defaultOpen={true}
                             onChange={save}
+                            defaultValue={record[dataIndex]}
+                            style={{ width: '100%' }}
                             bordered={false}
                             options={statusOptions}                            
                         /> ) 
                     :   inputType === 'rangepicker' 
                     ?   ( 
                             <DatePicker
+                                defaultValue={dayjs('2021-01-01', 'YYYY-MM-DD')} 
                                 format={'DD-MM-YYYY'}
                                 ref={inputRef}
                                 defaultOpen={true}
                                 onChange={save}
+                                style={{ width: '100%' }}
                                 bordered={false}
                             />
                         ) 
-                    :   (<Input className='formInput' bordered={false} ref={inputRef} onPressEnter={save} onBlur={save} />) 
+                    :   <Input ref={inputRef} onPressEnter={save} onBlur={save} />
                 }
                 </Form.Item>
             ) : (
                 <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
-                    {children}
+                {children}
                 </div>
             );
         }
@@ -262,8 +259,8 @@ export const ProyectoView = () => {
 
     const components = {
         body: {
-            row: EditableRow,
-            cell: EditableCell,
+          row: EditableRow,
+          cell: EditableCell,
         },
     };
 
@@ -317,41 +314,7 @@ export const ProyectoView = () => {
 
     return (
         <>
-
-            <h1>{ currentProyecto.titulo }</h1>
-
-                <Segmented
-                    className='my-4'
-                    options={[
-                        {
-                            label: 'Listado',
-                            value: 'listado',
-                            icon: <Icon iconName='faList' />
-                        },
-                        {
-                            label: 'Gantt',
-                            value: 'gantt',
-                            icon: <Icon iconName='faChartGantt' />
-                        },
-                        {
-                            label: 'Calendario',
-                            value: 'calendario',
-                            icon: <Icon iconName='faCalendar' />
-                        },
-                        {
-                            label: 'Kanban',
-                            value: 'kanban',
-                            icon: <Icon iconName='faColumns' />
-                        }
-                    ]}
-                />
-
-                <div>
-                    <CustomDropdown  buttonText='Persona' iconButton='faPerson' >
-                        Hola
-                    </CustomDropdown>   
-                </div>
-
+            <Box className='mb-16'>
                 <Collapse 
                     collapsible='header' 
                     defaultActiveKey={[currentProyecto?.proyectos_hitos[0]?.id]}
@@ -363,9 +326,8 @@ export const ProyectoView = () => {
                                 header={`${hitos.titulo}`} key={hitos.id}>
                                 <Table 
                                     components={components}
-                                    scroll={{ x: 1000 }}
                                     columns={columns as ColumnTypes}
-                                    bordered={false}
+                                    bordered
                                     dataSource={hitos.hitos_acciones || []}
                                     pagination={false}
                                     rowClassName="editable-row"
@@ -376,7 +338,7 @@ export const ProyectoView = () => {
                     }
 
                 </Collapse>
-            {/* </Box> */}
+            </Box>
 
         </>
     )

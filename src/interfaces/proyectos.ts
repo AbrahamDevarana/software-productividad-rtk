@@ -1,17 +1,18 @@
-import { InitialState, Paginate, UsuarioProps } from ".";
+import { HitosProps, InitialState, Paginate, UsuarioProps } from ".";
 
 
 export interface ProyectosProps {
-    id:          string;
-    titulo:      string;
+    id: string;
+    titulo: string;
     descripcion: string;
-    icono:       string;
-    imagen:      string;
+    icono: string;
+    imagen: string;
     participantesIds: string[];
     participantes: UsuarioProps[];
+    proyectos_hitos: HitosProps[];
     fechaInicio: Date;
-    fechaFin:    Date;
-    status:      number;
+    fechaFin: Date;
+    status: number;
 }
 
 

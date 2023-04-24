@@ -13,4 +13,5 @@ export * from "./areas";
 export * from "./operativos";
 export * from "./resultadoClave";
 export * from "./proyectos";
-
+export * from "./hitos";
+export * from "./acciones";

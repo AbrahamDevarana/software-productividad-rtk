@@ -14,6 +14,7 @@ const initialState: ProyectosState = {
         fechaInicio: new Date(),
         fechaFin: new Date(),
         status: 0,
+        proyectos_hitos: [],
     },
     isLoadingProyecto: false,
     errorProyecto: false,

@@ -298,6 +298,17 @@ input {
         cursor: default!important;
         opacity: 1;
     }
+}
 
+
+.formInput {
+    color: #848891 !important;
+    padding: 2px 0!important;
 
 }
+
+.editable-row .ant-form-item-explain {
+    position: absolute;
+    top: 100%;
+    font-size: 12px;
+  }
