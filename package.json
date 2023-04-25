@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_OPTIONS=--max-old-space-size=2048 tsc && vite build",
+    "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && vite build",
     "preview": "vite preview",
     "serve": "tsc && vite build && serve -s dist"
   },
