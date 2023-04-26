@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 // @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;700&family=Playfair+Display&display=swap');
-@import './assets/scss/variables.scss';
+@import './assets/scss/_variables.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 
@@ -312,3 +312,22 @@ input {
     top: 100%;
     font-size: 12px;
   }
+
+.customInput{
+    &.ant-input {
+        border-color: transparent;
+        box-shadow: none;
+        background-color: transparent;
+        color: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    &.ant-input:focus, &.ant-input-focused, &.ant-input:hover, &.ant-input-active {
+        box-shadow: none;
+        outline: none;
+    }
+    &:hover, &:focus, &:active {
+        @apply border border-devarana-graph border-solid border-opacity-20 transition-all ease-in-out duration-500;
+    }
+}

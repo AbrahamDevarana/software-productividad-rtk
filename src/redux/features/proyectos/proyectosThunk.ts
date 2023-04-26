@@ -1,7 +1,8 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { ProyectosProps } from '@/interfaces';
+import { HitosProps, ProyectosProps } from '@/interfaces';
 import { checkingProyectos, createProyecto, getProyecto, getProyectos, setProyectosError, updateProyecto, checkingProyecto, clearProyecto, clearProyectos, setProyectoError } from './proyectosSlice';
 import { createProyectoProvider, deleteProyectoProvider, getProyectoProvider, getProyectosProvider, updateProyectoProvider } from './proyectosProvider';
+import { updateHitoProvider } from '../hitos/hitosProvider';
 
 export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingProyectos())
@@ -48,3 +49,16 @@ export const clearProyectoThunk = () => async (dispatch: AppDispatch) => {
 }
 
 
+
+
+//  Hitos
+
+export const updateHitoProyectoThunk = (hito: HitosProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    dispatch(checkingProyecto())
+    const response = await updateHitoProvider(hito, getState)
+    if (response.ok) {
+        dispatch(updateProyecto(response.hito))
+    } else {
+        dispatch(setProyectoError(response.errorMessage))
+    }
+}

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
-import { clearProyectoThunk, getProyectoThunk,  } from '@/redux/features/proyectos/proyectosThunk'
+import { clearProyectoThunk, getProyectoThunk, updateHitoProyectoThunk,  } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 
 import type { SelectProps } from 'antd';
-import { Avatar, Button, Collapse, DatePicker, Dropdown, Form, Input, Popconfirm, Segmented, Select, Space, Table, Tooltip } from 'antd';
+import { Avatar, Button, Collapse, DatePicker, Dropdown, Form, Input, Popconfirm, Segmented, Select, Space, Table, Tooltip, message } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { Box } from '@/components/ui';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
@@ -15,6 +15,7 @@ import { useColor } from '../../hooks/useColor';
 import dayjs from 'dayjs';
 import { Icon } from '@/components/Icon';
 import { CustomDropdown } from '@/components/ui/CustomDropdown';
+import { UserDropDown } from '@/components/ui/UserDropDown';
 
 interface DataType extends HitosProps{
     key: React.Key;
@@ -47,6 +48,8 @@ export const ProyectoView = () => {
     const { id } = useParams<{ id: string }>()
     const { currentProyecto } = useAppSelector(state => state.proyectos)
     const { usuarios } = useAppSelector(state => state.usuarios)
+
+    const [form] = Form.useForm();
 
     useEffect(() => {
       if(id) {
@@ -142,6 +145,24 @@ export const ProyectoView = () => {
         console.log('save');
         console.log(record);
     }
+
+    const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
+
+        const { value } = e.target as HTMLInputElement
+
+        if(value === hito.titulo) return
+        if(!value) return e.currentTarget.focus()
+
+        const query = {
+            ...hito,
+            titulo: value
+        }
+
+        dispatch(updateHitoProyectoThunk(query))
+        
+
+        
+    };
 
     const columns = defaultColumns.map((col) => {
         if (!col.editable) {
@@ -347,26 +368,40 @@ export const ProyectoView = () => {
                 />
 
                 <div>
-                    <CustomDropdown  buttonText='Persona' iconButton='faPerson' >
-                        Hola
-                    </CustomDropdown>   
+                    <UserDropDown searchFunc={ getUsuariosThunk } data={usuarios}  />
                 </div>
-
+ 
                 <Collapse 
                     collapsible='header' 
-                    defaultActiveKey={[currentProyecto?.proyectos_hitos[0]?.id]}
+                    defaultActiveKey={currentProyecto.proyectos_hitos.map((hito: HitosProps) => hito.id)}
                     ghost
                 >
                     {
-                        currentProyecto && currentProyecto.proyectos_hitos.map((hitos: any, index: number) => (
+                        currentProyecto && currentProyecto.proyectos_hitos.map((hito: HitosProps, index: number) => (
                             <Panel 
-                                header={`${hitos.titulo}`} key={hitos.id}>
+                                header={
+                                    <Form 
+                                        onClick={ e => e.stopPropagation()}
+                                    >
+                                        <Input
+                                            onBlur={ e => handleChangeHito(hito, e) } 
+                                            defaultValue={hito.titulo} 
+                                            onPressEnter={ (e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    e.currentTarget.blur()
+                                                }
+                                            }
+                                            className='customInput'
+                                             />
+                                    </Form>
+                                } key={hito.id}>
                                 <Table 
                                     components={components}
                                     scroll={{ x: 1000 }}
                                     columns={columns as ColumnTypes}
                                     bordered={false}
-                                    dataSource={hitos.hitos_acciones || []}
+                                    dataSource={hito.hitos_acciones || []}
                                     pagination={false}
                                     rowClassName="editable-row"
                                     rowKey={(record: any) => record.id}
