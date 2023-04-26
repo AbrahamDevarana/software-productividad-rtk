@@ -5,7 +5,7 @@ import { FormObjetivo } from './FormObjetivo';
 import { useAppSelector } from '@/redux/hooks';
 import { FormResultados } from '@/components/resultados/FormResultados';
 import Loading from '@/components/antd/Loading';
-import { CalendarObjetivo } from './Calendar';
+
 
 
 export const WizardOperativo:FC = () => {
@@ -50,7 +50,7 @@ export const WizardOperativo:FC = () => {
                         
                         { current === 1 && <FormResultados currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
         
-                        { current === 2 && <CalendarObjetivo currentOperativo={currentOperativo} /> }
+                        {/* { current === 2 && <CalendarObjetivo currentOperativo={currentOperativo} /> } */}
                     </div>
                 )
             }
