@@ -9,24 +9,28 @@ interface GanttProps {
 
 
 export const Gantt = ({currentProyecto}: GanttProps) => {
-
-  console.log(currentProyecto);
-  
-  
   
 	const treeSize = '30%';
 	const durationUnit = 'hour';
 
+	const today = new Date(),
+		year = today.getFullYear(),
+		month = today.getMonth(),
+		date = today.getDate();
+
 	const taskColumns = [{
 		label: 'Tasks',
 		value: 'label',
-		size: '60%'
+		size: '60%',
 	}, 
 	{
 		label: 'Duration (hours)',
 		value: 'duration',
+		size: '20%',
 		formatFunction: (date:any) => parseInt(date)
 	}];
+
+	
 
 	const dataSource = useMemo(() => {
     const data = currentProyecto.proyectos_hitos?.map((proyecto_hito) => {
@@ -40,8 +44,8 @@ export const Gantt = ({currentProyecto}: GanttProps) => {
 			tasks: proyecto_hito.hitos_acciones?.map((hito) => {
 				return {
 				label: hito.nombre,
-				dateStart: '2023-02-10',
-				dateEnd: '2023-10-10',
+				dateStart: hito.fechaInicio,
+				dateEnd: hito.fechaFin,
 				type: 'task',
 				}
 			})
@@ -53,12 +57,15 @@ export const Gantt = ({currentProyecto}: GanttProps) => {
 
 	return (
 		<div>
-			<GanttChart 
+			<GanttChart
+				dateStart={new Date(year, month, date - 1, 8, 0, 0)}
+				dateEnd={new Date(year, month, date + 1, 17, 0, 0)}
                 dataSource={dataSource} 
-                taskColumns={taskColumns} 
+                taskColumns={taskColumns}
                 treeSize={treeSize} 
                 durationUnit={durationUnit}
-                
+                currentTimeIndicator={true}
+				shadeUntilCurrentTime={true}
                 id="gantt"/>
 		</div>
 	);
