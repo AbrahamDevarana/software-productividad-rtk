@@ -41,10 +41,6 @@ export default defineConfig({
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "ckeditor": ["@ckeditor/ckeditor5-react", "@ckeditor/ckeditor5-build-classic"],
-                "@fullcalendar/core": ["@fullcalendar/core"],
-                "@fullcalendar/daygrid" : ["@fullcalendar/daygrid"],
-                "@fullcalendar/interaction": ["@fullcalendar/interaction"],
-                "@fullcalendar/react": ["@fullcalendar/react"],
             }
         },
         chunkSizeWarningLimit: 1500
