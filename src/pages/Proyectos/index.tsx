@@ -1,8 +1,7 @@
 import { Icon } from "@/components/Icon"
 import Loading from "@/components/antd/Loading"
-import { Objetivo } from "@/components/operativo/Objetivo"
+import { Gantt } from "@/components/complexUI/Gantt"
 import { Box } from "@/components/ui"
-import { useColor } from "@/hooks"
 import { getProyectosThunk } from "@/redux/features/proyectos/proyectosThunk"
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -64,8 +63,6 @@ export const Proyectos = () => {
             closable={false}
             destroyOnClose={true}
         >
-            
-
         </Modal>
 
     <FloatButton
