@@ -1,4 +1,5 @@
 import { AccionesProps } from "./acciones";
+import { InitialState } from "./slice";
 
 
 export interface HitosProps {
@@ -10,4 +11,11 @@ export interface HitosProps {
     status: number;
     proyectoId: string;
     hitos_acciones: AccionesProps[];
+}
+
+
+export interface HitosState extends InitialState {
+    hitos: HitosProps[];
+    currentHito: HitosProps;
+    isLoadingCurrentHito: boolean;
 }

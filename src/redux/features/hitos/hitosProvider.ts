@@ -21,3 +21,23 @@ export const updateHitoProvider = async (hito: HitosProps, getState: () => RootS
         }
     }
 }
+
+export const createHitoProvider = async (hito: HitosProps, getState: () => RootState) => {
+    console.log(hito);
+    
+    try {
+        const response = await clientAxios.post(`/hitos`, hito, { headers: { "accessToken": `${getState().auth.accessToken}` } });
+        return {
+            ok: true,
+            hito: response.data
+        }
+    } catch (error: any) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        return {
+            ok: false,
+            errorCode,
+            errorMessage
+        }
+    }
+}

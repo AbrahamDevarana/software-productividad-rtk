@@ -4,8 +4,6 @@ import { RootState } from "@/redux/store";
 
 
 export const getProyectosProvider = async (filtros: any, getState: () => RootState) => {
-    console.log("getProyectosProvider", filtros);
-    
     try {
         const response = await clientAxios.get(`/proyectos`, { headers: { "accessToken": `${getState().auth.accessToken}` }, params: filtros });
         return {

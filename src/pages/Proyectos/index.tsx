@@ -1,11 +1,12 @@
 import { Icon } from "@/components/Icon"
 import Loading from "@/components/antd/Loading"
 import { Gantt } from "@/components/complexUI/Gantt"
+import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
-import { getProyectosThunk } from "@/redux/features/proyectos/proyectosThunk"
+import { clearProyectoThunk, getProyectoThunk, getProyectosThunk } from "@/redux/features/proyectos/proyectosThunk"
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Button, Card, Empty, FloatButton, Modal, Progress } from "antd"
+import { Button, Card, Divider, Empty, FloatButton, Modal } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
@@ -21,8 +22,13 @@ export const Proyectos = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false)
+        dispatch(clearProyectoThunk())
     }
 
+    const handleEdit = (proyectoId: string) => {
+        dispatch(getProyectoThunk(proyectoId))
+        setIsModalVisible(true)
+    }
     
     return (
         <>
@@ -33,22 +39,32 @@ export const Proyectos = () => {
 
             </Box>
 
-            <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+            <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5' >
                 
                 {   isLoading 
                     ?   <div className="col-span-12"> <Loading /> </div>
                     :   proyectos.length > 0 
                     ?   proyectos.map((proyecto, index) => (
-                            <>
-                                <Box key={index} className="col-span-4">
-                                    <Card title={proyecto.titulo} bordered={false} >
-                                        <p>{proyecto.descripcion}</p>
+                            <div key={index} className="lg:col-span-4 md:col-span-6 col-span-12">
+                                <Card 
+                                    hoverable
+                                    bordered={false} 
+                                    cover={ <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" /> }
+                                    actions={[
                                         <Link to={`/proyectos/${proyecto.id}`}> 
-                                            <Button htmlType="button" type="default" >Ver proyecto</Button>
-                                        </Link>
-                                    </Card>
-                                </Box>
-                            </>
+                                            <Icon className="w-full" iconName="faEye" />
+                                        </Link>,
+                                        <Icon className="w-full" iconName="faEdit" onClick={() => handleEdit(proyecto.id)} />,
+                                        <Icon className="w-full" iconName="faTrash" />
+                                    ]}
+                                    bodyStyle={{ height: '150px', overflowY: 'auto' }}
+                                >
+                                    <Card.Meta 
+                                        title={<p className="text-devarana-graph font-medium">{proyecto.titulo}</p>}
+                                        description={proyecto.descripcion}
+                                    />                                       
+                                </Card>
+                            </div>
                         ))
                     : <Empty className="col-span-12" description="No hay proyectos" />
                 }        
@@ -59,10 +75,11 @@ export const Proyectos = () => {
             open={isModalVisible}
             footer={null}
             onCancel={handleCancel}
-            width={1000}
+            width={800}
             closable={false}
             destroyOnClose={true}
         >
+            <FormProyecto currentProyecto={currentProyecto}  handleCancel={handleCancel}/>
         </Modal>
 
     <FloatButton

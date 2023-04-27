@@ -1,5 +1,5 @@
 import { HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
-import { updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
+import { createHitoProyectoThunk, updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Avatar, Collapse, DatePicker, Form, FormInstance, Input, Select, SelectProps, Table, } from 'antd'
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -34,19 +34,28 @@ export const TableProyectos = ({currentProyecto}: TableProyectosProps) => {
 
 
     const { usuarios } = useAppSelector(state => state.usuarios)
+    const { currentHito } = useAppSelector(state => state.hitos)
 
 
-    const EditableContext = React.createContext<FormInstance<any> | null>(null);
-    
-    const dispatch = useAppDispatch()
-    const { Panel } = Collapse;
+    const [nuevoHito, setNuevoHito] = useState<HitosProps>({
+        ...currentHito,
+        proyectoId: currentProyecto.id,
+
+    })
     const [form] = Form.useForm();
 
-    const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
+
+        const EditableContext = React.createContext<FormInstance<any> | null>(null);
+        
+        const dispatch = useAppDispatch()
+        const { Panel } = Collapse;
+
+        const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
 
         const { value } = e.target as HTMLInputElement
 
         if(value === hito.titulo) return
+        if(value === '') return e.currentTarget.focus()
         if(!value) return e.currentTarget.focus()
 
         const query = {
@@ -54,10 +63,18 @@ export const TableProyectos = ({currentProyecto}: TableProyectosProps) => {
             titulo: value
         }
 
-        dispatch(updateHitoProyectoThunk(query))
-        
 
-        
+        dispatch(updateHitoProyectoThunk(query))
+    };
+
+    const handleCreateHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
+
+        console.log(hito);        
+        dispatch(createHitoProyectoThunk(hito))
+        setNuevoHito({
+            ...nuevoHito,
+            titulo: ''
+        })
     };
 
    
@@ -357,7 +374,36 @@ export const TableProyectos = ({currentProyecto}: TableProyectosProps) => {
                             rowKey={(record: any) => record.id}
                         />
                     </Panel>
-                ))
+                )) 
+            }
+
+            {
+                true && (
+                    <Panel 
+                        header={
+                        <Form
+                            onClick={ e => e.stopPropagation()}
+                            form={form}
+                        >
+                            <Input
+                                name='titulo'
+                                value={nuevoHito.titulo}
+                                onBlur={ e => handleCreateHito(nuevoHito, e) }
+                                onPressEnter={ (e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        e.currentTarget.blur()
+                                }}
+                                onChange={ e => setNuevoHito({ ...nuevoHito, titulo: e.target.value }) }
+                                placeholder='Nuevo Hito'
+                                className='customInput'
+                            />
+                        </Form>
+                    } key='nuevoHito'>
+                </Panel>
+                )
+                
+                
             }
 
         </Collapse>

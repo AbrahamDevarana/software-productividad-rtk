@@ -35,12 +35,18 @@ export const Gantt = ({currentProyecto}: GanttProps) => {
 	const dataSource = useMemo(() => {
     const data = currentProyecto.proyectos_hitos?.map((proyecto_hito) => {
 		return {
+			dragProject: true,
 			synchronized: true,
 			label: proyecto_hito.titulo,
 			type: 'project',
 			expanded: true,
 			dateStart: proyecto_hito.fechaInicio,
 			dateEnd: proyecto_hito.fechaFin,
+			connections: [{
+				target: 1,
+				type: 0
+			}],
+
 			tasks: proyecto_hito.hitos_acciones?.map((hito) => {
 				return {
 				label: hito.nombre,

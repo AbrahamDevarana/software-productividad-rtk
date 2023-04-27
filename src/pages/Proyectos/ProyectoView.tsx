@@ -60,7 +60,7 @@ export const ProyectoView = () => {
 
 
     return (
-        <>
+        <div className='min-h-[500px]'>
 
             <h1>{ currentProyecto.titulo }</h1>
 
@@ -80,9 +80,9 @@ export const ProyectoView = () => {
                     <>
                         {
                             value === 'listado' && (
-                                <p>
+                                <div>
                                     <TableProyectos currentProyecto={currentProyecto} />
-                                </p>
+                                </div>
                             )
                         }
                         {
@@ -110,6 +110,6 @@ export const ProyectoView = () => {
            
             
 
-        </>
+        </div>
     )
 }
