@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { Form, Alert, DatePicker, Input, Select, Radio, Divider, Checkbox } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';

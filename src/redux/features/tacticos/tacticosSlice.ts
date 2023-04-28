@@ -87,6 +87,7 @@ const tacticosSlice = createSlice({
         },
         updateTactico: (state, action) => {
             const {objetivo} = action.payload
+            console.log(objetivo);
             
             
             if(objetivo.estrategicoId){
@@ -101,6 +102,8 @@ const tacticosSlice = createSlice({
             state.updated = true
             state.isLoading = false
             state.currentTactico = objetivo
+        },
+        updateTacticoEstrategia: (state, action) => {
         },
         deleteTactico: (state, action) => {
             state.tacticos = state.tacticos.filter(tactico => tactico.id !== action.payload.id)
@@ -133,6 +136,7 @@ export const {
     getCurrentTactico,
     createTactico,
     updateTactico,
+    updateTacticoEstrategia,
     deleteTactico,
     clearTacticos,
     clearCurrentTactico,

@@ -11,7 +11,7 @@ interface FormProyectoProps {
     handleCancel: () => void
 }
 
-export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps) => {
+export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps) => {   
 
     const { RangePicker } = DatePicker;
     const { TextArea } = Input;
@@ -68,7 +68,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                         label="Fecha"
                         className='col-span-12'
                     >
-                        <RangePicker className='w-full' defaultValue={[dayjs(values.fechaInicio), dayjs(values.fechaFin)]}  onCalendarChange={
+                        <RangePicker className='w-full' value={[dayjs(values.fechaInicio).add(6, 'hour'), dayjs(values.fechaFin).add(6, 'hour')]}  onCalendarChange={
                             (value, valueString) => {
                                 setFieldValue('fechaInicio', valueString[0])
                                 setFieldValue('fechaFin', valueString[1])

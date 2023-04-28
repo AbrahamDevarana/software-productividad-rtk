@@ -24,19 +24,19 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
 
   return (
     <div className='h-screen'>
-        <div className="w-[90px] h-screen bg-white p-2 shadow-lg dark:bg-dark-gradient">
+        <div className="w-[90px] h-screen p-2 shadow-lg bg-dark-gradient">
             <div className="flex flex-col menuSidebar items-center h-full gap-y-1 menu_sidebar">
                 <NavLink to={'/'} className={`link nav-link`}>
                     <SvgIsotipo className={`h-10 w-full block svg-icon brand`} />
                 </NavLink>
 
-                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
+                <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
                     <AvatarProfile picture={userAuth?.foto} preview={false} className="h-5 w-5 mx-auto" />
                 </NavLink>
 
-                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
+                <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
                     {/* <Icon iconName="faDove" className="h-5 w-5 mx-auto text-2xl" /> */}
                     <SvgIsotipo className={`h-6 w-full block svg-icon`} />
@@ -50,7 +50,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     <Icon iconName="faBrain" className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Táctica</span>
                 </div>
-                <div className='bg-gradient-to-r from-transparent dark:via-white via-devarana-midnight  to-transparent h-0.5 w-full rounded-full opacity-20' />
+                <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
                     <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
                     <span className="text-xs text-center font-light block">Objetivos</span>

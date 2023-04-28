@@ -9,6 +9,9 @@ interface GanttProps {
 
 
 export const Gantt = ({currentProyecto}: GanttProps) => {
+
+    console.log(currentProyecto);
+    
   
 	const treeSize = '30%';
 	const durationUnit = 'hour';
@@ -28,7 +31,14 @@ export const Gantt = ({currentProyecto}: GanttProps) => {
 		value: 'duration',
 		size: '20%',
 		formatFunction: (date:any) => parseInt(date)
-	}];
+	},
+    {
+        label: 'Participantes',
+        value: 'participantes',
+        size: '20%',
+        
+    }
+];
 
 	
 
@@ -68,7 +78,7 @@ export const Gantt = ({currentProyecto}: GanttProps) => {
 				dateEnd={new Date(year, month, date + 1, 17, 0, 0)}
                 dataSource={dataSource} 
                 taskColumns={taskColumns}
-                treeSize={treeSize} 
+                treeSize={treeSize}
                 durationUnit={durationUnit}
                 currentTimeIndicator={true}
 				shadeUntilCurrentTime={true}

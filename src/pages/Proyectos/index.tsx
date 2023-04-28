@@ -3,7 +3,7 @@ import Loading from "@/components/antd/Loading"
 import { Gantt } from "@/components/complexUI/Gantt"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
-import { clearProyectoThunk, getProyectoThunk, getProyectosThunk } from "@/redux/features/proyectos/proyectosThunk"
+import { clearProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk,  } from "@/redux/features/proyectos/proyectosThunk"
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Button, Card, Divider, Empty, FloatButton, Modal } from "antd"
@@ -29,6 +29,12 @@ export const Proyectos = () => {
         dispatch(getProyectoThunk(proyectoId))
         setIsModalVisible(true)
     }
+
+    const handleDelete = (proyectoId: string) => {
+        dispatch(deleteProyectoThunk(proyectoId))
+        setIsModalVisible(true)
+    }
+
     
     return (
         <>

@@ -47,6 +47,16 @@ export const clearProyectoThunk = () => async (dispatch: AppDispatch) => {
 }
 
 
+export const deleteProyectoThunk = (proyectoId: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const response = await deleteProyectoProvider(proyectoId, getState)
+    if (response.ok) {
+        dispatch(clearProyecto())
+    } else {
+        dispatch(setProyectosError(response.errorMessage))
+    }
+}
+
+
 
 
 //  Hitos

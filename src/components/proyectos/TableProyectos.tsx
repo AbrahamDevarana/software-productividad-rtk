@@ -376,36 +376,6 @@ export const TableProyectos = ({currentProyecto}: TableProyectosProps) => {
                     </Panel>
                 )) 
             }
-
-            {
-                true && (
-                    <Panel 
-                        header={
-                        <Form
-                            onClick={ e => e.stopPropagation()}
-                            form={form}
-                        >
-                            <Input
-                                name='titulo'
-                                value={nuevoHito.titulo}
-                                onBlur={ e => handleCreateHito(nuevoHito, e) }
-                                onPressEnter={ (e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        e.currentTarget.blur()
-                                }}
-                                onChange={ e => setNuevoHito({ ...nuevoHito, titulo: e.target.value }) }
-                                placeholder='Nuevo Hito'
-                                className='customInput'
-                            />
-                        </Form>
-                    } key='nuevoHito'>
-                </Panel>
-                )
-                
-                
-            }
-
         </Collapse>
     )
 }
