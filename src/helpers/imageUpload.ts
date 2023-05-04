@@ -26,3 +26,26 @@ export const uploadUserPicture = async (file: string | RcFile | Blob, id: string
     }
 }
 
+interface Props {
+    file: string | RcFile | Blob;
+    id: string;
+    url: string;
+}
+
+export const uploadImage = async ({file, id, url}: Props) => {
+
+    const formData = new FormData();
+    formData.append('file', file as Blob);
+    const result = await clientAxios.post(`/upload/${url}/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'accessToken': `${localStorage.getItem('accessToken')}`
+        }
+    })
+
+    return {
+        ok: result.status === 200,
+        status: result.status,
+    }
+}
+

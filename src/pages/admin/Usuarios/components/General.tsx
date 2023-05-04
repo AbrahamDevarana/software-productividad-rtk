@@ -67,16 +67,11 @@ export const General: React.FC<any> = ({handleSteps}) => {
 
     const handleOnChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
         setFileList(newFileList);
-        dispatch(uploadImageThunk(currentUsuario.id, newFileList))
+        // dispatch(uploadImageThunk(currentUsuario.id, newFileList))
     }
 
     const handleOnRemove = async (file: UploadFile) => {
-        
         const res = await dispatch(deleteProfilePhotoThunk(currentUsuario.id))
-
-        console.log(res);
-        
-
         setFileList([])
     }
 

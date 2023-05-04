@@ -13,7 +13,7 @@ import { Link } from "react-router-dom"
 export const Proyectos = () => {
 
     const dispatch = useAppDispatch()
-    const { proyectos, currentProyecto, isLoading  } = useAppSelector(state => state.proyectos)
+    const { proyectos, currentProyecto, isLoading, isLoadingProyecto  } = useAppSelector(state => state.proyectos)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
     useEffect(() => {
@@ -53,9 +53,15 @@ export const Proyectos = () => {
                     ?   proyectos.map((proyecto, index) => (
                             <div key={index} className="lg:col-span-4 md:col-span-6 col-span-12">
                                 <Card 
-                                    hoverable
+                                    // hoverable
                                     bordered={false} 
-                                    cover={ <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" /> }
+                                    cover={ <img alt={proyecto.titulo } className="object-cover object-center w-full max-h-[150px]" onError={
+                                        (e: any) => {
+                                            e.target.onerror = null;
+                                            e.target.src = `${import.meta.env.VITE_STORAGE_URL}/custom-images/noBanner.png`;
+                                            e.target.className = 'object-contain object-center w-full max-h-[150px]'
+                                        }
+                                    } src={`${import.meta.env.VITE_STORAGE_URL}${proyecto.imagen}`} /> }
                                     actions={[
                                         <Link to={`/proyectos/${proyecto.id}`}> 
                                             <Icon className="w-full" iconName="faEye" />
@@ -85,7 +91,7 @@ export const Proyectos = () => {
             closable={false}
             destroyOnClose={true}
         >
-            <FormProyecto currentProyecto={currentProyecto}  handleCancel={handleCancel}/>
+            <FormProyecto currentProyecto={currentProyecto}  handleCancel={handleCancel} isLoadingProyecto={isLoadingProyecto} />
         </Modal>
 
     <FloatButton

@@ -86,7 +86,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     }
 
    
-    if (isLoading && userAuth.id === '') return <Loading />;
+    if (isLoading && userAuth?.id === '') return <Loading />;
     return (
         <>
         <div className='w-full'>  
