@@ -279,15 +279,15 @@ p, li, span, a{
 
 
 label{
-    color: rgba(46, 49, 54, .5)!important;
-    font-size: 12px!important;
+    color: rgba(132, 136, 145, 1)!important;
+    font-size: 14px!important;
     font-weight: 500!important;
 }
 
 input, textarea {
     color: #848891!important;
     font-weight: 300;
-    // font-size: 14px!important;w
+    // font-size: 14px!important;
 }
 
 
@@ -308,11 +308,6 @@ input, textarea {
 
 }
 
-.editable-row .ant-form-item-explain {
-    position: absolute;
-    top: 100%;
-    font-size: 12px;
-  }
 
 .customInput{
     &.ant-input {
@@ -331,4 +326,27 @@ input, textarea {
     &:hover, &:focus, &:active {
         @apply border border-devarana-graph border-solid border-opacity-20 transition-all ease-in-out duration-500;
     }
+}
+
+
+.customSelect {
+
+}
+
+.customPicker {
+    
+}
+
+
+.customGantt{
+    .label {
+        position: relative!important;
+        top: unset!important;
+        text-align: center!important;
+        margin: auto!important;        
+    }
+}
+.customEditableTable{
+    background-color: transparent!important;
+    
 }

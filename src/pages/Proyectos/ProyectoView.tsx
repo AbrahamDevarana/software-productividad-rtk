@@ -3,19 +3,21 @@ import { useParams } from 'react-router'
 import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Segmented } from 'antd';
+import { Drawer, Segmented } from 'antd';
 import { Icon } from '@/components/Icon';
 import { UserDropDown } from '@/components/ui/UserDropDown';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { TableProyectos } from '@/components/proyectos/TableProyectos';
+import { FormAccionesProyecto } from '../../components/forms/FormAccionesProyecto';
 
-
+type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
     const { currentProyecto } = useAppSelector(state => state.proyectos)
     const { usuarios } = useAppSelector(state => state.usuarios)
-    const [value, setValue] = useState<string | number>('listado');
+    const [value, setValue] = useState<SegmentTypes>('listado');
+    const [visible, setVisible] = useState<boolean>(false);
 
 
     const options = [
@@ -48,14 +50,18 @@ export const ProyectoView = () => {
     
 
     useEffect(() => {
-      if(id) {
-        dispatch(getProyectoThunk(id))
-      }
-    //   dispatch(getUsuariosThunk({}))
-      return () => {
-        dispatch(clearProyectoThunk())
-      }
+        if(id) {
+            dispatch(getProyectoThunk(id))
+        }
+        //   dispatch(getUsuariosThunk({}))
+        return () => {
+            dispatch(clearProyectoThunk())
+        }
     }, [id])
+
+    const handleClose = () => {
+        setVisible(false)
+    }
 
 
 
@@ -68,7 +74,7 @@ export const ProyectoView = () => {
                     className='my-4'
                     options={options}
                     value={value}
-                    onChange={setValue}
+                    onChange={(value) => setValue(value as SegmentTypes)}
                 />
 
                 <div>
@@ -81,13 +87,13 @@ export const ProyectoView = () => {
                         {
                             value === 'listado' && (
                                 <div>
-                                    <TableProyectos currentProyecto={currentProyecto} />
+                                    <TableProyectos currentProyecto={currentProyecto} visible={visible} setVisible={setVisible}/>
                                 </div>
                             )
                         }
                         {
                             value === 'gantt' && (
-                                <Gantt currentProyecto={currentProyecto}/>
+                                <Gantt currentProyecto={currentProyecto} visible={visible} setVisible={setVisible}/>
                             )
                         }
                         {
@@ -110,6 +116,16 @@ export const ProyectoView = () => {
            
             
 
+            <Drawer
+                open={visible}
+                onClose={handleClose}
+                placement='right'
+                width='500'
+            >
+                <FormAccionesProyecto />
+            </Drawer>
         </div>
+
+
     )
 }

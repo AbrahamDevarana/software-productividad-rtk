@@ -8,9 +8,8 @@ import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks
 import dayjs from 'dayjs';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Editor from '@ckeditor/ckeditor5-build-classic';
-import { editorConfiguration } from '@/helpers/CKEditor';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useColor } from '@/hooks';
 import { TabStatus } from '../ui/TabStatus';
 import { useNavigate } from 'react-router-dom';
@@ -338,15 +337,13 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 label="Meta a alcanzar"
                                 className='col-span-12 form-editor'
                             >
-                                <CKEditor
-                                    editor={Editor}
-                                    data={values.descripcion}
-                                    onChange={(event:any, editor:any) => {
-                                        const data = editor.getData();
-                                        setFieldValue('descripcion', data)
-                                    }}
-                                    config={editorConfiguration}                                   
+                                
+                                <ReactQuill
+                                    value={values.descripcion}
+                                    onChange={(value) => setFieldValue('descripcion', value)}
+                                     
                                 />
+
 
                                 {/* <TextArea rows={3} value={values.descripcion} onChange={handleChange}  name="descripcion" /> */}
                                 <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />

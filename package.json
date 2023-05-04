@@ -10,8 +10,6 @@
     "serve": "tsc && vite build && serve -s dist"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
-    "@ckeditor/ckeditor5-react": "^5.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-regular-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
@@ -28,6 +26,7 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-icons": "^4.6.0",
+    "react-quill": "^2.0.0",
     "react-redux": "^8.0.4",
     "react-resizable": "^3.0.4",
     "react-router-dom": "^6.4.2",
@@ -37,8 +36,6 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@types/ckeditor__ckeditor5-basic-styles": "^28.0.2",
-    "@types/ckeditor__ckeditor5-block-quote": "^29.0.4",
     "@types/js-cookie": "^3.0.2",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.15.0",

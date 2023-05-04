@@ -40,7 +40,7 @@ export default defineConfig({
                 "axios": ["axios"],
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
-                "ckeditor": ["@ckeditor/ckeditor5-react", "@ckeditor/ckeditor5-build-classic"],
+                "react-quill": ["react-quill"],
             }
         },
         chunkSizeWarningLimit: 1500
