@@ -11,7 +11,7 @@ const initialState:HitosState = {
         fechaFin: new Date(),
         status: 0,
         proyectoId: '',
-        hitos_acciones: []
+        tareas: []
     },
     created:false,
     updated:false,

@@ -1,5 +1,5 @@
-import { AccionesProps } from "./acciones";
 import { InitialState } from "./slice";
+import { TareasProps } from "./tareas";
 
 
 export interface HitosProps {
@@ -10,7 +10,7 @@ export interface HitosProps {
     fechaFin: Date;
     status: number;
     proyectoId: string;
-    hitos_acciones: AccionesProps[];
+    tareas: TareasProps[];
 }
 
 

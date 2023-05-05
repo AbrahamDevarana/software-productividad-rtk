@@ -4,16 +4,16 @@ import React, { useMemo } from 'react'
 import { GanttChart } from 'smart-webcomponents-react/ganttchart';
 import ReactDOMServer from 'react-dom/server';
 import dayjs from 'dayjs';
+import { useAppSelector } from '@/redux/hooks';
 
 interface GanttProps {
-	currentProyecto: ProyectosProps
+    currentProyecto: ProyectosProps
     visible: boolean
     setVisible: (visible: boolean) => void
 }
 
 export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 
-  
 	const treeSize = '30%';
 	const durationUnit = 'hour';
 
@@ -82,7 +82,7 @@ export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 			dateStart: proyecto_hito.fechaInicio,
 			dateEnd: proyecto_hito.fechaFin,
 
-			tasks: proyecto_hito.hitos_acciones?.map((hito) => {
+			tasks: proyecto_hito.tareas?.map((hito) => {
 				return {
                     hito,
                     label: hito.nombre,

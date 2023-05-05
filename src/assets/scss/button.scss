@@ -22,7 +22,8 @@
       background: linear-gradient(190deg, $orange2 0%, $orange 100%)!important;
       color: white;
    }
- 
+
+
  
    &-primary-outline{
       background-color: transparent;
@@ -112,14 +113,15 @@
  
 
 .ant-modal-footer{   
-    .ant-btn{
-        @apply rounded-xl
-    }
-    .ant-btn-primary{
-        @apply btn-primary
-    }
-    .ant-btn-default{
-        @apply btn-danger-outline;
-    }
+   .ant-btn{
+      @apply rounded-xl
+   }
+   .ant-btn-primary{
+      @apply btn-primary
+   }
+   .ant-btn-default{
+      @apply btn-danger-outline;
+   }
 }
+
 

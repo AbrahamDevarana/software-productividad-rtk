@@ -1,4 +1,4 @@
-import { HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
+import { AccionesProps, AccionesProyectosProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
 import { createHitoProyectoThunk, updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Avatar, Collapse, DatePicker, Form, FormInstance, Input, Select, SelectProps, Table, } from 'antd'
@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 
 import '../../assets/scss/smart.custom.scss'
 import { useColor } from '@/hooks'
+import { getTareaThunk } from '@/redux/features/tareas/tareasThunk'
+import { Icon } from '../Icon'
 
 
 type EditableTableProps = Parameters<typeof Table>[0];
@@ -26,6 +28,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { currentHito } = useAppSelector(state => state.hitos)
+
 
 
     const [nuevoHito, setNuevoHito] = useState<HitosProps>({
@@ -57,9 +60,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         dispatch(updateHitoProyectoThunk(query))
     };
 
-    const handleCreateHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
-
-        console.log(hito);        
+    const handleCreateHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {    
         dispatch(createHitoProyectoThunk(hito))
         setNuevoHito({
             ...nuevoHito,
@@ -135,13 +136,13 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
     ]
 
-    const handleSave = (record: ColumnTypes) => {
-        console.log('save');
-        console.log(record);
+    const handleView = (record:AccionesProyectosProps) => {
+        dispatch(getTareaThunk(record.id))
+        setVisible(true)
     }
 
-    const handleView = (record: ColumnTypes) => {
-        console.log(record);
+    const handleNew = () => {
+        // Asignar el hito al proyecto
         setVisible(true)
     }
 
@@ -149,7 +150,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
     return (
         <Collapse
             collapsible='header' 
-            activeKey={currentProyecto.proyectos_hitos.map((hito: HitosProps) => hito.id)}
+            defaultActiveKey={currentProyecto.proyectos_hitos.map((hito: HitosProps) => hito.id)}
             ghost
         >
             {
@@ -171,14 +172,16 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
                                     className='customInput'
                                     />
                             </Form>
-                        } key={hito.id}>
+                        } key={hito.id}
+                        extra={<Icon iconName='faPlus' onClick={handleNew} className='text-devarana-primary ml-2 cursor-pointer' />}
+                        >
                         <Table 
                             className='customEditableTable'
                             scroll={{ x: 1000 }}
                             size='small'
                             columns={defaultColumns as ColumnTypes}
                             bordered={false}
-                            dataSource={hito.hitos_acciones}
+                            dataSource={hito.tareas}
                             pagination={false}
                             rowClassName="editable-row "
                             rowKey={(record: any) => record.id}

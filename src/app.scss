@@ -214,16 +214,16 @@ p, li, span, a{
 
 .menu_sidebar{
     .nav-link{
-        @apply hover:bg-opacity-50 rounded-xl py-2 w-full  dark:text-white text-devarana-blue dark:hover:bg-white hover:bg-devarana-blue dark:hover:text-devarana-graph hover:text-white;
+        @apply hover:bg-opacity-50 rounded-xl py-2 w-full text-white hover:bg-white hover:text-devarana-graph;
         &.active span {
-            @apply dark:text-devarana-blue text-devarana-blue
+            @apply text-devarana-blue
         }
     }
     .svg-icon{
-        @apply dark:fill-white fill-devarana-blue dark:hover:fill-devarana-graph hover:fill-white; 
+        @apply fill-white hover:fill-devarana-graph; 
     }
     .active .svg-icon:not(.brand){
-        @apply dark:fill-devarana-blue fill-devarana-blue 
+        @apply fill-devarana-blue 
     }
 
 }
@@ -314,10 +314,15 @@ input, textarea {
         border-color: transparent;
         box-shadow: none;
         background-color: transparent;
-        color: inherit;
-        font-size: inherit;
+        // color: inherit;
+        // font-size: inherit;
         line-height: inherit;
     }
+
+    &__title{
+        @apply text-devarana-midnight text-2xl font-bold pl-0
+    }
+
 
     &.ant-input:focus, &.ant-input-focused, &.ant-input:hover, &.ant-input-active {
         box-shadow: none;
