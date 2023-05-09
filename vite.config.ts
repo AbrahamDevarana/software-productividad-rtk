@@ -35,6 +35,7 @@ export default defineConfig({
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
+                "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
             }
         },
         chunkSizeWarningLimit: 1500
