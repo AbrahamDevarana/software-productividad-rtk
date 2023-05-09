@@ -23,6 +23,7 @@ export default defineConfig({
     },
     build: {
         rollupOptions: { 
+            treeshake: true,
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
