@@ -27,10 +27,7 @@ export default defineConfig({
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
-                "font-awesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
-                "font-free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
-                "font-free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
-                "react-fontawesome": ["@fortawesome/react-fontawesome"],
+                "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-regular-svg-icons", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
