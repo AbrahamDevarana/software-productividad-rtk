@@ -11,7 +11,7 @@ import Home from '@/pages/Home';
 import { Objetivos } from '@/pages/Operativos';
 import Perfil from '@/pages/Perfil';
 import { ErrorPage } from '@/pages/ErrorPage';
-import { EstrategíaHome } from '@/pages/Estrategia';
+import { EstrategiaHome } from '@/pages/Estrategia';
 import { Usuarios } from '@/pages/admin/Usuarios';
 import { Departamentos } from '@/pages/admin/Departamentos';
 import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
@@ -98,7 +98,7 @@ export const  rutaPrivada:RouteProps[] = [
         name: "Estrategia",
         path: '/estrategia',
         layout: LayoutApp,
-        component: EstrategíaHome
+        component: EstrategiaHome
     },
     {
         name: "Objetivo Estrategico",

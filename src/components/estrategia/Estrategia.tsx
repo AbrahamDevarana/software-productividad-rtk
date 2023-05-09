@@ -4,23 +4,15 @@ import { TablaEstrategia } from './TablaPerspectiva'
 import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
-import { CustomDrawer } from '../ui/Drawer';
-import { motion } from 'framer-motion';
 
 interface EstrategiaProps {
     perspectivas: PerspectivaProps[]
 }
 
-export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
+export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
 
     const [open, setOpen] = useState<boolean>(false)
-    const MotionDrawer = motion(Drawer);
 
-    const [openDrawer, setOpenDrawer] = useState<'hidden' | 'minimized' | 'maximized'>('hidden')
-
-    const handleNewEstrategia = () => {
-        setOpen(true)
-    }    
     
     return (
         <>
@@ -64,10 +56,6 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}: any) => {
                 icon={<Icon iconName="faPlus"/>} 
                 className='bottom-5'
             />
-
-            {/* <CustomDrawer open={openDrawer} setOpenDrawer={setOpenDrawer} >
-                
-            </CustomDrawer> */}
         </>
     )
 }

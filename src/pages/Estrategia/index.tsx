@@ -5,7 +5,7 @@ import { Estrategia } from '@/components/estrategia/Estrategia';
 import { Segmented } from 'antd';
 
 
-export const EstrategíaHome: React.FC = () => {
+export const EstrategiaHome: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
