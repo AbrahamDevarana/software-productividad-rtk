@@ -22,13 +22,10 @@ export default defineConfig({
         },
     },
     build: {
-        sourcemap: false,
-        rollupOptions: {
-            maxParallelFileOps: 10,  
+        rollupOptions: { 
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
-                "formik": ["formik"],
                 "font-awesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
                 "font-free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
                 "font-free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
@@ -40,7 +37,6 @@ export default defineConfig({
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
-                "react-dnd": ["react-dnd"],
             }
         },
         chunkSizeWarningLimit: 1500

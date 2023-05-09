@@ -6,7 +6,7 @@ import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useColor, useResizable } from '@/hooks';
+import { useColor } from '@/hooks';
 import { returnImage } from '@/helpers/returnImage';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
