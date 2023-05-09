@@ -1,15 +1,15 @@
-import { AccionesProps, AccionesProyectosProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
-import { createHitoProyectoThunk, updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
+import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
+import { updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Avatar, Collapse, DatePicker, Form, FormInstance, Input, Select, SelectProps, Table, } from 'antd'
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { Collapse, Form, Input, Table, } from 'antd'
+import React, { useEffect } from 'react'
 import dayjs from 'dayjs';
 
-import '../../assets/scss/smart.custom.scss'
 import { useColor } from '@/hooks'
-import { getTareaThunk } from '@/redux/features/tareas/tareasThunk'
+import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasThunk'
 import { Icon } from '../Icon'
 import { createHitoThunk, getHitosThunk } from '@/redux/features/hitos/hitosThunk'
+import Loading from '../antd/Loading'
 
 
 
@@ -22,10 +22,12 @@ interface TableProyectosProps {
 
 export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
 
-    const { hitos } = useAppSelector(state => state.hitos)
+    const { hitos, currentHito, isLoading} = useAppSelector(state => state.hitos)
         
     const dispatch = useAppDispatch()
     const { Panel } = Collapse;
+
+    
 
     const defaultColumns = [
         {
@@ -123,17 +125,47 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
     };
 
 
-    const handleView = (record:AccionesProyectosProps) => {
+    const handleView = (record:TareasProps) => {
         dispatch(getTareaThunk(record.id))
         setVisible(true)
     }
 
-    const handleNew = () => {
-        // Asignar el hito al proyecto
-        setVisible(true)
+
+    
+    const FooterComp = (hito:HitosProps) => {
+
+        const handleCreateTask = (hito: HitosProps) => {
+        
+        const query = {
+                ...form.getFieldsValue(),
+                hitoId: hito.id,
+            }
+            dispatch(createTareaThunk(query))
+            form.resetFields()
+        }
+        const [form] = Form.useForm();
+        return (
+            <Form initialValues={{
+                ...hito,
+                nombre: ''
+            }}
+            form={form}
+            onBlur={ e => handleCreateTask(hito)}
+            > 
+                <Form.Item name='nombre' className='mb-'>
+                    <Input placeholder='Agregar Nuevo Elemento' onPressEnter={
+                        (e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            e.currentTarget.blur()
+                        }
+                    } className='w-60'/> 
+                </Form.Item>
+            </Form>
+        )
     }
 
-
+    if(isLoading) return ( <Loading /> )
     return (
         <>
         <Collapse
@@ -160,18 +192,17 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
                                     className='customInput'
                                     />
                             </Form>
-                        } key={hito.id}
-                        extra={<Icon iconName='faPlus' onClick={handleNew} className='text-devarana-primary ml-2 cursor-pointer' />}
-                        >
-                        <Table 
+                        } key={hito.id}>
+                        <Table
                             className='customEditableTable'
                             scroll={{ x: 1000 }}
+                            bordered={false}
+                            pagination={false}
                             size='small'
                             columns={defaultColumns}
-                            bordered={false}
                             dataSource={hito.tareas}
-                            pagination={false}
-                            rowClassName="editable-row "
+                            // rowClassName="editable-row"
+                            footer={ () => FooterComp(hito)}
                             rowKey={(record: any) => record.id}
                             onRow={(record: any, index: any) => {
                                 return {
@@ -187,8 +218,8 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         </Collapse>
 
         <button 
-            className='border border-devarana-graph border-opacity-20 p-2 font-medium text-sm items-center flex gap-x-2
-            rounded-ext hover:bg-devarana-graph hover:bg-opacity-20'
+            className='border border-devarana-graph border-opacity-20 px-4 py-2 font-medium text-sm items-center flex gap-x-2
+            rounded-ext hover:bg-devarana-graph hover:bg-opacity-20 text-devarana-graph'
             onClick={handleCreateHito}
         > 
             <Icon iconName='faPlus' /> Agregar Nuevo Hito

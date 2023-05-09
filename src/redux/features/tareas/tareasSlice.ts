@@ -14,6 +14,7 @@ const initialState:TareasState = {
         fechaFin: new Date(),
 		participantesIds: [],
 		participantes: [],
+		hitoId: '',
         propietarioId: {
             id: '',
             nombre: '',

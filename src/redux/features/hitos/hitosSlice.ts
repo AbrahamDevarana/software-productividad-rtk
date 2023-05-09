@@ -1,6 +1,7 @@
 import { HitosState } from '@/interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { getHitosThunk, createHitoThunk, deleteHitoThunk, updateHitoThunk } from './hitosThunk';
+import { createTareaThunk } from '../tareas/tareasThunk';
 
 const initialState:HitosState = {
     hitos: [],
@@ -75,7 +76,12 @@ const hitosSlice = createSlice({
             state.isLoading = false;
             state.error = true;
         })
-
+        .addCase(createTareaThunk.fulfilled, (state, action) => {
+            const hito = state.hitos.find(hito => hito.id === action.payload.hitoId);   
+            if (hito) {
+                hito.tareas.push(action.payload);
+            }
+      });
     }
         
 })

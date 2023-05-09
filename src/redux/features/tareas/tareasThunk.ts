@@ -34,6 +34,7 @@ export const createTareaThunk = createAsyncThunk(
 
             const response = await clientAxios.post(`/tareas`, tarea, config);
             return response.data.tarea as TareasProps
+            
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }

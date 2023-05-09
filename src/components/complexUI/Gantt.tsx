@@ -14,6 +14,9 @@ interface GanttProps {
 
 export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 
+
+    const { hitos, currentHito, isLoading} = useAppSelector(state => state.hitos)
+
 	const treeSize = '30%';
 	const durationUnit = 'hour';
 
@@ -72,17 +75,17 @@ export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 	
 
 	const dataSource = useMemo(() => {
-    const data = currentProyecto.proyectosHito?.map((proyecto_hito) => {
+    const data = hitos?.map((hito) => {
 		return {
 			dragProject: true,
 			synchronized: true,
-			label: proyecto_hito.titulo,
+			label: hito.titulo,
 			type: 'project',
 			expanded: true,
-			dateStart: proyecto_hito.fechaInicio,
-			dateEnd: proyecto_hito.fechaFin,
+			dateStart: hito.fechaInicio,
+			dateEnd: hito.fechaFin,
 
-			tasks: proyecto_hito.tareas?.map((hito) => {
+			tasks: hito.tareas?.map((hito) => {
 				return {
                     hito,
                     label: hito.nombre,
