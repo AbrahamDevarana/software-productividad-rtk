@@ -5,7 +5,6 @@ import Actividad from "./actividad";
 import ProfileHeader from "./profileHeader";
 import Profile from "./profile";
 import { EditProfile } from "./editProfile";
-import { useNotification } from "@/hooks/useNotification";
 import Loading from "@/components/antd/Loading";
 
 

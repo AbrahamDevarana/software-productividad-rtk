@@ -1,10 +1,10 @@
 import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
-import { Icon, IconName } from '../Icon';
+import { Icon } from '../Icon';
 import { getObjetivoThunk } from '@/redux/features/operativo/operativosThunk';
 import { useColor } from '@/hooks';
+import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
 
 
 interface ObjetivoProps {

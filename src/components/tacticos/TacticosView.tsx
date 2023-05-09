@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useColor } from '@/hooks';
-import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
-import { AreaProps, EstrategicoProps, TacticoProps } from '@/interfaces'
+import { AreaProps, TacticoProps } from '@/interfaces'
 import dayjs from 'dayjs';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 import Loading from '../antd/Loading';
 import { Icon } from '../Icon';
 import { TabStatus } from '../ui/TabStatus';
 import { returnImage } from '@/helpers/returnImage';
+import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
 
 interface TacticosViewProps {
     setShowEdit: (value: boolean) => void

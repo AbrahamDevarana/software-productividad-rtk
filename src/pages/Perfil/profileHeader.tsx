@@ -1,6 +1,4 @@
 import { Segmented } from "antd";
-
-import AvatarProfile from "@/components/ui/Avatar";
 import Box from "@/components/ui/Box";
 
 interface HeaderProps {

@@ -1,4 +1,3 @@
-import { Alert, Modal, Select, Input, Form } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import { Button } from '@/components/ui'
 
@@ -9,6 +8,7 @@ import { ModalProps } from '@/interfaces/modal';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { useEffect } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { Alert, Modal, Select, Input, Form } from 'antd'
 
 
 export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {

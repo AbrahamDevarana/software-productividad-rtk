@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Drawer, Progress, Table} from 'antd';
-import { useResizable, useColor } from '@/hooks';
+import { useColor } from '@/hooks';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';

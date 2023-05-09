@@ -1,6 +1,5 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Radio, Divider, Checkbox } from 'antd';
 import { Button } from '../ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect } from 'react';
@@ -11,6 +10,7 @@ import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { TacticoProps, UsuarioProps } from '@/interfaces';
 import {  useParams } from 'react-router-dom';
+import { Form, Alert, DatePicker, Input, Select, Radio, Divider, Checkbox } from 'antd';
 
 
 interface FormTacticoProps {

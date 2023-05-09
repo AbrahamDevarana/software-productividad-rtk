@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-import {motion} from 'framer-motion';
 import { Segmented } from 'antd';
 
 

@@ -2,7 +2,7 @@ import { Icon } from '@/components/Icon'
 import Loading from '@/components/antd/Loading'
 import { EstrategiaView } from '@/components/estrategia/EstrategiaView'
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos'
-import { Box, Button } from '@/components/ui'
+import { Box } from '@/components/ui'
 import { getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Segmented, FloatButton, Drawer } from 'antd';

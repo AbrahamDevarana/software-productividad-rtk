@@ -1,8 +1,6 @@
 
 import { EstrategicoProps } from '@/interfaces';
-import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
 import dayjs from 'dayjs';
-import { PerspectivaProps } from '@/interfaces/perspectiva';
 import Loading from '../antd/Loading';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
@@ -14,6 +12,7 @@ import { TabStatus } from '../ui/TabStatus';
 import createDOMPurify from 'dompurify';
 import { returnImage } from '@/helpers/returnImage';
 import { useColor } from '@/hooks';
+import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
 
 
 

@@ -1,6 +1,6 @@
 import { Icon } from '@/components/Icon';
 import { Box } from '@/components/ui';
-import { Avatar, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
+import { Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';

@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Alert, Button, Form, Input, Radio } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs from 'dayjs';
 import { createResultadoThunk, getResultadoThunk, getResultadosThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { Icon } from '../Icon';
 

@@ -1,4 +1,3 @@
-import { Alert, Modal, Select, Input, Form } from 'antd'
 import { ErrorMessage, Formik } from 'formik'
 import { Button } from '@/components/ui'
 
@@ -8,6 +7,7 @@ import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux
 import { ModalProps } from '@/interfaces/modal';
 import { useEffect } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { Alert, Modal, Select, Input, Form } from 'antd'
 
 
 export const FormAreas = ({visible, handleModal} : ModalProps ) => {

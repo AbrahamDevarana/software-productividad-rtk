@@ -1,12 +1,11 @@
 import { Icon } from "@/components/Icon"
 import Loading from "@/components/antd/Loading"
-import { Gantt } from "@/components/complexUI/Gantt"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
 import { clearProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk,  } from "@/redux/features/proyectos/proyectosThunk"
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Button, Card, Divider, Empty, FloatButton, Modal } from "antd"
+import { Card, Empty, FloatButton, Modal } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 

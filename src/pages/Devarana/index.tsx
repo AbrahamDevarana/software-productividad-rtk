@@ -1,11 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Avatar, Box, Button } from '../../components/ui';
-
-
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import createDOMPurify from 'dompurify'
+import { Avatar, Box } from '../../components/ui';
 
 
 export const Devarana: React.FC = () => {

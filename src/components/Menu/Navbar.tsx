@@ -1,10 +1,9 @@
-import { Breadcrumb, Dropdown, Menu, Select, Space } from "antd";
+import { Dropdown, Select, Space } from "antd";
 import type { MenuProps } from 'antd';
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
 import { Icon } from '../Icon';
-import { Link, useLocation } from 'react-router-dom';
 import { rutaPrivada } from "@/router";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {

@@ -4,7 +4,6 @@ import { Skeleton, Steps } from 'antd';
 import { FormObjetivo } from './FormObjetivo';
 import { useAppSelector } from '@/redux/hooks';
 import { FormResultados } from '@/components/resultados/FormResultados';
-import Loading from '@/components/antd/Loading';
 
 
 

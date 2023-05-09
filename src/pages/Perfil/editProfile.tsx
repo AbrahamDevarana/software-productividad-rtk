@@ -1,12 +1,9 @@
-import {  Divider, Popconfirm, Switch } from 'antd'
+import {  Switch } from 'antd'
  import { AiOutlineLink } from 'react-icons/ai'
 import { FaUser } from 'react-icons/fa'
 import { Badge } from '@/components/ui/Badge'
 import Box from '@/components/ui/Box'
 import { ProfileInfo } from './components/ProfileInfo'
-import { ResponsabilidadesInfo } from './components/ResponsabilidadesInfo'
-import { SocialInfo } from './components/SocialInfo'
-
 
 export const EditProfile = ({activeUser}:any) => {
 

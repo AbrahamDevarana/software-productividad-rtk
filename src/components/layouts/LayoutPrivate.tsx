@@ -1,7 +1,6 @@
 import Loading from "../antd/Loading";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useNavigate } from "react-router-dom";
-import { Drawer } from "antd";
 import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
@@ -9,9 +8,10 @@ import 'animate.css';
 import { SecondNav } from '../Menu/SecondNav';
 import { useSocket } from "@/hooks/useSocket";
 import { connectSocketThunk, disconnectSocketThunk } from '@/redux/features/socket/socketThunk';
-import { useAuth } from "@/hooks/useAuth";
 import { optionalContent } from "@/interfaces";
 import { motion } from 'framer-motion';
+import { useAuth } from "@/hooks/useAuth";
+import { Drawer } from "antd";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];

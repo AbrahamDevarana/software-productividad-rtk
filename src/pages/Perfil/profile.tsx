@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import AvatarProfile from "@/components/ui/Avatar";
 import { FaProjectDiagram } from "react-icons/fa";
 import { Badge } from "@/components/ui/Badge";
-import { ProfileProps } from "@/interfaces";
 
 
 

@@ -1,10 +1,9 @@
-import { NavLink } from 'react-router-dom';
+
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Icon } from "../Icon";
 import { Admin } from '../secondNav/Admin';
 import { optionalContent } from '@/interfaces';
 import { Tactica } from '../secondNav/Tactica';
-import { DatePicker, Input } from 'antd';
 
 interface OptBarProps{
     optBarVisible: boolean;
