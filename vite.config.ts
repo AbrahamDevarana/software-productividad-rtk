@@ -8,7 +8,7 @@ import * as path from 'path';
 export default defineConfig({
     plugins: [
         react(),
-        viteCompression()
+        // viteCompression()
     ],
     
     server: {
@@ -42,7 +42,6 @@ export default defineConfig({
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
                 "react-dnd": ["react-dnd"],
-                "react-dnd-html5-backend": ["react-dnd-html5-backend"],
             }
         },
         chunkSizeWarningLimit: 1500
