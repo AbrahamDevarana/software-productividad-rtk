@@ -8,7 +8,7 @@ import * as path from 'path';
 export default defineConfig({
     plugins: [
         react(),
-        // viteCompression()
+        viteCompression()
     ],
     
     server: {
@@ -24,8 +24,7 @@ export default defineConfig({
     build: {
         sourcemap: false,
         rollupOptions: {
-            maxParallelFileOps: 2,
-            cache: false,            
+            maxParallelFileOps: 10,  
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
