@@ -72,7 +72,7 @@ export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 	
 
 	const dataSource = useMemo(() => {
-    const data = currentProyecto.proyectos_hitos?.map((proyecto_hito) => {
+    const data = currentProyecto.proyectosHito?.map((proyecto_hito) => {
 		return {
 			dragProject: true,
 			synchronized: true,

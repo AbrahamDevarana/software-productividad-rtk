@@ -9,10 +9,8 @@ import '../../assets/scss/smart.custom.scss'
 import { useColor } from '@/hooks'
 import { getTareaThunk } from '@/redux/features/tareas/tareasThunk'
 import { Icon } from '../Icon'
+import { createHitoThunk, getHitosThunk } from '@/redux/features/hitos/hitosThunk'
 
-
-type EditableTableProps = Parameters<typeof Table>[0];
-type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 
 interface TableProyectosProps {
@@ -22,53 +20,12 @@ interface TableProyectosProps {
 }
 
 
-
 export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
 
-
-    const { usuarios } = useAppSelector(state => state.usuarios)
-    const { currentHito } = useAppSelector(state => state.hitos)
-
-
-
-    const [nuevoHito, setNuevoHito] = useState<HitosProps>({
-        ...currentHito,
-        proyectoId: currentProyecto.id,
-
-    })
-    const [form] = Form.useForm();
-
-
+    const { hitos } = useAppSelector(state => state.hitos)
         
-        const dispatch = useAppDispatch()
-        const { Panel } = Collapse;
-
-    const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
-
-        const { value } = e.target as HTMLInputElement
-
-        if(value === hito.titulo) return
-        if(value === '') return e.currentTarget.focus()
-        if(!value) return e.currentTarget.focus()
-
-        const query = {
-            ...hito,
-            titulo: value
-        }
-
-
-        dispatch(updateHitoProyectoThunk(query))
-    };
-
-    const handleCreateHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {    
-        dispatch(createHitoProyectoThunk(hito))
-        setNuevoHito({
-            ...nuevoHito,
-            titulo: ''
-        })
-    };
-
-   
+    const dispatch = useAppDispatch()
+    const { Panel } = Collapse;
 
     const defaultColumns = [
         {
@@ -136,6 +93,36 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
     ]
 
+    useEffect(() => {
+        dispatch(getHitosThunk(currentProyecto.id))
+    }, [])
+
+
+    const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
+
+        const { value } = e.target as HTMLInputElement
+
+        if(value === hito.titulo) return
+        if(value === '') return e.currentTarget.focus()
+        if(!value) return e.currentTarget.focus()
+
+        const query = {
+            ...hito,
+            titulo: value
+        }
+
+
+        dispatch(updateHitoProyectoThunk(query))
+    };
+
+    const handleCreateHito = () => {    
+        const query = {
+            proyectoId: currentProyecto.id,
+        }
+        dispatch(createHitoThunk(query))
+    };
+
+
     const handleView = (record:AccionesProyectosProps) => {
         dispatch(getTareaThunk(record.id))
         setVisible(true)
@@ -148,13 +135,14 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
 
     return (
+        <>
         <Collapse
             collapsible='header' 
-            defaultActiveKey={currentProyecto.proyectos_hitos.map((hito: HitosProps) => hito.id)}
+            defaultActiveKey={hitos && hitos.map((hito: HitosProps) => hito.id)}
             ghost
         >
             {
-                currentProyecto && currentProyecto.proyectos_hitos.map((hito: HitosProps, index: number) => (
+                hitos.map((hito: HitosProps, index: number) => (
                     <Panel 
                         header={
                             <Form 
@@ -179,7 +167,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
                             className='customEditableTable'
                             scroll={{ x: 1000 }}
                             size='small'
-                            columns={defaultColumns as ColumnTypes}
+                            columns={defaultColumns}
                             bordered={false}
                             dataSource={hito.tareas}
                             pagination={false}
@@ -197,5 +185,14 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
                 )) 
             }
         </Collapse>
+
+        <button 
+            className='border border-devarana-graph border-opacity-20 p-2 font-medium text-sm items-center flex gap-x-2
+            rounded-ext hover:bg-devarana-graph hover:bg-opacity-20'
+            onClick={handleCreateHito}
+        > 
+            <Icon iconName='faPlus' /> Agregar Nuevo Hito
+        </button>
+        </>
     )
 }

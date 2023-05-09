@@ -1,5 +1,6 @@
 import { HitosState } from '@/interfaces';
-import {  createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { getHitosThunk, createHitoThunk, deleteHitoThunk, updateHitoThunk } from './hitosThunk';
 
 const initialState:HitosState = {
     hitos: [],
@@ -13,9 +14,6 @@ const initialState:HitosState = {
         proyectoId: '',
         tareas: []
     },
-    created:false,
-    updated:false,
-    deleted:false,
     infoMessage: '',
     isLoading: false,
     error: false,
@@ -25,18 +23,65 @@ const initialState:HitosState = {
 const hitosSlice = createSlice({
     name: 'hitos',
     initialState,
-    reducers: {
-        checkingHitos: (state) => {
+    reducers: {  
+    },
+    extraReducers: (builder) => {
+        builder
+        .addCase(getHitosThunk.pending, (state) => {
             state.isLoading = true;
-        },
-        chekingHito: (state) => {
+            state.error = false;
+        })
+        .addCase(getHitosThunk.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.hitos = action.payload;
+        })
+        .addCase(getHitosThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
+        .addCase(createHitoThunk.pending, (state) => {
             state.isLoading = true;
-        }
+            state.error = false;
+        })
+        .addCase(createHitoThunk.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.hitos.push(action.payload);
+        })
+        .addCase(createHitoThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
+        .addCase(deleteHitoThunk.pending, (state) => {
+            state.isLoading = true;
+            state.error = false;
+        })
+        .addCase(deleteHitoThunk.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.hitos = state.hitos.filter(hito => hito.id !== action.payload);
+        })
+        .addCase(deleteHitoThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
+        .addCase(updateHitoThunk.pending, (state) => {
+            state.isLoading = true;
+            state.error = false;
+        })
+        .addCase(updateHitoThunk.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.hitos = state.hitos.map(hito =>  (hito.id === action.payload.id ) ? action.payload : hito)
+        })
+        .addCase(updateHitoThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
+
     }
+        
 })
 
 
-export const { checkingHitos, chekingHito } = hitosSlice.actions;
+export const {  } = hitosSlice.actions;
 export default hitosSlice.reducer;
 
 

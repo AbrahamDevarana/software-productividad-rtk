@@ -9,6 +9,8 @@ export interface TareasProps {
     fechaInicio: Date;
     fechaFin: Date;
     propietarioId: UsuarioProps;
+    participantesIds: string[];
+    participantes: UsuarioProps[];
 }
 
 

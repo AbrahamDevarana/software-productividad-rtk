@@ -67,6 +67,7 @@ export const FormTareas = () => {
 
     const handleSubmit = () => {
         console.log('submit')
+        
         const query = {
             ...currentTarea,
             ...form.getFieldsValue(),

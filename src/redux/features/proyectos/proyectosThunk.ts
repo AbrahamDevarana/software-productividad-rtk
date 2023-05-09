@@ -71,7 +71,12 @@ export const updateHitoProyectoThunk = (hito: HitosProps) => async (dispatch: Ap
     }
 }
 
-export const createHitoProyectoThunk = (hito: HitosProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
+
+
+//  Validar si debe existir aquí o en hitos
+
+
+export const createHitoProyectoThunk = (hito: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingProyecto())
     const response = await createHitoProvider(hito, getState)
     if (response.ok) {

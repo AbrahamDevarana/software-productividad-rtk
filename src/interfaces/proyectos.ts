@@ -8,8 +8,8 @@ export interface ProyectosProps {
     icono: string;
     imagen: string;
     participantesIds: string[];
-    participantes: UsuarioProps[];
-    proyectos_hitos: HitosProps[];
+    usuariosProyecto: UsuarioProps[];
+    proyectosHito: HitosProps[];
     fechaInicio: Date;
     fechaFin: Date;
     status: number;

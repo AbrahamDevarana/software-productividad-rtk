@@ -1,26 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Drawer, Segmented, Skeleton } from 'antd';
+import { Avatar, Button, Drawer, Input, Segmented, Select, Skeleton, Tooltip } from 'antd';
 import { Icon } from '@/components/Icon';
 import { UserDropDown } from '@/components/ui/UserDropDown';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { TableProyectos } from '@/components/proyectos/TableProyectos';
 import { FormTareas } from '../../components/forms/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
+import { UsuarioProps } from '@/interfaces';
+import { useSelectUser } from '@/hooks/useSelectUser';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
     const { currentProyecto, isLoadingProyecto } = useAppSelector(state => state.proyectos)
-    const { usuarios } = useAppSelector(state => state.usuarios)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
 
-
+    
+    
     const options = [
         {
             label: 'Listado',
@@ -46,7 +48,7 @@ export const ProyectoView = () => {
     
     const dispatch = useAppDispatch()
     const { id } = useParams<{ id: string }>()
-
+    
     useEffect(() => {
         if(id) {
             dispatch(getProyectoThunk(id))
@@ -55,45 +57,38 @@ export const ProyectoView = () => {
             dispatch(clearProyectoThunk())
         }
     }, [id])
-
+    
     const handleClose = () => {
         setVisible(false)
         dispatch(clearCurrentTarea())
     }
-
-
-    const handleCreateHito = () => {
-        //
-    }
-
-    const handleUpdateHito = () => {
-        //
-    }
-
-    const handleCreateTarea = () => {
-        //
-    }
-
-    const handleUpadateTarea = () => {
-        //
-    }
-
-
-    if( isLoadingProyecto ) return ( <Skeleton paragraph={{ rows: 20 }} /> )
-
-
+    
+    
+    
+    const usuarios =  useMemo(() => {
+        return currentProyecto.usuariosProyecto
+    }, [currentProyecto])
+    
+    const {selectedUsers, setSelectedUsers, spanUsuario, tagRender} = useSelectUser(usuarios)
+    
     return (
         <div className='min-h-[500px]'>
+            <p className='text-xs text-devarana-graph text-opacity-50'>Proyecto:</p>
             <h1>{ currentProyecto.titulo }</h1>
                 <Segmented
                     className='my-4'
                     options={options}
                     value={value}
                     onChange={(value) => setValue(value as SegmentTypes)}
+
                 />
-                <div>
-                    <UserDropDown searchFunc={ getUsuariosThunk } data={usuarios}  />
-                </div>
+                {/* <>
+                    <p>Filtrar Por: </p>
+                    <div className='flex gap-x-5'>
+                        <UserDropDown searchFunc={ getUsuariosThunk } data={usuarios}  />
+                        <Input placeholder='Buscar' className='w-60' />
+                    </div>
+                </> */}
 
             {
                 currentProyecto && (
@@ -143,7 +138,7 @@ export const ProyectoView = () => {
                 onClose={handleClose}
                 destroyOnClose={true}
                 placement='right'
-                width='500'
+                width={600}
             >
                 <FormTareas />
             </Drawer>
