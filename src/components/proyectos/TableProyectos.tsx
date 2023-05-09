@@ -1,15 +1,13 @@
-import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
+import React, { useEffect } from 'react'
 import { updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Collapse, Form, Input, Table, } from 'antd'
-import React, { useEffect } from 'react'
-import dayjs from 'dayjs';
-
-import { useColor } from '@/hooks'
 import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasThunk'
-import { Icon } from '../Icon'
 import { createHitoThunk, getHitosThunk } from '@/redux/features/hitos/hitosThunk'
+import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
+import dayjs from 'dayjs';
 import Loading from '../antd/Loading'
+import { FaPlus } from 'react-icons/fa'
+import { Collapse, Form, Input, Table, } from 'antd'
 
 
 
@@ -222,7 +220,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             rounded-ext hover:bg-devarana-graph hover:bg-opacity-20 text-devarana-graph'
             onClick={handleCreateHito}
         > 
-            <Icon iconName='faPlus' /> Agregar Nuevo Hito
+            <FaPlus className='font-light' /> Agregar Nuevo Hito
         </button>
         </>
     )

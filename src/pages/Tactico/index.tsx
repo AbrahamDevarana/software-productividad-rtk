@@ -6,7 +6,7 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { Drawer, FloatButton } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
-import { Icon } from '@/components/Icon';
+import { FaPlus } from 'react-icons/fa';
 
 export const Tactico: React.FC = () => {
 
@@ -50,7 +50,7 @@ export const Tactico: React.FC = () => {
                 </Drawer>
             </div>
             <FloatButton
-                icon={<Icon iconName='faPlus' />}
+                icon={<FaPlus />}
                 onClick={() => setVisible(true)}
             />
         </>

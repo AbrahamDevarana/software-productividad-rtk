@@ -1,7 +1,7 @@
+import { useAppDispatch } from '@/redux/hooks';
 import { ProyectosProps } from '@/interfaces'
 import { createProyectoThunk, updateProyectoThunk } from '@/redux/features/proyectos/proyectosThunk';
-import { useAppDispatch } from '@/redux/hooks';
-import { Alert, Button, DatePicker, Form, Input, Modal, Skeleton, Upload } from 'antd'
+import { Button, DatePicker, Form, Input, Skeleton } from 'antd'
 import dayjs from 'dayjs';
 
 interface FormProyectoProps {

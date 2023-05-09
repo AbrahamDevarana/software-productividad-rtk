@@ -1,6 +1,6 @@
 import { ProyectosProps } from '@/interfaces';
 import { Avatar, DatePicker } from 'antd';
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { GanttChart } from 'smart-webcomponents-react/ganttchart';
 import ReactDOMServer from 'react-dom/server';
 import dayjs from 'dayjs';

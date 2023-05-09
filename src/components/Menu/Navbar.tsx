@@ -3,8 +3,8 @@ import type { MenuProps } from 'antd';
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
-import { Icon } from '../Icon';
 import { rutaPrivada } from "@/router";
+import { FaAngleRight, FaBell, FaSearch, FaSlidersH } from "react-icons/fa";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
@@ -80,7 +80,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
         <div className={`h-16 px-5 mb-4 bg-white shadow backdrop-blur-sm border-white border-opacity-25 fixed z-50 left-28 right-8 transition-all duration-200 ease-in-out ${navbarClass}`}>
             <div className="flex h-full items-center">
                 <div>
-                    <Select placeholder="Buscar" showSearch suffixIcon={<Icon iconName={"faMagnifyingGlass"} />} className='transition-all duration-200 ease-in-out w-32'
+                    <Select placeholder="Buscar" showSearch suffixIcon={<FaSearch />} className='transition-all duration-200 ease-in-out w-32'
                         style={{
                             maxWidth: '300px',
                         }}
@@ -93,15 +93,15 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                     <Dropdown menu={{ items:notificaciones }} trigger={['click']} className="px-2">
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                         <Space>
-                            <Icon iconName="faBell" className='text-2xl text-devarana-blue' />
+                            <FaBell className='text-2xl text-devarana-blue' />
                         </Space>
                         </a>
                     </Dropdown>
-                    <Icon iconName="faSliders" className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue ' onClick={ showDrawer } />
+                    <FaSlidersH className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue ' onClick={ showDrawer } />
                     <Dropdown menu={{items:menu}} trigger={['click']}>
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                             <Space>
-                                <Icon iconName="faArrowRightFromBracket" className='text-2xl text-devarana-blue '/>
+                                <FaAngleRight className='text-2xl text-devarana-blue '/>
                             </Space>
                         </a>
                     </Dropdown>

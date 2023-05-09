@@ -1,17 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Avatar, Button, Drawer, Input, Segmented, Select, Skeleton, Tooltip } from 'antd';
-import { Icon } from '@/components/Icon';
-import { UserDropDown } from '@/components/ui/UserDropDown';
+import {  Drawer, Segmented } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { TableProyectos } from '@/components/proyectos/TableProyectos';
 import { FormTareas } from '../../components/forms/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
-import { UsuarioProps } from '@/interfaces';
 import { useSelectUser } from '@/hooks/useSelectUser';
+import { Icon } from '@/components/Icon';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 

@@ -1,12 +1,12 @@
 
 import { NavLink } from 'react-router-dom'
-import { Icon } from '../Icon'
 import { DatePicker } from 'antd';
 import type { DatePickerProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { FaBuilding } from 'react-icons/fa';
 
 interface TacticaProps {
     handleBar: () => void;
@@ -60,7 +60,7 @@ export const Tactica: React.FC<TacticaProps> = ({handleBar}) => {
                     areaId: area.id
                 }} key={area.id}>
                     <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
-                        <Icon iconName="faBuilding" />
+                        <FaBuilding />
                         <span>{area.nombre}</span>
                     </div>
                 </NavLink>

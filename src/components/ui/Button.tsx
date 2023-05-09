@@ -1,6 +1,4 @@
 import { ReactElement } from "react";
-import '@/assets/scss/button.scss'
-import "@/assets/scss/links.scss";
 
 
 interface ButtonProps {
@@ -16,7 +14,7 @@ export const Button = ({ children, className, fn, type = "button", btnType }: Bu
     return (
         <button
             type={type}
-            className={`btn-${btnType ?? ""} py-2 px-4 rounded-[10px] transition-all duration-300 ease-in-out hover:shadow-ext ${className ?? ""}`}
+            className={`py-2 px-4 rounded-ext transition-all duration-300 ease-in-out hover:shadow-ext ${className ?? ""}`}
             onClick={fn}
         >
             {children}

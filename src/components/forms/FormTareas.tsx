@@ -1,5 +1,6 @@
-import { Avatar, DatePicker, Divider, Form, Input, Select, Skeleton, Tooltip } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { createTareaThunk, updateTareaThunk } from '@/redux/features/tareas/tareasThunk'
+import { Avatar, DatePicker, Form, Input, Select, Skeleton, Tooltip } from 'antd'
+import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
 import { TareasProps, UsuarioProps } from '@/interfaces'
@@ -8,7 +9,6 @@ import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/assets/scss/quill.scss'
-import { createTareaThunk, updateTareaThunk } from '@/redux/features/tareas/tareasThunk'
 
 
 

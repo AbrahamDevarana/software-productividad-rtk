@@ -2,10 +2,10 @@ import AvatarProfile from '../ui/Avatar'
 import SvgIsotipo from '../svg/Isotipo';
 import { NavLink} from 'react-router-dom';
 import "@/assets/scss/menu.scss"
-import { Icon } from '../Icon';
 import { optionalContent } from '@/interfaces';
 import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
+import { FaBrain, FaCheckSquare, FaCog, FaComment, FaCrosshairs, FaPuzzlePiece, FaRocket, FaSquare } from 'react-icons/fa';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -36,42 +36,42 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     <AvatarProfile picture={userAuth?.foto} preview={false} className="h-5 w-5 mx-auto" />
                 </NavLink>
 
-                <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
-                    {/* <Icon iconName="faDove" className="h-5 w-5 mx-auto text-2xl" /> */}
+                    {/* <Icon iconName="faDove" className="mx-auto text-xl" /> */}
                     <SvgIsotipo className={`h-6 w-full block svg-icon`} />
                     <span className="text-xs text-center font-light block">Devarana</span>
                 </NavLink>
+                <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
-                    <Icon iconName='faRocket' className="h-5 w-5 mx-auto text-2xl" />
+                    <FaRocket className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Estrategia</span>
                 </NavLink>
                 <div className={`nav-link cursor-pointer text-center`} onClick={() => handleOptBar('tactica')}>
-                    <Icon iconName="faBrain" className="h-5 w-5 mx-auto text-2xl" />
+                    <FaBrain  className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Táctica</span>
                 </div>
-                <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/objetivos'} className={`link nav-link text-center`}>
-                    <Icon iconName='faCrosshairs' className="h-5 w-5 mx-auto text-2xl" />
+                    <FaCrosshairs className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Objetivos</span>
                 </NavLink>
+                <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
                 <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
-                    <Icon iconName="faPuzzlePiece" className="h-5 w-5 mx-auto text-2xl" />
+                    <FaPuzzlePiece className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Proyectos</span>
                 </NavLink>
                 <NavLink to={'/actividades'} className={`link nav-link text-center`}>
-                    <Icon iconName="faSquareCheck" className="h-5 w-5 mx-auto text-2xl" />
+                    <FaCheckSquare className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Actividades</span>
                 </NavLink>
                 {/* Chat button */}
                 <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
-                    <Icon iconName='faComment' className="h-5 w-5 mx-auto text-2xl" />
+                    <FaComment className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Chat</span>
                 </div>
 
                 <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
                     <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>
-                        <Icon iconName='faGear' className="h-5 w-5 mx-auto text-2xl" />
+                        <FaCog className="mx-auto text-xl" />
                         <span className="text-xs text-center font-light block">Admin</span>
                     </div>
                    

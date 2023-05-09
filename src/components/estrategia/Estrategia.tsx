@@ -1,10 +1,10 @@
-import { Icon } from '../Icon'
 import { PerspectivaProps } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
 import { Drawer, FloatButton } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
-
+import { FaPlus } from 'react-icons/fa';
+import { Icon } from '../Icon'
 interface EstrategiaProps {
     perspectivas: PerspectivaProps[]
 }
@@ -53,7 +53,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
 
             <FloatButton
                 onClick={() => setOpen(true)}
-                icon={<Icon iconName="faPlus"/>} 
+                icon={<FaPlus />} 
                 className='bottom-5'
             />
         </>

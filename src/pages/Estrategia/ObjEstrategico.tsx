@@ -1,4 +1,3 @@
-import { Icon } from '@/components/Icon'
 import Loading from '@/components/antd/Loading'
 import { EstrategiaView } from '@/components/estrategia/EstrategiaView'
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos'
@@ -10,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTacticoFromEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { FormTactico } from '@/components/tacticos/FormTacticos';
+import { FaAmbulance, FaPlus, FaTachometerAlt } from 'react-icons/fa'
 
 export const ObjEstrategico: React.FC = () => {
 
@@ -46,12 +46,12 @@ export const ObjEstrategico: React.FC = () => {
 		{
 			label: 'Tácticos',
 			value: 'tacticos',
-			icon: <Icon iconName='faTachometer' />
+			icon: <FaTachometerAlt />
 		},
 		{
 			label: 'Proyectos',
 			value: 'proyectos',
-			icon: <Icon iconName='faAmbulance' />
+			icon: <FaAmbulance/>
 		},
 	]
 
@@ -88,7 +88,7 @@ export const ObjEstrategico: React.FC = () => {
 
     
            <FloatButton 
-                icon={<Icon iconName='faPlus' /> }
+                icon={<FaPlus /> }
                 onClick={() => setShowDrawer(true)}
                 className='bottom-5'
                 

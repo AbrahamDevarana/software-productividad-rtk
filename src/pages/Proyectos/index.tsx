@@ -1,11 +1,11 @@
-import { Icon } from "@/components/Icon"
+
 import Loading from "@/components/antd/Loading"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
 import { clearProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk,  } from "@/redux/features/proyectos/proyectosThunk"
-
+import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Card, Empty, FloatButton, Modal } from "antd"
+import { Card, FloatButton, Modal } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
@@ -41,7 +41,6 @@ export const Proyectos = () => {
             <Box className='md:col-span-9 col-span-12 flex justify-evenly md:flex-row flex-col'>
             </Box>
             <Box className='md:col-span-3 col-span-12 row-span-3'>
-
             </Box>
 
             <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5' >
@@ -63,10 +62,10 @@ export const Proyectos = () => {
                                     } src={`${import.meta.env.VITE_STORAGE_URL}${proyecto.imagen}`} /> }
                                     actions={[
                                         <Link to={`/proyectos/${proyecto.id}`}> 
-                                            <Icon className="w-full" iconName="faEye" />
+                                            <FaEye />
                                         </Link>,
-                                        <Icon className="w-full" iconName="faEdit" onClick={() => handleEdit(proyecto.id)} />,
-                                        <Icon className="w-full" iconName="faTrash" />
+                                        <FaEdit onClick={() => handleEdit(proyecto.id)} />,
+                                        <FaTrash />
                                     ]}
                                     bodyStyle={{ height: '150px', overflowY: 'auto' }}
                                 >
@@ -77,7 +76,12 @@ export const Proyectos = () => {
                                 </Card>
                             </div>
                         ))
-                    : <Empty className="col-span-12" description="No hay proyectos" />
+                    : 
+                    <div className="col-span-12">
+                        <div className="flex justify-center align-middle">
+                            <p className="text-devarana-graph font-medium">No hay proyectos registrados</p>
+                        </div>
+                    </div>
                 }        
             </div>
         </div>
@@ -95,7 +99,7 @@ export const Proyectos = () => {
 
     <FloatButton
         shape="circle"
-        icon={<Icon iconName='faPlus' />}
+        icon={<FaPlus />}
         onClick={() => setIsModalVisible(true)}
     />
     </>

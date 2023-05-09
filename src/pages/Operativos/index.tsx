@@ -1,4 +1,3 @@
-import { Icon } from '@/components/Icon';
 import { Box } from '@/components/ui';
 import { Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
@@ -11,6 +10,7 @@ import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useColor } from '@/hooks';
+import { FaPlus } from 'react-icons/fa';
 
 export const Objetivos : React.FC = () => {
 
@@ -129,7 +129,7 @@ export const Objetivos : React.FC = () => {
 
             <FloatButton
                 shape="circle"
-                icon={<Icon iconName='faPlus' />}
+                icon={<FaPlus />}
                 onClick={() => setIsModalVisible(true)}
             />
         </>

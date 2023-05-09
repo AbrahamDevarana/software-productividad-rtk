@@ -6,7 +6,7 @@ import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
 import { createResultadoThunk, getResultadoThunk, getResultadosThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { Icon } from '../Icon';
+import { FaPen } from 'react-icons/fa';
 
 
 
@@ -84,7 +84,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handle
                    {
                         resultadoList && resultadoList.map( resultado => (
                             <li key={resultado.id} className='flex gap-x-5 p-2 border last-of-type:rounded-b-ext first-of-type:rounded-t-ext'>
-                                <p className='w-full'>{resultado.nombre}</p> <Button type='ghost' className='border-0' onClick={() => handleEditResultado(resultado.id)}> <Icon iconName='faPen' className='text-devarana-midnight' /></Button>
+                                <p className='w-full'>{resultado.nombre}</p> <Button type='ghost' className='border-0' onClick={() => handleEditResultado(resultado.id)}> <FaPen className='text-devarana-midnight' /></Button>
                             </li>
                         ))
                     }
