@@ -62,10 +62,10 @@ export const Proyectos = () => {
                                     } src={`${import.meta.env.VITE_STORAGE_URL}${proyecto.imagen}`} /> }
                                     actions={[
                                         <Link to={`/proyectos/${proyecto.id}`}> 
-                                            <FaEye />
+                                            <FaEye className="mx-auto" />
                                         </Link>,
-                                        <FaEdit onClick={() => handleEdit(proyecto.id)} />,
-                                        <FaTrash />
+                                        <FaEdit className="mx-auto" onClick={() => handleEdit(proyecto.id)} />,
+                                        <FaTrash className="mx-auto"/>
                                     ]}
                                     bodyStyle={{ height: '150px', overflowY: 'auto' }}
                                 >

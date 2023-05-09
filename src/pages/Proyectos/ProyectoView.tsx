@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import {  Drawer, Segmented } from 'antd';
-import { Gantt } from '@/components/complexUI/Gantt';
+// import { Gantt } from '@/components/complexUI/Gantt';
 import { TableProyectos } from '@/components/proyectos/TableProyectos';
 import { FormTareas } from '../../components/forms/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
@@ -103,11 +103,12 @@ export const ProyectoView = () => {
                         }
                         {
                             value === 'gantt' && (
-                                <Gantt 
-                                    visible={visible} 
-                                    setVisible={setVisible} 
-                                    currentProyecto={currentProyecto}
-                                />
+                                // <Gantt 
+                                //     visible={visible} 
+                                //     setVisible={setVisible} 
+                                //     currentProyecto={currentProyecto}
+                                // />}
+                                <></>
                             )
                         }
                         {
