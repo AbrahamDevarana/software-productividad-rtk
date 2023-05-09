@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build-light": "node --max_old_space_size=1024 && tsc && vite build",
+    "build-light": "NODE_OPTIONS=--max_old_space_size=512 tsc && vite build",
     "preview": "vite preview",
     "serve": "tsc && vite build && serve -s dist"
   },
