@@ -5,7 +5,7 @@ import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Swal from "sweetalert2";
 import { Icon } from "@/components/Icon";
-import { FormAreas } from '@/components/forms/FormAreas';
+import { FormAreas } from '@/components/tareas/FormAreas';
 import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';

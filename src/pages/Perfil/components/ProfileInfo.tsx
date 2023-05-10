@@ -1,5 +1,5 @@
 import { Formik, ErrorMessage,Field } from 'formik'
-import { Button } from '@/components/ui/'
+import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
 import * as Yup from "yup";
 import { Alert, DatePicker } from 'antd';

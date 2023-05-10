@@ -2,7 +2,7 @@ import { Pagination, Table, Tooltip, Input } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
-import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk, clearAlertUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
+import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
 import { ColumnsType } from "antd/es/table"
 import { Icon } from "@/components/Icon"
 import { useDelete } from "@/hooks/useDelete"
@@ -31,7 +31,7 @@ interface DataType {
 export const Usuarios: React.FC = () => {
     const [filtros, setFiltros] = useState<any>(initialValues)
 	const [formVisible, setFormVisible] = useState<boolean>(false)
-	const { usuarios, infoMessage, paginate, created, deleted, updated, error } = useAppSelector((state: any) => state.usuarios)
+	const { usuarios, infoMessage, paginate} = useAppSelector((state: any) => state.usuarios)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -48,20 +48,6 @@ export const Usuarios: React.FC = () => {
 			dispatch(deleteUsuarioThunk(id))
 		}
 	}
-
-    useEffect(() => {
-        useNotify({
-            created,
-            deleted,
-            infoMessage,
-            updated,
-            error
-        })
-
-        return () => {
-            dispatch(clearAlertUsuariosThunk())
-        }
-    }, [created, deleted, infoMessage, updated, error])
 
     const isComplete = (data: any) => ( (Object.values(data).some(val => val === null) ? false : true ) ||
     data.fechaNacimiento === null || data.fechaIngreso === null || data.leaderId === null || 

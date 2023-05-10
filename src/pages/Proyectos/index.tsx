@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Card, FloatButton, Modal } from "antd"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { getUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
 
 export const Proyectos = () => {
 
@@ -17,6 +18,7 @@ export const Proyectos = () => {
 
     useEffect(() => {
         dispatch(getProyectosThunk({}))
+        dispatch(getUsuariosThunk({}))
     }, [])
 
     const handleCancel = () => {

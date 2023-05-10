@@ -1,58 +1,94 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { createUsuarioProvider, deleteUsuarioProvider, getUsuarioProvider, getUsuariosProvider, updateUsuarioProvider, uploadImageProvider, deleteImageProvider } from './usuariosProvider';
-import { checkingUsuarios, getUsuario, getUsuarios, setUsuariosError, createUsuario, deleteUsuario, updateUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } from './usuariosSlice';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { uploadImageProvider, deleteImageProvider } from './usuariosProvider';
+import { checkingUsuarios, setUsuariosError, cleanCurrentUsuario, clearUsuarios } from './usuariosSlice';
+import { clientAxios } from '@/config/axios';
+import { UsuarioProps } from '@/interfaces';
 
 
-export const getUsuariosThunk = (filtros: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingUsuarios())
-        const result = await getUsuariosProvider(filtros, getState)
-        
-        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-        dispatch( getUsuarios(result.usuarios) )
+export const getUsuariosThunk = createAsyncThunk(
+    'usuarios/getUsuarios',
+    async (filtros:any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+            const response = await clientAxios.get(`/usuarios`, config);
+            return response.data.usuarios
+
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const getUsuarioThunk = (usuarioId: string) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingUsuarios())
-        const result = await getUsuarioProvider(usuarioId, getState)
-
-        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-        dispatch( getUsuario(result.usuario) )
+export const getUsuarioThunk = createAsyncThunk(
+    'usuarios/getUsuario',
+    async (usuarioId: string, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.get(`/usuarios/${usuarioId}`, config);
+            return response.data.usuario
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const createUsuarioThunk = (usuario: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingUsuarios())
-        const result = await createUsuarioProvider(usuario, getState)
-
-        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-
-        
-        dispatch( createUsuario(result.usuario) )
+export const createUsuarioThunk = createAsyncThunk(
+    'usuarios/createUsuario',
+    async (usuario: UsuarioProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: usuario
+            }
+            const response = await clientAxios.post(`/usuarios`, config);
+            return response.data.usuario
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const updateUsuarioThunk = (usuario: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingUsuarios())
-        const result = await updateUsuarioProvider(usuario, getState)
-
-        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-        dispatch( updateUsuario(result.usuario) )
+export const updateUsuarioThunk = createAsyncThunk(
+    'usuarios/updateUsuario',
+    async (usuario: UsuarioProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: usuario
+            }
+            const response = await clientAxios.put(`/usuarios/${usuario.id}`, config);
+            return response.data.usuario
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const deleteUsuarioThunk = (usuarioId: string) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingUsuarios())
-        const result = await deleteUsuarioProvider(usuarioId, getState)       
-        if(!result.ok) return dispatch( setUsuariosError(result.errorMessage) )
-        dispatch( deleteUsuario(usuarioId) )
+export const deleteUsuarioThunk = createAsyncThunk(
+    'usuarios/deleteUsuario',
+    async (usuarioId: string, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.delete(`/usuarios/${usuarioId}`, config);
+            return response.data.usuario
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
 
 export const uploadImageThunk = (usuarioId: string, file: any) => {
@@ -75,7 +111,6 @@ export const deleteProfilePhotoThunk = (usuarioId: string) => {
     }
 }
 
-
 export const cleanCurrentUsuarioThunk = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(cleanCurrentUsuario())
@@ -85,11 +120,5 @@ export const cleanCurrentUsuarioThunk = () => {
 export const clearUsuariosThunk = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(clearUsuarios())
-    }
-}
-
-export const clearAlertUsuariosThunk = () => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(clearAlertUsuarios())
     }
 }

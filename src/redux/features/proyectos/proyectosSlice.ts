@@ -9,7 +9,7 @@ const initialState: ProyectosState = {
         descripcion: '',
         icono: '',
         imagen: '',
-        participantesIds: [],
+        participantes: [],
         usuariosProyecto: [],
         fechaInicio: new Date(),
         fechaFin: new Date(),

@@ -4,11 +4,9 @@ export interface UsuariosState {
     usuarios: UsuarioProps[];
     paginate: Paginate;
     isLoading: boolean;
+    isLoadingCurrentUsuario: boolean;
     error: boolean;
     infoMessage: string;
-    updated: boolean;
-    created: boolean;
-    deleted: boolean;
     currentUsuario: UsuarioProps;
 }
 

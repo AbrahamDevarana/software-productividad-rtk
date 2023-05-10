@@ -24,15 +24,15 @@ export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
 	return (
 		<div>
 			<GanttChart
-				dateStart={new Date(year, month, date - 1, 8, 0, 0)}
-				dateEnd={new Date(year, month, date + 1, 17, 0, 0)}
-                dataSource={dataSource} 
-                taskColumns={taskColumns}
-                durationUnit={durationUnit}
-                currentTimeIndicator={true}
-				shadeUntilCurrentTime={true}
-                className='customGantt'
-                id="gantt"
+				// dateStart={new Date(year, month, date - 1, 8, 0, 0)}
+				// dateEnd={new Date(year, month, date + 1, 17, 0, 0)}
+                // dataSource={dataSource} 
+                // taskColumns={taskColumns}
+                // durationUnit={durationUnit}
+                // currentTimeIndicator={true}
+				// shadeUntilCurrentTime={true}
+                // className='customGantt'
+                // id="gantt"
                 ></GanttChart>
 		</div>
 	);

@@ -9,6 +9,7 @@ import { FormTareas } from '../../components/forms/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { Icon } from '@/components/Icon';
+import { KanbanProyecto } from '@/components/proyectos/KanbanProyecto';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -30,11 +31,6 @@ export const ProyectoView = () => {
             label: 'Gantt',
             value: 'gantt',
             icon: <Icon iconName='faChartGantt' />
-        },
-        {
-            label: 'Calendario',
-            value: 'calendario',
-            icon: <Icon iconName='faCalendar' />
         },
         {
             label: 'Kanban',
@@ -111,16 +107,9 @@ export const ProyectoView = () => {
                             )
                         }
                         {
-                            value === 'calendario' && (
-                                <p>
-                                    Calendario
-                                </p>
-                            )
-                        }
-                        {
                             value === 'kanban' && (
                                 <p>
-                                    Kanban
+                                    <KanbanProyecto />
                                 </p>
                             )
                         }

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UsuariosState  } from "@/interfaces";
+import { createUsuarioThunk, deleteUsuarioThunk, getUsuarioThunk, getUsuariosThunk, updateUsuarioThunk } from "./usuariosThunks";
 
 const initialState: UsuariosState = {
     usuarios: [],
@@ -9,11 +10,9 @@ const initialState: UsuariosState = {
         currentPage: 0,
     },
     isLoading: false,
+    isLoadingCurrentUsuario: false,
     infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
     currentUsuario: {
         id: '',
         nombre: '',
@@ -54,80 +53,97 @@ const usuariosSlice = createSlice({
     reducers: {
         checkingUsuarios: (state) => {
             state.isLoading = true
-            state.updated = false
         },
         setUsuariosError: (state, action) => {
             state.isLoading = false
             state.infoMessage = action.payload
             state.error = true
         },
-        getUsuarios: (state, action) => {
-            state.usuarios = action.payload.usuarios.rows
-            state.paginate = {
-                totalItems: action.payload.usuarios.totalItems,
-                totalPages: action.payload.usuarios.totalPages,
-                currentPage: action.payload.usuarios.currentPage
-            }
-            state.isLoading = false
-            state.error = false
-        },
-        getUsuario: (state, action) => {
-            state.currentUsuario = action.payload.usuario
-            state.isLoading = false
-            state.error = false
-        },
-        createUsuario: (state, action) => {
-            console.log(action.payload.usuario);
-            
-            state.usuarios.push(action.payload.usuario)
-            state.currentUsuario = action.payload.usuario
-            state.created = true
-            state.isLoading = false
-            state.error = false
-        },
-        updateUsuario: (state, action) => {
-            state.usuarios = state.usuarios.map(usuario => usuario.id === action.payload.usuario.id ? action.payload.usuario : usuario)
-            state.updated = true
-            state.isLoading = false
-            state.error = false
-            state.currentUsuario = action.payload.usuario
-        },
-        deleteUsuario: (state, action) => {           
-            state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload)
-            state.deleted = true
-            state.isLoading = false
-            state.error = false
-        },
         clearUsuarios: (state) => {
-            state.usuarios = []
-            state.paginate = {
-                totalItems: 0,
-                totalPages: 0,
-                currentPage: 0,
-            }
-            state.isLoading = false
-            state.infoMessage = ''
-            state.error = false
-            state.updated = false
-            state.created = false
-            state.deleted = false
-            state.currentUsuario = initialState.currentUsuario
+            state = initialState
         },
         cleanCurrentUsuario: (state) => {
             state.currentUsuario = initialState.currentUsuario
         },
-        clearAlertUsuarios: (state) => {   
-            state.error = false
-            state.updated = false
-            state.created = false
-            state.deleted = false
-            state.infoMessage = ''
-        }
-
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getUsuariosThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(getUsuariosThunk.fulfilled, (state, action) => {
+                state.usuarios = action.payload.rows
+                state.paginate = {
+                    totalItems: action.payload.totalItems,
+                    totalPages: action.payload.totalPages,
+                    currentPage: action.payload.currentPage
+                }
+                state.isLoading = false
+                state.error = false
+        })
+            .addCase(getUsuariosThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.error.message!
+                state.error = true
+        })
+            .addCase(getUsuarioThunk.pending, (state) => {
+                state.isLoadingCurrentUsuario = true
+        })
+            .addCase(getUsuarioThunk.fulfilled, (state, action) => {
+                state.currentUsuario = action.payload
+                state.isLoadingCurrentUsuario = false
+                state.error = false
+        })
+            .addCase(getUsuarioThunk.rejected, (state, action) => {
+                state.isLoadingCurrentUsuario = false
+                state.infoMessage = action.error.message!
+                state.error = true
+        })
+            .addCase(createUsuarioThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(createUsuarioThunk.fulfilled, (state, action) => {
+                state.usuarios.push(action.payload)
+                state.currentUsuario = action.payload
+                state.isLoading = false
+                state.error = false
+        })
+            .addCase(createUsuarioThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.error.message!
+                state.error = true
+        })
+            .addCase(updateUsuarioThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(updateUsuarioThunk.fulfilled, (state, action) => {
+                state.usuarios = state.usuarios.map(usuario => usuario.id === action.payload.id ? action.payload : usuario)
+                state.currentUsuario = action.payload
+                state.isLoading = false
+                state.error = false
+        })  
+            .addCase(updateUsuarioThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.error.message!
+                state.error = true
+        })
+            .addCase(deleteUsuarioThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(deleteUsuarioThunk.fulfilled, (state, action) => {
+                state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload)
+                state.isLoading = false
+                state.error = false
+        })
+            .addCase(deleteUsuarioThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.error.message!
+                state.error = true
+        })  
     }
 })
 
-export const { checkingUsuarios, setUsuariosError, getUsuarios, getUsuario, createUsuario, updateUsuario, deleteUsuario, cleanCurrentUsuario, clearUsuarios, clearAlertUsuarios } = usuariosSlice.actions
+export const { checkingUsuarios, setUsuariosError, cleanCurrentUsuario, clearUsuarios } = usuariosSlice.actions
 
 
 
