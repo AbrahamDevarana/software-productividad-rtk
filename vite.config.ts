@@ -26,7 +26,7 @@ export default defineConfig({
             treeshake: true,
             experimentalCacheExpiry: 1000 * 60 * 60 * 24 * 7, // 7 days
             manualChunks: {
-                "smart-webcomponents-react": ["smart-webcomponents-react"],
+                "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
                 "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-regular-svg-icons", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
