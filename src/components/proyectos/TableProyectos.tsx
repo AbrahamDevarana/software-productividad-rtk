@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasThunk'
@@ -163,12 +163,16 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         )
     }
 
+    const activeHitos = useMemo(() => {
+        return hitos.map((hito: HitosProps) => hito.id)
+    }, [hitos])
+
     if(isLoading) return ( <Loading /> )
     return (
         <>
         <Collapse
             collapsible='header' 
-            defaultActiveKey={hitos && hitos.map((hito: HitosProps) => hito.id)}
+            defaultActiveKey={activeHitos}
             ghost
         >
             {

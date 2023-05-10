@@ -24,6 +24,8 @@ export default defineConfig({
     build: {
         rollupOptions: { 
             treeshake: true,
+            external: ['smart-webcomponents-react/ganttchart'],
+            experimentalCacheExpiry: 1000 * 60 * 60 * 24 * 7, // 7 days
             manualChunks: {
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
@@ -35,7 +37,7 @@ export default defineConfig({
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
-                "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
+                // "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
             }
         },
         chunkSizeWarningLimit: 1500

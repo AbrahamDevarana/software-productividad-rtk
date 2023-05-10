@@ -41,7 +41,6 @@ const hitosSlice = createSlice({
             state.error = true;
         })
         .addCase(createHitoThunk.pending, (state) => {
-            state.isLoading = true;
             state.error = false;
         })
         .addCase(createHitoThunk.fulfilled, (state, action) => {
