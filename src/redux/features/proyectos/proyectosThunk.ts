@@ -1,8 +1,10 @@
 import { AppDispatch, RootState } from '@/redux/store';
 import { HitosProps, ProyectosProps } from '@/interfaces';
-import { checkingProyectos, createProyecto, getProyecto, getProyectos, setProyectosError, updateProyecto, checkingProyecto, clearProyecto, clearProyectos, setProyectoError } from './proyectosSlice';
-import { createProyectoProvider, deleteProyectoProvider, getProyectoProvider, getProyectosProvider, updateProyectoProvider } from './proyectosProvider';
+import { checkingProyectos, createProyecto, getProyectos, setProyectosError, updateProyecto, checkingProyecto, clearProyecto, clearProyectos, setProyectoError } from './proyectosSlice';
+import { createProyectoProvider, deleteProyectoProvider, getProyectosProvider, updateProyectoProvider } from './proyectosProvider';
 import { updateHitoProvider, createHitoProvider } from '../hitos/hitosProvider';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { clientAxios } from '@/config/axios';
 
 export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(checkingProyectos())
@@ -14,15 +16,22 @@ export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch,
     }
 }
 
-export const getProyectoThunk = (proyectoId: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingProyecto())
-    const response = await getProyectoProvider(proyectoId, getState)
-    if (response.ok) {
-        dispatch(getProyecto(response.proyecto))
-    } else {
-        dispatch(setProyectosError(response.errorMessage))
+
+export const getProyectoThunk = createAsyncThunk(
+    'proyectos/getProyecto',
+    async (proyectoId: string, { rejectWithValue, getState }) => {
+       try{
+        const { accessToken } = (getState() as RootState).auth;
+        const config = {
+            headers: { "accessToken": `${accessToken}` }
+        }
+            const response = await clientAxios.get(`/proyectos/${proyectoId}`, config);
+            return response.data.proyecto as ProyectosProps
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
 export const createProyectoThunk = (proyecto: ProyectosProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
     const response = await createProyectoProvider(proyecto, getState)

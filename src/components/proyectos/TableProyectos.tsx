@@ -93,9 +93,11 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
     ]
 
-    useEffect(() => {
-        dispatch(getHitosThunk(currentProyecto.id))
-    }, [])
+    useEffect(() => {        
+        if(currentProyecto.id !== ''){
+            dispatch(getHitosThunk(currentProyecto.id))
+        }
+    }, [currentProyecto])
 
 
     const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {

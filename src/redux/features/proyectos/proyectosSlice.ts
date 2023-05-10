@@ -1,5 +1,6 @@
 import {  createSlice } from '@reduxjs/toolkit';
 import {  ProyectosState } from '@/interfaces';
+import { getProyectoThunk } from './proyectosThunk';
 
 const initialState: ProyectosState = {
     proyectos: [],
@@ -40,10 +41,6 @@ const proyectosSlice = createSlice({
             state.isLoading = false
             state.proyectos = action.payload.proyectos
         },
-        getProyecto: (state, action) => {
-            state.isLoadingProyecto = false
-            state.currentProyecto = action.payload.proyecto
-        },
         setProyectosError: (state, action) => {
             state.isLoading = false
             state.infoMessage = action.payload
@@ -70,7 +67,23 @@ const proyectosSlice = createSlice({
         clearProyectos: (state) => {
             state.proyectos = initialState.proyectos
         },        
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getProyectoThunk.pending, (state) => {
+            state.isLoadingProyecto = true
+        })
+            .addCase(getProyectoThunk.fulfilled, (state, action) => {
+            state.isLoadingProyecto = false
+            state.currentProyecto = action.payload
+        })
+            .addCase(getProyectoThunk.rejected, (state, action) => {
+            state.isLoadingProyecto = false
+            state.infoMessage = action.payload as string
+            state.errorProyecto = true
+        })
     }
+            
 })
 
 
@@ -78,7 +91,6 @@ export const {
     checkingProyectos,
     checkingProyecto,
     getProyectos,
-    getProyecto,
     setProyectosError,
     setProyectoError,
     createProyecto,
