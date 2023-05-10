@@ -24,9 +24,9 @@ export default defineConfig({
     build: {
         rollupOptions: { 
             treeshake: true,
-            external: ['smart-webcomponents-react/ganttchart'],
             experimentalCacheExpiry: 1000 * 60 * 60 * 24 * 7, // 7 days
             manualChunks: {
+                "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
                 "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-regular-svg-icons", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
@@ -37,7 +37,6 @@ export default defineConfig({
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
-                // "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
             }
         },
         chunkSizeWarningLimit: 1500
