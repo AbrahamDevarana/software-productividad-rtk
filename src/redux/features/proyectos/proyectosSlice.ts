@@ -1,6 +1,6 @@
 import {  createSlice } from '@reduxjs/toolkit';
 import {  ProyectosState } from '@/interfaces';
-import { getProyectoThunk } from './proyectosThunk';
+import { createProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk, updateProyectoThunk } from './proyectosThunk';
 
 const initialState: ProyectosState = {
     proyectos: [],
@@ -31,36 +31,6 @@ const proyectosSlice = createSlice({
     name: 'proyectosSlice',
     initialState,
     reducers: {
-        checkingProyectos: (state) => {
-            state.isLoading = true
-        },
-        checkingProyecto: (state) => {
-            state.isLoadingProyecto = true
-        },
-        getProyectos: (state, action) => {
-            state.isLoading = false
-            state.proyectos = action.payload.proyectos
-        },
-        setProyectosError: (state, action) => {
-            state.isLoading = false
-            state.infoMessage = action.payload
-            state.error = true
-        },
-        setProyectoError: (state, action) => {
-            state.isLoadingProyecto = false
-            state.infoMessage = action.payload
-            state.errorProyecto = true
-        },
-        createProyecto: (state, action) => {
-            state.isLoading = false
-            state.proyectos.push(action.payload.proyecto)
-            state.created = true
-        },
-        updateProyecto: (state, action) => {
-            state.isLoadingProyecto = false
-            state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.proyecto.id ? action.payload.proyecto : proyecto)
-            state.updated = true
-        },
         clearProyecto: (state) => {
             state.currentProyecto = initialState.currentProyecto
         },
@@ -70,31 +40,77 @@ const proyectosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getProyectosThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(getProyectosThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.proyectos = action.payload
+        })
+            .addCase(getProyectosThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.payload as string
+                state.error = true
+        })
             .addCase(getProyectoThunk.pending, (state) => {
-            state.isLoadingProyecto = true
+                state.isLoadingProyecto = true
         })
             .addCase(getProyectoThunk.fulfilled, (state, action) => {
-            state.isLoadingProyecto = false
-            state.currentProyecto = action.payload
+                state.isLoadingProyecto = false
+                state.currentProyecto = action.payload
         })
             .addCase(getProyectoThunk.rejected, (state, action) => {
-            state.isLoadingProyecto = false
-            state.infoMessage = action.payload as string
-            state.errorProyecto = true
+                state.isLoadingProyecto = false
+                state.infoMessage = action.payload as string
+                state.errorProyecto = true
         })
+            .addCase(createProyectoThunk.pending, (state) => {
+                state.isLoading = true
+        })
+            .addCase(createProyectoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.proyectos.push(action.payload)
+                state.created = true
+        })
+            .addCase(createProyectoThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.infoMessage = action.payload as string
+                state.error = true
+        })
+            .addCase(updateProyectoThunk.pending, (state) => {
+                state.isLoadingProyecto = true
+        })
+            .addCase(updateProyectoThunk.fulfilled, (state, action) => {
+                state.isLoadingProyecto = false
+                state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
+                state.updated = true
+        })
+            .addCase(updateProyectoThunk.rejected, (state, action) => {
+                state.isLoadingProyecto = false
+                state.infoMessage = action.payload as string
+                state.errorProyecto = true
+        })
+            .addCase(deleteProyectoThunk.pending, (state) => {
+                state.isLoadingProyecto = true
+        })
+            .addCase(deleteProyectoThunk.fulfilled, (state, action) => {
+                state.isLoadingProyecto = false
+                state.proyectos = state.proyectos.filter(proyecto => proyecto.id !== action.payload.id)
+                state.deleted = true
+        })
+            .addCase(deleteProyectoThunk.rejected, (state, action) => {
+                state.isLoadingProyecto = false
+                state.infoMessage = action.payload as string
+                state.errorProyecto = true
+        })
+
+
     }
             
 })
 
 
 export const {
-    checkingProyectos,
-    checkingProyecto,
-    getProyectos,
-    setProyectosError,
-    setProyectoError,
-    createProyecto,
-    updateProyecto,
     clearProyecto,
     clearProyectos,
 } = proyectosSlice.actions

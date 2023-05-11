@@ -36,6 +36,7 @@ export const updateHitoThunk = createAsyncThunk(
 
             const response = await clientAxios.put(`/hitos/${hito.id}`, hito, config);
             return response.data.hito as HitosProps
+            
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }

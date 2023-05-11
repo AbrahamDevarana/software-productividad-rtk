@@ -56,18 +56,18 @@ const tareasSlice = createSlice({
 			state.isLoadingCurrentTarea = false;
 			state.error = true;
 		})
-		.addCase(createTareaThunk.pending, (state) => {
-			state.isLoading = true;
-			state.error = false;
-		})
-		.addCase(createTareaThunk.fulfilled, (state, action) => {
-			state.isLoading = false;
-			state.tareas.push(action.payload);
-		})
-		.addCase(createTareaThunk.rejected, (state) => {
-			state.isLoading = false;
-			state.error = true;
-		});
+		// .addCase(createTareaThunk.pending, (state) => {
+		// 	state.isLoading = true;
+		// 	state.error = false;
+		// })
+		// .addCase(createTareaThunk.fulfilled, (state, action) => {
+		// 	state.isLoading = false;
+		// 	state.tareas.push(action.payload);
+		// })
+		// .addCase(createTareaThunk.rejected, (state) => {
+		// 	state.isLoading = false;
+		// 	state.error = true;
+		// });
     },
 })
 

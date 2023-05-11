@@ -25,7 +25,7 @@ export const getTareaThunk = createAsyncThunk(
 
 export const createTareaThunk = createAsyncThunk(
     'tareas/createTarea',
-    async (tarea: TareasProps, {rejectWithValue, getState}) => {
+    async (tarea: TareasProps, {rejectWithValue, getState}) => {    
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -34,7 +34,6 @@ export const createTareaThunk = createAsyncThunk(
 
             const response = await clientAxios.post(`/tareas`, tarea, config);
             return response.data.tarea as TareasProps
-            
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }

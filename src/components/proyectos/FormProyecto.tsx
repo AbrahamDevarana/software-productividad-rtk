@@ -40,6 +40,9 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
 
     const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } =  useSelectUser(usuarios)
 
+    
+    
+
     if (isLoadingProyecto) return <Skeleton active paragraph={{  rows: 10 }} />
 
     return (
@@ -53,6 +56,7 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
                 descripcion: currentProyecto.descripcion,
                 fechaInicio: dayjs(currentProyecto.fechaInicio).add(6, 'hour'),
                 fechaFin: dayjs(currentProyecto.fechaFin).add(6, 'hour'),
+                participantes: currentProyecto.usuariosProyecto.map((usuario) => usuario.id)
             }}
         >
             <Form.Item label="Titulo" name="titulo" required className='col-span-12'>

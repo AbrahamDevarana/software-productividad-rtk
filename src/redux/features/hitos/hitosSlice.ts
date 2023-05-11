@@ -75,12 +75,23 @@ const hitosSlice = createSlice({
             state.isLoading = false;
             state.error = true;
         })
+        .addCase(createTareaThunk.pending, (state) => {
+            state.error = false;
+        })
         .addCase(createTareaThunk.fulfilled, (state, action) => {
-            const hito = state.hitos.find(hito => hito.id === action.payload.hitoId);   
-            if (hito) {
-                hito.tareas.push(action.payload);
+            const { hitoId } = action.payload
+
+            const hito = state.hitos.find(hito => hito.id === hitoId);
+            if(hito){
+                hito.tareas?.push(action.payload);
             }
-      });
+
+
+        })    
+        .addCase(createTareaThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
     }
         
 })

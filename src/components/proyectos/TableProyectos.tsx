@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
-import { updateHitoProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasThunk'
-import { createHitoThunk, getHitosThunk } from '@/redux/features/hitos/hitosThunk'
+import { createHitoThunk, getHitosThunk, updateHitoThunk } from '@/redux/features/hitos/hitosThunk'
 import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
 import dayjs from 'dayjs';
 import Loading from '../antd/Loading'
@@ -113,8 +112,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             titulo: value
         }
 
-
-        dispatch(updateHitoProyectoThunk(query))
+        dispatch(updateHitoThunk(query))
     };
 
     const handleCreateHito = () => {    
