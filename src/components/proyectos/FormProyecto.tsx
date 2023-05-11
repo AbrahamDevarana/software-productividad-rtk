@@ -38,7 +38,7 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
         
     }
 
-    const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } =  useSelectUser(usuarios)
+    const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
 
     
     

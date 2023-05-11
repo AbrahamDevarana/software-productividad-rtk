@@ -1,7 +1,7 @@
 import { HitosState } from '@/interfaces';
 import { createSlice } from '@reduxjs/toolkit';
 import { getHitosThunk, createHitoThunk, deleteHitoThunk, updateHitoThunk } from './hitosThunk';
-import { createTareaThunk } from '../tareas/tareasThunk';
+import { createTareaThunk, updateTareaThunk } from '../tareas/tareasThunk';
 
 const initialState:HitosState = {
     hitos: [],
@@ -75,23 +75,39 @@ const hitosSlice = createSlice({
             state.isLoading = false;
             state.error = true;
         })
+
+
+        // Tareas
         .addCase(createTareaThunk.pending, (state) => {
             state.error = false;
         })
         .addCase(createTareaThunk.fulfilled, (state, action) => {
             const { hitoId } = action.payload
-
             const hito = state.hitos.find(hito => hito.id === hitoId);
             if(hito){
                 hito.tareas?.push(action.payload);
             }
-
-
         })    
         .addCase(createTareaThunk.rejected, (state) => {
             state.isLoading = false;
             state.error = true;
         })
+        .addCase(updateTareaThunk.pending, (state) => {
+            state.error = false;
+        })
+        .addCase(updateTareaThunk.fulfilled, (state, action) => {
+            const { hitoId } = action.payload
+            const hito = state.hitos.find(hito => hito.id === hitoId);
+            if(hito){
+                hito.tareas = hito.tareas?.map(tarea =>  (tarea.id === action.payload.id ) ? action.payload : tarea)
+            }
+        })
+        .addCase(updateTareaThunk.rejected, (state) => {
+            state.isLoading = false;
+            state.error = true;
+        })
+
+
     }
         
 })

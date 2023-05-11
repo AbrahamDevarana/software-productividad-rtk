@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import {  Drawer, Segmented } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { TableProyectos } from '@/components/proyectos/TableProyectos';
-import { FormTareas } from '../../components/forms/FormTareas';
+import { FormTareas } from '../../components/tareas/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { Icon } from '@/components/Icon';

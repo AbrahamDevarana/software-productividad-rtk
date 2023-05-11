@@ -6,7 +6,7 @@ import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfa
 import dayjs from 'dayjs';
 import Loading from '../antd/Loading'
 import { FaPlus } from 'react-icons/fa'
-import { Collapse, Form, Input, Progress, Table, } from 'antd'
+import { Avatar, Collapse, Form, Input, Progress, Table, Tooltip, } from 'antd'
 import { useColor } from '@/hooks'
 import type { ColumnsType } from 'antd/es/table';
 
@@ -52,31 +52,47 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         },
         {
             title: 'Responsables',
-            key: 'participantes',
-            render: (participantes: UsuarioProps[]) => (
-                <div className='w-full block'>
-                    {/* <Avatar.Group maxCount={2}>  
-                        { participantes.map((participante) => (
-                                <Avatar src={participante.foto} key={participante.id} />
+            key: 'usuariosTarea',
+            render: (text: any, record: TareasProps ) => (
+                <div className='w-full text-devarana-graph'>
+                    <Avatar.Group maxCount={3}>
+                        <Tooltip title={record.propietario.nombre + ' ' + record.propietario.apellidoPaterno} key={record.propietario.id} className='relative'>
+                            <Avatar
+                                src={import.meta.env.VITE_STORAGE_URL + record.propietario.foto}
+                            >
+                                {record.propietario.iniciales}
+                            </Avatar>
+                        </Tooltip>
+
+                        {record.usuariosTarea.map((usuario: UsuarioProps) => (
+                            <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno} key={usuario.id} className='relative'>
+                                <Avatar
+                                    src={import.meta.env.VITE_STORAGE_URL + usuario.foto}
+                                >
+                                    {usuario.iniciales}
+                                </Avatar>
+                            </Tooltip>
+
                         ))}
-                    </Avatar.Group> */}
+                    </Avatar.Group>
                 </div>
             ),
-            width: '20%'
-        },
+            width: '20%',
+        },  
         {
             title: 'Avance',
             dataIndex: 'avance',
             render: (text, record, index) => (
-                <Progress 
-                    className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
-                    strokeColor={{
-                        '0%': useColor(record.status).lowColor,
-                        '100%': useColor(record.status, .8).color,
-                        direction: 'to top',
-                    }}
-                    trailColor={useColor(record.status, .3).color} 
-                />
+                <></>
+                // <Progress 
+                //     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                //     strokeColor={{
+                //         '0%': useColor(record.status).lowColor,
+                //         '100%': useColor(record.status, .8).color,
+                //         direction: 'to top',
+                //     }}
+                //     trailColor={useColor(record.status, .3).color} 
+                // />
             ),
             width: '10%'
         },
@@ -85,10 +101,11 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             dataIndex: 'status',
             key: 'status',
             render: (text, record, index) => (
-                <span className='font-semibold'
-                 style={{
-                    color: useColor(record.status).color,
-                }}>{useColor(record.status).nombre}</span>
+                <></>
+                // <span className='font-semibold'
+                //  style={{
+                //     color: useColor(record.status).color,
+                // }}>{useColor(record.status).nombre}</span>
             ),
             width: '10%'
         },

@@ -12,10 +12,11 @@ const initialState:TareasState = {
         status: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
-		participantesIds: [],
+		usuariosTarea: [],
 		participantes: [],
 		hitoId: '',
-        propietarioId: {
+		propietarioId: '',
+        propietario: {
             id: '',
             nombre: '',
             apellidoPaterno: '',

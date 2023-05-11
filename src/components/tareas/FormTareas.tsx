@@ -90,7 +90,8 @@ export const FormTareas = () => {
                     nombre: currentTarea.nombre,
                     fechaInicio: dayjs(currentTarea.fechaInicio).add(6, 'hour'),
                     fechaFin: dayjs(currentTarea.fechaFin).add(6, 'hour'),
-                    descripcion: currentTarea.descripcion
+                    descripcion: currentTarea.descripcion,
+                    participantes: currentTarea.usuariosTarea.map((usuario) => usuario.id)
                 }}
                 form={form}
                 onBlur={handleSubmit}
