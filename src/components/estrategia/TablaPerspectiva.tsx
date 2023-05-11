@@ -107,8 +107,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
     return (
         <>
             <Table
-                size='small'
-                className=' w-full'
+                className='w-full'
                 loading={ perspectiva.objetivos_estrategicos?.length === 0 ? true : false }
                 columns={columns}
                 dataSource={perspectiva.objetivos_estrategicos}

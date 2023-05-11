@@ -1,19 +1,22 @@
-$gray: #A6AFC3;
-$gray2: #F9F9F7;
+
+$primary: #0967C9;
+$secondary: #E51141;
+$success: #11C31C;
+$info: #F09814;
+$warning: #F0E438;
+$error: #CB0007;
 $dark: #2E3136;
-$dark2: #656A76;
-$blue: #0967C9;
-$blue2: #408FE3;
-$yellow: #F0E438;
-$yellow2: #F3ED90;
-$orange: #F09814;
-$orange2: #F3B860;
-$green: #11C31C;
-$green2: #75DD7B;
-$pink: #E51141;
-$pink2: #FF6E8F;
-$red: #CB0007;
-$red2: #EC4D49;
+$default: #A6AFC3;
+
+$primary-light: #408FE3;
+$secondary-light: #FF6E8F;
+$success-light: #75DD7B;
+$info-light: #F3B860;
+$warning-light: #F3ED90;
+$error-light: #EC4D49;
+$dark-light: #656A76;
+$default-light: #F9F9F7;
+
 
 
 $breakpoint-sm:640px;

@@ -6,8 +6,9 @@ import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfa
 import dayjs from 'dayjs';
 import Loading from '../antd/Loading'
 import { FaPlus } from 'react-icons/fa'
-import { Collapse, Form, Input, Table, } from 'antd'
-
+import { Collapse, Form, Input, Progress, Table, } from 'antd'
+import { useColor } from '@/hooks'
+import type { ColumnsType } from 'antd/es/table';
 
 
 interface TableProyectosProps {
@@ -26,7 +27,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
 
     
 
-    const defaultColumns = [
+    const defaultColumns:ColumnsType<any> = [
         {
             title: 'Actividad',
             dataIndex: 'nombre',
@@ -66,12 +67,16 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         {
             title: 'Avance',
             dataIndex: 'avance',
-            key: 'fecha',
-            inputType: 'text',
-            render: (avance: number) => (
-                <div className='bg-green-500 w-full text-center text-white'>
-                    100%
-                </div>
+            render: (text, record, index) => (
+                <Progress 
+                    className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                    strokeColor={{
+                        '0%': useColor(record.status).lowColor,
+                        '100%': useColor(record.status, .8).color,
+                        direction: 'to top',
+                    }}
+                    trailColor={useColor(record.status, .3).color} 
+                />
             ),
             width: '10%'
         },
@@ -79,13 +84,11 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             title: 'Estatus',
             dataIndex: 'status',
             key: 'status',
-            render: (status: number) => (
-                <div className='w-full text-center text-white'>
-                    <span className='bg-green-500 px-2 py-1 rounded-full'>
-                        {/* {useColor(status).color} */}
-                    </span>
-                </div>
-
+            render: (text, record, index) => (
+                <span className='font-semibold'
+                 style={{
+                    color: useColor(record.status).color,
+                }}>{useColor(record.status).nombre}</span>
             ),
             width: '10%'
         },
@@ -150,7 +153,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             form={form}
             onBlur={ e => handleCreateTask(hito)}
             > 
-                <Form.Item name='nombre' className='mb-'>
+                <Form.Item name='nombre' className='mb-0'>
                     <Input placeholder='Agregar Nuevo Elemento' onPressEnter={
                         (e) => {
                             e.preventDefault()
@@ -166,8 +169,9 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
     const activeHitos = useMemo(() => {
         return hitos.map((hito: HitosProps) => hito.id)
     }, [hitos])
+    
 
-    if(isLoading) return ( <Loading /> )
+    // if(isLoading) return ( <Loading /> )
     return (
         <>
         <Collapse
@@ -178,6 +182,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             {
                 hitos.map((hito: HitosProps, index: number) => (
                     <Panel 
+                        className=''
                         header={
                             <Form 
                                 onClick={ e => e.stopPropagation()}
@@ -196,15 +201,14 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
                             </Form>
                         } key={hito.id}>
                         <Table
-                            className='customEditableTable'
+                            loading={isLoading}
+                            className='customTable'
                             scroll={{ x: 1000 }}
                             bordered={false}
                             pagination={false}
-                            size='small'
                             columns={defaultColumns}
                             dataSource={hito.tareas}
-                            // rowClassName="editable-row"
-                            footer={ () => FooterComp(hito)}
+                            footer={ () => FooterComp(hito) }
                             rowKey={(record: any) => record.id}
                             onRow={(record: any, index: any) => {
                                 return {

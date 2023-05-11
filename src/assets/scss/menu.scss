@@ -36,11 +36,6 @@
     font-size: 18px!important
 }
 
-.ant-menu-submenu-title .ant-menu-item-icon, .text-2xl-forced {
-    @apply text-2xl #{!important};
-}
-
-
 .menu-opt{
     .ant-menu-title-content, .ant-menu-submenu-arrow{
         display: none;
@@ -94,7 +89,7 @@
 }
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
-    background-color: $blue !important;
+    background-color: $primary !important;
 }
 
 .ant-menu-root{
@@ -119,7 +114,7 @@
 }
 
 .menuSidebar .active{
-    color: $blue2 !important;
+    color: $primary-light !important;
 }
 .menuSidebar .active.profile{
     background-color: rgb(255, 255, 255, .2);

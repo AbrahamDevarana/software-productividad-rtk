@@ -23,7 +23,7 @@ body{
 /* Works on Firefox */
 * {
 	scrollbar-width: thin;
-	scrollbar-color: $dark $gray2;
+	scrollbar-color: $dark $default-light;
   }
   
   /* Works on Chrome, Edge, and Safari */
@@ -32,29 +32,29 @@ body{
   }
   
   *::-webkit-scrollbar-track {
-	background: $gray2;
+	background: $default-light;
   }
   
   *::-webkit-scrollbar-thumb {
 	background-color: $dark;
 	border-radius: 20px;
-	border: 2px solid $gray2;
+	border: 2px solid $default-light;
   }
 
 
 h1, h4{
 	font-weight: bold;
-	@apply text-custom-dark2
+	@apply text-default
 }
 
 h2{
 	font-weight: 300;
-	@apply text-custom-dark2
+	@apply text-default
 }
 
 h3, h5{
 	font-weight: 300;
-	@apply text-custom-gray
+	@apply text-default
 }
 
 p, li, span, a{
@@ -139,10 +139,10 @@ p, li, span, a{
 
 
 .ant-switch{
-	@apply bg-custom-gray2
+	@apply bg-devarana-graph
 }
 .ant-switch-checked{
-	@apply bg-custom-dark
+	@apply bg-black
 }
 
 .glassMorph{
@@ -351,12 +351,25 @@ input, textarea {
         margin: auto!important;        
     }
 }
-.customEditableTable{
-    background-color: transparent!important;
-    
 
-    .ant-table-thead {
-        background-color: transparent!important;
+
+.customTable{
+    .ant-table {
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+
+        .ant-table-thead tr th{
+            padding: 16px 16px!important;
+        }
+
+        .ant-table-tbody .ant-table-cell {
+            padding: 10px 16px!important;
+        }
+
+        .ant-table-footer{
+            background: transparent!important;
+            padding: 10px 16px!important;
+        }
+        
     }
-    
 }

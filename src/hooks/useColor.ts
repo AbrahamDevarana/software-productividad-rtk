@@ -45,11 +45,6 @@ export function useColor(idOrType: string | number, opacity: number = 1) {
         lowColor = `rgba(240, 152, 20, ${opacity})`;
         nombre = 'Detenido';
         break;
-    //   case 'warning':
-    //     color = `rgba(240, 228, 56, ${opacity})`;
-    //     lowColor = `rgba(243, 237, 144, ${opacity})`;
-    //     nombre = 'Detenido';
-    //     break;
       case 'info':
         color = `rgba(240, 152, 20, ${opacity})`;
         lowColor = `rgba(240, 152, 20, ${opacity})`;
@@ -73,6 +68,7 @@ export function useColor(idOrType: string | number, opacity: number = 1) {
 
     return { color, nombre, lowColor };
   }, [opacity, type]);
+  
 
   return { color, nombre, type, lowColor };
 }
