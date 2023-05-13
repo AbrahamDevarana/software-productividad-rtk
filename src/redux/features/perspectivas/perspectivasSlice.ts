@@ -15,7 +15,7 @@ const initialState: PerspectivasState = {
         descripcion: '',
         progreso: 0,
         color: '',
-        status: 0,
+        status: 'SIN_INICIAR',
         objetivos_estrategicos: [],
     }
 }

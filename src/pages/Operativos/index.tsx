@@ -9,8 +9,8 @@ import Loading from '@/components/antd/Loading';
 import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { useColor } from '@/hooks';
 import { FaPlus } from 'react-icons/fa';
+import { getColor } from '@/helpers';
 
 export const Objetivos : React.FC = () => {
 
@@ -71,7 +71,7 @@ export const Objetivos : React.FC = () => {
                             percent={ponderacionTotal} 
                             type='dashboard' 
                             className='flex justify-center'
-                            strokeColor={useColor(2).color}
+                            strokeColor={getColor('SIN_INICIAR').color}
                             strokeWidth={10}
 
                         />

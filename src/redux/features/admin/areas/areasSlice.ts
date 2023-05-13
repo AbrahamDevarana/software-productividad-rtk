@@ -12,9 +12,6 @@ const initialState: AreasState = {
     isLoading: false,
     infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
     currentArea: {
         id: 0,
         nombre: '',
@@ -29,7 +26,6 @@ const areasSlice = createSlice({
     reducers: {
         checkingAreas: (state) => {
             state.isLoading = true
-            state.updated = false
         },
         setAreasError: (state, action) => {
             state.isLoading = false
@@ -52,21 +48,18 @@ const areasSlice = createSlice({
         createArea: (state, action) => {
             state.areas.push(action.payload.area)
             state.isLoading = false
-            state.created = true
             state.infoMessage = action.payload.message         
         },
         updateArea: (state, action) => {            
             const index = state.areas.findIndex(area => area.id === action.payload.area.id)
             state.areas[index] = action.payload.area
             state.isLoading = false
-            state.updated = true
             state.infoMessage = action.payload.message
         },
         deleteArea: (state, action) => {
             const index = state.areas.findIndex(area => area.id === action.payload)
             state.areas.splice(index, 1)
             state.isLoading = false
-            state.deleted = true
             state.infoMessage = 'Área eliminada correctamente' 
         },
         clearAreas: (state) => {
@@ -74,7 +67,6 @@ const areasSlice = createSlice({
             state.isLoading = false
             state.error = false
             state.infoMessage = ''
-            state.updated = false
             state.currentArea = initialState.currentArea
         },
         clearCurrentArea: (state) => {

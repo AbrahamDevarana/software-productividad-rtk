@@ -15,7 +15,7 @@ const initialState: ProyectosState = {
         usuariosProyecto: [],
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        status: 0,
+        status: 'SIN_INICIAR',
         proyectosHito: [],
     },
     isLoadingProyecto: false,

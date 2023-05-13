@@ -13,9 +13,6 @@ export interface AreasState {
     isLoading: boolean;
     error: boolean;
     infoMessage: string;
-    updated: boolean;
-    created: boolean;
-    deleted: boolean;
     currentArea: AreaProps;
     
     

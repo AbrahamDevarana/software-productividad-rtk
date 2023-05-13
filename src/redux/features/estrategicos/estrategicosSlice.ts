@@ -23,7 +23,7 @@ const initialState: EstrategicosState = {
         progreso: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        status: 1,
+        status: 'SIN_INICIAR',
         indicador: '',
         perspectivaId: '',
         perspectivas: {
@@ -32,7 +32,7 @@ const initialState: EstrategicosState = {
                 descripcion: '',
                 icono: 'faChartLine',
                 color: '',
-                status: 1,
+                status: 'SIN_INICIAR',
                 progreso: 0,
             },        
         responsables: [],

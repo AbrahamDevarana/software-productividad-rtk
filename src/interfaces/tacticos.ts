@@ -1,6 +1,7 @@
 import { UsuarioProps,  } from "./usuario";
 import { EstrategicoProps } from "./";
 import { AreaProps } from '@/interfaces';
+import { statusType } from "@/types";
 
 export interface TacticoProps {
     id:           string;
@@ -11,7 +12,7 @@ export interface TacticoProps {
     progreso:     number;
     fechaInicio:  Date;
     fechaFin:     Date;
-    status:       number;
+    status:       statusType;
     tipoObjetivo: number;
     responsables:  UsuarioProps[];
     areas: AreaProps[]

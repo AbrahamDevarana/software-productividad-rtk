@@ -6,15 +6,15 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
-import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
+import { PerspectivaProps } from '@/interfaces';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useColor } from '@/hooks';
 import { TabStatus } from '../ui/TabStatus';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
-import { log } from 'util';
+import { statusType } from '@/types';
+import { getColor } from '@/helpers';
 
 
 
@@ -32,7 +32,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
-    const [statusEstrategico, setStatusEstrategico] = useState<number>(currentEstrategico.status);
+    const [statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
 
     
     
@@ -72,7 +72,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         }  
     }
 
-    const handleChangeStatus = (value: number) => {  
+    const handleChangeStatus = (value: statusType) => {  
 
         setStatusEstrategico(value); 
         const updateEstrategico = {
@@ -87,31 +87,31 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         {
           key: '1',
           label: (
-            <button onClick={() => handleChangeStatus(1)}> <TabStatus statusId={1} /> </button>
+            <button onClick={() => handleChangeStatus('SIN_INICIAR')}> <TabStatus status={'SIN_INICIAR'} /> </button>
           ),
         },
         {
             key: '2',
             label: (
-                <button onClick={() => handleChangeStatus(2)}> <TabStatus statusId={2} /> </button>
+                <button onClick={() => handleChangeStatus('EN_PROGRESO')}> <TabStatus status={'EN_PROGRESO'} /> </button>
             ),
         },
         {
             key: '3',
             label: (
-                <button onClick={() => handleChangeStatus(3)}> <TabStatus statusId={3} /> </button>
+                <button onClick={() => handleChangeStatus('FINALIZADO')}> <TabStatus status={'FINALIZADO'} /> </button>
             ),
         },
         {
             key: '4',
             label: (
-                <button onClick={() => handleChangeStatus(4)}> <TabStatus statusId={4} /> </button>
+                <button onClick={() => handleChangeStatus('DETENIDO')}> <TabStatus status={'DETENIDO'} /> </button>
             ),
         },
         {
             key: '5',
             label: (
-                <button onClick={() => handleChangeStatus(5)}> <TabStatus statusId={5} /> </button>
+                <button onClick={() => handleChangeStatus('CANCELADO')}> <TabStatus status={'CANCELADO'} /> </button>
             ),
         },
     ]
@@ -197,7 +197,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                         <div className='bg-gray-50 rounded-full px-2'>
                                             <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                                 <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
-                                                    <TabStatus statusId={statusEstrategico} />
+                                                    <TabStatus status={statusEstrategico} />
                                                 </button>
                                             </Dropdown>
                                         </div>
@@ -214,12 +214,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                         max={100}
                                         onAfterChange={ handleChangeProgreso }
                                         trackStyle={{
-                                            backgroundColor: useColor(values.status).color,
+                                            backgroundColor: getColor(values.status).color,
                                             borderRadius: 10,
 
                                         }}
                                         railStyle={{
-                                            backgroundColor: useColor(values.status, .3).color,
+                                            backgroundColor: getColor(values.status, .3).color,
                                             borderRadius: 10,
                                         }}
                                         

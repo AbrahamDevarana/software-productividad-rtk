@@ -11,7 +11,7 @@ const initialState:HitosState = {
         descripcion: '',
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        status: 0,
+        status: 'SIN_INICIAR',
         proyectoId: '',
         tareas: []
     },

@@ -10,9 +10,9 @@ import { updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategic
 import type { MenuProps } from 'antd';
 import { TabStatus } from '../ui/TabStatus';
 import createDOMPurify from 'dompurify';
-import { getFile } from '@/helpers';
-import { useColor } from '@/hooks';
+import { getColor, getFile } from '@/helpers';
 import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
+import { statusType } from '@/types';
 
 
 interface EstrategiaViewProps{
@@ -33,7 +33,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
     const navigate = useNavigate();
     const DOMPurify = createDOMPurify(window)
     
-    const [statusEstrategico, setStatusEstrategico] = useState<number>(estrategico.status);
+    const [statusEstrategico, setStatusEstrategico] = useState<statusType>(estrategico.status);
     const [progresoEstrategico, setProgresoEstrategico] = useState<number>(estrategico.progreso);
     
 
@@ -54,7 +54,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
              
     }
 
-    const handleChangeStatus = (value: number) => {
+    const handleChangeStatus = (value: statusType) => {
         setStatusEstrategico(value); 
         const updateEstrategico = {
             ...estrategico,
@@ -74,31 +74,31 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
         {
           key: '1',
           label: (
-            <button onClick={() => handleChangeStatus(1)}> <TabStatus statusId={1} /> </button>
+            <button onClick={() => handleChangeStatus('SIN_INICIAR')}> <TabStatus status={'SIN_INICIAR'} /> </button>
           ),
         },
         {
             key: '2',
             label: (
-                <button onClick={() => handleChangeStatus(2)}> <TabStatus statusId={2} /> </button>
+                <button onClick={() => handleChangeStatus('EN_PROGRESO')}> <TabStatus status={'EN_PROGRESO'} /> </button>
             ),
         },
         {
             key: '3',
             label: (
-                <button onClick={() => handleChangeStatus(3)}> <TabStatus statusId={3} /> </button>
+                <button onClick={() => handleChangeStatus('FINALIZADO')}> <TabStatus status={'FINALIZADO'} /> </button>
             ),
         },
         {
             key: '4',
             label: (
-                <button onClick={() => handleChangeStatus(4)}> <TabStatus statusId={4} /> </button>
+                <button onClick={() => handleChangeStatus('DETENIDO')}> <TabStatus status={'DETENIDO'} /> </button>
             ),
         },
         {
             key: '5',
             label: (
-                <button onClick={() => handleChangeStatus(5)}> <TabStatus statusId={5} /> </button>
+                <button onClick={() => handleChangeStatus('CANCELADO')}> <TabStatus status={'CANCELADO'} /> </button>
             ),
         },
     ]
@@ -131,7 +131,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
                     <div className='bg-gray-50 rounded-full px-2'>
                         <Dropdown menu={{items}} overlayClassName='bg-transparent' disabled={!view} >
                             <button onClick={(e) => e.preventDefault()}>
-                                <TabStatus statusId={statusEstrategico} />
+                                <TabStatus status={statusEstrategico} />
                             </button>
                         </Dropdown>
                     </div>
@@ -144,11 +144,11 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
                             className='drop-shadow progressStyle'
                             percent={progresoEstrategico}
                             strokeColor={{
-                                from: useColor(statusEstrategico).color,
-                                to: useColor(statusEstrategico, .5).color,
+                                from: getColor(statusEstrategico).color,
+                                to: getColor(statusEstrategico, .5).color,
                                 direction: 'to top'
                             }}
-                            trailColor={useColor(statusEstrategico, .2)?.color}
+                            trailColor={getColor(statusEstrategico, .2)?.color}
                             strokeWidth={20}
                             showInfo={false}
                         />
@@ -161,12 +161,12 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
                         max={100}
                         onAfterChange={ handleChangeProgreso }
                         trackStyle={{
-                            backgroundColor: useColor(statusEstrategico).color,
+                            backgroundColor: getColor(statusEstrategico).color,
                             borderRadius: 10,
 
                         }}
                         railStyle={{
-                            backgroundColor: useColor(statusEstrategico, .3).color,
+                            backgroundColor: getColor(statusEstrategico, .3).color,
                             borderRadius: 10,
                         }}
                         

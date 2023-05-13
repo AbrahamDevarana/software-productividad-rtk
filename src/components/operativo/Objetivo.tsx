@@ -3,8 +3,8 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getObjetivoThunk } from '@/redux/features/operativo/operativosThunk';
-import { useColor } from '@/hooks';
 import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
+import { getColor } from '@/helpers';
 
 
 interface ObjetivoProps {
@@ -65,7 +65,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 strokeLinecap='square'
                 className='flex justify-center py-5'
                 strokeWidth={10}
-                strokeColor={useColor(2).color}
+                strokeColor={getColor('SIN_INICIAR').color}
 
             />
             <Avatar.Group className='flex justify-center'>

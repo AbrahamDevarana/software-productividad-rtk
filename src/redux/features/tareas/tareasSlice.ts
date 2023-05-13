@@ -9,7 +9,7 @@ const initialState:TareasState = {
         id: '',
         nombre: '',
         descripcion: '',
-        status: 0,
+        status: 'SIN_INICIAR',
         fechaInicio: new Date(),
         fechaFin: new Date(),
 		usuariosTarea: [],

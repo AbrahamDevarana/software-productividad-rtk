@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Drawer, Progress, Table} from 'antd';
-import { useColor } from '@/hooks';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
 import {  statusString } from '@/helpers/status';
-import { getFile } from '@/helpers';
+import { getColor, getFile } from '@/helpers';
 import '@/assets/css/ResizableTable.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
@@ -29,7 +28,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: useColor(record.status).color }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -48,7 +47,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             render: (text, record, index) => (
                 <span className='font-semibold'
                  style={{
-                    color: useColor(record.status).color,
+                    color: getColor(record.status).color,
                 }}>{statusString[record.status]}</span>
             ),
         },
@@ -60,10 +59,10 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
-                        from: useColor(record.status).color || '#108ee9',
-                        to: useColor(record.status).lowColor || '#87d068',
+                        from: getColor(record.status).color || '#108ee9',
+                        to: getColor(record.status).lowColor || '#87d068',
                     }}
-                    trailColor={useColor(record.status, .3).color} 
+                    trailColor={getColor(record.status, .3).color} 
                 />
             )
         },

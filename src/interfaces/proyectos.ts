@@ -1,3 +1,4 @@
+import { statusType } from "@/types";
 import { HitosProps, InitialState, Paginate, UsuarioProps } from ".";
 
 
@@ -13,7 +14,7 @@ export interface ProyectosProps {
     proyectosHito: HitosProps[];
     fechaInicio: Date;
     fechaFin: Date;
-    status: number;
+    status: statusType;
 }
 
 

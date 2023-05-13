@@ -1,5 +1,6 @@
 
 import { PerspectivaProps, Paginate, UsuarioProps, TacticoProps } from '@/interfaces';
+import { statusType } from '@/types';
 
 
 export interface EstrategicosState {
@@ -23,7 +24,7 @@ export interface EstrategicoProps {
     progreso: number;
     fechaInicio: Date;
     fechaFin: Date;
-    status: number;
+    status: statusType;
     indicador: string;
     perspectivaId: string;
     perspectivas?: PerspectivaProps;

@@ -6,8 +6,7 @@ import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useColor } from '@/hooks';
-import {  getFile } from '@/helpers';
+import {  getColor, getFile, getStatus } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 
@@ -31,7 +30,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: useColor(record.status).color }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -56,8 +55,8 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             render: (text, record, index) => (
                 <span className='font-semibold'
                  style={{
-                    color: useColor(record.status).color,
-                }}>{useColor(record.status).nombre}</span>
+                    color: getColor(record.status).color,
+                }}>{getStatus(record.status)}</span>
             ),
         },
         
@@ -69,11 +68,11 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
-                        '0%': useColor(record.status).lowColor,
-                        '100%': useColor(record.status, .8).color,
+                        '0%': getColor(record.status).lowColor,
+                        '100%': getColor(record.status, .8).color,
                         direction: 'to top',
                     }}
-                    trailColor={useColor(record.status, .3).color} 
+                    trailColor={getColor(record.status, .3).color} 
                 />
             ),
         },
