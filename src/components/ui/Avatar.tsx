@@ -1,6 +1,6 @@
 import React from 'react'
 import { Avatar, Image } from 'antd';
-import brokenUser from '@/helpers/brokenUser';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 interface AvatarProps{
     picture?: string;
@@ -16,7 +16,7 @@ const AvatarProfile = ({picture = '', userName, size='large', preview = true , .
 
     
     return ( 
-        <Avatar size={size} src={ <Image fallback={brokenUser()} src={`${import.meta.env.VITE_STORAGE_URL}${picture}`} preview={preview} /> } />
+        <Avatar size={size} src={ <Image fallback={getBrokenUser()} src={`${import.meta.env.VITE_STORAGE_URL}${picture}`} preview={preview} /> } />
      );
 }
  

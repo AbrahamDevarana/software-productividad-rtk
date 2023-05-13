@@ -56,32 +56,32 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 		setSettingVisible(false);
 	};
 
-    const setTheme = (e: any) => {
+    // const setTheme = (e: any) => {
 
-        if (e.target.checked) {
-            localStorage.setItem('theme', 'dark');
-            document.documentElement.classList.add('dark')
-        }else{
-            localStorage.setItem('theme', 'light');
-            document.documentElement.classList.remove('dark')
-        }
-    }
+    //     if (e.target.checked) {
+    //         localStorage.setItem('theme', 'dark');
+    //         document.documentElement.classList.add('dark')
+    //     }else{
+    //         localStorage.setItem('theme', 'light');
+    //         document.documentElement.classList.remove('dark')
+    //     }
+    // }
 
-    useEffect(() => {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark')
-        }else{
-            document.documentElement.classList.remove('dark')
-        }
-    }, [])
+    // useEffect(() => {
+    //     const theme = localStorage.getItem('theme');
+    //     if (theme === 'dark') {
+    //         document.documentElement.classList.add('dark')
+    //     }else{
+    //         document.documentElement.classList.remove('dark')
+    //     }
+    // }, [])
     
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         if(e.currentTarget.scrollTop > 30){
-            setNavbarClass('bg-opacity-25');
+            setNavbarClass('bg-opacity-25 bg-white shadow');
         }else{
-            setNavbarClass('');
+            setNavbarClass('bg-transparent');
         }
     }
 
@@ -120,8 +120,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         <Drawer title="Configuración" placement="right" onClose={onClose} open={settingVisible} contentWrapperStyle={{ width: '300px' }}
         >
             <div className="flex">
-                <p> Modo Oscuro </p>
-                <input type="checkbox" className="ml-2" onChange={setTheme} defaultChecked={localStorage.getItem('theme') == "dark" ? true : false} />
+                {/* <input type="checkbox" className="ml-2" onChange={setTheme} defaultChecked={localStorage.getItem('theme') == "dark" ? true : false} /> */}
             </div>
         </Drawer>
 

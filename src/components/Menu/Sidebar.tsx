@@ -30,7 +30,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     <SvgIsotipo className={`h-10 w-full block svg-icon brand`} />
                 </NavLink>
 
-                <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
+                <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
                     <AvatarProfile picture={userAuth?.foto} preview={false} className="h-5 w-5 mx-auto" />

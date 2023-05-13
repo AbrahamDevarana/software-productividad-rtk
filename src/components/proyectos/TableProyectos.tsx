@@ -4,11 +4,11 @@ import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasT
 import { createHitoThunk, getHitosThunk, updateHitoThunk } from '@/redux/features/hitos/hitosThunk'
 import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
 import dayjs from 'dayjs';
-import Loading from '../antd/Loading'
 import { FaPlus } from 'react-icons/fa'
 import { Avatar, Collapse, Form, Input, Progress, Table, Tooltip, } from 'antd'
-import { useColor } from '@/hooks'
 import type { ColumnsType } from 'antd/es/table';
+import { getColor, getStatus } from '@/helpers'
+
 
 
 interface TableProyectosProps {
@@ -32,11 +32,14 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             title: 'Actividad',
             dataIndex: 'nombre',
             key: 'nombre',
-            render: (nombre: string) => (
-                <div className='w-full text-devarana-graph font-light py-1.5'>
-                    { nombre }
-                </div>
-            ),
+            render: (text, record, index) => ({
+                children: <div className='flex'> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
+                    <p className='text-devarana-graph'>{record.nombre}</p>
+                </div>,
+            }),
+
+            
             width: '30%'
         },
         {
@@ -45,7 +48,11 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             key: 'fecha',
             render: (fechaFin: string | Date | null) => (
                 <div className='w-full text-devarana-graph'>
-                    { fechaFin ? dayjs(fechaFin).format('DD/MM/YYYY') : <span className='text-devarana-graph font-light'>No Asignado</span> }
+                    { 
+                        fechaFin 
+                        ? <span className='text-devarana-graph font-light'>{dayjs(fechaFin).format('DD MMM YY')} </span> 
+                        : <span className='text-devarana-graph font-light'>No Asignado</span> 
+                    }
                 </div>
             ),
             width: '20%'
@@ -80,32 +87,15 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
             width: '20%',
         },  
         {
-            title: 'Avance',
-            dataIndex: 'avance',
-            render: (text, record, index) => (
-                <></>
-                // <Progress 
-                //     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
-                //     strokeColor={{
-                //         '0%': useColor(record.status).lowColor,
-                //         '100%': useColor(record.status, .8).color,
-                //         direction: 'to top',
-                //     }}
-                //     trailColor={useColor(record.status, .3).color} 
-                // />
-            ),
-            width: '10%'
-        },
-        {
             title: 'Estatus',
             dataIndex: 'status',
             key: 'status',
-            render: (text, record, index) => (
-                <></>
-                // <span className='font-semibold'
-                //  style={{
-                //     color: useColor(record.status).color,
-                // }}>{useColor(record.status).nombre}</span>
+            render: (status) => (
+                <div className='w-full' style={{
+                    color: getColor(status).color,
+                }}>
+                    { getStatus(status) }
+                </div>
             ),
             width: '10%'
         },

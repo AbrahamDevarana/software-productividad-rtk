@@ -1,23 +1,24 @@
 import React from 'react'
-import { useColor } from '@/hooks';
+import { statusType, statusTypes } from "@/types";
+import { getColor, getStatus } from '@/helpers';
 
 interface TabStatusProps  {
-    statusId: number;
+    status:  statusType
     children?: React.ReactNode;
 }
 
-export const TabStatus: React.FC<TabStatusProps> = ({statusId, children}) => {
+export const TabStatus: React.FC<TabStatusProps> = ({status, children}) => {
   return (
     <div className='flex items-center gap-2 px-2 py-1 rounded-full min-w-[100px]'>  
         <div style={{ 
-                backgroundColor: useColor(statusId).color, 
-                boxShadow: `0 0 3px 2px ${useColor(statusId, .3).color}`,
+                backgroundColor: getColor(status).color, 
+                boxShadow: `0 0 3px 2px ${getColor(status, .3).color}`,
                 width: '5px',
                 height: '5px',
             }}  
         />
 
-        <p> {useColor(statusId).nombre} </p>
+        <p> {getStatus(status)} </p>
     </div>
   )
 }

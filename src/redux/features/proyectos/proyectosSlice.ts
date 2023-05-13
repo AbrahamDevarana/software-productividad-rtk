@@ -11,6 +11,7 @@ const initialState: ProyectosState = {
         icono: '',
         imagen: '',
         participantes: [],
+        propietarioId: '',
         usuariosProyecto: [],
         fechaInicio: new Date(),
         fechaFin: new Date(),

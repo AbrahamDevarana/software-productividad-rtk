@@ -1,3 +1,4 @@
+import { statusType, statusTypes } from "@/types";
 import { InitialState } from "./slice";
 import { UsuarioProps } from "./usuario";
 
@@ -5,7 +6,7 @@ export interface TareasProps {
     id: string;
     nombre: string;
     descripcion: string;
-    status: number;
+    status: statusType;
     fechaInicio: Date;
     fechaFin: Date;
     hitoId: string;

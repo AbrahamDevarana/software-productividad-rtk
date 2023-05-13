@@ -10,10 +10,9 @@ import { updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategic
 import type { MenuProps } from 'antd';
 import { TabStatus } from '../ui/TabStatus';
 import createDOMPurify from 'dompurify';
-import { returnImage } from '@/helpers/returnImage';
+import { getFile } from '@/helpers';
 import { useColor } from '@/hooks';
 import { Divider, Avatar, Button, Tooltip, FloatButton, Slider, Dropdown, Progress } from 'antd';
-
 
 
 interface EstrategiaViewProps{
@@ -202,7 +201,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
 
                 <Divider orientation='left'>Propietario:</Divider>
                 <Tooltip title={`${estrategico.propietario?.nombre} ${ estrategico.propietario?.apellidoPaterno }`}>
-                    <Avatar key={estrategico.propietario?.id} src={returnImage(estrategico.propietario?.foto)}  > { estrategico.propietario?.iniciales } </Avatar>
+                    <Avatar key={estrategico.propietario?.id} src={getFile(estrategico.propietario?.foto)}  > { estrategico.propietario?.iniciales } </Avatar>
                 </Tooltip>
 
                 <Divider orientation='left'>Co-Responsables:</Divider>
@@ -211,7 +210,7 @@ export const EstrategiaView: React.FC<EstrategiaViewProps> = ({estrategico, isLo
                     estrategico.responsables?.map((responsable, index) => (
                         <Link to={`/perfil/${responsable.id}`} key={index}>
                             <Tooltip title={`${responsable.nombre} ${ responsable.apellidoPaterno }`}>
-                                <Avatar key={index} src={returnImage(responsable.foto)}  />
+                                <Avatar key={index} src={getFile(responsable.foto)}  />
                             </Tooltip>
                         </Link>
                     ))

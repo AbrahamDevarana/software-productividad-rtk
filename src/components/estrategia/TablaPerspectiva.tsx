@@ -7,7 +7,7 @@ import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useColor } from '@/hooks';
-import { returnImage } from '@/helpers/returnImage';
+import {  getFile } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 
@@ -82,7 +82,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             width: 50,
             render: (text, record, index) => (
                 <Avatar 
-                    src={returnImage(record.propietario?.foto)}
+                    src={ getFile(record.propietario?.foto)}
                 >
                     {record.propietario?.iniciales}
                 </Avatar>

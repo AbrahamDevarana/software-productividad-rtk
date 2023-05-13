@@ -25,8 +25,8 @@ export const SecondNav = ({optBarVisible, setOptBarVisible, optionalContent}:Opt
     return (
         <>
             <div className={`${ optBarVisible ? 'w-full z-[1000]' : 'w-0 opacity-0 -z-50' } transition-all duration-500 ease-linear`} style={{  maxWidth: '250px', }}>
-                <div className={`dark:bg-dark-gradient bg-white  w-full h-full menu_sidebar relative p-5`} >
-                    <button className="absolute right-0 top-5 justify-center flex py-5 rounded-l-lg bg-devarana-blue dark:bg-devarana-graph"> 
+                <div className={`bg-dark-gradient  w-full h-full menu_sidebar relative p-5`} >
+                    <button className="absolute right-0 top-5 justify-center flex py-5 rounded-l-lg bg-devarana-graph"> 
                         <FaCaretLeft className="text-white text-xl pl-1" onClick={ handleBar} />
                     </button>
                     {  optionalContent === 'admin' && ( <Admin handleBar={handleBar}/> ) }

@@ -97,6 +97,7 @@ const hitosSlice = createSlice({
         })
         .addCase(updateTareaThunk.fulfilled, (state, action) => {
             const { hitoId } = action.payload
+        
             const hito = state.hitos.find(hito => hito.id === hitoId);
             if(hito){
                 hito.tareas = hito.tareas?.map(tarea =>  (tarea.id === action.payload.id ) ? action.payload : tarea)

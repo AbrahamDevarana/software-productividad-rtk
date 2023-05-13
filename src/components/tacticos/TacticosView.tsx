@@ -7,7 +7,7 @@ import { useAppSelector } from '@/redux/hooks';
 import Loading from '../antd/Loading';
 import { Icon } from '../Icon';
 import { TabStatus } from '../ui/TabStatus';
-import { returnImage } from '@/helpers/returnImage';
+import { getFile } from '@/helpers';
 import { Avatar, Divider, Dropdown, FloatButton, MenuProps, Slider, Tooltip } from 'antd';
 
 interface TacticosViewProps {
@@ -138,7 +138,7 @@ export const TacticosView = ({setShowEdit}: TacticosViewProps) => {
 
             <Divider orientation='left'>Propietario:</Divider>
             <Tooltip title={`${currentTactico.propietario?.nombre} ${ currentTactico.propietario?.apellidoPaterno }`}>
-                <Avatar key={currentTactico.propietario?.id} src={ returnImage(currentTactico.propietario?.foto ) }  > { currentTactico.propietario?.iniciales } </Avatar>
+                <Avatar key={currentTactico.propietario?.id} src={ getFile(currentTactico.propietario?.foto ) }  > { currentTactico.propietario?.iniciales } </Avatar>
             </Tooltip>
 
             <Divider orientation='left'>Co-Responsables:</Divider>

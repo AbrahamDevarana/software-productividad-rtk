@@ -6,7 +6,7 @@ import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
 import {  statusString } from '@/helpers/status';
-import { returnImage } from '@/helpers/returnImage';
+import { getFile } from '@/helpers';
 import '@/assets/css/ResizableTable.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
@@ -74,7 +74,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <Avatar.Group maxCount={3} key={index}>
                     {record.responsables?.map((responsable, index) => (
                         <span key={index} className='z-50' >
-                            <Avatar src={returnImage(responsable.foto)} />
+                            <Avatar src={getFile(responsable.foto)} />
                         </span>
                     ))}
                 </Avatar.Group>

@@ -14,6 +14,7 @@ export const Proyectos = () => {
 
     const dispatch = useAppDispatch()
     const { proyectos, currentProyecto, isLoading, isLoadingProyecto  } = useAppSelector(state => state.proyectos)
+    const { userAuth } = useAppSelector(state => state.auth)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
     useEffect(() => {
@@ -40,11 +41,6 @@ export const Proyectos = () => {
     return (
         <>
         <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
-            <Box className='md:col-span-9 col-span-12 flex justify-evenly md:flex-row flex-col'>
-            </Box>
-            <Box className='md:col-span-3 col-span-12 row-span-3'>
-            </Box>
-
             <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5' >
                 
                 {   isLoading 
@@ -66,8 +62,12 @@ export const Proyectos = () => {
                                         <Link to={`/proyectos/${proyecto.id}`}> 
                                             <FaEye className="mx-auto" />
                                         </Link>,
-                                        <FaEdit className="mx-auto" onClick={() => handleEdit(proyecto.id)} />,
-                                        <FaTrash className="mx-auto"/>
+                                        <>
+                                            { userAuth.id === proyecto.propietarioId ? <FaEdit onClick={() => handleEdit(proyecto.id)} className="mx-auto"/> : null } 
+                                        </>,
+                                        <>
+                                            { userAuth.id === proyecto.propietarioId ? <FaTrash onClick={() => {}} className="mx-auto"/> : null }
+                                        </>
                                     ]}
                                     bodyStyle={{ height: '150px', overflowY: 'auto' }}
                                 >
@@ -86,6 +86,8 @@ export const Proyectos = () => {
                     </div>
                 }        
             </div>
+             <Box className='md:col-span-3 col-span-12 row-span-3'>
+            </Box>
         </div>
 
         <Modal
