@@ -373,3 +373,9 @@ input, textarea {
         
     }
 }
+
+.ant-breadcrumb a:hover{
+    color: unset;
+    background-color: unset;
+    @apply hover:text-devarana-dark-graph hover:bg-none text-devarana-blue;
+}

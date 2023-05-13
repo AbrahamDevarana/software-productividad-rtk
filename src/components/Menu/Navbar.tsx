@@ -1,26 +1,15 @@
-import { Dropdown, Select, Space } from "antd";
+import { Breadcrumb, Dropdown, Select, Space } from "antd";
 import type { MenuProps } from 'antd';
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
 import { rutaPrivada } from "@/router";
 import { FaAngleRight, FaBell, FaSearch, FaSlidersH } from "react-icons/fa";
+import MyBreadcrumb from "../ui/Breadcrumb";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
     const { userAuth: {nombre}} = useAppSelector(state => state.auth)
-
-    const breadcrumbNameMap: Record<string, string> = {}
-
-    rutaPrivada.forEach(route => {
-        if (route.name && route.path) {
-          const path = route.path.replace(/:[a-zA-Z0-9]+/, '');
-        
-          breadcrumbNameMap[path] = route.name;
-        }
-      });
-
-
 
     const dispatch = useAppDispatch()
 
@@ -33,7 +22,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                 </button>
               ),
             },
-          ]
+		]
 
     const notificaciones: MenuProps['items'] = [
             {
@@ -68,7 +57,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                 </span>
               ),
             },
-          ]
+		]
 
     const showDrawer = () => {
         setSettingVisible(true);
@@ -82,8 +71,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
         <div className={`h-16 px-5 rounded-ext mb-4   backdrop-blur-sm border-white border-opacity-25 fixed z-50 left-28 right-8 transition-all duration-200 ease-in-out ${navbarClass}`}>
             <div className="flex h-full items-center">
                 <div className="text-devarana-midnight font-light">
-                    <p className="text-2xl">Hola,</p>
-                    <span className="text-xl">{nombre}</span>
+                    <MyBreadcrumb />
                 </div>
                 <div className="sm:ml-auto flex items-center">
                     <Dropdown menu={{ items:notificaciones }} trigger={['click']} className="px-2">

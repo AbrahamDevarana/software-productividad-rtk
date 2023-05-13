@@ -20,14 +20,20 @@ import { Proyectos } from '@/pages/Proyectos';
 import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
 
 
-interface RouteProps {
+interface Props {
     path: string;
     layout: React.FC<LayoutLoginProps>;
     component: React.FC;
-    name?: string;
 }
 
-export const rutaPublica:RouteProps[] = [
+interface PrivateRouteProps extends Props {
+    title: string;
+}
+
+
+
+
+export const rutaPublica:Props[] = [
     {
         path: "/login",
         layout: LayoutLogin,
@@ -45,87 +51,87 @@ export const rutaPublica:RouteProps[] = [
     }
 ]
 
-export const  rutaPrivada:RouteProps[] = [
+export const  rutaPrivada:PrivateRouteProps[] = [
     {
-        name: "Home",
+        title: "Home",
         path: '/',
         layout: LayoutApp,
         component: Home,
     },
     {
-        name: "Perfil",
+        title: "Perfil",
         path: "/perfil",
         layout: LayoutApp,
         component: Perfil
     },
     {
-        name: "Perfil de Usuario",
+        title: "Perfil de Usuario",
         path: "/perfil/:id",
         layout: LayoutApp,
         component: Perfil
     },
     {
-        name: "Areas",
+        title: "Areas",
         path: '/admin/areas',
         layout: LayoutApp,
         component: Areas
     },
     {
-        name: "Departamentos",
+        title: "Departamentos",
         path: '/admin/departamentos',
         layout: LayoutApp,
         component: Departamentos
     },
     {
-        name: "Usuarios",
+        title: "Usuarios",
         path: '/admin/usuarios',
         layout: LayoutApp,
         component: Usuarios
     },
     {
-        name: "Devarana",
+        title: "Devarana",
         path: '/somos-devarana',
         layout: LayoutApp,
         component: Devarana
     },
     {
-        name: "Objetivos",
+        title: "Objetivos",
         path: '/objetivos',
         layout: LayoutApp,
         component: Objetivos
     },
     {
-        name: "Estrategia",
+        title: "Estrategia",
         path: '/estrategia',
         layout: LayoutApp,
         component: EstrategiaHome
     },
     {
-        name: "Objetivo Estrategico",
+        title: "Objetivo Estrategico",
         path: '/estrategia/:id',
         layout: LayoutApp,
         component: ObjEstrategico
     },
     {
-        name: "Tactico",
+        title: "Tactico",
         path: '/tactica/:slug',
         layout: LayoutApp,
         component: Tactico
     },
     {
-        name: "Proyectos",
+        title: "Proyectos",
         path: '/proyectos',
         layout: LayoutApp,
         component: Proyectos
     },
     {
-        name: "Proyectos",
+        title: "Proyectos",
         path: '/proyectos/:id',
         layout: LayoutApp,
         component: ProyectoView
     },
     {
-        name: "Error",
+        title: "Error",
         path: '*',
         layout: LayoutApp,
         component: ErrorPage
