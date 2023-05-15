@@ -1,127 +1,267 @@
 @import './variables.scss';
 
-// Botones
-.btn {   
-   &-primary{ 
-      background: linear-gradient(190deg, $dark2 0%, $dark 100%)!important;
-      color: white;
-   }
-   &-secondary{ 
-      background: linear-gradient(190deg, $blue2 0%, $blue 100%)!important;
-      color: white;
-   }
-   &-success{ 
-      background: linear-gradient(190deg, $green2 0%, $green 100%)!important;
-      color: white;
-   }
-   &-danger{ 
-      background: linear-gradient(190deg, $red2 0%, $red 100%)!important;
-      color: white;
-   }
-   &-warning{ 
-      background: linear-gradient(190deg, $orange2 0%, $orange 100%)!important;
-      color: white;
-   }
+// // Botones
+// .btn {   
+//    &-primary{ 
+//       background: linear-gradient(190deg, $dark2 0%, $dark 100%)!important;
+//       color: white;
+//    }
+//    &-secondary{ 
+//       background: linear-gradient(190deg, $blue2 0%, $blue 100%)!important;
+//       color: white;
+//    }
+//    &-success{ 
+//       background: linear-gradient(190deg, $green2 0%, $green 100%)!important;
+//       color: white;
+//    }
+//    &-danger{ 
+//       background: linear-gradient(190deg, $red2 0%, $red 100%)!important;
+//       color: white;
+//    }
+//    &-warning{ 
+//       background: linear-gradient(190deg, $orange2 0%, $orange 100%)!important;
+//       color: white;
+//    }
 
 
  
-   &-primary-outline{
-      background-color: transparent;
-      color: $dark2;
-      border: 1px $dark2 solid;
+//    &-primary-outline{
+//       background-color: transparent;
+//       color: $dark2;
+//       border: 1px $dark2 solid;
 
-        &:hover{
-             background-color: $dark2;
-             color: white;
-             border: 1px $dark2 solid;
-        }
-   }
+//         &:hover{
+//              background-color: $dark2;
+//              color: white;
+//              border: 1px $dark2 solid;
+//         }
+//    }
    
-   &-secondary-outline{
-      background-color: transparent;
-      color: $blue2;
-      border: 1px $blue2 solid;
+//    &-secondary-outline{
+//       background-color: transparent;
+//       color: $blue2;
+//       border: 1px $blue2 solid;
 
-        &:hover{
-             background-color: $blue2;
-             color: white;
-             border: 1px $blue2 solid;
-        }
-   }
+//         &:hover{
+//              background-color: $blue2;
+//              color: white;
+//              border: 1px $blue2 solid;
+//         }
+//    }
 
-   &-success-outline{
-      background-color: transparent;
-      color: $green2;
-      border: 1px $green2 solid;
+//    &-success-outline{
+//       background-color: transparent;
+//       color: $green2;
+//       border: 1px $green2 solid;
 
-        &:hover{
-             background-color: $green2;
-             color: white;
-             border: 1px $green2 solid;
-        }
-   }
+//         &:hover{
+//              background-color: $green2;
+//              color: white;
+//              border: 1px $green2 solid;
+//         }
+//    }
 
-   &-danger-outline{
-      background-color: transparent;
-      color: $red2;
-      border: 1px $red2 solid;
+//    &-danger-outline{
+//       background-color: transparent;
+//       color: $red2;
+//       border: 1px $red2 solid;
       
-      &:hover{
-         background-color: $red2;
-         color: white;
-         border: 1px $red2 solid;
-      }
-   }
+//       &:hover{
+//          background-color: $red2;
+//          color: white;
+//          border: 1px $red2 solid;
+//       }
+//    }
 
-   &-warning-outline{
-      background-color: transparent;
-      color: $orange2;
-      border: 1px $orange2 solid;
+//    &-warning-outline{
+//       background-color: transparent;
+//       color: $orange2;
+//       border: 1px $orange2 solid;
 
-        &:hover{
-             background-color: $orange2;
-             color: white;
-             border: 1px $orange2 solid;
-        }
-   }
+//         &:hover{
+//              background-color: $orange2;
+//              color: white;
+//              border: 1px $orange2 solid;
+//         }
+//    }
  
+// }
+ 
+//  button {
+//    position: relative;
+//    overflow: hidden!important;
+//    transition: background 400ms;
+//  }
+ 
+//  span.ripple {
+//    position: absolute;
+//    border-radius: 50%;
+//    transform: scale(0);
+//    animation: ripple 600ms linear;
+//    background-color: rgba(255, 255, 255, 0.7);
+//    z-index: 100000;
+//  }
+ 
+//  @keyframes ripple {
+//    to {
+//      transform: scale(4);
+//      opacity: 0;
+//    }
+//  }
+
+
+ 
+
+// .ant-modal-footer{   
+//    .ant-btn{
+//       @apply rounded-xl
+//    }
+//    .ant-btn-primary{
+//       @apply btn-primary
+//    }
+//    .ant-btn-default{
+//       @apply btn-danger-outline;
+//    }
+// }
+
+
+ 
+// Buttons
+
+.customButton {
+
+	&__regular {
+		padding: 8px 20px;
+		border-radius: 10px;
+		color: white;
+
+		&:hover {
+			opacity: 0.9;
+		}
+
+		&:active {
+			transform: scale(1.01);
+			transition: all;
+			transition-duration: 1000;
+			transition-property: ease-in-out;
+		}
+	}
+
+	&__outline {
+		padding: 8px 20px;
+		border-radius: 10px;
+	}
+
+	&__icon {
+		
+	}
+
+	&__regular {
+		&-default {
+			background: linear-gradient(190deg, $default-light 0%, $default 100%)!important;
+		}
+
+		&-dark{
+			background: linear-gradient(190deg, $dark-light 0%, $dark 100%)!important;
+		}
+
+		&-primary{
+			background: linear-gradient(190deg, $primary-light 0%, $primary 100%)!important;
+		}
+
+		&-secondary{
+			background: linear-gradient(190deg, $secondary-light 0%, $secondary 100%)!important;
+		}
+
+		&-success{
+			background: linear-gradient(190deg, $success-light 0%, $success 100%)!important;
+		}
+
+		&-info{
+			background: linear-gradient(190deg, $info-light 0%, $info 100%)!important;
+		}
+
+		&-warning {
+			background: linear-gradient(190deg, $warning-light 0%, $warning 100%)!important;
+		}
+
+		&-error{
+			background: linear-gradient(190deg, $error-light 0%, $error 100%)!important;
+		}
+	}
+
+	&__outline {
+		&-default {
+			
+		}
+
+		&-dark{
+			
+		}
+
+		&-primary{
+			
+		}
+
+		&-secondary{
+			
+		}
+
+		&-success{
+			
+		}
+
+		&-info{
+			
+		}
+
+		&-warning {
+			
+		}
+
+		&-error{
+			
+		}
+	}
+
+	&__icon {
+		&-default {
+			
+		}
+
+		&-dark{
+			
+		}
+
+		&-primary{
+			
+		}
+
+		&-secondary{
+			
+		}
+
+		&-success{
+			
+		}
+
+		&-info{
+			
+		}
+
+		&-warning {
+			
+		}
+
+		&-error{
+			
+		}
+	}
+
+
+
+
 }
- 
- button {
-   position: relative;
-   overflow: hidden!important;
-   transition: background 400ms;
- }
- 
- span.ripple {
-   position: absolute;
-   border-radius: 50%;
-   transform: scale(0);
-   animation: ripple 600ms linear;
-   background-color: rgba(255, 255, 255, 0.7);
-   z-index: 100000;
- }
- 
- @keyframes ripple {
-   to {
-     transform: scale(4);
-     opacity: 0;
-   }
- }
 
-
- 
-
-.ant-modal-footer{   
-   .ant-btn{
-      @apply rounded-xl
-   }
-   .ant-btn-primary{
-      @apply btn-primary
-   }
-   .ant-btn-default{
-      @apply btn-danger-outline;
-   }
-}
 
 

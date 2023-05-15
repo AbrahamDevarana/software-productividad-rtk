@@ -23,8 +23,8 @@ module.exports = {
 				'devarana-midnight' : '#242a38',
 				'devarana-hazelnut' : '#eadfd4',
 				'devarana-pearl' : '#f9f9f7',
-				'devarana-graph' : '#656a76',
-				'devarana-dark-graph' : '#2e3136',
+				'devarana-graph' : '#848891',
+				'devarana-dark-graph' : '#656A76',
 				'devarana-pollito' : '#ffdea4',
 				'devarana-salmon' : '#fabcab',
 
@@ -37,14 +37,14 @@ module.exports = {
 				'dark': '#2E3136',
 				'default': '#A6AFC3',
 
-				'primary-light': '#408FE30',
-				'secondary-light': '#FF6E8F0',
-				'success-light': '#75DD7B0',
-				'info-light': '#F3B8600',
-				'warning-light': '#F3ED900',
-				'error-light': '#EC4D490',
-				'dark-light': '#656A760',
-				'default-light': '#F9F9F70',
+				'primary-light': '#408FE3',
+				'secondary-light': '#FF6E8F',
+				'success-light': '#75DD7B',
+				'info-light': '#F3B860',
+				'warning-light': '#F3ED90',
+				'error-light': '#EC4D49',
+				'dark-light': '#656A76',
+				'default-light': '#F9F9F7',
 
             },
             fontSize: {

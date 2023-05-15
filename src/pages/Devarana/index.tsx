@@ -1,24 +1,24 @@
 
 import { Link } from 'react-router-dom';
 import { Avatar, Box } from '../../components/ui';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useEffect } from 'react';
+import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { FaEye, FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
+import { BiWorld } from 'react-icons/bi';
 
 
 export const Devarana: React.FC = () => {
 
-    const users = [
-        {
-            id: 1,
-            name: 'Abraham',
-            slug: 'abraham-aag',
-            short_name: 'AAG',
-            email: '',
-            phone: '1234567890',
-            address: 'Bangalore',
-            status: 'Active',
-            action: 'Edit',
-            picture: 'https://images.unsplash.com/photo-1616489950079-8b8b2b2b2b1c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
-        },
-    ]
+    const usuarios = useAppSelector(state => state.usuarios.usuarios)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+
+        dispatch(getUsuariosThunk({}))
+    }, [])
+
+
 
 
   return (
@@ -26,267 +26,197 @@ export const Devarana: React.FC = () => {
         <div>
             <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20">
             </Box>
-            <Box className="-my-10 py-5 mx-5 mb-10 glassMorph overflow-hidden">
-                <div className="scroller">
-                    { users && users.length > 0 ?
-                        users.map( (item, i) => (
-                         //     <Avatar className="w-10 h-10 mx-3">{item.short_name}</Avatar> 
-                         <>
-                         <div className="scroller-item">
-                            <Link key={i} to={`/perfil/${item.slug}`}>
-                                <Avatar className="w-10 h-10 mx-3" picture={item.picture}>{item.short_name}</Avatar> 
-                            </Link>
-                        </div>
-                    </>
-                    ))
-                               
-                           
-                               
-                        :
-                        null
-                    }
-                </div>
-
-                    <div className="logo-slider">
-                    
-                        {/* <div>
-                            { users && users.length > 0 ?
-                                users.map( (item, i) => (
-                                    <>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
+            <Box className="-my-10 py-3 mx-5 mb-10 glassMorph overflow-hidden">
+                <div className="scroller-container">
+                    <div className='scroller'>
+                        { 
+                            usuarios.map( (item, i) => (
+                                <div className="scroller-item" key={i}>
+                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
                                         </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                    </>
-                                ))
-
-                                : null
-                            }
-                        </div> */}
-                        
-                        {/* <div>
-                        { users && users.length > 0 ?
-                                users.map( (item, i) => (
-                                    <>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <img src={item.picture} alt="" />
-                                        </Link>
-                                    </>
-                                ))
-
-                                : null
-                            }
-                        </div> */}
-                        
+                                    </div>
+                            ))
+                        }
                     </div>
+                    <div className='scroller'>
+                        { 
+                            usuarios.map( (item, i) => (
+                                <div className="scroller-item" key={i}>
+                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                        </Link>
+                                    </div>
+                            ))
+                        }
+                    </div>
+                    <div className='scroller'>
+                        { 
+                            usuarios.map( (item, i) => (
+                                <div className="scroller-item" key={i}>
+                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                        </Link>
+                                    </div>
+                            ))
+                        }
+                    </div>
+                    <div className='scroller'>
+                        { 
+                            usuarios.map( (item, i) => (
+                                <div className="scroller-item" key={i}>
+                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                        </Link>
+                                    </div>
+                            ))
+                        }
+                    </div>
+                </div>
             </Box>
         </div>
 
         <div className="grid grid-cols-12 gap-5">
-            <Box className="col-span-12 md:col-span-4 bg-w-logotipo bg-auto bg-no-repeat bg-right">
+            <Box className="col-span-12 md:col-span-6 bg-w-logotipo bg-auto bg-no-repeat bg-right">
                 <div className="flex">
-                    <h1 className="text-lg font-medium">Logotipo</h1>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal( { 'logotipo': logotipo }, 'Logotipo', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
+                    <h1 className="text-xl font-medium pb-5">Logotipo</h1>
                 </div>
-                {/* <p>{logotipo}</p> */}
-                {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(logotipo) }}></div> */}
+                <p className='font-light text-devarana-graph'>
+                    Buscamos crear un entorno de paz y armonía, es por ello la selección del nombre de nuestra empresa, que significa <span className='text-devarana-dark-graph font-bold'>“JARDÍN CELESTIAL”</span> o <span className='text-devarana-dark-graph font-bold'>“EDÉN”</span> en el antiguo idioma sánscrito.
+                </p>
+                
             </Box>
-            <Box className="col-span-12 md:col-span-4 bg-w-isotipo bg-no-repeat bg-right">
+            <Box className="col-span-12 md:col-span-6 bg-w-isotipo bg-no-repeat bg-right">
                 <div className="flex">
-                    <h1 className="text-lg font-medium">Isotipo</h1>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal({'isotipo': isotipo}, 'Isotipo', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
+                    <h1 className="text-xl font-medium pb-5">Isotipo</h1>
                 </div>
-                    {/* <p>{isotipo}</p> */}
-                    {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(isotipo) }}></div> */}
+                <p className='font-light text-devarana-graph'>
+                    El isotipo que nos identifica es un ave que representa la fusión de tres especies, conjuntando la cabeza de un gorrión, cola de golondrina y alas de colibrí, que simboliza la diversidad entre nuestros clientes.
+                </p>
             </Box>
-            <div className="md:col-span-4"></div>
             <Box className="col-span-6 md:col-span-4 bg-w-proposito bg-no-repeat bg-right">
-                <div className="flex">
-                    <div className="font-medium">
-                        <h1 className="text-lg">Propósito</h1>
-                        <p className="pt-3">¿Qué hacemos?</p>
-                    </div>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal( { 'proposito': proposito }, 'Propósito', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
-                </div>
-                {/* <p>{proposito}</p> */}
-                {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(proposito) }}></div> */}
+                <h1 className="text-xl font-medium pb-5">Propósito</h1>
+                <h2 className="text-base pb-2">¿Qué hacemos?</h2>
+                <p className='font-light text-devarana-graph'>Creamos espacios extraordinarios que evocan la alegría y el placer del buen vivir.</p>
             </Box>
-            <Box className="col-span-6 md:col-span-4 bg-w-mision bg-no-repeat bg-right">
-                <div className="flex">
-                    <div className="font-medium">
-                        <h1 className="text-lg">Misión</h1>
-                        <p className="pt-3">¿Para qué?</p>
-                    </div>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal({'mision': mision}, 'Misión', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
-                </div>
-                    {/* <p>{mision}</p> */}
-                    {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(mision) }}></div> */}
+            <Box className="col-span-6 md:col-span-4 bg-w-mision bg-no-repeat bg-right"> 
+                <h1 className="text-xl font-medium pb-5">Misión</h1>
+                <h2 className="pb-2 text-base">¿Para qué?</h2>
+                <p className='font-light text-devarana-graph'>
+                    Inspiramos al mundo creando espacios únicos con amor y pasión, cuidando nuestro entorno, la rentabilidad y el bienestar de nuestros clientes.
+                </p>
             </Box>
             <Box className="col-span-6 md:col-span-4 bg-w-vision bg-no-repeat bg-right">
-                <div className="flex">
-                    <div className="font-medium">
-                        <h1 className="text-lg">Futuro</h1>
-                        <p className="pt-3">¿Cómo queremos ser?</p>
+                <h1 className="text-xl font-medium pb-5">Futuro</h1>
+                <h2 className="pb-2 text-base">¿Cómo queremos ser?</h2>
+                <p className='font-light text-devarana-graph'>Inspiramos al mundo creando espacios únicos con amor y pasión, cuidando nuestro entorno, la rentabilidad y el bienestar de nuestros clientes.</p>
+            </Box>
+            <Box className="col-span-12 md:col-span-6">
+                <h1 className='text-xl font-medium pb-5'>
+                    Valores
+                </h1>
+                <h2 className='pb-2 text-base'>¿Cómo lo hacemos?</h2>
+                <div className='flex gap-x-6 items-center py-5'>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <div>
+                        <h3 className='text-base font-medium text-devarana-pink'>LO EXTRAORDINARIO ES PRIMERO</h3>
+                        <p className='font-light text-devarana-graph'>La atención en los detalles, nuestro servicio legendario y esfuerzo por la satisfacción total, son parte de nuestra esencia.</p>
                     </div>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal({'vision': vision}, 'Futuro', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
                 </div>
-                {/* <p>{vision}</p> */}
-                {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(vision) }}></div> */}
+                <div className='flex gap-x-6 items-center pb-5'>
+                    <div className='text-right'>
+                        <h3 className='text-base font-medium text-devarana-pink'>SOMOS APASIONADOS</h3>
+                        <p className='font-light text-devarana-graph'>Buscamos nuestra esencia para dedicarnos a lo que amamos y hacer nuestro trabajo siempre con pasión. ¡Nos levantamos cada día con entusiasmo para enfrentar los retos que encontramos en nuestro camino!</p>
+                    </div>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                </div>
+               
+                <div className='flex gap-x-6 items-center py-5'>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <div>
+                        <h3 className='text-base font-medium text-devarana-pink'>LA EXCELENCIA ESTÁ EN NUESTRO ADN</h3>
+                        <p className='font-light text-devarana-graph'>Buscamos la excelencia en todo lo que hacemos y damos todos los días lo mejor de nosotros mismos para vivir plenamente y sentirnos felices.</p>
+                    </div>
+                </div>
+                <div className='flex gap-x-6 items-center pb-5'>
+                    <div className='text-right'>
+                        <h3 className='text-base font-medium text-devarana-pink'>SOMOS INCLUYENTES</h3>
+                        <p className='font-light text-devarana-graph'>Vamos más allá de la tolerancia y hacemos siempre un esfuerzo por incluir a todos. El respeto a la diversidad nos hace una empresa incluyente.</p>
+                    </div>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                </div>
+               
+                <div className='flex gap-x-6 items-center py-5'>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <div>
+                        <h3 className='text-base font-medium text-devarana-pink'>LA INNOVACIÓN NOS DISTINGUE</h3>
+                        <p className='font-light text-devarana-graph'>¡Creemos firmemente en la constante innovación! Nos ilusionan los retos y buscamos siempre estar a la vanguardia.</p>
+                    </div>
+                </div>
+                <div className='flex gap-x-6 items-center pb-5'>
+                    <div className='text-right'>
+                        <h3 className='text-base font-medium text-devarana-pink'>INSPIRAMOS CON AMOR</h3>
+                        <p className='font-light text-devarana-graph'>El amor verdadero es preeminente en esta vida y nos motiva a hacer el bien en todo lo que emprendemos. Con nuestras acciones tratamos de hacer de este mundo un lugar mejor.</p>
+                    </div>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                </div>
+               
+                <div className='flex gap-x-6 items-center py-5'>
+                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <div>
+                        <h3 className='text-base font-medium text-devarana-pink'>ESPÍRITU TRIUNFADOR</h3>
+                        <p className='font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
+                    </div>
+                </div>
             </Box>
             <Box className="col-span-12 md:col-span-6">
-                <div>
-                    {/* <Valores valores={valores} isAdmin={isAdmin}/> */}
-                </div>
-            </Box>
-            <Box className="col-span-12 md:col-span-6">
-                <div>
-                    {/* <Competencias competencias={competencias} isAdmin={isAdmin}/> */}
-                </div>
+
             </Box>
             <Box className="col-span-12 bg-w-legendario bg-no-repeat bg-right">
-                <div className="flex">
-                    <h1 className="text-lg font-medium">Política de responsabilidad</h1>
-                    {/* {isAdmin ? <AiFillEdit onClick={() => showModal( { 'politica_responsabilidad': politica_responsabilidad }, 'Politica de responsabilidad', '200')} className="text-xl text-custom-dark2 ml-auto cursor-pointer"/> : null } */}
-                </div>
-                {/* <p>{politica_responsabilidad}</p> */}
-                {/* <div className="font-light" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(politica_responsabilidad) }}></div> */}
+                <h1 className="text-xl font-medium pb-5">Política de responsabilidad</h1>
+                
+                <p className='font-light text-devarana-graph pb-5'>
+                    En DEVARANA hemos asumido el compromiso de implementar un modelo de Gestión de la Calidad, basado en la norma ISO 9001-2015, que nos proporcione un marco de referencia integral para el establecimiento de objetivos específicos de calidad y con la finalidad de, a través de la mejora continua, conseguir la satisfacción total de nuestros colaboradores, clientes y socios de negocios, convirtiéndonos en un referente en el sector de desarrollo inmobiliario, por los estándares de calidad que empleamos en el servicio que ofrecemos y los productos que desarrollamos.
+                </p>
+                <p className='font-light text-devarana-graph pb-3'>
+                    En un mercado en continua expansión, DEVARANA se mantiene como líder del sector inmobiliario, al tener siempre presente que nuestro éxito es consecuencia de honrar los siguientes principios de calidad:
+                </p>
+
+                <ul className='list-disc text-devarana-graph font-light list-inside pl-10'>
+                    <li>Lograr la plena satisfacción de nuestros clientes internos y externos.</li>
+                    <li>Conseguir la excelencia empresarial a través de potenciar a nuestro capital humano.</li>
+                    <li>Integrar en todo momento a nuestros socios de negocio en el compromiso con la calidad.</li>
+                    <li>Mantener un alto nivel de innovación en el desarrollo de nuestros productos.</li>
+                    <li>Cumplir la normatividad legal y los requisitos aplicables.</li>
+                    <li>Identificar y evaluar todos los riesgos y oportunidades en cada uno de los procesos que contempla nuestro sistema de calidad.</li>
+                    <li>Asegurar la integridad y seguridad de nuestro Sistema de Gestión de Calidad.</li>
+                </ul>
             </Box>
             <Box className="col-span-6 md:col-span-3">
-                <div className="card">  
-                    <div className="card__content">
-                        <h1 className="text-lg font-medium card__title">Medio Ambiente</h1>
-                        {/* <p className="card__description text-devarana-graph">{vision}</p> */}
-                    </div>
-                </div>
-            </Box>
-            <Box className="col-span-6 md:col-span-3">
-                <div className="card">  
-                    <div className="card__content">
-                        <h1 className="text-lg font-medium card__title">Calidad</h1>
-                        {/* <p className="card__description">{vision}</p> */}
-                    </div>
-                </div>
-            </Box>
-            <Box className="col-span-6 md:col-span-3">
-            <div className="card">
-                <div className="card__content">
-                        <h1 className="text-lg font-medium card__title">Bienestar</h1>
-                        {/* <p className="card__description">{vision}</p> */}
-                    </div>
+                <div className="flex flex-col gap-y-2  items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon">  
+                    <FaLeaf className='text-2xl'/>
+                    <p className="font-lg">Medio Ambiente</p>
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3">
-                <div className="card flex">
-                    <div className="card__content">
-                        <h1 className="text-lg font-medium card__title">Seguridad</h1>
-                        {/* <p className="card__description">{vision}</p> */}
-                    </div>
-                    {/* <div className="card__over">
-                        Icono
-                        <h2>Seguridad</h2>
-                    </div> */}
+                <div className="flex flex-col  gap-y-2 items-center align-middle text-white p-5 rounded-ext bg-devarana-pink">  
+                    <FaMedal className='text-2xl'/>
+                    <p className="font-lg">Calidad</p>
+                </div>
+            </Box>
+            <Box className="col-span-6 md:col-span-3">
+                <div className="flex flex-col gap-y-2  items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue">
+                    <FaTree className='text-2xl'/>
+                    <p className="font-lg">Bienestar</p>
+                </div>
+            </Box>
+            <Box className="col-span-6 md:col-span-3">
+                <div className="flex flex-col  gap-y-2 items-center align-middle text-white p-5 rounded-ext bg-devarana-blue">
+                    <BiWorld className='text-2xl'/>
+                    <p className="font-lg">Seguridad</p>
                 </div>
             </Box>
         </div>
-
-
-        {/* <Modal title={modalConfig.title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={800} className="overflow-hidden"
-            footer={[
-                <Button fn={handleCancel} btnType="primary-outline" className="mx-2"> Cancel </Button>,
-                <Button fn={handleOk} btnType="primary"> Guardar </Button>
-            ]}
-        >
-            <CKEditor
-                    editor={ ClassicEditor }
-                    className="h-40"
-                    data={Object.values(devarana)[0]}
-                    onReady={ editor => {
-                        // You can store the "editor" and use when it is needed.
-                        console.log( 'Editor is ready to use!', editor );
-                        editor.editing.view.change((writer) => {
-                            writer.setStyle(
-                                "height",
-                                "400px",
-                                editor.editing.view.document.getRoot()
-                            )
-                        })
-                    } }
-                    
-                    onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        setDevarana({
-                            ...devarana,
-                            [Object.keys(devarana)[0]]: data
-                        })
-                    } }
-                />
-            <TextArea maxLength={modalConfig.maxLength  || 220 } showCount={true} value={Object.values(devarana)[0]} name={Object.keys(devarana)[0]} onChange={handleChange} />
-        </Modal> */}
     </div>
   )
 }

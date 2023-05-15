@@ -9,7 +9,7 @@ import MyBreadcrumb from "../ui/Breadcrumb";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
-    const { userAuth: {nombre}} = useAppSelector(state => state.auth)
+    const { userAuth } = useAppSelector(state => state.auth)
 
     const dispatch = useAppDispatch()
 

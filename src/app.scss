@@ -42,19 +42,10 @@ body{
   }
 
 
-h1, h4{
-	font-weight: bold;
-	@apply text-default
-}
+h1, h2, h3, h4{
 
-h2{
-	font-weight: 300;
-	@apply text-default
-}
-
-h3, h5{
-	font-weight: 300;
-	@apply text-default
+	color: $dark-light;
+    letter-spacing: 0.04em;
 }
 
 p, li, span, a{
@@ -378,4 +369,47 @@ input, textarea {
     color: unset;
     background-color: unset;
     @apply hover:text-devarana-dark-graph hover:bg-none text-devarana-blue;
+}
+
+
+.scroller-container{
+
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;	
+    position: relative;
+	display: flex;
+
+    .scroller{
+        animation: carousel 10s linear infinite;
+        display: flex;
+        position: relative;
+        justify-content: space-around;
+
+        .scroller-item{
+            display: block;
+            margin: 0 1vw;
+            border: 2px $secondary solid;
+            border-radius: 100%;
+        }
+    }
+    
+    
+    
+    
+}
+
+
+
+@keyframes carousel {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+}
+
+.scroller-container:hover .scroller {
+    animation-play-state: paused;
 }
