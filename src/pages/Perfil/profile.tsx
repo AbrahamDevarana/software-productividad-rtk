@@ -125,7 +125,7 @@ const Profile: React.FC<any> = ({activeUser}) => {
                     <p className="font-light">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.</p>
 
                     <div className="py-3 grid grid-cols-2 gap-x-5">
-                        <Button btnType="primary-outline"> Ver Proyecto </Button>
+                        <Button classColor="primary" classType='outline'> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
@@ -150,7 +150,7 @@ const Profile: React.FC<any> = ({activeUser}) => {
                     <h2 className="py-3">Desarrollo Web</h2>
                     <p className="font-light">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.</p>
                     <div className="py-3 grid grid-cols-2 gap-x-5">
-                        <Button btnType="primary-outline"> Ver Proyecto </Button>
+                        <Button classColor="primary" classType='outline'> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
@@ -175,7 +175,7 @@ const Profile: React.FC<any> = ({activeUser}) => {
                     <h2 className="py-3">Desarrollo Web</h2>
                     <p className="font-light">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.</p>
                     <div className="py-3 grid grid-cols-2 gap-x-5">
-                        <Button btnType="primary-outline"> Ver Proyecto </Button>
+                        <Button classColor="primary" classType='outline'> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
@@ -202,7 +202,7 @@ const Profile: React.FC<any> = ({activeUser}) => {
                     <h2 className="py-3">Desarrollo Web</h2>
                     <p className="font-light">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.</p>
                     <div className="py-3 grid grid-cols-2 gap-x-5">
-                        <Button btnType="primary-outline"> Ver Proyecto </Button>
+                        <Button classColor="primary" classType='outline'> Ver Proyecto </Button>
                         <div className="flex justify-center my-auto">
                             <AvatarProfile className="w-7 h-7 -mx-1"/>
                             <AvatarProfile className="w-7 h-7 -mx-1"/>

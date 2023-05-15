@@ -1,6 +1,5 @@
 import { ErrorMessage, Formik } from 'formik'
 import { Button } from '@/components/ui'
-
 import * as Yup from "yup";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
@@ -124,7 +123,7 @@ export const FormDepartamentos = ({visible, handleModal} : ModalProps ) => {
                                         </Form.Item>
                                     </div>
                                     <div className='py-4'>
-                                        <Button btnType="secondary" type="submit" className="mr-2"> { currentDepartamento.id ? 'Editar' : 'Crear' } </Button>
+                                        <Button classType='regular' classColor='primary' type="submit" className="mr-2"> { currentDepartamento.id ? 'Editar' : 'Crear' } </Button>
                                     </div>
 
                                 </Form>

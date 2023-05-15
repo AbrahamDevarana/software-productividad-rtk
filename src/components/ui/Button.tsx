@@ -8,18 +8,22 @@ interface ButtonProps {
     onClick?: () => void;
     classType: "regular" | "outline" | "icon"
     classColor: "default" | "dark" | "primary" | "secondary" | "success" | "info" | "warning" | "error"
+    width?: number | '100%' | 'auto';
 }
 
  
 
-export const Button = ({ children, onClick, type = "button", classType, classColor }: ButtonProps) => {
+export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%' }: ButtonProps) => {
 
 
     return (
         <button
             type={type}
-            className={`customButton w-full customButton__${classType} customButton__${classType}-${classColor}`}
+            className={`customButton customButton__${classType} customButton__${classType}-${classColor}`}
             onClick={onClick}
+            style={{
+                width: width
+            }}
         >
             {children}
         </button>

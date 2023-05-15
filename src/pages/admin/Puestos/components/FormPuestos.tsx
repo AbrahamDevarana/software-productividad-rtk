@@ -33,7 +33,7 @@ export const FormPuestos = () => {
                                 <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
                             </div>
                             <div className='py-4'>
-                                <Button btnType="secondary" type="submit" className="mr-2">Crear</Button>
+                                <Button classType='regular' width={'auto'} classColor="secondary" type="submit" className="mr-2">Crear</Button>
                             </div>
 
                         </form>

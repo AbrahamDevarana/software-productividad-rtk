@@ -1,4 +1,4 @@
-import { Input, Pagination, Table } from "antd"
+import { FloatButton, Input, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
 import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/redux/features/admin/areas/areasThunks';
@@ -10,6 +10,7 @@ import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';
 import { AreaProps } from "@/interfaces";
+import { FaPlus } from "react-icons/fa";
 
 
 const initialValues = {
@@ -44,16 +45,18 @@ export const Areas: React.FC = () => {
             render: (data: any) => (
                 <div className="flex gap-2">
                     <Button
-                        btnType="primary-outline"
-                        fn={() => {
+                        classType="outline"
+                        classColor="warning"
+                        onClick={() => {
                             handleEdit(data.id)
                         } }
                     >
                         <Icon iconName="faPen" />
                     </Button>
                     <Button
-                        btnType="primary-outline"
-                        fn={() => handleDelete(data.id) }
+                        classType="outline"
+                        classColor="error"
+                        onClick={() => handleDelete(data.id) }
                     >
                         <Icon iconName="faTrash" />
                     </Button>
@@ -118,12 +121,11 @@ export const Areas: React.FC = () => {
                             })
                         }}
                     />
-                    <Button
-                        btnType="primary"
-                        fn={() => handleModal(true)}
-                    >
-                        <Icon iconName="faPlus" />
-                    </Button>
+                    <FloatButton
+                        shape="circle"
+                        icon={<FaPlus />}
+                        onClick={(() => handleModal(true))}
+                    />
                 </div>
                 <Table 
 

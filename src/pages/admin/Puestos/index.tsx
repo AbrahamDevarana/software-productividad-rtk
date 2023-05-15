@@ -18,14 +18,16 @@ export const Puestos = () => {
             render: (data: any) => (
                 <div>
                     <Button
-                        btnType="primary-outline"
-                        fn={() => {} }
+                        classType="outline"
+                        classColor="warning"
+                        onClick={() => {} }
                     >
                         <AiFillEdit />
                     </Button>
                     <Button
-                        btnType="primary-outline"
-                        fn={() => {} }
+                        classType="outline"
+                        classColor="error"
+                        onClick={() => {} }
                     >
                         <AiFillDelete />
                     </Button>

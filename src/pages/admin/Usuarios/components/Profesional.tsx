@@ -134,7 +134,7 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
                             </Form.Item>                                
                         </div>
                         <div className="flex justify-end mt-2">
-                            <Button btnType="secondary" type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
+                            <Button classType='regular' classColor="primary" width={'auto'} type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
                         </div>
                     </Form>
                 )}

@@ -61,7 +61,7 @@ export const ProfileInfo = ({activeUser}: any) => {
                     {/* <textarea title="Sobre mi" className="w-full" inputName="profile_description" fn={handleChange} onBlur={handleBlur} /> */}
                 </div>  
                 <div className="col-span-12 ml-auto">
-                    <Button btnType="secondary-outline" className="block ml-auto" type='submit'>  Guardar Perfil </Button>
+                    <Button classColor="secondary" classType='outline' className="block ml-auto" type='submit'>  Guardar Perfil </Button>
                 </div>    
             </form>
         )

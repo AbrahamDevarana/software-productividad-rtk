@@ -67,7 +67,7 @@ export const SocialInfo: React.FC<SocialProsp> = ({selectedUser}) => {
                         <ErrorMessage name="social_twitter" render={msg => <Alert message={msg} showIcon  type="error" />} />
                     </div>
                     <div className="col-span-4">
-                        <Button btnType="secondary-outline" className="block ml-auto" type='submit'>  Guardar Perfil </Button>
+                        <Button classColor="secondary" classType='outline' className="block ml-auto" type='submit'>  Guardar Perfil </Button>
                     </div>   
                 </form>  
             )

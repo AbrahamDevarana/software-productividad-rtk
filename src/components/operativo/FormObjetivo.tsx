@@ -170,10 +170,11 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, h
                         className='col-span-12'
                     >
                         <div className='flex justify-between'>
-                            <Button btnType='primary' type='submit' className='btn-primary'>Guardar</Button>
+                            <Button classColor='primary' classType='regular' type='submit' className='btn-primary'>Guardar</Button>
                             {
                                 currentOperativo.id !== '' && (
-                                    <Button btnType='secondary' type='button' className='bg-devarana-blue text-white' fn={() => handleCurrent(1)}>Siguiente</Button>
+                                    <Button classColor='dark' classType='regular' type='button' className='bg-devarana-blue text-white' onClick={() => handleCurrent(1)}>Siguiente</Button>
+                                    
                                 )
                             }
                         </div>

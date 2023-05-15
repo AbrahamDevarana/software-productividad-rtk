@@ -1,4 +1,4 @@
-import { Pagination, Table, Tooltip, Input } from "antd"
+import { Pagination, Table, Tooltip, Input, FloatButton } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
@@ -9,6 +9,7 @@ import { useDelete } from "@/hooks/useDelete"
 import useNotify from "@/hooks/useNotify"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
+import { FaPlus } from "react-icons/fa"
 
 
 
@@ -93,16 +94,18 @@ export const Usuarios: React.FC = () => {
 			render: (data: any) => (
 				<div className="flex gap-2">
                     <Button
-                        btnType="primary-outline"
-                        fn={() => {
+                        classType="icon"
+                        classColor="warning"
+                        onClick={() => {
                             handleEdit(data.id)
                         } }
                     >
                         <Icon iconName="faPen" />
                     </Button>
                     <Button
-                        btnType="primary-outline"
-                        fn={() => handleDelete(data.id) }
+                        classType="icon"
+                        classColor="error"
+                        onClick={() => handleDelete(data.id) }
                     >
                         <Icon iconName="faTrash" />
                     </Button>
@@ -142,12 +145,11 @@ export const Usuarios: React.FC = () => {
                             })
                         }}
                     />
-                    <Button
-                        btnType="primary"
-                        fn={() => handleModal(true)}
-                    >
-                        <Icon iconName="faPlus" />
-                    </Button>
+                    <FloatButton
+                        shape="circle"
+                        icon={<FaPlus />}
+                        onClick={(() => handleModal(true))}
+                    />
                 </div>
             <Table
                     columns={columns}

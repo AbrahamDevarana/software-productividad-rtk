@@ -107,7 +107,7 @@ export const Personal: React.FC<any> = ({handleSteps, handleCancel}) => {
                                 </Form.Item>
                             </div>
                             <div className="flex justify-end mt-2">
-                                <Button btnType="secondary" type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
+                                <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
                             </div>
                         </Form>
                 )}

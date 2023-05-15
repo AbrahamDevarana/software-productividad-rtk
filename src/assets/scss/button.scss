@@ -150,10 +150,34 @@
 	&__outline {
 		padding: 8px 20px;
 		border-radius: 10px;
+
+		&:hover {
+			opacity: 0.9;
+		}
+
+		&:active {
+			transform: scale(1.01);
+			transition: all;
+			transition-duration: 1000;
+			transition-property: ease-in-out;
+		}
 	}
 
 	&__icon {
+		padding: 8px 12px;
+		border-radius: 10px;
 		
+
+		&:hover {
+			opacity: 0.9;
+		}
+
+		&:active {
+			transform: scale(1.01);
+			transition: all;
+			transition-duration: 1000;
+			transition-property: ease-in-out;
+		}
 	}
 
 	&__regular {
@@ -192,69 +216,85 @@
 
 	&__outline {
 		&-default {
-			
+			border: 1px $default solid;
+			color: $default;
 		}
 
 		&-dark{
-			
+			border: 1px $dark solid;
+			color: $dark;
 		}
 
 		&-primary{
-			
+			border: 1px $primary solid;
+			color: $primary;
 		}
 
 		&-secondary{
-			
+			border: 1px $secondary solid;
+			color: $secondary;
 		}
 
 		&-success{
-			
+			border: 1px $success solid;
+			color: $success;
 		}
 
 		&-info{
-			
+			border: 1px $info solid;
+			color: $info;
 		}
 
 		&-warning {
-			
+			border: 1px $warning solid;
+			color: $warning;
 		}
 
 		&-error{
-			
+			border: 1px $error solid;
+			color: $error;
 		}
 	}
 
 	&__icon {
 		&-default {
-			
+			border: 1px $default solid;
+			color: $default;
 		}
 
 		&-dark{
-			
+			border: 1px $dark solid;
+			color: $dark;
 		}
 
 		&-primary{
-			
+			border: 1px $primary solid;
+			color: $primary;
 		}
 
 		&-secondary{
-			
+			border: 1px $secondary solid;
+			color: $secondary;
 		}
 
 		&-success{
-			
+			border: 1px $success solid;
+			color: $success;
 		}
 
 		&-info{
-			
+			border: 1px $info solid;
+			color: $info;
 		}
 
 		&-warning {
-			
+			border: 1px $warning solid;
+			color: $warning;
 		}
 
 		&-error{
-			
+			border: 1px $error solid;
+			color: $error;
 		}
 	}
 

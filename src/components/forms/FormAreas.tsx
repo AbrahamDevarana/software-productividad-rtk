@@ -113,7 +113,7 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
                                         </Form.Item>
                                     </div>
                                     <div className='py-4'>
-                                        <Button btnType="secondary" type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
+                                        <Button classType='regular' classColor='primary' type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
                                     </div>
 
                                 </Form>

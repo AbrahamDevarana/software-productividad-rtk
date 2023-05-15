@@ -257,8 +257,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                                 className='text-right'
                             >
                                 <div className='flex'>
-                                    { showEdit && <Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
-                                    <Button btnType="secondary" type='submit' className='ml-auto'>Guardar</Button>
+                                    { showEdit && <Button onClick={ () => setShowEdit(false)} classColor='primary' classType='regular' >Cancelar</Button>}
+                                    <Button classColor='secondary' width={'auto'} classType='regular' type='submit' className='ml-auto'>Guardar</Button>
                                 </div>
                             </Form.Item>
                         </Form>
