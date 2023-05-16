@@ -1,4 +1,3 @@
-import AvatarProfile from '../ui/Avatar'
 import SvgIsotipo from '../svg/Isotipo';
 import { NavLink} from 'react-router-dom';
 import "@/assets/scss/menu.scss"
@@ -6,6 +5,7 @@ import { optionalContent } from '@/interfaces';
 import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
 import { FaBrain, FaCheckSquare, FaCog, FaComment, FaCrosshairs, FaPuzzlePiece, FaRocket, FaSquare } from 'react-icons/fa';
+import { Avatar } from 'antd';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -33,7 +33,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                 <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                    <AvatarProfile picture={userAuth?.foto} preview={false} className="h-5 w-5 mx-auto" />
+                    <Avatar src={import.meta.env.VITE_STORAGE_URL + userAuth.foto} size={40} />
                 </NavLink>
 
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>

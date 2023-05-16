@@ -20,20 +20,19 @@ export interface OperativoProps {
     tacticoId:       string;
     fechaInicio:     Date;
     fechaFin:        Date;
-    propietario_op?:  CustomUsuarioProps;
-    responsables_op?: CustomUsuarioProps[];
+    operativoPropietario?:  CustomUsuarioProps;
+    operativosResponsable?: CustomUsuarioProps[];
     propietarioId:   string;
     participantesIds?:    string[];
-    resultados_clave?: ResultadoClaveProps[];
+    resultadosClave?: ResultadoClaveProps[];
 }
 
 
 
-export interface OperativoState extends InitialState{
+export interface OperativoState extends InitialState {
     operativos: OperativoProps[];
     proyectos:  OperativoProps[];
     paginate?:     Paginate;
     isLoadingObjetivo: boolean;
-    errorObjetivo: boolean;
     currentOperativo: OperativoProps;
 }

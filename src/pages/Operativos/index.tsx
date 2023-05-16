@@ -3,7 +3,7 @@ import { Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearObjetivoThunk, getOperativosThunk, getProyectosThunk } from '@/redux/features/operativo/operativosThunk';
+import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import Loading from '@/components/antd/Loading';
 
 import { WizardOperativo } from '@/components/operativo/WizardOperativo';
@@ -30,7 +30,6 @@ export const Objetivos : React.FC = () => {
 
     useEffect(() => {
         dispatch(getOperativosThunk({}))
-        dispatch(getProyectosThunk({}))
     }, [])
 
 
@@ -39,7 +38,7 @@ export const Objetivos : React.FC = () => {
         let total = 0
       
         operativos.forEach(operativo => {
-            operativo.responsables_op?.map(responsable => {
+            operativo.operativosResponsable?.map(responsable => {
                 if( responsable.id === userAuth?.id ) {
                     total += responsable.scoreCard?.progresoFinal || 0
                 }

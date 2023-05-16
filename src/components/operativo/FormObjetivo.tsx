@@ -147,7 +147,7 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, h
                     >
                         <Select
                             mode="multiple"
-                            value={values.responsables_op?.map( usuario => usuario.id)}
+                            value={values.operativosResponsable?.map( usuario => usuario.id)}
                             onBlur={handleBlur}
                             onChange={
                                 // push into values.responsables_op

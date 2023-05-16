@@ -3,7 +3,7 @@ import {  Switch } from 'antd'
 import { FaUser } from 'react-icons/fa'
 import { Badge } from '@/components/ui/Badge'
 import Box from '@/components/ui/Box'
-import { ProfileInfo } from './components/ProfileInfo'
+import { ProfileInfo } from '@/components/perfil/ProfileInfo'
 
 export const EditProfile = ({activeUser}:any) => {
 
@@ -27,7 +27,7 @@ export const EditProfile = ({activeUser}:any) => {
                 <div className="xl:col-span-9 md:col-span-8 col-span-12 snap-y">
                     <Box className="mb-5 snap-center pt-8 pb-14" id="perfil">
                         <div className="flex pb-10">
-                            <Badge badgeType="pink">
+                            <Badge badgeType="secondary">
                                 <FaUser/>
                             </Badge>
                             <h1 className="text-2xl my-auto mx-3">Información de perfil</h1>

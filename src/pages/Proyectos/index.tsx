@@ -53,46 +53,6 @@ export const Proyectos = () => {
                     ?   <div className="col-span-12">  </div>
                     :   proyectos.length > 0 
                     ?   proyectos.map((proyecto, index) => (
-                            // <div key={index} className="lg:col-span-4 md:col-span-6 col-span-12">
-                            //     <Card 
-                            //         // hoverable
-                            //         bordered={false} 
-                            //         cover={ <img alt={proyecto.titulo } className="object-cover object-center w-full max-h-[150px]" onError={
-                            //             (e: any) => {
-                            //                 e.target.onerror = null;
-                            //                 e.target.src = `${import.meta.env.VITE_STORAGE_URL}/custom-images/noBanner.png`;
-                            //                 e.target.className = 'object-contain object-center w-full max-h-[150px]'
-                            //             }
-                            //         } src={`${import.meta.env.VITE_STORAGE_URL}${proyecto.imagen}`} /> }
-                            //         actions={[
-                            //             <Link to={`/proyectos/${proyecto.id}`}> 
-                            //                 <FaEye className="mx-auto" />
-                            //             </Link>,
-                            //             <>
-                            //                 { userAuth.id === proyecto.propietarioId ? <FaEdit onClick={() => handleEdit(proyecto.id)} className="mx-auto"/> : null } 
-                            //             </>,
-                            //             <>
-                            //                 { userAuth.id === proyecto.propietarioId ? <FaTrash onClick={() => {}} className="mx-auto"/> : null }
-                            //             </>
-                            //         ]}
-                            //         bodyStyle={{ height: '150px', overflowY: 'auto' }}
-                            //     >
-                            //         <Card.Meta 
-                            //             title={<p className="text-devarana-graph font-medium">{proyecto.titulo}</p>}
-                            //             description={proyecto.descripcion}
-                            //         />                                    
-
-                            //         <Avatar.Group>
-                            //         {
-                            //             proyecto.usuariosProyecto.map((usuario, index) => (
-                            //                 <Avatar key={index} src={`${import.meta.env.VITE_STORAGE_URL}${usuario.foto}`}>
-                            //                     {usuario.iniciales}
-                            //                 </Avatar>
-                            //             ))
-                            //         }
-                            //         </Avatar.Group>
-                            //     </Card>
-                            // </div>
                             <ProyectoCard proyecto={proyecto}
                             key={index}
                             handleView={handleView}

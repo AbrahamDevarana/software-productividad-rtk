@@ -2,7 +2,7 @@
 export * from "./slice";
 
 
-export * from "./profile";
+export * from "./perfil";
 export * from "./layout";
 export * from "./usuario";
 export * from "./svg";

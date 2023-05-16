@@ -1,11 +1,12 @@
 
 import { Link } from 'react-router-dom';
-import { Avatar, Box } from '../../components/ui';
+import { Box } from '../../components/ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { FaEye, FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
 import { BiWorld } from 'react-icons/bi';
+import { Avatar } from 'antd';
 
 
 export const Devarana: React.FC = () => {
@@ -33,7 +34,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -44,7 +45,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -55,7 +56,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -66,7 +67,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" picture={item.foto}>{item.iniciales}</Avatar> 
+                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))

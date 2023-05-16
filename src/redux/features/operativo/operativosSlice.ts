@@ -1,24 +1,22 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
+import { createObjetivoThunk, getObjetivoThunk, getOperativosThunk, updateObjetivoThunk } from "./operativosThunk";
+
 
 const initialState: OperativoState = {
     operativos: [],
     proyectos: [],
     isLoading: false,
     isLoadingObjetivo: false,
-    errorObjetivo: false,
-    infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
+    infoMessage: '',
     currentOperativo: {
         id: '',
         nombre: '',
         fechaFin: new Date(),
         fechaInicio: new Date(),
         tacticoId: '',
-        propietario_op: {
+        operativoPropietario: {
             id: '',
             nombre: '',
             apellidoMaterno: '',
@@ -27,7 +25,7 @@ const initialState: OperativoState = {
             email: '',
         },
         propietarioId: '',
-        responsables_op: [],
+        operativosResponsable: [],
         indicador: '',
         meta: '',
     }
@@ -37,86 +35,58 @@ const operativoSlice = createSlice({
     name: 'operativoSlice',
     initialState,
     reducers: {
-        checkingOperativos: (state) => {
-            state.isLoading = true
-            state.updated = false
-        },
-        checkingObjetivo: (state) => {
-            state.isLoadingObjetivo = true
-        },
-        setOperativosError: (state, action) => {
-            state.isLoading = false
-            state.infoMessage = action.payload
-            state.error = true
-        },
-        getOperativos: (state, action) => {
-            state.isLoading = false
-            state.operativos = action.payload.operativos
-        },
-        getProyectos: (state, action) => {
-            state.isLoading = false
-            state.proyectos = action.payload.proyectos
-        },
-        getObjetivo: (state, action) => {            
-            state.isLoadingObjetivo = false
-            state.currentOperativo = action.payload
-        },
-        createObjetivo: (state, action) => {            
-            state.isLoading = false
-            state.created = true
-            state.infoMessage = action.payload
-            state.currentOperativo = action.payload
-            state.operativos.push(action.payload)
-        },
-        updateObjetivo: (state, action) => {
-            state.operativos = state.operativos.map(operativo => operativo.id === action.payload.id ? action.payload : operativo)
-            state.isLoading = false
-            state.updated = true
-            state.infoMessage = action.payload
-        },
-        deleteObjetivo: (state, action) => {
-            state.isLoading = false
-            state.deleted = true
-            state.infoMessage = action.payload
-        },
-        setObjetivoError: (state, action) => {
-            state.isLoadingObjetivo = false
-            state.infoMessage = action.payload
-            state.errorObjetivo = true
-        },
-        clearOperativos: (state) => {
-            state = initialState
-        },
         clearOperativo: (state) => {
             state.currentOperativo = initialState.currentOperativo
-            state.errorObjetivo = false
-            
         },
-        clearStatus: (state) => {
-            state.updated = false
-            state.created = false
-            state.deleted = false
-            state.error = false
-            state.infoMessage = ''
-        }
-
-    }   
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getOperativosThunk.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(getOperativosThunk.fulfilled, (state, { payload }) => {
+            state.isLoading = false
+            state.operativos = payload
+        })
+        .addCase(getOperativosThunk.rejected, (state) => {
+            state.isLoading = false
+            state.error = true
+        })
+        .addCase(getObjetivoThunk.pending, (state) => {
+            state.isLoadingObjetivo = true
+        })
+        .addCase(getObjetivoThunk.fulfilled, (state, { payload }) => {
+            state.isLoadingObjetivo = false
+            state.currentOperativo = payload
+        })
+        .addCase(getObjetivoThunk.rejected, (state) => {
+            state.isLoadingObjetivo = false
+            state.error = true
+        })
+        .addCase(createObjetivoThunk.pending, (state) => {
+            state.isLoadingObjetivo = true
+        })
+        .addCase(createObjetivoThunk.fulfilled, (state, { payload }) => {
+            state.isLoadingObjetivo = false
+            state.operativos.push(payload)
+        })
+        .addCase(createObjetivoThunk.rejected, (state) => {
+            state.isLoadingObjetivo = false
+            state.error = true
+        })
+        .addCase(updateObjetivoThunk.pending, (state) => {
+            state.isLoadingObjetivo = true
+        })
+        .addCase(updateObjetivoThunk.fulfilled, (state, { payload }) => {
+            state.isLoadingObjetivo = false
+            state.currentOperativo = payload
+            state.operativos = state.operativos.map(operativo => operativo.id === payload.id ? payload : operativo)
+        })
+        .addCase(updateObjetivoThunk.rejected, (state) => {
+            state.isLoadingObjetivo = false
+        })
+    }
 })
 
-export const {
-    checkingOperativos,
-    setOperativosError,
-    getOperativos,
-    getProyectos,
-    getObjetivo,
-    createObjetivo,
-    updateObjetivo,
-    deleteObjetivo,
-    clearOperativos,
-    clearOperativo,
-    clearStatus,
-    checkingObjetivo,
-    setObjetivoError
-} = operativoSlice.actions
+export const { clearOperativo } = operativoSlice.actions
 
 export default operativoSlice.reducer

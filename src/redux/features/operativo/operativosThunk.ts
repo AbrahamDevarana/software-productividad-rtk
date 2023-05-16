@@ -1,61 +1,89 @@
+import { clientAxios } from '@/config/axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '@/redux/store';
-import { createObjetivoProvider, getOperativosProvider, getProyectosProvider, getObjetivoProvider, deleteObjetivoProvider, updateObjetivoProvider} from './operativosProvider';
-import { checkingObjetivo, checkingOperativos, clearOperativo, clearOperativos, clearStatus, createObjetivo, deleteObjetivo, getObjetivo, getOperativos, getProyectos, setOperativosError, updateObjetivo, setObjetivoError } from './operativosSlice';
+import { clearOperativo, } from './operativosSlice';
 import { OperativoProps } from '@/interfaces';
 
 
-export const getOperativosThunk = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingOperativos())
-    const response = await getOperativosProvider(filtros, getState)
-    if (response.ok) {
-        dispatch(getOperativos(response.operativos))
-    } else {
-        dispatch(setOperativosError(response.errorMessage))
+interface Props {
+    operativos: OperativoProps[]
+    operativo: OperativoProps
+}
+
+
+export const getOperativosThunk = createAsyncThunk(
+    'operativos/getOperativos',
+    async (filtros: any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.get<Props>(`/operativos`, config);
+            return response.data.operativos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const getObjetivoThunk = (operativoId: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingObjetivo())
-    const response = await getObjetivoProvider(operativoId, getState)
-    if (response.ok) {
-        dispatch(getObjetivo(response.objetivo))
-    } else {
-        dispatch(setObjetivoError(response.errorMessage))
+export const getObjetivoThunk = createAsyncThunk(
+    'operativos/getObjetivo',
+    async (operativoId: string, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.get<Props>(`/operativos/${operativoId}`, config);
+            return response.data.operativo
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
+        
+export const createObjetivoThunk = createAsyncThunk(
+    'operativos/createObjetivo',
+    async (operativo: OperativoProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
 
-
-export const getProyectosThunk = (filtros: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingOperativos())
-    const response = await getProyectosProvider(filtros, getState)
-    if (response.ok) {
-        dispatch(getProyectos(response.proyectos))
-    } else {
-        dispatch(setOperativosError(response.errorMessage))
+            const response = await clientAxios.post<Props>(`/operativos`, operativo, config);
+            return response.data.operativo
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
+export const updateObjetivoThunk = createAsyncThunk(
+    'operativos/updateObjetivo',
+    async (operativo: OperativoProps, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
 
-export const createObjetivoThunk = (operativo: OperativoProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingOperativos())
-    const response = await createObjetivoProvider(operativo, getState)
-    if (response.ok) {
-        dispatch(createObjetivo(response.operativo))
-    } else {
-        dispatch(setOperativosError(response.errorMessage))
+            const response = await clientAxios.put<Props>(`/operativos/${operativo.id}`, operativo, config);
+            return response.data.operativo
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-export const updateObjetivoThunk = (operativo: OperativoProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch(checkingOperativos())
-    
-    const response = await updateObjetivoProvider(operativo, getState)
-    if (response.ok) {
-        dispatch(updateObjetivo(response.operativo))
-    }else {
-        dispatch(setOperativosError(response.errorMessage))
-    }   
-}
+
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearOperativo())

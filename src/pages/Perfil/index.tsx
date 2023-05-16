@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchProfileThunk } from "@/redux/features/profile/profileThunk";
+import { getProfileThunk } from "@/redux/features/profile/profileThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
-import ProfileHeader from "./profileHeader";
-import Profile from "./profile";
+import Header from "../../components/perfil/Header";
+import Profile from "./perfil";
 import { EditProfile } from "./editProfile";
 import Loading from "@/components/antd/Loading";
 
@@ -11,13 +11,13 @@ import Loading from "@/components/antd/Loading";
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
     
-    const [value, setValue] = useState('Perfil');
+    const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
-    const { usuario, isLoading } = useAppSelector(state => state.profile)
+    const { perfil, isLoading } = useAppSelector(state => state.profile)
 
     useEffect(() => {
         if(userAuth){   
-            dispatch(fetchProfileThunk(userAuth.id))
+            dispatch(getProfileThunk(userAuth.id))
         }
     }, [userAuth])    
     
@@ -26,15 +26,15 @@ const Perfil: React.FC = () => {
 
     return ( 
         <div className="animate__animated animate__fadeIn animate__faster">
-            <ProfileHeader activeUser={ usuario } value={value} setValue={setValue}  />
-            { value === 'Perfil' ?
-                <Profile activeUser={ usuario } /> 
+            <Header usuarioActivo={ perfil } segment={segment} setSegment={setSegment}  />
+            { segment === 'Perfil' ?
+                <Profile usuarioActivo={ perfil } /> 
                 :
-                value === 'Actividad' ?
+                segment === 'Actividad' ?
                 <Actividad />
                 :
-                value === 'Configuración' ? 
-                <EditProfile activeUser={ usuario } /> : null 
+                segment === 'Configuración' ? 
+                <EditProfile usuarioActivo={ perfil } /> : null 
             }
         </div>
     );

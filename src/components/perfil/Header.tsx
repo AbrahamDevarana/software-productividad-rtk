@@ -1,15 +1,18 @@
-import { Segmented } from "antd";
+import { Avatar, Segmented } from "antd";
 import Box from "@/components/ui/Box";
+import { PerfilProps } from "@/interfaces";
+import { FaCog, FaRegUserCircle } from "react-icons/fa";
+import { BsActivity } from "react-icons/bs";
 
 interface HeaderProps {
-    activeUser?: any;
-    value: string;
-    setValue: React.SetStateAction<any>;
+    usuarioActivo: PerfilProps;
+    segment: string;
+    setSegment: React.SetStateAction<any>;
     visit?: boolean;
 }
 
 
-const ProfileHeader: React.FC<HeaderProps> = ({ activeUser, value, setValue, visit = false}) => {
+const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, visit = false}) => {
     return ( 
         <>
             <Box className="h-60 w-full z-auto bg-[url('http://picsum.photos/2000/244')]">
@@ -18,13 +21,13 @@ const ProfileHeader: React.FC<HeaderProps> = ({ activeUser, value, setValue, vis
             <div className="w-full px-4 z-10">
                 <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-3 px-5 mr-5 justify-center" >
                     <div className="justify-center align-middle flex">
-                        {/* <AvatarProfile picture={activeUser.picture } userName={"Colaborador"} className="m-auto"/> */}
+                        <Avatar src={`${import.meta.env.VITE_STORAGE_URL}${usuarioActivo.foto}`} />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
-                        <p className="font-bold text-custom-dark2">{`${activeUser.nombre} ${activeUser.apellidoPaterno} ${activeUser.apellidoMaterno}`} </p>
-                        {/* <p className="text-sm font-light text-custom-dark2"> { activeUser.position.nombre }</p> */}
+                        <h1 className="text-devarana-dark-graph">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </h1>
+                        <p className="text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
                     </div>
-                    { ! visit ?
+                    { !visit ?
                         <div className="bg-devarana-background my-auto flex max-w-[400px] w-full ml-auto rounded relative z-0">
                             <Segmented
                                 block={true}
@@ -32,27 +35,25 @@ const ProfileHeader: React.FC<HeaderProps> = ({ activeUser, value, setValue, vis
                                     {
                                         label: 'Perfil',
                                         value: 'Perfil',
-                                        // icon: <FaRegUserCircle className="text-xs"/>
+                                        // icon: <FaRegUserCircle/>
                                     },
                                     {
                                         label: 'Actividad',
                                         value: 'Actividad',
-                                        // icon: <FiActivity className="text-xs"/>
+                                        // icon: <BsActivity/>
                                     },
                                     {
                                         label: 'Configuración',
                                         value: 'Configuración',
-                                        // icon: <GrDocumentConfig className="text-xs"/>
+                                        // icon: <FaCog/>
                                     }
                                 ]}
-                                
-                                size={"middle"}
-                                value={value} 
-                                onChange={setValue}
-                                className="flex w-full custom-dark2"
+                                className="w-full"                                
+                                value={segment} 
+                                onChange={setSegment}
                             />
                         </div>
-                        : null
+                        : null  
                     }
                 </Box>
             </div>
@@ -60,4 +61,4 @@ const ProfileHeader: React.FC<HeaderProps> = ({ activeUser, value, setValue, vis
     );
 }
  
-export default ProfileHeader;
+export default Header;

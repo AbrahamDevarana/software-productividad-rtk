@@ -1,9 +1,9 @@
-import { Formik, ErrorMessage,Field } from 'formik'
+import { Formik, ErrorMessage } from 'formik'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui'
 import * as Yup from "yup";
 import { Alert, DatePicker } from 'antd';
-import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
+import { updateProfileProvider } from '@/redux/features/profile/profileThunk';
 import { useAppDispatch } from '@/redux/hooks';
 
 
@@ -23,7 +23,7 @@ export const ProfileInfo = ({activeUser}: any) => {
   return (
     <Formik
         initialValues={activeUser}
-        onSubmit={values => dispatch(updateProfileThunk( values ))}
+        onSubmit={values => dispatch(updateProfileProvider( values ))}
         validationSchema={profileSchema}
     >
    {

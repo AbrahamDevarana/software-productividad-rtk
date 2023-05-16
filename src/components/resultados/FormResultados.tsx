@@ -21,7 +21,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handle
     const dispatch = useAppDispatch()
     const { errorObjetivo } = useAppSelector(state => state.operativos)
     const { currentResultadoClave } = useAppSelector(state => state.resultados)
-    const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultados_clave || [] )
+    const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultadosClave || [] )
 
     const [ resultado, setResultado ] = useState<ResultadoClaveProps>({
         id: '',

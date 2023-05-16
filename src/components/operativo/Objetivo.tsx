@@ -40,7 +40,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
                 <div className=''>
                     <p> Resultados Clave </p>
-                    <p> 0 / { objetivo.resultados_clave?.length } </p>
+                    <p> 0 / { objetivo.resultadosClave?.length } </p>
                 </div>
                 <div className='border-x px-5'>
                     <p>Indicadores </p>
@@ -55,7 +55,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
             <Progress 
                 percent={
-                    objetivo.responsables_op?.map(responsable => {
+                    objetivo.operativosResponsable?.map(responsable => {
                         if( responsable.id === userAuth?.id ) {
                             return responsable.scoreCard?.progresoFinal
                         }
@@ -70,13 +70,13 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             />
             <Avatar.Group className='flex justify-center'>
                 {
-                    objetivo.propietario_op && (
-                        <Avatar size={'large'} key={objetivo.propietario_op.id} src={<Image title={objetivo.propietario_op.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${objetivo.propietario_op.foto}`} /> }> {objetivo.propietario_op.iniciales} </Avatar>
+                    objetivo.operativoPropietario && (
+                        <Avatar size={'large'} key={objetivo.operativoPropietario.id} src={<Image title={objetivo.operativoPropietario.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${objetivo.operativoPropietario.foto}`} /> }> {objetivo.operativoPropietario.iniciales} </Avatar>
                     )
                 }
                 {
                     
-                    objetivo.responsables_op?.map((responsable, index) => (
+                    objetivo.operativosResponsable?.map((responsable, index) => (
                         <Avatar size={'large'} key={index} src={<Image title={responsable.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${responsable.foto}`} /> }> {responsable.iniciales} </Avatar>
                     ))
                     

@@ -1,40 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ProfileProps } from '../../../interfaces';
+import { PerfilState } from '@/interfaces';
+import { getProfileThunk, updateProfileProvider } from './profileThunk';
 
 
-const initialState = {
-    isLoading: true,
-    updated: false,
-    errorMesssage: '',
-    usuario: '',
+const initialState: PerfilState = {
+    isLoading: false,
+    error: '',
+    perfil: {
+        id: '',
+        nombre: '',
+        apellidoMaterno: '',
+        apellidoPaterno: '',
+        iniciales: '',
+        nombreCorto: '',
+        email: '',
+        foto: '',
+        objetivosOperativos: [],
+        proyectos: [],
+    }
 }
+    
 
 const profileSlice = createSlice({
-  name: 'profileSlice',
-  initialState,
-  reducers: {
-    checkingProfile: (state) => {
-        state.isLoading = true
-        state.updated = false
-    },
-    getProfileError: (state, action) => {
-        state.errorMesssage = action.payload
-    },
-    getProfile: (state, action) => {       
-        Object.assign(state, action.payload)
-        state.isLoading = false
-    },
-    // on update profile
-    updateProfile: (state, action) => {
-        Object.assign(state, action.payload)
-        state.isLoading = false
+    name: 'profileSlice',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(getProfileThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getProfileThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.perfil = action.payload
+            })
+            .addCase(getProfileThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(updateProfileProvider.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateProfileProvider.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.perfil = action.payload
+            })
+            .addCase(updateProfileProvider.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
     }
-  }
 });
 
 
 
 
-export const {getProfile, checkingProfile, getProfileError, updateProfile} = profileSlice.actions
+export const {} = profileSlice.actions
 
 export default profileSlice.reducer

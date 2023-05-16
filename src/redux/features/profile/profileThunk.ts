@@ -1,28 +1,47 @@
 
-import { useNotification } from "../../../hooks/useNotification";
-import { AppDispatch, RootState } from "../../store";
-import { getProfileProvider, updateProfileProvider } from "./profileProvider";
-import { checkingProfile, getProfile, getProfileError, updateProfile } from "./profileSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "@/redux/store";
+import { clientAxios } from "@/config/axios";
+import { PerfilProps } from "@/interfaces";
 
-export const fetchProfileThunk = (userId:string) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingProfile())
-        const result = await getProfileProvider(userId, getState)        
-        if(!result.ok) return dispatch( getProfileError(result.errorMessage) )
+
+interface Props {
+    usuario : PerfilProps
+}
+
+
+export const getProfileThunk = createAsyncThunk(
+    'profile/getProfile',
+    async (userId: string, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.get<Props>(`/usuarios/perfil/${userId}`, config);            
+            return response.data.usuario
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
         
-        dispatch( getProfile(result.profile) )
+
+export const updateProfileProvider = createAsyncThunk(
+    'profile/updateProfile',
+    async (profile: PerfilProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.put<Props>(`/usuarios/perfil/${profile.id}`, profile, config);
+            return response.data.usuario
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
-
-
-// Update Profile
-export const updateProfileThunk = (profile:any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingProfile())
-        const result = await updateProfileProvider(profile, getState)        
-        if(!result.ok) return dispatch( getProfileError(result.errorMessage) )
-
-        useNotification({type: 'success', message: 'Información de perfil actualizada'})
-        dispatch( updateProfile(result.profile.user) )
-    }
-}
+)
