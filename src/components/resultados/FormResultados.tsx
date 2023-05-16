@@ -19,7 +19,7 @@ interface FormResultadosProps {
 export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handleCurrent, current}) => {
 
     const dispatch = useAppDispatch()
-    const { errorObjetivo } = useAppSelector(state => state.operativos)
+    const { error } = useAppSelector(state => state.operativos)
     const { currentResultadoClave } = useAppSelector(state => state.resultados)
     const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultadosClave || [] )
 
@@ -53,7 +53,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handle
         if ( currentOperativo.id !== '' ){
             if(query.id === ''){
                 await dispatch( createResultadoThunk(query) )
-                if(!errorObjetivo){
+                if(!error){
                     setResultadoList( [...resultadoList, query] )
                 }
             }else{
