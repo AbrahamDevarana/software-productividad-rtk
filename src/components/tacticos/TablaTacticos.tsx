@@ -4,8 +4,7 @@ import {Avatar, Drawer, Progress, Table} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
-import {  statusString } from '@/helpers/status';
-import { getColor, getFile } from '@/helpers';
+import { getColor, getFile, getStatus } from '@/helpers';
 import '@/assets/css/ResizableTable.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
@@ -48,7 +47,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 <span className='font-semibold'
                  style={{
                     color: getColor(record.status).color,
-                }}>{statusString[record.status]}</span>
+                }}>{getStatus(record.status)}</span>
             ),
         },
         {
