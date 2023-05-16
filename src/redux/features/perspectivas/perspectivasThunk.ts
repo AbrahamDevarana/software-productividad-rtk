@@ -1,4 +1,3 @@
-import { useNotification } from '@/hooks/useNotification';
 import { AppDispatch, RootState } from '@/redux/store';
 import { createPerspectivaProvider, deletePerspectivaProvider, getPerspectivaProvider, getPerspectivasProvider, updatePerspectivaProvider} from './perspectivasProvider';
 import { checkingPerspectivas, setPerspectivasError, getCurrentPerspectiva, createPerspectiva, deletePerspectiva, getPerspectivas, updatePerspectiva, clearCurrentPerspectiva, clearPerspectivas } from './perspectivasSlice';
@@ -28,7 +27,6 @@ export const createPerspectivaThunk = (perspectiva: PerspectivaProps) => {
         dispatch(checkingPerspectivas())
         const result = await createPerspectivaProvider(perspectiva, getState)
         if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Perspectiva creada correctamente'})
         dispatch( createPerspectiva(result.perspectiva) )
     }   
 }
@@ -38,7 +36,6 @@ export const deletePerspectivaThunk = (perspectivaId: number) => {
         dispatch(checkingPerspectivas())
         const result = await deletePerspectivaProvider(perspectivaId, getState)
         if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Perspectiva eliminada correctamente'})
         dispatch( deletePerspectiva(perspectivaId) )
     }   
 }
@@ -48,7 +45,6 @@ export const updatePerspectivaThunk = (perspectiva: PerspectivaProps) => {
         dispatch(checkingPerspectivas())
         const result = await updatePerspectivaProvider(perspectiva, getState)
         if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Perspectiva actualizada correctamente'})
         dispatch( updatePerspectiva(result.perspectiva) )
     }   
 }
@@ -58,7 +54,6 @@ export const createPerspectivaAndClearThunk = (perspectiva: PerspectivaProps) =>
         dispatch(checkingPerspectivas())
         const result = await createPerspectivaProvider(perspectiva, getState)
         if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Perspectiva creada correctamente'})
         dispatch( createPerspectiva(result.perspectiva) )
         dispatch( clearCurrentPerspectiva() )
     }

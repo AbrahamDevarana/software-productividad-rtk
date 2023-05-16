@@ -1,4 +1,3 @@
-import { useNotification } from '../../../../hooks/useNotification';
 import { AppDispatch, RootState } from '../../../store';
 import { getDepartamentosProvider, getDepartamentoProvider, createDepartamentoProvider, deleteDepartamentoProvider, updateDepartamentoProvider, getLideresDepartamentoProvider } from './departamentosProvider';
 import { checkingDepartamentos, setDepartamentosError, getCurrentDepartamento, createDepartamento, deleteDepartamento, getDepartamentos, updateDepartamento, clearDepartamentos, clearCurrentDepartamento, getLideresDepartamento } from './departamentosSlice';
@@ -32,8 +31,7 @@ export const createDepartamentoThunk = (departamento: any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingDepartamentos())
         const result = await createDepartamentoProvider(departamento, getState)        
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) ); useNotification({type: 'error', message: result.errorMessage})
-        useNotification({type: 'success', message: 'Área creada correctamente'})
+        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) ); 
         dispatch( createDepartamento(result.departamento) )
     }
 }
@@ -44,7 +42,6 @@ export const deleteDepartamentoThunk = (departamentoId: number) => {
         dispatch(checkingDepartamentos())
         const result = await deleteDepartamentoProvider(departamentoId, getState)        
         if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Área eliminada correctamente'})
         dispatch( deleteDepartamento(departamentoId) )
     }
 }
@@ -55,7 +52,6 @@ export const updateDepartamentoThunk = (departamento: any) => {
         dispatch(checkingDepartamentos())
         const result = await updateDepartamentoProvider(departamento, getState)        
         if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Área actualizada correctamente'})
         dispatch( updateDepartamento(result.departamento) )
         dispatch( clearCurrentDepartamento() )
     }

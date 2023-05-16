@@ -1,4 +1,3 @@
-import { useNotification } from '@/hooks/useNotification';
 import { AppDispatch, RootState } from '@/redux/store';
 import { getAreasProvider, getAreaProvider, createAreaProvider, deleteAreaProvider, updateAreaProvider } from './areasProvider';
 import { checkingAreas, setAreasError, getCurrentArea, createArea, deleteArea, getAreas, updateArea, clearAreas, clearCurrentArea } from './areasSlice';
@@ -32,8 +31,7 @@ export const createAreaThunk = (area: any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingAreas())
         const result = await createAreaProvider(area, getState)        
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) ); useNotification({type: 'error', message: result.errorMessage})
-        useNotification({type: 'success', message: 'Área creada correctamente'})
+        if(!result.ok) return dispatch( setAreasError(result.errorMessage) ); 
         dispatch( createArea(result.area) )
     }
 }
@@ -44,7 +42,7 @@ export const deleteAreaThunk = (areaId: number) => {
         dispatch(checkingAreas())
         const result = await deleteAreaProvider(areaId, getState)        
         if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Área eliminada correctamente'})
+        
         dispatch( deleteArea(areaId) )
     }
 }
@@ -55,7 +53,6 @@ export const updateAreaThunk = (area: any) => {
         dispatch(checkingAreas())
         const result = await updateAreaProvider(area, getState)        
         if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        useNotification({type: 'success', message: 'Área actualizada correctamente'})
         dispatch( updateArea(result.area) )
         dispatch( clearCurrentArea() )
     }

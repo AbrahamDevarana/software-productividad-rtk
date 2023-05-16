@@ -5,8 +5,6 @@ import { useEffect, useState } from "react"
 import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
 import { ColumnsType } from "antd/es/table"
 import { Icon } from "@/components/Icon"
-import { useDelete } from "@/hooks/useDelete"
-import useNotify from "@/hooks/useNotify"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
 import { FaPlus } from "react-icons/fa"
@@ -43,11 +41,9 @@ export const Usuarios: React.FC = () => {
     }, [filtros])
 
 
-	async function handleDelete(id: string) {
-		const confirmed = await useDelete('¿Estás seguro que deseas eliminar este elemento?');
-		if (confirmed) {
+    const handleDelete = (id: string) => {
 			dispatch(deleteUsuarioThunk(id))
-		}
+		
 	}
 
     const isComplete = (data: any) => ( (Object.values(data).some(val => val === null) ? false : true ) ||
@@ -115,10 +111,6 @@ export const Usuarios: React.FC = () => {
 		}
 
     ]
-
-	useEffect(() => {
-        useNotify({ infoMessage })
-    }, [infoMessage])
    
 	const handleEdit = (id: any) => {
         dispatch(getUsuarioThunk(id))

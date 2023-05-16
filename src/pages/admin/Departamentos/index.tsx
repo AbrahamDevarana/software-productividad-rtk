@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { FloatButton, Input, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { Icon } from "@/components/Icon";
-import useNotify from "@/hooks/useNotify";
 import type { ColumnsType } from 'antd/es/table';
 import { cleanDepartamentoThunk, getDepartamentoThunk, getDepartamentosThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { deleteDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
@@ -84,12 +83,6 @@ export const Departamentos: React.FC = () => {
             dispatch(cleanDepartamentoThunk())
         }
     }, [filtros])
-
-    useEffect(() => {
-        useNotify({ infoMessage })
-    }, [infoMessage])
-
-
 
     const handleDelete = (id: any) => {
         Swal.fire({

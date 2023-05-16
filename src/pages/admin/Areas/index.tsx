@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Swal from "sweetalert2";
 import { Icon } from "@/components/Icon";
 import { FormAreas } from '@/components/forms/FormAreas';
-import useNotify from "@/hooks/useNotify";
 
 import type { ColumnsType } from 'antd/es/table';
 import { AreaProps } from "@/interfaces";
@@ -73,11 +72,6 @@ export const Areas: React.FC = () => {
             dispatch(cleanAreaThunk())
         }
     }, [filtros])
-
-    useEffect(() => {
-        useNotify({ infoMessage })
-    }, [infoMessage])
-
 
 
     const handleDelete = (id: any) => {

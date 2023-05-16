@@ -3,7 +3,6 @@ import jwtDecode from 'jwt-decode';
 import { AppDispatch, RootState } from '../../store';
 import { logOutProvider } from './authProvider';
 import { logOut, setAuthError, setCredentials, setisLoading } from './authSlice';
-import { useNotification } from '../../../hooks/useNotification';
 import { userAuthProps } from '@/interfaces';
 
 interface IAuthProps {
@@ -36,7 +35,7 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 api.dispatch( setCredentials({ user, accessToken }) );
                 return baseQuery(args, api, extraOptions);
             }else{ 
-                if( localStorage.getItem('accessToken') ) useNotification({type: 'error', message: 'Su sesión ha expirado, por favor vuelva a iniciar sesión' });
+                if( localStorage.getItem('accessToken') )
                 api.dispatch( logOut() );
             }
         }else{
