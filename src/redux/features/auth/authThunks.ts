@@ -24,19 +24,20 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { 
-    const result = await baseQuery(args, api, extraOptions);     
-
+    const result = await baseQuery(args, api, extraOptions);
         if( result.error && result.error.status === 401 ) {
             const refreshAccessToken = await baseQuery('refresh-access-token', api, extraOptions);
+            
+            if( refreshAccessToken.error && refreshAccessToken.error.status === 401 ) {
+                api.dispatch( logOut() );
+            }
+
             if( refreshAccessToken.data ) {
                 const { accessToken }:any = refreshAccessToken.data;
                 localStorage.setItem('accessToken', accessToken);
                 const user = jwtDecode(accessToken);
                 api.dispatch( setCredentials({ user, accessToken }) );
                 return baseQuery(args, api, extraOptions);
-            }else{ 
-                if( localStorage.getItem('accessToken') )
-                api.dispatch( logOut() );
             }
         }else{
             const { accessToken, usuario }  = result.data as IAuthProps;
@@ -44,8 +45,8 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
             if( accessToken ) {
                 api.dispatch( setCredentials({ usuario, accessToken }) );
                 api.dispatch( setisLoading(false) );
-                
             }
+            if( !accessToken ) api.dispatch( logOut() );
         }
         
     return result

@@ -21,6 +21,7 @@ const initialState: ProyectosState = {
     isLoadingProyecto: false,
     errorProyecto: false,
     isLoading: false,
+    isUpdating: false,
     error: false,
     infoMessage: '',
     updated: false,
@@ -66,28 +67,28 @@ const proyectosSlice = createSlice({
                 state.errorProyecto = true
         })
             .addCase(createProyectoThunk.pending, (state) => {
-                state.isLoading = true
+                state.isUpdating = true
         })
             .addCase(createProyectoThunk.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.isUpdating = false
                 state.proyectos.push(action.payload)
                 state.created = true
         })
             .addCase(createProyectoThunk.rejected, (state, action) => {
-                state.isLoading = false
+                state.isUpdating = false
                 state.infoMessage = action.payload as string
                 state.error = true
         })
             .addCase(updateProyectoThunk.pending, (state) => {
-                state.isLoadingProyecto = true
+                state.isUpdating = true
         })
             .addCase(updateProyectoThunk.fulfilled, (state, action) => {
-                state.isLoadingProyecto = false
+                state.isUpdating = false
                 state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
                 state.updated = true
         })
             .addCase(updateProyectoThunk.rejected, (state, action) => {
-                state.isLoadingProyecto = false
+                state.isUpdating = false
                 state.infoMessage = action.payload as string
                 state.errorProyecto = true
         })

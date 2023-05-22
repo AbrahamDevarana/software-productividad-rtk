@@ -3,17 +3,18 @@ import { ReactElement } from "react";
 
 interface ButtonProps {
     className?: string;
-    children: ReactElement | string | string [];
+    children: any;
     type?: "button" | "submit" | "reset";
     onClick?: () => void;
     classType: "regular" | "outline" | "icon"
     classColor: "default" | "dark" | "primary" | "secondary" | "success" | "info" | "warning" | "error"
     width?: number | '100%' | 'auto';
+    disabled?: boolean;
 }
 
  
 
-export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%' }: ButtonProps) => {
+export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%', disabled }: ButtonProps) => {
 
 
     return (
@@ -24,6 +25,7 @@ export const Button = ({ children, onClick, type = "button", classType, classCol
             style={{
                 width: width
             }}
+            disabled={disabled}
         >
             {children}
         </button>

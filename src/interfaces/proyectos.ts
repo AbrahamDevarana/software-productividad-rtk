@@ -20,7 +20,7 @@ export interface ProyectosProps {
 
 export interface ProyectosState extends InitialState{
     proyectos: ProyectosProps[];
-    // paginate?:     Paginate;
+    isUpdating: boolean;
     isLoadingProyecto: boolean;
     errorProyecto: boolean;
     currentProyecto: ProyectosProps;

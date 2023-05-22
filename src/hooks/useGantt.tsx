@@ -10,7 +10,7 @@ interface Props {
 	currentProyecto: ProyectosProps
 }
 
-export const useGantt = ({hitos, currentProyecto}:Props) => {
+export const useGantt = ({hitos, currentProyecto}: Props) => {
 
 	const treeSize = '30%';
 	const durationUnit = 'hour';

@@ -41,11 +41,14 @@ export const getProyectoThunk = createAsyncThunk(
 
 export const createProyectoThunk = createAsyncThunk(
     'proyectos/createProyecto',
-    async (proyecto: ProyectosProps, { rejectWithValue, getState }) => {
+    async (proyecto: FormData, { rejectWithValue, getState }) => {
+ 
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}`,
+                            "Content-Type": "multipart/form-data"   
+                        }
             }
             const response = await clientAxios.post('/proyectos', proyecto, config);
             return response.data.proyecto as ProyectosProps
@@ -57,13 +60,15 @@ export const createProyectoThunk = createAsyncThunk(
 
 export const updateProyectoThunk = createAsyncThunk(
     'proyectos/updateProyecto',
-    async (proyecto: ProyectosProps, { rejectWithValue, getState }) => {
+    async ( { proyectoId, proyecto }: { proyectoId: string, proyecto: FormData }, { rejectWithValue, getState }) => {        
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}`,
+                            "Content-Type": "multipart/form-data"
             }
-            const response = await clientAxios.put(`/proyectos/${proyecto.id}`, proyecto, config);
+            }
+            const response = await clientAxios.put(`/proyectos/${proyectoId}`, proyecto, config);
             return response.data.proyecto as ProyectosProps
         } catch (error: any) {
             return rejectWithValue(error.response.data)

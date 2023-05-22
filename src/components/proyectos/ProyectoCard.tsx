@@ -4,6 +4,7 @@ import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'
 import { Avatar, Image, Tooltip } from 'antd'
 import { ProyectosProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
+import { getStorageUrl } from '@/helpers'
 
 interface Props {
 	proyecto: ProyectosProps
@@ -20,11 +21,12 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 	return (
 		<Box className="col-span-4">
 			<div className="relative group z-0">
-				<Image className="shadow-card-picture z-30 rounded-ext group-hover:-translate-y-8 transition-all duration-500 ease-out" preview={false} 
-					src={`${import.meta.env.VITE_STORAGE_URL}${imagen}`} 
-					fallback={`${import.meta.env.VITE_STORAGE_URL}/custom-images/noBanner.png`}
+				<Image className="shadow-card-picture max-h-[150px] z-30 rounded-ext group-hover:-translate-y-8 transition-all duration-500 ease-out" preview={false} 
+					src={getStorageUrl(imagen)} 
+					fallback={`${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner.png`}
+					wrapperStyle={{ width: '100%', height: '150px', objectFit: 'cover', objectPosition: 'center'}}
 					/>
-				<div className="flex absolute left-0 right-0 bottom-2 justify-center gap-x-5 -z-10 group-hover:z-10">
+				<div className="flex absolute left-0 right-0 bottom-4 justify-center gap-x-5 -z-10 group-hover:z-10">
 					<Tooltip title="Ver" placement='bottom'>
 						<FaEye className="text-devarana-graph cursor-pointer" onClick={ () => handleView(id)}/>
 					</Tooltip>

@@ -1,13 +1,11 @@
-
-import Loading from "@/components/antd/Loading"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
 import { clearProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk,  } from "@/redux/features/proyectos/proyectosThunk"
-import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa"
+import { FaPlus } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, Card, FloatButton, Image, Modal } from "antd"
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { FloatButton, Modal } from "antd"
 import { getUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
 import { ProyectoCard } from "@/components/proyectos/ProyectoCard"
 
@@ -15,7 +13,6 @@ export const Proyectos = () => {
 
     const dispatch = useAppDispatch()
     const { proyectos, currentProyecto, isLoading, isLoadingProyecto  } = useAppSelector(state => state.proyectos)
-    const { userAuth } = useAppSelector(state => state.auth)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
     const navigate = useNavigate()

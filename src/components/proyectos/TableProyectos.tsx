@@ -132,12 +132,10 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
         dispatch(createHitoThunk(query))
     };
 
-
     const handleView = (record:TareasProps) => {
         dispatch(getTareaThunk(record.id))
         setVisible(true)
     }
-
 
     
     const FooterComp = (hito:HitosProps) => {
