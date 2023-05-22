@@ -7,6 +7,9 @@ import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks
 import { FaEye, FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
 import { BiWorld } from 'react-icons/bi';
 import { Avatar } from 'antd';
+// import { Chart } from '@/components/devarana/Chart';
+import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
+import { Chart } from '@/components/svg/devarana/Chart';
 
 
 export const Devarana: React.FC = () => {
@@ -27,14 +30,14 @@ export const Devarana: React.FC = () => {
         <div>
             <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20">
             </Box>
-            <Box className="-my-10 py-3 mx-5 mb-10 glassMorph overflow-hidden">
+            <Box className="-my-10 py-2 mx-5 mb-10 glassMorph overflow-hidden">
                 <div className="scroller-container">
                     <div className='scroller'>
                         { 
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -45,7 +48,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -56,7 +59,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -67,7 +70,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar className="w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-10 h-10 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -118,7 +121,7 @@ export const Devarana: React.FC = () => {
                 </h1>
                 <h2 className='pb-2 text-base'>¿Cómo lo hacemos?</h2>
                 <div className='flex gap-x-6 items-center py-5'>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Extraordinario className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LO EXTRAORDINARIO ES PRIMERO</h3>
                         <p className='font-light text-devarana-graph'>La atención en los detalles, nuestro servicio legendario y esfuerzo por la satisfacción total, son parte de nuestra esencia.</p>
@@ -129,11 +132,11 @@ export const Devarana: React.FC = () => {
                         <h3 className='text-base font-medium text-devarana-pink'>SOMOS APASIONADOS</h3>
                         <p className='font-light text-devarana-graph'>Buscamos nuestra esencia para dedicarnos a lo que amamos y hacer nuestro trabajo siempre con pasión. ¡Nos levantamos cada día con entusiasmo para enfrentar los retos que encontramos en nuestro camino!</p>
                     </div>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Apasionados className='fill-devarana-pink text-3xl' />
                 </div>
                
                 <div className='flex gap-x-6 items-center py-5'>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Adn className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LA EXCELENCIA ESTÁ EN NUESTRO ADN</h3>
                         <p className='font-light text-devarana-graph'>Buscamos la excelencia en todo lo que hacemos y damos todos los días lo mejor de nosotros mismos para vivir plenamente y sentirnos felices.</p>
@@ -144,11 +147,11 @@ export const Devarana: React.FC = () => {
                         <h3 className='text-base font-medium text-devarana-pink'>SOMOS INCLUYENTES</h3>
                         <p className='font-light text-devarana-graph'>Vamos más allá de la tolerancia y hacemos siempre un esfuerzo por incluir a todos. El respeto a la diversidad nos hace una empresa incluyente.</p>
                     </div>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Incluyentes className='fill-devarana-pink text-3xl' />
                 </div>
                
                 <div className='flex gap-x-6 items-center py-5'>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Innovacion className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LA INNOVACIÓN NOS DISTINGUE</h3>
                         <p className='font-light text-devarana-graph'>¡Creemos firmemente en la constante innovación! Nos ilusionan los retos y buscamos siempre estar a la vanguardia.</p>
@@ -159,11 +162,11 @@ export const Devarana: React.FC = () => {
                         <h3 className='text-base font-medium text-devarana-pink'>INSPIRAMOS CON AMOR</h3>
                         <p className='font-light text-devarana-graph'>El amor verdadero es preeminente en esta vida y nos motiva a hacer el bien en todo lo que emprendemos. Con nuestras acciones tratamos de hacer de este mundo un lugar mejor.</p>
                     </div>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Amor className='fill-devarana-pink text-3xl' />
                 </div>
                
                 <div className='flex gap-x-6 items-center py-5'>
-                    <FaEye className='text-3xl text-devarana-pink'/>
+                    <Triunfador className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>ESPÍRITU TRIUNFADOR</h3>
                         <p className='font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
@@ -171,6 +174,7 @@ export const Devarana: React.FC = () => {
                 </div>
             </Box>
             <Box className="col-span-12 md:col-span-6">
+                <Chart />
 
             </Box>
             <Box className="col-span-12 bg-w-legendario bg-no-repeat bg-right">

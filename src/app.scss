@@ -2,7 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-// @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;700&family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;700&family=Playfair+Display&display=swap');
 @import './assets/scss/_variables.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 @import '../node_modules/smart-webcomponents-react/source/styles/smart.default.css';
@@ -389,8 +389,6 @@ input, textarea {
         .scroller-item{
             display: block;
             margin: 0 1vw;
-            border: 2px $secondary solid;
-            border-radius: 100%;
         }
     }
     
