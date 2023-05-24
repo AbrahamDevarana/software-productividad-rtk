@@ -11,14 +11,8 @@ interface Props {
 }
 
 export const useGantt = ({hitos, currentProyecto}: Props) => {
-
 	const treeSize = '30%';
 	const durationUnit = 'hour';
-
-	const today = new Date(),
-	year = today.getFullYear(),
-	month = today.getMonth(),
-	date = today.getDate();
 
 
 	const taskColumns = [{
@@ -27,19 +21,12 @@ export const useGantt = ({hitos, currentProyecto}: Props) => {
 		size: '50%',
 	}, 
 	{
-		label: 'Inicio',
-		value: 'fechaInicio',
+		label: 'Fecha',
+		value: 'fecha',
 		size: '30%',
-		formatFunction: function (data: any, task:any) {
-
-            console.log(task, data);
-            
-
-            const fechaInicio = dayjs(task.hito?.fechaInicio).add(6, 'hour').format('DD/MM/YYYY');
-            const fechaFin = dayjs(task.hito?.fechaFin).add(6, 'hour').format('DD/MM/YYYY');
-
-
-
+		formatFunction: function (data: any, task:any) {            
+            const fechaInicio = dayjs(task.hito?.fechaInicio).add(6, 'hour').format('D MMM');
+            const fechaFin = dayjs(task.hito?.fechaFin).add(6, 'hour').format('D MMM');
             return `${fechaInicio} - ${fechaFin}`;
         }
 
@@ -71,37 +58,37 @@ export const useGantt = ({hitos, currentProyecto}: Props) => {
 	const dataSource = useMemo(() => {
 		const data = hitos?.map((hito) => {
 			return {
-				dragProject: true,
+				dragProject: false,
 				synchronized: true,
 				label: hito.titulo,
 				type: 'project',
+				class: 'project',
 				expanded: true,
-				dateStart: hito.fechaInicio,
-				dateEnd: hito.fechaFin,
-
+				dateStart: dayjs(hito.fechaInicio).add(6, 'hour').format('YYYY-MM-DD'),
+				dateEnd: dayjs(hito.fechaFin).add(6, 'hour').format('YYYY-MM-DD'),
 				tasks: hito.tareas?.map((hito) => {
 					return {
 						hito,
 						label: hito.nombre,
-						dateStart: hito.fechaInicio,
-						dateEnd: hito.fechaFin,
-						type: 'task',    
+						dateStart: dayjs(hito.fechaInicio).add(6, 'hour').format('YYYY-MM-DD'),
+						dateEnd: dayjs(hito.fechaFin).add(6, 'hour').format('YYYY-MM-DD'),
+						type: 'task',
+						class: 'task',
 					}
 				})
 			}
 		})
+	
 		return data
-  }, [currentProyecto])
+
+		
+  }, [hitos, currentProyecto])
 
 
   return {
 	dataSource,
 	taskColumns,
-	durationUnit,
-	year,
-	month, 
-	date
-
+	durationUnit
   }
 
 }

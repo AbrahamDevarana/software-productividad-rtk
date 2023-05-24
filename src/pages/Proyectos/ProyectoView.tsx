@@ -4,7 +4,7 @@ import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import {  Drawer, Segmented } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
-import { TableProyectos } from '@/components/proyectos/TableProyectos';
+import { ListadoProyectos } from '@/components/proyectos/ListadoProyectos';
 import { FormTareas } from '../../components/tareas/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -73,7 +73,6 @@ export const ProyectoView = () => {
                     options={options}
                     value={value}
                     onChange={(value) => setValue(value as SegmentTypes)}
-
                 />
                 {/* <>
                     <p>Filtrar Por: </p>
@@ -89,7 +88,7 @@ export const ProyectoView = () => {
                         {
                             value === 'listado' && (
                                 <div>
-                                    <TableProyectos 
+                                    <ListadoProyectos 
                                         visible={visible} 
                                         setVisible={setVisible} 
                                         currentProyecto={currentProyecto} 

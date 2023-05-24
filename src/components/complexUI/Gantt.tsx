@@ -4,10 +4,17 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGantt } from '@/hooks/useGantt';
 import Loading from '../antd/Loading';
 
-import { Smart, GanttChart } from 'smart-webcomponents-react/ganttchart';
-import { useEffect, useState } from 'react';
-import { getTareaThunk } from '@/redux/features/tareas/tareasThunk';
+import { GanttChart } from 'smart-webcomponents-react/ganttchart';
+import { useEffect, useRef, useState } from 'react';
+import { getTareaThunk, updateTareaThunk } from '@/redux/features/tareas/tareasThunk';
 window.Smart.License = "7C743E09-8C47-4BFC-9783-7CF87E92D987";
+import '@/assets/scss/smart.custom.scss'
+import { getHitosThunk } from '@/redux/features/hitos/hitosThunk';
+
+
+// import  '@/assets/static/js/jszip.min.js'
+// import '@/assets/static/js/pdfmake.min.js'
+// import '@/assets/static/js/html2canvas.min.js'
 
 
 interface GanttProps {
@@ -16,45 +23,79 @@ interface GanttProps {
     setVisible: (visible: boolean) => void
 }
 
-export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
-    const { hitos, isLoading } = useAppSelector(state => state.hitos)
-    const {dataSource, taskColumns, durationUnit } = useGantt({hitos, currentProyecto}); 
+type DurationUnit = 'day' | 'week' | 'month' | 'year'
 
+export const Gantt = ({currentProyecto, visible, setVisible}: GanttProps) => {
+
+
+    const { hitos, isLoading } = useAppSelector(state => state.hitos)
+
+    const ref = useRef(null);
+    
+    const durationUnitOptions: DurationUnit[] = ['day', 'week', 'month', 'year']
+    const [view, setView] = useState<DurationUnit>('month')
     
     const dispatch = useAppDispatch()
-    
+
+
+    const {dataSource, taskColumns, durationUnit } = useGantt({hitos, currentProyecto});
+        
+
+    const handleView = async (record:TareasProps) => {
+        if(record === undefined ) return        
+        await dispatch(getTareaThunk(record.id))
+        setVisible(true)
+    }
+
+    const handleExport = (type: string) => {
+        const gantt = ref.current as any
+        gantt.exportData(type)
+        
+    }
+
+    const handleChangeDate = async (event: any) => {   
+        const { dateStart, dateEnd, hito } = event.detail.item;
+
+        const query = {
+            ...hito,
+            fechaInicio: dateStart,
+            fechaFin: dateEnd
+        } as TareasProps
+
+
+        await dispatch(updateTareaThunk(query))
+
+    }
+
     if(isLoading) return ( <Loading /> )
-    
-    
-    const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('week')
-    
+
 	return (
 		<div>
             <div className='flex gap-x-3 text-devarana-graph justify-end'>
-                <button onClick={() => setView('day')}>
-                    <span>Day</span>
-                </button>
-                <button onClick={() => setView('week')}>
-                    <span>Week</span>
-                </button>
-                <button onClick={() => setView('month')}>
-                    <span>Month</span>
-                </button>
-                <button onClick={() => setView('year')}>
-                    <span>Year</span>
-                </button>
+                {
+                    durationUnitOptions.map((unit, index) => (
+                        <button key={index} onClick={() => setView(unit)} className='capitalize'> 
+                            {unit}
+                        </button>
+                    ))
+                }
             </div>
 			<GanttChart
-				dateStart={currentProyecto.fechaInicio}
-				dateEnd={currentProyecto.fechaFin}
-                dataSource={dataSource} 
-                taskColumns={taskColumns}
-                durationUnit={durationUnit}
-                currentTimeIndicator={true}
-				shadeUntilCurrentTime={true}
-                view={view}
+                theme='custom'
                 className='customGantt'
                 id="gantt"
+                ref={ref}
+                dataSource={dataSource} 
+                taskColumns={taskColumns}
+				dateStart={currentProyecto.fechaInicio}
+				dateEnd={currentProyecto.fechaFin}
+                durationUnit={durationUnit}
+                view={view}
+                disableWindowEditor={true}
+                disableSelection={true}
+                onItemClick={ (event: any) => handleView(event.detail.item?.hito) }
+                onDragEnd={ handleChangeDate }
+                onResizeEnd={ handleChangeDate }
                 ></GanttChart>
 		</div>
 	);

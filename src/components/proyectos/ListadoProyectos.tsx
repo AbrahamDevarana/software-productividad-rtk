@@ -8,6 +8,7 @@ import { FaPlus } from 'react-icons/fa'
 import { Avatar, Collapse, Form, Input, Progress, Table, Tooltip, } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
 import { getColor, getStatus } from '@/helpers'
+import Loading from '../antd/Loading'
 
 
 
@@ -18,14 +19,13 @@ interface TableProyectosProps {
 }
 
 
-export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
+export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
 
     const { hitos, currentHito, isLoading} = useAppSelector(state => state.hitos)
         
     const dispatch = useAppDispatch()
     const { Panel } = Collapse;
-
-    
+   
 
     const defaultColumns:ColumnsType<any> = [
         {
@@ -176,7 +176,7 @@ export const TableProyectos = ({currentProyecto, visible, setVisible}: TableProy
     }, [hitos])
     
 
-    // if(isLoading) return ( <Loading /> )
+    if(isLoading) return ( <Loading /> )
     return (
         <>
         <Collapse

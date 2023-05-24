@@ -1,33 +1,33 @@
 .smart-element[theme=custom] { 
-   --smart-primary-rgb: 4, 143, 227;
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
-   --smart-primary: rgba(4, 143, 227, 1);
+   --smart-primary-rgb: 9, 103, 201;
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-border-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-border-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
    --smart-font-size: 14px;
-   --smart-font-family: "Roboto",  sans-serif;
+   --smart-font-family: "Roboto", "Helvetice Neue", sans-serif;
 }
 .smart-element[theme=custom] {
-   --smart-font-family: "Roboto",  sans-serif;
+   --smart-font-family: "Roboto", "Helvetice Neue", sans-serif;
    --smart-font-size: 14px;
    --smart-font-family-icon: smart-icons;
    --smart-font-family-src: ;
@@ -35,33 +35,33 @@
 
 smart-accordion[theme=custom].smart-element,
 smart-accordion-item[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-accordion[theme=custom].smart-element {
-   --smart-ui-state-border-focus: rgba(224, 224, 224, 1);
+   --smart-ui-state-border-focus: rgba(243, 246, 249, 1);
    --smart-accordion-item-expanded-offset: 20px;
 }
 
@@ -70,57 +70,57 @@ smart-accordion[theme=custom].smart-element smart-accordion-item .smart-accordio
 }
 
 smart-accordion[theme=custom].smart-element .smart-accordion-item{
-   --smart-item-border-top-left-radius: 10px;
-   --smart-item-border-bottom-left-radius: 10px;
-   --smart-item-border-top-right-radius: 10px;
-   --smart-item-border-bottom-right-radius: 10px;
+   --smart-item-border-top-left-radius: 4px;
+   --smart-item-border-bottom-left-radius: 4px;
+   --smart-item-border-top-right-radius: 4px;
+   --smart-item-border-bottom-right-radius: 4px;
 }
 
 smart-accordion[theme=custom].smart-element .smart-accordion-item{
-   --smart-first-item-border-top-left-radius: 10px;
-   --smart-first-item-border-bottom-left-radius: 10px;
-   --smart-first-item-border-top-right-radius: 10px;
-   --smart-first-item-border-bottom-right-radius: 10px;
+   --smart-first-item-border-top-left-radius: 4px;
+   --smart-first-item-border-bottom-left-radius: 4px;
+   --smart-first-item-border-top-right-radius: 4px;
+   --smart-first-item-border-bottom-right-radius: 4px;
 }
 
 smart-accordion[theme=custom].smart-element .smart-accordion-item{
-   --smart-last-item-border-top-left-radius: 10px;
-   --smart-last-item-border-bottom-left-radius: 10px;
-   --smart-last-item-border-top-right-radius: 10px;
-   --smart-last-item-border-bottom-right-radius: 10px;
+   --smart-last-item-border-top-left-radius: 4px;
+   --smart-last-item-border-bottom-left-radius: 4px;
+   --smart-last-item-border-top-right-radius: 4px;
+   --smart-last-item-border-bottom-right-radius: 4px;
 }
 
 smart-button[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-button[theme=custom].smart-element{
-   --smart-border-top-left-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
 }
 
 smart-button[theme=custom].smart-element.success{
@@ -215,29 +215,29 @@ smart-repeat-button[theme=custom].smart-element.error{
 }
 
 smart-carousel.smart-element[theme=custom], smart-carousel.smart-element[theme=custom] smart-repeat-button {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-card-view.smart-element[theme=custom], smart-card-view.smart-element[theme=custom] .smart-element {
@@ -246,7 +246,7 @@ smart-card-view.smart-element[theme=custom], smart-card-view.smart-element[theme
 }
 
 smart-card-view.smart-element[theme=custom], smart-card-view.smart-element[theme=custom] .smart-card.smart-element {
-   --smart-card-border: rgba(224, 224, 224, 1);
+   --smart-card-border: rgba(243, 246, 249, 1);
    --smart-card-view-vertical-offset: 15px;
    --smart-border-top-left-radius: 0px;
    --smart-border-bottom-left-radius: 0px;
@@ -255,29 +255,29 @@ smart-card-view.smart-element[theme=custom], smart-card-view.smart-element[theme
 }
 
 smart-card-view.smart-element[theme=custom], smart-card-view.smart-element[theme=custom] .smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-text-box[theme=custom].smart-element,
@@ -336,16 +336,16 @@ smart-time-picker[theme=custom].smart-element,
 smart-list-box[theme=custom].smart-element,
 smart-list-item[theme=custom].smart-element,
 smart-calendar[theme=custom].smart-element {
-   --smart-item-border-top-left-radius: 10px;
-   --smart-item-border-bottom-left-radius: 10px;
-   --smart-item-border-top-right-radius: 10px;
-   --smart-item-border-bottom-right-radius: 10px;
+   --smart-item-border-top-left-radius: 4px;
+   --smart-item-border-bottom-left-radius: 4px;
+   --smart-item-border-top-right-radius: 4px;
+   --smart-item-border-bottom-right-radius: 4px;
    --smart-list-item-horizontal-offset: 3px;
    --smart-list-item-vertical-offset: 3px;
    --smart-list-item-height: 36px;
-   --smart-ui-state-border-focus: rgba(224, 224, 224, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-selected: rgba(0, 92, 153, .1);
+   --smart-ui-state-border-focus: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-selected: rgba(0, 92, 153, 0.1);
 }
 
 smart-text-box[theme=custom].smart-element,
@@ -373,92 +373,92 @@ smart-time-picker[theme=custom].smart-element,
 smart-list-box[theme=custom].smart-element,
 smart-list-item[theme=custom].smart-element,
 smart-calendar[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-gantt-chart.smart-element[theme=custom], smart-gantt-chart.smart-element[theme=custom] .smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
    --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-surface: rgba(255, 255, 255, 1);
+   --smart-border: rgba(132, 136, 145, 0.2);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(9, 103, 201, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-grid[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-grid[theme=custom].smart-element {
-   --smart-grid-cell-vertical-border: rgba(224, 224, 224, 1);
-   --smart-grid-cell-horizontal-border: rgba(224, 224, 224, 1);
-   --smart-grid-cell-header-vertical-border: rgba(224, 224, 224, 1);
-   --smart-grid-cell-header-horizontal-border: rgba(224, 224, 224, 1);
+   --smart-grid-cell-vertical-border: rgba(243, 246, 249, 1);
+   --smart-grid-cell-horizontal-border: rgba(243, 246, 249, 1);
+   --smart-grid-cell-header-vertical-border: rgba(243, 246, 249, 1);
+   --smart-grid-cell-header-horizontal-border: rgba(243, 246, 249, 1);
    --smart-grid-cell-horizontal-border-opacity-selected: 0.3;
    --smart-grid-cell-vertical-border-opacity-selected: 0.3;
-   --smart-grid-cell-background-freeze: rgba(245, 245, 245, 1);
-   --smart-grid-cell-color-freeze: rgba(101, 106, 118, 1);
+   --smart-grid-cell-background-freeze: rgba(9, 103, 201, 1);
+   --smart-grid-cell-color-freeze: rgba(255, 255, 255, 1);
    --smart-grid-cell-font-size: inherit;
    --smart-grid-cell-font-weight: inherit;
 }
@@ -469,46 +469,46 @@ smart-grid[theme=custom].smart-element {
 }
 
 smart-grid[theme=custom].smart-element .smart-grid-column-header{
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-grid-column-horizontal-border: rgba(224, 224, 224, 1);
-   --smart-grid-column-vertical-border: rgba(224, 224, 224, 1);
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-grid-column-horizontal-border: rgba(243, 246, 249, 1);
+   --smart-grid-column-vertical-border: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
    --smart-grid-column-font-size: inherit;
    --smart-grid-column-font-weight: inherit;
 }
 
 smart-grid[theme=custom].smart-element .smart-action-button{
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-border-focus: rgba(224, 224, 224, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-border-focus: rgba(243, 246, 249, 1);
 }
 
 .smart-grid-column-menu, .smart-grid-column-menu .smart-filter-container{
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
 }
 
 smart-grid[theme=custom].smart-element .smart-grid-pager, smart-grid[theme=custom].smart-element .smart-grid-pager smart-pager.smart-element{
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
 }
 
 smart-grid[theme=custom].smart-element .smart-grid-pager smart-pager.smart-element, smart-grid[theme=custom].smart-element .smart-grid-pager smart-pager.smart-element smart-pager.smart-element{
@@ -519,112 +519,112 @@ smart-grid[theme=custom].smart-element .smart-grid-pager smart-pager.smart-eleme
 }
 
 smart-grid[theme=custom].smart-element {
-   --smart-alternation-index0-background: rgba(245, 245, 245, 1);
-   --smart-alternation-index0-color: rgba(101, 106, 118, 1);
+   --smart-alternation-index0-background: rgba(9, 103, 201, 1);
+   --smart-alternation-index0-color: rgba(255, 255, 255, 1);
 }
 
 smart-list-menu[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-menu.smart-element[theme=custom], smart-menu-item.smart-element[theme=custom], smart-menu-items-group.smart-element[theme=custom] {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-progress-bar.smart-element[theme=custom], smart-circular-progress-bar.smart-element[theme=custom] {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-splitter.smart-element[theme=custom], smart-splitter-bar.smart-element[theme=custom], smart-splitter-item.smart-element[theme=custom] {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-scroll-bar[theme=custom].smart-element {
@@ -673,29 +673,29 @@ smart-slider[theme=custom].smart-element{
 }
 
 smart-slider[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-tabs[theme=custom].smart-element {
@@ -707,73 +707,73 @@ smart-tabs[theme=custom].smart-element {
 }
 
 smart-tabs[theme=custom].smart-element .smart-tabs-selection-bar{
-   --smart-tab-item-selection-bar: rgba(4, 143, 227, 1);
+   --smart-tab-item-selection-bar: rgba(9, 103, 201, 1);
 }
 
 smart-tabs[theme=custom].smart-element {
-   --smart-item-border-top-left-radius: 10px;
-   --smart-item-border-bottom-left-radius: 10px;
-   --smart-item-border-top-right-radius: 10px;
-   --smart-item-border-bottom-right-radius: 10px;
+   --smart-item-border-top-left-radius: 4px;
+   --smart-item-border-bottom-left-radius: 4px;
+   --smart-item-border-top-right-radius: 4px;
+   --smart-item-border-bottom-right-radius: 4px;
 }
 
 smart-tabs[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-tree.smart-element[theme=custom], smart-tree-item.smart-element[theme=custom], smart-tree-items-group.smart-element[theme=custom] {
-   --smart-item-border-top-left-radius: 10px;
-   --smart-item-border-bottom-left-radius: 10px;
-   --smart-item-border-top-right-radius: 10px;
-   --smart-item-border-bottom-right-radius: 10px;
+   --smart-item-border-top-left-radius: 4px;
+   --smart-item-border-bottom-left-radius: 4px;
+   --smart-item-border-top-right-radius: 4px;
+   --smart-item-border-bottom-right-radius: 4px;
 }
 
 smart-tree.smart-element[theme=custom], smart-tree-item.smart-element[theme=custom], smart-tree-items-group.smart-element[theme=custom] {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-tooltip[theme=custom].smart-element.smart-tooltip{
@@ -789,53 +789,83 @@ smart-tooltip[theme=custom].smart-element.smart-tooltip-content{
 }
 
 smart-tooltip[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
 }
 
 smart-window[theme=custom].smart-element {
-   --smart-primary: rgba(4, 143, 227, 1);
-   --smart-ui-state-active: rgba(4, 143, 227, 1);
-   --smart-ui-state-border-active: rgba(4, 143, 227, 1);
+   --smart-primary: rgba(9, 103, 201, 1);
+   --smart-ui-state-active: rgba(9, 103, 201, 1);
+   --smart-ui-state-border-active: rgba(9, 103, 201, 1);
    --smart-primary-color: rgba(255, 255, 255, 1);
    --smart-ui-state-color-active: rgba(255, 255, 255, 1);
-   --smart-background-color: rgba(101, 106, 118, 1);
-   --smart-background: rgba(254, 254, 254, 1);
-   --smart-surface-color: rgba(101, 106, 118, 1);
-   --smart-surface: rgba(245, 245, 245, 1);
-   --smart-border: rgba(224, 224, 224, 1);
-   --smart-border-radius: 10px;
-   --smart-border-top-left-radius: 10px;
-   --smart-border-top-right-radius: 10px;
-   --smart-border-bottom-left-radius: 10px;
-   --smart-border-bottom-right-radius: 10px;
-   --smart-ui-state-color-hover: rgba(51, 51, 51, 0.5);
-   --smart-ui-state-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-border-hover: rgba(235, 235, 235, 1);
-   --smart-ui-state-color-selected: rgba(64, 143, 227, 1);
-   --smart-ui-state-selected: rgba(0, 92, 153, .1);
-   --smart-ui-state-color-focus: rgba(101, 106, 118, 0.5);
-   --smart-ui-state-focus: rgba(224, 224, 224, 1);
-   --smart-outline: rgba(178, 178, 178, 1);
+   --smart-background-color: rgba(132, 136, 145, 1);
+   --smart-background: rgba(255, 255, 255, 1);
+   --smart-surface-color: rgba(255, 255, 255, 1);
+   --smart-surface: rgba(9, 103, 201, 1);
+   --smart-border: rgba(243, 246, 249, 1);
+   --smart-border-radius: 4px;
+   --smart-border-top-left-radius: 4px;
+   --smart-border-top-right-radius: 4px;
+   --smart-border-bottom-left-radius: 4px;
+   --smart-border-bottom-right-radius: 4px;
+   --smart-ui-state-color-hover: rgba(51, 51, 51, 1);
+   --smart-ui-state-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-border-hover: rgba(243, 246, 249, 1);
+   --smart-ui-state-color-selected: rgba(229, 17, 65, 1);
+   --smart-ui-state-selected: rgba(0, 92, 153, 0.1);
+   --smart-ui-state-color-focus: rgba(0, 0, 0, 1);
+   --smart-ui-state-focus: rgba(243, 246, 249, 1);
+   --smart-outline: rgba(243, 246, 249, 1);
+}
+
+
+
+
+
+
+
+
+
+
+// Gantt Chart
+
+
+.smart-gantt-chart .project {
+   --smart-gantt-chart-project-label-color: white;
+   --smart-gantt-chart-project-color: linear-gradient(to top, rgba(46, 49, 54, 1), rgba(101, 106, 118, 1));
+
+   .smart-timeline-task-fill{
+      border-radius: 15px;
+   }
+}
+
+.smart-gantt-chart .task {
+   --smart-gantt-chart-task-label-color: white;
+   --smart-gantt-chart-task-color: linear-gradient(to top, rgba(9, 103, 201, 1), rgba(64, 143, 227, 1));
+
+   .smart-timeline-task-fill{
+      border-radius: 15px;
+   }
 }

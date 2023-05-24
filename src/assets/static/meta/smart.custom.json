@@ -1,0 +1,4073 @@
+{
+    "name": "custom",
+    "basicDark": {
+        "backgroundColor": {
+            "name": "Text color",
+            "value": "rgba(254, 254, 254, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "background": {
+            "name": "Background color",
+            "value": "rgba(36, 36, 36, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "surfaceColor": {
+            "name": "Header text color",
+            "value": "rgba(254, 254, 254, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "surface": {
+            "name": "Header background color",
+            "value": "rgba(51, 51, 51, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "border": {
+            "name": "Border color",
+            "value": "rgba(31, 31, 31, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateColorHover": {
+            "name": "Hovered state text color",
+            "value": "rgba(235, 235, 235, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateHover": {
+            "name": "Hovered state background color",
+            "value": "rgba(68, 68, 68, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderHover"
+                }
+            ]
+        },
+        "uiStateColorFocus": {
+            "name": "Focus state text color",
+            "value": "rgba(235, 235, 235, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateFocus": {
+            "name": "Focus state background color",
+            "value": "rgba(68, 68, 68, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderHover"
+                }
+            ]
+        },
+        "outline": {
+            "name": "Outline color",
+            "value": "rgba(68, 68, 68, 1)",
+            "editor": "colorPicker"
+        },
+        "scrollbar": {
+            "name": "Scrollbar",
+            "visible": true,
+            "types": {
+                "scrollbar": {
+                    "scrollBarBackground": {
+                        "name": "Scrollbar background color",
+                        "value": "#3E3E42",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackground": {
+                        "name": "Scrollbar thumb background color",
+                        "value": "#686868",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorder": {
+                        "name": "Scrollbar thumb border color",
+                        "value": "#686868",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackgroundHover": {
+                        "name": "Scrollbar thumb hovered background color",
+                        "value": "#9E9E9E",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderHover": {
+                        "name": "Scrollbar thumb hovered border color",
+                        "value": "#9E9E9E",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackgroundActive": {
+                        "name": "Scrollbar thumb active background color",
+                        "value": "#B7B7B7",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderActive": {
+                        "name": "Scrollbar thumb active border color",
+                        "value": "#B7B7B7",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackground": {
+                        "name": "Scrollbar arrow background color",
+                        "value": "#3E3E42",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorder": {
+                        "name": "Scrollbar arrow border color",
+                        "value": "#3E3E42",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColor": {
+                        "name": "Scrollbar arrow color",
+                        "value": "#999999",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackgroundHover": {
+                        "name": "Scrollbar arrow hovered background color",
+                        "value": "#3E3E42",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorderHover": {
+                        "name": "Scrollbar arrow hovered border color",
+                        "value": "#3E3E42",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColorHover": {
+                        "name": "Scrollbar arrow hovered color",
+                        "value": "#eeeeee",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackgroundActive": {
+                        "name": "Scrollbar arrow active background color",
+                        "value": "#B7B7B7",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorderActive": {
+                        "name": "Scrollbar arrow border color",
+                        "value": "#B7B7B7",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColorActive": {
+                        "name": "Scrollbar arrow active color",
+                        "value": "#ffffff",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderTopLeftRadius": {
+                        "name": "Scrollbar thumb border top left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderBottomLeftRadius": {
+                        "name": "Scrollbar thumb bottom left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderTopRightRadius": {
+                        "name": "Scrollbar thumb top right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderBottomRightRadius": {
+                        "name": "Scrollbar thumb bottom right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    }
+                }
+            }
+        }
+    },
+    "basic": {
+        "primary": {
+            "name": "Primary color",
+            "value": "rgba(9, 103, 201, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderActive"
+                },
+                {
+                    "prop": "uiStateActive"
+                }
+            ]
+        },
+        "primaryColor": {
+            "name": "Primary text color",
+            "value": "rgba(255, 255, 255, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateColorActive"
+                }
+            ]
+        },
+        "backgroundColor": {
+            "name": "Text color",
+            "value": "rgba(132, 136, 145, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "background": {
+            "name": "Background color",
+            "value": "rgba(255, 255, 255, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "surfaceColor": {
+            "name": "Header text color",
+            "value": "rgba(255, 255, 255, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "surface": {
+            "name": "Header background color",
+            "value": "rgba(9, 103, 201, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "border": {
+            "name": "Border color",
+            "value": "rgba(243, 246, 249, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "borderRadius": {
+            "name": "Border radius",
+            "value": "4px",
+            "editor": "input",
+            "relatedProps": [
+                {
+                    "prop": "borderTopLeftRadius"
+                },
+                {
+                    "prop": "borderTopRightRadius"
+                },
+                {
+                    "prop": "borderBottomLeftRadius"
+                },
+                {
+                    "prop": "borderBottomRightRadius"
+                }
+            ]
+        },
+        "uiStateColorHover": {
+            "name": "Hovered state text color",
+            "value": "rgba(51, 51, 51, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateHover": {
+            "name": "Hovered state background color",
+            "value": "rgba(243, 246, 249, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderHover"
+                }
+            ]
+        },
+        "uiStateColorSelected": {
+            "name": "Selected state text color",
+            "value": "rgba(229, 17, 65, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateSelected": {
+            "name": "Selected state background color",
+            "value": "rgba(0, 92, 153, 0.1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderSelected"
+                }
+            ]
+        },
+        "uiStateColorFocus": {
+            "name": "Focus state text color",
+            "value": "rgba(0, 0, 0, 1)",
+            "editor": "colorPicker",
+            "relatedProps": []
+        },
+        "uiStateFocus": {
+            "name": "Focus state background color",
+            "value": "rgba(243, 246, 249, 1)",
+            "editor": "colorPicker",
+            "relatedProps": [
+                {
+                    "prop": "uiStateBorderFocus"
+                },
+                {
+                    "prop": "outline"
+                }
+            ]
+        },
+        "outline": {
+            "name": "Outline color",
+            "value": "rgba(243, 246, 249, 1)",
+            "editor": "colorPicker"
+        },
+        "fontSize": {
+            "name": "Font size",
+            "value": "14px",
+            "editor": "input"
+        },
+        "fontFamily": {
+            "name": "Font family",
+            "value": "\"Roboto\", \"Helvetice Neue\", sans-serif",
+            "editor": "input"
+        }
+    },
+    "advanced": {
+        "typography": {
+            "name": "Typography",
+            "visible": true,
+            "types": {
+                "settings": {
+                    "fontFamily": {
+                        "name": "Font family",
+                        "value": "\"Roboto\", \"Helvetice Neue\", sans-serif",
+                        "editor": "input"
+                    },
+                    "fontSize": {
+                        "name": "Font size",
+                        "value": "14px",
+                        "editor": "input"
+                    },
+                    "fontFamilyIcon": {
+                        "name": "Font family Icons",
+                        "value": "smart-icons",
+                        "editor": "input"
+                    },
+                    "fontFamilySrc": {
+                        "name": "Font family Icons src",
+                        "value": "",
+                        "editor": "input"
+                    },
+                    "IconTable": {
+                        "name": "Icon table",
+                        "value": "e800",
+                        "valueAlt": "grid_on",
+                        "editor": "input"
+                    },
+                    "IconStar": {
+                        "name": "Icon star",
+                        "value": "e801",
+                        "valueAlt": "star",
+                        "editor": "input"
+                    },
+                    "IconStarEmpty": {
+                        "name": "Icon star empty",
+                        "value": "e802",
+                        "valueAlt": "star_border",
+                        "editor": "input"
+                    },
+                    "IconPlus": {
+                        "name": "Icon plus",
+                        "value": "e803",
+                        "valueAlt": "add_box",
+                        "editor": "input"
+                    },
+                    "IconMinus": {
+                        "name": "Icon minus",
+                        "value": "e804",
+                        "valueAlt": "remove",
+                        "editor": "input"
+                    },
+                    "IconAttentionCircled": {
+                        "name": "Icon attention circled",
+                        "value": "e805",
+                        "valueAlt": "warning",
+                        "editor": "input"
+                    },
+                    "IconAlignLeft": {
+                        "name": "Icon align left",
+                        "value": "e806",
+                        "valueAlt": "format_align_left",
+                        "editor": "input"
+                    },
+                    "IconAlignRight": {
+                        "name": "Icon align right",
+                        "value": "e807",
+                        "valueAlt": "format_align_right",
+                        "editor": "input"
+                    },
+                    "IconAlignCenter": {
+                        "name": "Icon align center",
+                        "value": "e808",
+                        "valueAlt": "format_align_center",
+                        "editor": "input"
+                    },
+                    "IconReload": {
+                        "name": "Icon reload",
+                        "value": "e809",
+                        "valueAlt": "repeat",
+                        "editor": "input"
+                    },
+                    "IconCancel": {
+                        "name": "Icon cancel",
+                        "value": "e80d",
+                        "valueAlt": "cancel",
+                        "editor": "input"
+                    },
+                    "IconClose": {
+                        "name": "Icon close",
+                        "value": "e80d",
+                        "valueAlt": "close",
+                        "editor": "input"
+                    },
+                    "IconCancelCircled": {
+                        "name": "Icon cancel circled",
+                        "value": "e80e",
+                        "valueAlt": "cancel",
+                        "editor": "input"
+                    },
+                    "IconPlusCircled": {
+                        "name": "Icon plus circled",
+                        "value": "e810",
+                        "valueAlt": "add_circle",
+                        "editor": "input"
+                    },
+                    "IconPower": {
+                        "name": "Icon power",
+                        "value": "e811",
+                        "valueAlt": "power_settings_new",
+                        "editor": "input"
+                    },
+                    "IconMinusCircled": {
+                        "name": "Icon minus circled",
+                        "value": "e814",
+                        "valueAlt": "remove_circle",
+                        "editor": "input"
+                    },
+                    "IconArrowUpAlt": {
+                        "name": "Icon arrow up alt",
+                        "value": "e817",
+                        "valueAlt": "keyboard_arrow_up",
+                        "editor": "input"
+                    },
+                    "IconRadio": {
+                        "name": "Icon radio",
+                        "value": "e818",
+                        "valueAlt": "radio_button_checked",
+                        "editor": "input"
+                    },
+                    "IconRefresh": {
+                        "name": "Icon refresh",
+                        "value": "e819",
+                        "valueAlt": "refresh",
+                        "editor": "input"
+                    },
+                    "IconChart": {
+                        "name": "Icon chart",
+                        "value": "e81a",
+                        "valueAlt": "bar_chart",
+                        "editor": "input"
+                    },
+                    "IconCheckSquared": {
+                        "name": "Icon check squared",
+                        "value": "e81b",
+                        "valueAlt": "check_box",
+                        "editor": "input"
+                    },
+                    "IconResizeFull": {
+                        "name": "Icon resize full",
+                        "value": "e81c",
+                        "valueAlt": "fullscreen",
+                        "editor": "input"
+                    },
+                    "IconResizeSmall": {
+                        "name": "Icon resize small",
+                        "value": "e81d",
+                        "valueAlt": "fullscreen_exit",
+                        "editor": "input"
+                    },
+                    "IconResizeVertical": {
+                        "name": "Icon resize vertical",
+                        "value": "e80c",
+                        "valueAlt": "swap_vert",
+                        "editor": "input"
+                    },
+                    "IconResizeHorizontal": {
+                        "name": "Icon resize horizontal",
+                        "value": "e80f",
+                        "valueAlt": "swap_horiz",
+                        "editor": "input"
+                    },
+                    "IconLock": {
+                        "name": "Icon lock",
+                        "value": "e821",
+                        "valueAlt": "lock",
+                        "editor": "input"
+                    },
+                    "IconSort": {
+                        "name": "Icon sort",
+                        "value": "e823",
+                        "valueAlt": "sort",
+                        "editor": "input"
+                    },
+                    "IconDelete": {
+                        "name": "Icon delete",
+                        "value": "e826",
+                        "valueAlt": "delete",
+                        "editor": "input"
+                    },
+                    "IconSearch": {
+                        "name": "Icon search",
+                        "value": "e828",
+                        "valueAlt": "search",
+                        "editor": "input"
+                    },
+                    "IconCalendar": {
+                        "name": "Icon calendar",
+                        "value": "e829",
+                        "valueAlt": "calendar_today",
+                        "editor": "input"
+                    },
+                    "IconEdit": {
+                        "name": "Icon edit",
+                        "value": "e82a",
+                        "valueAlt": "edit",
+                        "editor": "input"
+                    },
+                    "IconPopup": {
+                        "name": "Icon popup",
+                        "value": "e82c",
+                        "valueAlt": "star_border",
+                        "editor": "input"
+                    },
+                    "IconLockOpen": {
+                        "name": "Icon lock open",
+                        "value": "e82e",
+                        "valueAlt": "lock_open",
+                        "editor": "input"
+                    },
+                    "IconAddFilter": {
+                        "name": "Icon add filter",
+                        "value": "e82f",
+                        "valueAlt": "filter",
+                        "editor": "input"
+                    },
+                    "IconBlock": {
+                        "name": "Icon block",
+                        "value": "e832",
+                        "valueAlt": "block",
+                        "editor": "input"
+                    },
+                    "IconSettings": {
+                        "name": "Icon settings",
+                        "value": "e833",
+                        "valueAlt": "settings_applications",
+                        "editor": "input"
+                    },
+                    "IconDuplicate": {
+                        "name": "Icon duplicate",
+                        "value": "e834",
+                        "valueAlt": "file_copy",
+                        "editor": "input"
+                    },
+                    "IconCopyRecord": {
+                        "name": "Icon copy record",
+                        "value": "e835",
+                        "valueAlt": "file_copy",
+                        "editor": "input"
+                    },
+                    "IconDownloadAlt": {
+                        "name": "Icon download alt",
+                        "value": "e836",
+                        "valueAlt": "cloud_download",
+                        "editor": "input"
+                    },
+                    "IconClock": {
+                        "name": "Icon clock",
+                        "value": "e837",
+                        "valueAlt": "clock",
+                        "editor": "input"
+                    },
+                    "IconAttention": {
+                        "name": "Icon attention",
+                        "value": "e838",
+                        "valueAlt": "warning",
+                        "editor": "input"
+                    },
+                    "IconHelpCircled": {
+                        "name": "Icon help circled",
+                        "value": "e839",
+                        "valueAlt": "help",
+                        "editor": "input"
+                    },
+                    "IconMail": {
+                        "name": "Icon mail",
+                        "value": "e83c",
+                        "valueAlt": "mail",
+                        "editor": "input"
+                    },
+                    "IconUp": {
+                        "name": "Icon up",
+                        "value": "e83f",
+                        "valueAlt": "arrow_up",
+                        "editor": "input"
+                    },
+                    "IconFirstPage": {
+                        "name": "Icon first page",
+                        "value": "e900",
+                        "valueAlt": "first_page",
+                        "editor": "input"
+                    },
+                    "IconArrowDown": {
+                        "name": "Icon arrow down",
+                        "value": "e901",
+                        "valueAlt": "keyboard_arrow_down",
+                        "editor": "input"
+                    },
+                    "IconArrowLeft": {
+                        "name": "Icon arrow left",
+                        "value": "e902",
+                        "valueAlt": "keyboard_arrow_left",
+                        "editor": "input"
+                    },
+                    "IconArrowRight": {
+                        "name": "Icon arrow right",
+                        "value": "e903",
+                        "valueAlt": "keyboard_arrow_right",
+                        "editor": "input"
+                    },
+                    "IconArrowUp": {
+                        "name": "Icon arrow up",
+                        "value": "e904",
+                        "valueAlt": "keyboard_arrow_up",
+                        "editor": "input"
+                    },
+                    "IconArrowDownFilled": {
+                        "name": "Icon arrow down filled",
+                        "value": "e812",
+                        "valueAlt": "arrow_down",
+                        "editor": "input"
+                    },
+                    "IconArrowLeftFilled": {
+                        "name": "Icon arrow left filled",
+                        "value": "e816",
+                        "valueAlt": "arrow_left",
+                        "editor": "input"
+                    },
+                    "IconArrowRightFilled": {
+                        "name": "Icon arrow right filled",
+                        "value": "e81e",
+                        "valueAlt": "arrow_right",
+                        "editor": "input"
+                    },
+                    "IconArrowUpFilled": {
+                        "name": "Icon arrow up filled",
+                        "value": "e815",
+                        "valueAlt": "arrow_up",
+                        "editor": "input"
+                    },
+                    "IconLastPage": {
+                        "name": "Icon last page",
+                        "value": "e905",
+                        "valueAlt": "last_page",
+                        "editor": "input"
+                    },
+                    "IconMoreHoriz": {
+                        "name": "Icon more horiz",
+                        "value": "e906",
+                        "valueAlt": "more_horiz",
+                        "editor": "input"
+                    },
+                    "IconSkipNext": {
+                        "name": "Icon skip next",
+                        "value": "e907",
+                        "valueAlt": "skip_next",
+                        "editor": "input"
+                    },
+                    "IconCheck": {
+                        "name": "Icon check",
+                        "value": "e908",
+                        "valueAlt": "check",
+                        "editor": "input"
+                    },
+                    "IconModeEdit": {
+                        "name": "Icon mode edit",
+                        "value": "e909",
+                        "valueAlt": "edit",
+                        "editor": "input"
+                    },
+                    "IconReplay": {
+                        "name": "Icon replay",
+                        "value": "e90c",
+                        "valueAlt": "repeat",
+                        "editor": "input"
+                    },
+                    "IconVisibility": {
+                        "name": "Icon visibility",
+                        "value": "e90d",
+                        "valueAlt": "visibility",
+                        "editor": "input"
+                    },
+                    "IconVisibilityOff": {
+                        "name": "Icon visibility off",
+                        "value": "e90e",
+                        "valueAlt": "visibility_off",
+                        "editor": "input"
+                    },
+                    "IconLinkExt": {
+                        "name": "Icon link ext",
+                        "value": "f08e",
+                        "valueAlt": "link",
+                        "editor": "input"
+                    },
+                    "IconCheckEmpty": {
+                        "name": "Icon check empty",
+                        "value": "f096",
+                        "valueAlt": "check_box_outline_blank",
+                        "editor": "input"
+                    },
+                    "IconFilter": {
+                        "name": "Icon filter",
+                        "value": "f0b0",
+                        "valueAlt": "filter_list",
+                        "editor": "input"
+                    },
+                    "IconResizeFullAlt": {
+                        "name": "Icon resize full alt",
+                        "value": "f0b2",
+                        "valueAlt": "call_made",
+                        "editor": "input"
+                    },
+                    "IconMenu": {
+                        "name": "Icon menu",
+                        "value": "f0c9",
+                        "valueAlt": "menu",
+                        "editor": "input"
+                    },
+                    "IconSort1": {
+                        "name": "Icon sort 1",
+                        "value": "f0dc",
+                        "valueAlt": "sort_by_alpha",
+                        "editor": "input"
+                    },
+                    "IconPaste": {
+                        "name": "Icon paste",
+                        "value": "f0ea",
+                        "valueAlt": "file_copy",
+                        "editor": "input"
+                    },
+                    "IconCircleEmpty": {
+                        "name": "Icon circle empty",
+                        "value": "f10c",
+                        "valueAlt": "radio_button_checked",
+                        "editor": "input"
+                    },
+                    "IconCircle": {
+                        "name": "Icon circle",
+                        "value": "f111",
+                        "valueAlt": "radio_button",
+                        "editor": "input"
+                    },
+                    "IconEllipsis": {
+                        "name": "Icon ellipsis",
+                        "value": "f141",
+                        "valueAlt": "more_horiz",
+                        "editor": "input"
+                    },
+                    "IconMinusSquared": {
+                        "name": "Icon minus squared",
+                        "value": "f146",
+                        "valueAlt": "indeterminate_check_box",
+                        "editor": "input"
+                    },
+                    "IconOkSquared": {
+                        "name": "Icon ok squared",
+                        "value": "f14a",
+                        "valueAlt": "check_box",
+                        "editor": "input"
+                    },
+                    "IconSortNameUp": {
+                        "name": "Icon sort name up",
+                        "value": "f15d",
+                        "valueAlt": "arrow_upward",
+                        "editor": "input"
+                    },
+                    "IconSortNameDown": {
+                        "name": "Icon sort name down",
+                        "value": "f15e",
+                        "valueAlt": "arrow_downward",
+                        "editor": "input"
+                    },
+                    "IconSortAltUp": {
+                        "name": "Icon sort alt up",
+                        "value": "f160",
+                        "valueAlt": "import_export",
+                        "editor": "input"
+                    },
+                    "IconSortAltDown": {
+                        "name": "Icon sort alt down",
+                        "value": "f161",
+                        "valueAlt": "import_export",
+                        "editor": "input"
+                    },
+                    "IconSortNumberUp": {
+                        "name": "Icon sort number up",
+                        "value": "f162",
+                        "valueAlt": "arrow_upward",
+                        "editor": "input"
+                    },
+                    "IconSortNumberDown": {
+                        "name": "Icon sort number down",
+                        "value": "f163",
+                        "valueAlt": "arrow_downward",
+                        "editor": "input"
+                    },
+                    "IconDotCircled": {
+                        "name": "Icon dot circled",
+                        "value": "f192",
+                        "valueAlt": "more_horiz",
+                        "editor": "input"
+                    },
+                    "IconToggleOff": {
+                        "name": "Icon toggle off",
+                        "value": "f204",
+                        "valueAlt": "toggle_off",
+                        "editor": "input"
+                    },
+                    "IconToggleOn": {
+                        "name": "Icon toggle on",
+                        "value": "f205",
+                        "valueAlt": "toggle_on",
+                        "editor": "input"
+                    },
+                    "IconGroup": {
+                        "name": "Icon group",
+                        "value": "f247",
+                        "valueAlt": "add",
+                        "editor": "input"
+                    },
+                    "IconUngroup": {
+                        "name": "Icon ungroup",
+                        "value": "f248",
+                        "valueAlt": "remove",
+                        "editor": "input"
+                    },
+                    "IconWindowMaximize": {
+                        "name": "Icon window maximize",
+                        "value": "f2d0",
+                        "valueAlt": "check_box_outline_blank",
+                        "editor": "input"
+                    },
+                    "IconWindowMinimize": {
+                        "name": "Icon window minimize",
+                        "value": "f2d1",
+                        "valueAlt": "minimize",
+                        "editor": "input"
+                    },
+                    "IconWindowRestore": {
+                        "name": "Icon window restore",
+                        "value": "f2d2",
+                        "valueAlt": "open_in_new",
+                        "editor": "input"
+                    },
+                    "IconWindowPinAlt": {
+                        "name": "Icon window pin alt",
+                        "value": "e82d",
+                        "valueAlt": "lock_open",
+                        "editor": "input"
+                    },
+                    "IconWindowPin": {
+                        "name": "Icon window pin",
+                        "value": "e80a",
+                        "valueAlt": "lock",
+                        "editor": "input"
+                    },
+                    "IconDocs": {
+                        "name": "Icon docs",
+                        "value": "f0c5",
+                        "valueAlt": "folder",
+                        "editor": "input"
+                    },
+                    "IconMath": {
+                        "name": "Icon math",
+                        "value": "f01a",
+                        "valueAlt": "functions",
+                        "editor": "input"
+                    },
+                    "IconSpin": {
+                        "name": "Icon spin",
+                        "value": "e80b",
+                        "valueAlt": "autorenew",
+                        "editor": "input"
+                    }
+                }
+            }
+        },
+        "accordion": {
+            "name": "Accordion",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "borderRadius",
+                "uiStateSelected",
+                "uiStateColorSelected",
+                "outline"
+            ],
+            "types": {
+                "accordion": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "accordionUI": {
+                    "selector": "",
+                    "uiStateBorderFocus": {
+                        "name": "Focus state border color",
+                        "value": "{uiStateFocus}",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "accordionItemExpandedOffset": {
+                        "name": "Header expanded offset",
+                        "value": "20px",
+                        "editor": "input",
+                        "relatedProps": []
+                    }
+                },
+                "accordionItem": {
+                    "selector": "smart-accordion-item .smart-accordion-item-header",
+                    "accordionItemHeaderHeight": {
+                        "name": "Header height",
+                        "value": "40px",
+                        "editor": "input",
+                        "relatedProps": []
+                    }
+                },
+                "radius": {
+                    "selector": ".smart-accordion-item",
+                    "itemBorderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                },
+                "firstItemRadius": {
+                    "selector": ".smart-accordion-item",
+                    "name": "First item",
+                    "firstItemBorderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "firstItemBorderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "firstItemBorderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "firstItemBorderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                },
+                "lastItemRadius": {
+                    "selector": ".smart-accordion-item",
+                    "name": "Last item",
+                    "lastItemBorderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "lastItemBorderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "lastItemBorderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "lastItemBorderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                }
+            }
+        },
+        "button": {
+            "name": "Button",
+            "visible": true,
+            "hidden": [
+                "surface",
+                "surfaceColor",
+                "uiStateColorSelected",
+                "uiStateSelected",
+                "borderRadius"
+            ],
+            "types": {
+                "button": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "radius": {
+                    "selector": "",
+                    "borderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "borderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "borderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "borderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                },
+                "success": {
+                    "name": "Success",
+                    "selector": ".success",
+                    "success": {
+                        "name": "Background color",
+                        "value": "rgba(139, 195, 74, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "successColor": {
+                        "name": "Text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "secondary": {
+                    "name": "Secondary",
+                    "selector": ".secondary",
+                    "secondary": {
+                        "name": "Background color",
+                        "value": "rgba(32, 32, 32, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "secondaryColor": {
+                        "name": "Text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "error": {
+                    "name": "Error",
+                    "selector": ".error",
+                    "error": {
+                        "name": "Background color",
+                        "value": "rgba(176, 0, 32, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "errorColor": {
+                        "name": "Text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "carousel": {
+            "name": "Carousel",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "borderRadius",
+                "uiStateFocus",
+                "uiStateColorFocus",
+                "surface",
+                "surfaceColor",
+                "uiStateColorSelected",
+                "uiStateSelected",
+                "outline"
+            ],
+            "types": {
+                "carousel": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "cardView": {
+            "name": "CardView",
+            "visible": true,
+            "hidden": [
+                "borderRadius",
+                "uiStateFocus",
+                "uiStateColorFocus",
+                "uiStateColorSelected",
+                "uiStateSelected",
+                "outline"
+            ],
+            "types": {
+                "layout": {
+                    "selector": "",
+                    "cardViewColumnGap": {
+                        "name": "Layout column gap",
+                        "value": "10px",
+                        "editor": "input"
+                    },
+                    "cardViewRowGap": {
+                        "name": "Layout row gap",
+                        "value": "10px",
+                        "editor": "input"
+                    }
+                },
+                "radius": {
+                    "selector": ".smart-card",
+                    "cardBorder": {
+                        "name": "Card cell border",
+                        "value": "{border}",
+                        "editor": "colorPicker"
+                    },
+                    "cardViewVerticalOffset": {
+                        "name": "Card cell vertical offset",
+                        "value": "15px",
+                        "editor": "input"
+                    },
+                    "borderTopLeftRadius": {
+                        "name": "Card cell border top left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "borderBottomLeftRadius": {
+                        "name": "Card cell border bottom left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "borderTopRightRadius": {
+                        "name": "Card cell border top right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "borderBottomRightRadius": {
+                        "name": "Card cell border bottom right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    }
+                },
+                "cardView": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "editors": {
+            "name": "Editors",
+            "visible": true,
+            "hidden": [
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "radius": {
+                    "selector": "",
+                    "calendarCellBorderTopLeftRadius": {
+                        "name": "Calendar cell border top left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "calendarCellBorderBottomLeftRadius": {
+                        "name": "Calendar cell border bottom left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "calendarCellBorderTopRightRadius": {
+                        "name": "Calendar cell border top right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "calendarCellBorderBottomRightRadius": {
+                        "name": "Calendar cell border bottom right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    }
+                },
+                "itemRadius": {
+                    "selector": "0.smart-list-box.smart-element",
+                    "name": "List Item",
+                    "itemBorderTopLeftRadius": {
+                        "name": "List Item Border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomLeftRadius": {
+                        "name": "List Item Border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderTopRightRadius": {
+                        "name": "List Item Border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomRightRadius": {
+                        "name": "List Item Border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "listItemHorizontalOffset": {
+                        "name": "List Item horizontal offset",
+                        "value": "3px",
+                        "editor": "input"
+                    },
+                    "listItemVerticalOffset": {
+                        "name": "List Item vertical offset",
+                        "value": "3px",
+                        "editor": "input"
+                    },
+                    "listItemHeight": {
+                        "name": "List Item height",
+                        "value": "36px",
+                        "editor": "input"
+                    },
+                    "uiStateBorderFocus": {
+                        "name": "Focus state border color",
+                        "value": "{uiStateFocus}",
+                        "editor": "colorPicker"
+                    },
+                    "uiStateBorderHover": {
+                        "name": "Hover state border color",
+                        "value": "{uiStateHover}",
+                        "editor": "colorPicker"
+                    },
+                    "uiStateBorderSelected": {
+                        "name": "Selected state border color",
+                        "value": "{uiStateSelected}",
+                        "editor": "colorPicker"
+                    }
+                },
+                "editors": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "ganttChart": {
+            "name": "Gantt Chart",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "borderRadius",
+                "uiStateFocus",
+                "uiStateColorFocus",
+                "outline"
+            ],
+            "types": {
+                "ganttChart": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(101, 106, 118, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(132, 136, 145, 0.2)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "grid": {
+            "name": "Grid / TreeGrid",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "outline"
+            ],
+            "types": {
+                "grid": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "cells": {
+                    "selector": "",
+                    "name": "Cells",
+                    "gridCellVerticalBorder": {
+                        "name": "Cells Vertical Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellHorizontalBorder": {
+                        "name": "Cells Horizontal Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellHeaderVerticalBorder": {
+                        "name": "Cells Header Vertical Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellHeaderHorizontalBorder": {
+                        "name": "Cells Header Horizontal Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellHorizontalBorderOpacitySelected": {
+                        "name": "Cells Horizontal Border opacity",
+                        "value": "0.3",
+                        "editor": "input"
+                    },
+                    "gridCellVerticalBorderOpacitySelected": {
+                        "name": "Cells Vertical Border opacity",
+                        "value": "0.3",
+                        "editor": "input"
+                    },
+                    "gridCellBackgroundFreeze": {
+                        "name": "Cells Frozen Background color",
+                        "value": "{surface}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellColorFreeze": {
+                        "name": "Cells Frozen Text color",
+                        "value": "{surfaceColor}",
+                        "editor": "colorPicker"
+                    },
+                    "gridCellFontSize": {
+                        "name": "Font size",
+                        "value": "inherit",
+                        "editor": "input"
+                    },
+                    "gridCellFontWeight": {
+                        "name": "Font weight",
+                        "value": "inherit",
+                        "editor": "input"
+                    }
+                },
+                "layout": {
+                    "selector": "",
+                    "name": "Layout",
+                    "gridRowHeight": {
+                        "name": "Row height",
+                        "value": "30px",
+                        "editor": "input"
+                    },
+                    "gridColumnHeaderHeight": {
+                        "name": "Column Height",
+                        "value": "48px",
+                        "editor": "input"
+                    }
+                },
+                "columnHeader": {
+                    "name": "Column Header",
+                    "selector": ".smart-grid-column-header",
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "gridColumnHorizontalBorder": {
+                        "name": "Column Horizontal Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "gridColumnVerticalBorder": {
+                        "name": "Column Vertical Border color",
+                        "value": "{border}",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            "border"
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "gridColumnFontSize": {
+                        "name": "Font size",
+                        "value": "inherit",
+                        "editor": "input"
+                    },
+                    "gridColumnFontWeight": {
+                        "name": "Font weight",
+                        "value": "inherit",
+                        "editor": "input"
+                    }
+                },
+                "columnMenuButton": {
+                    "name": "Column Menu Button",
+                    "selector": ".smart-action-button",
+                    "uiStateHover": {
+                        "name": "Hover background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hover content color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateBorderHover": {
+                        "name": "Hover border color",
+                        "value": "{uiStateHover}",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Opened background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Opened content color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateBorderFocus": {
+                        "name": "Opened border color",
+                        "value": "{uiStateFocus}",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    }
+                },
+                "columnMenu": {
+                    "name": "Column Menu",
+                    "selector": "0.smart-grid-column-menu",
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "backgroundColor": {
+                        "name": "Text and Icons color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                },
+                "pager": {
+                    "name": "Pager",
+                    "selector": ".smart-grid-pager",
+                    "primary": {
+                        "name": "Buttons background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "primaryColor": {
+                        "name": "Buttons text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    }
+                },
+                "pagerRadius": {
+                    "selector": ".smart-grid-pager smart-pager.smart-element",
+                    "itemBorderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "itemBorderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    }
+                },
+                "alternation": {
+                    "selector": "",
+                    "name": "Alternation",
+                    "alternationIndex0Background": {
+                        "name": "Alternation background color",
+                        "value": "{surface}",
+                        "editor": "colorPicker"
+                    },
+                    "alternationIndex0Color": {
+                        "name": "Alternation text color",
+                        "value": "{surfaceColor}",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "list": {
+            "name": "List Menu",
+            "visible": true,
+            "hidden": [
+                "uiStateColorSelected",
+                "uiStateSelected",
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "list": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "menu": {
+            "name": "Menu",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "uiStateSelected",
+                "uiStateColorSelected"
+            ],
+            "types": {
+                "menu": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "progressBar": {
+            "name": "Progress Bar",
+            "visible": true,
+            "hidden": [
+                "surface",
+                "surfaceColor",
+                "uiStateHover",
+                "uiStateColorHover",
+                "uiStateSelected",
+                "uiStateColorSelected",
+                "uiStateFocus",
+                "uiStateColorFocus",
+                "outline"
+            ],
+            "types": {
+                "progressBar": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "splitter": {
+            "name": "Splitter",
+            "visible": true,
+            "hidden": [
+                "outline",
+                "uiStateSelected",
+                "uiStateColorSelected",
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "splitter": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "scrollbar": {
+            "name": "Scrollbar",
+            "visible": true,
+            "types": {
+                "scrollbar": {
+                    "scrollBarBackground": {
+                        "name": "Scrollbar background color",
+                        "value": "rgba(241, 241, 241, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackground": {
+                        "name": "Scrollbar thumb background color",
+                        "value": "rgba(193, 193, 193, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorder": {
+                        "name": "Scrollbar thumb border color",
+                        "value": "rgba(193, 193, 193, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackgroundHover": {
+                        "name": "Scrollbar thumb hovered background color",
+                        "value": "rgba(168, 168, 168, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderHover": {
+                        "name": "Scrollbar thumb hovered border color",
+                        "value": "rgba(168, 168, 168, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBackgroundActive": {
+                        "name": "Scrollbar thumb active background color",
+                        "value": "rgba(120, 120, 120, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderActive": {
+                        "name": "Scrollbar thumb active border color",
+                        "value": "rgba(120, 120, 120, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackground": {
+                        "name": "Scrollbar arrow background color",
+                        "value": "rgba(241, 241, 241, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorder": {
+                        "name": "Scrollbar arrow border color",
+                        "value": "rgba(241, 241, 241, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColor": {
+                        "name": "Scrollbar arrow color",
+                        "value": "rgba(80, 80, 80, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackgroundHover": {
+                        "name": "Scrollbar arrow hovered background color",
+                        "value": "rgba(210, 210, 210, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorderHover": {
+                        "name": "Scrollbar arrow hovered border color",
+                        "value": "rgba(210, 210, 210, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColorHover": {
+                        "name": "Scrollbar arrow hovered color",
+                        "value": "rgba(80, 80, 80, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBackgroundActive": {
+                        "name": "Scrollbar arrow active background color",
+                        "value": "rgba(120, 120, 120, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonBorderActive": {
+                        "name": "Scrollbar arrow border color",
+                        "value": "rgba(120, 120, 120, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarButtonColorActive": {
+                        "name": "Scrollbar arrow active color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker"
+                    },
+                    "scrollBarThumbBorderTopLeftRadius": {
+                        "name": "Scrollbar thumb border top left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderBottomLeftRadius": {
+                        "name": "Scrollbar thumb bottom left radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderTopRightRadius": {
+                        "name": "Scrollbar thumb top right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "scrollBarThumbBorderBottomRightRadius": {
+                        "name": "Scrollbar thumb bottom right radius",
+                        "value": "0px",
+                        "editor": "input"
+                    }
+                }
+            }
+        },
+        "slider": {
+            "name": "Slider",
+            "visible": true,
+            "hidden": [
+                "background",
+                "backgroundColor",
+                "borderRadius",
+                "uiStateSelected",
+                "uiStateColorSelected",
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "radius": {
+                    "selector": "",
+                    "name": "Slider buttons radius",
+                    "borderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "borderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "borderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    },
+                    "borderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "100%",
+                        "editor": "input"
+                    }
+                },
+                "thumbRadius": {
+                    "selector": "",
+                    "name": "Slider thumb radius",
+                    "sliderThumbBorderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "15px",
+                        "editor": "input"
+                    },
+                    "sliderThumbBorderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "15px",
+                        "editor": "input"
+                    },
+                    "sliderThumbBorderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "15px",
+                        "editor": "input"
+                    },
+                    "sliderThumbBorderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "15px",
+                        "editor": "input"
+                    }
+                },
+                "sizing": {
+                    "selector": "",
+                    "sliderTrackSize": {
+                        "name": "Track size",
+                        "value": "1px",
+                        "editor": "input"
+                    },
+                    "sliderThumbWidth": {
+                        "name": "Thumb width",
+                        "value": "20px",
+                        "editor": "input"
+                    },
+                    "sliderThumbHeight": {
+                        "name": "Thumb height",
+                        "value": "20px",
+                        "editor": "input"
+                    },
+                    "sliderSpinButtonWidth": {
+                        "name": "Button width",
+                        "value": "30px",
+                        "editor": "input"
+                    },
+                    "sliderSpinButtonHeight": {
+                        "name": "Button height",
+                        "value": "30px",
+                        "editor": "input"
+                    }
+                },
+                "slider": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "tabs": {
+            "name": "Tabs",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "settings": {
+                    "selector": "",
+                    "tabItemInitialOffset": {
+                        "name": "Tabs Initial offset",
+                        "value": "5px",
+                        "editor": "input"
+                    },
+                    "tabItemOffset": {
+                        "name": "Tabs offset",
+                        "value": "5px",
+                        "editor": "input"
+                    },
+                    "tabItemPadding": {
+                        "name": "Tabs offset",
+                        "value": "12px 16px",
+                        "editor": "input"
+                    },
+                    "tabsHeaderPadding": {
+                        "name": "Tabs header padding",
+                        "value": "0px",
+                        "editor": "input"
+                    },
+                    "tabsHeaderOffset": {
+                        "name": "Tabs header offset",
+                        "value": "0px",
+                        "editor": "input"
+                    }
+                },
+                "selectionBar": {
+                    "selector": ".smart-tabs-selection-bar",
+                    "tabItemSelectionBar": {
+                        "name": "Selection bar",
+                        "value": "{primary}",
+                        "editor": "colorPicker"
+                    }
+                },
+                "radius": {
+                    "selector": "",
+                    "itemBorderTopLeftRadius": {
+                        "name": "Item border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomLeftRadius": {
+                        "name": "Item border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderTopRightRadius": {
+                        "name": "Item border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomRightRadius": {
+                        "name": "Item border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                },
+                "tabs": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "tree": {
+            "name": "Tree View",
+            "visible": true,
+            "hidden": [
+                "surface",
+                "surfaceColor",
+                "primary",
+                "primaryColor",
+                "uiStateFocus",
+                "uiStateColorFocus"
+            ],
+            "types": {
+                "radius": {
+                    "selector": "",
+                    "itemBorderTopLeftRadius": {
+                        "name": "Item border top left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomLeftRadius": {
+                        "name": "Item border bottom left radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderTopRightRadius": {
+                        "name": "Item border top right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    },
+                    "itemBorderBottomRightRadius": {
+                        "name": "Item border bottom right radius",
+                        "value": "{borderRadius}",
+                        "editor": "input"
+                    }
+                },
+                "tree": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "tooltip": {
+            "name": "Tooltip",
+            "visible": true,
+            "hidden": [
+                "primary",
+                "primaryColor",
+                "border",
+                "surface",
+                "surfaceColor",
+                "background",
+                "backgroundColor",
+                "uiStateHover",
+                "uiStateColorHover",
+                "uiStateSelected",
+                "uiStateColorSelected",
+                "uiStateFocus",
+                "uiStateColorFocus",
+                "outline",
+                "borderRadius"
+            ],
+            "types": {
+                "tooltipSecondary": {
+                    "selector": ".smart-tooltip",
+                    "secondary": {
+                        "name": "Background color",
+                        "value": "rgba(50, 50, 50, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            "border"
+                        ]
+                    },
+                    "secondaryColor": {
+                        "name": "Text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    }
+                },
+                "radius": {
+                    "selector": ".smart-tooltip-content",
+                    "borderTopLeftRadius": {
+                        "name": "Border top left radius",
+                        "value": "0px",
+                        "cssProperty": "borderTopLeftRadius",
+                        "editor": "input"
+                    },
+                    "borderBottomLeftRadius": {
+                        "name": "Border bottom left radius",
+                        "value": "0px",
+                        "cssProperty": "borderBottomLeftRadius",
+                        "editor": "input"
+                    },
+                    "borderTopRightRadius": {
+                        "name": "Border top right radius",
+                        "value": "0px",
+                        "cssProperty": "borderTopRightRadius",
+                        "editor": "input"
+                    },
+                    "borderBottomRightRadius": {
+                        "name": "Border bottom right radius",
+                        "value": "0px",
+                        "cssProperty": "borderBottomRightRadius",
+                        "editor": "input"
+                    }
+                },
+                "tooltip": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        },
+        "window": {
+            "name": "Window",
+            "visible": true,
+            "hidden": [
+                "uiStateColorFocus",
+                "uiStateFocus",
+                "uiStateHover",
+                "uiStateColorHover",
+                "uiStateColorSelected",
+                "uiStateSelected",
+                "outline"
+            ],
+            "types": {
+                "window": {
+                    "primary": {
+                        "name": "Primary color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderActive"
+                            },
+                            {
+                                "prop": "uiStateActive"
+                            }
+                        ]
+                    },
+                    "primaryColor": {
+                        "name": "Primary text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateColorActive"
+                            }
+                        ]
+                    },
+                    "backgroundColor": {
+                        "name": "Text color",
+                        "value": "rgba(132, 136, 145, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "background": {
+                        "name": "Background color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surfaceColor": {
+                        "name": "Header text color",
+                        "value": "rgba(255, 255, 255, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "surface": {
+                        "name": "Header background color",
+                        "value": "rgba(9, 103, 201, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "border": {
+                        "name": "Border color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "borderRadius": {
+                        "name": "Border radius",
+                        "value": "4px",
+                        "editor": "input",
+                        "relatedProps": [
+                            {
+                                "prop": "borderTopLeftRadius"
+                            },
+                            {
+                                "prop": "borderTopRightRadius"
+                            },
+                            {
+                                "prop": "borderBottomLeftRadius"
+                            },
+                            {
+                                "prop": "borderBottomRightRadius"
+                            }
+                        ]
+                    },
+                    "uiStateColorHover": {
+                        "name": "Hovered state text color",
+                        "value": "rgba(51, 51, 51, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateHover": {
+                        "name": "Hovered state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderHover"
+                            }
+                        ]
+                    },
+                    "uiStateColorSelected": {
+                        "name": "Selected state text color",
+                        "value": "rgba(229, 17, 65, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateSelected": {
+                        "name": "Selected state background color",
+                        "value": "rgba(0, 92, 153, 0.1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderSelected"
+                            }
+                        ]
+                    },
+                    "uiStateColorFocus": {
+                        "name": "Focus state text color",
+                        "value": "rgba(0, 0, 0, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": []
+                    },
+                    "uiStateFocus": {
+                        "name": "Focus state background color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker",
+                        "relatedProps": [
+                            {
+                                "prop": "uiStateBorderFocus"
+                            },
+                            {
+                                "prop": "outline"
+                            }
+                        ]
+                    },
+                    "outline": {
+                        "name": "Outline color",
+                        "value": "rgba(243, 246, 249, 1)",
+                        "editor": "colorPicker"
+                    }
+                }
+            }
+        }
+    },
+    "baseTheme": "blue"
+}
