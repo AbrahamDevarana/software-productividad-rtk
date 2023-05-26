@@ -10,12 +10,15 @@ import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { Icon } from '@/components/Icon';
 import { KanbanProyecto } from '@/components/proyectos/KanbanProyecto';
+import { getUpdatedHitoThunk } from '@/redux/features/hitos/hitosThunk';
+import { getUpdatedTareaThunk } from '@/redux/features/tareas/tareasThunk';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
     const { currentProyecto, isLoadingProyecto } = useAppSelector(state => state.proyectos)
+    const { socket } = useAppSelector(state => state.socket)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
 
@@ -63,6 +66,21 @@ export const ProyectoView = () => {
     }, [currentProyecto])
     
     const {selectedUsers, setSelectedUsers, spanUsuario, tagRender} = useSelectUser(usuarios)
+
+
+    useEffect(() => {        
+        socket?.on('hitos:updated', (hito) => {                       
+            dispatch(getUpdatedHitoThunk(hito))
+        })
+
+        socket?.on('tareas:updated', (tarea) => {          
+            dispatch(getUpdatedTareaThunk(tarea))
+        })
+
+        return () => {
+            socket?.off('hitos:updated')
+        }
+    }, [socket])
     
     return (
         <div className='min-h-[500px]'>

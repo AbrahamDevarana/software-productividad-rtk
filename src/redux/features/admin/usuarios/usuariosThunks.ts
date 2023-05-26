@@ -47,9 +47,9 @@ export const createUsuarioThunk = createAsyncThunk(
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: usuario
             }
-            const response = await clientAxios.post(`/usuarios`, config);
+
+            const response = await clientAxios.post(`/usuarios`, usuario, config);
             return response.data.usuario
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -64,9 +64,8 @@ export const updateUsuarioThunk = createAsyncThunk(
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: usuario
             }
-            const response = await clientAxios.put(`/usuarios/${usuario.id}`, config);
+            const response = await clientAxios.put(`/usuarios/${usuario.id}`, usuario, config);
             return response.data.usuario
         } catch (error: any) {
             return rejectWithValue(error.response.data)

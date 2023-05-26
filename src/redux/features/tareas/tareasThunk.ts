@@ -1,8 +1,9 @@
 
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import { TareasProps } from '@/interfaces';
-import { RootState } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import { clientAxios } from '@/config/axios';
+import { getUpdatedTarea } from '../hitos/hitosSlice';
 
 
 export const getTareaThunk = createAsyncThunk(
@@ -56,3 +57,9 @@ export const updateTareaThunk = createAsyncThunk(
         }
     }
 )
+
+export const getUpdatedTareaThunk = (tarea: TareasProps) => async ( dispatch: AppDispatch ) => {
+    dispatch(getUpdatedTarea(tarea))
+}
+
+

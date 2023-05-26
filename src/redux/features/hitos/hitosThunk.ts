@@ -1,8 +1,9 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import { clientAxios } from '@/config/axios';
 import { HitosProps } from '@/interfaces';
+import { getUpdatedHito } from './hitosSlice';
 
 
 export const getHitosThunk = createAsyncThunk(
@@ -76,3 +77,8 @@ export const deleteHitoThunk = createAsyncThunk(
         }
     }
 )
+
+
+export const getUpdatedHitoThunk = (hito: HitosProps) => async (dispatch: AppDispatch) => {
+    dispatch(getUpdatedHito(hito))
+}

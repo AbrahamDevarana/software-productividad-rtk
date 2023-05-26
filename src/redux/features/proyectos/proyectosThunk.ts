@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from '@/redux/store';
 import { ProyectosProps } from '@/interfaces';
-import { clearProyecto, clearProyectos } from './proyectosSlice';
+import { clearProyecto, clearProyectos, getCreatedProyecto, getUpdatedProyecto } from './proyectosSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
@@ -21,7 +21,6 @@ export const getProyectosThunk = createAsyncThunk(
         }
     }
 )
-
 
 export const getProyectoThunk = createAsyncThunk(
     'proyectos/getProyecto',
@@ -93,6 +92,17 @@ export const deleteProyectoThunk = createAsyncThunk(
 )
 
 
+export const getCreatedProyectoThunk = (proyecto: ProyectosProps) => async ( dispatch: AppDispatch ) => {
+    dispatch(getCreatedProyecto(proyecto))
+}
+
+export const getUpdatedProyectoThunk = (proyecto: ProyectosProps) => async ( dispatch: AppDispatch ) => {
+    dispatch(getUpdatedProyecto(proyecto))
+}
+
+
+
+
 export const clearProyectoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearProyecto())
 }
@@ -101,31 +111,3 @@ export const clearProyectosThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearProyectos())
 }
 
-
-
-// //  Hitos
-
-// export const updateHitoProyectoThunk = (hito: HitosProps) => async (dispatch: AppDispatch, getState: () => RootState) => {
-//     dispatch(checkingProyecto())
-//     const response = await updateHitoProvider(hito, getState)
-//     if (response.ok) {
-//         dispatch(updateProyecto(response.hito))
-//     } else {
-//         dispatch(setProyectoError(response.errorMessage))
-//     }
-// }
-
-
-
-// //  Validar si debe existir aquí o en hitos
-
-
-// export const createHitoProyectoThunk = (hito: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
-//     dispatch(checkingProyecto())
-//     const response = await createHitoProvider(hito, getState)
-//     if (response.ok) {
-//         dispatch(updateProyecto(response.hito))
-//     } else {
-//         dispatch(setProyectoError(response.errorMessage))
-//     }
-// }

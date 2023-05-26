@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
 import { Box } from "@/components/ui"
-import { clearProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk,  } from "@/redux/features/proyectos/proyectosThunk"
+import { clearProyectoThunk, deleteProyectoThunk, getCreatedProyectoThunk, getProyectoThunk, getProyectosThunk, getUpdatedProyectoThunk,  } from "@/redux/features/proyectos/proyectosThunk"
 import { FaPlus } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { FloatButton, Modal } from "antd"
@@ -14,6 +14,7 @@ export const Proyectos = () => {
     const dispatch = useAppDispatch()
     const { proyectos, currentProyecto, isLoading, isLoadingProyecto  } = useAppSelector(state => state.proyectos)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
+    const { socket } = useAppSelector(state => state.socket)
 
     const navigate = useNavigate()
 
@@ -40,6 +41,22 @@ export const Proyectos = () => {
         dispatch(deleteProyectoThunk(proyectoId))
         setIsModalVisible(true)
     }
+
+    useEffect(() => {
+        socket?.on('proyecto:updated', (proyecto) => {            
+            dispatch(getUpdatedProyectoThunk(proyecto))
+        })
+
+        socket?.on('proyecto:created', (proyecto) => {
+            dispatch(getCreatedProyectoThunk(proyecto))
+        })
+
+        return () => {
+            socket?.off('proyecto:updated')
+            socket?.off('proyecto:created')
+        }
+    }, [socket])
+
 
     
     return (

@@ -25,6 +25,16 @@ const hitosSlice = createSlice({
     name: 'hitos',
     initialState,
     reducers: {  
+        getUpdatedHito: (state, action) => {
+            state.hitos = state.hitos.map(hito => hito.id === action.payload.id ? action.payload : hito)
+        },
+        getUpdatedTarea: (state, action) => {
+            const { id, hitoId } = action.payload
+            const hito = state.hitos.find(hito => hito.id === hitoId)
+            if(hito) {
+                hito.tareas = hito.tareas.map(tarea => tarea.id === id ? action.payload : tarea)            
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -64,18 +74,17 @@ const hitosSlice = createSlice({
             state.error = true;
         })
         .addCase(updateHitoThunk.pending, (state) => {
-            state.isLoading = true;
+            state.isLoadingCurrentHito = true;
             state.error = false;
         })
         .addCase(updateHitoThunk.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.isLoadingCurrentHito = false;
             state.hitos = state.hitos.map(hito =>  (hito.id === action.payload.id ) ? action.payload : hito)
         })
         .addCase(updateHitoThunk.rejected, (state) => {
-            state.isLoading = false;
+            state.isLoadingCurrentHito = false;
             state.error = true;
         })
-
 
         // Tareas
         .addCase(createTareaThunk.pending, (state) => {
@@ -114,7 +123,7 @@ const hitosSlice = createSlice({
 })
 
 
-export const {  } = hitosSlice.actions;
+export const { getUpdatedHito, getUpdatedTarea } = hitosSlice.actions;
 export default hitosSlice.reducer;
 
 

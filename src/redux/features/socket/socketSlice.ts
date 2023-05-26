@@ -1,6 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Socket } from 'socket.io-client';
+import { connectSocketThunk, disconnectSocketThunk } from './socketThunk';
 
-const initialState = {
+
+
+interface SocketState {
+    socket: Socket | null;
+    online: boolean;
+}
+
+const initialState: SocketState = {
     socket: null,
     online: false
 }
@@ -9,18 +18,18 @@ const socketSlice = createSlice({
     name: 'socket',
     initialState,
     reducers: {
-        connectSocket: (state, action) => {
-            state.socket = action.payload.socket
-            state.online = action.payload.online
-        },
-        disconnectSocket: (state, action) => {
-            state.socket = null
-            state.online = false
-        }
+    },
+    extraReducers: builder => {
+        builder.addCase(connectSocketThunk.fulfilled, (state, action) => {
+            state.socket = action.payload.socket;
+            state.online = action.payload.online;
+        })
+        builder.addCase(disconnectSocketThunk.fulfilled, (state, action) => {
+            state.socket = action.payload.socket;
+            state.online = action.payload.online;
+        })
     }
 })
 
-
-export const {connectSocket} = socketSlice.actions
-
-export default socketSlice.reducer
+export const { } = socketSlice.actions;
+export default socketSlice.reducer;

@@ -1,12 +1,20 @@
-import { useAppSelector } from '@/redux/hooks';
 import { useMemo, useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 
-export const useSocket = (serverPath:string) => {
 
-    // const { userAuth } = useAppSelector( state => state.auth );    
+interface ServerToClientEvents {
+    noArg: () => void;
+    basicEmit: (a: number, b: string, c: Buffer) => void;
+    withAck: (d: string, callback: (e: number) => void) => void;
+  }
+  
+  interface ClientToServerEvents {
+    hello: () => void;
+  }
 
-    const socket = useMemo( () => io( serverPath , {
+export const useSocket = (serverPath:string) => { 
+
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = useMemo( () => io( serverPath , {
         transports: ['websocket'],
         autoConnect: true,
         query: {

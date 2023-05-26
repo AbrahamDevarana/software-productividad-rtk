@@ -174,7 +174,8 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
     const activeHitos = useMemo(() => {
         return hitos.map((hito: HitosProps) => hito.id)
     }, [hitos])
-    
+
+
 
     if(isLoading) return ( <Loading /> )
     return (
@@ -192,17 +193,23 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
                             <Form 
                                 onClick={ e => e.stopPropagation()}
                             >
-                                <Input
-                                    onBlur={ e => handleChangeHito(hito, e) } 
-                                    defaultValue={hito.titulo} 
-                                    onPressEnter={ (e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                            e.currentTarget.blur()
+                                <Form.Item
+                                    name='titulo'
+                                    shouldUpdate
+                                    >
+                                    <Input
+                                        onBlur={ e => handleChangeHito(hito, e) } 
+                                        defaultValue={hito.titulo}
+                                        name='titulo'
+                                        onPressEnter={ (e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                e.currentTarget.blur()
+                                            }
                                         }
-                                    }
-                                    className='customInput'
+                                        className='customInput'
                                     />
+                                </Form.Item>
                             </Form>
                         } key={hito.id}>
                         <Table

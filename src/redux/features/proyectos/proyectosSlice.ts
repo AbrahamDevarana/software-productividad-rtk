@@ -38,7 +38,13 @@ const proyectosSlice = createSlice({
         },
         clearProyectos: (state) => {
             state.proyectos = initialState.proyectos
-        },        
+        },
+        getCreatedProyecto: (state, action) => {
+            state.proyectos.push(action.payload)
+        },
+        getUpdatedProyecto: (state, action) => {
+            state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -115,6 +121,7 @@ const proyectosSlice = createSlice({
 export const {
     clearProyecto,
     clearProyectos,
-} = proyectosSlice.actions
+    getCreatedProyecto,
+    getUpdatedProyecto } = proyectosSlice.actions
 
 export default proyectosSlice.reducer
