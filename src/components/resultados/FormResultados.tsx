@@ -18,59 +18,59 @@ interface FormResultadosProps {
 
 export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handleCurrent, current}) => {
 
-    const dispatch = useAppDispatch()
-    const { error } = useAppSelector(state => state.operativos)
-    const { currentResultadoClave } = useAppSelector(state => state.resultados)
-    const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultadosClave || [] )
+    // const dispatch = useAppDispatch()
+    // const { error } = useAppSelector(state => state.operativos)
+    // const { currentResultadoClave } = useAppSelector(state => state.resultados)
+    // const [ resultadoList, setResultadoList ] = useState(currentOperativo.resultadosClave || [] )
 
-    const [ resultado, setResultado ] = useState<ResultadoClaveProps>({
-        id: '',
-        nombre: '',
-        tipoProgreso: "porcentaje",
-        progreso: 0,
-        fechaInicio: dayjs().startOf('quarter').format('YYYY-MM-DD'),
-        fechaFin: dayjs().endOf('quarter').format('YYYY-MM-DD'),
-        operativoId: '',
-        propietarioId: ''
-    })
+    // const [ resultado, setResultado ] = useState<ResultadoClaveProps>({
+    //     id: '',
+    //     nombre: '',
+    //     tipoProgreso: "porcentaje",
+    //     progreso: 0,
+    //     fechaInicio: dayjs().startOf('quarter').format('YYYY-MM-DD'),
+    //     fechaFin: dayjs().endOf('quarter').format('YYYY-MM-DD'),
+    //     operativoId: '',
+    //     propietarioId: ''
+    // })
 
 
-    useEffect(() => {
-        if ( currentOperativo.id === '' ) return
-        dispatch( getResultadosThunk(currentOperativo.id) )
-    }, [currentOperativo.id])
+    // useEffect(() => {
+    //     if ( currentOperativo.id === '' ) return
+    //     dispatch( getResultadosThunk(currentOperativo.id) )
+    // }, [currentOperativo.id])
     
     
     
-    const handleOnSubmit = async (values: ResultadoClaveProps) => {
+    // const handleOnSubmit = async (values: ResultadoClaveProps) => {
         
-        const query = {
-            ...values,
-            operativoId: currentOperativo.id,
-            propietarioId: currentOperativo.propietarioId
-        }
+    //     const query = {
+    //         ...values,
+    //         operativoId: currentOperativo.id,
+    //         propietarioId: currentOperativo.propietarioId
+    //     }
         
-        if ( currentOperativo.id !== '' ){
-            if(query.id === ''){
-                await dispatch( createResultadoThunk(query) )
-                if(!error){
-                    setResultadoList( [...resultadoList, query] )
-                }
-            }else{
-                dispatch( updateResultadoThunk(query) )
-                setResultadoList( resultadoList.map( resultado => resultado.id === query.id ? query : resultado ) )
-            }
+    //     if ( currentOperativo.id !== '' ){
+    //         if(query.id === ''){
+    //             await dispatch( createResultadoThunk(query) )
+    //             if(!error){
+    //                 setResultadoList( [...resultadoList, query] )
+    //             }
+    //         }else{
+    //             dispatch( updateResultadoThunk(query) )
+    //             setResultadoList( resultadoList.map( resultado => resultado.id === query.id ? query : resultado ) )
+    //         }
            
-        }
-    }
+    //     }
+    // }
 
-    const handleEditResultado = (resultadoId: string ) => {
-        dispatch( getResultadoThunk(resultadoId) )
-    }
+    // const handleEditResultado = (resultadoId: string ) => {
+    //     dispatch( getResultadoThunk(resultadoId) )
+    // }
 
-    useEffect(() => {
-        setResultado(currentResultadoClave)
-    }, [currentResultadoClave])
+    // useEffect(() => {
+    //     setResultado(currentResultadoClave)
+    // }, [currentResultadoClave])
 
 
 
@@ -78,7 +78,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handle
     return (
     <>
 
-        <div className="grid grid-cols-4 gap-x-10">
+        {/* <div className="grid grid-cols-4 gap-x-10">
             <div className='col-span-2'>
                 <ul className=''>
                    {
@@ -151,7 +151,7 @@ export const FormResultados:FC<FormResultadosProps> = ({currentOperativo, handle
                 </Formik>
             </div>
 
-        </div>
+        </div> */}
     
     </>
   )

@@ -7,7 +7,7 @@ import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup';
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
-import { createObjetivoThunk, updateObjetivoThunk } from '@/redux/features/operativo/operativosThunk'
+import { createOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
 import { Button } from '../ui'
 
 
@@ -39,10 +39,10 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, h
         }
         
         if(currentOperativo.id === ''){
-            dispatch(createObjetivoThunk(query))
+            dispatch(createOperativoThunk(query))
             handleCurrent(current + 1)
         }else{
-            dispatch(updateObjetivoThunk(query))
+            dispatch(updateOperativoThunk(query))
         }
     }
 
@@ -150,7 +150,6 @@ export const FormObjetivo:FC<FormObjetivoProps> = ({currentOperativo, current, h
                             value={values.operativosResponsable?.map( usuario => usuario.id)}
                             onBlur={handleBlur}
                             onChange={
-                                // push into values.responsables_op
                                 (value) => {
                                     const participantes = usuarios.filter( usuario => value.includes(usuario.id))
                                     setFieldValue('responsables_op', participantes)

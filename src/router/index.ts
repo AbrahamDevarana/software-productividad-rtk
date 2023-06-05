@@ -18,6 +18,7 @@ import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 import { Tactico } from '@/pages/Tactico';
 import { Proyectos } from '@/pages/Proyectos';
 import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
+import { OperativoView } from '@/pages/Operativos/OperativoView';
 
 
 interface Props {
@@ -95,10 +96,16 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         component: Devarana
     },
     {
-        title: "Objetivos",
+        title: "Objetivos Operativos",
         path: '/objetivos',
         layout: LayoutApp,
         component: Objetivos
+    },
+    {
+        title: "Objetivos Operativos",
+        path: '/objetivos/:id',
+        layout: LayoutApp,
+        component: OperativoView
     },
     {
         title: "Estrategia",

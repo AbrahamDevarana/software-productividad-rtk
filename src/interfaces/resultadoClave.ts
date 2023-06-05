@@ -1,6 +1,6 @@
 
 
-import { InitialState, Paginate } from ".";
+import { AccionesProps, InitialState, Paginate } from ".";
 
 
 
@@ -14,12 +14,14 @@ export interface ResultadoClaveProps {
     fechaFin: string | Date
     operativoId: string
     propietarioId: string
+    acciones: AccionesProps[]
 }
 
 
 
 export interface ResultadoClaveState extends InitialState{
     resultadosClave: ResultadoClaveProps[];
+    isLoadingResultado: boolean;
     paginate?:     Paginate;
     currentResultadoClave: ResultadoClaveProps;
 }

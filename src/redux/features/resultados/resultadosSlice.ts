@@ -1,16 +1,15 @@
 
 import { ResultadoClaveState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
+import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk} from "./resultadosThunk";
 
 
 const initialState: ResultadoClaveState = {
     resultadosClave: [],
     isLoading: false,
+    isLoadingResultado: false,
     infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
     currentResultadoClave: {
         id: '',
         nombre: '',
@@ -20,8 +19,11 @@ const initialState: ResultadoClaveState = {
         fechaFin: new Date(),
         operativoId: '',
         propietarioId: '',
+        acciones: []
     }
 }
+
+
 
         
 
@@ -29,46 +31,71 @@ const resultadoClaveSlice = createSlice({
     name: 'resultadoClaveSlice',
     initialState,
     reducers: {
-        checkingResultados: (state) => {
-            state.isLoading = true
-            state.updated = false
-        },
-        setResultadoClaveError: (state, action) => {
-            state.isLoading = false
-            state.infoMessage = action.payload
-            state.error = true
-        },
-        getResultadosClave: (state, action) => {
-            state.isLoading = false
-            state.resultadosClave = action.payload.resultados
-        },
-        getResultadoClave: (state, action) => {
-            state.isLoading = false
-            state.currentResultadoClave = action.payload.resultado
-        },
-        createResultadoClave: (state, action) => {
-            state.isLoading = false
-            state.created = true
-        },
-        updateResultadoClave: (state, action) => {
-            state.isLoading = false
-            state.updated = true,
+        clearResultadoClave: (state) => {
             state.currentResultadoClave = initialState.currentResultadoClave
-        },
-        deleteResultadoClave: (state, action) => {
-            state.isLoading = false
-            state.deleted = true
-        },
-        cleanCurrentResultadoClave: (state) => {
-            state.currentResultadoClave = initialState.currentResultadoClave
-        },
-        cleanResultadosClave: (state) => {
-            state.resultadosClave = initialState.resultadosClave
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getResultadosThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getResultadosThunk.fulfilled, (state, { payload }) => {
+                state.isLoading = false
+                state.resultadosClave = payload
+            })
+            .addCase(getResultadosThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(getResultadoThunk.pending, (state) => {
+                state.isLoadingResultado = true
+            })
+            .addCase(getResultadoThunk.fulfilled, (state, { payload }) => {
+                state.isLoadingResultado = false
+                state.currentResultadoClave = payload
+            })
+            .addCase(getResultadoThunk.rejected, (state) => {
+                state.isLoadingResultado = false
+                state.error = true
+            })
+            .addCase(createResultadoThunk.pending, (state) => {
+                state.isLoadingResultado = true
+            })
+            .addCase(createResultadoThunk.fulfilled, (state, {payload}) => {
+                state.isLoadingResultado = false
+                state.resultadosClave = [...state.resultadosClave, payload]
+            })
+            .addCase(createResultadoThunk.rejected, (state) => {
+                state.isLoadingResultado = false
+                state.error = true
+            })
+            .addCase(updateResultadoThunk.pending, (state) => {
+                state.isLoadingResultado = true
+            })
+            .addCase(updateResultadoThunk.fulfilled, (state, {payload}) => {
+                state.isLoadingResultado = false
+                state.resultadosClave = state.resultadosClave.map(resultado => resultado.id === payload.id ? payload : resultado)
+            })
+            .addCase(updateResultadoThunk.rejected, (state) => {
+                state.isLoadingResultado = false
+                state.error = true
+            })
+            .addCase(deleteResultadoThunk.pending, (state) => {
+                state.isLoadingResultado = true
+            })
+            .addCase(deleteResultadoThunk.fulfilled, (state, {payload}) => {
+                state.isLoadingResultado = false
+                state.resultadosClave = state.resultadosClave.filter(resultado => resultado.id !== payload)
+            })
+            .addCase(deleteResultadoThunk.rejected, (state) => {
+                state.isLoadingResultado = false
+                state.error = true
+            })
     }
 })
 
-export const { checkingResultados, setResultadoClaveError, getResultadosClave, getResultadoClave, createResultadoClave, updateResultadoClave, deleteResultadoClave, cleanCurrentResultadoClave, cleanResultadosClave } = resultadoClaveSlice.actions
+export const { clearResultadoClave } = resultadoClaveSlice.actions
 
 export default resultadoClaveSlice.reducer
 

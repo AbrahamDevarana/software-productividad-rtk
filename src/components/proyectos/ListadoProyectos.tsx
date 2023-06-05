@@ -195,7 +195,7 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
                             >
                                 <Form.Item
                                     name='titulo'
-                                    shouldUpdate
+                                    className='mb-0'
                                     >
                                     <Input
                                         onBlur={ e => handleChangeHito(hito, e) } 

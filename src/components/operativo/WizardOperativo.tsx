@@ -34,7 +34,6 @@ export const WizardOperativo:FC = () => {
                     items={[
                         { title: 'Objetivo' },
                         { title: 'Resultados Clave' },
-                        { title: 'Organizate'}
                     ]}
                 />
             </Box>
@@ -46,10 +45,7 @@ export const WizardOperativo:FC = () => {
                 : (
                     <div className={`pt-24`}>
                         { current === 0 && <FormObjetivo currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
-                        
                         { current === 1 && <FormResultados currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
-        
-                        {/* { current === 2 && <CalendarObjetivo currentOperativo={currentOperativo} /> } */}
                     </div>
                 )
             }

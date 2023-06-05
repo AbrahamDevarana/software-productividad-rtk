@@ -2,9 +2,10 @@ import {FC} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
-import { getObjetivoThunk } from '@/redux/features/operativo/operativosThunk';
+import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
 import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
 import { getColor } from '@/helpers';
+import { Link } from 'react-router-dom';
 
 
 interface ObjetivoProps {
@@ -18,11 +19,20 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
-        dispatch(getObjetivoThunk(id))
+        dispatch(getOperativoThunk(id))
         setIsModalVisible(true)
     }
 
     const items: MenuProps['items'] = [
+        {
+            key: 'view',
+            label: (
+                <Link to={`${objetivo.id}`} >
+                    <Icon iconName='faEye' className='text-devarana-graph'/>
+                    <span> Ver </span>
+                </Link>
+            )
+        },
         {
             key: 'edit',
             label: (
@@ -31,7 +41,6 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                     <span>Editar</span>
                 </Space>
             )
-            
         }
     ]
 

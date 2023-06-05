@@ -1,7 +1,7 @@
 import { clientAxios } from '@/config/axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '@/redux/store';
-import { clearOperativo, } from './operativosSlice';
+import { clearObjetivo, } from './operativosSlice';
 import { OperativoProps } from '@/interfaces';
 
 
@@ -29,7 +29,7 @@ export const getOperativosThunk = createAsyncThunk(
     }
 )
 
-export const getObjetivoThunk = createAsyncThunk(
+export const getOperativoThunk = createAsyncThunk(
     'operativos/getObjetivo',
     async (operativoId: string, {rejectWithValue, getState}) => {
         try {
@@ -39,6 +39,7 @@ export const getObjetivoThunk = createAsyncThunk(
             }
 
             const response = await clientAxios.get<Props>(`/operativos/${operativoId}`, config);
+        
             return response.data.operativo
         }
         catch (error: any) {
@@ -47,7 +48,7 @@ export const getObjetivoThunk = createAsyncThunk(
     }
 )
         
-export const createObjetivoThunk = createAsyncThunk(
+export const createOperativoThunk = createAsyncThunk(
     'operativos/createObjetivo',
     async (operativo: OperativoProps, {rejectWithValue, getState}) => {
         try {
@@ -65,7 +66,7 @@ export const createObjetivoThunk = createAsyncThunk(
     }
 )
 
-export const updateObjetivoThunk = createAsyncThunk(
+export const updateOperativoThunk = createAsyncThunk(
     'operativos/updateObjetivo',
     async (operativo: OperativoProps, {rejectWithValue, getState}) => {
         try {   
@@ -86,6 +87,6 @@ export const updateObjetivoThunk = createAsyncThunk(
 
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {
-    dispatch(clearOperativo())
+    dispatch(clearObjetivo())
 }
 
