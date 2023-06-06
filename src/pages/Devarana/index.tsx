@@ -11,6 +11,7 @@ import { Avatar } from 'antd';
 import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
 import { Chart } from '@/components/svg/devarana/Chart';
 
+import '@/assets/scss/devarana.scss'
 
 export const Devarana: React.FC = () => {
 
@@ -28,7 +29,18 @@ export const Devarana: React.FC = () => {
   return (
     <div className="animate__animated animate__fadeIn animate__faster">
         <div>
-            <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20">
+            <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20 relative flex items-center justify-center">
+                <div className="flex justify-center">
+                        <p className="pr-2 font-playfair lg:text-4xl sm:text-base text-sm text-white">
+                            ¡Descubre
+                        </p>
+                        <div className="lg:h-[48px] h-[30px] overflow-hidden ">
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">el nuevo concepto de Resort-Living!</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">tu nuevo estilo de vida!</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">Royal View!</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">el nuevo estándar de la exclusividad!</p>
+                        </div>
+                    </div>
             </Box>
             <Box className="-my-10 py-2 mx-5 mb-10 glassMorph overflow-hidden">
                 <div className="scroller-container">
