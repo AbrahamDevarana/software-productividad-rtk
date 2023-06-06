@@ -13,6 +13,7 @@ const initialState: AccionesState = {
         status: 'SIN_INICIAR',
         fechaInicio: new Date(),
         fechaFin: new Date(),
+        resultadoClaveId: '',
         propietarioId: {
             id: '',
             nombre: '',
