@@ -32,13 +32,13 @@ export const Devarana: React.FC = () => {
             <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20 relative flex items-center justify-center">
                 <div className="flex justify-center">
                         <p className="pr-2 font-playfair lg:text-4xl sm:text-base text-sm text-white">
-                            ¡Descubre
+                            ¡ Somos
                         </p>
                         <div className="lg:h-[48px] h-[30px] overflow-hidden ">
-                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">el nuevo concepto de Resort-Living!</p>
-                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">tu nuevo estilo de vida!</p>
-                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">Royal View!</p>
-                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">el nuevo estándar de la exclusividad!</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">creadores !</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">arquitectos !</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">diseñadores !</p>
+                            <p className="pb-2 text-white listEffect_item font-playfair lg:text-4xl sm:text-base text-sm">calidad !</p>
                         </div>
                     </div>
             </Box>
