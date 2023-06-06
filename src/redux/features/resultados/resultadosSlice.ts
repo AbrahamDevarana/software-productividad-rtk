@@ -2,6 +2,7 @@
 import { ResultadoClaveState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk} from "./resultadosThunk";
+import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "../acciones/accionesThunk";
 
 
 const initialState: ResultadoClaveState = {
@@ -33,6 +34,9 @@ const resultadoClaveSlice = createSlice({
     reducers: {
         clearResultadoClave: (state) => {
             state.currentResultadoClave = initialState.currentResultadoClave
+        },
+        getUpdatedAccion: (state, { payload }) => {
+            state.currentResultadoClave.acciones = [...state.currentResultadoClave.acciones, payload]
         }
     },
     extraReducers: (builder) => {
@@ -90,6 +94,44 @@ const resultadoClaveSlice = createSlice({
             })
             .addCase(deleteResultadoThunk.rejected, (state) => {
                 state.isLoadingResultado = false
+                state.error = true
+            })
+
+
+
+
+            // Acciones
+
+            .addCase(createAccionThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(createAccionThunk.fulfilled, (state, { payload }) => {
+                const { resultadoClaveId } = payload
+                const resultadoClave = state.resultadosClave.find(resultado => resultado.id === resultadoClaveId)
+                
+                if(resultadoClave){
+                    resultadoClave.acciones = [...resultadoClave.acciones, payload]
+                }
+            })
+            .addCase(createAccionThunk.rejected, (state) => {
+                state.error = true
+            })
+            .addCase(updateAccionThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {
+                state.currentResultadoClave.acciones = state.currentResultadoClave.acciones.map(accion => accion.id === payload.id ? payload : accion)
+            })
+            .addCase(updateAccionThunk.rejected, (state) => {
+                state.error = true
+            })
+            .addCase(deleteAccionThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(deleteAccionThunk.fulfilled, (state, { payload }) => {
+                state.currentResultadoClave.acciones = state.currentResultadoClave.acciones.filter(accion => accion.id !== payload)
+            })
+            .addCase(deleteAccionThunk.rejected, (state) => {
                 state.error = true
             })
     }

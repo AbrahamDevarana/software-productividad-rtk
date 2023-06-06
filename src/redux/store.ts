@@ -15,6 +15,7 @@ import resultadosSlice from "./features/resultados/resultadosSlice";
 import proyectosSlice from "./features/proyectos/proyectosSlice";
 import hitosSlice from "./features/hitos/hitosSlice";
 import tareasSlice from "./features/tareas/tareasSlice";
+import accionesSlice from "./features/acciones/accionesSlice";
 
 export const store = configureStore({
     reducer: {
@@ -33,7 +34,8 @@ export const store = configureStore({
         resultados: resultadosSlice,
         proyectos: proyectosSlice,
         hitos: hitosSlice,
-        tareas: tareasSlice
+        tareas: tareasSlice,
+        acciones: accionesSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })

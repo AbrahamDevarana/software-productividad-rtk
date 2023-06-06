@@ -1,5 +1,6 @@
 import { statusType } from "@/types";
 import { UsuarioProps } from "./usuario";
+import { InitialState } from "./slice";
 
 export interface AccionesProps {
     id: string;
@@ -9,7 +10,9 @@ export interface AccionesProps {
     fechaInicio: Date;
     fechaFin: Date;
     propietarioId: UsuarioProps;
+    resultadoClaveId: string;
 }
+
 
 export interface AccionesProyectosProps {
     id: string;
@@ -20,4 +23,11 @@ export interface AccionesProyectosProps {
     fechaFin: Date;
     propietarioId: UsuarioProps;
     hitoId: string;
+}
+
+
+export interface AccionesState extends InitialState {
+    acciones: AccionesProps[];
+    currentAccion: AccionesProps;
+    isLoadingCurrentAccion: boolean;
 }

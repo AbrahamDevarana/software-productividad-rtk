@@ -1,10 +1,12 @@
 import { OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Collapse, Table } from "antd";
+import { Collapse, Form, Input, Table } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo } from "react";
 import { getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
+import { createAccionThunk } from "@/redux/features/acciones/accionesThunk";
+import { FaCog } from "react-icons/fa";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -26,8 +28,18 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
             key: 'nombre',
             render: (text, record, index) => ({
                 children: <div className='flex'>
-                    <div className='border-2 rounded-full mr-2' style={{ borderColor: 'red' }} />
+                    <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-error-light' }`} />
                     <p className='text-devarana-graph'>{record.nombre}</p>
+                </div>,
+            }),
+        },{
+            title: 'Estado',
+            dataIndex: 'status',
+            key: 'status',
+            render: (text, record, index) => ({
+                children: <div className='flex'>
+                    <div className={`rounded-full border mr-2 h-2 w-2 self-center ${record.status ? 'bg-success' : 'bg-error-light' }`} />
+                    <p className='text-devarana-graph'>{record.status ? 'Completado' : 'Pendiente'}</p>
                 </div>,
             }),
         }
@@ -46,6 +58,62 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
         }
         return []
     }, [resultadosClave])
+
+
+    const footerComponent = (resultadoClave: ResultadoClaveProps) => {
+
+        const [form] = Form.useForm();
+        const handleCreateAccion = () => {
+            const query = {
+                ...form.getFieldsValue(),
+                resultadoClaveId: resultadoClave.id
+            }
+
+            dispatch(createAccionThunk(query))
+            form.resetFields()
+        }
+
+        
+
+
+        return (
+            <Form
+                initialValues={{
+                    ...resultadoClave,
+                    nombre: '',
+                }}
+                form={form}
+                onBlur={handleCreateAccion}
+            >
+
+                <Form.Item name="nombre" className="mb-0">
+                    <Input placeholder="Nombre de la Accion"
+                        onPressEnter={
+                            (e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                e.currentTarget.blur()
+                            }
+                        }
+                        className="w-60"
+                    />
+                </Form.Item>
+                
+            </Form>
+        )
+    }
+
+
+    const genExtra = () => (
+        <div
+            onClick={event => {
+                // If you don't want click extra trigger collapse, you can prevent this:
+                event.stopPropagation();
+            }}
+        >
+            <FaCog className="text-default text-sm" />
+        </div>
+    );
 
 
     if(isLoading) return ( <Loading /> )
@@ -68,6 +136,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                                     <p className='text-devarana-graph font-bold'>{resultado.nombre}</p>
                                 </div>
                             }
+                            extra={genExtra()}
                         >
                             <Table 
                                 loading={isLoading}
@@ -78,6 +147,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                                 columns={defaultColumns}
                                 dataSource={resultado.acciones}
                                 rowKey={record => record.id}
+                                footer={() => footerComponent(resultado)}
                                 onRow={(record: any, index: any) => {
                                     return {
                                         onClick: () => {
