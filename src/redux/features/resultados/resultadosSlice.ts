@@ -119,8 +119,13 @@ const resultadoClaveSlice = createSlice({
             .addCase(updateAccionThunk.pending, (state) => {
                 state.error = false
             })
-            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {
-                state.currentResultadoClave.acciones = state.currentResultadoClave.acciones.map(accion => accion.id === payload.id ? payload : accion)
+            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {                
+                state.resultadosClave = state.resultadosClave.map(resultado => {
+                    if(resultado.id === payload.resultadoClaveId){
+                        resultado.acciones = resultado.acciones.map(accion => accion.id === payload.id ? payload : accion)
+                    }
+                    return resultado
+                })
             })
             .addCase(updateAccionThunk.rejected, (state) => {
                 state.error = true
@@ -129,7 +134,12 @@ const resultadoClaveSlice = createSlice({
                 state.error = false
             })
             .addCase(deleteAccionThunk.fulfilled, (state, { payload }) => {
-                state.currentResultadoClave.acciones = state.currentResultadoClave.acciones.filter(accion => accion.id !== payload)
+                state.resultadosClave = state.resultadosClave.map(resultado => {
+                    if(resultado.id === payload.resultadoClaveId){
+                        resultado.acciones = resultado.acciones.filter(accion => accion.id !== payload.id)
+                    }
+                    return resultado
+                })
             })
             .addCase(deleteAccionThunk.rejected, (state) => {
                 state.error = true

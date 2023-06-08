@@ -44,8 +44,8 @@ export const WizardOperativo:FC = () => {
                 ? <Skeleton active className='pt-24' paragraph={{ rows: 13 }} /> 
                 : (
                     <div className={`pt-24`}>
-                        { current === 0 && <FormObjetivo currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
-                        { current === 1 && <FormResultados currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
+                        {/* { current === 0 && <FormObjetivo currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> }
+                        { current === 1 && <FormResultados currentOperativo={currentOperativo} handleCurrent={handleCurrent} current={current}/> } */}
                     </div>
                 )
             }

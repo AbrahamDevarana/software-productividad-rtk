@@ -1,57 +1,60 @@
-import { Button } from 'antd'
-import React, { useCallback, useState } from 'react'
-import { Icon, IconName } from '../Icon';
+import { useEffect, useRef, useState } from "react";
 
-interface CustomDropdownProps {
-    buttonText?: string;
-    iconButton?: IconName;
-    children?: React.ReactNode;
-    buttonChildren?: React.ReactNode;
-    bordered?: boolean;
-    className?: string;
-    classNameRoot?: string;
+interface Props {
+    children: React.ReactNode
+    buttonChildren: React.ReactNode
+    buttonClass?: string
+    containerClass?: string
+    preferredPosition?: 'top' | 'bottom' | 'left' | 'right'
 }
 
-interface CustomDropDownContainerProps {
-    children?: React.ReactNode;
-    className?: string;
-    visible: boolean;
-    setVisible: (visible: boolean) => void;
-}
+const CustomDropdown = ({children, buttonChildren, buttonClass, containerClass, preferredPosition}: Props) => {
 
-export const CustomDropdown = ({iconButton, buttonChildren, children, bordered = true, classNameRoot, className}: CustomDropdownProps) => {
+    const [open, setOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const [visible, setVisible] = useState(false);
-
-    
-    const handleClick = useCallback(() => {
-        setVisible(prevVisible => !prevVisible);
+    const handleOutsideClick = () => {
+        setOpen(false)
+    };
+  
+    useEffect(() => {
+      document.addEventListener("mousedown", handleOutsideClick);
+  
+      return () => {
+        document.removeEventListener("mousedown", handleOutsideClick);
+      };
     }, []);
 
-    return (
-        <>
-        <div className='relative'>
-            <Button onClick={ handleClick } icon={ iconButton ? <Icon iconName={iconButton} className={`px-2 ${classNameRoot}`} /> : null } > { buttonChildren } </Button>
-            {
-                <CustomDropDownContainer visible={visible} setVisible={setVisible} className={className}>
-                    { children }
-                </CustomDropDownContainer>
+
+    useEffect(() => {
+        if (dropdownRef.current) {
+            const rect = dropdownRef.current.getBoundingClientRect();
+            const overflowRight = window.innerWidth - (rect.left + rect.width);
+            const overflowBottom = window.innerHeight - (rect.top + rect.height);
+
+            if (overflowRight < 0) {
+                dropdownRef.current.style.right = '0px';
             }
+            if (overflowBottom < 0 && preferredPosition === 'bottom') {
+                dropdownRef.current.style.bottom = '0px';
+            }
+        }
+    }, [open, preferredPosition]);
 
+    return ( 
+        <div className="relative">
+            <button className={`p-1 ${buttonClass}`} onClick={() => setOpen(!open)} >
+                { buttonChildren }
+            </button>
+            <div className={`absolute ${preferredPosition === 'bottom' ? 'mt-2' : 'mb-2'} mt-2 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${
+                open ? "opacity-100 max-h-96 z-50" : "opacity-0 max-h-0 -z-50"} ${preferredPosition === 'top' ? 'bottom-full' : ''}`}
+                ref={dropdownRef} >
+                <div className={`p-2 rounded-md  ${containerClass}`}>
+                    {children}
+                </div>
+            </div>
         </div>
-        { visible ? <div className="fixed inset-0 bg-transparent z-[100]" onClick={() => setVisible(false)}></div> : null }
-        </>
-    )
+    );
 }
-
-
-const CustomDropDownContainer = ({children, visible, className}: CustomDropDownContainerProps) => {
-
-    return (
-        <div
-            className={`absolute left-0 bg-white shadow-lg min-w-[200px] p-2 rounded-lg transition-all ${ visible ? 'top-full z-[110]' : 'top-0 -z-10'} ${className}`}
-        >
-            {children}
-        </div>
-    )
-}
+ 
+export default CustomDropdown;

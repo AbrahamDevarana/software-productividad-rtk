@@ -3,7 +3,7 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
+import { Avatar, Badge, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
 import { getColor } from '@/helpers';
 import { Link } from 'react-router-dom';
 
@@ -47,17 +47,13 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     return (
         <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
-                <div className=''>
+                <div>
                     <p> Resultados Clave </p>
                     <p> 0 / { objetivo.resultadosClave?.length } </p>
                 </div>
-                <div className='border-x px-5'>
-                    <p>Indicadores </p>
-                    <p> 0 / 2</p>
-                </div>
-                <div className=''>
+                <div>
                     <p>Acciones </p>
-                    <p> 0 / 2</p>
+                    <p> 0 / 0 </p>
                 </div>
             </div>
             <Divider />

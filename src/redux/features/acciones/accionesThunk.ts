@@ -3,7 +3,10 @@ import { AccionesProps } from "@/interfaces";
 import { AppDispatch, RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
 
-
+interface Props {
+    accion: AccionesProps
+    acciones: AccionesProps[]
+}
 
 export const getAccionesThunk = createAsyncThunk(
     'acciones/getAcciones',
@@ -14,8 +17,8 @@ export const getAccionesThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.get(`/acciones/proyecto/${proyectoId}`, config);
-            return response.data.acciones as AccionesProps[]
+            const response = await clientAxios.get<Props>(`/acciones/proyecto/${proyectoId}`, config);
+            return response.data.acciones
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }
@@ -30,8 +33,8 @@ export const getAccionThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.get(`/acciones/${accionId}`, config);
-            return response.data.accion as AccionesProps
+            const response = await clientAxios.get<Props>(`/acciones/${accionId}`, config);
+            return response.data.accion
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }
@@ -46,8 +49,8 @@ export const createAccionThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.post(`/acciones`, accion, config);
-            return response.data.accion as AccionesProps
+            const response = await clientAxios.post<Props>(`/acciones`, accion, config);
+            return response.data.accion
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }
@@ -62,8 +65,8 @@ export const updateAccionThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.put(`/acciones/${accion.id}`, accion, config);
-            return response.data.accion as AccionesProps
+            const response = await clientAxios.put<Props>(`/acciones/${accion.id}`, accion, config);
+            return response.data.accion
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }
@@ -78,8 +81,9 @@ export const deleteAccionThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            await clientAxios.delete(`/acciones/${accionId}`, config);
-            return accionId
+            const response = await clientAxios.delete<Props>(`/acciones/${accionId}`, config);            
+            return response.data.accion
+
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }

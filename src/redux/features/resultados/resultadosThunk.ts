@@ -13,7 +13,7 @@ interface Props {
 
 export const getResultadosThunk = createAsyncThunk( 
     'resultados/getResultados',
-    async (filtros: any, {rejectWithValue, getState}) => {
+    async (operativoId: string, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -21,7 +21,7 @@ export const getResultadosThunk = createAsyncThunk(
             }
 
             const params = {
-                operativoId: filtros
+                operativoId: operativoId
             }
 
             const response = await clientAxios.get<Props>(`/resultados`, {...config, params});           

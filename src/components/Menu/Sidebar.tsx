@@ -59,15 +59,15 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     <FaPuzzlePiece className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Proyectos</span>
                 </NavLink>
-                <NavLink to={'/actividades'} className={`link nav-link text-center`}>
+                {/* <NavLink to={'/actividades'} className={`link nav-link text-center`}>
                     <FaCheckSquare className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Actividades</span>
-                </NavLink>
+                </NavLink> */}
                 {/* Chat button */}
-                <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
+                {/* <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
                     <FaComment className="mx-auto text-xl" />
                     <span className="text-xs text-center font-light block">Chat</span>
-                </div>
+                </div> */}
 
                 <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
                     <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>

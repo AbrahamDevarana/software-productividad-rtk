@@ -20,8 +20,8 @@ export interface OperativoProps {
     tacticoId:       string;
     fechaInicio:     Date;
     fechaFin:        Date;
-    operativoPropietario?:  CustomUsuarioProps;
-    operativosResponsable?: CustomUsuarioProps[];
+    operativoPropietario:  CustomUsuarioProps;
+    operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
     participantesIds?:    string[];
     resultadosClave?: ResultadoClaveProps[];

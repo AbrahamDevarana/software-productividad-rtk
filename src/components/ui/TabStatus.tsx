@@ -11,14 +11,18 @@ export const TabStatus: React.FC<TabStatusProps> = ({status, children}) => {
   return (
     <div className='flex items-center gap-2 px-2 py-1 rounded-full min-w-[100px]'>  
         <div style={{ 
-                backgroundColor: getColor(status).color, 
-                boxShadow: `0 0 3px 2px ${getColor(status, .3).color}`,
-                width: '5px',
-                height: '5px',
+                backgroundColor: getColor(status).color,
+                width: '6px',
+                height: '6px',
+                borderRadius: '25%'
             }}  
         />
 
-        <p> {getStatus(status)} </p>
+        <p style={{
+            color: getColor(status).color,
+            fontWeight: 600
+
+        }}> {getStatus(status)} </p>
     </div>
   )
 }

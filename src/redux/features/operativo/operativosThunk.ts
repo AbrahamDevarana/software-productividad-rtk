@@ -40,6 +40,8 @@ export const getOperativoThunk = createAsyncThunk(
 
             const response = await clientAxios.get<Props>(`/operativos/${operativoId}`, config);
         
+            console.log(response.data.operativo);
+            
             return response.data.operativo
         }
         catch (error: any) {
@@ -74,8 +76,7 @@ export const updateOperativoThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-
-            const response = await clientAxios.put<Props>(`/operativos/${operativo.id}`, operativo, config);
+            const response = await clientAxios.put<Props>(`/operativos/${operativo.id}`, operativo, config);            
             return response.data.operativo
         }
         catch (error: any) {

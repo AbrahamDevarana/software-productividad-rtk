@@ -6,11 +6,11 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import Loading from '@/components/antd/Loading';
 
-import { WizardOperativo } from '@/components/operativo/WizardOperativo';
 import { Objetivo } from '@/components/operativo/Objetivo';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { FaPlus } from 'react-icons/fa';
 import { getColor } from '@/helpers';
+import { FormObjetivo } from '@/components/operativo/FormObjetivo';
 
 export const Objetivos : React.FC = () => {
 
@@ -18,7 +18,7 @@ export const Objetivos : React.FC = () => {
 
     const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
-    const { operativos, proyectos, isLoading } = useAppSelector(state => state.operativos)
+    const { operativos, isLoading, currentOperativo } = useAppSelector(state => state.operativos)
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
@@ -125,7 +125,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <WizardOperativo />
+                <FormObjetivo />
 
             </Modal>
 

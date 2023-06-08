@@ -1,12 +1,16 @@
-import { OperativoProps, ResultadoClaveProps } from "@/interfaces";
+import { AccionesProps, OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Collapse, Form, Input, Table } from "antd";
+import { Collapse, Form, Input, Popconfirm, Table } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
-import { createAccionThunk } from "@/redux/features/acciones/accionesThunk";
+import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "@/redux/features/acciones/accionesThunk";
 import { FaCog } from "react-icons/fa";
+import CustomDropdown from "../ui/CustomDropdown";
+import { TabStatus } from "../ui/TabStatus";
+import { BsThreeDots } from "react-icons/bs";
+import { BiTrash } from "react-icons/bi";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -18,8 +22,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave } = useAppSelector(state => state.resultados)
-
-
+    
 
     const defaultColumns: ColumnsType<any> = [
         {
@@ -28,20 +31,56 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
             key: 'nombre',
             render: (text, record, index) => ({
                 children: <div className='flex'>
-                    <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-error-light' }`} />
+                    <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-dark-light' }`} />
                     <p className='text-devarana-graph'>{record.nombre}</p>
                 </div>,
             }),
-        },{
+        },
+        {
             title: 'Estado',
             dataIndex: 'status',
             key: 'status',
             render: (text, record, index) => ({
-                children: <div className='flex'>
-                    <div className={`rounded-full border mr-2 h-2 w-2 self-center ${record.status ? 'bg-success' : 'bg-error-light' }`} />
-                    <p className='text-devarana-graph'>{record.status ? 'Completado' : 'Pendiente'}</p>
-                </div>,
+                children: 
+                 <CustomDropdown 
+                    buttonChildren={ <TabStatus status={ record.status ? 'FINALIZADO' : 'SIN_INICIAR' } /> }
+                    buttonClass={''}
+                >
+
+                    <div className="w-full flex flex-col">
+                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, false)}>
+                            <TabStatus status={'SIN_INICIAR'} />
+                        </button>
+                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, true)}>
+                            <TabStatus status={'FINALIZADO'} />
+                        </button>
+                    </div>
+                 </CustomDropdown>
             }),
+        },
+        {
+            title: '',
+            dataIndex: 'acciones',
+            key: 'acciones',
+            render: (text, record, index) => ({
+                children: 
+                <div className='flex items-center group-hover:opacity-100 group-hover:z-0 -z-50 opacity-0 transition-all duration-700'>
+                    <Popconfirm
+                        title="¿Estas seguro de eliminar esta accion?"
+                        onConfirm={ () => handleDeleteAccion(record.id)}
+                        onCancel={() => console.log('cancel')}
+                        okText="Si"
+                        cancelText="No"
+                        placement="left"
+                         
+                    >
+                        <BiTrash className='text-default hover:text-error-light text-xl cursor-pointer' />
+                    </Popconfirm>
+                    
+                </div>,
+                
+            }),
+            width: 20,
         }
     ]
 
@@ -95,7 +134,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                                 e.currentTarget.blur()
                             }
                         }
-                        className="w-60"
+                        className="min-w-[350px] w-min"
                     />
                 </Form.Item>
                 
@@ -115,6 +154,20 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
         </div>
     );
 
+
+    const handleDeleteAccion = (id: string) => {
+        dispatch(deleteAccionThunk(id))
+    }
+
+    const handleUpdateStatus = (accion: AccionesProps, status: boolean) => {
+        
+        const query = {
+            ...accion,
+            status
+        }
+
+        dispatch(updateAccionThunk(query))
+    }
 
     if(isLoading) return ( <Loading /> )
 
@@ -148,6 +201,9 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                                 dataSource={resultado.acciones}
                                 rowKey={record => record.id}
                                 footer={() => footerComponent(resultado)}
+                                rowClassName={ (record, index) => {
+                                    return 'group'
+                                }}
                                 onRow={(record: any, index: any) => {
                                     return {
                                         onClick: () => {

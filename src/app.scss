@@ -24,6 +24,8 @@ body{
 * {
 	scrollbar-width: thin;
 	scrollbar-color: $dark $default-light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   /* Works on Chrome, Edge, and Safari */
