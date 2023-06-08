@@ -29,7 +29,7 @@ export const Devarana: React.FC = () => {
   return (
     <div className="animate__animated animate__fadeIn animate__faster">
         <div>
-            <Box className="h-60 bg-[url('http://picsum.photos/2000/244')] py-20 relative flex items-center justify-center">
+            <Box className="h-80 bg-[url('http://picsum.photos/2000/320')] py-20 relative flex items-center justify-center">
                 <div className="flex justify-center">
                         <p className="pr-2 font-playfair lg:text-4xl sm:text-base text-sm text-white">
                             ¡ Somos

@@ -160,13 +160,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 className='col-span-10'
                             >
                                 <Input
-                                    className=''
+                                    className='text-2xl'
                                     bordered={false}
                                     value={values.nombre}
                                     onChange={handleChange}
                                     name="nombre"
                                     ref={inputRef}
-                                    disabled
                                     onPressEnter={ () => handleOnSubmit(values) }
                                 />
                                 <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
