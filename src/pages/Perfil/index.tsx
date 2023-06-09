@@ -13,7 +13,7 @@ const Perfil: React.FC = () => {
     
     const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil, isLoading } = useAppSelector(state => state.profile)
+    const { perfil } = useAppSelector(state => state.profile)
 
     useEffect(() => {
         if(userAuth){   
@@ -21,8 +21,7 @@ const Perfil: React.FC = () => {
         }
     }, [userAuth])    
     
-    
-    if(isLoading) return <Loading />
+
 
     return ( 
         <div className="animate__animated animate__fadeIn animate__faster">
