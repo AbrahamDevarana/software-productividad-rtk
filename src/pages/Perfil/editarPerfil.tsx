@@ -17,7 +17,7 @@ export const EditarPerfil = ({usuarioActivo}:Props) => {
     return (
         <div className="animate__animated animate__fadeIn animate__faster">
             <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10">
-                <div className="xl:col-span-3 md:col-span-4 col-span-12 relative">
+                <div className="xl:col-span-3 md:col-span-4 col-span-12">
                     <div className="sticky top-0 w-full">
                         <Box className="flex flex-col">
                             <a href="#perfil" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium ">Perfil</a>

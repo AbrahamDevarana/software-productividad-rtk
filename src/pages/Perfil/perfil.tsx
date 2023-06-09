@@ -71,10 +71,9 @@ const Profile = ({usuarioActivo}: Props) => {
 
         <div className="grid grid-cols-3 gap-10 pt-10">
             <Box className="xl:col-span-1 col-span-3">
-                <p className="py-2 text-lg font-medium text-devarana-dark-graph">Información de Perfil</p>
+                <p className="py-2 text-lg font-medium text-devarana-dark-graph">Acerca de mí</p>
 
                 <div className="py-4 font-light">
-                    <p className="font-medium text-devarana-dark-graph">Acerca de mí</p>
                     <p className="font-light text-devarana-graph">
                         { usuarioActivo.descripcionPerfil }
                     </p>
@@ -104,7 +103,7 @@ const Profile = ({usuarioActivo}: Props) => {
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
             </Box>
             <Box className="xl:col-span-1 col-span-3">
-                <p className="text-2xl py-2"></p>
+                <p className="text-lg font-medium py-2 text-devarana-dark-graph">Logros</p>
             </Box>
         </div>
 

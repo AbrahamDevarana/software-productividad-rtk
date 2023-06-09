@@ -15,16 +15,16 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, visit = false}) => {
     return ( 
         <>
-            <Box className="h-80 w-full z-auto bg-[url('http://picsum.photos/2000/385')]">
+            <Box className="h-80 w-full bg-cover bg-center bg-no-repeat z-auto bg-[url('https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/portadas/IMG_4805.jpg')]">
             
             </Box>
             <div className="w-full px-4 z-10">
-                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-3 px-5 mr-5 justify-center h-20 items-center" >
+                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-center h-20 items-center" >
                     <div className="justify-center align-middle flex items-center">
-                        <Avatar className="w-10 h-10" src={`${import.meta.env.VITE_STORAGE_URL}${usuarioActivo.foto}`} />
+                        <Avatar className="w-16 h-16" src={`${import.meta.env.VITE_STORAGE_URL}${usuarioActivo.foto}`} />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
-                        <p className="text-devarana-dark-graph text-lg font-medium">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
+                        <p className="text-devarana-dark-graph text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
                         <p className="text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
                     </div>
                     { !visit ?
