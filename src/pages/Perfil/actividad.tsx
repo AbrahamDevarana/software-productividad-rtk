@@ -2,8 +2,11 @@
 import { Timeline } from "antd";
 import Box from "@/components/ui/Box";
 import { Icon } from "@/components/Icon";
+import { Proximamente } from "@/components/ui/proximamente";
 
 const Actividad: React.FC = () => {
+    
+    return <Proximamente />
     return ( 
     <div className="animate__animated animate__fadeIn animate__faster">
        <Box>

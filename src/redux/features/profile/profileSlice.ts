@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileProvider } from './profileThunk';
+import { getProfileThunk, updateProfileThunk } from './profileThunk';
 
 
 const initialState: PerfilState = {
@@ -38,14 +38,14 @@ const profileSlice = createSlice({
                 state.isLoading = false
                 state.error = action.error.message
             })
-            .addCase(updateProfileProvider.pending, (state) => {
+            .addCase(updateProfileThunk.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(updateProfileProvider.fulfilled, (state, action) => {
+            .addCase(updateProfileThunk.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.perfil = action.payload
             })
-            .addCase(updateProfileProvider.rejected, (state, action) => {
+            .addCase(updateProfileThunk.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.error.message
             })

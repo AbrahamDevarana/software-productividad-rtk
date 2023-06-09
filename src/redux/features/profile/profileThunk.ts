@@ -28,7 +28,7 @@ export const getProfileThunk = createAsyncThunk(
 )
         
 
-export const updateProfileProvider = createAsyncThunk(
+export const updateProfileThunk = createAsyncThunk(
     'profile/updateProfile',
     async (profile: PerfilProps, {rejectWithValue, getState}) => {
         try {

@@ -4,7 +4,7 @@ import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logoutThunk } from "@/redux/features/auth/authThunks";
 import { rutaPrivada } from "@/router";
-import { FaAngleRight, FaBell, FaSearch, FaSlidersH } from "react-icons/fa";
+import { FaAngleRight, FaSignOutAlt } from "react-icons/fa";
 import MyBreadcrumb from "../ui/Breadcrumb";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
@@ -17,8 +17,8 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
             {
               key: '1',
               label: (
-                <button onClick={() => dispatch(logoutThunk())} >
-                  Logout
+                <button onClick={() => dispatch(logoutThunk())} className="text-devarana-dark-graph">
+					Cerrar sesión
                 </button>
               ),
             },
@@ -74,18 +74,18 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
                     <MyBreadcrumb />
                 </div>
                 <div className="sm:ml-auto flex items-center">
-                    <Dropdown menu={{ items:notificaciones }} trigger={['click']} className="px-2">
+                    {/* <Dropdown menu={{ items:notificaciones }} trigger={['click']} className="px-2">
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                         <Space>
                             <FaBell className='text-2xl text-devarana-blue' />
                         </Space>
                         </a>
-                    </Dropdown>
-                    <FaSlidersH className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue ' onClick={ showDrawer } />
+                    </Dropdown> */}
+                    {/* <FaSlidersH className='text-2xl ml-2 mr-3 cursor-pointer text-devarana-blue ' onClick={ showDrawer } /> */}
                     <Dropdown menu={{items:menu}} trigger={['click']}>
                         <a onClick={(e) => e.preventDefault()} className="items-center flex">
                             <Space>
-                                <FaAngleRight className='text-2xl text-devarana-blue '/>
+                                <FaSignOutAlt className='text-xl font-light text-devarana-graph cursor-pointer'/>
                             </Space>
                         </a>
                     </Dropdown>

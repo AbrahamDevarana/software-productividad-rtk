@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { getProfileThunk } from "@/redux/features/profile/profileThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
-import Header from "../../components/perfil/Header";
+import Header from "../../components/perfil/HeaderPerfil";
 import Profile from "./perfil";
-import { EditProfile } from "./editProfile";
+import { EditarPerfil } from "./editarPerfil";
 import Loading from "@/components/antd/Loading";
 
 
@@ -33,7 +33,7 @@ const Perfil: React.FC = () => {
                 <Actividad />
                 :
                 segment === 'Configuración' ? 
-                <EditProfile usuarioActivo={ perfil } /> : null 
+                <EditarPerfil usuarioActivo={ perfil } /> : null 
             }
         </div>
     );

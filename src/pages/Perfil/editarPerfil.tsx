@@ -3,16 +3,15 @@ import {  Switch } from 'antd'
 import { FaUser } from 'react-icons/fa'
 import { Badge } from '@/components/ui/Badge'
 import Box from '@/components/ui/Box'
-import { ProfileInfo } from '@/components/perfil/ProfileInfo'
+import { FormPerfil } from '@/components/perfil/FormPerfil'
 import { PerfilProps } from '@/interfaces'
 
 interface Props {
     usuarioActivo: PerfilProps
 }
 
-export const EditProfile = ({usuarioActivo}:Props) => {
+export const EditarPerfil = ({usuarioActivo}:Props) => {
 
- 
 
 
     return (
@@ -32,14 +31,14 @@ export const EditProfile = ({usuarioActivo}:Props) => {
                 <div className="xl:col-span-9 md:col-span-8 col-span-12 snap-y">
                     <Box className="mb-5 snap-center pt-8 pb-14" id="perfil">
                         <div className="flex pb-10">
-                            <Badge badgeType="secondary">
+                            <Badge badgeType="primary">
                                 <FaUser/>
                             </Badge>
                             <p className="text-lg font-bold my-auto mx-3 text-devarana-dark-graph">Información de perfil</p>
                         </div>    
 
                         <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10">
-                            <ProfileInfo usuarioActivo={usuarioActivo} />
+                            <FormPerfil usuarioActivo={usuarioActivo} />
                         </div>
                     </Box>
 

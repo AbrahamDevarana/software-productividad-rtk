@@ -20,8 +20,8 @@ export interface UsuarioProps {
     email: string;
     password?: string;
     status?: boolean;
-    fechaNacimiento?: Date;
-    fechaIngreso?: Date;
+    fechaNacimiento?: Date | string;
+    fechaIngreso?: Date | string;
     telefono?: string;
     foto?: string;
     descripcionPerfil?: string;

@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                         <Avatar className="w-10 h-10" src={`${import.meta.env.VITE_STORAGE_URL}${usuarioActivo.foto}`} />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
-                        <h1 className="text-devarana-dark-graph text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </h1>
+                        <p className="text-devarana-dark-graph text-lg font-medium">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
                         <p className="text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
                     </div>
                     { !visit ?

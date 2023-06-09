@@ -9,7 +9,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AnimatePresence } from "framer-motion";
 import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import 'dayjs/locale/es'
 
+dayjs.locale('es')
 
 dayjs.extend(quarterOfYear)
 dayjs.extend(customParseFormat)

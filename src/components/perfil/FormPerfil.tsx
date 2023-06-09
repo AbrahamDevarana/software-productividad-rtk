@@ -1,6 +1,6 @@
 
 import { DatePicker, Form, Input } from 'antd';
-import { updateProfileProvider } from '@/redux/features/profile/profileThunk';
+import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import { PerfilProps } from "@/interfaces";
 import { Button } from "../ui";
@@ -10,7 +10,7 @@ interface Props {
     usuarioActivo: PerfilProps
 }
 
-export const ProfileInfo = ({usuarioActivo}: Props) => {
+export const FormPerfil = ({usuarioActivo}: Props) => {
 
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();    
@@ -18,8 +18,11 @@ export const ProfileInfo = ({usuarioActivo}: Props) => {
     const handleonSubmit = () => {
 
         const values = form.getFieldsValue();
-        console.log(values)
-        // dispatch(updateProfileProvider(values))
+        const query = {
+            ...values,
+            id: usuarioActivo.id,
+        }
+        dispatch(updateProfileThunk(query))
     }
 
   return (
@@ -29,7 +32,7 @@ export const ProfileInfo = ({usuarioActivo}: Props) => {
             layout="vertical"
             initialValues={{
                 ...usuarioActivo,
-                fechaNacimiento: dayjs(usuarioActivo.fechaNacimiento)
+                fechaNacimiento: dayjs(usuarioActivo.fechaNacimiento).add(6, 'hour')
             }}
             onFinish={handleonSubmit}
             form={form}
@@ -67,7 +70,7 @@ export const ProfileInfo = ({usuarioActivo}: Props) => {
                 label="Fecha de nacimiento"
                 name="fechaNacimiento"
             >
-                <DatePicker placeholder="Fecha de nacimiento" disabled={true}  name="fechaNacimiento" className="w-full" />
+                <DatePicker placeholder="Fecha de nacimiento" disabled={true} className="w-full"  format={'DD/MM/YYYY'}/>
             </Form.Item>
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
@@ -81,7 +84,7 @@ export const ProfileInfo = ({usuarioActivo}: Props) => {
                 label="Teléfono"
                 name="telefono"
                 >
-                <Input type='tel' title="Teléfono" className="w-full" name="telefono" />
+                <Input type='tel' className="w-full" name="telefono" />
             </Form.Item>
             
             <Form.Item 
@@ -89,10 +92,10 @@ export const ProfileInfo = ({usuarioActivo}: Props) => {
                 label="Sobre mi"
                 name="descripcionPerfil"
             >
-                <Input.TextArea title="Sobre mi" className="w-full" name="descripcionPerfil"  />
+                <Input.TextArea className="w-full" name="descripcionPerfil"  />
             </Form.Item>  
             <Form.Item className="col-span-12 ml-auto">
-                <Button classColor="secondary" classType='outline' className="block ml-auto" type='submit'>  Guardar Perfil </Button>
+                <Button classColor="primary" classType='outline' className="block ml-auto" type='submit'>  Guardar Perfil </Button>
             </Form.Item>    
         </Form>
   )
