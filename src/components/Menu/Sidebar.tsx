@@ -6,6 +6,7 @@ import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
 import { FaBrain, FaCheckSquare, FaCog, FaComment, FaCrosshairs, FaPuzzlePiece, FaRocket, FaSquare } from 'react-icons/fa';
 import { Avatar } from 'antd';
+import { getStorageUrl } from '@/helpers';
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -33,7 +34,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                 <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                    <Avatar src={import.meta.env.VITE_STORAGE_URL + userAuth?.foto} size={40} />
+                    <Avatar src={getStorageUrl('profile-picture/'+ userAuth.foto)} size={40} />
                 </NavLink>
 
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>

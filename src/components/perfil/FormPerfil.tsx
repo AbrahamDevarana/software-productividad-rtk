@@ -1,10 +1,13 @@
 
-import { DatePicker, Form, Input } from 'antd';
+import { DatePicker, Form, Input, Modal, Upload } from 'antd';
 import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import { PerfilProps } from "@/interfaces";
 import { Button } from "../ui";
 import dayjs from 'dayjs';
+import { uploadUserPicture } from '@/helpers';
+import { useUploadAvatar } from '@/hooks/useUploadAvatar';
+import { uploadButton } from '../ui/UploadButton';
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -14,6 +17,8 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
 
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();    
+
+    const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen} = useUploadAvatar({currentUsuario: usuarioActivo})
 
     const handleonSubmit = () => {
 
@@ -37,6 +42,32 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             onFinish={handleonSubmit}
             form={form}
         >
+            <div className='block col-span-4'>
+                <Upload
+                    maxCount={1}
+                    accept="image/*"
+                    name="file"
+                    fileList={fileList}
+                    listType="picture-circle"                                 
+                    onPreview={handlePreview}
+                    onChange={handleOnChange}
+                    onRemove={handleOnRemove}
+                    customRequest={ async ({ file, onSuccess, onError }) => {
+                        await uploadUserPicture(file, usuarioActivo.id).then((res) => {
+                                onSuccess?.(res)
+                            }).catch((err) => {
+                                onError?.(err)
+                        })
+                    }}
+                    
+                >
+                    {fileList.length >= 1 ? null
+                    : uploadButton({loading: false} )}
+                </Upload>
+            <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
+                <img alt="example" style={{ width: '100%' }} src={preview} />
+            </Modal>
+            </div>
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 name="nombre"

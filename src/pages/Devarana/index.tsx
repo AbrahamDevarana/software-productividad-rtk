@@ -12,6 +12,7 @@ import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunf
 import { Chart } from '@/components/svg/devarana/Chart';
 
 import '@/assets/scss/devarana.scss'
+import { getStorageUrl } from '@/helpers';
 
 export const Devarana: React.FC = () => {
 
@@ -53,7 +54,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -64,7 +65,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -75,7 +76,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -86,7 +87,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.id}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${import.meta.env.VITE_STORAGE_URL}${item.foto}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))

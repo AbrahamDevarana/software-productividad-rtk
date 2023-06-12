@@ -8,6 +8,8 @@ import { createUsuarioThunk, deleteProfilePhotoThunk, updateUsuarioThunk, upload
 import { Icon } from '@/components/Icon';
 import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { getBase64, uploadUserPicture } from '@/helpers';
+import { useUploadAvatar } from '@/hooks/useUploadAvatar';
+import { uploadButton } from '@/components/ui/UploadButton';
 
 
 const usuarioSchema = Yup.object().shape({
@@ -23,9 +25,6 @@ export const General: React.FC<any> = ({handleSteps}) => {
     const dispatch = useAppDispatch();
     const { currentUsuario } = useAppSelector(state => state.usuarios)
 
-    const [fileList, setFileList] = useState<UploadFile[]>( [] );
-    const [preview, setPreview] = useState('');
-    const [previewOpen, setPreviewOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const handleOnSubmit = async (values: any) => {
 
@@ -37,43 +36,15 @@ export const General: React.FC<any> = ({handleSteps}) => {
         // handleSteps(1)
     }
 
-    useEffect(() => {
-        if(currentUsuario.id && currentUsuario.foto) {
-            setFileList([{
-                uid: currentUsuario.id,
-                name: currentUsuario.nombre,
-                status: 'done',
-                url: `${import.meta.env.VITE_STORAGE_URL}${currentUsuario.foto}`
-            }])
-        }
-    }, [currentUsuario])
+
+    const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen} = useUploadAvatar({currentUsuario})
 
 
 
-    const uploadButton = (
-        <div>
-            {loading ? <Icon iconName='faSpinner'  /> : <Icon iconName='faPlus' />}
-            <div style={{ marginTop: 8 }}>Upload</div>
-        </div>
-    )
 
-    const handlePreview = async (file: UploadFile) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj as RcFile);
-        }
-        setPreview(file.url || (file.preview as string));
-        setPreviewOpen(true);
-    }
 
-    const handleOnChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-        // dispatch(uploadImageThunk(currentUsuario.id, newFileList))
-    }
 
-    const handleOnRemove = async (file: UploadFile) => {
-        const res = await dispatch(deleteProfilePhotoThunk(currentUsuario.id))
-        setFileList([])
-    }
+
 
 
     return (
@@ -108,7 +79,7 @@ export const General: React.FC<any> = ({handleSteps}) => {
                                         
                                     >
                                         {fileList.length >= 1 ? null
-                                        : uploadButton}
+                                        : uploadButton({loading} )}
                                     </Upload>
                                 <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
                                     <img alt="example" style={{ width: '100%' }} src={preview} />
