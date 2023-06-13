@@ -10,24 +10,25 @@ interface ButtonProps {
     classColor: "default" | "dark" | "primary" | "secondary" | "success" | "info" | "warning" | "error"
     width?: number | '100%' | 'auto';
     disabled?: boolean;
+    form?: 'square' | 'circle'
 }
 
  
 
-export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%', disabled }: ButtonProps) => {
+export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%', disabled, form = 'square' }: ButtonProps) => {
 
 
     return (
         <button
             type={type}
-            className={`customButton customButton__${classType} customButton__${classType}-${classColor} disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`customButton customButton__${classType} customButton__${classType}-${classColor} disabled:opacity-50 disabled:cursor-not-allowed text-center ${ form === 'circle' ? 'rounded-full' : ''}`}
             onClick={onClick}
             style={{
                 width: width
             }}
             disabled={disabled}
         >
-            {children}
+            { children }
         </button>
     )
 }

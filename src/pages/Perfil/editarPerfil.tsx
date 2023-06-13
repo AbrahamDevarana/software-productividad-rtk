@@ -16,9 +16,10 @@ import { Social } from '@/components/perfil/SocialInfo'
 
 interface Props {
     usuarioActivo: PerfilProps
+    visitante?: boolean
 }
 
-export const EditarPerfil = ({usuarioActivo}:Props) => {
+export const EditarPerfil = ({usuarioActivo, visitante}:Props) => {
 
     const dispatch = useAppDispatch();
     const [responsabilidad, setResponsabilidad] = useState(usuarioActivo.responsabilidades)
@@ -42,8 +43,8 @@ export const EditarPerfil = ({usuarioActivo}:Props) => {
         <div className="animate__animated animate__fadeIn animate__faster">
             <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10 relative">
                 <div className="xl:col-span-3 md:col-span-4 col-span-12 ">
-                    <div className="w-full relative">
-                        <Box className="flex flex-col sticky top-0">
+                    <div className="w-full">
+                        <Box className="flex flex-col">
                             <a href="#perfil" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium ">Perfil</a>
                             <a href="#social" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium ">Social</a>
                             <a href="#responsibilidades" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium">Responsabilidades</a>

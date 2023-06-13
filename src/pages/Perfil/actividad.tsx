@@ -4,7 +4,11 @@ import Box from "@/components/ui/Box";
 import { Icon } from "@/components/Icon";
 import { Proximamente } from "@/components/ui/proximamente";
 
-const Actividad: React.FC = () => {
+interface Props {
+    visitante?: boolean
+}
+
+const Actividad: React.FC<Props> = ({visitante = false}) => {
     
     return <Proximamente />
     return ( 

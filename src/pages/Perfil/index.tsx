@@ -5,37 +5,50 @@ import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";
 import Profile from "./perfil";
 import { EditarPerfil } from "./editarPerfil";
-import Loading from "@/components/antd/Loading";
-
+import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
-    
+
+    const { id } = useParams<{id: string}>()
     const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
     const { perfil } = useAppSelector(state => state.profile)
 
+    const [ visitante, setVisitante ] = useState(false)
+
     useEffect(() => {
-        if(userAuth){   
-            dispatch(getProfileThunk(userAuth.id))
+        if(id){
+            setVisitante(true)
+            dispatch(getProfileThunk(id))
+        }else{
+            setVisitante(false)
+            if(userAuth){   
+                dispatch(getProfileThunk(userAuth.id))
+            }
         }
-    }, [userAuth])    
+    }, [userAuth, id])    
     
 
 
     return ( 
-        <div className="animate__animated animate__fadeIn animate__faster">
-            <Header usuarioActivo={ perfil } segment={segment} setSegment={setSegment}  />
-            { segment === 'Perfil' ?
-                <Profile usuarioActivo={ perfil } /> 
-                :
-                segment === 'Actividad' ?
-                <Actividad />
-                :
-                segment === 'Configuración' ? 
-                <EditarPerfil usuarioActivo={ perfil } /> : null 
-            }
-        </div>
+        <>
+            <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+            >
+                <Header usuarioActivo={ perfil } segment={segment} setSegment={setSegment} visitante={visitante}  />
+                { segment === 'Perfil' 
+                    ? <Profile usuarioActivo={ perfil } visitante={visitante} /> 
+                    : segment === 'Actividad' 
+                    ? <Actividad visitante={visitante}/>
+                    : segment === 'Configuración' 
+                    ? <EditarPerfil usuarioActivo={ perfil } visitante={visitante}/> 
+                    : null 
+                }
+            </motion.div>
+        </>
     );
 }
  

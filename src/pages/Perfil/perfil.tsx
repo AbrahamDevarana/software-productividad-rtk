@@ -11,12 +11,14 @@ import DOMPurify from "dompurify";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Avatar, Tooltip } from "antd";
+import { Logros } from "@/components/perfil/Logros";
 
 interface Props {
     usuarioActivo: PerfilProps
+    visitante: boolean
 }
 
-const Profile = ({usuarioActivo}: Props) => {
+const Profile = ({usuarioActivo, visitante}: Props) => {
     
 
     return ( 
@@ -105,14 +107,15 @@ const Profile = ({usuarioActivo}: Props) => {
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Logros</p>
+                {/* <Logros /> */}
             </Box>
         </div>
 
         <h2 className="py-10 px-2 text-lg font-medium">Objetivos</h2>
-        <div className="grid grid-cols-4 gap-10 pt-5">
+        <div className="gap-10 py-5 overflow-x-auto w-full flex">
             {
                 usuarioActivo.objetivosOperativos.map( objetivo => (
-                    <Box className="2xl:col-span-1 lg:col-span-2 col-span-4" key={objetivo.id}>
+                    <Box className="w-[350px] flex-none" key={objetivo.id}>
                         <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
                             <div>
                                 {/* <DoughnutChart/> */}
@@ -128,11 +131,11 @@ const Profile = ({usuarioActivo}: Props) => {
                                 <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
                             </div>
                             <div className="py-3 grid grid-cols-2 gap-x-5">
-                                <Link to={`/objetivos/${objetivo.id}`}>
+                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
                                     <Button className="w-full" classColor="primary" classType="regular" >
                                         Ver Objetivo
                                     </Button>
-                                </Link>
+                                </Link>}
                                 <div className="flex justify-center my-auto">
                                     <Avatar.Group>
                                         {
@@ -149,7 +152,6 @@ const Profile = ({usuarioActivo}: Props) => {
                     </Box>
                 ))
             }
-
         </div>
     </div> );
 }
