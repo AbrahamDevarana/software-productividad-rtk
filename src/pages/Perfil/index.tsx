@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProfileThunk } from "@/redux/features/profile/profileThunk";
+import { clearProfileThunk, getProfileThunk } from "@/redux/features/profile/profileThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";
@@ -27,6 +27,10 @@ const Perfil: React.FC = () => {
             if(userAuth){   
                 dispatch(getProfileThunk(userAuth.id))
             }
+        }
+
+        return () => {
+            dispatch(clearProfileThunk())
         }
     }, [userAuth, id])    
     

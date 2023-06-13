@@ -62,9 +62,12 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
         <>
             <Box className="h-80 w-full bg-cover bg-center bg-no-repeat z-auto bg-[url('https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/portadas/IMG_4805.jpg')]">
                 <div className="relative">
-                    <button className="z-50 absolute top-0 right-0" onClick={handlePanel}>
-                        <FaCog className=" text-2xl text-white drop-shadow-md"/>
-                    </button>
+                   {
+                        !visitante && (   
+                        <button className="z-50 absolute top-0 right-0" onClick={handlePanel}>
+                            <FaCog className=" text-2xl text-white drop-shadow-md"/>
+                        </button> )
+                   }
                 </div>
             </Box>
             <div className="w-full px-4 z-10">

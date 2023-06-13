@@ -16,6 +16,7 @@ export interface UsuarioProps {
     apellidoPaterno: string;
     apellidoMaterno: string;
     nombreCorto?: string;
+    slug?: string;
     iniciales: string;
     email: string;
     password?: string;

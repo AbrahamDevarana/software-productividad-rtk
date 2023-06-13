@@ -3,6 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
 import { PerfilProps } from "@/interfaces";
+import { clearProfile } from "./profileSlice";
 
 
 interface Props {
@@ -69,3 +70,9 @@ export const updateProfileSocialThunk = createAsyncThunk(
         }
     }
 )
+
+export const clearProfileThunk = () => {
+    return (dispatch: any) => {
+        dispatch(clearProfile());
+    }
+}

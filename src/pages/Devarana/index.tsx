@@ -7,12 +7,15 @@ import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks
 import { FaEye, FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
 import { BiWorld } from 'react-icons/bi';
 import { Avatar } from 'antd';
-// import { Chart } from '@/components/devarana/Chart';
 import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
 import { Chart } from '@/components/svg/devarana/Chart';
+import { getStorageUrl } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
-import { getStorageUrl } from '@/helpers';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import { EffectFade } from 'swiper';
+import 'swiper/css';
+import "swiper/css/effect-fade";
 
 export const Devarana: React.FC = () => {
 
@@ -20,32 +23,28 @@ export const Devarana: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-
         dispatch(getUsuariosThunk({}))
     }, [])
-
-
-
 
   return (
     <div className="animate__animated animate__fadeIn animate__faster">
         <div>
             <Box className="h-80 bg-[url('https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/portadas/DEV-FON-2.jpg')] py-20 relative flex items-center justify-center">
                 
-                    <div className='bg-black bg-opacity-40 w-full h-full absolute'>
+                <div className='bg-black bg-opacity-50 w-full h-full absolute'>
 
+                </div>
+                <div className="flex justify-center z-50 items-end">
+                    <p className="pr-4 font-playfair lg:text-7xl sm:text-base text-sm text-white">
+                        ¡ Somos... 
+                    </p>
+                    <div className="lg:h-[48px] h-[30px] overflow-hidden ">
+                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">creadores !</p>
+                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">arquitectos !</p>
+                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">diseñadores !</p>
+                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">de lo extraordinario !</p>
                     </div>
-                <div className="flex justify-center z-50 items-center">
-                        <p className="pr-2 font-playfair lg:text-6xl sm:text-base text-sm text-white">
-                            ¡ Somos
-                        </p>
-                        <div className="lg:h-[48px] h-[30px] overflow-hidden ">
-                            <p className="pb-2 text-white listEffect_item font-mulish lg:text-4xl sm:text-base text-sm">creadores !</p>
-                            <p className="pb-2 text-white listEffect_item font-mulish lg:text-4xl sm:text-base text-sm">arquitectos !</p>
-                            <p className="pb-2 text-white listEffect_item font-mulish lg:text-4xl sm:text-base text-sm">diseñadores !</p>
-                            <p className="pb-2 text-white listEffect_item font-mulish lg:text-4xl sm:text-base text-sm">de lo extraordinario !</p>
-                        </div>
-                    </div>
+                </div>
             </Box>
             <Box className="-my-10 py-2 mx-5 mb-10 glassMorph  overflow-hidden">
                 <div className="scroller-container">
@@ -53,7 +52,7 @@ export const Devarana: React.FC = () => {
                         { 
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                        <Link key={i} to={`/perfil/${item.slug}`}>
                                             <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
@@ -64,7 +63,7 @@ export const Devarana: React.FC = () => {
                         { 
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                        <Link key={i} to={`/perfil/${item.slug}`}>
                                             <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
@@ -75,7 +74,7 @@ export const Devarana: React.FC = () => {
                         { 
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                        <Link key={i} to={`/perfil/${item.slug}`}>
                                             <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
@@ -86,7 +85,7 @@ export const Devarana: React.FC = () => {
                         { 
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.id}`}>
+                                        <Link key={i} to={`/perfil/${item.slug}`}>
                                             <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
@@ -191,7 +190,19 @@ export const Devarana: React.FC = () => {
                 </div>
             </Box>
             <Box className="col-span-12 md:col-span-6">
-                <Chart />
+                <Swiper
+                    spaceBetween={50}
+                    slidesPerView={1}
+                    effect='fade'
+                    modules={[EffectFade]}
+                >
+                    <SwiperSlide>
+                        <Chart />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <Chart />
+                    </SwiperSlide>
+                </Swiper>
 
             </Box>
             <Box className="col-span-12 bg-w-legendario bg-no-repeat bg-right">
@@ -214,28 +225,55 @@ export const Devarana: React.FC = () => {
                     <li className='text-[16px]'>Asegurar la integridad y seguridad de nuestro Sistema de Gestión de Calidad.</li>
                 </ul>
             </Box>
-            <Box className="col-span-6 md:col-span-3">
-                <div className="flex flex-col gap-y-2  items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon">  
+
+
+            
+            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon group-hover:opacity-0 transition-all duration-500 ease-in-out">  
                     <FaLeaf className='text-2xl'/>
                     <p className="font-lg">Medio Ambiente</p>
                 </div>
+                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <p className='text-devarana-graph'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    </p>
+                </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3">
-                <div className="flex flex-col  gap-y-2 items-center align-middle text-white p-5 rounded-ext bg-devarana-pink">  
+            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink group-hover:opacity-0 transition-all duration-500 ease-in-out">  
                     <FaMedal className='text-2xl'/>
                     <p className="font-lg">Calidad</p>
                 </div>
+                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <p className='text-devarana-graph'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    </p>
+                </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3">
-                <div className="flex flex-col gap-y-2  items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue">
+            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue group-hover:opacity-0 transition-all duration-500 ease-in-out">
                     <FaTree className='text-2xl'/>
                     <p className="font-lg">Bienestar</p>
                 </div>
+                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <p className='text-devarana-graph'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    </p>
+                </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3">
-                <div className="flex flex-col  gap-y-2 items-center align-middle text-white p-5 rounded-ext bg-devarana-blue">
+            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue group-hover:opacity-0 transition-all duration-500 ease-in-out">
                     <BiWorld className='text-2xl'/>
                     <p className="font-lg">Seguridad</p>
+                </div>
+                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <p className='text-devarana-graph'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    </p>
                 </div>
             </Box>
         </div>
