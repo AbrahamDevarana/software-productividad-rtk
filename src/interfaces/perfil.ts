@@ -52,6 +52,7 @@ export interface PerfilProps {
     telefono?:             number;
     puesto?:               string;
     descripcionPerfil?:    null;
+    responsabilidades?:    string;
     status?:               boolean;
     departamentoId?:       number;
     leaderId?:             string;
@@ -60,4 +61,14 @@ export interface PerfilProps {
     direccion?:            DireccionProps;
     objetivosOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
+    social?: Social[];
+}
+
+
+
+export interface Social {
+    id:        string;
+    nombre:    string;
+    url:       string;
+    usuarioId: string;
 }

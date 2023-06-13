@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { FaCheck, FaProjectDiagram } from "react-icons/fa";
 import { Badge } from "@/components/ui/Badge";
 import { PerfilProps } from "@/interfaces";
-
+import DOMPurify from "dompurify";
 
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
@@ -101,6 +101,7 @@ const Profile = ({usuarioActivo}: Props) => {
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
+                <div className="font-light text-devarana-graph max-h-[250px] overflow-y-scroll" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}></div>
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Logros</p>
@@ -123,7 +124,7 @@ const Profile = ({usuarioActivo}: Props) => {
                         </div>
                         <div className="pt-5">
                             <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
-                            <div className="h-[80px]">
+                            <div className="h-[80px] overflow-y-auto">
                                 <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
                             </div>
                             <div className="py-3 grid grid-cols-2 gap-x-5">

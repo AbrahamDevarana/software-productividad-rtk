@@ -20,7 +20,7 @@ export const Button = ({ children, onClick, type = "button", classType, classCol
     return (
         <button
             type={type}
-            className={`customButton customButton__${classType} customButton__${classType}-${classColor}`}
+            className={`customButton customButton__${classType} customButton__${classType}-${classColor} disabled:opacity-50 disabled:cursor-not-allowed`}
             onClick={onClick}
             style={{
                 width: width

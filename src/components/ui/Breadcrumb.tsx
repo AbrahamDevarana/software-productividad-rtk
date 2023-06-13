@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/redux/hooks';
 import { rutaPrivada } from '@/router';
 import { Breadcrumb } from 'antd';
 import { FaHome } from 'react-icons/fa';
@@ -6,6 +7,8 @@ import { Link, useLocation } from 'react-router-dom';
 const MyBreadcrumb = () => {
     const location = useLocation();
     const paths = location.pathname.split('/').filter(path => path !== '');
+
+    const { userAuth } = useAppSelector (state => state.auth);
 
     const breadcrumbItems = paths.map((path, index) => {
         const currentPath = `/${paths.slice(0, index + 1).join('/')}`;
@@ -33,7 +36,9 @@ const MyBreadcrumb = () => {
     const finalItems = [homeItem, ...breadcrumbItems];
 
     return (
-        <Breadcrumb>
+       <>
+            <Breadcrumb>
+            
             {finalItems.map(item => (
                 item && (
                     <Breadcrumb.Item key={item.path}>
@@ -46,7 +51,17 @@ const MyBreadcrumb = () => {
                     </Breadcrumb.Item>
                 )
             ))}
+
+            
         </Breadcrumb>
+            <div>
+            {
+                location.pathname == '/perfil' && (
+                    <h1 className='pr-3 items-center font-medium'>Buenos días, { userAuth.nombre } </h1>
+                )
+            }
+            </div>
+        </>
     );
 };
 

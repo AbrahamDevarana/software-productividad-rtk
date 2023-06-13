@@ -29,7 +29,9 @@ export interface UsuarioProps {
     leaderId?: number | null ;
     direccion?: Direccion;
     departamento?: Departamento;
+
 }
+
 
 export interface Direccion {
     id: number;
