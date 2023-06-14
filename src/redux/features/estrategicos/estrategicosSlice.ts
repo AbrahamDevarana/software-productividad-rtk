@@ -4,7 +4,7 @@ import { EstrategicosState } from '@/interfaces';
 const initialState: EstrategicosState = {
     estrategicos: [],
     paginate: {
-        totalItems: 0,
+        totalItem: 0,
         totalPages: 0,
         currentPage: 0,
     }, 
@@ -68,7 +68,7 @@ const estrategicosSlice = createSlice({
             state.isLoading = false
             state.estrategicos = action.payload.objetivosEstrategicos.rows
             state.paginate = {
-                totalItems: action.payload.objetivosEstrategicos.totalItems,
+                totalItem: action.payload.objetivosEstrategicos.totalItem,
                 totalPages: action.payload.objetivosEstrategicos.totalPages,
                 currentPage: action.payload.objetivosEstrategicos.currentPage
             }

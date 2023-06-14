@@ -5,7 +5,7 @@ import { AreasState, Paginate } from '@/interfaces';
 const initialState: AreasState = {
     areas: [],
     paginate: {
-        totalItems: 0,
+        totalItem: 0,
         totalPages: 0,
         currentPage: 0,
     },
@@ -35,7 +35,7 @@ const areasSlice = createSlice({
         getAreas: (state, action) => {
             state.areas = action.payload.areas.rows
             state.paginate = {
-                totalItems: action.payload.areas.totalItems,
+                totalItem: action.payload.areas.totalItem,
                 totalPages: action.payload.areas.totalPages,
                 currentPage: action.payload.areas.currentPage
             }
