@@ -200,7 +200,7 @@ export const Devarana: React.FC = () => {
 
         <div className='grid grid-cols-12 gap-10 pt-5'>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon group-hover:opacity-0 transition-all duration-500 ease-in-out">  
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
                     <FaLeaf className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Medio Ambiente</p>
                 </div>
@@ -211,7 +211,7 @@ export const Devarana: React.FC = () => {
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink group-hover:opacity-0 transition-all duration-500 ease-in-out">  
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
                     <FaMedal className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Calidad</p>
                 </div>
@@ -222,7 +222,7 @@ export const Devarana: React.FC = () => {
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue group-hover:opacity-0 transition-all duration-500 ease-in-out">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
                     <FaTree className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Bienestar</p>
                 </div>
@@ -235,14 +235,26 @@ export const Devarana: React.FC = () => {
                     </p>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue group-hover:opacity-0 transition-all duration-500 ease-in-out">
+            {/* <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
                     <BiWorld className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Seguridad</p>
                 </div>
                 <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
                     <p className='text-devarana-graph text-[16px] font-light'>
                     Fomentamos el desarrollo personal y profesional de nuestros colaboradores, brindándoles oportunidades de crecimiento, capacitación continua y reconocimiento por su desempeño.
+                    </p>
+                </div>
+            </Box> */}
+            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue transition-all duration-500 ease-in-out 
+                    group-hover:transform group-hover:scale-50 group-hover:translate-x-1/2">
+                    <BiWorld className='text-2xl'/>
+                    <p className="text-[16px] font-light text-white">Seguridad</p>
+                </div>
+                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-x-visible group-hover:overflow-y-auto group-hover:w-3/4'>
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                        Fomentamos el desarrollo personal y profesional de nuestros colaboradores, brindándoles oportunidades de crecimiento, capacitación continua y reconocimiento por su desempeño.
                     </p>
                 </div>
             </Box>

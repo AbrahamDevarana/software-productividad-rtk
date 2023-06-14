@@ -3,34 +3,19 @@
 
 
 .quill {
-
     border-width: 1px;
     border-color: rgba(101, 106, 118, .2);
     border-radius: 10px;
-
+    color: $default;
+    transition: all .3s ease-in-out;
     
     .ql-snow{
-        transition: all .5s ease-in-out;
+        transition: all .3s ease-in-out;
         border: 0;
     }
 
-    // .ql-toolbar{
-    //     display: none;
-    // }
-
-    p{
-        color: $default;
-        transition: all .3s ease-in-out;
-    }
-
     &:focus-within, &:hover {
-        p{
-            color: $dark
-        }
-
-        .ql-toolbar{
-            display: block;
-        }
+        color: $dark;
     }
     
 }

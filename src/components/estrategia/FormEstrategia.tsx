@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space } from 'antd';
+import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Switch, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
@@ -15,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { statusType } from '@/types';
 import { getColor } from '@/helpers';
+import { BsFillCalendarFill } from 'react-icons/bs';
+import { useSelectUser } from '@/hooks/useSelectUser';
+import { FaEdit, FaTimes } from 'react-icons/fa';
 
 
 
@@ -33,21 +35,30 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     const { userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const [statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
+    const [viewMeta, setViewMeta] = useState<boolean>(false);
 
-    
+    const [form] = Form.useForm();
     
     const inputRef = useRef<any>(null)
     const { TextArea } = Input;
+
+    const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
     
 
-    const handleOnSubmit = ( values: any ) => {
-        delete values.status
+    const handleOnSubmit = () => {
 
-        inputRef.current?.blur();
-        if(values.id){            
-            dispatch(updateEstrategicoThunk(values))
-        }else if(values.nombre.trim() !== '' && values.descripcion.trim() !== '' && values.perspectivaId.trim() !== '' && values.fechaInicio && values.fechaFin && values.propietarioId && values.indicador.trim() !== ''){
-            dispatch(createEstrategicoFromPerspectivaThunk(values))
+        
+        const query =  {
+            ...currentEstrategico,
+            ...form.getFieldsValue(),
+        }
+
+        delete query.status
+
+        if(query.id){            
+            dispatch(updateEstrategicoThunk(query))
+        }else if(query.nombre.trim() !== '' && query.descripcion.trim() !== '' && query.perspectivaId.trim() !== '' && query.fechaInicio && query.fechaFin && query.propietarioId && query.indicador.trim() !== ''){
+            dispatch(createEstrategicoFromPerspectivaThunk(query))
         }
     }
 
@@ -63,7 +74,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
 
     const handleChangeProgreso = (value: number) => {
+        
         if(currentEstrategico.id && currentEstrategico.progreso !== value){
+
             const updateEstrategico = {
                 ...currentEstrategico,
                 progreso: value
@@ -121,253 +134,250 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     }
 
 
+    const itemTab: TabsProps['items'] = [
+        {
+            key: '1',
+            label: 'Indicador',
+        },
+        {
+            key: '2',
+            label: 'Comentarios',
+        }
+    ]
+
+
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
     return (
         <>
-
-            <Formik
-                initialValues={ {
+            <Form
+                layout='vertical'
+                onBlur={handleOnSubmit}
+                initialValues={{
                     ...currentEstrategico,
-                    propietarioId: currentEstrategico.propietario?.id || userAuth?.id,
-                    responsables: currentEstrategico.responsables?.map((r: any) => r.id) || [],
-                    perspectivaId: currentEstrategico.perspectivaId
-                    
-                } }
-            
-                onSubmit={ (values) => handleOnSubmit(values) }
-                validationSchema={Yup.object({
-                    nombre: Yup.string().required("El nombre es requerido"),
-                    codigo: Yup.string().required("El codigo es requerida"),
-                    descripcion: Yup.string().required("La descripción es requerida"),
-                    perspectivaId: Yup.string().required("La perspectiva es requerida")
-                })}
-                enableReinitialize={true}
-                validateOnBlur={true}
-
+                    responsables: currentEstrategico.responsables.map(responsable => responsable.id),
+                }}
+                form={form}
+                className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
             >
-                {
-                    ({ values, handleChange, setFieldValue, setFieldTouched}) => (
-                        <Form
-                            noValidate
-                            layout='vertical'
-                            onBlur={() => handleOnSubmit(values)}
-                            className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
-                        >
-                 
-                            <Form.Item
-                                label="Objetivo"
-                                className='col-span-10'
-                            >
-                                <Input
-                                    className='text-2xl'
-                                    bordered={false}
-                                    value={values.nombre}
-                                    onChange={handleChange}
-                                    name="nombre"
-                                    ref={inputRef}
-                                    onPressEnter={ () => handleOnSubmit(values) }
-                                />
-                                <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Clave"
-                                className='col-span-2'
-                            >
-                                <Input
-                                    className=''
-                                    bordered={false}
-                                    value={values.codigo}
-                                    onChange={handleChange}
-                                    name="codigo"
-                                    ref={inputRef}
-                                />
-                                <ErrorMessage name="codigo" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Space className={`${values.id === ''? 'hidden': 'block'} col-span-12`}>
-                                <Divider className='col-span-12'  />
-                                <Form.Item 
-                                    className='col-span-12'>
-                                    <div className='flex justify-between'>
-                                        <p className='text-devarana-graph'>
-                                            <span className='text-3xl'> {values.progreso} </span> 
-                                            % / 100 %
-                                        </p>
-                                        <div className='bg-gray-50 rounded-full px-2'>
-                                            <Dropdown menu={{items}} overlayClassName='bg-transparent'>
-                                                <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
-                                                    <TabStatus status={statusEstrategico} />
-                                                </button>
-                                            </Dropdown>
-                                        </div>
-                                    </div>
-                                </Form.Item>
-                                <Form.Item
-                                    label="Progreso"
-                                    className='col-span-12'
-                                >
-                                    <Slider
-                                        className='drop-shadow progressStyle'
-                                        defaultValue={values.progreso}
-                                        min={0}
-                                        max={100}
-                                        onAfterChange={ handleChangeProgreso }
-                                        trackStyle={{
-                                            backgroundColor: getColor(values.status).color,
-                                            borderRadius: 10,
+        
+                <Form.Item
+                    label="Objetivo"
+                    className='col-span-10'
+                    name={'nombre'}
+                >
+                    <Input
+                        className='text-2xl'
+                        bordered={false}
+                        ref={inputRef}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Clave"
+                    className='col-span-2'
+                    name={'codigo'}
+                >
+                    <Input
+                        bordered={false}
+                        name="codigo"
+                        className='text-2xl'
+                        ref={inputRef}
+                    />
+                </Form.Item>
+                <Space className={`${ form.getFieldValue('id') === ''? 'hidden': 'block'} col-span-12`}>
+                    <Divider className='col-span-12'  />
+                    <Form.Item
+                        className='col-span-12'
+                        name={'progreso'}
+                    >
 
-                                        }}
-                                        railStyle={{
-                                            backgroundColor: getColor(values.status, .3).color,
-                                            borderRadius: 10,
-                                        }}
-                                        
-                                    />
+                        <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Progreso</p>
+                            <Dropdown menu={{items}} overlayClassName='bg-transparent'>
+                                    <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
+                                        <TabStatus status={statusEstrategico} />
+                                    </button>
+                            </Dropdown>
+                        </div>
+                        <div className='inline-flex w-full'>
+                            <p className='text-3xl font-bold pr-2' style={{ 
+                                color: getColor(form.getFieldValue('status')).color,
+                                backgroundClip: 'text',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundImage: `linear-gradient(to top, ${getColor(form.getFieldValue('status')).lowColor}, ${getColor(form.getFieldValue('status')).color})`
+                            }}> { currentEstrategico.progreso }% </p>
+                            <Slider
+                                className='drop-shadow progressStyle w-full'
+                                defaultValue={currentEstrategico.progreso}
+                                min={0}
+                                max={100}
+                                onAfterChange={ (value ) => handleChangeProgreso(value) }
+                                trackStyle={{
+                                    backgroundColor: getColor(form.getFieldValue('status')).color,
+                                    borderRadius: 10,
 
-                                </Form.Item>
-                                <Divider className='col-span-12' />
-                            </Space>
-                            <Form.Item
-                                label="Perspectiva"
-                                className='col-span-12'
-                            >
-                                <div className='flex flex-wrap gap-3'>
-                                    {
-                                        perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
-                                            <button 
-                                                type='button'
-                                                onClick={() => setFieldValue('perspectivaId', perspectiva.id)}
-                                                key={perspectiva.id} 
-                                                className='rounded-ext px-3 py-1'
-                                                style={{
-                                                    backgroundColor: values.perspectivaId === perspectiva.id ? perspectiva.color : '#f0f2f5',
-                                                    color: values.perspectivaId === perspectiva.id ? '#fff' : '#000'
-                                                }}
-                                            >
-                                                <span className='drop-shadow'>{ perspectiva.nombre }</span>
-                                            </button>
-                                        ))
-                                    }
-                                </div>
-                            <ErrorMessage name="perspectivaId" render={msg => <Alert type="error" message={msg} showIcon />} />
+                                }}
+                                railStyle={{
+                                    backgroundColor: getColor(form.getFieldValue('status'), .3).color,
+                                    borderRadius: 10,
+                                }}
+                                handleStyle={{
+                                    borderColor: getColor(form.getFieldValue('status')).color,
+                                }}
+                            />
+                        </div>
+                    </Form.Item>
+                    <Divider className='col-span-12' />
+                </Space>
+                <Form.Item
+                    label="Perspectiva"
+                    className='col-span-12'
+                >
+                    <div className='flex flex-wrap gap-3'>
+                        {
+                            perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
+                                <button 
+                                    type='button'
+                                    onClick={() => form.setFieldValue('perspectivaId', perspectiva.id)}
+                                    key={perspectiva.id} 
+                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105 ${form.getFieldValue('perspectivaId') === perspectiva.id? 'opacity-100': 'opacity-70'}`}
+                                    style={{
+                                        backgroundColor: perspectiva.color,
+                                    }}
+                                > { perspectiva.nombre }
+                                </button>
+                            ))
+                        }
+                    </div>
 
-                            </Form.Item>
-                            <Divider className='col-span-12' />
-                            <Form.Item
-                                label="Fecha de inicio"
-                                className='col-span-6'
-                            >
-                                <DatePicker
-                                    onChange={(date, dateString) => setFieldValue('fechaInicio', dayjs(dateString, 'DD-MM-YYYY'))}
-                                    value={dayjs(values.fechaInicio)} format={"DD-MM-YYYY"}
-                                    defaultValue={dayjs(values.fechaInicio)}
-                                    name="fechaInicio"
-                                    className='w-full editableDatePicker'
-                                bordered={false}
-                                    clearIcon={false}
-                                    ref={inputRef}
-                                />
-                                <ErrorMessage name="fechaInicio" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Fecha de fin"
-                                className='col-span-6'
-                            >
-                                <DatePicker
-                                    onChange={(date, dateString) => setFieldValue('fechaFin', dayjs(dateString, 'DD-MM-YYYY'))}
-                                    value={dayjs(values.fechaFin)} format={"DD-MM-YYYY"}
-                                    defaultValue={dayjs(values.fechaFin)}
-                                    name="fechaFin"
-                                    className='w-full editableDatePicker'
-                                    clearIcon={false}
-                                    ref={inputRef}
-                                    bordered={false}
-                                />
-                                <ErrorMessage name="fechaFin" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Propietario"
-                                className='col-span-12'
-                            >
-                                <Select
-                                    style={{ width: '100%' }}
-                                    placeholder="Selecciona los responsables"
-                                    onChange={(value) => setFieldValue('propietarioId', value)}
-                                    allowClear
-                                bordered = {false}
-                                    value={ values.propietarioId }
-                                >
-                                    {
-                                        usuarios.map((usuario: any) => (
-                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
-                                        ))
-                                    }
-                                </Select>
-                                <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Co-Responsables"
-                                className='col-span-12'
-                            >
-                                <Select
-                                    mode="multiple"
-                                    style={{ width: '100%' }}
-                                    placeholder="Selecciona los responsables"
-                                    onChange={(value) => {
-                                        setFieldValue('responsables', value)
-                                    }}           
-                                    onDeselect={(value) => {
-                                        setFieldValue('responsables', values.responsables.filter((item: any) => item !== value))
-                                        
-                                    }}                            
-                                    allowClear
-                                    bordered = {false}
-                                    value={ values.responsables }
-                                >
-                                    {
-                                        usuarios.map((usuario: any) => (
-                                            <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
-                                        ))
-                                    }
-                                </Select>
-                                <ErrorMessage name="responsables" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Meta a alcanzar"
-                                className='col-span-12 form-editor'
-                            >
-                                
-                                <ReactQuill
-                                    value={values.descripcion}
-                                    onChange={(value) => setFieldValue('descripcion', value)}
-                                     
-                                />
+                </Form.Item>
+                <Form.Item
+                    label="Fecha de inicio"
+                    className='col-span-6'
+                >
+                    <DatePicker
+                        onChange={(date, dateString) => form.setFieldValue('fechaInicio', dayjs(dateString, 'DD-MM-YYYY'))}
+                        value={dayjs(form.getFieldValue('fechaInicio'))}
+                        format={"DD-MM-YYYY"}
+                        defaultValue={dayjs(form.getFieldValue('fechaInicio'))}
+                        name="fechaInicio"
+                        className='w-full'
+                        clearIcon={false}
+                        ref={inputRef}
+                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Fecha de fin"
+                    className='col-span-6'
+                >
+                    <DatePicker
+                        onChange={(date, dateString) => form.setFieldValue('fechaFin', dayjs(dateString, 'DD-MM-YYYY'))}
+                        value={dayjs(form.getFieldValue('fechaFin'))}
+                        defaultValue={dayjs(form.getFieldValue('fechaFin'))}
+                        name="fechaFin"
+                        className='w-full'
+                        clearIcon={false}
+                        ref={inputRef}
+                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label="Propietario"
+                    className='col-span-6'
+                >
+                    <Select
+                        style={{ width: '100%' }}
+                        placeholder="Selecciona los responsables"
+                        onChange={(value) => form.setFieldValue('propietarioId', value)}
+                        // mode="multiple"
+                        tagRender={tagRender}
+                        bordered = {false}
+                        value={ form.getFieldValue('propietarioId') }
+                        maxLength={1}
+                        maxTagPlaceholder={(omittedValues) => (
+                            <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                        )}
+                    >
+                        {
+                            usuarios.map(usuario => (
+                                <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
+                            )).filter( usuario => usuario.key !== userAuth?.id)
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Co-Responsables"
+                    className='col-span-6'
+                    name='responsables'
+                >
 
+                    <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Selecciona los responsables"
+                        onChange={(value) => {
+                            form.setFieldValue('responsables', value)
+                        }}           
+                        onDeselect={(value) => {
+                            form.setFieldValue('responsables', value)
+                        }}                            
+                        allowClear
+                        bordered = {false}
+                        value={ form.getFieldValue('responsables') }
+                        tagRender={tagRender}
+                        maxLength={3}
+                        maxTagPlaceholder={(omittedValues) => (
+                            <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                        )}
+                    >
+                        {
+                            usuarios.map(usuario => (
+                                <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
+                            )).filter( usuario => usuario.key !== userAuth?.id)
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    className='col-span-12'
+                    name="meta"
+                >
+                    <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Meta</p>
+                            <button onClick={() => setViewMeta(!viewMeta)} className='font-bold text-devarana-graph'>
+                                {
+                                    viewMeta ? <FaTimes /> : <FaEdit />
+                                }
+                            </button>
+                            
+                        </div>
+                    {
+                        viewMeta 
+                        ? (
+                            <ReactQuill
+                                value={form.getFieldValue('descripcion')}
+                                onChange={(value) => form.setFieldValue('descripcion', value)}
+                            />    
+                        ) 
+                        : ( <div className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )
+                    }
+                </Form.Item>
+                <div className='col-span-12'>
+                    <Tabs defaultActiveKey='1' items={itemTab} className='text-devarana-graph active:text-devarana-dark-graph'>
+                    </Tabs>
+                    
+                </div>
 
-                                {/* <TextArea rows={3} value={values.descripcion} onChange={handleChange}  name="descripcion" /> */}
-                                <ErrorMessage name="descripcion" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-                            <Form.Item
-                                label="Indicador"
-                                className='col-span-12'
-                            >
-                                <TextArea rows={1} value={values.indicador} onChange={handleChange}  name="indicador" className='editableInput' bordered={false}/>
-                                <ErrorMessage name="indicador" render={msg => <Alert type="error" message={msg} showIcon />} />
-                            </Form.Item>
-
-                            {/* <Form.Item 
-                                className='text-right'
-                            >
-                                <div className='flex'>
-                                    {setShowEdit &&<Button fn={ () => setShowEdit(false)} btnType="primary-outline">Cancelar</Button>}
-                                    <Button btnType="secondary" type='submit' className='ml-auto'>Guardar</Button>
-                                </div>
-                            </Form.Item> */}
-                        </Form>
-
-                    )}
-            </Formik>
-                    <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-devarana-midnight hover:opacity-70 rounded-full text-white border-none absolute -left-4 top-20' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
+                <Form.Item
+                    label="Indicador"
+                    className='col-span-12'
+                >
+                    <TextArea rows={1} onChange={(e) => form.setFieldValue('indicador', e.target.value)} value={form.getFieldValue('indicador')}
+                    name="indicador" className='editableInput' bordered={false}/>
+                </Form.Item>
+            </Form>
+            <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
         </>
     )
 }

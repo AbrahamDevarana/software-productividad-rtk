@@ -41,6 +41,7 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             }}
             onFinish={handleonSubmit}
             form={form}
+            
         >
             {/* <div className='block col-span-4'>
                 <Upload
@@ -125,9 +126,9 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             >
                 <Input.TextArea className="w-full" name="descripcionPerfil"  />
             </Form.Item>  
-            <Form.Item className="col-span-12 ml-auto">
+            <div className="col-span-12 ml-auto">
                 <Button classColor="dark" classType='regular' className="block ml-auto" type='submit'>  Guardar Perfil </Button>
-            </Form.Item>    
+            </div>    
         </Form>
   )
 }

@@ -237,9 +237,20 @@ p, li, span, a{
 
 }
 
+.tableTitlePrincipal{
+    @apply text-devarana-graph font-medium;
+    font-size: 14px;
+}
+
+.tableTitle {
+    @apply text-devarana-graph font-medium;
+    font-size: 12px;
+}
+
+// Eliminar
 .ant-table-thead th {
     color: #848891!important;
-    @apply uppercase font-bold;
+    @apply font-bold;
     font-size: 11px;
 }
 
@@ -348,7 +359,6 @@ input, textarea {
 
 .customTable{
     .ant-table {
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
 
         .ant-table-thead tr th{

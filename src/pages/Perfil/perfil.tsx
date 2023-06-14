@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Avatar, Tooltip } from "antd";
 import { Logros } from "@/components/perfil/Logros";
+import { Proximamente } from "@/components/ui/Proximamente";
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -106,169 +107,16 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <div className="font-light text-devarana-graph max-h-[250px] overflow-y-scroll" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}></div>
             </Box>
             <Box className="xl:col-span-1 col-span-3">
-                <p className="text-lg font-medium py-2 text-devarana-dark-graph">Logros</p>
+                <p className="text-lg font-medium py-2 text-devarana-dark-graph ">Logros</p>
                 {/* <Logros /> */}
+                <div className="flex items-center h-full">
+                    <Proximamente avance={25} size="small" />
+                </div>
             </Box>
         </div>
 
         <h2 className="py-10 px-2 text-lg font-medium">Objetivos</h2>
         <div className="gap-10 py-5 overflow-x-auto w-full flex">
-            {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
-                    <Box className="w-[350px] flex-none" key={objetivo.id}>
-                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
-                            <div>
-                                {/* <DoughnutChart/> */}
-                            </div>
-                            <div className="text-white my-auto text-center">
-                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
-                                <p>18 <span className="font-light text-sm">Tareas</span></p>
-                            </div>
-                        </div>
-                        <div className="pt-5">
-                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
-                            <div className="h-[80px] overflow-y-auto">
-                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
-                            </div>
-                            <div className="py-3 grid grid-cols-2 gap-x-5">
-                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
-                                    <Button className="w-full" classColor="primary" classType="regular" >
-                                        Ver Objetivo
-                                    </Button>
-                                </Link>}
-                                <div className="flex justify-center my-auto">
-                                    <Avatar.Group>
-                                        {
-                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
-                                                <Tooltip title={responsable.nombre} key={responsable.id}>
-                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
-                                                </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                ))
-            }
-            {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
-                    <Box className="w-[350px] flex-none" key={objetivo.id}>
-                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
-                            <div>
-                                {/* <DoughnutChart/> */}
-                            </div>
-                            <div className="text-white my-auto text-center">
-                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
-                                <p>18 <span className="font-light text-sm">Tareas</span></p>
-                            </div>
-                        </div>
-                        <div className="pt-5">
-                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
-                            <div className="h-[80px] overflow-y-auto">
-                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
-                            </div>
-                            <div className="py-3 grid grid-cols-2 gap-x-5">
-                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
-                                    <Button className="w-full" classColor="primary" classType="regular" >
-                                        Ver Objetivo
-                                    </Button>
-                                </Link>}
-                                <div className="flex justify-center my-auto">
-                                    <Avatar.Group>
-                                        {
-                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
-                                                <Tooltip title={responsable.nombre} key={responsable.id}>
-                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
-                                                </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                ))
-            }
-            {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
-                    <Box className="w-[350px] flex-none" key={objetivo.id}>
-                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
-                            <div>
-                                {/* <DoughnutChart/> */}
-                            </div>
-                            <div className="text-white my-auto text-center">
-                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
-                                <p>18 <span className="font-light text-sm">Tareas</span></p>
-                            </div>
-                        </div>
-                        <div className="pt-5">
-                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
-                            <div className="h-[80px] overflow-y-auto">
-                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
-                            </div>
-                            <div className="py-3 grid grid-cols-2 gap-x-5">
-                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
-                                    <Button className="w-full" classColor="primary" classType="regular" >
-                                        Ver Objetivo
-                                    </Button>
-                                </Link>}
-                                <div className="flex justify-center my-auto">
-                                    <Avatar.Group>
-                                        {
-                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
-                                                <Tooltip title={responsable.nombre} key={responsable.id}>
-                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
-                                                </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                ))
-            }
-            {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
-                    <Box className="w-[350px] flex-none" key={objetivo.id}>
-                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
-                            <div>
-                                {/* <DoughnutChart/> */}
-                            </div>
-                            <div className="text-white my-auto text-center">
-                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
-                                <p>18 <span className="font-light text-sm">Tareas</span></p>
-                            </div>
-                        </div>
-                        <div className="pt-5">
-                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
-                            <div className="h-[80px] overflow-y-auto">
-                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
-                            </div>
-                            <div className="py-3 grid grid-cols-2 gap-x-5">
-                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
-                                    <Button className="w-full" classColor="primary" classType="regular" >
-                                        Ver Objetivo
-                                    </Button>
-                                </Link>}
-                                <div className="flex justify-center my-auto">
-                                    <Avatar.Group>
-                                        {
-                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
-                                                <Tooltip title={responsable.nombre} key={responsable.id}>
-                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
-                                                </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                ))
-            }
             {
                 usuarioActivo.objetivosOperativos.map( objetivo => (
                     <Box className="w-[350px] flex-none" key={objetivo.id}>

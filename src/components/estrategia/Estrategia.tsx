@@ -28,14 +28,14 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                         }}>
                             <p className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider leading-4 py-2 w-[170px] drop-shadow '> Perspectiva <br/> { perspectiva.nombre }</p>
                         </div>
-                        <div className='bg-white flex justify-center items-center flex-col align-middle w-[160px] relative group'>
+                        <div className='bg-white flex justify-center items-center flex-col align-middle w-[160px] relative group overflow-hidden'>
                             <div className='group-hover:opacity-0 transition-all duration-300 ease-in-out'>
                                 <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
                             </div>
-                            <div className='absolute inset-0 px-3 py-5 flex items-center text-white group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out overflow-auto' style={{
+                            <div className='absolute inset-0 px-3 py-5 flex items-center text-white group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out overflow-auto group-hover:transform group-hover:scale-110' style={{
                                 backgroundColor: perspectiva.color
                             }}>
-                                <p className='leading-5'>
+                                <p className='leading-5 cursor-default'>
                                     {
                                         perspectiva.descripcion
                                     }
@@ -43,7 +43,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                             </div>
                         </div>
                     </div>
-                    <div className='bg-white py-10 px-5 w-full shadow relative'>
+                    <div className='bg-white px-5 w-full shadow relative rounded-r-ext'>
                         <TablaEstrategia perspectiva={perspectiva} setOpen={setOpen}/>
                     </div>
                 </div>
@@ -53,7 +53,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
             <Drawer
                 onClose={() => setOpen(false)}
                 open={open}
-                width={window.innerWidth > 1200 ? 600 : '100%'}
+                width={window.innerWidth > 1200 ? 640 : '100%'}
                 className='rounded-l-ext'
                 destroyOnClose={true}
                 // exit={{ opacity: 0 }}

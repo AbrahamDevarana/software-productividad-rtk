@@ -3,9 +3,7 @@ import { Avatar, Drawer, Progress, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
-import { EstrategiaView } from './EstrategiaView'
 import { FormEstrategia } from './FormEstrategia';
-import { useLocation, useNavigate } from 'react-router-dom';
 import {  getColor, getFile, getStatus } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
@@ -25,43 +23,44 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
-            title: 'Objetivos',
+            title: () => ( <p className='tableTitlePrincipal'>Objetivo</p>),
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
-                children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
-                    <p className='text-default'>{record.nombre}</p>
+                children: 
+                <div className='flex items-center'> 
+                    <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(record.status).color }}/> 
+                    <p className='text-devarana-graph'>{record.nombre}</p>
                 </div>,
             }),
         },
         {
-            title: 'Código',
+            title: () => ( <p className='tableTitle'>Código</p>),
             render: (text, record, index) => ( <p className='text-default'> { record.codigo } </p>   ),
-            width: 50,
+            width: 20,
             ellipsis: true,
         },
         {
-            title: 'Tácticos',
-            width: 40,
+            title: () => ( <p className='tableTitle'>Tácticos</p>),
+            width: 23,
             ellipsis: true,
             render: (text, record, index) => ( <p className='text-default'> { record.tacticos?.length } </p>   ),
         },
         {
-            title: 'Estatus',
+            title: () => ( <p className='tableTitle'>Estatus</p>),
             dataIndex: 'status',
-            width: 50,
+            width: 40,
             ellipsis: true,
             render: (text, record, index) => (
-                <span className='font-semibold'
+                <p className='font-medium'
                  style={{
                     color: getColor(record.status).color,
-                }}>{getStatus(record.status)}</span>
+                }}>{getStatus(record.status)}</p>
             ),
         },
         
         {
-            title: 'Progreso',
+            title: () => ( <p className='tableTitle'>Progreso</p>),
             dataIndex: 'progreso',
             width: 60,
             render: (text, record, index) => (
@@ -77,7 +76,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             ),
         },
         {
-            title: 'Responsables',
+            title: () => ( <p className='tableTitle'>Responsables</p>),
             width: 50,
             render: (text, record, index) => (
                 <Avatar 
@@ -106,7 +105,8 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
     return (
         <>
             <Table
-                className='w-full'
+                className='w-full customTable' 
+                rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 loading={ perspectiva.objetivos_estrategicos?.length === 0 ? true : false }
                 columns={columns}
                 dataSource={perspectiva.objetivos_estrategicos}
@@ -135,11 +135,6 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
                 {
                     <FormEstrategia setOpen={setOpen} setShowEdit={setShowEdit}/> 
-
-
-                    // showEdit
-                    // ? <FormEstrategia currentTactico={ estrategico } setOpen={setOpen} setShowEdit={setShowEdit}/> 
-                    // : <EstrategiaView estrategico={ estrategico } perspectiva={perspectiva} edit={true} view={true} setShowEdit={setShowEdit}/>
                 }
             </Drawer>
         </>

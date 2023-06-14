@@ -2,7 +2,8 @@
 import { Timeline } from "antd";
 import Box from "@/components/ui/Box";
 import { Icon } from "@/components/Icon";
-import { Proximamente } from "@/components/ui/proximamente";
+import { Proximamente } from "@/components/ui/Proximamente";
+
 
 interface Props {
     visitante?: boolean
@@ -10,10 +11,14 @@ interface Props {
 
 const Actividad: React.FC<Props> = ({visitante = false}) => {
     
-    return <Proximamente />
+    return (
+        <div className="h-96 flex justify-center">
+            <Proximamente avance={20} />
+        </div>
+    )
     return ( 
     <div className="animate__animated animate__fadeIn animate__faster">
-       <Box>
+       <Box>xw
             <h1 className='text-2xl'>Actividad</h1>
             <Timeline className='p-10'>
                 <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
