@@ -28,9 +28,19 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                         }}>
                             <p className='inline-block transform text-center -rotate-90 text-white font-normal tracking-wider leading-4 py-2 w-[170px] drop-shadow '> Perspectiva <br/> { perspectiva.nombre }</p>
                         </div>
-                        <div className='bg-white flex justify-center items-center flex-col align-middle min-w-[160px]'>
-                            <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
-                            {/* <p className='text-devarana-graph'>Ver más...</p> */}
+                        <div className='bg-white flex justify-center items-center flex-col align-middle w-[160px] relative group'>
+                            <div className='group-hover:opacity-0 transition-all duration-300 ease-in-out'>
+                                <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
+                            </div>
+                            <div className='absolute inset-0 px-3 py-5 flex items-center text-white group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out overflow-auto' style={{
+                                backgroundColor: perspectiva.color
+                            }}>
+                                <p className='leading-5'>
+                                    {
+                                        perspectiva.descripcion
+                                    }
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div className='bg-white py-10 px-5 w-full shadow relative'>

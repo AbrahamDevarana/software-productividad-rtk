@@ -28,7 +28,7 @@ interface Departamento {
 const initialState: DepartamentoState = {
     departamentos: [],
     paginate: {
-        totalItems: 0,
+        totalItem: 0,
         totalPages: 0,
         currentPage: 0,
     },
@@ -65,7 +65,7 @@ const departamentosSlice = createSlice({
         getDepartamentos: (state, action) => {
             state.departamentos = action.payload.departamentos.rows
             state.paginate = {
-                totalItems: action.payload.departamentos.totalItems,
+                totalItem: action.payload.departamentos.totalItem,
                 totalPages: action.payload.departamentos.totalPages,
                 currentPage: action.payload.departamentos.currentPage
             }

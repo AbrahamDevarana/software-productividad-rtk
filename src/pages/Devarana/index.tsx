@@ -70,33 +70,11 @@ export const Devarana: React.FC = () => {
                             ))
                         }
                     </div>
-                    <div className='scroller'>
-                        { 
-                            usuarios.map( (item, i) => (
-                                <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
-                                        </Link>
-                                    </div>
-                            ))
-                        }
-                    </div>
-                    <div className='scroller'>
-                        { 
-                            usuarios.map( (item, i) => (
-                                <div className="scroller-item" key={i}>
-                                        <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
-                                        </Link>
-                                    </div>
-                            ))
-                        }
-                    </div>
                 </div>
             </Box>
         </div>
 
-        <div className="grid grid-cols-12 gap-5">
+        <div className="grid grid-cols-12 gap-10">
             <Box className="col-span-12 md:col-span-6 bg-w-logotipo bg-auto bg-no-repeat bg-right">
                 <div className="flex">
                     <p className="text-devarana-dark-graph text-xl font-bold pb-5">Logotipo</p>
@@ -190,89 +168,81 @@ export const Devarana: React.FC = () => {
                 </div>
             </Box>
             <Box className="col-span-12 md:col-span-6">
+                <p className='text-devarana-dark-graph text-xl font-bold pb-5'>
+                    Competencias
+                </p>
                 <Swiper
                     spaceBetween={50}
                     slidesPerView={1}
                     effect='fade'
                     modules={[EffectFade]}
+                    autoplay={{
+                        delay: 5000,
+                    }}
+                    loop={true}
                 >
                     <SwiperSlide>
                         <Chart />
                     </SwiperSlide>
                     <SwiperSlide>
-                        <Chart />
+                        {/* <Chart /> */}
                     </SwiperSlide>
                 </Swiper>
 
             </Box>
             <Box className="col-span-12 bg-w-legendario bg-no-repeat bg-right">
                 <p className="text-devarana-dark-graph text-xl font-bold pb-5">Política de Responsabilidad</p>
-                
-                <p className='text-[16px] font-light text-devarana-graph pb-5'>
-                    En DEVARANA hemos asumido el compromiso de implementar un modelo de Gestión de la Calidad, basado en la norma ISO 9001-2015, que nos proporcione un marco de referencia integral para el establecimiento de objetivos específicos de calidad y con la finalidad de, a través de la mejora continua, conseguir la satisfacción total de nuestros colaboradores, clientes y socios de negocios, convirtiéndonos en un referente en el sector de desarrollo inmobiliario, por los estándares de calidad que empleamos en el servicio que ofrecemos y los productos que desarrollamos.
+                <p className='text-[16px] font-light text-devarana-graph pb-10'>
+                    En DEVARANA como creadores, diseñadores y arquitectos de lo extrordinario nos comprometemos a implementar y mantener un Sistema Integral de gestión que abarque aspectos de calidad, el cuidado del medio ambiente, la salud y la seguridad ocupacional así como la responsabilidad social. Nuestro principal objetivo es ofrecer desarrollos inmobiliarios del más alto nivel y asegurar la satisfacción de nuestros colaboradores, clientes y demás partes interesadas. Esta política se basa en los siguientes principios:
                 </p>
-                <p className='text-[16px] font-light text-devarana-graph pb-3'>
-                    En un mercado en continua expansión, DEVARANA se mantiene como líder del sector inmobiliario, al tener siempre presente que nuestro éxito es consecuencia de honrar los siguientes principios de calidad:
-                </p>
-
-                <ul className='list-disc text-devarana-graph font-light list-inside pl-10 '>
-                    <li className='text-[16px]'>Lograr la plena satisfacción de nuestros clientes internos y externos.</li>
-                    <li className='text-[16px]'>Conseguir la excelencia empresarial a través de potenciar a nuestro capital humano.</li>
-                    <li className='text-[16px]'>Integrar en todo momento a nuestros socios de negocio en el compromiso con la calidad.</li>
-                    <li className='text-[16px]'>Mantener un alto nivel de innovación en el desarrollo de nuestros productos.</li>
-                    <li className='text-[16px]'>Cumplir la normatividad legal y los requisitos aplicables.</li>
-                    <li className='text-[16px]'>Identificar y evaluar todos los riesgos y oportunidades en cada uno de los procesos que contempla nuestro sistema de calidad.</li>
-                    <li className='text-[16px]'>Asegurar la integridad y seguridad de nuestro Sistema de Gestión de Calidad.</li>
-                </ul>
             </Box>
+        </div>
 
-
-            
+        <div className='grid grid-cols-12 gap-10 pt-5'>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon group-hover:opacity-0 transition-all duration-500 ease-in-out">  
                     <FaLeaf className='text-2xl'/>
-                    <p className="font-lg">Medio Ambiente</p>
+                    <p className="text-[16px] font-light text-white">Medio Ambiente</p>
                 </div>
                 <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                        Nuestro propósito es alcanzar la excelencia en el diseño, construcción y comercialización de desarrollos inmobiliarios premium, cumpliendo con los más altos estándares de calidad, superando las expectativas de nuestros clientes y manteniendo un enfoque de mejora continua
                     </p>
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink group-hover:opacity-0 transition-all duration-500 ease-in-out">  
                     <FaMedal className='text-2xl'/>
-                    <p className="font-lg">Calidad</p>
+                    <p className="text-[16px] font-light text-white">Calidad</p>
                 </div>
                 <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                        Nos comprometemos a minimizar el impacto ambiental promoviendo prácticas sostenibles en el diseño, construcción y operación de los proyectos.
                     </p>
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue group-hover:opacity-0 transition-all duration-500 ease-in-out">
                     <FaTree className='text-2xl'/>
-                    <p className="font-lg">Bienestar</p>
+                    <p className="text-[16px] font-light text-white">Bienestar</p>
                 </div>
                 <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                        Velamos por la seguridad y bienestar de nuestros colaboradores brindando un entorno laboral seguro y promoviendo la cultura de prevención.
+                    </p>
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                     Cumplimos con las regulaciones y normativas en materia de seguridad y salud ocupacional.
                     </p>
                 </div>
             </Box>
             <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue group-hover:opacity-0 transition-all duration-500 ease-in-out">
                     <BiWorld className='text-2xl'/>
-                    <p className="font-lg">Seguridad</p>
+                    <p className="text-[16px] font-light text-white">Seguridad</p>
                 </div>
                 <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pulvinar odio a leo pulvinar, nec blandit arcu consectetur. Aliquam erat volutpat. Cras fringilla placerat varius. Integer mattis arcu vestibulum lacus tincidunt mollis. Suspendisse nec orci ac lorem molestie accumsan. Nunc rutrum mi eget dolor lobortis fringilla. In fringilla et erat ut fermentum. In lectus arcu, maximus vulputate nisi sit amet, vehicula dapibus est. Praesent pulvinar velit at fermentum pretium.
+                    <p className='text-devarana-graph text-[16px] font-light'>
+                    Fomentamos el desarrollo personal y profesional de nuestros colaboradores, brindándoles oportunidades de crecimiento, capacitación continua y reconocimiento por su desempeño.
                     </p>
                 </div>
             </Box>

@@ -152,6 +152,162 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Box>
                 ))
             }
+            {
+                usuarioActivo.objetivosOperativos.map( objetivo => (
+                    <Box className="w-[350px] flex-none" key={objetivo.id}>
+                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
+                            <div>
+                                {/* <DoughnutChart/> */}
+                            </div>
+                            <div className="text-white my-auto text-center">
+                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
+                                <p>18 <span className="font-light text-sm">Tareas</span></p>
+                            </div>
+                        </div>
+                        <div className="pt-5">
+                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
+                            <div className="h-[80px] overflow-y-auto">
+                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
+                            </div>
+                            <div className="py-3 grid grid-cols-2 gap-x-5">
+                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
+                                    <Button className="w-full" classColor="primary" classType="regular" >
+                                        Ver Objetivo
+                                    </Button>
+                                </Link>}
+                                <div className="flex justify-center my-auto">
+                                    <Avatar.Group>
+                                        {
+                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
+                                                <Tooltip title={responsable.nombre} key={responsable.id}>
+                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
+                                                </Tooltip>
+                                            ))
+                                        }
+                                    </Avatar.Group>
+                                </div>
+                            </div>
+                        </div>
+                    </Box>
+                ))
+            }
+            {
+                usuarioActivo.objetivosOperativos.map( objetivo => (
+                    <Box className="w-[350px] flex-none" key={objetivo.id}>
+                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
+                            <div>
+                                {/* <DoughnutChart/> */}
+                            </div>
+                            <div className="text-white my-auto text-center">
+                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
+                                <p>18 <span className="font-light text-sm">Tareas</span></p>
+                            </div>
+                        </div>
+                        <div className="pt-5">
+                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
+                            <div className="h-[80px] overflow-y-auto">
+                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
+                            </div>
+                            <div className="py-3 grid grid-cols-2 gap-x-5">
+                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
+                                    <Button className="w-full" classColor="primary" classType="regular" >
+                                        Ver Objetivo
+                                    </Button>
+                                </Link>}
+                                <div className="flex justify-center my-auto">
+                                    <Avatar.Group>
+                                        {
+                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
+                                                <Tooltip title={responsable.nombre} key={responsable.id}>
+                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
+                                                </Tooltip>
+                                            ))
+                                        }
+                                    </Avatar.Group>
+                                </div>
+                            </div>
+                        </div>
+                    </Box>
+                ))
+            }
+            {
+                usuarioActivo.objetivosOperativos.map( objetivo => (
+                    <Box className="w-[350px] flex-none" key={objetivo.id}>
+                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
+                            <div>
+                                {/* <DoughnutChart/> */}
+                            </div>
+                            <div className="text-white my-auto text-center">
+                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
+                                <p>18 <span className="font-light text-sm">Tareas</span></p>
+                            </div>
+                        </div>
+                        <div className="pt-5">
+                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
+                            <div className="h-[80px] overflow-y-auto">
+                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
+                            </div>
+                            <div className="py-3 grid grid-cols-2 gap-x-5">
+                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
+                                    <Button className="w-full" classColor="primary" classType="regular" >
+                                        Ver Objetivo
+                                    </Button>
+                                </Link>}
+                                <div className="flex justify-center my-auto">
+                                    <Avatar.Group>
+                                        {
+                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
+                                                <Tooltip title={responsable.nombre} key={responsable.id}>
+                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
+                                                </Tooltip>
+                                            ))
+                                        }
+                                    </Avatar.Group>
+                                </div>
+                            </div>
+                        </div>
+                    </Box>
+                ))
+            }
+            {
+                usuarioActivo.objetivosOperativos.map( objetivo => (
+                    <Box className="w-[350px] flex-none" key={objetivo.id}>
+                        <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
+                            <div>
+                                {/* <DoughnutChart/> */}
+                            </div>
+                            <div className="text-white my-auto text-center">
+                                <p>3 <span className="font-light text-sm">Resultados Clave</span> </p>
+                                <p>18 <span className="font-light text-sm">Tareas</span></p>
+                            </div>
+                        </div>
+                        <div className="pt-5">
+                            <p className="py-2 font-medium text-lg text-devarana-dark-graph">{ objetivo.nombre }</p>
+                            <div className="h-[80px] overflow-y-auto">
+                                <p className="font-light text-devarana-graph line-clamp-3">{objetivo.meta}</p>
+                            </div>
+                            <div className="py-3 grid grid-cols-2 gap-x-5">
+                                { !visitante && <Link to={`/objetivos/${objetivo.id}`}>
+                                    <Button className="w-full" classColor="primary" classType="regular" >
+                                        Ver Objetivo
+                                    </Button>
+                                </Link>}
+                                <div className="flex justify-center my-auto">
+                                    <Avatar.Group>
+                                        {
+                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
+                                                <Tooltip title={responsable.nombre} key={responsable.id}>
+                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
+                                                </Tooltip>
+                                            ))
+                                        }
+                                    </Avatar.Group>
+                                </div>
+                            </div>
+                        </div>
+                    </Box>
+                ))
+            }
         </div>
     </div> );
 }

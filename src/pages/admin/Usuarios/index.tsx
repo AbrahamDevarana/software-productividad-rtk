@@ -30,7 +30,7 @@ interface DataType {
 export const Usuarios: React.FC = () => {
     const [filtros, setFiltros] = useState<any>(initialValues)
 	const [formVisible, setFormVisible] = useState<boolean>(false)
-	const { usuarios, infoMessage, paginate} = useAppSelector((state: any) => state.usuarios)
+	const { usuarios, infoMessage, paginate} = useAppSelector((state) => state.usuarios)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -50,7 +50,7 @@ export const Usuarios: React.FC = () => {
     data.fechaNacimiento === null || data.fechaIngreso === null || data.leaderId === null || 
     data.departamentoId === null) ? false : true
     
-    const columns: ColumnsType <DataType> = [
+    const columns = [
 		{
 			render: (data: any) => Object.values(data).some(val => val === null) ? 
 			<Tooltip title="Este usuario no ha completado su registro">
@@ -130,6 +130,7 @@ export const Usuarios: React.FC = () => {
                     <Input
                         placeholder="Buscar"
                         className="max-w-xs w-full"
+                        allowClear
                         onChange={(e: any) => {
                             setFiltros({
                                 ...filtros,
@@ -154,7 +155,7 @@ export const Usuarios: React.FC = () => {
             <Pagination
                     className="flex justify-end mt-5"
                     current={paginate.currentPage + 1}
-                    total={paginate.totalItems}
+                    total={paginate.totalItem}
                     pageSize={filtros.size}
                     onChange={(page, pageSize) => {
                         setFiltros({

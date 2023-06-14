@@ -1,5 +1,5 @@
 export interface Paginate {
-    totalItems: number;
+    totalItem: number;
     totalPages: number;
     currentPage: number;
 }

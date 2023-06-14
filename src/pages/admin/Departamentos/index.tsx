@@ -149,7 +149,7 @@ export const Departamentos: React.FC = () => {
                         <Pagination
                             className="flex justify-end mt-5"
                             current={paginate.currentPage + 1}
-                            total={paginate.totalItems}
+                            total={paginate.totalItem}
                             pageSize={filtros.size}
                             onChange={(page, pageSize) => {
                                 setFiltros({

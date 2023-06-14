@@ -5,7 +5,7 @@ import { createUsuarioThunk, deleteUsuarioThunk, getUsuarioThunk, getUsuariosThu
 const initialState: UsuariosState = {
     usuarios: [],
     paginate: {
-        totalItems: 0,
+        totalItem: 0,
         totalPages: 0,
         currentPage: 0,
     },
@@ -74,7 +74,7 @@ const usuariosSlice = createSlice({
             .addCase(getUsuariosThunk.fulfilled, (state, action) => {
                 state.usuarios = action.payload.rows
                 state.paginate = {
-                    totalItems: action.payload.totalItems,
+                    totalItem: action.payload.totalItem,
                     totalPages: action.payload.totalPages,
                     currentPage: action.payload.currentPage
                 }
