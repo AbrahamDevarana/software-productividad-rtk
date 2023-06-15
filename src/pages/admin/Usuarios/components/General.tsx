@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Alert, Input, Form, Upload, message, Modal } from 'antd';
+import { useState } from 'react';
+import { Alert, Input, Form, Upload, Modal } from 'antd';
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '@/components/ui';
-import { createUsuarioThunk, deleteProfilePhotoThunk, updateUsuarioThunk, uploadImageThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { Icon } from '@/components/Icon';
-import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
-import { getBase64, uploadUserPicture } from '@/helpers';
+import { createUsuarioThunk, updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { uploadUserPicture } from '@/helpers';
 import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { uploadButton } from '@/components/ui/UploadButton';
-
+import ImgCrop from 'antd-img-crop';
 
 const usuarioSchema = Yup.object().shape({
     nombre: Yup.string().required("El nombre es requerido"),
@@ -60,6 +58,9 @@ export const General: React.FC<any> = ({handleSteps}) => {
                         <div className="grid grid-cols-4 gap-x-4">
                             <div className={`${currentUsuario.id !== ''? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
                                 <div className='block'>
+                                <ImgCrop 
+                                        quality={.5}
+                                >
                                     <Upload
                                         maxCount={1}
                                         accept="image/*"
@@ -81,6 +82,7 @@ export const General: React.FC<any> = ({handleSteps}) => {
                                         {fileList.length >= 1 ? null
                                         : uploadButton({loading} )}
                                     </Upload>
+                                </ImgCrop>
                                 <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
                                     <img alt="example" style={{ width: '100%' }} src={preview} />
                                 </Modal>
