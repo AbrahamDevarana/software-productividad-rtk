@@ -1,9 +1,9 @@
-import { BiDetail, BiTargetLock } from "react-icons/bi";
+import { BiTargetLock } from "react-icons/bi";
 import { ImStatsBars2 } from 'react-icons/im'
 import { GiPodiumWinner } from 'react-icons/gi'
 import Box from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
-import { FaCheck, FaFacebook, FaInstagram, FaLink, FaLinkedin, FaProjectDiagram, FaTwitter } from "react-icons/fa";
+import { FaLink, FaProjectDiagram } from "react-icons/fa";
 import { Badge } from "@/components/ui/Badge";
 import { PerfilProps } from "@/interfaces";
 import DOMPurify from "dompurify";
@@ -11,8 +11,7 @@ import DOMPurify from "dompurify";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Avatar, Tooltip } from "antd";
-import { Logros } from "@/components/perfil/Logros";
-import { Proximamente } from "@/components/ui/Proximamente";
+import { Proximamente } from '@/components/ui';
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
 
 interface Props {

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
 import { Segmented } from 'antd';
-import { Proximamente } from '@/components/ui/Proximamente';
+import { Proximamente } from '@/components/ui';
 
 
 export const EstrategiaHome: React.FC = () => {

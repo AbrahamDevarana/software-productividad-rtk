@@ -2,7 +2,7 @@
 import { Timeline } from "antd";
 import Box from "@/components/ui/Box";
 import { Icon } from "@/components/Icon";
-import { Proximamente } from "@/components/ui/Proximamente";
+import { Proximamente } from '@/components/ui';
 
 
 interface Props {
