@@ -6,7 +6,7 @@ interface Props {
 	size?: 'small' | 'default'
 }
 
-export const Proximamente = ({avance, size = 'default'}: Props) => {
+export const Prox = ({avance, size = 'default'}: Props) => {
 
 	const sizeBar:[number, number] = size === 'small' ? [150, 25] : [250, 25]
 
