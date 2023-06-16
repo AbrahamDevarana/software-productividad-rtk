@@ -1,5 +1,5 @@
-import { getColor } from '@/helpers';
 import { Progress } from 'antd';
+import { getColor } from '@/helpers';
 
 interface Props {
     avance: number
@@ -25,7 +25,6 @@ export const Proximamente = ({avance, size = 'default'}: Props) => {
 						direction: 'to top',
 					}}
 					trailColor={getColor('SIN_INICIAR', .2).color}
-				
 				/>
 			</div>
 		</div>
