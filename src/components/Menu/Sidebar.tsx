@@ -34,7 +34,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                 <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
 
                 <NavLink to={'/perfil'} className={`link profile nav-link text-center`}>
-                    <Avatar src={getStorageUrl('profile-picture/'+ userAuth.foto)} size={40} />
+                    <Avatar src={getStorageUrl(userAuth.foto)} size={40} />
                 </NavLink>
 
                 <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>

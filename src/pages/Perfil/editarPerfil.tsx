@@ -1,6 +1,5 @@
-import {  Switch } from 'antd'
- import { AiOutlineLink } from 'react-icons/ai'
-import { FaTasks, FaUser } from 'react-icons/fa'
+import { AiOutlineLink } from 'react-icons/ai'
+import { FaTasks, FaUser} from 'react-icons/fa'
 import { Badge } from '@/components/ui/Badge'
 import Box from '@/components/ui/Box'
 import { FormPerfil } from '@/components/perfil/FormPerfil'
@@ -12,7 +11,9 @@ import { updateProfileThunk } from '@/redux/features/profile/profileThunk'
 import { useAppDispatch } from '@/redux/hooks'
 import { useState } from 'react'
 import { Button } from '@/components/ui'
-import { Social } from '@/components/perfil/SocialInfo'
+import { SocialInfo } from '@/components/perfil/SocialInfo'
+import { HiIdentification } from 'react-icons/hi'
+import { FotoPerfil } from '@/components/perfil/FotoPerfil'
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -35,26 +36,30 @@ export const EditarPerfil = ({usuarioActivo, visitante}:Props) => {
         }
         dispatch(updateProfileThunk(query))
     }
-    
-
 
 
     return (
 
         <div className="grid grid-cols-12 sm:gap-x-10 gap-10 relative">
             <div className="xl:col-span-3 md:col-span-4 col-span-12 sticky top-[500px]">
-                <Box className="flex flex-col">
-                    <a href="#perfil" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium ">Perfil</a>
-                    <a href="#social" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium ">Social</a>
-                    <a href="#responsibilidades" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium">Responsabilidades</a>
-                    <a href="#notificaciones" className="text-left py-1 my-1 px-2 text-devarana-dark-graph font-medium">Notificaciones</a>
+                <Box className="mb-5 snap-center py-10">
+                    <div className="flex pb-10">
+                        <Badge badgeType="info">
+                            <FaUser />
+                        </Badge>
+                        <p className="text-lg font-bold my-auto mx-3 text-devarana-dark-graph">Foto Perfil</p>
+                    </div>
+
+                    <div className='flex justify-center'>
+                        <FotoPerfil usuarioActivo={usuarioActivo} />
+                    </div>
                 </Box>
             </div>
             <div className="xl:col-span-9 md:col-span-8 col-span-12 grid gap-10">
                 <Box className="mb-5 snap-center py-10" id="perfil">
                     <div className="flex pb-10">
                         <Badge badgeType="primary">
-                            <FaUser/>
+                            <HiIdentification />
                         </Badge>
                         <p className="text-lg font-bold my-auto mx-3 text-devarana-dark-graph">Información de perfil</p>
                     </div>    
@@ -66,12 +71,12 @@ export const EditarPerfil = ({usuarioActivo, visitante}:Props) => {
 
                 <Box className="mb-5 snap-center py-10" id="social">
                     <div className="flex pb-10">
-                        <Badge badgeType="secondary" className="bg-gradient-to-tr from-custom-blue to-custom-blue2">
+                        <Badge badgeType="secondary">
                             <AiOutlineLink/>
                         </Badge>
                         <p className="text-lg font-bold my-auto mx-3 text-devarana-dark-graph">Social</p>
                     </div>  
-                    <Social usuarioActivo={usuarioActivo} />
+                    <SocialInfo usuarioActivo={usuarioActivo} />
                 </Box>
 
                 <Box className="mb-5 snap-center" id="responsibilidades">

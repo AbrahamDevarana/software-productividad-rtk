@@ -61,14 +61,19 @@ export interface PerfilProps {
     direccion?:            DireccionProps;
     objetivosOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
-    social?: Social[];
+    social: Social
 }
 
 
 
 export interface Social {
-    id:        string;
-    nombre:    string;
-    url:       string;
-    usuarioId: string;
+    facebook: Redes;
+    otros: Redes;
+    instagram: Redes;
+    linkedin: Redes;
+}
+
+export interface Redes {
+    url: string;
+    nombre: string;
 }

@@ -1,54 +1,103 @@
 import { PerfilProps } from '@/interfaces';
-import { Input, InputRef } from 'antd';
-import { useRef, useState } from 'react';
-import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
+import { Input } from 'antd';
+import { useState } from 'react';
+import { AiFillAccountBook, AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiOutlineLink } from 'react-icons/ai';
 import { IoShareSocialSharp } from 'react-icons/io5';
-import { Button } from '../ui';
 import { useAppDispatch } from '@/redux/hooks';
-import { updateProfileSocialThunk } from '@/redux/features/profile/profileThunk';
+import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
+import { Button } from '../ui';
 
 
 
-interface SocialProsp {
+interface Props {
     usuarioActivo: PerfilProps
 }
 
 
-export const Social: React.FC<SocialProsp> = ({usuarioActivo}) => {
+export const SocialInfo = ({usuarioActivo}: Props) => {
 
     const dispatch = useAppDispatch()
+    const [ redes, setRedes ] = useState(usuarioActivo.social)
 
     const { social } = usuarioActivo
 
-    const handleSocial = (url: string | undefined = '', nombre: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'otro' = 'otro') => {
-        
-        if (url) {
-            dispatch(updateProfileSocialThunk({url, nombre}))
-        }  
-        
+
+    const handleOnChange = (e: any) => {
+        const { name, value } = e.target
+
+        // quitar https o http de la url
+        const finalValue = value.replace(/(^\w+:|^)\/\//, '')
+
+
+        setRedes({
+            ...redes,
+            [name]: {
+                url: finalValue,
+                nombre: name,
+            }
+        })
     }
 
+    const handleOnSubmit = () => {
+
+        const query = {
+            ...usuarioActivo,
+            social: redes
+        }
+
+        dispatch(updateProfileThunk(query))
+    }
 
     return (
         <>
-            <div className='grid grid-cols-2 gap-10'>
-                <div className='col-span-1 items-center flex'>
-                    <AiFillLinkedin className='text-2xl mr-2 text-[#0A66C2]'/>
-                    <Input type="text" defaultValue={social?.find(social => social.nombre === 'linkedin')?.url} onBlur={(e) => handleSocial(e.target.value, 'linkedin')} />
+            <div className='grid grid-cols-2 gap-5'>
+                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                    <AiFillLinkedin className='text-4xl text-blue-500' />
+                    <Input
+                        className='w-full'
+                        name='linkedin'
+                        value={redes.linkedin.url}
+                        onChange={handleOnChange}
+                    />
                 </div>
-                <div className='col-span-1 items-center flex'>
-                    <AiFillFacebook className='text-2xl mr-2 text-[#1877F2]'/>
-                    <Input type="text" defaultValue={social?.find(social => social.nombre === 'facebook')?.url} onBlur={(e) => handleSocial(e.target.value, 'facebook')} />
+                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                    <AiFillFacebook className='text-4xl text-blue-500' />
+                    <Input
+                        className='w-full'
+                        name='facebook'
+                        value={redes.facebook.url}
+                        onChange={handleOnChange}
+                    />
                 </div>
-                <div className='col-span-1 items-center flex'>
-                    <AiFillInstagram className='text-2xl mr-2 text-[#D54084]'/>
-                    <Input type="text" defaultValue={social?.find(social => social.nombre === 'instagram')?.url} onBlur={(e) => handleSocial(e.target.value, 'instagram')} />
+                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                    <AiFillInstagram className='text-4xl text-devarana-pink' />
+                    <Input
+                        className='w-full'
+                        name='instagram'
+                        value={redes.instagram.url}
+                        onChange={handleOnChange}
+                    />
                 </div>
-                <div className='col-span-1 items-center flex'>
-                    <IoShareSocialSharp className='text-2xl mr-2 text-devarana-dark-graph'/>
-                    <Input type="text" defaultValue={social?.find(social => social.nombre === 'otro')?.url}  onBlur={(e) => handleSocial(e.target.value, 'otro')} />
+                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                    <AiOutlineLink className='text-4xl text-default' />
+                    <Input
+                        className='w-full'
+                        name='otros'
+                        value={redes.otros.url}
+                        onChange={handleOnChange}
+                    />
                 </div>
 
+                <div className='flex justify-end col-span-2'>
+                    <Button
+                        classColor='dark'
+                        classType='regular'
+                        onClick={handleOnSubmit}
+                        width={150}
+                    >
+                        Guardar
+                    </Button>
+                </div>
             </div>
         </>
     )

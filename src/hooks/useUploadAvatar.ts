@@ -44,7 +44,7 @@ export const useUploadAvatar = ({currentUsuario}: Props) => {
                 uid: currentUsuario.id,
                 name: currentUsuario.nombre,
                 status: 'done',
-                url: `${getStorageUrl('profile-picture/'+ currentUsuario.foto)}`
+                url: `${getStorageUrl(currentUsuario.foto)}`
             }])
         }
     }, [currentUsuario])

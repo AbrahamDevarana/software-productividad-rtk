@@ -3,7 +3,7 @@ import { ImStatsBars2 } from 'react-icons/im'
 import { GiPodiumWinner } from 'react-icons/gi'
 import Box from "@/components/ui/Box";
 import { Button } from "@/components/ui/Button";
-import { FaCheck, FaProjectDiagram } from "react-icons/fa";
+import { FaCheck, FaFacebook, FaInstagram, FaLink, FaLinkedin, FaProjectDiagram, FaTwitter } from "react-icons/fa";
 import { Badge } from "@/components/ui/Badge";
 import { PerfilProps } from "@/interfaces";
 import DOMPurify from "dompurify";
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { Avatar, Tooltip } from "antd";
 import { Logros } from "@/components/perfil/Logros";
 import { Proximamente } from "@/components/ui/Proximamente";
+import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -100,6 +101,46 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <div>
                     <p className="font-medium py-2 text-devarana-dark-graph"> Fecha de Ingreso:
                     <span className="font-light text-devarana-graph"> { dayjs( usuarioActivo.fechaIngreso ).format('DD MMMM YYYY') } </span>  </p>
+                </div>
+
+                <p className="font-medium py-2 text-devarana-dark-graph block"> Redes: </p>
+                <div className="flex gap-2">
+                    {
+                        usuarioActivo.social.linkedin.url && (
+                            <Tooltip title="Linkedin">
+                                <a href={`https://${usuarioActivo.social.facebook.url}`} target="_blank" rel="noreferrer">                                    
+                                    <AiFillLinkedin className="text-2xl text-blue-500" />
+                                </a>
+                            </Tooltip>
+                        )
+                    }
+                    {
+                        usuarioActivo.social.facebook.url && (
+                            <Tooltip title="Facebook">
+                                <a href={`https://${usuarioActivo.social.facebook.url}`} target="_blank" rel="noreferrer">
+                                    <AiFillFacebook className="text-2xl text-blue-500" />
+                                </a>
+                            </Tooltip>
+                        )
+                    }
+                    {
+                        usuarioActivo.social.instagram.url && (
+                            <Tooltip title="Instagram">
+                                <a href={`https://${usuarioActivo.social.instagram.url}`} target="_blank" rel="noreferrer">
+                                    <AiFillInstagram className="text-2xl text-blue-500" />
+                                </a>
+                            </Tooltip>
+                        )                        
+                    }
+                    {
+                        usuarioActivo.social.otros.url && (
+                            <Tooltip title={usuarioActivo.social.otros.nombre}>
+                                <a href={`https://${usuarioActivo.social.otros.url}`} target="_blank" rel="noreferrer">
+                                    <FaLink className="text-2xl text-blue-500" />
+                                </a>
+                            </Tooltip>
+                        )
+                    }
                 </div>
             </Box>
             <Box className="xl:col-span-1 col-span-3">

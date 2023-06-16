@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileThunk } from './profileThunk';
+import { getProfileThunk, updateProfileThunk, uploadProfilePictureThunk } from './profileThunk';
 
 
 const initialState: PerfilState = {
@@ -17,6 +17,24 @@ const initialState: PerfilState = {
         foto: '',
         objetivosOperativos: [],
         proyectos: [],
+        social: {
+            facebook: {
+                nombre: 'facebook',
+                url: ''
+            },
+            instagram: {
+                nombre: 'instagram',
+                url: ''
+            },
+            linkedin: {
+                nombre: 'linkedin',
+                url: ''
+            },
+            otros: {
+                nombre: 'otros',
+                url: ''
+            }
+        }
     }
 }
     
@@ -50,6 +68,17 @@ const profileSlice = createSlice({
                 state.perfil = action.payload
             })
             .addCase(updateProfileThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(uploadProfilePictureThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(uploadProfilePictureThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.perfil = action.payload
+            })
+            .addCase(uploadProfilePictureThunk.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.error.message
             })

@@ -10,11 +10,6 @@ interface Props {
     usuario : PerfilProps
 }
 
-interface Sociales {    
-    nombre: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'otro'
-    url: string | undefined
-}
-
 
 export const getProfileThunk = createAsyncThunk(
     'profile/getProfile',
@@ -53,16 +48,19 @@ export const updateProfileThunk = createAsyncThunk(
 )
 
 
-export const updateProfileSocialThunk = createAsyncThunk(
-    'profile/updateProfileSocial',
-    async (sociales: Sociales, {rejectWithValue, getState}) => {
+export const uploadProfilePictureThunk = createAsyncThunk(
+    'profile/uploadProfilePicture',
+    async ({profile, usuarioId}: {profile:FormData, usuarioId: string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { 
+                    "accessToken": `${accessToken}`,
+                    'Content-Type': 'multipart/form-data'
+                },
             }
-
-            const response = await clientAxios.put<Props>(`/social`, sociales, config);
+        
+            const response = await clientAxios.post<Props>(`/usuarios/upload/${usuarioId}`, profile, config);
             return response.data.usuario
         }
         catch (error: any) {
@@ -70,6 +68,9 @@ export const updateProfileSocialThunk = createAsyncThunk(
         }
     }
 )
+
+
+            
 
 export const clearProfileThunk = () => {
     return (dispatch: any) => {

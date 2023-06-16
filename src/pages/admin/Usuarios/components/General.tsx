@@ -38,13 +38,6 @@ export const General: React.FC<any> = ({handleSteps}) => {
     const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen} = useUploadAvatar({currentUsuario})
 
 
-
-
-
-
-
-
-
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
             <Formik

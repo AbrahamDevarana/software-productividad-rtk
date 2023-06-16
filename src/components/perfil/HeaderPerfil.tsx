@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
             <div className="w-full px-4 z-10">
                 <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-center h-20 items-center" >
                     <div className="justify-center align-middle flex items-center">
-                        <Avatar className="w-16 h-16" src={`${getStorageUrl('profile-picture/'+ usuarioActivo.foto)}`} />
+                        <Avatar className="w-16 h-16" src={`${getStorageUrl(usuarioActivo.foto)}`} />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
                         <p className="text-devarana-dark-graph text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
