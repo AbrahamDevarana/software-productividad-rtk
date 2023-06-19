@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Avatar, Drawer, Progress, Table } from 'antd';
+import { Avatar, Drawer, Image, Progress, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
@@ -7,6 +7,7 @@ import { FormEstrategia } from './FormEstrategia';
 import {  getColor, getFile, getStatus } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 
 interface TablaEstrategiaProps{
@@ -79,11 +80,13 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             title: () => ( <p className='tableTitle'>Responsables</p>),
             width: 50,
             render: (text, record, index) => (
-                <Avatar 
-                    src={ getFile(record.propietario?.foto)}
-                >
-                    {record.propietario?.iniciales}
-                </Avatar>
+                <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`}>
+                    <Avatar 
+                        src={<Image src={`${ getFile(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                    >
+                        {record.propietario?.iniciales}
+                    </Avatar>
+                </Tooltip>
             ),
             ellipsis: true,
         },

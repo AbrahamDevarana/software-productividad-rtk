@@ -51,7 +51,7 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
     return (
         <>
             <div className='grid grid-cols-2 gap-5'>
-                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiFillLinkedin className='text-4xl text-blue-500' />
                     <Input
                         className='w-full'
@@ -60,7 +60,7 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
                         onChange={handleOnChange}
                     />
                 </div>
-                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiFillFacebook className='text-4xl text-blue-500' />
                     <Input
                         className='w-full'
@@ -69,7 +69,7 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
                         onChange={handleOnChange}
                     />
                 </div>
-                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiFillInstagram className='text-4xl text-devarana-pink' />
                     <Input
                         className='w-full'
@@ -78,7 +78,7 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
                         onChange={handleOnChange}
                     />
                 </div>
-                <div className='flex items-center justify-center gap-x-2 col-span-1'>
+                <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiOutlineLink className='text-4xl text-default' />
                     <Input
                         className='w-full'

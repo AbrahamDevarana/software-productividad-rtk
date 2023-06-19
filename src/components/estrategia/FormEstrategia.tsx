@@ -86,12 +86,15 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     }
 
     const handleChangeStatus = (value: statusType) => {  
+        console.log(value);
+        
 
         setStatusEstrategico(value); 
         const updateEstrategico = {
             ...currentEstrategico,
             status: value
         }
+        
         dispatch(updateEstrategicoThunk(updateEstrategico));       
     }
     
@@ -152,7 +155,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         <>
             <Form
                 layout='vertical'
-                onBlur={handleOnSubmit}
                 initialValues={{
                     ...currentEstrategico,
                     responsables: currentEstrategico.responsables.map(responsable => responsable.id),
@@ -170,6 +172,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         className='text-2xl'
                         bordered={false}
                         ref={inputRef}
+                        onBlur={handleOnSubmit}
+                        onPressEnter={ () => inputRef.current?.blur() }
                     />
                 </Form.Item>
                 <Form.Item
@@ -182,6 +186,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         name="codigo"
                         className='text-2xl'
                         ref={inputRef}
+                        onBlur={handleOnSubmit}
+                        onPressEnter={ () => inputRef.current?.blur() }
                     />
                 </Form.Item>
                 <Space className={`${ form.getFieldValue('id') === ''? 'hidden': 'block'} col-span-12`}>
@@ -291,7 +297,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         style={{ width: '100%' }}
                         placeholder="Selecciona los responsables"
                         onChange={(value) => form.setFieldValue('propietarioId', value)}
-                        // mode="multiple"
+                        mode="multiple"
                         tagRender={tagRender}
                         bordered = {false}
                         value={ form.getFieldValue('propietarioId') }

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { EstrategicosState } from '@/interfaces';
+import { createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
 
 const initialState: EstrategicosState = {
     estrategicos: [],
@@ -12,9 +13,6 @@ const initialState: EstrategicosState = {
     isLoadingCurrent: false,
     infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
     currentEstrategico: {
         id: '',
         nombre: '',
@@ -64,52 +62,82 @@ const estrategicosSlice = createSlice({
             state.infoMessage = action.payload
             state.error = true
         },
-        getEstrategicos: (state, action) => {            
-            state.isLoading = false
-            state.estrategicos = action.payload.objetivosEstrategicos.rows
-            state.paginate = {
-                totalItem: action.payload.objetivosEstrategicos.totalItem,
-                totalPages: action.payload.objetivosEstrategicos.totalPages,
-                currentPage: action.payload.objetivosEstrategicos.currentPage
-            }
-        },
-        getCurrentEstrategico: (state, action) => {
-            state.currentEstrategico = action.payload.objetivoEstrategico
-            state.isLoadingCurrent = false
-        },
-        createEstrategico: (state, action) => {
-            state.estrategicos = [...state.estrategicos, action.payload.objetivoEstrategico]
-            state.created = true
-            state.isLoading = false
-        },
-        updateEstrategico: (state, action) => {          
-            state.currentEstrategico = action.payload.objetivoEstrategico
-            state.updated = true
-            state.isLoading = false
-        },
-        deleteEstrategico: (state, action) => {
-            state.estrategicos = state.estrategicos.filter(estrategico => estrategico.id !== action.payload.id)
-            state.deleted = true
-            state.isLoading = false
-        },
+
         clearEstrategicos: (state) => {
             state = initialState
         },
         clearCurrentEstrategico: (state) => {
             state.currentEstrategico = initialState.currentEstrategico
-        },          
-        
+        },             
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getEstrategicosThunk.pending, (state) => {
+                state.isLoading = true
+                state.error = false
+            })
+            .addCase(getEstrategicosThunk.fulfilled, (state, action) => {       
+                state.isLoading = false
+                
+            })
+            .addCase(getEstrategicosThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(getEstrategicoThunk.pending, (state) => {
+                state.isLoadingCurrent = true
+                state.error = false
+            })
+            .addCase(getEstrategicoThunk.fulfilled, (state, action) => {
+                state.isLoadingCurrent = false
+                state.currentEstrategico = action.payload
+            })
+            .addCase(getEstrategicoThunk.rejected, (state) => {
+                state.isLoadingCurrent = false
+                state.error = true
+            })
+            .addCase(createEstrategicoThunk.pending, (state) => {
+                state.isLoading = true
+                state.error = false
+            })
+            .addCase(createEstrategicoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.estrategicos = [...state.estrategicos, action.payload]
+            })
+            .addCase(createEstrategicoThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(updateEstrategicoThunk.pending, (state) => {
+                state.isLoading = true
+                state.error = false
+            })
+            .addCase(updateEstrategicoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.currentEstrategico = action.payload
+            })
+            .addCase(updateEstrategicoThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(deleteEstrategicoThunk.pending, (state) => {
+                state.isLoading = true
+                state.error = false
+            })
+            .addCase(deleteEstrategicoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.estrategicos = state.estrategicos.filter(estrategico => estrategico.id !== action.payload.id)
+            })
+            .addCase(deleteEstrategicoThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
     }
 })
 
 export const {
     checkingEstrategicos,
     setEstrategicosError,
-    getEstrategicos,
-    getCurrentEstrategico,
-    createEstrategico,
-    updateEstrategico,
-    deleteEstrategico,
     clearEstrategicos,
     clearCurrentEstrategico,
     checkingCurrent

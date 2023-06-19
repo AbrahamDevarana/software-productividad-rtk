@@ -5,3 +5,6 @@ export * from './Adn'
 export * from './Amor'
 export * from './Incluyentes'
 export * from './Triunfador'
+
+export * from './Lider'
+export * from './Colaborador'

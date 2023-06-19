@@ -4,11 +4,10 @@ import { Box } from '../../components/ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { FaEye, FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
+import { FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
 import { BiWorld } from 'react-icons/bi';
-import { Avatar } from 'antd';
-import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
-import { Chart } from '@/components/svg/devarana/Chart';
+import { Avatar, Image } from 'antd';
+import { Adn, Amor, Apasionados, Colaborador, Extraordinario, Incluyentes, Innovacion, Triunfador, Lider } from '@/components/svg/devarana';
 import { getStorageUrl } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
@@ -16,6 +15,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import { EffectFade } from 'swiper';
 import 'swiper/css';
 import "swiper/css/effect-fade";
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 export const Devarana: React.FC = () => {
 
@@ -53,7 +53,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -64,7 +64,7 @@ export const Devarana: React.FC = () => {
                             usuarios.map( (item, i) => (
                                 <div className="scroller-item" key={i}>
                                         <Link key={i} to={`/perfil/${item.slug}`}>
-                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={`${getStorageUrl('profile-picture/'+ item.foto)}`}>{item.iniciales}</Avatar> 
+                                            <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />}>{item.iniciales}</Avatar> 
                                         </Link>
                                     </div>
                             ))
@@ -181,11 +181,11 @@ export const Devarana: React.FC = () => {
                     }}
                     loop={true}
                 >
-                    <SwiperSlide>
-                        <Chart />
+                    <SwiperSlide className='bg-white'>
+                        <Lider />
                     </SwiperSlide>
-                    <SwiperSlide>
-                        {/* <Chart /> */}
+                    <SwiperSlide className='bg-white'>
+                        <Colaborador />
                     </SwiperSlide>
                 </Swiper>
 

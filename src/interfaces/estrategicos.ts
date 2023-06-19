@@ -10,9 +10,6 @@ export interface EstrategicosState {
     paginate:     Paginate;
     error:        boolean;
     infoMessage:  string;
-    updated:      boolean;
-    created:      boolean;
-    deleted:      boolean;
     currentEstrategico: EstrategicoProps;
 }
 

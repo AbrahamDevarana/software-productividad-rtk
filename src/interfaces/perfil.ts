@@ -37,6 +37,17 @@ export interface PerfilState{
 }
 
 
+export interface ConfiguracionUsuarioProps {
+    usuarioId: string;
+    notificacionesWeb: boolean;
+    notificacionesEmail: boolean;
+    notificacionesEmailDiario: boolean;
+    notificacionesEmailSemanal: boolean;
+    notificacionesEmailMensual: boolean;
+    notificacionesEmailTrimestral: boolean;
+    portadaPerfil: string;
+}
+
 
 export interface PerfilProps {
     id:                   string;
@@ -61,7 +72,8 @@ export interface PerfilProps {
     direccion?:            DireccionProps;
     objetivosOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
-    social: Social
+    social: Social,
+    configuracion: ConfiguracionUsuarioProps;
 }
 
 

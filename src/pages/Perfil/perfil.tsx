@@ -26,45 +26,44 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
     <div className="animate__animated animate__fadeIn animate__faster">
         <div className="grid grid-cols-4 gap-10 pt-10">
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
-            <div className="flex sm:justify-between justify-center flex-wrap">
-                <Badge badgeType="dark" className="-mt-10">
-                    <ImStatsBars2/>
-                </Badge>
-                <div className="sm:text-right text-center sm:py-0 pt-">
-                    <p className="text-devarana-dark-graph font-medium text-lg">Avance Trimestral</p>
-                    <p className="font-light text-devarana-graph">15 %</p>
+                <div className="flex justify-between items-center flex-wrap lg:gap-x-0 gap-x-5">
+                    <Badge badgeType="dark" className="lg:-mt-10">
+                        <ImStatsBars2/>
+                    </Badge>
+                    <div className="text-right sm:py-0">
+                        <p className="text-devarana-dark-graph font-medium text-lg">Avance Trimestral</p>
+                        <p className="font-light text-devarana-graph">15 %</p>
+                    </div>
                 </div>
-            </div>
-
             </Box>
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
-                <div className="flex sm:justify-between justify-center flex-wrap">
-                    <Badge className="-mt-10" badgeType="secondary">
+                <div className="flex justify-between items-center flex-wrap lg:gap-x-0 gap-x-5">
+                    <Badge badgeType="secondary" className="lg:-mt-10">
                         <BiTargetLock/>
                     </Badge>
-                    <div className="sm:text-right text-center sm:py-0 pt-">
+                    <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Objetivos</p>
                         <p className="font-light text-devarana-graph"> {usuarioActivo.objetivosOperativos.length } </p>
                     </div>
                 </div>
             </Box>
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
-                <div className="flex sm:justify-between justify-center flex-wrap">
-                    <Badge className="-mt-10" badgeType="info">
+                <div className="flex justify-between items-center flex-wrap lg:gap-x-0 gap-x-5">
+                    <Badge badgeType="info" className="lg:-mt-10">
                         <GiPodiumWinner/>
                     </Badge>
-                        <div className="sm:text-right text-center sm:py-0 pt-">
+                        <div className="text-right sm:py-0">
                             <p className="text-devarana-dark-graph font-medium text-lg">Proyectos</p>
                             <p className="font-light text-devarana-graph">{ usuarioActivo.proyectos.length }</p>
                         </div>
                 </div>
             </Box>
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
-                <div className="flex sm:justify-between justify-center flex-wrap">
-                    <Badge className="-mt-10" badgeType="primary">
+                <div className="flex justify-between items-center flex-wrap lg:gap-x-0 gap-x-5">
+                    <Badge badgeType="primary" className="lg:-mt-10">
                         <FaProjectDiagram/>
                     </Badge>
-                    <div className="sm:text-right text-center sm:py-0 pt-4">
+                    <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Comités</p>
                         <p className="font-light text-devarana-graph">0</p>
                     </div>
@@ -102,45 +101,51 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     <span className="font-light text-devarana-graph"> { dayjs( usuarioActivo.fechaIngreso ).format('DD MMMM YYYY') } </span>  </p>
                 </div>
 
-                <p className="font-medium py-2 text-devarana-dark-graph block"> Redes: </p>
-                <div className="flex gap-2">
-                    {
-                        usuarioActivo.social.linkedin.url && (
-                            <Tooltip title="Linkedin">
-                                <a href={`https://${usuarioActivo.social.facebook.url}`} target="_blank" rel="noreferrer">                                    
-                                    <AiFillLinkedin className="text-2xl text-blue-500" />
-                                </a>
-                            </Tooltip>
-                        )
-                    }
-                    {
-                        usuarioActivo.social.facebook.url && (
-                            <Tooltip title="Facebook">
-                                <a href={`https://${usuarioActivo.social.facebook.url}`} target="_blank" rel="noreferrer">
-                                    <AiFillFacebook className="text-2xl text-blue-500" />
-                                </a>
-                            </Tooltip>
-                        )
-                    }
-                    {
-                        usuarioActivo.social.instagram.url && (
-                            <Tooltip title="Instagram">
-                                <a href={`https://${usuarioActivo.social.instagram.url}`} target="_blank" rel="noreferrer">
-                                    <AiFillInstagram className="text-2xl text-blue-500" />
-                                </a>
-                            </Tooltip>
-                        )                        
-                    }
-                    {
-                        usuarioActivo.social.otros.url && (
-                            <Tooltip title={usuarioActivo.social.otros.nombre}>
-                                <a href={`https://${usuarioActivo.social.otros.url}`} target="_blank" rel="noreferrer">
-                                    <FaLink className="text-2xl text-blue-500" />
-                                </a>
-                            </Tooltip>
-                        )
-                    }
-                </div>
+                {
+                    usuarioActivo.social && (
+                        <>
+                            <p className="font-medium py-2 text-devarana-dark-graph block"> Redes: </p>
+                            <div className="flex gap-2">
+                            {
+                                usuarioActivo.social.linkedin?.url && (
+                                    <Tooltip title="Linkedin">
+                                        <a href={`https://${usuarioActivo.social.linkedin?.url}`} target="_blank" rel="noreferrer">                                    
+                                            <AiFillLinkedin className="text-2xl text-blue-500" />
+                                        </a>
+                                    </Tooltip>
+                                )
+                            }
+                            {
+                                usuarioActivo.social.facebook?.url && (
+                                    <Tooltip title="Facebook">
+                                        <a href={`https://${usuarioActivo.social.facebook?.url}`} target="_blank" rel="noreferrer">
+                                            <AiFillFacebook className="text-2xl text-blue-500" />
+                                        </a>
+                                    </Tooltip>
+                                )
+                            }
+                            {
+                                usuarioActivo.social.instagram?.url && (
+                                    <Tooltip title="Instagram">
+                                        <a href={`https://${usuarioActivo.social.instagram?.url}`} target="_blank" rel="noreferrer">
+                                            <AiFillInstagram className="text-2xl text-blue-500" />
+                                        </a>
+                                    </Tooltip>
+                                )                        
+                            }
+                            {
+                                usuarioActivo.social.otros?.url && (
+                                    <Tooltip title={usuarioActivo.social.otros.nombre}>
+                                        <a href={`https://${usuarioActivo.social.otros?.url}`} target="_blank" rel="noreferrer">
+                                            <FaLink className="text-2xl text-blue-500" />
+                                        </a>
+                                    </Tooltip>
+                                )
+                            }
+                            </div>
+                        </>
+                    )
+                }
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>

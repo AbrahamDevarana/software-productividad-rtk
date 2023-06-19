@@ -3,13 +3,14 @@ interface BoxProps {
     className?: string;
     children: React.ReactNode;
     ref?: React.Ref<HTMLDivElement>;
+    style?: React.CSSProperties;
 }
 
 
 
-const Box = ({id, className, children, ref}: BoxProps) => {
+const Box = ({id, className, children, ref, style}: BoxProps) => {
     return ( 
-        <div ref={ref} id={id} className={`p-5 shadow-ext bg-white rounded-ext ${className ? className : ""}` }>
+        <div ref={ref} id={id} className={`p-5 shadow-ext bg-white rounded-ext ${className ? className : ""}` } style={style}>
             {children}
         </div>
      );

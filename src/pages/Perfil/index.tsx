@@ -7,6 +7,7 @@ import Profile from "./perfil";
 import { EditarPerfil } from "./editarPerfil";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loading from "@/components/antd/Loading";
 
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -14,7 +15,7 @@ const Perfil: React.FC = () => {
     const { id } = useParams<{id: string}>()
     const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil } = useAppSelector(state => state.profile)
+    const { perfil, isLoading } = useAppSelector(state => state.profile)
 
     const [ visitante, setVisitante ] = useState(false)
 
@@ -35,6 +36,10 @@ const Perfil: React.FC = () => {
     }, [userAuth, id])    
     
 
+    
+    if(isLoading){
+        <Loading />
+    }
 
     return ( 
         <>

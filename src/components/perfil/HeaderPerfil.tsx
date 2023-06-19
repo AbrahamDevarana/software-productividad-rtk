@@ -1,11 +1,12 @@
-import { Avatar, Drawer, Segmented } from "antd";
+import { Avatar, Drawer, Image, Segmented } from "antd";
 import Box from "@/components/ui/Box";
 import { PerfilProps } from "@/interfaces";
-import { FaCog, FaRegUserCircle } from "react-icons/fa";
-import { BsActivity } from "react-icons/bs";
+import { FaCog } from "react-icons/fa";
 import { getStorageUrl } from "@/helpers";
 import { useMemo, useState } from "react";
 import { Galeria } from "../ui/Galeria";
+import getBrokenUser from "@/helpers/getBrokenUser";
+import { useAppDispatch } from "@/redux/hooks";
 
 interface HeaderProps {
     usuarioActivo: PerfilProps;
@@ -14,6 +15,10 @@ interface HeaderProps {
     visitante?: boolean;
 }
 
+interface PictureProps {
+    id: string;
+    url: string;
+}
 
 const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, visitante = false}) => {
 
@@ -21,7 +26,11 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     // const { configuracion } = usuarioActivo
 
     const [panel, setPanel] = useState(false)
-    const [picture, setPicture] = useState()
+    const [picture, setPicture] = useState<PictureProps>({
+        id: '',
+        url: ''
+    })
+    const dispatch = useAppDispatch();
 
     const options = [
         {
@@ -55,29 +64,47 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     }
 
     const handleGallery = () => {
-    }
+        console.log('galeria', picture);
 
+        // dispatch(updateConfiguracionThunk())
+        
+    }
 
     return ( 
         <>
-            <Box className="h-80 w-full bg-cover bg-center bg-no-repeat z-auto bg-[url('https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/portadas/IMG_4805.jpg')]">
-                <div className="relative">
+
+            <div className="shadow-ext bg-white rounded-ext h-80 overflow-hidden">
+                <div className="relative overflow-hidden w-full h-full">
+                    <div className="absolute top-0 left-0 w-full h-full">
+                        <Image 
+                            className="w-full h-80 object-cover object-center" 
+                            src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
+                            preview={false}
+                            fallback={getStorageUrl('portadas/portada-default.jpg')}
+                            wrapperStyle={{
+                                objectFit: 'cover',
+                                objectPosition: 'center',
+                                width: '100%',
+                            }}
+                        />
+                    </div>
+
                    {
                         !visitante && (   
-                        <button className="z-50 absolute top-0 right-0" onClick={handlePanel}>
+                        <button className="z-50 absolute top-3 right-3" onClick={handlePanel}>
                             <FaCog className=" text-2xl text-white drop-shadow-md"/>
                         </button> )
                    }
                 </div>
-            </Box>
-            <div className="w-full px-4 z-10">
-                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-center h-20 items-center" >
+            </div>
+            <div className="w-full px-4 z-20 relative">
+                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-center lg:h-20 items-center z-50" >
                     <div className="justify-center align-middle flex items-center">
-                        <Avatar className="w-16 h-16" src={`${getStorageUrl(usuarioActivo.foto)}`} />
+                        <Avatar className="w-16 h-16" src={<Image src={`${getStorageUrl(usuarioActivo.foto)}`} preview={false} fallback={getBrokenUser()} />} />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
-                        <p className="text-devarana-dark-graph text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
-                        <p className="text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
+                        <p className="text-devarana-dark-graph lg:text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
+                        <p className="lg:text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
                     </div>
                     
                         <div className="bg-devarana-background my-auto flex max-w-[400px] w-full ml-auto rounded relative z-0">
@@ -99,9 +126,9 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 destroyOnClose={true}
                 onClose={handlePanel}
                 open={panel}
-                width={600}
+                width={ window.innerWidth < 768 ? '100%' : 600 }
             >
-                <Galeria galeria={[]} setPicture={setPicture} picture={picture}/>
+                <Galeria galeria={[]} setPicture={setPicture} picture={picture} handleGallery={handleGallery} />
             </Drawer>
         </> 
     );

@@ -33,7 +33,17 @@ const initialState: PerfilState = {
             otros: {
                 nombre: 'otros',
                 url: ''
-            }
+            },
+        },
+        configuracion:{
+            usuarioId: '',
+            notificacionesWeb: false,
+            notificacionesEmail: false,
+            notificacionesEmailDiario: false,
+            notificacionesEmailSemanal: false,
+            notificacionesEmailMensual: false,
+            notificacionesEmailTrimestral: false,
+            portadaPerfil: ''
         }
     }
 }
