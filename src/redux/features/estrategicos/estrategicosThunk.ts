@@ -98,8 +98,6 @@ export const updateEstrategicoThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
             const response = await clientAxios.put<Props>(`/estrategicos/${estrategico.id}`, estrategico, config);   
-            console.log(response.data.objetivoEstrategico);
-                     
             return response.data.objetivoEstrategico
             
         }

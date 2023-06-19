@@ -1,5 +1,7 @@
+import { getStorageUrl } from "@/helpers";
+import getBrokenUser from "@/helpers/getBrokenUser";
 import { UsuarioProps } from "@/interfaces";
-import { Avatar, Tooltip } from "antd";
+import { Avatar, Image, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 
 
@@ -22,7 +24,7 @@ export const useSelectUser = (usuarios:UsuarioProps[]) => {
         return (
             <Tooltip title={label} color='white' key={value} className='relative'>
                 <Avatar 
-                    src={ import.meta.env.VITE_STORAGE_URL + usuario?.foto || undefined}
+                    src={ <Image src={`${getStorageUrl(usuario!.foto)}`} preview={false} fallback={getBrokenUser()} /> }
                     style={{
                         marginRight: -5
                     }}
@@ -38,7 +40,7 @@ export const useSelectUser = (usuarios:UsuarioProps[]) => {
 
         <div className='flex items-center gap-x-2'>
             <Avatar
-                src={import.meta.env.VITE_STORAGE_URL + usuario.foto}
+                src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />}
             >
                 {usuario.iniciales}
             </Avatar>

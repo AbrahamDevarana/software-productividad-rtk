@@ -81,10 +81,18 @@ const perspectivasSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(updateEstrategicoThunk.fulfilled, (state, action) => {
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
+            const oldPerspectiva = state.perspectivas.find(perspectiva => perspectiva.objetivos_estrategicos?.find(estrategico => estrategico.id === action.payload.id))
+            
+            if (perspectiva && oldPerspectiva?.id !== perspectiva.id) {
+                perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload] : [action.payload]
 
-            if (perspectiva) {
-                const objetivos_estrategicos = perspectiva.objetivos_estrategicos?.map(objetivo_estrategico => objetivo_estrategico.id === action.payload.id ? action.payload : objetivo_estrategico)
-                state.perspectivas = state.perspectivas.map(perspectiva => perspectiva.id === action.payload.perspectivaId ? { ...perspectiva, objetivos_estrategicos } : perspectiva)
+                if ( oldPerspectiva ) {
+                    oldPerspectiva.objetivos_estrategicos = oldPerspectiva.objetivos_estrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
+                }
+            }else{
+                if (perspectiva) {
+                    perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos?.map(estrategico => estrategico.id === action.payload.id ? action.payload : estrategico)
+                }
             }
         })
     }

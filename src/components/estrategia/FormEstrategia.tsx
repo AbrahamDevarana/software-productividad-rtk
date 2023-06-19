@@ -55,6 +55,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
         delete query.status
 
+
         if(query.id){            
             dispatch(updateEstrategicoThunk(query))
         }else if(query.nombre.trim() !== '' && query.descripcion.trim() !== '' && query.perspectivaId.trim() !== '' && query.fechaInicio && query.fechaFin && query.propietarioId && query.indicador.trim() !== ''){
@@ -97,6 +98,15 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         
         dispatch(updateEstrategicoThunk(updateEstrategico));       
     }
+
+    const handleChangePerspectiva = (value: string) => {
+        const updateEstrategico = {
+            ...currentEstrategico,
+            perspectivaId: value
+        }
+        dispatch(updateEstrategicoThunk(updateEstrategico));
+    }
+
     
 
     const items: MenuProps['items'] = [
@@ -158,8 +168,11 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 initialValues={{
                     ...currentEstrategico,
                     responsables: currentEstrategico.responsables.map(responsable => responsable.id),
+                    fechaInicio: dayjs(currentEstrategico.fechaInicio).add(6, 'hour'),
+                    fechaFin: dayjs(currentEstrategico.fechaFin).add(6, 'hour'),
                 }}
                 form={form}
+                onBlur={handleOnSubmit}
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
             >
         
@@ -172,7 +185,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         className='text-2xl'
                         bordered={false}
                         ref={inputRef}
-                        onBlur={handleOnSubmit}
                         onPressEnter={ () => inputRef.current?.blur() }
                     />
                 </Form.Item>
@@ -186,7 +198,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         name="codigo"
                         className='text-2xl'
                         ref={inputRef}
-                        onBlur={handleOnSubmit}
                         onPressEnter={ () => inputRef.current?.blur() }
                     />
                 </Form.Item>
@@ -207,11 +218,11 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         </div>
                         <div className='inline-flex w-full'>
                             <p className='text-3xl font-bold pr-2' style={{ 
-                                color: getColor(form.getFieldValue('status')).color,
+                                color: getColor(currentEstrategico.status).color,
                                 backgroundClip: 'text',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
-                                backgroundImage: `linear-gradient(to top, ${getColor(form.getFieldValue('status')).lowColor}, ${getColor(form.getFieldValue('status')).color})`
+                                backgroundImage: `linear-gradient(to top, ${getColor(currentEstrategico.status).lowColor}, ${getColor(currentEstrategico.status).color})`
                             }}> { currentEstrategico.progreso }% </p>
                             <Slider
                                 className='drop-shadow progressStyle w-full'
@@ -220,16 +231,16 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 max={100}
                                 onAfterChange={ (value ) => handleChangeProgreso(value) }
                                 trackStyle={{
-                                    backgroundColor: getColor(form.getFieldValue('status')).color,
+                                    backgroundColor: getColor(currentEstrategico.status).color,
                                     borderRadius: 10,
 
                                 }}
                                 railStyle={{
-                                    backgroundColor: getColor(form.getFieldValue('status'), .3).color,
+                                    backgroundColor: getColor(currentEstrategico.status, .3).color,
                                     borderRadius: 10,
                                 }}
                                 handleStyle={{
-                                    borderColor: getColor(form.getFieldValue('status')).color,
+                                    borderColor: getColor(currentEstrategico.status).color,
                                 }}
                             />
                         </div>
@@ -245,9 +256,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
                                 <button 
                                     type='button'
-                                    onClick={() => form.setFieldValue('perspectivaId', perspectiva.id)}
+                                    onClick={() => handleChangePerspectiva(perspectiva.id)}
                                     key={perspectiva.id} 
-                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105 ${form.getFieldValue('perspectivaId') === perspectiva.id? 'opacity-100': 'opacity-70'}`}
+                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105 ${ currentEstrategico.perspectivaId === perspectiva.id? 'opacity-100': 'opacity-70'}`}
                                     style={{
                                         backgroundColor: perspectiva.color,
                                     }}
@@ -261,13 +272,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 <Form.Item
                     label="Fecha de inicio"
                     className='col-span-6'
+                    name={'fechaInicio'}
                 >
                     <DatePicker
-                        onChange={(date, dateString) => form.setFieldValue('fechaInicio', dayjs(dateString, 'DD-MM-YYYY'))}
-                        value={dayjs(form.getFieldValue('fechaInicio'))}
                         format={"DD-MM-YYYY"}
-                        defaultValue={dayjs(form.getFieldValue('fechaInicio'))}
-                        name="fechaInicio"
                         className='w-full'
                         clearIcon={false}
                         ref={inputRef}
@@ -277,12 +285,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 <Form.Item
                     label="Fecha de fin"
                     className='col-span-6'
+                    name={'fechaFin'}
                 >
                     <DatePicker
-                        onChange={(date, dateString) => form.setFieldValue('fechaFin', dayjs(dateString, 'DD-MM-YYYY'))}
-                        value={dayjs(form.getFieldValue('fechaFin'))}
-                        defaultValue={dayjs(form.getFieldValue('fechaFin'))}
-                        name="fechaFin"
+                        format={"DD-MM-YYYY"}
                         className='w-full'
                         clearIcon={false}
                         ref={inputRef}
@@ -292,16 +298,13 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 <Form.Item
                     label="Propietario"
                     className='col-span-6'
+                    name='propietarioId'
                 >
                     <Select
                         style={{ width: '100%' }}
-                        placeholder="Selecciona los responsables"
-                        onChange={(value) => form.setFieldValue('propietarioId', value)}
-                        mode="multiple"
+                        placeholder="Selecciona al propietario"
                         tagRender={tagRender}
                         bordered = {false}
-                        value={ form.getFieldValue('propietarioId') }
-                        maxLength={1}
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
@@ -322,16 +325,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     <Select
                         mode="multiple"
                         style={{ width: '100%' }}
-                        placeholder="Selecciona los responsables"
-                        onChange={(value) => {
-                            form.setFieldValue('responsables', value)
-                        }}           
-                        onDeselect={(value) => {
-                            form.setFieldValue('responsables', value)
-                        }}                            
+                        placeholder="Selecciona los responsables"                      
                         allowClear
                         bordered = {false}
-                        value={ form.getFieldValue('responsables') }
                         tagRender={tagRender}
                         maxLength={3}
                         maxTagPlaceholder={(omittedValues) => (
@@ -347,7 +343,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 </Form.Item>
                 <Form.Item
                     className='col-span-12'
-                    name="meta"
+                    name="descripcion"
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Meta</p>
@@ -364,6 +360,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             <ReactQuill
                                 value={form.getFieldValue('descripcion')}
                                 onChange={(value) => form.setFieldValue('descripcion', value)}
+                                onBlur={handleOnSubmit}
                             />    
                         ) 
                         : ( <div className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )
@@ -372,15 +369,14 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 <div className='col-span-12'>
                     <Tabs defaultActiveKey='1' items={itemTab} className='text-devarana-graph active:text-devarana-dark-graph'>
                     </Tabs>
-                    
                 </div>
 
                 <Form.Item
                     label="Indicador"
                     className='col-span-12'
+                    name={'indicador'}
                 >
-                    <TextArea rows={1} onChange={(e) => form.setFieldValue('indicador', e.target.value)} value={form.getFieldValue('indicador')}
-                    name="indicador" className='editableInput' bordered={false}/>
+                    <TextArea rows={3} name="indicador" className='editableInput' bordered={false}/>
                 </Form.Item>
             </Form>
             <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 

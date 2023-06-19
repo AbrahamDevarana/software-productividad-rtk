@@ -115,6 +115,7 @@ const estrategicosSlice = createSlice({
             .addCase(updateEstrategicoThunk.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.currentEstrategico = action.payload
+            
             })
             .addCase(updateEstrategicoThunk.rejected, (state) => {
                 state.isLoading = false
