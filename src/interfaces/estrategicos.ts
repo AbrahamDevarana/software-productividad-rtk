@@ -1,6 +1,7 @@
 
 import { PerspectivaProps, Paginate, UsuarioProps, TacticoProps } from '@/interfaces';
 import { statusType } from '@/types';
+import { ComentarioProps } from './comentarios';
 
 
 export interface EstrategicosState {
@@ -29,6 +30,7 @@ export interface EstrategicoProps {
     tacticos?: TacticoProps[];
     propietarioId?: string
     propietario?: UsuarioProps;
+    comentarios?: ComentarioProps[];
 }
 
 
