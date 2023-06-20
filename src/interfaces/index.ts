@@ -16,3 +16,4 @@ export * from "./proyectos";
 export * from "./hitos";
 export * from "./tareas";
 export * from "./acciones";
+export * from "./comentarios";

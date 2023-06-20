@@ -17,6 +17,7 @@ import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaEdit, FaTimes } from 'react-icons/fa';
+import { Comentarios } from '../general/Comentarios';
 
 
 
@@ -151,10 +152,20 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         {
             key: '1',
             label: 'Indicador',
+            children: (
+                <Form.Item
+                    label="Indicador"
+                    className='col-span-12'
+                    name={'indicador'}
+                >
+                    <TextArea rows={3} name="indicador" className='editableInput' bordered={false}/>
+                </Form.Item>
+            )
         },
         {
             key: '2',
             label: 'Comentarios',
+            children: ( <Comentarios /> )
         }
     ]
 
@@ -371,13 +382,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     </Tabs>
                 </div>
 
-                <Form.Item
-                    label="Indicador"
-                    className='col-span-12'
-                    name={'indicador'}
-                >
-                    <TextArea rows={3} name="indicador" className='editableInput' bordered={false}/>
-                </Form.Item>
+                
             </Form>
             <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
         </>
