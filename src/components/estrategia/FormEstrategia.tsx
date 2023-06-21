@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Switch, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -147,6 +147,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         navigate(`/estrategia/${id}`)
     }
 
+    const messagesCount = useMemo(() => {
+        return currentEstrategico.comentarios?.length
+    }, [currentEstrategico.comentarios])
+
 
     const itemTab: TabsProps['items'] = [
         {
@@ -164,11 +168,17 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         },
         {
             key: '2',
-            label: 'Comentarios',
+            label: (
+                <div className='flex gap-2 items-center justify-center'>
+                    <p> Comentarios </p>
+                    <div className='bg-gradient-to-t h-4 w-4 from-primary to-primary-light text-white rounded-full text-[11px] shadow-sm flex  items-center justify-center'>
+                        {messagesCount} 
+                    </div>
+                </div>
+            ),
             children: ( <Comentarios /> )
         }
     ]
-
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
@@ -378,7 +388,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     }
                 </Form.Item>
                 <div className='col-span-12'>
-                    <Tabs defaultActiveKey='1' items={itemTab} className='text-devarana-graph active:text-devarana-dark-graph'>
+                    <Tabs defaultActiveKey='1' items={itemTab} className='text-devarana-graph active:text-devarana-dark-graph'
+                        onClick={ ( e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                        }}
+                    >
                     </Tabs>
                 </div>
 

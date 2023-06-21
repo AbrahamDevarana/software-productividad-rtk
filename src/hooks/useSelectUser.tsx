@@ -24,7 +24,7 @@ export const useSelectUser = (usuarios:UsuarioProps[]) => {
         return (
             <Tooltip title={label} color='white' key={value} className='relative'>
                 <Avatar 
-                    src={ <Image src={`${getStorageUrl(usuario!.foto)}`} preview={false} fallback={getBrokenUser()} /> }
+                    src={ <Image src={`${getStorageUrl(usuario?.foto)}`} preview={false} fallback={getBrokenUser()} /> }
                     style={{
                         marginRight: -5
                     }}

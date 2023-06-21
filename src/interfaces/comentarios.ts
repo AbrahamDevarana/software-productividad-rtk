@@ -8,5 +8,5 @@ export interface ComentarioProps {
     autorId: string;
     mensaje: string;
     createdAt: Date;
-    autor?: UsuarioProps;
+    autor: UsuarioProps;
 }
