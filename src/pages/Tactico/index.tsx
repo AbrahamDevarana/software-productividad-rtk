@@ -20,7 +20,7 @@ export const Tactico: React.FC = () => {
 
     useEffect(() => {
         if(slug){
-            dispatch(getTacticoFromAreaThunk(slug, state.quarter, state.year))
+            dispatch(getTacticoFromAreaThunk({ slug, quarter: state.quarter, year: state.year}))
         }
 
         return () => { dispatch(clearTacticosThunk()) }
@@ -30,7 +30,7 @@ export const Tactico: React.FC = () => {
         <>
             <div className='grid gap-10'>
                 <Box>
-                    <h2>Objetivos que contribuyen a la estrategia </h2>
+                    <h2>Tácticos Estratégicos </h2>
                     <TablaTacticos tacticos={tacticos}/>
                 </Box>
                 <Box>

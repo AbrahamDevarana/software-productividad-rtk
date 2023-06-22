@@ -25,7 +25,7 @@ export interface EstrategicoProps {
     status: statusType;
     indicador: string;
     perspectivaId: string;
-    perspectivas?: PerspectivaProps;
+    perspectivas: PerspectivaProps;
     responsables: UsuarioProps[];
     tacticos?: TacticoProps[];
     propietarioId?: string

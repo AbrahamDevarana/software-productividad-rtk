@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
+import { getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, updateTacticoThunk } from './tacticosThunk';
+
 
 const initialState: TacticosState = {
     tacticos: [],
     tacticos_core: [],
     isLoading: false,
+    isLoadingCurrent: false,
     infoMessage: '',
     error: false,
-    updated: false,
-    created: false,
-    deleted: false,
     currentTactico: {
         id: '',
         nombre: '',
@@ -38,12 +38,21 @@ const initialState: TacticosState = {
             nombre: '',
             codigo: '',
             descripcion: '',
-            fechaFin: new Date(),
-            fechaInicio: new Date(),
             progreso: 0,
+            fechaInicio: new Date(),
+            fechaFin: new Date(),
             status: 'SIN_INICIAR',
             indicador: '',
             perspectivaId: '',
+            perspectivas: { 
+                id: '',
+                nombre: '',
+                descripcion: '',
+                icono: 'faChartLine',
+                color: '',
+                status: 'SIN_INICIAR',
+                progreso: 0,
+            },
             responsables: [],
         },
         
@@ -54,93 +63,84 @@ const tacticosSlice = createSlice({
     name: 'tacticosSlice',
     initialState,
     reducers: {
-        checkingTacticos: (state) => {
-            state.isLoading = true
-            state.updated = false
-        },
-        setTacticosError: (state, action) => {
-            state.isLoading = false
-            state.infoMessage = action.payload
-            state.error = true
-        },
-        getTacticos: (state, action) => {                 
-            state.isLoading = false
-            state.tacticos = action.payload.tacticos
-            state.tacticos_core = action.payload.tacticos_core
-        },
-        getCurrentTactico: (state, action) => {
-            state.currentTactico = action.payload.tactico
-            state.isLoading = false
-        },
-        createTactico: (state, action) => {      
-            const {objetivo} = action.payload
-            
-            if(objetivo.estrategicoId){
-                state.tacticos = [ ...state.tacticos, objetivo]
-            }else{
-                state.tacticos_core = [ ...state.tacticos_core, objetivo]
-            }
-
-            state.currentTactico = objetivo
-            state.created = true
-            state.isLoading = false
-        },
-        updateTactico: (state, action) => {
-            const {objetivo} = action.payload
-            console.log(objetivo);
-            
-            
-            if(objetivo.estrategicoId){
-                state.tacticos = [ ...state.tacticos, objetivo]
-                state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== objetivo.id )
-            
-            }else{
-                state.tacticos_core = [ ...state.tacticos_core, objetivo]
-                state.tacticos = state.tacticos_core.filter( objetivo => objetivo.id !== objetivo.id )
-            }
-
-            state.updated = true
-            state.isLoading = false
-            state.currentTactico = objetivo
-        },
-        updateTacticoEstrategia: (state, action) => {
-        },
-        deleteTactico: (state, action) => {
-            state.tacticos = state.tacticos.filter(tactico => tactico.id !== action.payload.id)
-            state.deleted = true
-            state.isLoading = false
-        },
         clearTacticos: (state) => {
             state.tacticos = initialState.tacticos
             state.tacticos_core = initialState.tacticos_core
         },
         clearCurrentTactico: (state) => {
-            
             state.currentTactico = initialState.currentTactico
-        },       
-        clearAlertTacticos: (state) => {   
-            state.error = false
-            state.updated = false
-            state.created = false
-            state.deleted = false
-            state.infoMessage = ''
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getTacticoFromAreaThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticoFromAreaThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tacticos = action.payload.tacticos
+                state.tacticos_core = action.payload.tacticos_core
+            })
+            .addCase(getTacticoFromAreaThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(getTacticoFromEstrategiaThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticoFromEstrategiaThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tacticos = action.payload.tacticos
+                state.tacticos_core = action.payload.tacticos_core
+            })
+            .addCase(getTacticoFromEstrategiaThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(getTacticoThunk.pending, (state) => {
+                state.isLoadingCurrent = true
+            })
+            .addCase(getTacticoThunk.fulfilled, (state, action) => {
+                state.isLoadingCurrent = false
+                state.currentTactico = action.payload
+            })
+            .addCase(getTacticoThunk.rejected, (state, action) => {
+                state.isLoadingCurrent = false
+                state.error = true
+            })
+            .addCase(updateTacticoThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateTacticoThunk.fulfilled, (state, action) => {
+                                                
+                if(action.payload.estrategicoId){
+                    // si existe en el array de tacticos, lo actualiza
+                    const find = state.tacticos.find( tactico => tactico.id === action.payload.id )
+                    if(find){
+                        state.tacticos = state.tacticos.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
+                    }else{
+                        state.tacticos = [ ...state.tacticos, action.payload]
+                    }
+                    // si existe en el array de tacticos_core, lo elimina
+                    state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== action.payload.id )
+
+                }else{
+                    const find = state.tacticos_core.find( tactico => tactico.id === action.payload.id )
+                    if(find){
+                        state.tacticos_core = state.tacticos_core.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
+                    }else{
+                        state.tacticos_core = [ ...state.tacticos_core, action.payload]
+                    }
+                    state.tacticos = state.tacticos.filter( objetivo => objetivo.id !== action.payload.id )
+                }
+
+            })
         }
-        
-    }
 })
 
 export const {
-    checkingTacticos,
-    setTacticosError,
-    getTacticos,
-    getCurrentTactico,
-    createTactico,
-    updateTactico,
-    updateTacticoEstrategia,
-    deleteTactico,
     clearTacticos,
     clearCurrentTactico,
-    clearAlertTacticos
 } = tacticosSlice.actions
 
 export default tacticosSlice.reducer

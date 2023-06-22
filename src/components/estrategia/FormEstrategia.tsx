@@ -223,9 +223,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     />
                 </Form.Item>
                 <Space className={`${ form.getFieldValue('id') === ''? 'hidden': 'block'} col-span-12`}>
-                    <Divider className='col-span-12'  />
+                    <Divider className='my-3'  />
                     <Form.Item
-                        className='col-span-12'
+                        className=''
                         name={'progreso'}
                     >
 
@@ -266,11 +266,11 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             />
                         </div>
                     </Form.Item>
-                    <Divider className='col-span-12' />
+                    <Divider className='my-3' />
                 </Space>
                 <Form.Item
                     label="Perspectiva"
-                    className='col-span-12'
+                    className='col-span-12 mt-5'
                 >
                     <div className='flex flex-wrap gap-3'>
                         {

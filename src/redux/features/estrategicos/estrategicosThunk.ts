@@ -10,8 +10,13 @@ import { clientAxios } from '@/config/axios';
 
 
 interface Props {
-    objetivoEstrategico : EstrategicoProps
-    objetivosEstrategicos : EstrategicoProps[]
+    objetivoEstrategico: EstrategicoProps
+    objetivosEstrategicos: {
+        rows: EstrategicoProps[]
+        totalItem: number
+        totalPages: number
+        currentPage: number
+    }
 }
 
 export const getEstrategicosThunk = createAsyncThunk(
@@ -87,8 +92,6 @@ export const deleteEstrategicoThunk = createAsyncThunk(
     }
 )
 
-
-
 export const updateEstrategicoThunk = createAsyncThunk(
     'estrategicos/updateEstrategico',
     async (estrategico: EstrategicoProps, { rejectWithValue, getState }) => {
@@ -107,9 +110,6 @@ export const updateEstrategicoThunk = createAsyncThunk(
     }
 )
 
-
-
-
 export const createEstrategicoFromPerspectivaThunk = (estrategico: EstrategicoProps) => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
         dispatch(checkingEstrategicos())
@@ -118,8 +118,6 @@ export const createEstrategicoFromPerspectivaThunk = (estrategico: EstrategicoPr
         dispatch( createEstrategicoFromProvider(result.estrategico) )
     }
 }
-
-
 
 export const clearEstrategicosThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {

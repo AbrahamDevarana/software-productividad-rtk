@@ -77,8 +77,13 @@ const estrategicosSlice = createSlice({
                 state.error = false
             })
             .addCase(getEstrategicosThunk.fulfilled, (state, action) => {       
-                state.isLoading = false
-                
+                state.isLoading = false,
+                state.estrategicos = action.payload.rows
+                state.paginate = {
+                    totalItem: action.payload.totalItem,
+                    totalPages: action.payload.totalPages,
+                    currentPage: action.payload.currentPage,
+                }
             })
             .addCase(getEstrategicosThunk.rejected, (state) => {
                 state.isLoading = false

@@ -28,11 +28,9 @@ export interface TacticosState {
     tacticos: TacticoProps[];
     tacticos_core: TacticoProps[];
     isLoading:    boolean;
+    isLoadingCurrent: boolean;
     error:        boolean;
     infoMessage:  string;
-    updated:      boolean;
-    created:      boolean;
-    deleted:      boolean;
     currentTactico: TacticoProps;
     
     

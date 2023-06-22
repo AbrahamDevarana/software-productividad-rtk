@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import {Avatar, Drawer, Progress, Table} from 'antd';
+import {Avatar, Drawer, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
-import { getColor, getFile, getStatus } from '@/helpers';
+import { getColor, getFile, getStatus, getStorageUrl } from '@/helpers';
 import '@/assets/css/ResizableTable.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
@@ -22,7 +23,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
-            title: 'Objetivos',
+            title: () => ( <p className='tableTitlePrincipal'>Objetivo</p>),
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
@@ -33,13 +34,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             }),
         },
         {
-            title: 'Resultados Clave',
-            width: 40,
-            ellipsis: true,
-            render: (text, record, index) => ( <p className='text-default'> 0 </p>   ),
-        },
-        {
-            title: 'Estatus',
+            title: () => ( <p className='tableTitle'>Estatus</p>),
             dataIndex: 'status',
             width: 50,
             ellipsis: true,
@@ -51,7 +46,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             ),
         },
         {
-            title: 'Progreso',
+            title: () => ( <p className='tableTitle'>Progreso</p>),
             dataIndex: 'progreso',
             width: 100,
             render: (text, record, index) => (
@@ -66,15 +61,19 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             )
         },
         {
-            title: 'Responsables',
+            title: () => ( <p className='tableTitle'>Responsables</p>),
             width: 50,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={3} key={index}>
-                    {record.responsables?.map((responsable, index) => (
-                        <span key={index} className='z-50' >
-                            <Avatar src={getFile(responsable.foto)} />
-                        </span>
-                    ))}
+                <Avatar.Group maxCount={3} key={index} className='z-50'>
+                    { record.responsables?.map((responsable, index) => (
+                        <Tooltip title={`${responsable?.nombre} ${responsable?.apellidoPaterno}`} key={index}>
+                            <Avatar 
+                                src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                            >
+                                {responsable?.iniciales}
+                            </Avatar>
+                        </Tooltip>
+                    )) }
                 </Avatar.Group>
             ),
             onCell: (record, rowIndex) => {
@@ -106,8 +105,8 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             <Table
                 columns={columns}
                 dataSource={tacticos}
-                size='small'
-                className='w-full '
+                className='w-full customTable' 
+                rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
@@ -121,7 +120,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
             <Drawer
                 open={showDrawer}
-                width={window.innerWidth > 1200 ? 600 : '100%'}
+                width={window.innerWidth > 1200 ? 700 : '100%'}
                 destroyOnClose={true}
                 onClose={() => handleCancel()}
                 closable={false}

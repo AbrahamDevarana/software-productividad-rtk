@@ -23,27 +23,6 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
         setIsModalVisible(true)
     }
 
-    const items: MenuProps['items'] = [
-        {
-            key: 'view',
-            label: (
-                <Link to={`${objetivo.id}`} >
-                    <Icon iconName='faEye' className='text-devarana-graph'/>
-                    <span> Ver </span>
-                </Link>
-            )
-        },
-        {
-            key: 'edit',
-            label: (
-                <Space onClick={ () => handleEditObjetivo(objetivo.id) } >
-                    <Icon iconName='faEdit' className='text-devarana-graph'/>
-                    <span>Editar</span>
-                </Space>
-            )
-        }
-    ]
-
     return (
         <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
@@ -88,9 +67,18 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 }
             </Avatar.Group>
 
-            <Dropdown className='absolute hidden group-hover:block top-0 right-0' menu={{items}} trigger={['click']}>
-                <Button className='' type='text' icon={<Icon iconName='faEllipsisH' className='text-devarana-graph text-xl'/> } />
-            </Dropdown>
+
+            <div className='absolute inset-0 opacity-0 group-hover:opacity-100 -z-50 group-hover:z-50 flex  items-center justify-center w-full bottom-0 bg-black bg-opacity-70 text-white transition-all duration-300 rounded-ext gap-10'>
+                    <Link to={`${objetivo.id}`} >
+                        <Icon iconName='faEye' className='text-devarana-graph'/>
+                        <span> Ver </span>
+                    </Link>
+                    <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer' >
+                        <Icon iconName='faEdit' className='text-devarana-graph'/>
+                        <span>Editar</span>
+                    </Space>
+            </div>
+            
         </Card>
     )
 }
