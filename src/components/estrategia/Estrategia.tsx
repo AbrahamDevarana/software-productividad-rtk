@@ -13,7 +13,6 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
 
     const [open, setOpen] = useState<boolean>(false)
 
-    
     return (
         <>
             {
@@ -61,11 +60,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                 <FormEstrategia setOpen={ setOpen } />
             </Drawer>
 
-            <FloatButton
-                onClick={() => setOpen(true)}
-                icon={<FaPlus />} 
-                className='bottom-5'
-            />
+           
         </>
     )
 }

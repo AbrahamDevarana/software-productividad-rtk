@@ -59,8 +59,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
         if(query.id){            
             dispatch(updateEstrategicoThunk(query))
-        }else if(query.nombre.trim() !== '' && query.descripcion.trim() !== '' && query.perspectivaId.trim() !== '' && query.fechaInicio && query.fechaFin && query.propietarioId && query.indicador.trim() !== ''){
-            dispatch(createEstrategicoFromPerspectivaThunk(query))
         }
     }
 

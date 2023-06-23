@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-import { Segmented } from 'antd';
+import { FloatButton, Segmented } from 'antd';
 import { Proximamente } from '@/components/ui';
+import { FaPlus } from 'react-icons/fa';
+import { createEstrategicoFromPerspectivaThunk, createEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 
 
 export const EstrategiaHome: React.FC = () => {
@@ -32,20 +34,35 @@ export const EstrategiaHome: React.FC = () => {
         dispatch(getPerspectivasThunk({}));
     }, []);
 
+
+    const handleNuevaPerspectiva = () => {
+        dispatch(createEstrategicoThunk({
+            perspectivaId: 1,
+            propietarioId: 1,
+        }))
+    }
+
     return (
-        <div className='' id="Estrategia">
-            <div className='max-w-sm pb-5'>
-                <Segmented block options={options} value={segment} onChange={setSegment} />
-            </div>
-            {
-                segment === 'Listado' && <Estrategia perspectivas={perspectivas} />
-            }
-            {
-                segment === 'Mapa' && <Proximamente size='default' avance={50} />
-            }
-            {
-                segment === 'Gantt' && <Proximamente size='default' avance={28} />
-            }
-        </div>
+        <>
+            <>
+                <div className='max-w-sm pb-5'>
+                    <Segmented block options={options} value={segment} onChange={setSegment} />
+                </div>
+                {
+                    segment === 'Listado' && <Estrategia perspectivas={perspectivas} />
+                }
+                {
+                    segment === 'Mapa' && <Proximamente size='default' avance={50} />
+                }
+                {
+                    segment === 'Gantt' && <Proximamente size='default' avance={28} />
+                }
+            </>
+
+            <FloatButton
+                icon={<FaPlus />} 
+                className='bottom-5'
+            />
+        </>
     )
 }

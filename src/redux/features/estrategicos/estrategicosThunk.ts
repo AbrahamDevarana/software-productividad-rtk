@@ -58,7 +58,7 @@ export const getEstrategicoThunk = createAsyncThunk(
 
 export const createEstrategicoThunk = createAsyncThunk(
     'estrategicos/createEstrategico',
-    async (estrategico: EstrategicoProps, { rejectWithValue, getState }) => {
+    async (estrategico: any, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
