@@ -1,62 +1,106 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { getAreasProvider, getAreaProvider, createAreaProvider, deleteAreaProvider, updateAreaProvider } from './areasProvider';
-import { checkingAreas, setAreasError, getCurrentArea, createArea, deleteArea, getAreas, updateArea, clearAreas, clearCurrentArea } from './areasSlice';
+import { clearAreas, clearCurrentArea } from './areasSlice';
+import { AreaProps } from '@/interfaces';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { clientAxios } from '@/config/axios';
 
-
-// Get Areas
-export const getAreasThunk = (filtros: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingAreas())
-        const result = await getAreasProvider(filtros, getState)
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        
-        dispatch( getAreas(result.areas) )
+interface Props {
+    area: AreaProps
+    areas: {
+        rows: AreaProps[]
+        totalItem: number
+        totalPages: number
+        currentPage: number
     }
 }
 
-// Get Area
-export const getAreaThunk = (areaId: number) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingAreas())
-        const result = await getAreaProvider(areaId, getState)        
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        
-        dispatch( getCurrentArea(result.area) )
-    }
-}
 
-// Create Area
 
-export const createAreaThunk = (area: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingAreas())
-        const result = await createAreaProvider(area, getState)        
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) ); 
-        dispatch( createArea(result.area) )
+export const getAreasThunk = createAsyncThunk(
+    'areas/getAreas',
+    async (filtros: any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+            
+            const response = await clientAxios.get<Props>(`/areas`, config);
+            return response.data.areas
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
 
-// Delete Area
-export const deleteAreaThunk = (areaId: number) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingAreas())
-        const result = await deleteAreaProvider(areaId, getState)        
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        
-        dispatch( deleteArea(areaId) )
-    }
-}
+export const getAreaThunk = createAsyncThunk(
+    'areas/getArea',
+    async (areaId: number, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
 
-// Update Area
-export const updateAreaThunk = (area: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingAreas())
-        const result = await updateAreaProvider(area, getState)        
-        if(!result.ok) return dispatch( setAreasError(result.errorMessage) )
-        dispatch( updateArea(result.area) )
-        dispatch( clearCurrentArea() )
+            const response = await clientAxios.get<Props>(`/areas/${areaId}`, config);
+            return response.data.area
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
+)
+
+export const createAreaThunk = createAsyncThunk(
+    'areas/createArea',
+    async (area: AreaProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.post<Props>(`/areas`, area, config);
+            return response.data.area
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const deleteAreaThunk = createAsyncThunk(
+    'areas/deleteArea',
+    async (areaId: number, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.delete<Props>(`/areas/${areaId}`, config);
+            return response.data.area
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const updateAreaThunk = createAsyncThunk(
+    'areas/updateArea',
+    async (area: AreaProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.put<Props>(`/areas/${area.id}`, area, config);
+            return response.data.area
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 
 //  Clean Area

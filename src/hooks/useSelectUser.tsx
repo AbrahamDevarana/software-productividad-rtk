@@ -5,7 +5,7 @@ import { Avatar, Image, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 
 
-export const useSelectUser = (usuarios:UsuarioProps[]) => {
+export const useSelectUser = (usuarios?:UsuarioProps[]) => {
 
     const [ selectedUsers, setSelectedUsers ] = useState<any[]>([]);
 
@@ -19,7 +19,7 @@ export const useSelectUser = (usuarios:UsuarioProps[]) => {
     const tagRender = (props: any) => {
         const { label, value, closable, onClose } = props;
 
-        const usuario = usuarios.find((usuario) => usuario.id === value)
+        const usuario = usuarios!.find((usuario) => usuario.id === value)
 
         return (
             <Tooltip title={label} color='white' key={value} className='relative'>

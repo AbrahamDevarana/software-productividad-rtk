@@ -1,72 +1,128 @@
+import { DepartamentoProps } from '@/interfaces';
 import { AppDispatch, RootState } from '../../../store';
-import { getDepartamentosProvider, getDepartamentoProvider, createDepartamentoProvider, deleteDepartamentoProvider, updateDepartamentoProvider, getLideresDepartamentoProvider } from './departamentosProvider';
-import { checkingDepartamentos, setDepartamentosError, getCurrentDepartamento, createDepartamento, deleteDepartamento, getDepartamentos, updateDepartamento, clearDepartamentos, clearCurrentDepartamento, getLideresDepartamento } from './departamentosSlice';
+import { clearDepartamentos, clearCurrentDepartamento } from './departamentosSlice';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { clientAxios } from '@/config/axios';
 
 
-// Get Departamentos
-export const getDepartamentosThunk = (filtros: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await getDepartamentosProvider(filtros, getState)
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        
-        dispatch( getDepartamentos(result.departamentos) )
+
+interface Props {
+    departamento: DepartamentoProps
+    departamentos: {
+        rows: DepartamentoProps[]
+        totalItem: number
+        totalPages: number
+        currentPage: number
     }
-}
-
-// Get Departamento
-export const getDepartamentoThunk = (departamentoId: number) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await getDepartamentoProvider(departamentoId, getState)        
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        
-        dispatch( getCurrentDepartamento(result.departamento) )
-    }
-}
-
-// Create Departamento
-
-export const createDepartamentoThunk = (departamento: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await createDepartamentoProvider(departamento, getState)        
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) ); 
-        dispatch( createDepartamento(result.departamento) )
-    }
-}
-
-// Delete Departamento
-export const deleteDepartamentoThunk = (departamentoId: number) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await deleteDepartamentoProvider(departamentoId, getState)        
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        dispatch( deleteDepartamento(departamentoId) )
-    }
-}
-
-// Update Departamento
-export const updateDepartamentoThunk = (departamento: any) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await updateDepartamentoProvider(departamento, getState)        
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        dispatch( updateDepartamento(result.departamento) )
-        dispatch( clearCurrentDepartamento() )
-    }
+    lideres: any[]
 }
 
 
-export const getLideresDepartamentoThunk = (departamentoId: number) => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        dispatch(checkingDepartamentos())
-        const result = await getLideresDepartamentoProvider(departamentoId, getState)
-        if(!result.ok) return dispatch( setDepartamentosError(result.errorMessage) )
-        dispatch( getLideresDepartamento(result.lideres) )
+
+
+export const getDepartamentosThunk = createAsyncThunk(
+    'departamentos/getDepartamentos',
+    async (filtros: any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+
+            const response = await clientAxios.get<Props>(`/departamentos`, config);
+            return response.data.departamentos
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
     }
-}
-        
+)
+
+export const getDepartamentoThunk = createAsyncThunk(
+    'departamentos/getDepartamento',
+    async (departamentoId: number, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.get<Props>(`/departamentos/${departamentoId}`, config);
+            return response.data.departamento
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const createDepartamentoThunk = createAsyncThunk(
+    'departamentos/createDepartamento',
+    async (departamento: DepartamentoProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.post<Props>(`/departamentos`, departamento, config);
+            return response.data.departamento
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const deleteDepartamentoThunk = createAsyncThunk(
+    'departamentos/deleteDepartamento',
+    async (departamentoId: number, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.delete<Props>(`/departamentos/${departamentoId}`, config);
+            return response.data.departamento
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const updateDepartamentoThunk = createAsyncThunk(
+    'departamentos/updateDepartamento',
+    async (departamento: DepartamentoProps, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.put<Props>(`/departamentos/${departamento.id}`, departamento, config);
+            return response.data.departamento
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const getLideresDepartamentoThunk = createAsyncThunk(
+    'departamentos/getLideresDepartamento',
+    async (departamentoId: number, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.get<Props>(`/departamentos/getLeader/${departamentoId}`, config);
+            return response.data.lideres
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+  
 
 
 //  Clean Departamento

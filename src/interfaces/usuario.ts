@@ -1,3 +1,4 @@
+import { DepartamentoProps } from "./departamentos";
 import { Paginate } from "./slice";
 
 export interface UsuariosState {
@@ -14,7 +15,7 @@ export interface UsuarioProps {
     id: string;
     nombre: string;
     apellidoPaterno: string;
-    apellidoMaterno: string;
+    apellidoMaterno?: string;
     nombreCorto?: string;
     slug?: string;
     iniciales: string;
@@ -26,11 +27,11 @@ export interface UsuarioProps {
     telefono?: string;
     foto?: string;
     descripcionPerfil?: string;
-    departamentoId?: number | null;
+    departamentoId?: number;
     leaderId?: number | null ;
     direccion?: Direccion;
-    departamento?: Departamento;
-
+    departamento?: DepartamentoProps;
+    puesto?: string;
 }
 
 
@@ -45,11 +46,6 @@ export interface Direccion {
     estado: string;
 }
 
-export interface Departamento {
-    id: number | null;
-    nombre: string;
-    leaderId: string | null;
-}
 
 export interface Lider {
     id: number;

@@ -8,6 +8,7 @@ import { Icon } from "@/components/Icon"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
 import { FaPlus } from "react-icons/fa"
+import { UsuarioProps } from "@/interfaces"
 
 
 
@@ -46,13 +47,13 @@ export const Usuarios: React.FC = () => {
 		
 	}
 
-    const isComplete = (data: any) => ( (Object.values(data).some(val => val === null) ? false : true ) ||
-    data.fechaNacimiento === null || data.fechaIngreso === null || data.leaderId === null || 
-    data.departamentoId === null) ? false : true
+    // const isComplete = ({text, record, index}: ) => ( (Object.values(record).some(val => val === null) ? false : true ) ||
+    // record.fechaNacimiento === null || record.fechaIngreso === null || record.leaderId === null || 
+    // record.departamentoId === null) ? false : true
     
-    const columns = [
+    const columns: ColumnsType<UsuarioProps> = [
 		{
-			render: (data: any) => Object.values(data).some(val => val === null) ? 
+			render: (text, record, index) => Object.values(record).some(val => val === null) ? 
 			<Tooltip title="Este usuario no ha completado su registro">
 				<span><Icon iconName="faExclamationTriangle" className="text-yellow-300" /></span>
 			</Tooltip>
@@ -61,39 +62,39 @@ export const Usuarios: React.FC = () => {
 			width: 35
 		},
         {
-            title: "Nombre",
+            title: () => ( <p className='tableTitlePrincipal'>Nombre</p>),
             key: "nombre",
-			render: (data: any) => `${data.nombre} ${data.apellidoPaterno} ${data.apellidoMaterno}`,
+			render: (text, record, index) => ( <p className="text-devarana-graph"> {record.nombre} {record.apellidoPaterno} {record.apellidoMaterno} </p>),
 			ellipsis: true
         },
 		{
-			title: "Email",
+			title: () => ( <p className='tableTitle'>Email</p>),
 			key: "email",
-			dataIndex: "email",
-			ellipsis: true
+            ellipsis: true,
+            render: (text, record, index) => ( <p className="text-devarana-graph"> {record.email} </p>)
 		},
 		{
-			title: "Fecha Nacimiento",
+			title: () => ( <p className='tableTitle'>Fecha Nacimiento</p>),
 			key: "fechaNacimiento",
-            render: (data: any) => data.fechaNacimiento ? `${dayjs(data.fechaNacimiento, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
+            render: (text, record, index) => ( <p className="text-devarana-graph"> {record.fechaNacimiento? `${dayjs(record.fechaNacimiento, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado'} </p>),
 			ellipsis: true
 		},
 		{
-			title: "Fecha Ingreso",
+			title: () => ( <p className='tableTitle'>Fecha Ingreso</p>),
 			key: "fechaIngreso",
-			render: (data: any) => data.fechaIngreso ? `${dayjs(data.fechaIngreso, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado',
+            render: (text, record, index) => ( <p className="text-devarana-graph"> {record.fechaIngreso? `${dayjs(record.fechaIngreso, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado'} </p>),
 			ellipsis: true
 		},
 		{
-            title: "Acciones",
+            title: () => ( <p className='tableTitle'>Acciones</p>),
             key: "acciones",
-			render: (data: any) => (
+			render: (text, record, index) => (
 				<div className="flex gap-2">
                     <Button
                         classType="icon"
                         classColor="warning"
                         onClick={() => {
-                            handleEdit(data.id)
+                            handleEdit(record.id)
                         } }
                     >
                         <Icon iconName="faPen" />
@@ -101,7 +102,7 @@ export const Usuarios: React.FC = () => {
                     <Button
                         classType="icon"
                         classColor="error"
-                        onClick={() => handleDelete(data.id) }
+                        onClick={() => handleDelete(record.id) }
                     >
                         <Icon iconName="faTrash" />
                     </Button>
@@ -145,10 +146,12 @@ export const Usuarios: React.FC = () => {
                     />
                 </div>
             <Table
-                    columns={columns}
-                    dataSource={usuarios}
-                    rowKey={(record) => record.id}
-                    pagination={false}
+                columns={columns}
+                dataSource={usuarios}
+                rowKey={(record) => record.id}
+                pagination={false}
+                className="customTable"
+                // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
             >
 
             </Table>

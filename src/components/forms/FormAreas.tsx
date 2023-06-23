@@ -1,35 +1,47 @@
-import { ErrorMessage, Formik } from 'formik'
-import { Button } from '@/components/ui'
 
-import * as Yup from "yup";
+import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/admin/areas/areasThunks';
-import { ModalProps } from '@/interfaces/modal';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { Alert, Modal, Select, Input, Form } from 'antd'
+import { Select, Input, Form, Skeleton } from 'antd'
+import { useSelectUser } from '@/hooks/useSelectUser';
+import Swal from 'sweetalert2';
 
 
-export const FormAreas = ({visible, handleModal} : ModalProps ) => {
+interface Props {
+    handleClose: () => void
+}
+
+export const FormAreas = ({handleClose}: Props) => {
 
     const dispatch = useAppDispatch();
     
-    const { currentArea } = useAppSelector((state: any) => state.areas)
-    const { areas } = useAppSelector((state: any) => state.areas)
-    const { usuarios } = useAppSelector((state: any) => state.usuarios)
+    const { currentArea, isLoadingCurrent } = useAppSelector( state => state.areas)
+    const { areas } = useAppSelector( state => state.areas)
+    const { usuarios } = useAppSelector( state => state.usuarios)
+    const [cancel, setCancel] = useState(false)
 
-    const handleOnSubmit = (values: any) => {       
+    const [form] = Form.useForm()
+    const { spanUsuario } = useSelectUser(usuarios)
+
+    const handleOnSubmit = () => {  
+
+        const query = {
+            id: currentArea.id,
+            ...form.getFieldsValue()
+        }
 
         if (currentArea.id) {
-            dispatch(updateAreaThunk(values))
+            dispatch(updateAreaThunk(query))
         }else {
-            dispatch(createAreaThunk(values))
+            dispatch(createAreaThunk(query))
         }
         handleCancel()
     } 
 
     const handleCancel = () => {
-        handleModal(false)
+        handleClose()
         dispatch(clearCurrentAreaThunk())
     }    
 
@@ -37,89 +49,101 @@ export const FormAreas = ({visible, handleModal} : ModalProps ) => {
         dispatch(getUsuariosThunk({}))
     }, [])
 
+
+    const handleDelete = () => {
+        Swal.fire({
+            customClass: {
+                confirmButton: 'bg-devarana-error',
+                cancelButton: 'bg-devarana-success'
+            },
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Eliminado!',
+                'El registro ha sido eliminado.',
+                'success'
+                )
+            }
+        })
+    }
+
+
+    if (isLoadingCurrent) return <Skeleton active paragraph={{ rows: 10 }} />
+    
     return (
-        <Modal 
-            open={visible}
-            onCancel={ handleCancel }
-            destroyOnClose={true}
-            width={700}
-            footer={null}
-        >
+        
             <div className='animate__animated animate__fadeIn animate__faster'>
-                    <h1 className='pb-3'>
-                        {
-                            currentArea.id ? 'Editar Área' : 'Crear Área'
-                        }
-                    </h1>
-                    <Formik
-                        initialValues={currentArea}
-                        onSubmit={ (values) => handleOnSubmit(values) }
-                        validationSchema={Yup.object({
-                            nombre: Yup.string().required("El nombre es requerido"),
-                        })}
-                        enableReinitialize={true}
+                <h1 className='pb-3'>
+                    {
+                        currentArea.id !== 0 ? 'Editar Área' : 'Crear Área'
+                    }
+                </h1>
+                <Form 
+                    onFinish={handleOnSubmit}
+                    layout='vertical'
+                    form={form}
+                    initialValues={currentArea}
+                >
+                    <div className='flex pt-4 flex-col gap-y-2'>
+                        <Form.Item
+                            label="Nombre del área"
+                            name='nombre'
+                            >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label="Lider de área"
+                            name='leaderId'
+                        >
+                             <Select
+                                showSearch
+                                placeholder="Selecciona una opción"
+                                allowClear
+                                // @ts-ignore
+                                filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                            >
+                                {
+                                    usuarios.map((usuario) => (
+                                       <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
+                                    ))
+                                }
+                                
+                            </Select>
+                        </Form.Item>
 
-                    >
-                        {
-                            ({ values, handleChange, handleBlur, handleSubmit, validateForm }) => (
-                                <Form onFinish={handleSubmit} noValidate layout='vertical'>
-                                    <div className='flex pt-4 flex-col gap-y-2'>
-                                        <Form.Item
-                                            label="Nombre del área"
-                                            >
-                                            <Input
-                                                value={values.nombre}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                name="nombre"
-                                            />
-                                            <ErrorMessage name="nombre" render={msg => <Alert type="error" message={msg} showIcon />} />
-                                        </Form.Item>
-                                        <Form.Item
-                                            label="Lider de área"
-                                        >
-                                            <Select
-                                                showSearch
-                                                onChange={ (value) => handleChange({target: {name: 'leaderId', value}}) }
-                                                value={values.leaderId}
-                                                placeholder="Selecciona una opción"
-                                                allowClear
-                                            >
-                                                {
-                                                    usuarios.map((usuario: any) => (
-                                                        <Select.Option key={usuario.id} value={usuario.id}>{usuario.nombre}</Select.Option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Form.Item>
+                        <Form.Item
+                            label="Área padre"
+                            name='parentId'
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Selecciona una opción"
+                                allowClear
+                                // @ts-ignore
+                                filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                            >
+                                {
+                                    areas.map( area => (
+                                        <Select.Option key={area.id} value={area.id}>
+                                            <p className='text-devarana-graph'> {area.nombre} </p>
+                                        </Select.Option>
+                                    ))
+                                }
+                            </Select>
+                        </Form.Item>
+                    </div>
+                    <div className='flex justify-between gap-10'>
+                        <Button classType='regular' width={150} classColor='error' onClick={handleDelete}> Eliminar </Button>
+                        <Button classType='regular' width={150} classColor='primary' type="submit" className="mr-2"> { currentArea.id !== 0 ? 'Editar' : 'Crear' } </Button>
+                    </div>
 
-                                        <Form.Item
-                                            label="Área padre"
-                                        >
-                                            <Select
-                                                showSearch
-                                                onChange={ (value) => handleChange({target: {name: 'parentId', value}}) }
-                                                value={values.parentId}
-                                                placeholder="Selecciona una opción"
-                                                allowClear
+                </Form>
 
-                                            >
-                                                {
-                                                    areas.map((area: any) => (
-                                                        <Select.Option key={area.id} value={area.id}>{area.nombre}</Select.Option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Form.Item>
-                                    </div>
-                                    <div className='py-4'>
-                                        <Button classType='regular' classColor='primary' type="submit" className="mr-2"> { currentArea.id ? 'Editar' : 'Crear' } </Button>
-                                    </div>
 
-                                </Form>
-                        )}
-                    </Formik>
             </div>
-        </Modal>
     )
 }

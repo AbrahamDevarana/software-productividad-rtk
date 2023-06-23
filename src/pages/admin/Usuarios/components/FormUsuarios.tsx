@@ -39,7 +39,6 @@ export const FormUsuarios: React.FC<ModalProps> = ({visible, handleModal} ) => {
             width={1000}
             footer={null}
             closable = {false}
-            maskClosable = {false}
             bodyStyle={{ backgroundColor: 'transparent' }}
         >
             <div className="animate__animated animate__fadeIn animate__faster">

@@ -1,4 +1,4 @@
-import { FloatButton, Input, Pagination, Table } from "antd"
+import { FloatButton, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
 import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/redux/features/admin/areas/areasThunks';
@@ -24,30 +24,30 @@ export const Areas: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const { areas, infoMessage, paginate } = useAppSelector((state: any) => state.areas)
-    const [formVisible, setFormVisible] = useState<boolean>(false)
+    const [visible, setFormVisible] = useState<boolean>(false)
     const [filtros, setFiltros] = useState<any>(initialValues)
 
     const columns: ColumnsType <AreaProps> = [
         {
-            title: "Areas",
+            title: () => ( <p className='tableTitlePrincipal'>Áreas</p>),
             key: "areas",
-            render: (data: any) => data.nombre
+            render: (text, record, index) => ( <p className="text-devarana-graph"> { record.nombre } </p>),
         },
         {
-            title: "Lider",
+            title: () => ( <p className='tableTitle'>Lider</p>),
             key: "leader",
-            render: (data: any) => data.leader && data.leader.nombre + ' ' + data.leader.apellidoPaterno
+            render: (text, record, index) => ( <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>),
         },
         {
-            title: "Acciones",
-            key: "acciones",
-            render: (data: any) => (
+            
+            title: () => ( <p className='tableTitle'>Acciones</p>),
+            render: (text, record, index) => (
                 <div className="flex gap-2">
                     <Button
                         classType="outline"
                         classColor="warning"
                         onClick={() => {
-                            handleEdit(data.id)
+                            handleEdit(record.id)
                         } }
                     >
                         <Icon iconName="faPen" />
@@ -55,7 +55,7 @@ export const Areas: React.FC = () => {
                     <Button
                         classType="outline"
                         classColor="error"
-                        onClick={() => handleDelete(data.id) }
+                        onClick={() => handleDelete(record.id) }
                     >
                         <Icon iconName="faTrash" />
                     </Button>
@@ -75,20 +75,7 @@ export const Areas: React.FC = () => {
 
 
     const handleDelete = (id: any) => {
-        Swal.fire({
-            title: 'Estás seguro?',
-            text: "No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, bórralo!',
-            cancelButtonText: 'Cancelar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                dispatch(deleteAreaThunk(id))
-            }
-        })
+        dispatch(deleteAreaThunk(id))
     }
 
     const handleModal = (status : boolean) => {
@@ -100,6 +87,9 @@ export const Areas: React.FC = () => {
         setFormVisible(true)
     }
     
+    const handleClose = () => {
+        setFormVisible(false)
+    }
 
     return (
         <>
@@ -122,19 +112,12 @@ export const Areas: React.FC = () => {
                     />
                 </div>
                 <Table 
-
                     columns={columns}
                     dataSource={ areas }
-                    rowKey={(data: any) => data.id}
+                    className="customTable"
+                    rowKey={(record) => record.id}
                     pagination={false}
-                    expandable={{
-                        expandedRowRender: (record: any) => record.subAreas && record.subAreas.map(
-                            (data: any) => (
-                                <p className="border-l-8 pl-5"> {data.nombre} </p>
-                            )
-                        ),
-                        rowExpandable: (record: any) => record.subAreas && record.subAreas.length > 0,
-                    }}
+                    // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                     />
                     <Pagination
                         className="flex justify-end mt-5"
@@ -150,7 +133,15 @@ export const Areas: React.FC = () => {
                         }}
                     />
             </Box>
-            <FormAreas visible={formVisible} handleModal={handleModal}/>
+            <Modal
+                open={visible}
+                onCancel={ handleClose }
+                destroyOnClose={true}
+                width={700}
+                footer={null}
+            >
+                <FormAreas handleClose={handleClose}/>
+            </Modal>
         </>
     )
 }

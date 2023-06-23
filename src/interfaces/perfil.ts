@@ -1,18 +1,6 @@
-import { OperativoProps, ProyectosProps } from "./";
+import { DepartamentoProps, OperativoProps, ProyectosProps } from "./";
 
-export interface DepartamentoProps {
-    id:        number;
-    nombre:    string;
-    areaId?:   number;
-    leaderId:  string;
-    status:    boolean;
-    slug:      string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: null;
-    area?:     DepartamentoProps;
-    parentId?: null;
-}
+
 
 export interface DireccionProps {
     id:             number;
@@ -24,9 +12,6 @@ export interface DireccionProps {
     ciudad:         null;
     estado:         null;
 }
-
-
-
 
 
 export interface PerfilState{

@@ -1,11 +1,11 @@
-import { Button } from '../ui';
+
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
-import { createTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { TacticoProps, UsuarioProps } from '@/interfaces';
+import { updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { UsuarioProps } from '@/interfaces';
 import { useParams } from 'react-router-dom';
 import { Form, DatePicker, Input, Select, Radio, Divider, Checkbox, RadioChangeEvent, Skeleton } from 'antd';
 import dayjs from 'dayjs';
