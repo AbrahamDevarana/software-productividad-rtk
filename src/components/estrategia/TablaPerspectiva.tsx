@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Avatar, Drawer, Image, Progress, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import '@/assets/css/ResizableTable.css';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import { FormEstrategia } from './FormEstrategia';
 import {  getColor, getStatus, getStorageUrl } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearCurrentEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import { clearCurrentEstrategicoThunk, createEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import { FaPlus } from 'react-icons/fa';
 
 
 interface TablaEstrategiaProps{
@@ -20,11 +20,16 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
     const { color } = perspectiva
     const dispatch = useAppDispatch()   
-    const [showEdit, setShowEdit] = useState<boolean>(false);        
+    const [ showEdit, setShowEdit ] = useState<boolean>(false);        
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
-            title: () => ( <p className='tableTitlePrincipal'>Objetivo</p>),
+            title: () => ( 
+            <div className='flex gap-3 items-center relative'>
+                <p className='tableTitlePrincipal'>Objetivo</p>
+                <button onClick={(e) => handleCreateEstrategia(e)} className='z-50'> <FaPlus /> </button>
+            </div>
+            ),
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
@@ -36,24 +41,24 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             }),
         },
         {
-            title: () => ( <p className='tableTitle'>Código</p>),
-            render: (text, record, index) => ( <p className='text-default'> { record.codigo } </p>   ),
+            title: () => ( <p className='tableTitle text-right'>Código</p>),
+            render: (text, record, index) => ( <p className='text-default text-right'> { record.codigo } </p>   ),
             width: 20,
             ellipsis: true,
         },
         {
-            title: () => ( <p className='tableTitle'>Tácticos</p>),
+            title: () => ( <p className='tableTitle text-right'>Tácticos</p>),
             width: 23,
             ellipsis: true,
-            render: (text, record, index) => ( <p className='text-default'> { record.tacticos?.length } </p>   ),
+            render: (text, record, index) => ( <p className='text-default text-right'> { record.tacticos?.length } </p>   ),
         },
         {
-            title: () => ( <p className='tableTitle'>Estatus</p>),
+            title: () => ( <p className='tableTitle text-right'>Estatus</p>),
             dataIndex: 'status',
             width: 40,
             ellipsis: true,
             render: (text, record, index) => (
-                <p className='font-medium'
+                <p className='font-medium text-right'
                  style={{
                     color: getColor(record.status).color,
                 }}>{getStatus(record.status)}</p>
@@ -61,12 +66,12 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         },
         
         {
-            title: () => ( <p className='tableTitle'>Progreso</p>),
+            title: () => ( <p className='tableTitle text-right'>Progreso</p>),
             dataIndex: 'progreso',
-            width: 60,
+            width: 50,
             render: (text, record, index) => (
                 <Progress 
-                    className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                    className='drop-shadow progressStyle ml-auto' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
                         '0%': getColor(record.status).lowColor,
                         '100%': getColor(record.status, .8).color,
@@ -77,16 +82,30 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             ),
         },
         {
-            title: () => ( <p className='tableTitle'>Responsables</p>),
+            title: () => ( <p className='tableTitle text-right'>Responsable</p>),
             width: 50,
             render: (text, record, index) => (
-                <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`}>
-                    <Avatar 
-                        src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                    >
-                        {record.propietario?.iniciales}
-                    </Avatar>
-                </Tooltip>
+                <div className='flex justify-end'>
+                    <Avatar.Group>
+                        <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`}>
+                            <Avatar 
+                                src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                className=''
+                            >
+                                {record.propietario?.iniciales}
+                            </Avatar>
+                        </Tooltip>
+                        {
+                            record.responsables?.map((responsable, index) => (
+                                <Tooltip key={index} title={`${responsable.nombre} ${responsable.apellidoPaterno}`}>
+                                    <Avatar src={<Image src={`${getStorageUrl(responsable.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                        {responsable.iniciales}
+                                    </Avatar>
+                                </Tooltip>
+                            ))
+                        }
+                    </Avatar.Group>
+                </div>
             ),
             ellipsis: true,
         },
@@ -98,6 +117,18 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
         dispatch(getEstrategicoThunk(id))
         setShowDrawer(true)
     }
+
+    const handleCreateEstrategia = async (e: HTMLButtonElement | any) => {
+        e.stopPropagation()
+        e.preventDefault()
+        
+
+        await dispatch(createEstrategicoThunk({
+            perspectivaId: perspectiva.id,
+        }))
+    }
+
+
     const handleCloseDrawer = () => {
         setShowDrawer(false)
         setShowEdit(false)

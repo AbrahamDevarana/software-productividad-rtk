@@ -42,8 +42,8 @@ const initialState: EstrategicosState = {
             apellidoPaterno: '',
             email: '',
             iniciales: '',
-        }
-
+        },
+        comentarios: [],
     }
 }
 

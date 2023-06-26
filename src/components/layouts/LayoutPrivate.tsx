@@ -85,6 +85,13 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         }
     }
 
+
+
+    // TODO: Obtener Permisos de la APP y guardarlos en el store
+    // TODO: Pantalla de carga en lo que se obtienen los permisos con un isLoadingPermisos
+
+
+
    
     if (isLoading && userAuth?.id === '') return <Loading />;
     return (

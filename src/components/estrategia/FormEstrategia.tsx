@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Switch, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -33,10 +33,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     const navigate = useNavigate()
     const { currentEstrategico, isLoadingCurrent } = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
-    const { userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const [statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
     const [viewMeta, setViewMeta] = useState<boolean>(false);
+    const [ comentariosCount , setComentariosCount ] = useState<number>(0)
 
     const [form] = Form.useForm();
     
@@ -48,7 +48,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
     const handleOnSubmit = () => {
 
-        
+       
         const query =  {
             ...currentEstrategico,
             ...form.getFieldsValue(),
@@ -86,9 +86,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     }
 
     const handleChangeStatus = (value: statusType) => {  
-        console.log(value);
-        
-
         setStatusEstrategico(value); 
         const updateEstrategico = {
             ...currentEstrategico,
@@ -106,6 +103,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         dispatch(updateEstrategicoThunk(updateEstrategico));
     }
 
+    useEffect(() => {
+        setComentariosCount(currentEstrategico.comentarios?.length)
+    }, [currentEstrategico.comentarios])
     
 
     const items: MenuProps['items'] = [
@@ -145,11 +145,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         navigate(`/estrategia/${id}`)
     }
 
-    const messagesCount = useMemo(() => {
-        return currentEstrategico.comentarios?.length
-    }, [currentEstrategico.comentarios])
-
-
     const itemTab: TabsProps['items'] = [
         {
             key: '1',
@@ -170,13 +165,16 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 <div className='flex gap-2 items-center justify-center'>
                     <p> Comentarios </p>
                     <div className='bg-gradient-to-t h-4 w-4 from-primary to-primary-light text-white rounded-full text-[11px] shadow-sm flex  items-center justify-center'>
-                        {messagesCount} 
+                        {comentariosCount} 
                     </div>
                 </div>
             ),
-            children: ( <Comentarios /> )
+            children: ( <Comentarios  setComentariosCount={setComentariosCount} comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
         }
     ]
+
+
+
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
@@ -327,11 +325,13 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
                             usuarios.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
-                            )).filter( usuario => usuario.key !== userAuth?.id)
+                            ))
                         }
                     </Select>
                 </Form.Item>
@@ -352,11 +352,13 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
                             usuarios.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
-                            )).filter( usuario => usuario.key !== userAuth?.id)
+                            )).filter( usuario => usuario.key !== form.getFieldValue('propietarioId') )
                         }
                     </Select>
                 </Form.Item>
@@ -366,7 +368,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Meta</p>
-                            <button onClick={() => setViewMeta(!viewMeta)} className='font-bold text-devarana-graph'>
+                            <button onClick={() => setViewMeta(!viewMeta)} className='font-bold text-devarana-graph' type='button'>
                                 {
                                     viewMeta ? <FaTimes /> : <FaEdit />
                                 }

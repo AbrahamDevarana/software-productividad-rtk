@@ -30,7 +30,7 @@ export interface EstrategicoProps {
     tacticos?: TacticoProps[];
     propietarioId?: string
     propietario?: UsuarioProps;
-    comentarios?: ComentarioProps[];
+    comentarios: ComentarioProps[];
 }
 
 
