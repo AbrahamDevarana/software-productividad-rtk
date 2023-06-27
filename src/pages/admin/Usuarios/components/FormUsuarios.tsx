@@ -6,14 +6,17 @@ import { Box } from "@/components/ui"
 import { General } from "./General";
 import { Personal } from "./Personal";
 import { Profesional } from "./Profesional";
-import { ModalProps } from '@/interfaces/modal';
 import { useAppDispatch } from '@/redux/hooks';
 import { cleanCurrentUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
 
+interface Props {
+    visible: boolean;
+    handleModal: (visible: boolean) => void;
+}
 
 
-export const FormUsuarios: React.FC<ModalProps> = ({visible, handleModal} ) => {
+export const FormUsuarios = ({visible, handleModal}: Props) => {
 
     const [ current, setCurrent] = useState<number>(0);
     const dispatch = useAppDispatch()

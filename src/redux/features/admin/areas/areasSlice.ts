@@ -19,7 +19,17 @@ const initialState: AreasState = {
         nombre: '',
         slug: '',
         parentId: null,
-        leaderId: 0
+        leaderId: 0,
+        subAreas: [],
+        leader: {
+            nombre: '',
+            apellidoPaterno: '',
+            email: '',
+            id: '',
+            apellidoMaterno: '',
+            iniciales: '',
+
+        }
     }
 }
 

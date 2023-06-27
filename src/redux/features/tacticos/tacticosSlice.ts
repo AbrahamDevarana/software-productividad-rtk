@@ -44,6 +44,16 @@ const initialState: TacticosState = {
             status: 'SIN_INICIAR',
             indicador: '',
             perspectivaId: '',
+            comentarios: [],
+            propietarioId: '',
+            propietario: {
+                nombre: '',
+                apellidoPaterno: '',
+                email: '',
+                id: '',
+                apellidoMaterno: '',
+                iniciales: '',
+            },
             perspectivas: { 
                 id: '',
                 nombre: '',
