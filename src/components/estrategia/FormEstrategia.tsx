@@ -18,6 +18,7 @@ import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaEdit, FaTimes } from 'react-icons/fa';
 import { Comentarios } from '../general/Comentarios';
+import { hasGroupPermission } from '@/helpers/hasPermission';
 
 
 
@@ -33,9 +34,10 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     const navigate = useNavigate()
     const { currentEstrategico, isLoadingCurrent } = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
+    const {permisos} = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
-    const [statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
-    const [viewMeta, setViewMeta] = useState<boolean>(false);
+    const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
+    const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
 
     const [form] = Form.useForm();
@@ -173,9 +175,6 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         }
     ]
 
-
-
-
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
     return (
@@ -191,6 +190,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 form={form}
                 onBlur={handleOnSubmit}
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
+                disabled={
+                    hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) ? false : true
+                }
             >
         
                 <Form.Item
@@ -242,11 +244,14 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                                 backgroundImage: `linear-gradient(to top, ${getColor(currentEstrategico.status).lowColor}, ${getColor(currentEstrategico.status).color})`
                             }}> { currentEstrategico.progreso }% </p>
                             <Slider
+
                                 className='drop-shadow progressStyle w-full'
                                 defaultValue={currentEstrategico.progreso}
                                 min={0}
                                 max={100}
-                                onAfterChange={ (value ) => handleChangeProgreso(value) }
+                                onAfterChange={ (value ) => {
+                                    hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangeProgreso(value)
+                                } }
                                 trackStyle={{
                                     backgroundColor: getColor(currentEstrategico.status).color,
                                     borderRadius: 10,
@@ -273,7 +278,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                             perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
                                 <button 
                                     type='button'
-                                    onClick={() => handleChangePerspectiva(perspectiva.id)}
+                                    onClick={() => {
+                                        hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangePerspectiva(perspectiva.id)
+                                    }}
                                     key={perspectiva.id} 
                                     className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105 ${ currentEstrategico.perspectivaId === perspectiva.id? 'opacity-100': 'opacity-70'}`}
                                     style={{
@@ -368,7 +375,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Meta</p>
-                            <button onClick={() => setViewMeta(!viewMeta)} className='font-bold text-devarana-graph' type='button'>
+                            <button onClick={() => {
+                                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewMeta(!viewMeta)
+                            }} className='font-bold text-devarana-graph' type='button'>
                                 {
                                     viewMeta ? <FaTimes /> : <FaEdit />
                                 }
@@ -380,8 +389,9 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                         ? (
                             <ReactQuill
                                 value={form.getFieldValue('descripcion')}
-                                onChange={(value) => form.setFieldValue('descripcion', value)}
+                                onChange={(value) => form.setFieldsValue({descripcion: value}) }
                                 onBlur={handleOnSubmit}
+                                readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
                             />    
                         ) 
                         : ( <div className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )

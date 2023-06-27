@@ -1,4 +1,5 @@
 import { DepartamentoProps } from "./departamentos";
+import { PermisoProps } from "./permisos";
 import { Paginate } from "./slice";
 
 export interface UsuariosState {
@@ -62,4 +63,7 @@ export interface userAuthProps{
     apellidoPaterno: string;
     apellidoMaterno: string;
     foto?: string;
+    rol: {
+        nombre: string;
+    }
 }

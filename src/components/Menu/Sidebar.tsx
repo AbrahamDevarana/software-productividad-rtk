@@ -4,10 +4,12 @@ import "@/assets/scss/menu.scss"
 import { optionalContent } from '@/interfaces';
 import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
-import { FaBrain, FaCheckSquare, FaCog, FaComment, FaCrosshairs, FaPuzzlePiece, FaRocket, FaSquare } from 'react-icons/fa';
+import { FaBrain, FaCog, FaCrosshairs, FaPuzzlePiece, FaRocket} from 'react-icons/fa';
 import { Avatar, Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import { hasGroupPermission, hasPermission } from '@/helpers/hasPermission';
+
 
 interface LayoutSidebarProps {
     setOptBarVisible: (value: boolean) => void;
@@ -17,7 +19,7 @@ interface LayoutSidebarProps {
 
 export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:LayoutSidebarProps) => {
 
-    const { userAuth, isLoading } = useAppSelector((state: RootState) => state.auth)
+    const { userAuth, isLoading, permisos } = useAppSelector((state: RootState) => state.auth)
 
     const handleOptBar = (opt:optionalContent) => {
         setOptionalContent(opt)
@@ -73,14 +75,16 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                         <span className="text-xs text-center font-light block">Chat</span>
                     </div> */}
 
-                    <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
-                        <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>
-                            <FaCog className="mx-auto text-xl" />
-                            <span className="text-xs text-center font-light block">Admin</span>
-                        </div>
+                        {
+                            hasGroupPermission(['editar areas', 'editar departamentos', 'editar usuarios', 'crear usuarios', 'crear departamentos', 'crear areas'], permisos) &&
+                            <div className="flex justify-end flex-col mt-auto gap-y-1 w-full">
+                                <div onClick={() => handleOptBar('admin')} className={`link nav-link text-center cursor-pointer`}>
+                                    <FaCog className="mx-auto text-xl" />
+                                    <span className="text-xs text-center font-light block">Admin</span>
+                                </div>        
+                            </div>
+                        }
                     
-                        
-                    </div>
 
                 </div>
             </div>

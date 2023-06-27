@@ -49,10 +49,6 @@ export const Tactico: React.FC = () => {
                     <FormTactico setShowEdit={setVisible}/>
                 </Drawer>
             </div>
-            <FloatButton
-                icon={<FaPlus />}
-                onClick={() => setVisible(true)}
-            />
         </>
     )
 }

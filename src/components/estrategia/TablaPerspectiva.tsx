@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentEstrategicoThunk, createEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
+import { hasGroupPermission } from '@/helpers/hasPermission';
 
 
 interface TablaEstrategiaProps{
@@ -21,13 +22,16 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
     const { color } = perspectiva
     const dispatch = useAppDispatch()   
     const [ showEdit, setShowEdit ] = useState<boolean>(false);        
+    const {permisos} = useAppSelector(state => state.auth)
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
             title: () => ( 
             <div className='flex gap-3 items-center relative'>
                 <p className='tableTitlePrincipal'>Objetivo</p>
-                <button onClick={(e) => handleCreateEstrategia(e)} className='z-50'> <FaPlus /> </button>
+                { hasGroupPermission(['crear estrategias'], permisos) &&
+                    <button onClick={(e) => handleCreateEstrategia(e)} className='z-50'> <FaPlus /> </button>
+                }
             </div>
             ),
             width: 150,

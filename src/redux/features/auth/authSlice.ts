@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import Cookies from 'js-cookie';
-import { userAuthProps } from "@/interfaces";
+import { PermisoProps, userAuthProps } from "@/interfaces";
 
 
 
@@ -13,6 +13,7 @@ interface AuthState {
     userAuth: userAuthProps,
     isAuthenticated: boolean,
     isLoading: boolean,
+    permisos: PermisoProps[]
 }
 
 const initialState: AuthState = {
@@ -25,7 +26,11 @@ const initialState: AuthState = {
         apellidoPaterno: '',
         iniciales: '',
         email: '',
+        rol: {
+            nombre: '',
+        }
     },
+    permisos: [],
     accessToken: null,
     refreshToken: null,
     loggedOut: false,
@@ -51,6 +56,7 @@ export const authSlice = createSlice({
             state.accessToken = accessToken;
             state.refreshToken = refreshToken;
             state.isAuthenticated = true;
+            state.permisos = usuario.rol.permisos;
         },
         logOut: (state) => {
             localStorage.removeItem('accessToken');

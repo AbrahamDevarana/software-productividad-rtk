@@ -11,6 +11,7 @@ import { Form, DatePicker, Input, Select, Radio, Divider, Checkbox, RadioChangeE
 import dayjs from 'dayjs';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
+import { hasGroupPermission } from '@/helpers/hasPermission';
 
 
 interface FormTacticoProps {
@@ -29,7 +30,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { areas } = useAppSelector(state => state.areas)
-    const {userAuth} = useAppSelector(state => state.auth)
+    const {userAuth, permisos} = useAppSelector(state => state.auth)
 
     const [isEstrategico, setIsEstrategico] = useState(false)
 
@@ -44,6 +45,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     }, [])
     
     const handleOnSubmit = () => {
+
+        if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
+
         const query = {
             ...currentTactico,
             ...form.getFieldsValue(),
@@ -70,6 +74,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
 
     const handleChangeTipoEstrategia = (e: RadioChangeEvent) => {
+
+        if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
         setIsEstrategico(e.target.value)
     }
 
@@ -97,11 +103,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     form.validateFields()
                     handleOnSubmit()
                 }}
-                onFinish={handleOnSubmit}
                 layout='vertical'
                 className='grid grid-cols-12 gap-x-5'
                 form={form}
                 scrollToFirstError
+                disabled={
+                    hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true
+                }
                 initialValues={{
                     ...currentTactico,
                     propietarioId: userAuth.id,
@@ -116,7 +124,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     <Radio.Group
                         value={ isEstrategico ? true : false}
                         onChange={handleChangeTipoEstrategia}
-                        className=''
+                        
                     >
                         <Radio value={true}>Táctico</Radio>
                         <Radio value={false}>Core</Radio>
@@ -137,7 +145,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         showSearch
                         options={options}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                        
                     >
                     </Select>
                 </Form.Item>

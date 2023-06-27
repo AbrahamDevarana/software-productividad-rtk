@@ -423,3 +423,48 @@ input, textarea {
 .scroller-container:hover .scroller {
     animation-play-state: paused;
 }
+
+
+.ant-radio-input, .ant-radio-inner, .ant-radio-wrapper-disabled,
+.ant-checkbox-input, .ant-checkbox-inner, .ant-checkbox-wrapper-disabled,
+.ant-date-picker-input input, .ant-picker-input input, .ant-picker-disabled, .ant-picker-disabled .ant-picker-input input,
+.ant-select .ant-select-selector, .ant-select-disabled .ant-select-selector, .ant-select-disabled .ant-select-selector:hover,
+.ant-input-disabled
+{
+    cursor: default!important;
+    opacity: 1;
+}
+
+.ant-picker.ant-picker-disabled{
+    background-color: transparent!important;
+}
+
+.ant-radio-wrapper .ant-radio-disabled .ant-radio-inner{
+    background-color: transparent!important;
+}
+
+.ant-radio-wrapper .ant-radio-disabled .ant-radio-inner::after{
+    background-color: #1677ff!important;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner{
+    background-color: transparent;
+
+}
+
+.ant-checkbox-checked .ant-checkbox-inner{
+    background-color: #1677ff;
+    border-color: #1677ff;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner:after{
+    border-color: white!important;
+}
+
+.ant-checkbox-disabled+span{
+    color: #848891!important;
+}
+
+textarea.ant-input-borderless[disabled]{
+    background-color: #F9F9F7!important;
+}

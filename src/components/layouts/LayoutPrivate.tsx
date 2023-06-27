@@ -12,6 +12,7 @@ import { optionalContent } from "@/interfaces";
 import { motion } from 'framer-motion';
 import { useAuth } from "@/hooks/useAuth";
 import { Drawer } from "antd";
+import { getPermisosThunk } from "@/redux/features/permisos/PermisosThunk";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -24,7 +25,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 
     useAuth()
 
-    const { isLoading, userAuth, isAuthenticated  } = useAppSelector(state => state.auth); 
+    const { isLoading, userAuth, isAuthenticated  } = useAppSelector(state => state.auth);
     const [ settingVisible, setSettingVisible ] = useState<boolean>(false);
     const [ optBarVisible, setOptBarVisible ] = useState<boolean>(false);
     const [ navbarClass, setNavbarClass ] = useState<string>('');
@@ -48,6 +49,12 @@ export default function LayoutApp({ children }: LayoutAppProps) {
     useEffect(() => {
         if(!isAuthenticated){
             dispatch(disconnectSocketThunk(socket))
+        }
+    }, [isAuthenticated])
+
+    useEffect(() => {
+        if(isAuthenticated){
+            dispatch(getPermisosThunk())
         }
     }, [isAuthenticated])
             
@@ -94,6 +101,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 
    
     if (isLoading && userAuth?.id === '') return <Loading />;
+    
     return (
         <>
         <div className='w-full'>  

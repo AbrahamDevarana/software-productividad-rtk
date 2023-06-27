@@ -58,11 +58,6 @@ export const EstrategiaHome: React.FC = () => {
                     segment === 'Gantt' && <Proximamente size='default' avance={28} />
                 }
             </>
-
-            <FloatButton
-                icon={<FaPlus />} 
-                className='bottom-5'
-            />
         </>
     )
 }

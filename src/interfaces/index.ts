@@ -1,5 +1,6 @@
 // Slices Has every Custom Interface
 export * from "./slice";
+export * from "./permisos";
 
 
 export * from "./perfil";

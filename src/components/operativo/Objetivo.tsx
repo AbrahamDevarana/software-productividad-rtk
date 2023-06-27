@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
 import { Avatar, Badge, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
-import { getColor } from '@/helpers';
+import { getColor, getStorageUrl } from '@/helpers';
 import { Link } from 'react-router-dom';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 
 interface ObjetivoProps {
@@ -55,28 +56,32 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             <Avatar.Group className='flex justify-center'>
                 {
                     objetivo.operativoPropietario && (
-                        <Avatar size={'large'} key={objetivo.operativoPropietario.id} src={<Image title={objetivo.operativoPropietario.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${objetivo.operativoPropietario.foto}`} /> }> {objetivo.operativoPropietario.iniciales} </Avatar>
+                        <Avatar src={<Image src={`${getStorageUrl(objetivo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                            {objetivo.operativoPropietario.iniciales} 
+                        </Avatar>
                     )
                 }
                 {
                     
                     objetivo.operativosResponsable?.map((responsable, index) => (
-                        <Avatar size={'large'} key={index} src={<Image title={responsable.nombre} src={`${import.meta.env.VITE_STORAGE_URL}${responsable.foto}`} /> }> {responsable.iniciales} </Avatar>
+                        <Avatar key={index} src={<Image src={`${getStorageUrl(responsable.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                            {responsable.iniciales} 
+                        </Avatar>
                     ))
                     
                 }
             </Avatar.Group>
 
 
-            <div className='absolute inset-0 opacity-0 group-hover:opacity-100 -z-50 group-hover:z-50 flex  items-center justify-center w-full bottom-0 bg-black bg-opacity-70 text-white transition-all duration-300 rounded-ext gap-10'>
-                    <Link to={`${objetivo.id}`} >
-                        <Icon iconName='faEye' className='text-devarana-graph'/>
-                        <span> Ver </span>
-                    </Link>
-                    <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer' >
-                        <Icon iconName='faEdit' className='text-devarana-graph'/>
-                        <span>Editar</span>
-                    </Space>
+            <div className='flex py-5 gap-10 justify-center'>
+                <Link to={`${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'>
+                    <Icon iconName='faEye'/>
+                    <span> Ver </span> 
+                </Link>
+                <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
+                    <Icon iconName='faEdit'/>
+                    <span> Editar </span>
+                </Space>
             </div>
             
         </Card>

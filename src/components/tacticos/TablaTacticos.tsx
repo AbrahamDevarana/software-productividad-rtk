@@ -5,7 +5,6 @@ import { TacticoProps } from '@/interfaces/tacticos';
 import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
 import { getColor, getFile, getStatus, getStorageUrl } from '@/helpers';
-import '@/assets/css/ResizableTable.css';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
