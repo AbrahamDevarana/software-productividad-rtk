@@ -2,7 +2,7 @@ import { PermisoProps } from "@/interfaces";
 
 
 export const hasPermission = (regla: string, permisos:PermisoProps[]) => {
-    const permisosUsuario = permisos.map((permiso) => {
+    const permisosUsuario = permisos?.map((permiso) => {
         return permiso.permisos;
     })
 
@@ -21,7 +21,8 @@ export const hasPermission = (regla: string, permisos:PermisoProps[]) => {
 
 export const hasGroupPermission = (reglas: string[], permisos: PermisoProps[]) => {
 
-    const permisosUsuario = permisos.map((permiso) => {
+
+    const permisosUsuario = permisos?.map((permiso) => {
         return permiso.permisos;
     })
 

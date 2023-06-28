@@ -23,8 +23,8 @@ export interface OperativoProps {
     operativoPropietario:  CustomUsuarioProps;
     operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
-    participantesIds?:    string[];
-    resultadosClave?: ResultadoClaveProps[];
+    participantesIds:    string[];
+    resultadosClave: ResultadoClaveProps[];
 }
 
 

@@ -10,7 +10,7 @@ const initialState: AccionesState = {
         id: '',
         nombre: '',
         descripcion: '',
-        status: false,
+        status: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
         resultadoClaveId: '',

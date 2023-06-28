@@ -18,13 +18,10 @@ export const getResultadosThunk = createAsyncThunk(
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` },
+                params: {operativoId: operativoId}
             }
 
-            const params = {
-                operativoId: operativoId
-            }
-
-            const response = await clientAxios.get<Props>(`/resultados`, {...config, params});           
+            const response = await clientAxios.get<Props>(`/resultados`, config);           
             return response.data.resultadosClave
         }
         catch (error: any) {

@@ -1,10 +1,12 @@
 import { Icon } from "@/components/Icon"
 import { FormAcciones } from "@/components/acciones/FormAcciones"
 import ListadoOperativo from "@/components/operativo/ListadoOperativo"
+import { getStorageUrl } from "@/helpers"
+import getBrokenUser from "@/helpers/getBrokenUser"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
 import { createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Drawer, FloatButton, Segmented } from "antd"
+import { Avatar, Drawer, FloatButton, Image, Segmented, Tooltip } from "antd"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
@@ -59,12 +61,38 @@ export const OperativoView = () => {
     return (
         <>
             <div className='min-h-[500px]'>
-                <p className="text-xs text-devarana-graph text-opacity-50"> Operativo </p>
-                <h1>
-                    { currentOperativo.nombre }
-                </h1>
+                <div className="flex w-full items-center px-5">
+                    <div>
+                        <p className="text-xs text-devarana-graph text-opacity-50"> Operativo </p>
+                        <h1>
+                            { currentOperativo.nombre }
+                        </h1>
+                    </div>
+
+                    <div className="ml-auto flex items-center align-middle">
+                        <p className="text-xs text-devarana-graph text-opacity-50 block"> Responsables </p>
+                            <Tooltip title={`${currentOperativo.operativoPropietario.nombre} ${currentOperativo.operativoPropietario.apellidoPaterno}`}>
+                                <Avatar src={<Image src={`${getStorageUrl(currentOperativo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                    {currentOperativo.operativoPropietario.iniciales}
+                                </Avatar>
+                            </Tooltip>
+
+                        <Avatar.Group className=''>
+                        {
+                                currentOperativo.operativosResponsable.map((participante) => (
+                                    <Tooltip key={participante.id} title={`${participante.nombre} ${participante.apellidoPaterno}`}>
+                                        <Avatar src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                            {participante.iniciales}
+                                        </Avatar>
+                                    </Tooltip>
+                                ))
+                                
+                        }
+                        </Avatar.Group>
+                    </div>
+                </div>
                 <Segmented
-                    className='my-4'
+                    className='my-4 px-5'
                     options={options}
                     value={value}
                     onChange={(value) => setValue(value as SegmentTypes)}

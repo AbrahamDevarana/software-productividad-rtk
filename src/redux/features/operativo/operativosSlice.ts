@@ -16,6 +16,8 @@ const initialState: OperativoState = {
         fechaFin: new Date(),
         fechaInicio: new Date(),
         tacticoId: '',
+        participantesIds: [],
+        resultadosClave: [],
         operativoPropietario: {
             id: '',
             nombre: '',

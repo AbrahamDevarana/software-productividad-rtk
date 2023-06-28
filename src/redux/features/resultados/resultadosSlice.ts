@@ -111,6 +111,13 @@ const resultadoClaveSlice = createSlice({
                 
                 if(resultadoClave){
                     resultadoClave.acciones = [...resultadoClave.acciones, payload]
+
+
+                    if( resultadoClave.tipoProgreso === 'acciones'){
+                        // el resultadoClave.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
+                        resultadoClave.progreso = resultadoClave.acciones.reduce((acc, accion) => acc + accion.status, 0) / resultadoClave.acciones.length * 100
+                    }
+                    
                 }
             })
             .addCase(createAccionThunk.rejected, (state) => {
@@ -119,13 +126,19 @@ const resultadoClaveSlice = createSlice({
             .addCase(updateAccionThunk.pending, (state) => {
                 state.error = false
             })
-            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {                
-                state.resultadosClave = state.resultadosClave.map(resultado => {
-                    if(resultado.id === payload.resultadoClaveId){
-                        resultado.acciones = resultado.acciones.map(accion => accion.id === payload.id ? payload : accion)
+            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {
+                
+                const updatedResultadoClave = state.resultadosClave.find(resultado => resultado.id === payload.resultadoClaveId)
+
+                if(updatedResultadoClave){
+                    updatedResultadoClave.acciones = updatedResultadoClave.acciones.map(accion => accion.id === payload.id ? payload : accion)
+
+                    if( updatedResultadoClave.tipoProgreso === 'acciones'){
+                        // el updatedResultadoClave.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
+                        updatedResultadoClave.progreso = updatedResultadoClave.acciones.reduce((acc, accion) => acc + accion.status, 0) / updatedResultadoClave.acciones.length * 100
                     }
-                    return resultado
-                })
+                }
+
             })
             .addCase(updateAccionThunk.rejected, (state) => {
                 state.error = true
@@ -134,12 +147,16 @@ const resultadoClaveSlice = createSlice({
                 state.error = false
             })
             .addCase(deleteAccionThunk.fulfilled, (state, { payload }) => {
-                state.resultadosClave = state.resultadosClave.map(resultado => {
-                    if(resultado.id === payload.resultadoClaveId){
-                        resultado.acciones = resultado.acciones.filter(accion => accion.id !== payload.id)
+                const deletedAccion = state.resultadosClave.find(resultado => resultado.id === payload.resultadoClaveId)
+
+                if(deletedAccion){
+                    deletedAccion.acciones = deletedAccion.acciones.filter(accion => accion.id !== payload.id)
+
+                    if( deletedAccion.tipoProgreso === 'acciones'){
+                        // el deletedAccion.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
+                        deletedAccion.progreso = deletedAccion.acciones.reduce((acc, accion) => acc + accion.status, 0) / deletedAccion.acciones.length * 100
                     }
-                    return resultado
-                })
+                }
             })
             .addCase(deleteAccionThunk.rejected, (state) => {
                 state.error = true

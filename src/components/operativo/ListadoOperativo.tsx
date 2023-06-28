@@ -1,16 +1,16 @@
 import { AccionesProps, OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Collapse, Form, Input, Popconfirm, Table } from "antd";
+import { Collapse, Drawer, Form, Input, Popconfirm, Table } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo, useState } from "react";
-import { getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
+import { getResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
 import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "@/redux/features/acciones/accionesThunk";
 import { FaCog } from "react-icons/fa";
 import CustomDropdown from "../ui/CustomDropdown";
 import { TabStatus } from "../ui/TabStatus";
-import { BsThreeDots } from "react-icons/bs";
 import { BiTrash } from "react-icons/bi";
+import { FormResultados } from "../resultados/FormResultados";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -22,6 +22,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave } = useAppSelector(state => state.resultados)
+    const [showDrawer, setShowDrawer] = useState(false)
     
 
     const defaultColumns: ColumnsType<any> = [
@@ -48,10 +49,10 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                 >
 
                     <div className="w-full flex flex-col">
-                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, false)}>
+                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, 0)}>
                             <TabStatus status={'SIN_INICIAR'} />
                         </button>
-                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, true)}>
+                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, 1)}>
                             <TabStatus status={'FINALIZADO'} />
                         </button>
                     </div>
@@ -143,11 +144,12 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
     }
 
 
-    const genExtra = () => (
+    const genExtra = (id: string) => (
         <div
+            className="cursor-pointer"
             onClick={event => {
-                // If you don't want click extra trigger collapse, you can prevent this:
                 event.stopPropagation();
+                handleShowOperativo(id)
             }}
         >
             <FaCog className="text-default text-sm" />
@@ -159,7 +161,7 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
         dispatch(deleteAccionThunk(id))
     }
 
-    const handleUpdateStatus = (accion: AccionesProps, status: boolean) => {
+    const handleUpdateStatus = (accion: AccionesProps, status: number) => {
         
         const query = {
             ...accion,
@@ -167,6 +169,16 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
         }
 
         dispatch(updateAccionThunk(query))
+    }
+
+    const handleCloseDrawer = () => {
+        setShowDrawer(false)
+    }
+
+    const handleShowOperativo = async (id:string) => {
+        await dispatch(getResultadoThunk(id))
+        setShowDrawer(true)
+        
     }
 
     if(isLoading) return ( <Loading /> )
@@ -186,10 +198,10 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                             key={index}
                             header={
                                 <div className='flex justify-between items-center'>
-                                    <p className='text-devarana-graph font-bold'>{resultado.nombre}</p>
+                                    <p className='text-devarana-graph font-light font-roboto'>{resultado.nombre} {resultado.progreso}</p>
                                 </div>
                             }
-                            extra={genExtra()}
+                            extra={genExtra(resultado.id)}
                         >
                             <Table 
                                 loading={isLoading}
@@ -220,6 +232,17 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
 
             </Collapse>
 
+            <Drawer
+                closable={false}
+                onClose={handleCloseDrawer}
+                destroyOnClose={true}
+                open={showDrawer}
+                width={window.innerWidth > 1200 ? 700 : '100%'}
+                className='rounded-l-ext'
+            >
+
+                <FormResultados />
+            </Drawer>
         </>
     )
 

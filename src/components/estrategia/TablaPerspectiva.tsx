@@ -117,7 +117,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
 
     const [showDrawer, setShowDrawer] = useState<boolean>(false);
 
-    const handleViewEstrategia = (id: string) => {
+    const handleShowEstrategia = (id: string) => {
         dispatch(getEstrategicoThunk(id))
         setShowDrawer(true)
     }
@@ -152,7 +152,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            handleViewEstrategia(record.id)                            
+                            handleShowEstrategia(record.id)                            
                         }
                     }}
                 }

@@ -2,9 +2,8 @@ import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Drawer, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
-import { TacticosView } from './TacticosView';
 import { FormTactico } from './FormTacticos';
-import { getColor, getFile, getStatus, getStorageUrl } from '@/helpers';
+import { getColor, getStatus, getStorageUrl } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -88,7 +87,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
 
 
 
-    const handleViewTactico = (tactico: TacticoProps) => {
+    const handleShowTactico = (tactico: TacticoProps) => {
         dispatch(getTacticoThunk(tactico.id))        
         setShowDrawer(true)
     }
@@ -110,7 +109,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            handleViewTactico(record)
+                            handleShowTactico(record)
                         }
                     }}
                 }
@@ -126,9 +125,7 @@ export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
             >   
 
                 {
-                    currentTactico
-                    ? <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit}/>
-                    : <TacticosView setShowEdit={setShowEdit} />
+                    currentTactico && <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit}/>
                 }
 
             </Drawer>

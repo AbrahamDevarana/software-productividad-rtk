@@ -6,7 +6,7 @@ export interface AccionesProps {
     id: string;
     nombre: string;
     descripcion: string;
-    status: boolean;
+    status: number;
     fechaInicio: Date;
     fechaFin: Date;
     propietarioId: UsuarioProps;

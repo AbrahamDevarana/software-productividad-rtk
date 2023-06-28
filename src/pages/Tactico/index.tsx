@@ -4,9 +4,8 @@ import { clearTacticosThunk, getTacticoFromAreaThunk } from '@/redux/features/ta
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
-import { Drawer, FloatButton } from 'antd';
+import { Drawer } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
-import { FaPlus } from 'react-icons/fa';
 
 export const Tactico: React.FC = () => {
 
@@ -37,17 +36,6 @@ export const Tactico: React.FC = () => {
                     <h2>Tácticos Core</h2>
                     <TablaTacticos tacticos={tacticos_core}/>
                 </Box>
-
-                <Drawer
-                    closable={false}
-                    onClose={() => setVisible(false)}
-                    open={visible}
-                    width={window.innerWidth > 1200 ? 600 : '100%'}
-                    destroyOnClose={true}
-
-                >
-                    <FormTactico setShowEdit={setVisible}/>
-                </Drawer>
             </div>
         </>
     )

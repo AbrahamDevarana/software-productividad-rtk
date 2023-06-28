@@ -56,7 +56,7 @@ export const authSlice = createSlice({
             state.accessToken = accessToken;
             state.refreshToken = refreshToken;
             state.isAuthenticated = true;
-            state.permisos = usuario.rol.permisos;
+            state.permisos = usuario.rol?.permisos;
         },
         logOut: (state) => {
             localStorage.removeItem('accessToken');
