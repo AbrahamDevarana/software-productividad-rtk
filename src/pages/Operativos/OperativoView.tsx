@@ -1,6 +1,7 @@
 import { Icon } from "@/components/Icon"
 import { FormAcciones } from "@/components/acciones/FormAcciones"
 import ListadoOperativo from "@/components/operativo/ListadoOperativo"
+import { Proximamente } from "@/components/ui"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
@@ -110,16 +111,12 @@ export const OperativoView = () => {
                             }
                             {
                                 value === 'gantt' && (
-                                    <div>
-                                        <p> Gantt </p>
-                                    </div>
+                                    <Proximamente avance={78} />
                                 )
                             }
                             {
                                 value === 'kanban' && (
-                                    <div>
-                                        <p> Kanban </p>
-                                    </div>
+                                    <Proximamente avance={55} />
                                 )
                             }
                         </>

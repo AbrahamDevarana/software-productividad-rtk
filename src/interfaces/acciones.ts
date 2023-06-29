@@ -7,10 +7,11 @@ export interface AccionesProps {
     nombre: string;
     descripcion: string;
     status: number;
-    fechaInicio: Date;
-    fechaFin: Date;
-    propietarioId: UsuarioProps;
+    fechaInicio: Date | string;
+    fechaFin: Date | string;
+    propietarioId: string;
     resultadoClaveId: string;
+    propietario: UsuarioProps
 }
 
 

@@ -20,7 +20,14 @@ const initialState: ResultadoClaveState = {
         fechaFin: new Date(),
         operativoId: '',
         propietarioId: '',
-        acciones: []
+        acciones: [],
+        propietario:{
+            nombre: '',
+            apellidoPaterno: '',
+            email: '',
+            iniciales: '',
+            id: ''
+        }
     }
 }
 
@@ -80,6 +87,7 @@ const resultadoClaveSlice = createSlice({
             .addCase(updateResultadoThunk.fulfilled, (state, {payload}) => {
                 state.isLoadingResultado = false
                 state.resultadosClave = state.resultadosClave.map(resultado => resultado.id === payload.id ? payload : resultado)
+                state.currentResultadoClave = payload
             })
             .addCase(updateResultadoThunk.rejected, (state) => {
                 state.isLoadingResultado = false

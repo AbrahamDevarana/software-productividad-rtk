@@ -1,6 +1,6 @@
 
 
-import { AccionesProps, InitialState, Paginate } from ".";
+import { AccionesProps, InitialState, Paginate, UsuarioProps } from ".";
 
 
 
@@ -14,6 +14,7 @@ export interface ResultadoClaveProps {
     fechaFin: string | Date
     operativoId: string
     propietarioId: string
+    propietario: UsuarioProps
     acciones: AccionesProps[]
 }
 

@@ -8,13 +8,14 @@ const initialState: AccionesState = {
     acciones: [],
     currentAccion: {
         id: '',
+        propietarioId: '',
         nombre: '',
         descripcion: '',
         status: 0,
         fechaInicio: new Date(),
         fechaFin: new Date(),
         resultadoClaveId: '',
-        propietarioId: {
+        propietario: {
             id: '',
             nombre: '',
             apellidoPaterno: '',

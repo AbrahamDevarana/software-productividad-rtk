@@ -47,7 +47,7 @@ const CustomDropdown = ({children, buttonChildren, buttonClass, containerClass, 
                 { buttonChildren }
             </button>
             <div className={`absolute ${preferredPosition === 'bottom' ? 'mt-2' : 'mb-2'} mt-2 bg-white rounded-md shadow-md transition-all duration-300 ease-in-out ${
-                open ? "opacity-100 max-h-96 z-50" : "opacity-0 max-h-0 -z-50"} ${preferredPosition === 'top' ? 'bottom-full' : ''}`}
+                open ? "opacity-100 max-h-96 z-50" : "opacity-0 max-h-0 -z-50"} ${preferredPosition === 'top' ? 'bottom' : ''}`}
                 ref={dropdownRef} >
                 <div className={`p-2 rounded-md  ${containerClass}`}>
                     {children}

@@ -1,8 +1,8 @@
 import { AccionesProps, OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Collapse, Drawer, Form, Input, Popconfirm, Table } from "antd";
+import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, MenuProps, Popconfirm, Table, Tooltip } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
 import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "@/redux/features/acciones/accionesThunk";
@@ -11,6 +11,10 @@ import CustomDropdown from "../ui/CustomDropdown";
 import { TabStatus } from "../ui/TabStatus";
 import { BiTrash } from "react-icons/bi";
 import { FormResultados } from "../resultados/FormResultados";
+import { BsFillCalendarFill } from "react-icons/bs";
+import { getStorageUrl } from "@/helpers";
+import getBrokenUser from "@/helpers/getBrokenUser";
+import dayjs from "dayjs";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -23,59 +27,129 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave } = useAppSelector(state => state.resultados)
     const [showDrawer, setShowDrawer] = useState(false)
+    const inputRef = useRef(null);
+
+
+    const handleOnUpdate = (e: any, record: AccionesProps) => {
+        const query = {
+            ...record,
+            [e.target.name]: e.target.value,
+        }
+
+        console.log(query);
+        
+        dispatch(updateAccionThunk(query))
+    }
+
+    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: AccionesProps) => {
+        const query = {
+            ...record,
+            fechaInicio: fechaInicio ? dayjs(fechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaInicio,
+            fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
+        }    
+        dispatch(updateAccionThunk(query))
+    }
+
+    console.log(currentOperativo.fechaFin);
     
+
 
     const defaultColumns: ColumnsType<any> = [
         {
-            title: 'Accion',
-            dataIndex: 'nombre',
-            key: 'nombre',
+            title: () => ( <p className='tableTitlePrincipal'>Acción</p>),
             render: (text, record, index) => ({
                 children: <div className='flex'>
                     <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-dark-light' }`} />
-                    <p className='text-devarana-graph'>{record.nombre}</p>
+                    <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} />
                 </div>,
             }),
         },
         {
-            title: 'Estado',
-            dataIndex: 'status',
-            key: 'status',
-            render: (text, record, index) => ({
-                children: 
-                 <CustomDropdown 
-                    buttonChildren={ <TabStatus status={ record.status ? 'FINALIZADO' : 'SIN_INICIAR' } /> }
-                    buttonClass={''}
-                >
+            title: () => ( <p className='tableTitle'>Fecha Inicio</p>),
+            render: (text, record, index) => {
 
-                    <div className="w-full flex flex-col">
-                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, 0)}>
-                            <TabStatus status={'SIN_INICIAR'} />
-                        </button>
-                        <button className="hover:bg-default hover:bg-opacity-20 transition-colors duration-200" onClick={() => handleUpdateStatus(record, 1)}>
-                            <TabStatus status={'FINALIZADO'} />
-                        </button>
-                    </div>
-                 </CustomDropdown>
+                const disabledDate = (current: any): boolean => {
+                    
+                    
+                    // Can not select days before currentOperativo.fechaInicio
+
+                    return current && current < dayjs(currentOperativo.fechaInicio)
+                }
+
+
+                return ({
+                    children: (
+                        <DatePicker 
+                            className='w-full'
+                            defaultValue={ dayjs(record.fechaInicio) }
+                            format={"DD-MM-YYYY"}
+                            showToday
+                            clearIcon={null}
+                            disabledDate={disabledDate}
+                            placeholder="Fecha Inicio"
+                            bordered={false}
+                            suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                            onChange={(date, dateString) => handleUpdateDate(dateString, null, record)}
+                        />
+                    ),
+                })
+            },
+            width: 200,
+        },
+        {
+            title: () => ( <p className='tableTitle'>Fecha Fin</p>),
+            dataIndex: 'fechaFin',
+            key: 'fechaFin',
+            render: (text, record, index) => {
+
+                const disabledDate = (current: any): boolean => {
+                    return current && current < dayjs(record.fechaInicio)
+                }
+                
+                return ({
+                    children: (
+                        <DatePicker 
+                            className='w-full'
+                            format={"DD-MM-YYYY"}
+                            defaultValue={ dayjs(record.fechaFin)  }
+                            showToday
+                            clearIcon={null}
+                            disabledDate={disabledDate}
+                            placeholder="Fecha Fin"
+                            bordered={false}
+                            name="fechaFin"
+                            suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                            onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
+                        />
+                    ),
+                })},
+            width: 200,
+        },
+        {
+            title: () => ( <p className='tableTitle'>Completado</p>),
+            width: 20,
+            render: (text, record, index) => ({
+                children:
+                        <Checkbox
+                            defaultChecked={record.status}
+                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 1 : 0)}
+                        />
             }),
         },
         {
-            title: '',
-            dataIndex: 'acciones',
-            key: 'acciones',
+            title: () => ( <p className='tableTitle'>Acciones</p>),
             render: (text, record, index) => ({
                 children: 
                 <div className='flex items-center group-hover:opacity-100 group-hover:z-0 -z-50 opacity-0 transition-all duration-700'>
                     <Popconfirm
                         title="¿Estas seguro de eliminar esta accion?"
                         onConfirm={ () => handleDeleteAccion(record.id)}
-                        onCancel={() => console.log('cancel')}
+                        onCancel={() => {}}
                         okText="Si"
                         cancelText="No"
                         placement="left"
-                         
                     >
-                        <BiTrash className='text-default hover:text-error-light text-xl cursor-pointer' />
+                        <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
                     </Popconfirm>
                     
                 </div>,
@@ -108,14 +182,9 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
                 ...form.getFieldsValue(),
                 resultadoClaveId: resultadoClave.id
             }
-
             dispatch(createAccionThunk(query))
             form.resetFields()
         }
-
-        
-
-
         return (
             <Form
                 initialValues={{
@@ -157,19 +226,22 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
     );
 
 
+    //* FORM
     const handleDeleteAccion = (id: string) => {
         dispatch(deleteAccionThunk(id))
     }
 
-    const handleUpdateStatus = (accion: AccionesProps, status: number) => {
-        
+    const handleUpdateStatus = async (accion: AccionesProps, status: number) => {
         const query = {
             ...accion,
             status
         }
-
         dispatch(updateAccionThunk(query))
     }
+
+    //** FIN FORM */
+
+
 
     const handleCloseDrawer = () => {
         setShowDrawer(false)
