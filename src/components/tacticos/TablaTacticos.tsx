@@ -10,9 +10,11 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
+    handleCreateTactico?: () => void
+    setNuevoTactico?: React.Dispatch<React.SetStateAction<TacticoProps | undefined>>
 }
 
-export const TablaTacticos = ({tacticos}:TablaTacticosProps) => {
+export const TablaTacticos = ({tacticos, handleCreateTactico, setNuevoTactico}:TablaTacticosProps) => {
 
     const { currentTactico } = useAppSelector(state => state.tacticos)
     const [showDrawer, setShowDrawer] = useState<boolean>(false)

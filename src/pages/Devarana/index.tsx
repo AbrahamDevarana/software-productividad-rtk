@@ -41,8 +41,8 @@ export const Devarana: React.FC = () => {
                     <div className="lg:h-[48px] h-[30px] overflow-hidden ">
                         <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">creadores !</p>
                         <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">arquitectos !</p>
-                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">diseñadores !</p>
-                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">de lo extraordinario !</p>
+                        <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm">diseñadores de lo extraordinario !</p>
+                        {/* <p className="pb-2 text-white listEffect_item font-mulish lg:text-5xl sm:text-base text-sm"></p> */}
                     </div>
                 </div>
             </Box>
