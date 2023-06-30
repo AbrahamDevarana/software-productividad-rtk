@@ -1,10 +1,11 @@
 // helpers/getColor y helpers/getStatus dependen de statusTypes
 export const statusTypes = {
     SIN_INICIAR: 'Sin Iniciar',
-    EN_PROGRESO: 'En Progreso',
+    EN_TIEMPO: 'En tiempo',
     FINALIZADO: 'Finalizado',
     CANCELADO: 'Cancelado',
-    DETENIDO: 'Detenido',
+    EN_PAUSA: 'En Pausa',
+    RETRASADO: 'Retrasado',
 }
 
 export type statusType = keyof typeof statusTypes

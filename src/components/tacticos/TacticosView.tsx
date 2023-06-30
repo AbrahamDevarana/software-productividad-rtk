@@ -42,7 +42,7 @@ export const TacticosView = ({setShowEdit}: TacticosViewProps) => {
         {
             key: '2',
             label: (
-                <button onClick={() => handleChangeStatus('EN_PROGRESO')}> <TabStatus status={'EN_PROGRESO'} /> </button>
+                <button onClick={() => handleChangeStatus('EN_TIEMPO')}> <TabStatus status={'EN_TIEMPO'} /> </button>
             ),
         },
         {
@@ -54,7 +54,7 @@ export const TacticosView = ({setShowEdit}: TacticosViewProps) => {
         {
             key: '4',
             label: (
-                <button onClick={() => handleChangeStatus('DETENIDO')}> <TabStatus status={'DETENIDO'} /> </button>
+                <button onClick={() => handleChangeStatus('EN_PAUSA')}> <TabStatus status={'EN_PAUSA'} /> </button>
             ),
         },
         {

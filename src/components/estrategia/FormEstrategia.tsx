@@ -16,7 +16,7 @@ import { statusType } from '@/types';
 import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { FaEdit, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaTimes, FaTrash } from 'react-icons/fa';
 import { Comentarios } from '../general/Comentarios';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 
@@ -120,7 +120,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         {
             key: '2',
             label: (
-                <button onClick={() => handleChangeStatus('EN_PROGRESO')}> <TabStatus status={'EN_PROGRESO'} /> </button>
+                <button onClick={() => handleChangeStatus('EN_TIEMPO')}> <TabStatus status={'EN_TIEMPO'} /> </button>
             ),
         },
         {
@@ -132,7 +132,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         {
             key: '4',
             label: (
-                <button onClick={() => handleChangeStatus('DETENIDO')}> <TabStatus status={'DETENIDO'} /> </button>
+                <button onClick={() => handleChangeStatus('EN_PAUSA')}> <TabStatus status={'EN_PAUSA'} /> </button>
             ),
         },
         {
@@ -186,6 +186,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     responsables: currentEstrategico.responsables.map(responsable => responsable.id),
                     fechaInicio: dayjs(currentEstrategico.fechaInicio).add(6, 'hour'),
                     fechaFin: dayjs(currentEstrategico.fechaFin).add(6, 'hour'),
+                    propietarioId: currentEstrategico.propietario?.id,
                 }}
                 form={form}
                 onBlur={handleOnSubmit}
@@ -208,7 +209,7 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Clave"
+                    label="Código"
                     className='col-span-2'
                     name={'codigo'}
                 >
@@ -409,6 +410,8 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
 
                 
             </Form>
+
+            <button className='bg-red-500 absolute bottom-20 left-4 px-0'> <FaTrash  className='text-white'/> </button>
             <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
         </>
     )

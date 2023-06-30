@@ -20,6 +20,7 @@ const initialState: UsuariosState = {
         apellidoMaterno: '',
         nombreCorto: '',
         iniciales: '',
+        foto: '',
         email: '',
         password: '',
         status: false,

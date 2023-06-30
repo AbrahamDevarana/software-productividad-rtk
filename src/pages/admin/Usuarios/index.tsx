@@ -153,7 +153,6 @@ export const Usuarios: React.FC = () => {
                 className="customTable"
                 // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
             >
-
             </Table>
             <Pagination
                     className="flex justify-end mt-5"
