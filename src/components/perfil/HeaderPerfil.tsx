@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                     </div>
 
                    {
-                        !visitante && (   
+                        false && (   
                         <button className="z-50 absolute top-3 right-3" onClick={handlePanel}>
                             <FaCog className=" text-2xl text-white drop-shadow-md"/>
                         </button> )

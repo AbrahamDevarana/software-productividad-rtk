@@ -1,14 +1,15 @@
-import { Image, Upload } from 'antd'
-import React, { useState } from 'react'
+import { Image, Spin, Upload, message } from 'antd'
+import { useEffect, useState } from 'react'
 import { Button } from '../ui'
 import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
 import { PerfilProps } from '@/interfaces';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { getStorageUrl } from '@/helpers';
-import { FaSave, FaTrash, FaUpload } from 'react-icons/fa';
+import { FaUpload } from 'react-icons/fa';
 import { uploadProfilePictureThunk } from '@/redux/features/profile/profileThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import ImgCrop from 'antd-img-crop';
+
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -19,7 +20,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
-
+    const [messageApi, contextHolder] = message.useMessage();
     const dispatch = useAppDispatch();
 
 
@@ -45,7 +46,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
         },
         itemRender:() => null,
         maxCount: 1,
-        fileList,
+        fileList,        
     };
 
     const handleUpload = async () => {
@@ -56,16 +57,28 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
 
         setUploading(true);
         
-        
         await dispatch(uploadProfilePictureThunk({profile: formData, usuarioId: usuarioActivo.id}))
 
         setUploading(false);
         setFileList([]);
+
+        messageApi.success('Foto de perfil actualizada correctamente');
+        
     }
+
+    useEffect(() => {
+        if(fileList && fileList.length > 0) {
+            handleUpload();
+        }
+    }, [fileList])
+
 
 
     return (
         <div>
+            {
+                contextHolder
+            }
             <div className='flex relative group rounded-full' style={{ width: 200, height: 200 }}>
             {
                 <Image
@@ -78,13 +91,18 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
                 />                        
             }
                 <div className='absolute top-0 left-0 w-full h-full  rounded-full bg-black bg-opacity-50 gap-x-2 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300'>
-                    <ImgCrop>
+                    <ImgCrop
+                        modalTitle='Editar foto de perfil'
+                        cropShape='round'
+                        modalClassName='antd-img-crop-modal'
+                        modalOk='Recortar'
+
+                    >
                         <Upload
                             name='banner'
                             {...props}
                         >
-                        <Button classColor='default' classType='icon' width={40} > <FaUpload /> </Button>
-                            
+                            <Button classColor='default' classType='icon' width={40} > <FaUpload /> </Button>
                         </Upload>
                     </ImgCrop>
                 </div>
@@ -92,7 +110,8 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
             <div className='flex items-center justify-center pt-10'>
                 {
                     fileList.length !== 0 && (
-                        <Button disabled={uploading} classColor='dark' classType='regular' width={150} onClick={handleUpload}> Guardar </Button>
+                        <Spin spinning tip='Subiendo foto de perfil...' />
+                        // <Button disabled={uploading} classColor='dark' classType='regular' width={150} onClick={handleUpload}> Guardar </Button>
                     )
 
                 }

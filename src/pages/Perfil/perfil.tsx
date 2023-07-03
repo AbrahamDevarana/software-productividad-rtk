@@ -105,12 +105,12 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     usuarioActivo.social && (
                         <>
                             <p className="font-medium py-2 text-devarana-dark-graph block"> Redes: </p>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 items-center">
                             {
                                 usuarioActivo.social.linkedin?.url && (
                                     <Tooltip title="Linkedin">
                                         <a href={`https://${usuarioActivo.social.linkedin?.url}`} target="_blank" rel="noreferrer">                                    
-                                            <AiFillLinkedin className="text-2xl text-blue-500" />
+                                            <AiFillLinkedin className="text-blue-500 w-6 h-5" />
                                         </a>
                                     </Tooltip>
                                 )
@@ -119,7 +119,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                                 usuarioActivo.social.facebook?.url && (
                                     <Tooltip title="Facebook">
                                         <a href={`https://${usuarioActivo.social.facebook?.url}`} target="_blank" rel="noreferrer">
-                                            <AiFillFacebook className="text-2xl text-blue-500" />
+                                            <AiFillFacebook className="text-blue-500 w-6 h-5" />
                                         </a>
                                     </Tooltip>
                                 )
@@ -128,7 +128,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                                 usuarioActivo.social.instagram?.url && (
                                     <Tooltip title="Instagram">
                                         <a href={`https://${usuarioActivo.social.instagram?.url}`} target="_blank" rel="noreferrer">
-                                            <AiFillInstagram className="text-2xl text-blue-500" />
+                                            <AiFillInstagram className="text-blue-500 w-6 h-5" />
                                         </a>
                                     </Tooltip>
                                 )                        
@@ -137,7 +137,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                                 usuarioActivo.social.otros?.url && (
                                     <Tooltip title={usuarioActivo.social.otros.nombre}>
                                         <a href={`https://${usuarioActivo.social.otros?.url}`} target="_blank" rel="noreferrer">
-                                            <FaLink className="text-2xl text-blue-500" />
+                                            <FaLink className="text-blue-500 w-6 h-4" />
                                         </a>
                                     </Tooltip>
                                 )
@@ -151,10 +151,10 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
                 <div className="font-light text-devarana-graph max-h-[250px] overflow-y-scroll" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}></div>
             </Box>
-            <Box className="xl:col-span-1 col-span-3">
+            <Box className="xl:col-span-1 col-span-3 flex flex-col">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph ">Logros</p>
                 {/* <Logros /> */}
-                <div className="flex items-center h-full">
+                <div className="flex h-full items-center">
                     <Proximamente avance={25} size="small" />
                 </div>
             </Box>

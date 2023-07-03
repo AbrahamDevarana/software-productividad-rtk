@@ -468,3 +468,20 @@ input, textarea {
 textarea.ant-input-borderless[disabled]{
     background-color: #F9F9F7!important;
 }
+
+.antd-img-crop-modal {
+
+    .ant-modal-footer{
+      
+        button.ant-btn-default{
+            display: none;
+        }
+
+        button.ant-btn-primary{
+            background: linear-gradient(190deg, $dark-light 0%, $dark 100%)!important;
+            border: none;
+            color: white!important;
+        }
+
+    }
+}

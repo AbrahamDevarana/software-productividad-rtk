@@ -40,6 +40,8 @@ export const updateProfileThunk = createAsyncThunk(
 
             const response = await clientAxios.put<Props>(`/usuarios/perfil/${profile.id}`, profile, config);
             return response.data.usuario
+
+
         }
         catch (error: any) {
             return rejectWithValue(error.response.data)

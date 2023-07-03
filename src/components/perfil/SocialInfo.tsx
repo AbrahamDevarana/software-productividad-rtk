@@ -1,5 +1,5 @@
 import { PerfilProps } from '@/interfaces';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import { useState } from 'react';
 import { AiFillAccountBook, AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiOutlineLink } from 'react-icons/ai';
 import { IoShareSocialSharp } from 'react-icons/io5';
@@ -18,8 +18,8 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
 
     const dispatch = useAppDispatch()
     const [ redes, setRedes ] = useState(usuarioActivo.social)
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const { social } = usuarioActivo
 
 
     const handleOnChange = (e: any) => {
@@ -38,18 +38,23 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
         })
     }
 
-    const handleOnSubmit = () => {
+    const handleOnSubmit =  async () => {
 
         const query = {
             ...usuarioActivo,
             social: redes
         }
 
-        dispatch(updateProfileThunk(query))
+        await dispatch(updateProfileThunk(query)).unwrap().then(() => {
+            messageApi.success('Perfil actualizado')
+        }).catch((err) => {
+            messageApi.error('Error al actualizar el perfil')
+        })
     }
 
     return (
         <>
+            { contextHolder }
             <div className='grid grid-cols-2 gap-5'>
                 <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiFillLinkedin className='text-4xl text-blue-500' />

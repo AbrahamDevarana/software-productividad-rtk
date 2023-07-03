@@ -1,10 +1,9 @@
 
-import { DatePicker, Form, Input } from 'antd';
+import { DatePicker, Form, Input, message } from 'antd';
 import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import { PerfilProps } from "@/interfaces";
 import dayjs from 'dayjs';
-import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { Button } from '../ui';
 
 interface Props {
@@ -14,16 +13,22 @@ interface Props {
 export const FormPerfil = ({usuarioActivo}: Props) => {
 
     const [form] = Form.useForm();
-    const dispatch = useAppDispatch();    
+    const dispatch = useAppDispatch();
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const handleonSubmit = () => {
+    const handleonSubmit = async () => {
 
         const values = form.getFieldsValue();
         const query = {
             ...values,
             id: usuarioActivo.id,
         }
-        dispatch(updateProfileThunk(query))
+        
+        await dispatch(updateProfileThunk(query)).unwrap().then(() => {
+            messageApi.success('Perfil actualizado')
+        }).catch((err) => {
+            messageApi.error('Error al actualizar el perfil')
+        })
     }
 
 
@@ -41,6 +46,9 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             form={form}
             
         >
+            {
+                contextHolder
+            }
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 name="nombre"
@@ -62,13 +70,14 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             >
                 <Input className="w-full" name="apellidoMaterno"  />
             </Form.Item>
-            {/* <Form.Item 
+            <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 label="Nombre a mostrar"
                 name="nombreCorto"
+                tooltip="Este nombre se mostrará en tu perfil a los demás usuarios"
             >
                 <Input className="w-full" name="nombreCorto"  />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 label="Fecha de nacimiento"
@@ -87,8 +96,23 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 label="Teléfono"
                 name="telefono"
+                // help="Ingresa tu número de teléfono a 10 dígitos"
+                tooltip="Ingresa tu número de teléfono a 10 dígitos"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Por favor ingresa tu número de teléfono',
+                        min: 10,
+                        max: 10
+                    }
+                ]}
                 >
-                <Input type='tel' className="w-full" name="telefono" />
+
+                <Input type='tel' className="w-full" maxLength={10} name="telefono" onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    form.setFieldsValue({telefono: value})
+                }} />
+
             </Form.Item>
             
             <Form.Item 
