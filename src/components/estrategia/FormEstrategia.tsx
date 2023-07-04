@@ -15,7 +15,7 @@ import { statusType } from '@/types';
 import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { FaEdit, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
 import { Comentarios } from '../general/Comentarios';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 
@@ -36,6 +36,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const { usuarios } = useAppSelector(state => state.usuarios)
     const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
+    const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
 
     const [form] = Form.useForm();
@@ -150,19 +151,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const itemTab: TabsProps['items'] = [
         {
             key: '1',
-            label: 'Indicador',
-            children: (
-                <Form.Item
-                    label="Indicador"
-                    className='col-span-12'
-                    name={'indicador'}
-                >
-                    <TextArea rows={3} name="indicador" className='editableInput' bordered={false}/>
-                </Form.Item>
-            )
-        },
-        {
-            key: '2',
             label: (
                 <div className='flex gap-2 items-center justify-center'>
                     <p> Comentarios </p>
@@ -171,7 +159,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     </div>
                 </div>
             ),
-            children: ( <Comentarios  setComentariosCount={setComentariosCount} comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
+            children: ( <Comentarios setComentariosCount={setComentariosCount} comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
         }
     ]
 
@@ -395,11 +383,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                 hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewMeta(!viewMeta)
                             }} className='font-bold text-devarana-graph' type='button'>
                                 {
-                                    viewMeta ? <FaTimes /> : <FaEdit />
+                                    viewMeta ? <FaSave /> : <FaEdit />
                                 }
                             </button>
                             
-                        </div>
+                    </div>
                     {
                         viewMeta 
                         ? (
@@ -410,7 +398,35 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                 readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
                             />    
                         ) 
-                        : ( <div className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )
+                    }
+                </Form.Item>
+                <Form.Item
+                    className='col-span-12'
+                    name="indicador"
+                >
+                    <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Indicador</p>
+                            <button onClick={() => {
+                                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewIndicador(!viewIndicador)
+                            }} className='font-bold text-devarana-graph' type='button'>
+                                {
+                                    viewIndicador ? <FaSave /> : <FaEdit />
+                                }
+                            </button>
+                            
+                    </div>
+                    {
+                        viewIndicador 
+                        ? (
+                            <ReactQuill
+                                value={form.getFieldValue('indicador')}
+                                onChange={(value) => form.setFieldsValue({indicador: value}) }
+                                onBlur={handleOnSubmit}
+                                readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
+                            />    
+                        ) 
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}></div> )
                     }
                 </Form.Item>
                 <div className='col-span-12'>

@@ -76,9 +76,11 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <p className="py-2 text-lg font-medium text-devarana-dark-graph">Acerca de mí</p>
 
                 <div className="py-4 font-light">
-                    <p className="font-light text-devarana-graph">
-                        { usuarioActivo.descripcionPerfil }
-                    </p>
+                    <div className="max-h-[170px] overflow-y-auto">
+                        <p className="font-light text-devarana-graph">
+                            { usuarioActivo.descripcionPerfil }
+                        </p>
+                    </div>
                 </div>
                 <div>
                     <p className="font-medium py-2 text-devarana-dark-graph">
@@ -89,7 +91,15 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <div>
                     <p className="font-medium py-2 text-devarana-dark-graph">
                         Teléfono: 
-                        <span className="font-light text-devarana-graph"> {usuarioActivo.telefono  } </span>
+                        <span className="font-light text-devarana-graph">
+                             {
+                                    usuarioActivo.telefono && usuarioActivo.telefono.toString()?.length === 10
+                                    ? ` ${usuarioActivo.telefono.toString().substring(0,3)}-${usuarioActivo.telefono.toString().substring(3,6)}-${usuarioActivo.telefono.toString().substring(6,10)}`
+                                    : usuarioActivo.telefono
+
+                             }
+                             
+                        </span>
                     </p>
                 </div>
                 <div>
@@ -149,7 +159,11 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
-                <div className="font-light text-devarana-graph max-h-[250px] overflow-y-scroll" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}></div>
+                <div className="max-h-[385px] overflow-y-auto text-devarana-graph">
+                    <div className="richText font-light text-devarana-graph" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}>
+                    </div>
+                </div>
+                    
             </Box>
             <Box className="xl:col-span-1 col-span-3 flex flex-col">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph ">Logros</p>

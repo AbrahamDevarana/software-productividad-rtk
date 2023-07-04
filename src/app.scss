@@ -485,3 +485,8 @@ textarea.ant-input-borderless[disabled]{
 
     }
 }
+
+// Quill
+.richText p, .richText li, .richText span, .richText strong, .richText{ 
+    color: $dark-light !important;
+}
