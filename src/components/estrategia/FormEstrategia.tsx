@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import * as Yup from 'yup';
-import { Form, Alert, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Switch, Tabs, TabsProps } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { createEstrategicoFromPerspectivaThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import { deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
 import { PerspectivaProps } from '@/interfaces';
@@ -22,13 +21,12 @@ import { hasGroupPermission } from '@/helpers/hasPermission';
 
 
 
-interface FormEstrategiaProps {
-    setOpen: (open: boolean) => void;
-    setShowEdit?: (show: boolean) => void;
+interface Props {
+    handleCloseDrawer: () => void;
 }
 
 
-export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowEdit}) => {
+export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -44,21 +42,17 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
     
     const inputRef = useRef<any>(null)
     const { TextArea } = Input;
+    const { confirm } = Modal;
 
-    const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
+    const { tagRender, spanUsuario } = useSelectUser(usuarios)
     
 
     const handleOnSubmit = () => {
-
-       
         const query =  {
             ...currentEstrategico,
             ...form.getFieldsValue(),
         }
-
         delete query.status
-
-
         if(query.id){            
             dispatch(updateEstrategicoThunk(query))
         }
@@ -138,6 +132,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
         {
             key: '5',
             label: (
+                <button onClick={() => handleChangeStatus('RETRASADO')}> <TabStatus status={'RETRASADO'} /> </button>
+            ),
+        },
+        {
+            key: '6',
+            label: (
                 <button onClick={() => handleChangeStatus('CANCELADO')}> <TabStatus status={'CANCELADO'} /> </button>
             ),
         },
@@ -174,6 +174,21 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
             children: ( <Comentarios  setComentariosCount={setComentariosCount} comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
         }
     ]
+
+
+    const showDeleteConfirm = () => {
+        confirm({
+            title: (<p className='text-devarana-graph'>¿Estas seguro de eliminar esta estrategia?</p>),
+            content: (<p className='text-devarana-graph'>Una vez eliminado no podras recuperarlo</p>),
+            okText: 'Si',
+            okType: 'danger',
+            cancelText: 'No',
+            async onOk() {
+                await dispatch(deleteEstrategicoThunk(currentEstrategico.id))
+                handleCloseDrawer()
+            }
+        });
+    }
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
@@ -411,8 +426,12 @@ export const FormEstrategia: React.FC<FormEstrategiaProps> = ({setOpen, setShowE
                 
             </Form>
 
-            <button className='bg-red-500 absolute bottom-20 left-4 px-0'> <FaTrash  className='text-white'/> </button>
+                <button onClick={showDeleteConfirm} className='bg-red-500 py-1 px-2 rounded-l-full flex items-center gap-x-2 right-0 absolute bottom-10 transition-all duration-500 translate-x-[58px] hover:translate-x-0'>
+                    <FaTrash className='text-white text-xs'/> <span className='text-white'>Eliminar</span>
+                </button>
             <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
+
+
         </>
     )
 }

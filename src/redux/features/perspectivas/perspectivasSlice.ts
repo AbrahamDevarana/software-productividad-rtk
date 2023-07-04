@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerspectivasState } from '@/interfaces';
-import { createEstrategicoThunk, updateEstrategicoThunk } from '../estrategicos/estrategicosThunk';
+import { createEstrategicoThunk, deleteEstrategicoThunk, updateEstrategicoThunk } from '../estrategicos/estrategicosThunk';
 
 const initialState: PerspectivasState = {
     perspectivas: [],
@@ -101,6 +101,14 @@ const perspectivasSlice = createSlice({
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
             if (perspectiva) {
                 perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload] : [action.payload]
+            }
+        })
+
+        .addCase(deleteEstrategicoThunk.fulfilled, (state, action) => {
+
+            const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
+            if (perspectiva) {
+                perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
             }
         })
 

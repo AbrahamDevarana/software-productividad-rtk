@@ -72,7 +72,7 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             </Form.Item>
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
-                label="Nombre a mostrar"
+                label="Nombre de perfil"
                 name="nombreCorto"
                 tooltip="Este nombre se mostrará en tu perfil a los demás usuarios"
             >
@@ -96,12 +96,11 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 label="Teléfono"
                 name="telefono"
-                // help="Ingresa tu número de teléfono a 10 dígitos"
                 tooltip="Ingresa tu número de teléfono a 10 dígitos"
                 rules={[
                     {
                         required: true,
-                        message: 'Por favor ingresa tu número de teléfono',
+                        message: 'Por favor ingresa tu número de teléfono a 10 dígitos',
                         min: 10,
                         max: 10
                     }

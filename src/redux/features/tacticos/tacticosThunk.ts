@@ -51,7 +51,7 @@ export const getTacticoThunk = createAsyncThunk(
 
 export const createTacticoThunk = createAsyncThunk(
     'tacticos/createTacticoThunk',
-    async (tactico: TacticoProps, { rejectWithValue, getState }) => {
+    async (tactico: any, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
@@ -109,6 +109,10 @@ export const getTacticoFromAreaThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` },
                 params: {quarter, year}
             }
+
+            console.log('config', config.params);
+            
+
             const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
                                   
             return response.data.objetivosTacticos

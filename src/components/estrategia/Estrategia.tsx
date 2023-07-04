@@ -10,9 +10,7 @@ interface EstrategiaProps {
 }
 
 export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
-
-    const [open, setOpen] = useState<boolean>(false)
-
+    
     return (
         <>
             {
@@ -43,24 +41,10 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                         </div>
                     </div>
                     <div className='bg-white px-5 w-full relative rounded-r-ext shadow'>
-                        <TablaEstrategia perspectiva={perspectiva} setOpen={setOpen}/>
+                        <TablaEstrategia perspectiva={perspectiva}/>
                     </div>
                 </div>
             ))}
-
-           
-            <Drawer
-                onClose={() => setOpen(false)}
-                open={open}
-                width={window.innerWidth > 1200 ? 640 : '100%'}
-                className='rounded-l-ext'
-                destroyOnClose={true}
-                // exit={{ opacity: 0 }}
-            >
-                <FormEstrategia setOpen={ setOpen } />
-            </Drawer>
-
-           
         </>
     )
 }

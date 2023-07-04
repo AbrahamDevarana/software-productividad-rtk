@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -95,18 +95,18 @@ const tacticosSlice = createSlice({
                 state.isLoading = false
                 state.error = true
             })
-            .addCase(getTacticoFromEstrategiaThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getTacticoFromEstrategiaThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.tacticos = action.payload.tacticos
-                state.tacticos_core = action.payload.tacticos_core
-            })
-            .addCase(getTacticoFromEstrategiaThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
-            })
+            // .addCase(getTacticoFromEstrategiaThunk.pending, (state) => {
+            //     state.isLoading = true
+            // })
+            // .addCase(getTacticoFromEstrategiaThunk.fulfilled, (state, action) => {
+            //     state.isLoading = false
+            //     state.tacticos = action.payload.tacticos
+            //     state.tacticos_core = action.payload.tacticos_core
+            // })
+            // .addCase(getTacticoFromEstrategiaThunk.rejected, (state, action) => {
+            //     state.isLoading = false
+            //     state.error = true
+            // })
             .addCase(getTacticoThunk.pending, (state) => {
                 state.isLoadingCurrent = true
             })
@@ -145,6 +145,25 @@ const tacticosSlice = createSlice({
                 }
 
             })
+            .addCase(updateTacticoThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
+            })
+            .addCase(createTacticoThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(createTacticoThunk.fulfilled, (state, action) => {
+                
+                if (action.payload.estrategicoId) {
+
+                    state.tacticos = [...state.tacticos, action.payload]
+                }else {
+                    state.tacticos_core = [...state.tacticos_core, action.payload]
+                }
+            })
+
+
+        
         }
 })
 

@@ -13,11 +13,10 @@ import { hasGroupPermission } from '@/helpers/hasPermission';
 
 interface TablaEstrategiaProps{
     perspectiva: PerspectivaProps;
-    setOpen: (open: boolean) => void;
 }
 
 
-export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, setOpen}) => {
+export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) => {
 
     const { color } = perspectiva
     const dispatch = useAppDispatch()   
@@ -172,7 +171,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva, se
             >
 
                 {
-                    <FormEstrategia setOpen={setOpen} setShowEdit={setShowEdit}/> 
+                    <FormEstrategia handleCloseDrawer={handleCloseDrawer} /> 
                 }
             </Drawer>
         </>

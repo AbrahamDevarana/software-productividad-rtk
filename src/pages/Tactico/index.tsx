@@ -2,22 +2,18 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { clearTacticosThunk, createTacticoThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
-import { Box } from '@/components/ui';
-import { Drawer } from 'antd';
-import { FormTactico } from '@/components/tacticos/FormTacticos';
-import { TacticoProps } from '@/interfaces';
+import { Segmented } from 'antd';
+import ListadoTacticos from '@/components/tacticos/ListadoTacticos';
 
 export const Tactico: React.FC = () => {
 
 
-    let {state} = useLocation()
+    let { state } = useLocation()
     const {slug} = useParams<{slug:string}>()
 
     const dispatch = useAppDispatch()
     const {tacticos, tacticos_core} = useAppSelector(state => state.tacticos)
-    const [nuevoTactico, setNuevoTactico] = useState<TacticoProps>()
-    const [visible, setVisible] = useState<boolean>(false)
+    const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
 
     useEffect(() => {
         if(slug){
@@ -28,28 +24,32 @@ export const Tactico: React.FC = () => {
     }, [slug])
 
 
-    const handleCreateTactico = () => {
-
-        const query = {
-            ...nuevoTactico,
-        }
-        
-        // dispatch(createTacticoThunk(query))
+    const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        e.preventDefault()
+    
+        dispatch(createTacticoThunk({slug, quarter: state.quarter, year: state.year}))
     }
 
 
     return (
         <>
-            <div className='grid gap-10'>
-                <Box>
-                    <h2>Tácticos Estratégicos </h2>
-                    <TablaTacticos tacticos={tacticos}  handleCreateTactico={handleCreateTactico} setNuevoTactico={setNuevoTactico}/>
-                </Box>
-                <Box>
-                    <h2>Tácticos Core</h2>
-                    <TablaTacticos tacticos={tacticos_core} handleCreateTactico={handleCreateTactico} setNuevoTactico={setNuevoTactico} />
-                </Box>
+            <div className='max-w-sm pb-5'>
+                <Segmented block 
+                    options={[
+                        {label: 'Listado', value: 'listado'},
+                        {label: 'Gantt', value: 'gantt'},
+                        {label: 'Equipos', value: 'equipos'},
+                    ]}
+                    value={segmented}
+                    onChange={setSegmented}
+                />
             </div>
+
+            {
+                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} tacticos={tacticos} tacticos_core={tacticos_core} />)
+            }
+            
         </>
     )
 }

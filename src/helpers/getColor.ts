@@ -30,12 +30,12 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             lowColor = `rgba(203, 0, 7, ${opacity})`;
             break;
 
-        case 'EN_PAUSA':
+        case 'RETRASADO':
             color = `rgba(238, 152, 25, ${opacity})`;
             lowColor = `rgba(243, 184, 96, ${opacity})`;
             break;
         
-        case 'RETRASADO':
+        case 'EN_PAUSA':
             color = `rgba(243, 184, 96, ${opacity})`;
             lowColor = `rgba(240, 152, 20, ${opacity})`;
             break;

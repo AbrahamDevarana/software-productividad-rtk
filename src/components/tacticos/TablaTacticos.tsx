@@ -7,23 +7,31 @@ import { getColor, getStatus, getStorageUrl } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import { FaPlus } from 'react-icons/fa';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
-    handleCreateTactico?: () => void
-    setNuevoTactico?: React.Dispatch<React.SetStateAction<TacticoProps | undefined>>
+    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const TablaTacticos = ({tacticos, handleCreateTactico, setNuevoTactico}:TablaTacticosProps) => {
+export const TablaTacticos = ({tacticos, handleCreateTactico}:TablaTacticosProps) => {
 
     const { currentTactico } = useAppSelector(state => state.tacticos)
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const dispatch = useAppDispatch()
 
+    
+
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
-            title: () => ( <p className='tableTitlePrincipal'>Objetivo</p>),
+            title: () => ( 
+                <div className='flex gap-3 items-center relative'>
+                    <p className='tableTitlePrincipal'>Objetivo</p>
+                    <button onClick={(e) => handleCreateTactico(e)} className='z-50'> <FaPlus /> </button>
+                    
+                </div>
+            ),
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
@@ -99,6 +107,8 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, setNuevoTactico}:T
         setShowEdit(false)
         dispatch(clearCurrentTacticoThunk())
     }
+
+    
 
     return (
         <>
