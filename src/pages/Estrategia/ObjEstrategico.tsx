@@ -70,7 +70,7 @@ export const ObjEstrategico: React.FC = () => {
             
             <Segmented block options={options} value={active} onChange={setActive} className='mb-5'/>            
             <div className=''>
-                { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> }
+                {/* { active === 'tacticos' && <TablaTacticos tacticos={tacticos} /> } */}
             </div>
             </div>
             
