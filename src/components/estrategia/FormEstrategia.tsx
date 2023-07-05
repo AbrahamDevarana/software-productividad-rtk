@@ -38,11 +38,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
+    const [progreso, setProgreso] = useState<number>(0)
 
     const [form] = Form.useForm();
     
     const inputRef = useRef<any>(null)
-    const { TextArea } = Input;
     const { confirm } = Modal;
 
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
@@ -53,7 +53,10 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             ...currentEstrategico,
             ...form.getFieldsValue(),
         }
+
         delete query.status
+        delete query.progreso
+        
         if(query.id){            
             dispatch(updateEstrategicoThunk(query))
         }
@@ -66,6 +69,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     useEffect(() => {
         if(currentEstrategico.id !== ''){
             setStatusEstrategico(currentEstrategico.status)
+            setProgreso(currentEstrategico.progreso)
         }
     }, [currentEstrategico])
 
@@ -182,6 +186,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     return (
         <>
+
             <Form
                 layout='vertical'
                 initialValues={{
@@ -227,8 +232,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 <Space className={`${ form.getFieldValue('id') === ''? 'hidden': 'block'} col-span-12`}>
                     <Divider className='my-3'  />
                     <Form.Item
-                        className=''
-                        name={'progreso'}
                     >
 
                         <div className='flex justify-between items-center'>
@@ -248,13 +251,17 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                 backgroundImage: `linear-gradient(to top, ${getColor(currentEstrategico.status).lowColor}, ${getColor(currentEstrategico.status).color})`
                             }}> { currentEstrategico.progreso }% </p>
                             <Slider
-
                                 className='drop-shadow progressStyle w-full'
-                                defaultValue={currentEstrategico.progreso}
                                 min={0}
+                                value={progreso}
                                 max={100}
+                                onChange={ (value ) => {
+                                    hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) &&
+                                    setProgreso(value)
+                                }}
                                 onAfterChange={ (value ) => {
                                     hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangeProgreso(value)
+                                    setProgreso(value)
                                 } }
                                 trackStyle={{
                                     backgroundColor: getColor(currentEstrategico.status).color,
@@ -286,11 +293,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                         hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangePerspectiva(perspectiva.id)
                                     }}
                                     key={perspectiva.id} 
-                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105 ${ currentEstrategico.perspectivaId === perspectiva.id? 'opacity-100': 'opacity-70'}`}
+                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105`}
                                     style={{
-                                        backgroundColor: perspectiva.color,
+                                        backgroundColor: currentEstrategico.perspectivaId === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
                                     }}
-                                > { perspectiva.nombre }
+                                > <span className='drop-shadow'>{ perspectiva.nombre }</span>
                                 </button>
                             ))
                         }
@@ -442,10 +449,12 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 
             </Form>
 
-                <button onClick={showDeleteConfirm} className='bg-red-500 py-1 px-2 rounded-l-full flex items-center gap-x-2 right-0 absolute bottom-10 transition-all duration-500 translate-x-[58px] hover:translate-x-0'>
-                    <FaTrash className='text-white text-xs'/> <span className='text-white'>Eliminar</span>
-                </button>
-            <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} /> 
+                {/* <button onClick={showDeleteConfirm} className='bg-red-500 py-1 px-2 rounded-l-full flex items-center gap-x-2 right-0 absolute top-10 transition-all duration-500 translate-x-[58px] hover:translate-x-0'>
+                    
+                    <span className='text-white'>Eliminar</span> 
+                </button> */}
+            {/* <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-10 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} />  */}
+            <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-xs'/> } /> 
 
 
         </>

@@ -17,9 +17,9 @@ const initialState: TacticosState = {
         meta: '',
         indicador: '',
         progreso: 0,
+        status: 'SIN_INICIAR',
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        status: 'SIN_INICIAR',
         tipoObjetivo: 0,
         responsables: [],
         areas: [],
@@ -122,6 +122,11 @@ const tacticosSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(updateTacticoThunk.fulfilled, (state, action) => {
+
+
+                // currentTactico
+                state.isLoading = false
+                state.currentTactico = action.payload
                                                 
                 if(action.payload.estrategicoId){
                     // si existe en el array de tacticos, lo actualiza

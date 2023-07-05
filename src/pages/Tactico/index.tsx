@@ -17,18 +17,18 @@ export const Tactico: React.FC = () => {
 
     useEffect(() => {
         if(slug){
-            dispatch(getTacticoFromAreaThunk({ slug, quarter: state.quarter, year: state.year}))
+            dispatch(getTacticoFromAreaThunk({ slug, year: 2023}))
         }
 
         return () => { dispatch(clearTacticosThunk()) }
     }, [slug])
 
 
-    const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
         e.stopPropagation()
         e.preventDefault()
     
-        dispatch(createTacticoThunk({slug, quarter: state.quarter, year: state.year}))
+        dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
     }
 
 

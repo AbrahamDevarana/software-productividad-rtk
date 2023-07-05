@@ -32,7 +32,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                             <div className='absolute inset-0 px-3 py-5 flex items-center text-white group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out overflow-auto group-hover:transform group-hover:scale-110' style={{
                                 backgroundColor: perspectiva.color
                             }}>
-                                <p className='leading-5 cursor-default'>
+                                <p className='leading-5 cursor-default drop-shadow'>
                                     {
                                         perspectiva.descripcion
                                     }

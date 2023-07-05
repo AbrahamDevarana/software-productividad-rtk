@@ -102,12 +102,12 @@ export const updateTacticoThunk = createAsyncThunk(
 
 export const getTacticoFromAreaThunk = createAsyncThunk(
     'tacticos/getTacticoFromAreaThunk',
-    async ({slug, quarter, year}: {slug: string, quarter:number, year:number}, { rejectWithValue, getState }) => {
+    async ({slug, year}: {slug: string, year:number}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: {quarter, year}
+                params: { year }
             }
 
             console.log('config', config.params);

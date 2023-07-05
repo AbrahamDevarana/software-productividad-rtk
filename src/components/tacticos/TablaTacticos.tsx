@@ -11,10 +11,11 @@ import { FaPlus } from 'react-icons/fa';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
-    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>) => void
+    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void
+    estrategico: boolean
 }
 
-export const TablaTacticos = ({tacticos, handleCreateTactico}:TablaTacticosProps) => {
+export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false}:TablaTacticosProps) => {
 
     const { currentTactico } = useAppSelector(state => state.tacticos)
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
@@ -28,7 +29,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico}:TablaTacticosProps
             title: () => ( 
                 <div className='flex gap-3 items-center relative'>
                     <p className='tableTitlePrincipal'>Objetivo</p>
-                    <button onClick={(e) => handleCreateTactico(e)} className='z-50'> <FaPlus /> </button>
+                    <button onClick={(e) => handleCreateTactico(e, estrategico)} className='z-50'> <FaPlus /> </button>
                     
                 </div>
             ),

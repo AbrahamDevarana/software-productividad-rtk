@@ -14,7 +14,8 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
     const dispatch = useAppDispatch();
     const { currentUsuario, isLoadingCurrentUsuario  } = useAppSelector(state => state.usuarios)
     const { areas, isLoading:isLoadingArea } = useAppSelector(state => state.areas)
-    const { departamentos, lideres } = useAppSelector(state => state.departamentos)    
+    const { departamentos, lideres } = useAppSelector(state => state.departamentos)
+    const [selectedArea, setSelectedArea] = useState<number | undefined>(undefined)
 
     const [form] = Form.useForm();
 
@@ -22,6 +23,8 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
     
     useEffect(() => {
         dispatch(getAreasThunk({}))
+        setSelectedArea(currentUsuario.departamento?.areaId)
+
     }, [])
 
     useEffect(() => {
@@ -38,6 +41,7 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
     }, [currentUsuario.departamentoId])
 
     const handleChangeArea = (value: number) => {
+        setSelectedArea(value)
         dispatch(getDepartamentosThunk({areaId: value}))
 
         form.setFieldsValue({
@@ -76,7 +80,6 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
 
     return (
         <div className='animate__animated animate__fadeIn animate__faster'>
-
             <Form 
                 layout='vertical' 
                 onFinish={handleOnSubmit}
@@ -87,13 +90,13 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
                     <Form.Item
                             label="Area"
                             className='col-span-1'
-                            name='areaId'
                         >
                         <Select
                             showSearch
                             placeholder="Selecciona una opción"
                             allowClear
                             onChange={handleChangeArea}
+                            value={selectedArea}
                         >
                             {
                                 areas.map((area) => (

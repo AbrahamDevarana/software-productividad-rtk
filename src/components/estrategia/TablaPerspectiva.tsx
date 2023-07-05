@@ -100,7 +100,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) =
                         </Tooltip>
                         {
                             record.responsables?.map((responsable, index) => (
-                                <Tooltip key={index} title={`${responsable.nombre} ${responsable.apellidoPaterno}`}>
+                                <Tooltip key={index} title={`${responsable.nombreCorto || '' }`}>
                                     <Avatar src={<Image src={`${getStorageUrl(responsable.foto)}`} preview={false} fallback={getBrokenUser()} />} >
                                         {responsable.iniciales}
                                     </Avatar>

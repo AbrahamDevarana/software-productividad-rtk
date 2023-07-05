@@ -4,7 +4,7 @@ import "@/assets/scss/menu.scss"
 import { optionalContent } from '@/interfaces';
 import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
-import { FaBrain, FaCog, FaCrosshairs, FaPuzzlePiece, FaRocket} from 'react-icons/fa';
+import { FaBrain, FaCheckSquare, FaCog, FaCrosshairs, FaLayerGroup, FaPeopleCarry, FaPuzzlePiece, FaRocket} from 'react-icons/fa';
 import { Avatar, Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -60,15 +60,20 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                         <FaCrosshairs className="mx-auto text-xl" />
                         <span className="text-xs text-center font-light block">Objetivos</span>
                     </NavLink>
+                    <NavLink to={'/actividades'} className={`link nav-link text-center`}>
+                        <FaCheckSquare className="mx-auto text-xl" />
+                        <span className="text-xs text-center font-light block">Actividades</span>
+                    </NavLink>
                     <div className='bg-gradient-to-r from-transparent via-white to-transparent h-0.5 w-full rounded-full opacity-20' />
                     <NavLink to={'/proyectos'} className={`link nav-link text-center`}>
                         <FaPuzzlePiece className="mx-auto text-xl" />
                         <span className="text-xs text-center font-light block">Proyectos</span>
                     </NavLink>
-                    {/* <NavLink to={'/actividades'} className={`link nav-link text-center`}>
-                        <FaCheckSquare className="mx-auto text-xl" />
-                        <span className="text-xs text-center font-light block">Actividades</span>
-                    </NavLink> */}
+                    
+                    <NavLink to={'/comite'} className={`link nav-link text-center`}>
+                        <FaLayerGroup className="mx-auto text-xl" />
+                        <span className="text-xs text-center font-light block">Comités</span>
+                    </NavLink>
                     {/* Chat button */}
                     {/* <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
                         <FaComment className="mx-auto text-xl" />

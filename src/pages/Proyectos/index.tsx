@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FormProyecto } from "@/components/proyectos/FormProyecto"
-import { Box } from "@/components/ui"
+import { Box, Proximamente } from "@/components/ui"
 import { clearProyectoThunk, deleteProyectoThunk, getCreatedProyectoThunk, getProyectoThunk, getProyectosThunk, getUpdatedProyectoThunk,  } from "@/redux/features/proyectos/proyectosThunk"
 import { FaPlus } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
@@ -58,6 +58,9 @@ export const Proyectos = () => {
     }, [socket])
 
 
+    return (
+        <Proximamente avance={28} />
+      )
     
     return (
         <>

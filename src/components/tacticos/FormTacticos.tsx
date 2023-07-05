@@ -5,7 +5,7 @@ import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { UsuarioProps } from '@/interfaces';
+import { PerspectivaProps, UsuarioProps } from '@/interfaces';
 import { useParams } from 'react-router-dom';
 import { Form, DatePicker, Input, Select, Radio, Divider, Checkbox, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, Space } from 'antd';
 import dayjs from 'dayjs';
@@ -15,6 +15,7 @@ import { hasGroupPermission } from '@/helpers/hasPermission';
 import { TabStatus } from '../ui/TabStatus';
 import { getColor } from '@/helpers';
 import { statusType } from '@/types';
+import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 
 
 interface FormTacticoProps {
@@ -24,19 +25,19 @@ interface FormTacticoProps {
 
 export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) => {
 
-    
-    const {slug} = useParams<{slug:string}>()
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
     const { currentTactico, isLoadingCurrent } = useAppSelector(state => state.tacticos)
-    const [ statusTactico, setStatusTactico] = useState<statusType>(currentTactico.status);
     const { TextArea } = Input;
     const { usuarios } = useAppSelector(state => state.usuarios)
+    const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const { areas } = useAppSelector(state => state.areas)
     const {userAuth, permisos} = useAppSelector(state => state.auth)
-
+    const [selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
     const [isEstrategico, setIsEstrategico] = useState(false)
+
+    const [progreso, setProgreso] = useState<number>(0)
+    const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
 
     const [form] = Form.useForm()
 
@@ -44,9 +45,15 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
-        dispatch(getAreasThunk({}))
         dispatch(getEstrategicosThunk({}))
+        dispatch(getPerspectivasThunk({}))
     }, [])
+    
+    useEffect(() => {
+        if(currentTactico.id === '') return
+        setSelectedPerspectiva(currentTactico.estrategico?.perspectivaId)
+    }, [currentTactico])
+    
     
     const handleOnSubmit = () => {
 
@@ -59,21 +66,27 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         if(!isEstrategico){
             query.estrategicoId = null
         }
+
+        delete query.status
+        delete query.progreso
         
         dispatch(updateTacticoThunk(query))
     }
     
 
-    const options = useMemo(() => {
-        const perspectivas = estrategicos.map((estrategico) => estrategico.perspectivas.nombre).filter((perspectiva, index, self) => self.indexOf(perspectiva) === index)
-        return perspectivas.map((perspectiva) => ({
-            label: (<p className='text-devarana-dark-graph text-xs opacity-50'>{perspectiva}</p>),
-            options: estrategicos.filter((estrategico) => estrategico.perspectivas.nombre === perspectiva).map((estrategico) => ({
-                label: (<p className='text-devarana-graph'>{estrategico.nombre}</p>),
+    const optEstrategicos = useMemo(() => {
+
+        // buscar estrategicos que sean de la perspectiva seleccionada
+        const estrategicosFiltrados = estrategicos.filter(estrategico => estrategico.perspectivaId === selectedPerspectiva)
+
+        return estrategicosFiltrados.map(estrategico => {
+            return {
+                label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
                 value: estrategico.id
-            }))
-        }))
-    }, [estrategicos])
+            }
+        })
+
+    }, [selectedPerspectiva])
    
 
 
@@ -81,6 +94,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
         setIsEstrategico(e.target.value)
+        form.setFieldsValue({estrategicoId: undefined})
+        setSelectedPerspectiva(undefined)
     }
 
 
@@ -90,6 +105,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         if(currentTactico.estrategicoId){
             setIsEstrategico(true)
         }
+        
+        setStatusTactico(currentTactico.status); 
+        setProgreso(currentTactico.progreso)
 
     }, [currentTactico])
 
@@ -114,6 +132,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         
         dispatch(updateTacticoThunk(updateTactico));       
     }
+
+    const handleSelectPerspectiva = (value: string) => {
+        form.setFieldsValue({estrategicoId: undefined})
+        setSelectedPerspectiva(value)
+    }
+    
+
 
     const items: MenuProps['items'] = [
         {
@@ -154,8 +179,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         },
     ]
 
-    
-
     if ( isLoadingCurrent ){
         return <Skeleton active paragraph={{ rows: 20 }} />
     }
@@ -177,9 +200,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                 }
                 initialValues={{
                     ...currentTactico,
-                    propietarioId: userAuth.id,
+                    propietarioId: currentTactico.propietarioId,
                     responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
-                    areasArray: [ ...currentTactico.areas.map((area) => area.id), areas.find(area => area.slug === slug )?.id || 0 ],
                     fechaInicio: dayjs(currentTactico.fechaInicio).add(6, 'hour'),
                     fechaFin: dayjs(currentTactico.fechaFin).add(6, 'hour'),
                 }}
@@ -212,8 +234,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                 <div className={`col-span-12`}>
                     <Divider className='my-3' />
                         <Form.Item
-                            className=''
-                            name={'progreso'}
                         >
                             <div className='flex justify-between items-center'>
                                 <p className='text-devarana-graph font-medium'>Progreso</p>
@@ -234,11 +254,16 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                                 <Slider
 
                                     className='drop-shadow progressStyle w-full'
-                                    defaultValue={currentTactico.progreso}
                                     min={0}
                                     max={100}
+                                    value={progreso}
+                                    onChange={ (value ) => {
+                                        hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) &&
+                                        setProgreso(value)
+                                    }}
                                     onAfterChange={ (value ) => {
                                         hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangeProgreso(value)
+                                        setProgreso(value)
                                     } }
                                     trackStyle={{
                                         backgroundColor: getColor(currentTactico.status).color,
@@ -262,8 +287,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     <label className='block pb-3'>Tipo de Objetivo Táctico</label>
                     <Radio.Group
                         value={ isEstrategico ? true : false}
-                        onChange={handleChangeTipoEstrategia}
-                        
+                        onChange={handleChangeTipoEstrategia}   
                     >
                         <Radio value={true}>Táctico</Radio>
                         <Radio value={false}>Core</Radio>
@@ -271,22 +295,52 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
                 </div>
                 { ( isEstrategico )  && (
+
+                    <>
+                    <Form.Item
+                        label="Perspectiva"
+                        className='col-span-12 mt-5'
+                        >
+                        <div className='flex flex-wrap gap-3'>
+                            {
+                                perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
+                                    <button
+                                        type='button'
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            handleSelectPerspectiva(perspectiva.id)
+                                        }}
+                                        key={perspectiva.id} 
+                                        className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105`}
+                                        style={{
+                                            backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
+                                        }}
+                                    > <span className='drop-shadow'>{ perspectiva.nombre }</span>
+                                    </button>
+                                ))
+                            }
+                        </div>
+
+                    </Form.Item>
+                    
                 <Form.Item
                     label="Objetivo estratégico"
                     name="estrategicoId"
-                    className='col-span-12'
+                    className='col-span-12 pt-4'
                     rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
                 >
                     <Select
                         placeholder="Selecciona el objetivo estratégico"
-                        disabled={options.length === 0}
+                        disabled={optEstrategicos.length === 0}
                         allowClear
                         showSearch
-                        options={options}
+                        options={optEstrategicos}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                     >
                     </Select>
                 </Form.Item>
+                    </>
                 )}
 
                 <Divider className='col-span-12'/>
@@ -328,13 +382,18 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         placeholder="Selecciona al propietario"
                         tagRender={tagRender}
                         bordered = {false}
+                        showSearch
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                        
                     >
                         {
                             usuarios.map((usuario: UsuarioProps) => (
-                                <Select.Option key={usuario.id} value={usuario.id}> { spanUsuario(usuario) } </Select.Option>
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} 
+                                > { spanUsuario(usuario) } </Select.Option>
                             ))
                         }
                     </Select>
@@ -355,10 +414,12 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
                             usuarios.map((usuario: UsuarioProps) => (
-                                <Select.Option key={usuario.id} value={usuario.id}>{spanUsuario(usuario)}</Select.Option>
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{spanUsuario(usuario)}</Select.Option>
                             ))
                         }
                     </Select>
