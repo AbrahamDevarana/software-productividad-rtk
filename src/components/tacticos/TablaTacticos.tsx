@@ -70,12 +70,23 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             )
         },
         {
+            title: () => ( <p className='tableTitle'>Periodos</p>),
+            dataIndex: 'periodos',
+            width: 100,
+            ellipsis: true,
+            render: (text, record, index) => (
+                <div>
+
+                </div>
+            ),
+        },
+        {
             title: () => ( <p className='tableTitle'>Responsables</p>),
             width: 50,
             render: (text, record, index) => (
                 <Avatar.Group maxCount={3} key={index} className='z-50'>
                     { record.responsables?.map((responsable, index) => (
-                        <Tooltip title={`${responsable?.nombre} ${responsable?.apellidoPaterno}`} key={index}>
+                        <Tooltip title={`${responsable.telefono || responsable.nombre + ' ' + responsable.apellidoPaterno}`} key={index}>
                             <Avatar 
                                 src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />}
                             >

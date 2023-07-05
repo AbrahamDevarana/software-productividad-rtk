@@ -65,7 +65,7 @@ const initialState: TacticosState = {
             },
             responsables: [],
         },
-        
+        comentarios: [],
     }
 }
 

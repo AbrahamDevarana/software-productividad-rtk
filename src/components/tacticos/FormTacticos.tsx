@@ -3,11 +3,9 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { useParams } from 'react-router-dom';
-import { Form, DatePicker, Input, Select, Radio, Divider, Checkbox, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, Space } from 'antd';
+import { Form, DatePicker, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs } from 'antd';
 import dayjs from 'dayjs';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -16,6 +14,9 @@ import { TabStatus } from '../ui/TabStatus';
 import { getColor } from '@/helpers';
 import { statusType } from '@/types';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
+import { FaEdit, FaSave } from 'react-icons/fa';
+import ReactQuill from 'react-quill';
+import { Comentarios } from '../general/Comentarios';
 
 
 interface FormTacticoProps {
@@ -28,20 +29,22 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
     const { currentTactico, isLoadingCurrent } = useAppSelector(state => state.tacticos)
-    const { TextArea } = Input;
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const {userAuth, permisos} = useAppSelector(state => state.auth)
+    const {permisos} = useAppSelector(state => state.auth)
     const [selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
     const [isEstrategico, setIsEstrategico] = useState(false)
+    const [ viewMeta, setViewMeta] = useState<boolean>(false);
+    const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
+    const [ comentariosCount , setComentariosCount ] = useState<number>(0)
 
     const [progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
 
     const [form] = Form.useForm()
 
-    const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
+    const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
@@ -96,6 +99,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         setIsEstrategico(e.target.value)
         form.setFieldsValue({estrategicoId: undefined})
         setSelectedPerspectiva(undefined)
+
+        if(e.target.value === false){
+            handleOnSubmit()
+        }
     }
 
 
@@ -138,6 +145,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         setSelectedPerspectiva(value)
     }
     
+    useEffect(() => {
+        setComentariosCount(currentTactico.comentarios?.length)
+    }, [currentTactico.comentarios])
 
 
     const items: MenuProps['items'] = [
@@ -179,6 +189,21 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         },
     ]
 
+    const itemTab: TabsProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <div className='flex gap-2 items-center justify-center'>
+                    <p> Comentarios </p>
+                    <div className='bg-gradient-to-t h-4 w-4 from-primary to-primary-light text-white rounded-full text-[11px] shadow-sm flex  items-center justify-center'>
+                        {comentariosCount} 
+                    </div>
+                </div>
+            ),
+            children: ( <Comentarios setComentariosCount={setComentariosCount} comentableType='TACTICO' comentableId={currentTactico.id}/> )
+        }
+    ]
+
     if ( isLoadingCurrent ){
         return <Skeleton active paragraph={{ rows: 20 }} />
     }
@@ -187,10 +212,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     return (
         <>
             <Form
-                onBlur={ () => {
-                    form.validateFields()
-                    handleOnSubmit()
-                }}
+                onFinish={handleOnSubmit}
                 layout='vertical'
                 className='grid grid-cols-12 gap-x-5'
                 form={form}
@@ -215,6 +237,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         className='text-xl'
                         ref={inputRef}
                         onPressEnter={ (e) => e.currentTarget.blur() }
+                        onBlur={handleOnSubmit}
                         bordered={false}
                     />
                 </Form.Item>
@@ -227,6 +250,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         className='text-xl'
                         ref={inputRef}
                         onPressEnter={ (e) => e.currentTarget.blur() }
+                        onBlur={handleOnSubmit}
                         bordered={false}
                     />
                 </Form.Item>
@@ -287,7 +311,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     <label className='block pb-3'>Tipo de Objetivo Táctico</label>
                     <Radio.Group
                         value={ isEstrategico ? true : false}
-                        onChange={handleChangeTipoEstrategia}   
+                        onChange={handleChangeTipoEstrategia}
                     >
                         <Radio value={true}>Táctico</Radio>
                         <Radio value={false}>Core</Radio>
@@ -297,33 +321,28 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                 { ( isEstrategico )  && (
 
                     <>
-                    <Form.Item
-                        label="Perspectiva"
-                        className='col-span-12 mt-5'
-                        >
-                        <div className='flex flex-wrap gap-3'>
-                            {
-                                perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
-                                    <button
-                                        type='button'
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                            handleSelectPerspectiva(perspectiva.id)
-                                        }}
-                                        key={perspectiva.id} 
-                                        className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105`}
-                                        style={{
-                                            backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
-                                        }}
-                                    > <span className='drop-shadow'>{ perspectiva.nombre }</span>
-                                    </button>
-                                ))
-                            }
-                        </div>
-
-                    </Form.Item>
                     
+                    <div className='flex flex-wrap gap-3 col-span-12'>
+                        {
+                            perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
+                                <button
+                                    type='button'
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        handleSelectPerspectiva(perspectiva.id)
+                                    }}
+                                    key={perspectiva.id} 
+                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105`}
+                                    style={{
+                                        backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
+                                    }}
+                                > <span className='drop-shadow'>{ perspectiva.nombre }</span>
+                                </button>
+                            ))
+                        }
+                    </div>
+
                 <Form.Item
                     label="Objetivo estratégico"
                     name="estrategicoId"
@@ -335,6 +354,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         disabled={optEstrategicos.length === 0}
                         allowClear
                         showSearch
+                        onBlur={handleOnSubmit}
                         options={optEstrategicos}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                     >
@@ -353,6 +373,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     <DatePicker
                         format={"DD-MM-YYYY"}
                         className='w-full'
+                        onBlur={handleOnSubmit}
                         picker="quarter"
                         clearIcon={false}
                         suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
@@ -366,6 +387,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                     <DatePicker
                         format={"DD-MM-YYYY"}
                         picker="quarter"
+                        onBlur={handleOnSubmit}
                         className='w-full'
                         clearIcon={false}
                         suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
@@ -381,6 +403,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         style={{ width: '100%' }}
                         placeholder="Selecciona al propietario"
                         tagRender={tagRender}
+                        onBlur={handleOnSubmit}
                         bordered = {false}
                         showSearch
                         maxTagPlaceholder={(omittedValues) => (
@@ -411,6 +434,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         bordered = {false}
                         tagRender={tagRender}
                         maxLength={3}
+                        onBlur={handleOnSubmit}
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
@@ -426,20 +450,72 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                 </Form.Item>
                         
                 <Form.Item
-                    label="Describe la meta a alcanzar"
                     className='col-span-12'
                     name="meta"
                 >
-                    <TextArea rows={3} name="meta" className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext'  bordered={false} />
+                    <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Meta</p>
+                            <button onClick={() => {
+                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewMeta(!viewMeta)
+                            }} className='font-bold text-devarana-graph' type='button'>
+                                {
+                                    viewMeta ? <FaSave /> : <FaEdit />
+                                }
+                            </button>
+                            
+                    </div>
+                    {
+                        viewMeta 
+                        ? (
+                            <ReactQuill
+                                value={form.getFieldValue('meta')}
+                                onChange={(value) => form.setFieldsValue({meta: value}) }
+                                onBlur={handleOnSubmit}
+                                readOnly={!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)}
+                            />    
+                        ) 
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('meta')}}></div> )
+                    }
                 </Form.Item>
                 <Form.Item
-                    label="Indicador"
                     className='col-span-12'
                     name="indicador"
                 >
-                    <TextArea rows={3} name="indicador" className='text-devarana-graph bg-[#F9F9F7] p-5 rounded-ext'  bordered={false} />
+                    <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Indicador</p>
+                            <button onClick={() => {
+                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewIndicador(!viewIndicador)
+                            }} className='font-bold text-devarana-graph' type='button'>
+                                {
+                                    viewIndicador ? <FaSave /> : <FaEdit />
+                                }
+                            </button>
+                            
+                    </div>
+                    {
+                        viewIndicador 
+                        ? (
+                            <ReactQuill
+                                value={form.getFieldValue('indicador')}
+                                onChange={(value) => form.setFieldsValue({indicador: value}) }
+                                onBlur={handleOnSubmit}
+                                readOnly={!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)}
+                            />    
+                        ) 
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}></div> )
+                    }
                 </Form.Item>
+                
             </Form>
+            <div className='col-span-12'>
+                <Tabs defaultActiveKey='1' items={itemTab} className='text-devarana-graph active:text-devarana-dark-graph'
+                    onClick={ ( e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                    }}
+                >
+                </Tabs>
+            </div>
                     
         </>
     )
