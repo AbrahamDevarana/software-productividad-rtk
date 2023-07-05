@@ -50,10 +50,11 @@ export const Tactico: React.FC = () => {
                     />
 
                 </div>
-                <DatePicker picker='year' onChange={(date, dateString) => setYear(dayjs(dateString).year())} defaultValue={dayjs(year, 'YYYY')} />
-                {
-                    year && <span className='text-gray-500 text-sm'>Año: {year}</span>
-                }
+                <DatePicker picker='year' onChange={(date, dateString) => setYear(dayjs(dateString).year())} value={dayjs(`${year}`)}
+                    disabledDate={(current) => {
+                        return current && current > dayjs().endOf('year')
+                    }}
+                />
             </div>
 
             {

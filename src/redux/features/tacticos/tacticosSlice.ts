@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
     tacticos: [],
     tacticos_core: [],
+    tacticosGeneral: [],
     isLoading: false,
     isLoadingCurrent: false,
     infoMessage: '',
@@ -165,6 +166,13 @@ const tacticosSlice = createSlice({
                 }else {
                     state.tacticos_core = [...state.tacticos_core, action.payload]
                 }
+            })
+            .addCase(getTacticosThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticosThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tacticosGeneral = action.payload
             })
 
 

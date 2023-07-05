@@ -28,6 +28,7 @@ export interface TacticoProps {
 export interface TacticosState {
     tacticos: TacticoProps[];
     tacticos_core: TacticoProps[];
+    tacticosGeneral: TacticoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
     error:        boolean;

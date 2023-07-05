@@ -11,6 +11,7 @@ interface Props {
         tacticos_core: TacticoProps[]
     }
     objetivoTactico: TacticoProps
+    tacticosGeneral: TacticoProps[]
 }
 
 export const getTacticosThunk = createAsyncThunk(
@@ -24,7 +25,7 @@ export const getTacticosThunk = createAsyncThunk(
             }
             
             const response = await clientAxios.get<Props>('/tacticos', configo);
-            return response.data.objetivosTacticos
+            return response.data.tacticosGeneral
         }
         catch (error: any) {
             return rejectWithValue(error.response.data)

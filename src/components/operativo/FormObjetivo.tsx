@@ -1,5 +1,5 @@
-import { FC, useEffect } from 'react'
-import { OperativoProps } from '@/interfaces'
+import { FC, useEffect, useMemo } from 'react'
+import { OperativoProps, TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { DatePicker, Form, Input, Select, Skeleton } from 'antd'
@@ -16,7 +16,7 @@ export const FormObjetivo = () => {
     const { RangePicker } = DatePicker;
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
-    const { tacticos } = useAppSelector(state => state.tacticos)
+    const { tacticosGeneral } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { userAuth } = useAppSelector(state => state.auth)
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
@@ -50,6 +50,60 @@ export const FormObjetivo = () => {
             )
         );
     };
+
+    const options = useMemo(() => {
+    //    agrupar tacticosGeneral en los que tengan estrategicoId y los que no, los que tengan estrategicoId se agrupan por su estrategico.nombre y los que no lo tienen se agrupan en core
+        const estrategicos = tacticosGeneral.filter((tactico) => tactico.estrategicoId !== null)
+        const core = tacticosGeneral.filter((tactico) => tactico.estrategicoId === null)
+
+        // estrategicos[0].estrategico.nombre
+
+        const estrategicosGroup = estrategicos.reduce((acc, tactico) => {
+            const { estrategico } = tactico
+            if(acc[estrategico.nombre]){
+                acc[estrategico.nombre].push(tactico)
+            }else{
+                acc[estrategico.nombre] = [tactico]
+            }
+            return acc
+        }
+        , {} as any)
+
+        const options = Object.keys(estrategicosGroup).map((estrategico) => {
+            return {
+                label: estrategico,
+                options: estrategicosGroup[estrategico].map((tactico: TacticoProps) => ({
+                    label: tactico.nombre,
+                    value: tactico.id,
+                    dataName: tactico.nombre
+                }))
+            }
+        }
+
+        )
+
+        return [
+            ...options,
+            {
+                label: 'Core',
+                options: core.map((tactico) => ({
+                    label: tactico.nombre,
+                    value: tactico.id,
+                    dataName: tactico.nombre
+                }))
+            },
+
+           
+        ]
+
+
+       
+       
+        
+
+    }, [tacticosGeneral])
+    
+    
 
     if ( isLoadingObjetivo ) return <Skeleton active paragraph={{  rows: 10 }} />
 
@@ -115,13 +169,15 @@ export const FormObjetivo = () => {
             >
 
                 <Select 
-                    onChange={ (value) => { form.setFieldValue('tacticoId', value)}} 
+                    onChange={ (value) => { form.setFieldValue('tacticoId', value)}} options={options} showSearch
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                 >
-                    {
-                        tacticos.map(tactico => (
+                    {/* {
+                        tacticosGeneral.map(tactico => (
                             <Select.Option key={tactico.id} value={tactico.id}>{tactico.nombre}</Select.Option>
                         ))
-                    }
+                    } */}
                 </Select>
             </Form.Item>
 
