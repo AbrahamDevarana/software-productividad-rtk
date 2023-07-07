@@ -110,12 +110,7 @@ export const getTacticoFromAreaThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` },
                 params: { year }
             }
-
-            console.log('config', config.params);
-            
-
             const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
-                                  
             return response.data.objetivosTacticos
         }
         catch (error: any) {

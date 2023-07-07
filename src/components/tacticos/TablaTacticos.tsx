@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import {Avatar, Drawer, Image, Progress, Table, Tooltip} from 'antd';
+import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
-import { FormTactico } from './FormTacticos';
 import { getColor, getStatus, getStorageUrl } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearCurrentTacticoThunk, getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 
@@ -13,13 +12,13 @@ interface TablaTacticosProps {
     tacticos?: TacticoProps[]
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void
     estrategico: boolean
+    setShowDrawer: (showDrawer: boolean) => void
 }
 
-export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false}:TablaTacticosProps) => {
+export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer}:TablaTacticosProps) => {
 
     const { currentTactico } = useAppSelector(state => state.tacticos)
-    const [showDrawer, setShowDrawer] = useState<boolean>(false)
-    const [showEdit, setShowEdit] = useState<boolean>(false);
+
     const dispatch = useAppDispatch()
 
     
@@ -43,6 +42,14 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             }),
         },
         {
+            title: () => ( <p className='tableTitle'>Código</p>),
+            width: 50,
+            ellipsis: true,
+            render: (text, record, index) => (
+                <span className='text-default'>{record.codigo}</span>
+            ),
+        },
+        {
             title: () => ( <p className='tableTitle'>Estatus</p>),
             dataIndex: 'status',
             width: 50,
@@ -57,7 +64,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
         {
             title: () => ( <p className='tableTitle'>Progreso</p>),
             dataIndex: 'progreso',
-            width: 100,
+            width: 60,
             render: (text, record, index) => (
                 <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
@@ -70,19 +77,25 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             )
         },
         {
-            title: () => ( <p className='tableTitle'>Periodos</p>),
+            title: () => ( <p className='tableTitle'>Duración</p>),
             dataIndex: 'periodos',
-            width: 100,
+            width: 80,
             ellipsis: true,
             render: (text, record, index) => (
-                <div>
-
+                <div className='flex gap-x-1 items-center align-middle'>
+                    {/* record.cuatrimestres */}
+                    {
+                        record.trimestres.map((trimestre, index) => (
+                            <span key={index} className={`px-4 text-[11px] font-medium rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>T{index+1}</span>
+                        ))
+                    }
+                    
                 </div>
             ),
         },
         {
             title: () => ( <p className='tableTitle'>Responsables</p>),
-            width: 50,
+            width: 80,
             render: (text, record, index) => (
                 <Avatar.Group maxCount={3} key={index} className='z-50'>
                     { record.responsables?.map((responsable, index) => (
@@ -114,13 +127,6 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
         setShowDrawer(true)
     }
 
-    const handleCancel = () => {
-        setShowDrawer(false)
-        setShowEdit(false)
-        dispatch(clearCurrentTacticoThunk())
-    }
-
-    
 
     return (
         <>
@@ -140,19 +146,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                 pagination={false}
             />
 
-            <Drawer
-                open={showDrawer}
-                width={window.innerWidth > 1200 ? 700 : '100%'}
-                destroyOnClose={true}
-                onClose={() => handleCancel()}
-                closable={false}
-            >   
-
-                {
-                    currentTactico && <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit}/>
-                }
-
-            </Drawer>
+            
         </>
     )
 }

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { PerspectivaProps, UsuarioProps } from '@/interfaces';
+import { PerspectivaProps, TacticoProps, TrimestreProps, UsuarioProps } from '@/interfaces';
 import { Form, DatePicker, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs } from 'antd';
 import dayjs from 'dayjs';
 import { BsFillCalendarFill } from 'react-icons/bs';
@@ -22,9 +22,10 @@ import { Comentarios } from '../general/Comentarios';
 interface FormTacticoProps {
     setShowEdit: (value: boolean) => void
     showEdit?: boolean
+    year: number
 }
 
-export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) => {
+export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, year}) => {
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
@@ -38,6 +39,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
+    const [ periodos, setPeriodos ] = useState<TrimestreProps[]>([])
 
     const [progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
@@ -58,13 +60,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
     }, [currentTactico])
     
     
-    const handleOnSubmit = () => {
-
+    const handleOnSubmit = () => {        
         if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
-
+        
         const query = {
             ...currentTactico,
             ...form.getFieldsValue(),
+            year,
         }
         if(!isEstrategico){
             query.estrategicoId = null
@@ -72,7 +74,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
         delete query.status
         delete query.progreso
-        
+    
         dispatch(updateTacticoThunk(query))
     }
     
@@ -91,8 +93,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
     }, [selectedPerspectiva])
    
-
-
     const handleChangeTipoEstrategia = (e: RadioChangeEvent) => {
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
@@ -115,6 +115,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         
         setStatusTactico(currentTactico.status); 
         setProgreso(currentTactico.progreso)
+        setPeriodos(currentTactico.trimestres)
 
     }, [currentTactico])
 
@@ -124,7 +125,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
             const updateTactico = {
                 ...currentTactico,
-                progreso: value
+                progreso: value,
+                year,
             }
             dispatch(updateTacticoThunk(updateTactico));  
         }  
@@ -134,7 +136,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
         setStatusTactico(value); 
         const updateTactico = {
             ...currentTactico,
-            status: value
+            status: value,
+            year,
         }
         
         dispatch(updateTacticoThunk(updateTactico));       
@@ -203,6 +206,28 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
             children: ( <Comentarios setComentariosCount={setComentariosCount} comentableType='TACTICO' comentableId={currentTactico.id}/> )
         }
     ]
+
+
+    const handleTrimestre = (trimestre: TrimestreProps) => {
+    //   encontrar el trimestre clickeado en periodos y cambiarle el trimestre.pivot_tactico_trimestre.activo
+    const trimestreEncontrado = periodos.map(periodo => periodo.trimestre === trimestre.trimestre ? {...periodo, pivot_tactico_trimestre: {...periodo.pivot_tactico_trimestre, activo: !periodo.pivot_tactico_trimestre.activo}} : periodo)
+    setPeriodos(trimestreEncontrado)
+
+        const query = {
+            ...currentTactico,
+            year,
+            trimestresActivos: trimestreEncontrado.filter(periodo => periodo.pivot_tactico_trimestre.activo).map(periodo => {
+                return periodo.trimestre
+            }),
+            responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
+        }       
+    
+        dispatch(updateTacticoThunk(query))
+        
+
+        
+    }
+
 
     if ( isLoadingCurrent ){
         return <Skeleton active paragraph={{ rows: 20 }} />
@@ -365,6 +390,21 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
                 <Divider className='col-span-12'/>
 
+                <div className='flex gap-x-1 items-center align-middle'>
+                    <p className='text-devarana-graph font-medium block'>Periodos</p>
+                    {
+                        periodos.map((trimestre: TrimestreProps, index: number) => {
+                            return (
+                                <span 
+                                    key={index} 
+                                    onClick={() => {
+                                        handleTrimestre(trimestre)
+                                    }}
+                                    className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
+                            )
+                        })
+                    }
+                </div>
                 {/* <Form.Item
                     label="Fecha de inicio"
                     className='col-span-6'

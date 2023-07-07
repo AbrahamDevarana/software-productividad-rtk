@@ -82,7 +82,7 @@ export const ObjEstrategico: React.FC = () => {
                     className='rounded-l-ext'
                     destroyOnClose={true}
                 >
-                    <FormTactico setShowEdit={setShowDrawer} />
+                    <FormTactico year={2023} setShowEdit={setShowDrawer} />
 
                 </Drawer>
 

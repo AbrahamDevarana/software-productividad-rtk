@@ -1,5 +1,5 @@
 import { UsuarioProps,  } from "./usuario";
-import { ComentarioProps, EstrategicoProps } from "./";
+import { ComentarioProps, EstrategicoProps, TrimestreProps } from "./";
 import { AreaProps } from '@/interfaces';
 import { statusType } from "@/types";
 
@@ -21,8 +21,7 @@ export interface TacticoProps {
     propietario?: UsuarioProps
     propietarioId?: string
     comentarios: ComentarioProps[];
-
-
+    trimestres: TrimestreProps[];
 }
 
 export interface TacticosState {

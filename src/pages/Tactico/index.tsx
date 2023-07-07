@@ -1,11 +1,12 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { clearTacticosThunk, createTacticoThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { clearCurrentTacticoThunk, clearTacticosThunk, createTacticoThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { DatePicker, Segmented } from 'antd';
+import { DatePicker, Drawer, Segmented } from 'antd';
 import ListadoTacticos from '@/components/tacticos/ListadoTacticos';
 import { Prox } from '@/components/ui/Prox';
 import dayjs from 'dayjs';
+import { FormTactico } from '@/components/tacticos/FormTacticos';
 
 export const Tactico: React.FC = () => {
 
@@ -14,9 +15,11 @@ export const Tactico: React.FC = () => {
     const {slug} = useParams<{slug:string}>()
 
     const dispatch = useAppDispatch()
-    const {tacticos, tacticos_core} = useAppSelector(state => state.tacticos)
+    const {tacticos, tacticos_core, currentTactico} = useAppSelector(state => state.tacticos)
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [year, setYear] = useState(dayjs().year())
+    const [showDrawer, setShowDrawer] = useState<boolean>(false)
+    const [showEdit, setShowEdit] = useState<boolean>(false);
 
     useEffect(() => {
         if(slug){
@@ -32,6 +35,12 @@ export const Tactico: React.FC = () => {
         e.preventDefault()
     
         dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
+    }
+
+    const handleCancel = () => {
+        setShowDrawer(false)
+        setShowEdit(false)
+        dispatch(clearCurrentTacticoThunk())
     }
 
 
@@ -50,15 +59,20 @@ export const Tactico: React.FC = () => {
                     />
 
                 </div>
-                <DatePicker picker='year' onChange={(date, dateString) => setYear(dayjs(dateString).year())} value={dayjs(`${year}`)}
+                <DatePicker 
+                    picker='year' 
+                    onChange={(date, dateString) => setYear(dayjs(dateString).year())} 
+                    value={dayjs(`${year}`)}
                     disabledDate={(current) => {
-                        return current && current > dayjs().endOf('year')
+                        // no se puede mas del año actual y menos de hace 11 años
+                        return current.year() > dayjs().year() || current.year() < dayjs().subtract(11, 'year').year()
                     }}
+                    allowClear={false}
                 />
             </div>
 
             {
-                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} tacticos={tacticos} tacticos_core={tacticos_core} />)
+                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} tacticos={tacticos} tacticos_core={tacticos_core} setShowDrawer={setShowDrawer} />)
             }
             {
                 segmented === 'gantt' && (<Prox avance={87} />)
@@ -67,6 +81,20 @@ export const Tactico: React.FC = () => {
                 segmented === 'equipos' && (<Prox avance={25} />)
             }
             
+
+            <Drawer
+                open={showDrawer}
+                width={window.innerWidth > 1200 ? 700 : '100%'}
+                destroyOnClose={true}
+                onClose={() => handleCancel()}
+                closable={false}
+            >   
+
+                {
+                    currentTactico && <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit} year={year}/>
+                }
+
+            </Drawer>
         </>
     )
 }
