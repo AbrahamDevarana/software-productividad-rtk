@@ -365,7 +365,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
 
                 <Divider className='col-span-12'/>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Fecha de inicio"
                     className='col-span-6'
                     name={"fechaInicio"}
@@ -392,7 +392,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit}) 
                         clearIcon={false}
                         suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
                     />
-                </Form.Item>
+                </Form.Item> */}
+
+                <Divider className='col-span-12'/>
 
                 <Form.Item
                     label="Propietario"
