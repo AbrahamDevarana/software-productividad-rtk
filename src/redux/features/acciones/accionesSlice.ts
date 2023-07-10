@@ -22,6 +22,7 @@ const initialState: AccionesState = {
             apellidoMaterno: '',
             email: '',
             iniciales: '',
+            departamentos: [],
         }
     },
     infoMessage: '',

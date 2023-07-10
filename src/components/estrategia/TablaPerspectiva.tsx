@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Avatar, Drawer, Image, Progress, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
@@ -9,6 +9,8 @@ import { clearCurrentEstrategicoThunk, createEstrategicoThunk, getEstrategicoThu
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 import { hasGroupPermission } from '@/helpers/hasPermission';
+import { extraerNumero } from '@/helpers/getNumberCode';
+import { Icon } from '../Icon';
 
 
 interface TablaEstrategiaProps{
@@ -89,7 +91,9 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) =
             width: 50,
             render: (text, record, index) => (
                 <div className='flex justify-end'>
-                    <Avatar.Group>
+                    <Avatar.Group maxCount={3} key={index} className='z-50'
+                        maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+                    >
                         <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`}>
                             <Avatar 
                                 src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
@@ -138,15 +142,26 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) =
         dispatch(clearCurrentEstrategicoThunk())
     }
 
+    // Ordenarlos por el codigo tienen algo así A1 A2 A3 B1 B2 B3
+    const objetivosOrdenados =  useMemo(() => {
+      
+        if(!perspectiva.objetivosEstrategicos) return []
+        return perspectiva.objetivosEstrategicos.map( item => item).sort((a, b) => {            
+            const aNumero = extraerNumero(a.codigo)
+            const bNumero = extraerNumero(b.codigo)
+            return aNumero - bNumero
+        })
+
+    }, [perspectiva.objetivosEstrategicos])
 
     return (
         <>
             <Table
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
-                loading={ perspectiva.objetivos_estrategicos?.length === 0 ? true : false }
+                loading={ perspectiva.objetivosEstrategicos?.length === 0 ? true : false }
                 columns={columns}
-                dataSource={perspectiva.objetivos_estrategicos}
+                dataSource={objetivosOrdenados}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {
                     return {

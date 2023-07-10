@@ -37,7 +37,7 @@ export const Tactico: React.FC = () => {
         dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
     }
 
-    const handleCancel = () => {
+    const handleCloseDrawer = () => {
         setShowDrawer(false)
         setShowEdit(false)
         dispatch(clearCurrentTacticoThunk())
@@ -86,12 +86,12 @@ export const Tactico: React.FC = () => {
                 open={showDrawer}
                 width={window.innerWidth > 1200 ? 700 : '100%'}
                 destroyOnClose={true}
-                onClose={() => handleCancel()}
+                onClose={() => handleCloseDrawer()}
                 closable={false}
             >   
 
                 {
-                    currentTactico && <FormTactico setShowEdit={setShowEdit}  showEdit={showEdit} year={year}/>
+                    currentTactico && <FormTactico handleCloseDrawer={handleCloseDrawer} year={year} slug={slug}/>
                 }
 
             </Drawer>

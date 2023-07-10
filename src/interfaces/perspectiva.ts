@@ -24,6 +24,6 @@ export interface PerspectivaProps {
     fechaInicio?: Date;
     fechaFin?: Date;
     clave?: string;
-    objetivos_estrategicos?: EstrategicoProps[];
+    objetivosEstrategicos: EstrategicoProps[];
 }
 

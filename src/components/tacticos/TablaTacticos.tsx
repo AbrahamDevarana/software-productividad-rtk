@@ -83,7 +83,6 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             ellipsis: true,
             render: (text, record, index) => (
                 <div className='flex gap-x-1 items-center align-middle'>
-                    {/* record.cuatrimestres */}
                     {
                         record.trimestres.map((trimestre, index) => (
                             <span key={index} className={`px-4 text-[11px] font-medium rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>T{index+1}</span>
@@ -97,9 +96,23 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             title: () => ( <p className='tableTitle'>Responsables</p>),
             width: 80,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={3} key={index} className='z-50'>
+                <Avatar.Group maxCount={3} key={index} className='z-50'
+                    maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+                >
+                    {
+                        record.propietario && (
+                            <Tooltip title={`${record.propietario.nombreCorto || record.propietario.nombre + ' ' + record.propietario.apellidoPaterno}`}>
+                                <Avatar
+                                    src={ <Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} /> }
+                                    style={{borderColor: '#F472B6'}}
+                                >
+                                    {record.propietario?.iniciales}
+                                </Avatar>
+                            </Tooltip>
+                        )
+                    }
                     { record.responsables?.map((responsable, index) => (
-                        <Tooltip title={`${responsable.telefono || responsable.nombre + ' ' + responsable.apellidoPaterno}`} key={index}>
+                        <Tooltip title={`${responsable.nombreCorto || responsable.nombre + ' ' + responsable.apellidoPaterno}`} key={index}>
                             <Avatar 
                                 src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />}
                             >

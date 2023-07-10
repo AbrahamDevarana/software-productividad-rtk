@@ -1,10 +1,11 @@
 import { PerspectivaProps } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
-import { Drawer, FloatButton } from 'antd';
+import { Drawer, FloatButton, Image } from 'antd';
 import { useState } from 'react'
 import { FormEstrategia } from './FormEstrategia'
 import { FaPlus } from 'react-icons/fa';
 import { Icon } from '../Icon'
+import { getStorageUrl } from '@/helpers';
 interface EstrategiaProps {
     perspectivas: PerspectivaProps[]
 }
@@ -27,7 +28,9 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                         </div>
                         <div className='bg-white flex justify-center items-center flex-col align-middle w-[160px] relative group overflow-hidden'>
                             <div className='group-hover:opacity-0 transition-all duration-300 ease-in-out'>
-                                <Icon iconName={`${perspectiva.icono || 'faAtom' }`} className='text-devarana-graph text-5xl' />
+                                {
+                                    <Image src={getStorageUrl(perspectiva.icono)} width={50} height={50} preview={false} />
+                                }
                             </div>
                             <div className='absolute inset-0 px-3 py-5 flex items-center text-white group-hover:opacity-100 opacity-0 transition-all duration-300 ease-in-out overflow-auto group-hover:transform group-hover:scale-110' style={{
                                 backgroundColor: perspectiva.color

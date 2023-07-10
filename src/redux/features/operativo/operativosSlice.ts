@@ -25,6 +25,7 @@ const initialState: OperativoState = {
             apellidoPaterno: '',
             iniciales: '',
             email: '',
+            departamentos: [],
         },
         propietarioId: '',
         operativosResponsable: [],

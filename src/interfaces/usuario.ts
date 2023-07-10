@@ -31,7 +31,7 @@ export interface UsuarioProps {
     departamentoId?: number;
     leaderId?: number | null ;
     direccion?: Direccion;
-    departamento?: DepartamentoProps;
+    departamentos: DepartamentoProps[];
     puesto?: string;
 }
 

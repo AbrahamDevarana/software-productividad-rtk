@@ -17,7 +17,7 @@ const initialState: PerspectivasState = {
         progreso: 0,
         color: '',
         status: 'SIN_INICIAR',
-        objetivos_estrategicos: [],
+        objetivosEstrategicos: [],
     }
 }
 
@@ -69,7 +69,7 @@ const perspectivasSlice = createSlice({
             state.perspectivas = state.perspectivas.map((perspectiva) => perspectiva.id === action.payload.perspectivaId
               ? {
                   ...perspectiva,
-                  objetivos_estrategicos: perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload.objetivoEstrategico] : [action.payload.objetivoEstrategico]
+                  objetivosEstrategicos: perspectiva.objetivosEstrategicos ? [...perspectiva.objetivosEstrategicos, action.payload.objetivoEstrategico] : [action.payload.objetivoEstrategico]
                 }
               : perspectiva
             );
@@ -82,17 +82,17 @@ const perspectivasSlice = createSlice({
         builder
         .addCase(updateEstrategicoThunk.fulfilled, (state, action) => {
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
-            const oldPerspectiva = state.perspectivas.find(perspectiva => perspectiva.objetivos_estrategicos?.find(estrategico => estrategico.id === action.payload.id))
+            const oldPerspectiva = state.perspectivas.find(perspectiva => perspectiva.objetivosEstrategicos?.find(estrategico => estrategico.id === action.payload.id))
             
             if (perspectiva && oldPerspectiva?.id !== perspectiva.id) {
-                perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload] : [action.payload]
+                perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos ? [...perspectiva.objetivosEstrategicos, action.payload] : [action.payload]
 
                 if ( oldPerspectiva ) {
-                    oldPerspectiva.objetivos_estrategicos = oldPerspectiva.objetivos_estrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
+                    oldPerspectiva.objetivosEstrategicos = oldPerspectiva.objetivosEstrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
                 }
             }else{
                 if (perspectiva) {
-                    perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos?.map(estrategico => estrategico.id === action.payload.id ? action.payload : estrategico)
+                    perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos?.map(estrategico => estrategico.id === action.payload.id ? action.payload : estrategico)
                 }
             }
         })
@@ -100,7 +100,7 @@ const perspectivasSlice = createSlice({
 
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
             if (perspectiva) {
-                perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos ? [...perspectiva.objetivos_estrategicos, action.payload] : [action.payload]
+                perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos ? [...perspectiva.objetivosEstrategicos, action.payload] : [action.payload]
             }
         })
 
@@ -108,7 +108,7 @@ const perspectivasSlice = createSlice({
 
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
             if (perspectiva) {
-                perspectiva.objetivos_estrategicos = perspectiva.objetivos_estrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
+                perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
             }
         })
 

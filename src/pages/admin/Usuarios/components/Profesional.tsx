@@ -5,7 +5,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useMemo, useState } from 'react';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
 import { useAppDispatch } from '@/redux/hooks';
-import { getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
+import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useSelectUser } from '@/hooks/useSelectUser';
 
@@ -23,20 +23,23 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
     
     useEffect(() => {
         dispatch(getAreasThunk({}))
-        setSelectedArea(currentUsuario.departamento?.areaId)
+        setSelectedArea(currentUsuario.departamentos[0]?.areaId)
 
+        return () => {
+            dispatch(clearLideresThunk())
+        }
     }, [])
 
     useEffect(() => {
-        if(currentUsuario.departamento && currentUsuario.departamento.areaId)
+        if(currentUsuario.departamentos.length > 0 && currentUsuario.departamentos[0]?.areaId)
         {
-            dispatch(getDepartamentosThunk({areaId: currentUsuario.departamento.areaId}))
+            dispatch(getDepartamentosThunk({areaId: currentUsuario.departamentos[0]?.areaId}))
         }        
-    }, [currentUsuario.departamento])
+    }, [currentUsuario.departamentos])
 
     useEffect(() => {
-        if (currentUsuario.departamentoId){ 
-            dispatch(getLideresDepartamentoThunk(currentUsuario.departamentoId)) 
+        if (currentUsuario.departamentos[0]){ 
+            dispatch(getLideresDepartamentoThunk(currentUsuario.departamentos[0].id))
         }
     }, [currentUsuario.departamentoId])
 
@@ -45,7 +48,7 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
         dispatch(getDepartamentosThunk({areaId: value}))
 
         form.setFieldsValue({
-            departamentoId: undefined,
+            despartamentos: undefined,
             leaderId: undefined
         })
     }
@@ -84,7 +87,10 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
                 layout='vertical' 
                 onFinish={handleOnSubmit}
                 form={form}
-                initialValues={currentUsuario}
+                initialValues={{
+                    ...currentUsuario,
+                    despartamentos: currentUsuario.departamentos?.map((departamento) => departamento.id)
+                }}
             >
                   <Space wrap className='grid grid-cols-2 gap-5'>
                     <Form.Item
@@ -108,12 +114,13 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
                     <Form.Item
                         label="Departamento"
                         className='col-span-1'
-                        name='departamentoId'
+                        name='despartamentos'
                     >
                         <Select
                             showSearch
                             placeholder="Selecciona una opción"
                             allowClear
+                            mode="multiple"
                             disabled={departamentos.length === 0}
                             onChange={handleChangeDepartamento}
                         >

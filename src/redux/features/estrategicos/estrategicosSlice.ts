@@ -32,6 +32,7 @@ const initialState: EstrategicosState = {
                 color: '',
                 status: 'SIN_INICIAR',
                 progreso: 0,
+                objetivosEstrategicos: [],
             },        
         responsables: [],
         propietarioId: '',
@@ -42,6 +43,7 @@ const initialState: EstrategicosState = {
             apellidoPaterno: '',
             email: '',
             iniciales: '',
+            departamentos: [],
         },
         comentarios: [],
     }

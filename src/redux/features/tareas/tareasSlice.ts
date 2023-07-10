@@ -24,6 +24,7 @@ const initialState:TareasState = {
             email: '',
             foto: '',
             iniciales: '',
+			departamentos: [],
         },
     },
     infoMessage: '',

@@ -28,7 +28,7 @@ const initialState: AreasState = {
             id: '',
             apellidoMaterno: '',
             iniciales: '',
-
+            departamentos: [],
         }
     }
 }

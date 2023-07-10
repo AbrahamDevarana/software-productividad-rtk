@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -33,6 +33,7 @@ const initialState: TacticosState = {
             apellidoPaterno: '',
             email: '',
             iniciales: '',
+            departamentos: [],
         },
         estrategico: {
             id: '',
@@ -47,6 +48,7 @@ const initialState: TacticosState = {
             perspectivaId: '',
             comentarios: [],
             propietarioId: '',
+            tacticos: [],
             propietario: {
                 nombre: '',
                 apellidoPaterno: '',
@@ -54,6 +56,7 @@ const initialState: TacticosState = {
                 id: '',
                 apellidoMaterno: '',
                 iniciales: '',
+                departamentos: [],
             },
             perspectivas: { 
                 id: '',
@@ -63,11 +66,13 @@ const initialState: TacticosState = {
                 color: '',
                 status: 'SIN_INICIAR',
                 progreso: 0,
+                objetivosEstrategicos: [],
             },
             responsables: [],
         },
         comentarios: [],
         trimestres: [],
+        
     }
 }
 
@@ -176,6 +181,18 @@ const tacticosSlice = createSlice({
                 state.tacticosGeneral = action.payload
             })
 
+            .addCase(deleteTacticoThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(deleteTacticoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tacticos = state.tacticos.filter( tactico => tactico.id !== action.payload.id )
+                state.tacticos_core = state.tacticos_core.filter( tactico => tactico.id !== action.payload.id )
+            })
+            .addCase(deleteTacticoThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
+            })
 
         
         }

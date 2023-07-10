@@ -28,7 +28,6 @@ const initialState: UsuariosState = {
         fechaIngreso: new Date(),
         telefono: '',
         descripcionPerfil: '',
-        departamentoId: 0,
         leaderId: null,
         direccion: {
             id: 0,
@@ -40,20 +39,7 @@ const initialState: UsuariosState = {
             ciudad: '',
             estado: ''
         },
-        departamento: {
-            id: 0,
-            nombre: '',
-            leaderId: '',
-            slug: '',
-            parentId: null,
-            status: false,
-            leader:{
-                nombre: '',
-                apellidoPaterno: '',
-                id: 0,
-                apellidoMaterno: '',
-            }
-        }
+        departamentos: []
     }
 }
 

@@ -3,11 +3,10 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { PerspectivaProps, TacticoProps, TrimestreProps, UsuarioProps } from '@/interfaces';
-import { Form, DatePicker, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs } from 'antd';
+import { deleteTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { PerspectivaProps, TrimestreProps, UsuarioProps } from '@/interfaces';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal } from 'antd';
 import dayjs from 'dayjs';
-import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import { TabStatus } from '../ui/TabStatus';
@@ -17,15 +16,16 @@ import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivas
 import { FaEdit, FaSave } from 'react-icons/fa';
 import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
+import { Icon } from '../Icon';
 
 
 interface FormTacticoProps {
-    setShowEdit: (value: boolean) => void
-    showEdit?: boolean
+    handleCloseDrawer: () => void
     year: number
+    slug?: string
 }
 
-export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, year}) => {
+export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year, slug}) => {
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
@@ -45,6 +45,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
 
     const [form] = Form.useForm()
+    const { confirm } = Modal;
 
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
@@ -67,6 +68,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
             ...currentTactico,
             ...form.getFieldsValue(),
             year,
+            slug,
         }
         if(!isEstrategico){
             query.estrategicoId = null
@@ -127,6 +129,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
                 ...currentTactico,
                 progreso: value,
                 year,
+                slug
             }
             dispatch(updateTacticoThunk(updateTactico));  
         }  
@@ -138,6 +141,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
             ...currentTactico,
             status: value,
             year,
+            slug
         }
         
         dispatch(updateTacticoThunk(updateTactico));       
@@ -216,6 +220,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
         const query = {
             ...currentTactico,
             year,
+            slug,
             trimestresActivos: trimestreEncontrado.filter(periodo => periodo.pivot_tactico_trimestre.activo).map(periodo => {
                 return periodo.trimestre
             }),
@@ -226,6 +231,20 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
         
 
         
+    }
+
+    const showDeleteConfirm = () => {
+        confirm({
+            title: (<p className='text-devarana-graph'>¿Estas seguro de eliminar esta estrategia?</p>),
+            content: (<p className='text-devarana-graph'>Una vez eliminado no podras recuperarlo</p>),
+            okText: 'Si',
+            okType: 'danger',
+            cancelText: 'No',
+            async onOk() {
+                await dispatch(deleteTacticoThunk(currentTactico.id))
+                handleCloseDrawer()
+            }
+        });
     }
 
 
@@ -390,20 +409,22 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
 
                 <Divider className='col-span-12'/>
 
-                <div className='flex gap-x-1 items-center align-middle'>
+                <div className='flex flex-col gap-y-1'>
                     <p className='text-devarana-graph font-medium block'>Periodos</p>
-                    {
-                        periodos.map((trimestre: TrimestreProps, index: number) => {
-                            return (
-                                <span 
-                                    key={index} 
-                                    onClick={() => {
-                                        handleTrimestre(trimestre)
-                                    }}
-                                    className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
-                            )
-                        })
-                    }
+                    <div className='flex gap-x-1 '>
+                        {
+                            periodos.map((trimestre: TrimestreProps, index: number) => {
+                                return (
+                                    <span 
+                                        key={index} 
+                                        onClick={() => {
+                                            handleTrimestre(trimestre)
+                                        }}
+                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
                 {/* <Form.Item
                     label="Fecha de inicio"
@@ -485,7 +506,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
                     >
                         {
                             usuarios.map((usuario: UsuarioProps) => (
-                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{spanUsuario(usuario)}</Select.Option>
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{
+                                    spanUsuario(usuario)}
+                                </Select.Option>
                             ))
                         }
                     </Select>
@@ -559,6 +582,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({showEdit, setShowEdit, y
                 </Tabs>
             </div>
                     
+        <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-xs'/> } /> 
         </>
     )
 }

@@ -26,7 +26,8 @@ const initialState: ResultadoClaveState = {
             apellidoPaterno: '',
             email: '',
             iniciales: '',
-            id: ''
+            id: '',
+            departamentos: [],
         }
     }
 }

@@ -1,6 +1,6 @@
 import { DepartamentoProps } from '@/interfaces';
 import { AppDispatch, RootState } from '../../../store';
-import { clearDepartamentos, clearCurrentDepartamento } from './departamentosSlice';
+import { clearDepartamentos, clearCurrentDepartamento, clearLideres } from './departamentosSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
@@ -135,5 +135,11 @@ export const cleanDepartamentoThunk = () => {
 export const clearCurrentDepartamentoThunk = () => {
     return async (dispatch: AppDispatch) => {
         dispatch( clearCurrentDepartamento() )
+    }
+}
+
+export const clearLideresThunk = () => {
+    return async (dispatch: AppDispatch) => {
+        dispatch( clearLideres() )
     }
 }

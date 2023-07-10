@@ -55,6 +55,9 @@ export const ObjEstrategico: React.FC = () => {
 		},
 	]
 
+    const handleCloseDrawer = () => {
+        setShowDrawer(false)
+    }
 
 	if(currentEstrategico.id === ""){
         return <Loading />
@@ -82,7 +85,7 @@ export const ObjEstrategico: React.FC = () => {
                     className='rounded-l-ext'
                     destroyOnClose={true}
                 >
-                    <FormTactico year={2023} setShowEdit={setShowDrawer} />
+                    <FormTactico year={2023} handleCloseDrawer={handleCloseDrawer} />
 
                 </Drawer>
 

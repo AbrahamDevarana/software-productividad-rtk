@@ -31,54 +31,15 @@ const departamentosSlice = createSlice({
     name: 'departamentosSlice',
     initialState,
     reducers: {
-        // checkingDepartamentos: (state) => {
-        //     state.isLoading = true
-        // },
-        // setDepartamentosError: (state, action) => {
-        //     state.isLoading = false
-        //     state.infoMessage = action.payload
-        //     state.error = true
-        // },
-        // getDepartamentos: (state, action) => {
-        //     state.departamentos = action.payload.departamentos.rows
-        //     state.paginate = {
-        //         totalItem: action.payload.departamentos.totalItem,
-        //         totalPages: action.payload.departamentos.totalPages,
-        //         currentPage: action.payload.departamentos.currentPage
-        //     }
-        //     state.isLoading = false
-        // },
-        // getCurrentDepartamento: (state, action) => {
-        //     state.currentDepartamento = action.payload.departamento
-        //     state.isLoading = false
-        // },
-        // createDepartamento: (state, action) => {
-        //     state.departamentos.push(action.payload.departamento)
-        //     state.isLoading = false
-        //     state.infoMessage = action.payload.message         
-        // },
-        // updateDepartamento: (state, action) => {            
-        //     const index = state.departamentos.findIndex(departamento => departamento.id === action.payload.departamento.id)
-        //     state.departamentos[index] = action.payload.departamento
-        //     state.isLoading = false
-        //     state.infoMessage = action.payload.message
-        // },
-        // deleteDepartamento: (state, action) => {
-        //     const index = state.departamentos.findIndex(departamento => departamento.id === action.payload)
-        //     state.departamentos.splice(index, 1)
-        //     state.isLoading = false
-        //     state.infoMessage = 'Área eliminada correctamente' 
-        // },
         clearDepartamentos: (state) => {
             state.departamentos = initialState.departamentos 
         },
         clearCurrentDepartamento: (state) => {
             state.currentDepartamento = initialState.currentDepartamento
         },
-        // getLideresDepartamento: (state, action) => {
-        //     state.lideres = action.payload.lideres
-        //     state.isLoading = false
-        // }
+        clearLideres: (state) => {
+            state.lideres = initialState.lideres
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -165,6 +126,7 @@ const departamentosSlice = createSlice({
 export const {
     clearDepartamentos,
     clearCurrentDepartamento,
+    clearLideres
 } = departamentosSlice.actions
 
 export default departamentosSlice.reducer

@@ -13,7 +13,6 @@ import ImgCrop from 'antd-img-crop';
 const usuarioSchema = Yup.object().shape({
     nombre: Yup.string().required("El nombre es requerido"),
     apellidoPaterno: Yup.string().required("El apellido paterno es requerido"),
-    apellidoMaterno: Yup.string().required("El apellido materno es requerido"),
     email: Yup.string().email("El email no es válido").required("El email es requerido"),
     telefono: Yup.number().required('El teléfono es requerido').typeError('El teléfono debe ser un número').positive('No puedes poner números negativos').integer(' No puede haber decimales '),
 })
@@ -99,7 +98,6 @@ export const General: React.FC<any> = ({handleSteps}) => {
                                 </Form.Item>
                                 <Form.Item
                                     label="Apellido Materno"
-                                    required
                                 >
                                     <Input  value={values.apellidoMaterno} name="apellidoMaterno"/>
                                     <ErrorMessage  name="apellidoMaterno" render={msg => <Alert type="error" message={msg} showIcon />} />
