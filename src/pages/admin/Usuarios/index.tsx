@@ -1,4 +1,4 @@
-import { Pagination, Table, Tooltip, Input, FloatButton } from "antd"
+import { Pagination, Table, Tooltip, Input, FloatButton, Modal } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
@@ -33,6 +33,7 @@ export const Usuarios: React.FC = () => {
 	const [formVisible, setFormVisible] = useState<boolean>(false)
 	const { usuarios, infoMessage, paginate} = useAppSelector((state) => state.usuarios)
     const dispatch = useAppDispatch()
+    const { confirm } = Modal;
 
     useEffect(() => {
       dispatch(getUsuariosThunk(filtros))
@@ -42,15 +43,21 @@ export const Usuarios: React.FC = () => {
     }, [filtros])
 
 
-    const handleDelete = (id: string) => {
-			dispatch(deleteUsuarioThunk(id))
-		
-	}
 
-    // const isComplete = ({text, record, index}: ) => ( (Object.values(record).some(val => val === null) ? false : true ) ||
-    // record.fechaNacimiento === null || record.fechaIngreso === null || record.leaderId === null || 
-    // record.departamentoId === null) ? false : true
-    
+    const showDeleteConfirm = (id: string) => {
+        confirm({
+            title: (<p className='text-devarana-graph'>¿Estas seguro de eliminar esta estrategia?</p>),
+            content: (<p className='text-devarana-graph'>Una vez eliminado no podras recuperarlo</p>),
+            okText: 'Si',
+            okType: 'danger',
+            cancelText: 'No',
+            async onOk() {
+                await dispatch(deleteUsuarioThunk(id))
+                handleModal(false)
+            }
+        });
+    }
+
     const columns: ColumnsType<UsuarioProps> = [
 		{
 			render: (text, record, index) => Object.values(record).some(val => val === null) ? 
@@ -102,7 +109,7 @@ export const Usuarios: React.FC = () => {
                     <Button
                         classType="icon"
                         classColor="error"
-                        onClick={() => handleDelete(record.id) }
+                        onClick={() => showDeleteConfirm(record.id) }
                     >
                         <Icon iconName="faTrash" />
                     </Button>
@@ -161,11 +168,11 @@ export const Usuarios: React.FC = () => {
                     pageSize={filtros.size}
                     onChange={(page, pageSize) => {
                         setFiltros({
-                            ...filtros,
                             page: page - 1,
                             size: pageSize
                         })
-                }}
+                    }}
+
             />
             </Box>
             <FormUsuarios visible={formVisible} handleModal={handleModal}/>

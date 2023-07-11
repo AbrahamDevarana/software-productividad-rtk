@@ -1,5 +1,4 @@
 import { Select, Form, Input, Space, Skeleton } from 'antd';
-import { Formik } from "formik"
 import { Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useMemo, useState } from 'react';
@@ -8,8 +7,9 @@ import { useAppDispatch } from '@/redux/hooks';
 import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { useSelectUser } from '@/hooks/useSelectUser';
+import { FaArrowRight, FaSave } from 'react-icons/fa';
 
-export const Profesional: React.FC<any> = ({handleSteps}) => {
+export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
 
     const dispatch = useAppDispatch();
     const { currentUsuario, isLoadingCurrentUsuario  } = useAppSelector(state => state.usuarios)
@@ -63,7 +63,7 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
             id: currentUsuario.id
         }
         dispatch(updateUsuarioThunk(query))              
-        handleSteps(2)
+        handleCancel()
     }
 
     const lidersList = useMemo(() => {
@@ -159,8 +159,9 @@ export const Profesional: React.FC<any> = ({handleSteps}) => {
                         </Select>
 
                     </Form.Item>                                
-                    <div className="flex justify-end mt-2">
-                        <Button classType='regular' classColor="primary" width={'auto'} type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
+                    <div className="flex justify-end mt-2 gap-x-2">
+                        <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> <FaSave /> </Button>
+                        <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={() => handleSteps(2)} className="mr-2"> <FaArrowRight /> </Button>
                     </div>
             </Form>
         </div>

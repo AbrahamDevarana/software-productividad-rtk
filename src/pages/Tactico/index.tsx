@@ -51,8 +51,8 @@ export const Tactico: React.FC = () => {
                     <Segmented block
                         options={[
                             {label: 'Listado', value: 'listado'},
-                            {label: 'Gantt', value: 'gantt'},
                             {label: 'Equipos', value: 'equipos'},
+                            {label: 'Gantt', value: 'gantt'},
                         ]}
                         value={segmented}
                         onChange={setSegmented}

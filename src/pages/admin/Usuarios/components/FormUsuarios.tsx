@@ -6,7 +6,7 @@ import { Box } from "@/components/ui"
 import { General } from "./General";
 import { Personal } from "./Personal";
 import { Profesional } from "./Profesional";
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { cleanCurrentUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 
 
@@ -19,6 +19,7 @@ interface Props {
 export const FormUsuarios = ({visible, handleModal}: Props) => {
 
     const [ current, setCurrent] = useState<number>(0);
+    const {currentUsuario} = useAppSelector(state => state.usuarios)
     const dispatch = useAppDispatch()
     const { Step } = Steps;
 
@@ -34,6 +35,9 @@ export const FormUsuarios = ({visible, handleModal}: Props) => {
         
     }   
 
+    console.log(currentUsuario);
+    
+
     return (
         <Modal
             open={visible}
@@ -46,10 +50,10 @@ export const FormUsuarios = ({visible, handleModal}: Props) => {
         >
             <div className="animate__animated animate__fadeIn animate__faster">
                 <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
-                    <Steps current={current} progressDot={true} size="small" onChange={ (current) => setCurrent(current) }>
+                    <Steps current={current} progressDot={true} size="small" onChange={ (current) => setCurrent(current) }  >
                         <Step title="General" onStepClick={setCurrent} />
-                        <Step title="Profesional" onStepClick={setCurrent} />
-                        <Step title="Personal" onStepClick={setCurrent} />
+                        <Step title="Profesional" onStepClick={setCurrent} disabled={ currentUsuario.id === ''} />
+                        <Step title="Personal" onStepClick={setCurrent} disabled={ currentUsuario.id === ''} />
                     </Steps>
                 </Box>
 

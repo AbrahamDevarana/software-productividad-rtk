@@ -110,6 +110,10 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     <p className="font-medium py-2 text-devarana-dark-graph"> Fecha de Ingreso:
                     <span className="font-light text-devarana-graph"> { dayjs( usuarioActivo.fechaIngreso ).format('DD MMMM YYYY') } </span>  </p>
                 </div>
+                <div>
+                    <p className="font-medium py-2 text-devarana-dark-graph"> Fecha de Nacimiento:
+                    <span className="font-light text-devarana-graph"> { dayjs( usuarioActivo.fechaNacimiento ).format('DD MMMM YYYY') } </span>  </p>
+                </div>
 
                 {
                     usuarioActivo.social && (

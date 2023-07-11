@@ -19,7 +19,7 @@ const initialValues = {
 export const Departamentos: React.FC = () => {
 
     const dispatch = useAppDispatch();
-    const { departamentos, infoMessage, paginate } = useAppSelector((state: any) => state.departamentos)
+    const { departamentos, infoMessage, paginate } = useAppSelector((state => state.departamentos))
     const [visible, setFormVisible] = useState<boolean>(false)
     const [filtros, setFiltros] = useState<any>(initialValues)
 
@@ -132,11 +132,10 @@ export const Departamentos: React.FC = () => {
                 pageSize={filtros.size}
                 onChange={(page, pageSize) => {
                     setFiltros({
-                        ...filtros,
                         page: page - 1,
                         size: pageSize
                     })
-                }}
+                }}                
             />
             </Box>
             <Modal
