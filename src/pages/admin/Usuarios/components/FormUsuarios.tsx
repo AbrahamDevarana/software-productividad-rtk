@@ -1,8 +1,6 @@
 import { Steps, Modal } from 'antd';
 import { useState } from "react";
 import { Box } from "@/components/ui"
-
-
 import { General } from "./General";
 import { Personal } from "./Personal";
 import { Profesional } from "./Profesional";
@@ -34,9 +32,6 @@ export const FormUsuarios = ({visible, handleModal}: Props) => {
         handleSteps(0)
         
     }   
-
-    console.log(currentUsuario);
-    
 
     return (
         <Modal

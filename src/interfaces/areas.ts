@@ -5,7 +5,7 @@ export interface AreaProps {
     id: number;
     nombre: string;
     parentId: number | null;
-    leaderId: number
+    leaderId?: number
     slug: string;
     leader: UsuarioProps
     subAreas: AreaProps[]

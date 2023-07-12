@@ -32,10 +32,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const { currentTactico, isLoadingCurrent } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
-    const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const {permisos} = useAppSelector(state => state.auth)
-    const [selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
-    const [isEstrategico, setIsEstrategico] = useState(false)
+    const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
+    const { permisos} = useAppSelector(state => state.auth)
+    const [ selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
+    const [ isEstrategico, setIsEstrategico] = useState(false)
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
@@ -248,9 +248,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     }
 
 
-    if ( isLoadingCurrent ){
+    if ( isLoadingCurrent || isLoadingEstrategico ){
         return <Skeleton active paragraph={{ rows: 20 }} />
     }
+    
     
 
     return (

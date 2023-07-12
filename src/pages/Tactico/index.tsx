@@ -7,6 +7,7 @@ import ListadoTacticos from '@/components/tacticos/ListadoTacticos';
 import { Prox } from '@/components/ui/Prox';
 import dayjs from 'dayjs';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
+import Equipos from './Equipos';
 
 export const Tactico: React.FC = () => {
 
@@ -75,10 +76,10 @@ export const Tactico: React.FC = () => {
                 segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} tacticos={tacticos} tacticos_core={tacticos_core} setShowDrawer={setShowDrawer} />)
             }
             {
-                segmented === 'gantt' && (<Prox avance={87} />)
+                segmented === 'equipos' && (<Equipos slug={slug} year={year} />)
             }
             {
-                segmented === 'equipos' && (<Prox avance={25} />)
+                segmented === 'gantt' && (<Prox avance={87} />)
             }
             
 

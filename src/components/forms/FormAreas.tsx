@@ -2,11 +2,11 @@
 import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/admin/areas/areasThunks';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { Select, Input, Form, Skeleton } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
-import Swal from 'sweetalert2';
+import { FaSave } from 'react-icons/fa';
 
 
 interface Props {
@@ -20,7 +20,6 @@ export const FormAreas = ({handleClose}: Props) => {
     const { currentArea, isLoadingCurrent } = useAppSelector( state => state.areas)
     const { areas } = useAppSelector( state => state.areas)
     const { usuarios } = useAppSelector( state => state.usuarios)
-    const [cancel, setCancel] = useState(false)
 
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
@@ -48,28 +47,6 @@ export const FormAreas = ({handleClose}: Props) => {
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
     }, [])
-
-
-    const handleDelete = () => {
-        Swal.fire({
-            customClass: {
-                confirmButton: 'bg-devarana-error',
-                cancelButton: 'bg-devarana-success'
-            },
-            title: '¿Estás seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                'Eliminado!',
-                'El registro ha sido eliminado.',
-                'success'
-                )
-            }
-        })
-    }
 
 
     if (isLoadingCurrent) return <Skeleton active paragraph={{ rows: 10 }} />
@@ -137,8 +114,7 @@ export const FormAreas = ({handleClose}: Props) => {
                         </Form.Item>
                     </div>
                     <div className='flex justify-between gap-10'>
-                        <Button classType='regular' width={150} classColor='error' onClick={handleDelete}> Eliminar </Button>
-                        <Button classType='regular' width={150} classColor='primary' type="submit" className="mr-2"> { currentArea.id !== 0 ? 'Editar' : 'Crear' } </Button>
+                        <Button classColor="primary" classType='regular' width={'auto'} type="submit" > <FaSave /> </Button>
                     </div>
 
                 </Form>

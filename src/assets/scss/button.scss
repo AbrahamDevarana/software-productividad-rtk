@@ -8,6 +8,9 @@
 		padding: 8px 20px;
 		border-radius: 10px;
 		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		&:hover {
 			opacity: 0.9;

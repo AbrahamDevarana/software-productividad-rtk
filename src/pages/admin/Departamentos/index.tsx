@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { FloatButton, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
-import { Icon } from "@/components/Icon";
 import type { ColumnsType } from 'antd/es/table';
 import { cleanDepartamentoThunk, getDepartamentoThunk, getDepartamentosThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { deleteDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { FormDepartamentos } from '@/components/forms/FormDepartamentos';
-import { FaPlus } from 'react-icons/fa';
+import { FaPen, FaPlus, FaTrash } from 'react-icons/fa';
 import { DepartamentoProps } from '@/interfaces';
 
 
@@ -22,6 +21,7 @@ export const Departamentos: React.FC = () => {
     const { departamentos, infoMessage, paginate } = useAppSelector((state => state.departamentos))
     const [visible, setFormVisible] = useState<boolean>(false)
     const [filtros, setFiltros] = useState<any>(initialValues)
+    const { confirm } = Modal;
 
 
     const columns: ColumnsType <DepartamentoProps> = [
@@ -49,20 +49,22 @@ export const Departamentos: React.FC = () => {
             render: (text, record, index) => (
                 <div className="flex gap-2">
                     <Button
-                        classType='outline'
-                        classColor='warning'
+                        classType='regular'
+                        classColor='info'
+                        width={'auto'}
                         onClick={() => {
                             handleEdit(record.id)
                         } }
                     >
-                        <Icon iconName="faPen" />
+                        <FaPen />
                     </Button>
                     <Button
-                        classType='outline'
+                        classType='regular'
                         classColor='error'
-                        onClick={() => handleDelete(record.id) }
+                        width={'auto'}
+                        onClick={() => showDeleteConfirm(record.id) }
                     >
-                        <Icon iconName="faTrash" />
+                        <FaTrash />
                     </Button>
                 </div>
             ),
@@ -77,10 +79,6 @@ export const Departamentos: React.FC = () => {
         }
     }, [filtros])
 
-    const handleDelete = (id: any) => {
-        dispatch(deleteDepartamentoThunk(id))
-    }
-
     const handleModal = (status : boolean) => {
         setFormVisible(status)
     }
@@ -92,6 +90,20 @@ export const Departamentos: React.FC = () => {
 
     const handleClose = () => {
         setFormVisible(false)
+    }
+
+    const showDeleteConfirm = (id: number) => {
+        confirm({
+            title: (<p className='text-devarana-graph'>¿Estas seguro de eliminar esta estrategia?</p>),
+            content: (<p className='text-devarana-graph'>Una vez eliminado no podras recuperarlo</p>),
+            okText: 'Si',
+            okType: 'danger',
+            cancelText: 'No',
+            async onOk() {
+                await dispatch(deleteDepartamentoThunk(id))
+                handleModal(false)
+            }
+        });
     }
 
     return (

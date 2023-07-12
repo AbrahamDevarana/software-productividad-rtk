@@ -8,6 +8,7 @@ import { Select, Input, Form, Skeleton } from 'antd'
 import { DefaultOptionType } from 'antd/es/select';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { color } from 'framer-motion';
+import { FaSave } from 'react-icons/fa';
 
 
 interface Props {
@@ -82,7 +83,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                         >
                             <Input />
                         </Form.Item>
-                        <Form.Item label="Lider Departamento" name="leaderId" >
+                        <Form.Item label="Lider Departamento" name="leaderId" rules={[{ required: true, message: 'El lider es requerido' }]}>
                             <Select
                                 showSearch
                                 placeholder="Selecciona una opción"
@@ -118,8 +119,8 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                             </Select>
                         </Form.Item>
                     </div>
-                    <div className='py-4'>
-                        <Button classType='regular' classColor='primary' type="submit" className="mr-2"> { currentDepartamento.id ? 'Editar' : 'Crear' } </Button>
+                    <div className='py-4 flex justify-end'>
+                        <Button classColor="primary" classType='regular' width={'auto'} type="submit" > <FaSave /> </Button>
                     </div>
 
                 </Form>

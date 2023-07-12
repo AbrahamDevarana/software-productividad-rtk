@@ -4,10 +4,9 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
 import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
 import { ColumnsType } from "antd/es/table"
-import { Icon } from "@/components/Icon"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
-import { FaPlus } from "react-icons/fa"
+import { FaExclamationTriangle, FaPen, FaPlus, FaTrash } from "react-icons/fa"
 import { UsuarioProps } from "@/interfaces"
 
 
@@ -62,7 +61,9 @@ export const Usuarios: React.FC = () => {
 		{
 			render: (text, record, index) => Object.values(record).some(val => val === null) ? 
 			<Tooltip title="Este usuario no ha completado su registro">
-				<span><Icon iconName="faExclamationTriangle" className="text-yellow-300" /></span>
+				<span>
+                    <FaExclamationTriangle className="text-yellow-300" />
+                </span>
 			</Tooltip>
 			: null,
 
@@ -98,20 +99,22 @@ export const Usuarios: React.FC = () => {
 			render: (text, record, index) => (
 				<div className="flex gap-2">
                     <Button
-                        classType="icon"
-                        classColor="warning"
+                        classType="regular"
+                        classColor="info"
+                        width={'auto'}
                         onClick={() => {
                             handleEdit(record.id)
                         } }
                     >
-                        <Icon iconName="faPen" />
+                        <FaPen />
                     </Button>
                     <Button
-                        classType="icon"
+                        classType="regular"
                         classColor="error"
+                        width={'auto'}
                         onClick={() => showDeleteConfirm(record.id) }
                     >
-                        <Icon iconName="faTrash" />
+                        <FaTrash />
                     </Button>
                 </div>
 			),

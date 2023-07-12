@@ -1,15 +1,13 @@
 import { FloatButton, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
-import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk, clearCurrentAreaThunk } from '@/redux/features/admin/areas/areasThunks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import Swal from "sweetalert2";
-import { Icon } from "@/components/Icon";
 import { FormAreas } from '@/components/forms/FormAreas';
 
 import type { ColumnsType } from 'antd/es/table';
 import { AreaProps } from "@/interfaces";
-import { FaPlus } from "react-icons/fa";
+import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
 
 
 const initialValues = {
@@ -44,20 +42,22 @@ export const Areas: React.FC = () => {
             render: (text, record, index) => (
                 <div className="flex gap-2">
                     <Button
-                        classType="outline"
-                        classColor="warning"
+                        classType="regular"
+                        classColor="info"
+                        width={'auto'}
                         onClick={() => {
                             handleEdit(record.id)
                         } }
                     >
-                        <Icon iconName="faPen" />
+                        <FaPen />
                     </Button>
                     <Button
-                        classType="outline"
+                        classType="regular"
                         classColor="error"
+                        width={'auto'}
                         onClick={() => handleDelete(record.id) }
                     >
-                        <Icon iconName="faTrash" />
+                        <FaTrash />
                     </Button>
                 </div>
             ),
@@ -88,6 +88,7 @@ export const Areas: React.FC = () => {
     }
     
     const handleClose = () => {
+        dispatch(clearCurrentAreaThunk())
         setFormVisible(false)
     }
 
