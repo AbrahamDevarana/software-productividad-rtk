@@ -137,6 +137,7 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
                     <Form.Item
                         label="Puesto"
                         className='col-span-1'
+                        name='puesto'
                     >
                         <Input />
                     </Form.Item>

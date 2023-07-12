@@ -420,7 +420,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                         onClick={() => {
                                             handleTrimestre(trimestre)
                                         }}
-                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
+                                        style={{
+                                            backgroundColor: trimestre.pivot_tactico_trimestre.activo ?  ( currentTactico.estrategico? currentTactico.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ): 'rgba(243, 244, 246, 1)'
+                                        }}
+                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
                                 )
                             })
                         }

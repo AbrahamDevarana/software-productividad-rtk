@@ -73,7 +73,7 @@ export const Comentarios = ({comentableType, comentableId, setComentariosCount}:
                                 </span>
                             </p>
                         </div>
-                        <div className='mt-1 max-h-20 overflow-y-scroll'>
+                        <div className='mt-1 max-h-20 overflow-y-auto'>
                             <p className='text-devarana-graph font-light text-sm'>
                                 { comentario.mensaje }
                             </p>
@@ -85,7 +85,7 @@ export const Comentarios = ({comentableType, comentableId, setComentariosCount}:
 
             {/* Crear nuevos comentarios  */}
             <div className='flex gap-3 py-5'>
-                <Avatar src={<Image src={getStorageUrl(userAuth.foto)} preview={false} /> } />
+                <Avatar className='py-2' src={<Image src={getStorageUrl(userAuth.foto)} preview={false} /> } />
                 <input type="text" className='bg-gray-100 rounded-full w-full px-2' placeholder='Escribe un comentario... ' onChange={handleChange} value={comentario}/>
                 <button disabled={ comentario.trim().length === 0} className='disabled:opacity-10 bg-gradient-to-t from-primary to-primary-light shadow-sm rounded-full h-8 w-9 flex justify-center items-center hover:opacity-80' onClick={createComentario}>
                     <BsSendFill className='text-white text-xs fill-white' /> 

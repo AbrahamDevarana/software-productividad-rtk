@@ -36,7 +36,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             ellipsis: true,
             render: (text, record, index) => ({
                 children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
+                <div className='border-2 rounded-full mr-2' style={{ borderColor: ( record.estrategico ? record.estrategico.perspectivas.color : getColor(record.status).color )  }}></div>
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
@@ -85,7 +85,12 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                 <div className='flex gap-x-1 items-center align-middle'>
                     {
                         record.trimestres.map((trimestre, index) => (
-                            <span key={index} className={`px-4 text-[11px] font-medium rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'bg-devarana-babyblue text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>T{index+1}</span>
+                            <span key={index} className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}
+                                style={{
+                                    backgroundColor: trimestre.pivot_tactico_trimestre.activo ? ( record.estrategico? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)',
+                                    color: trimestre.pivot_tactico_trimestre.activo ? '#FFFFFF' : '#6B7280',
+                                }}
+                            >T{index+1}</span>
                         ))
                     }
                     
