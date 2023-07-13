@@ -36,7 +36,7 @@ export const getAreasThunk = createAsyncThunk(
 
 export const getAreaThunk = createAsyncThunk(
     'areas/getArea',
-    async (areaId: number, {rejectWithValue, getState}) => {
+    async (areaId: number | string , {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {

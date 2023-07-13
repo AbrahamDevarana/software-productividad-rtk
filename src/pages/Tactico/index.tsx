@@ -22,13 +22,7 @@ export const Tactico: React.FC = () => {
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const [showEdit, setShowEdit] = useState<boolean>(false);
 
-    useEffect(() => {
-        if(slug){
-            dispatch(getTacticoFromAreaThunk({ slug, year}))
-        }
 
-        return () => { dispatch(clearTacticosThunk()) }
-    }, [slug, year])
 
 
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
@@ -73,7 +67,7 @@ export const Tactico: React.FC = () => {
             </div>
 
             {
-                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} tacticos={tacticos} tacticos_core={tacticos_core} setShowDrawer={setShowDrawer} />)
+                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
             }
             {
                 segmented === 'equipos' && (<Equipos slug={slug} year={year} />)

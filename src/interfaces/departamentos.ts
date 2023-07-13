@@ -1,5 +1,5 @@
 import { Paginate } from "./slice";
-import { Lider } from "./usuario";
+import { Lider, UsuarioProps } from "./usuario";
 
 export interface DepartamentoState {
     departamentos: DepartamentoProps[];
@@ -22,4 +22,5 @@ export interface DepartamentoProps {
     area?:     DepartamentoProps;
     areaId?:   number;
     leader?:   Lider;
+    usuarios: UsuarioProps[];
 }

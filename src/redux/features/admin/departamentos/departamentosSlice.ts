@@ -23,6 +23,7 @@ const initialState: DepartamentoState = {
         slug: '',
         leaderId: '',
         status: true,
+        usuarios: []
     },
     lideres: []
 }

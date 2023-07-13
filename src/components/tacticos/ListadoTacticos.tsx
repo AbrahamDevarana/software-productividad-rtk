@@ -1,17 +1,32 @@
-import { TacticoProps } from "@/interfaces";
 import { Box } from "../ui";
 import { TablaTacticos } from "./TablaTacticos";
 import { Tooltip } from "antd";
 import { FaQuestion, FaQuestionCircle } from "react-icons/fa";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { clearTacticosThunk, getTacticoFromAreaThunk } from "@/redux/features/tacticos/tacticosThunk";
 
 interface Props {
-    tacticos: TacticoProps[];
-    tacticos_core: TacticoProps[];
+    slug?: string
+    year: number
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void;
     setShowDrawer: (showDrawer: boolean) => void;
 }
 
-const ListadoTacticos = ({handleCreateTactico, tacticos, tacticos_core, setShowDrawer}:Props) => {
+const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer}:Props) => {
+
+    const dispatch = useAppDispatch()
+    const {tacticos, tacticos_core} = useAppSelector(state => state.tacticos)
+
+    useEffect(() => {
+        if(slug){
+            dispatch(getTacticoFromAreaThunk({ slug, year}))
+        }
+
+        return () => { dispatch(clearTacticosThunk()) }
+    }, [slug, year])
+
+
     return ( 
 
         <div className='grid gap-10'>

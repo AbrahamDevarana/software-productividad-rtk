@@ -1,3 +1,4 @@
+import { DepartamentoProps } from "./departamentos";
 import { Paginate } from "./slice";
 import { UsuarioProps } from "./usuario";
 
@@ -9,6 +10,7 @@ export interface AreaProps {
     slug: string;
     leader: UsuarioProps
     subAreas: AreaProps[]
+    departamentos: DepartamentoProps[]
 }
 
 export interface AreasState {

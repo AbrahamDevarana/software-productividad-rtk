@@ -20,6 +20,7 @@ const initialState: AreasState = {
         slug: '',
         parentId: null,
         subAreas: [],
+        departamentos: [],
         leader: {
             nombre: '',
             apellidoPaterno: '',

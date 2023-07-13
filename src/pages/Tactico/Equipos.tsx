@@ -1,11 +1,13 @@
 import { clearTacticosThunk } from "@/redux/features/tacticos/tacticosThunk"
-import { useAppDispatch } from "@/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect } from "react"
 import { Badge, Box } from "@/components/ui"
 import { ImStatsBars2 } from "react-icons/im"
 import { motion } from 'framer-motion';
 import { Avatar, Divider, Tooltip } from "antd"
 import { FaBrain, FaCrosshairs, FaRocket } from "react-icons/fa"
+import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/admin/areas/areasThunks"
+import Loading from "@/components/antd/Loading"
 
 interface Props {
     slug?: string
@@ -15,13 +17,17 @@ interface Props {
 const Equipos = ({ slug, year }:Props) => {
     
     const dispatch = useAppDispatch()
+    const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
     
     useEffect(() => {
         if(slug){
-            
+            dispatch(getAreaThunk(slug))
         }
 
-        return () => { dispatch(clearTacticosThunk()) }
+        return () => { 
+            dispatch(clearTacticosThunk())
+            dispatch(clearCurrentAreaThunk())
+         }
     }, [slug, year])
 
     const equipos = [
@@ -54,6 +60,9 @@ const Equipos = ({ slug, year }:Props) => {
         }
     ]
 
+
+    if(isLoadingArea) return <Loading />
+
     return ( 
         <motion.div
             initial={{ opacity: 0 }}
@@ -61,7 +70,7 @@ const Equipos = ({ slug, year }:Props) => {
         >
             <div className="flex flex-wrap gap-x-5 py-10">
                 {
-                    equipos.map(equipo => (
+                    currentArea.departamentos?.map(equipo => (
                         <motion.div key={equipo.id} className="max-w-sm w-full">
                             <Box>
                                 <div className="flex justify-between items-center">
@@ -90,7 +99,7 @@ const Equipos = ({ slug, year }:Props) => {
                                     </div>
                                     <Avatar.Group>
                                         {
-                                            equipo.participantes.map(participante => (
+                                            equipo.usuarios.map(participante => (
                                                 <Tooltip title={participante.nombre} key={participante.id}>
                                                     <Avatar key={participante.id} src={participante.foto} alt={participante.nombre} className="w-8 h-8 rounded-full" />
                                                 </Tooltip>
