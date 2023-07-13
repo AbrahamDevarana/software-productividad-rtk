@@ -81,11 +81,11 @@ export const FormAreas = ({handleClose}: Props) => {
                                 placeholder="Selecciona una opción"
                                 allowClear
                                 // @ts-ignore
-                                filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                             >
                                 {
                                     usuarios.map((usuario) => (
-                                       <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
+                                        <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                                     ))
                                 }
                                 
@@ -101,11 +101,11 @@ export const FormAreas = ({handleClose}: Props) => {
                                 placeholder="Selecciona una opción"
                                 allowClear
                                 // @ts-ignore
-                                filterOption={(input, option) => (option as DefaultOptionType)?.children!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                             >
                                 {
                                     areas.map( area => (
-                                        <Select.Option key={area.id} value={area.id}>
+                                        <Select.Option key={area.id} value={area.id} dataName={area.nombre}>
                                             <p className='text-devarana-graph'> {area.nombre} </p>
                                         </Select.Option>
                                     ))

@@ -17,6 +17,7 @@ import { FaEdit, FaSave } from 'react-icons/fa';
 import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
+import { DefaultOptionType } from 'antd/es/select';
 
 
 interface FormTacticoProps {
@@ -89,7 +90,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         return estrategicosFiltrados.map(estrategico => {
             return {
                 label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
-                value: estrategico.id
+                value: estrategico.id,
+                dataName: estrategico.nombre
             }
         })
 
@@ -400,6 +402,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         allowClear
                         showSearch
                         onBlur={handleOnSubmit}
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                         options={optEstrategicos}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                     >

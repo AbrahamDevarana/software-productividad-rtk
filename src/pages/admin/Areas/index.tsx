@@ -118,7 +118,6 @@ export const Areas: React.FC = () => {
                     className="customTable"
                     rowKey={(record) => record.id}
                     pagination={false}
-                    // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                     />
                     <Pagination
                         className="flex justify-end mt-5"

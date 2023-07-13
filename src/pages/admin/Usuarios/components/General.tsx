@@ -58,7 +58,8 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
                     <div className={`${currentUsuario.id !== ''? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
                         <div className='block'>
                         <ImgCrop 
-                                quality={.5}
+                            quality={.5}
+                            modalClassName='antd-img-crop-modal'
                         >
                             <Upload
                                 maxCount={1}

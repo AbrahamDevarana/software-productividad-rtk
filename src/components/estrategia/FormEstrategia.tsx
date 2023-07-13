@@ -41,8 +41,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const [progreso, setProgreso] = useState<number>(0)
 
     const [form] = Form.useForm();
+
+    
     
     const inputRef = useRef<any>(null)
+
     const { confirm } = Modal;
 
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
@@ -387,15 +390,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     name="descripcion"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Meta</p>
-                            <button onClick={() => {
-                                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewMeta(!viewMeta)
-                            }} className='font-bold text-devarana-graph' type='button'>
-                                {
-                                    viewMeta ? <FaSave /> : <FaEdit />
-                                }
-                            </button>
-                            
+                            <p className='text-devarana-graph font-medium'>Meta</p>                            
                     </div>
                     {
                         viewMeta 
@@ -403,11 +398,18 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                             <ReactQuill
                                 value={form.getFieldValue('descripcion')}
                                 onChange={(value) => form.setFieldsValue({descripcion: value}) }
-                                onBlur={handleOnSubmit}
+                                onBlur={ () => {
+                                    handleOnSubmit(); setViewMeta(false)
+                                }}
                                 readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
                             />    
                         ) 
-                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}></div> )
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' 
+                        dangerouslySetInnerHTML={{ __html: form.getFieldValue('descripcion')}}
+                        onClick={() => {
+                            hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewMeta(!viewMeta)
+                        }}
+                        ></div> )
                     }
                 </Form.Item>
                 <Form.Item
@@ -416,14 +418,13 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Indicador</p>
-                            <button onClick={() => {
+                            {/* <button onClick={() => {
                                 hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewIndicador(!viewIndicador)
                             }} className='font-bold text-devarana-graph' type='button'>
                                 {
                                     viewIndicador ? <FaSave /> : <FaEdit />
                                 }
-                            </button>
-                            
+                            </button> */}
                     </div>
                     {
                         viewIndicador 
@@ -431,11 +432,18 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                             <ReactQuill
                                 value={form.getFieldValue('indicador')}
                                 onChange={(value) => form.setFieldsValue({indicador: value}) }
-                                onBlur={handleOnSubmit}
+                                onBlur={ () => {
+                                    handleOnSubmit(); setViewIndicador(false)
+                                }}
                                 readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
                             />    
                         ) 
-                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}></div> )
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' 
+                            dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}
+                            onClick={() => {
+                                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewIndicador(!viewIndicador)
+                            }}
+                            ></div> )
                     }
                 </Form.Item>
                 <div className='col-span-12'>
