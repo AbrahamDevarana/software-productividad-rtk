@@ -77,6 +77,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                         <div className="relative h-80">
                             <Image
                                 src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
+                                fallback={getStorageUrl('portadas/portada-default.jpg')}
                                 preview={false}
                                 wrapperStyle={{
                                     objectFit: 'cover',
@@ -87,14 +88,14 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                                     objectFit: 'cover',
                                     objectPosition: 'center',
                                     width: '100%',
-                                    height: '320px'
+                                    height: '350px'
                                 }}
                             />
                         </div>
                     </div>
 
                    {
-                        true && (   
+                        !visitante && (   
                         <button className="z-50 absolute top-3 right-3" onClick={handlePanel}>
                             <FaCog className=" text-2xl text-white drop-shadow-md"/>
                         </button> )

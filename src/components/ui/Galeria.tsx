@@ -40,17 +40,22 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 			</div>
 				
 			{ galeria && galeria.map((foto, index) => (
-				<div className={`rounded-xl overflow-hidden col-span-1 ${ picture === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
-					<Image src={getStorageUrl(foto.url)} preview={false} className='object-fill' />
+				<div className={`rounded-xl overflow-hidden col-span-1 cursor-pointer ${ picture === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
+					<Image src={getStorageUrl(foto.url)} preview={false}
+						wrapperStyle={{
+							width: '100%',
+							height: '100%',
+							objectFit: 'cover',
+						}}
+						style={{
+							width: '100%',
+							height: '100%',
+							objectFit: 'cover',
+						}}
+					/>
 				</div>
 			))}
-
-
-				
-				
 		</div>
-
-
 			<div className='flex justify-end pt-5 gap-x-5'>
 					<Button width={'auto'} classType='regular' classColor='dark' onClick={() => setVisible(true)}>
 						<FaEye/>

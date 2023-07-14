@@ -32,7 +32,7 @@ export const Devarana: React.FC = () => {
         <div>
             <Box className="h-80 bg-[url('https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/portadas/DEV-FON-2.jpg')] py-20 relative flex items-center justify-center">
                 
-                <div className='bg-black bg-opacity-50 w-full h-full absolute'>
+                <div className='bg-black bg-opacity-50 w-full h-full absolute rounded-ext'>
 
                 </div>
                 <div className="flex justify-center z-50 items-end">

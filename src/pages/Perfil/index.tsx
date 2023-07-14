@@ -37,9 +37,7 @@ const Perfil: React.FC = () => {
     
 
     
-    if(isLoading){
-        <Loading />
-    }
+    if(isLoading) return <Loading />
 
     return ( 
         <>
