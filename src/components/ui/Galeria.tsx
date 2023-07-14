@@ -2,57 +2,57 @@ import { Image } from 'antd'
 import React, { useState } from 'react'
 import { Button } from './Button'
 import { AiFillSave } from 'react-icons/ai'
+import { GaleriaDevaranaProps } from '@/interfaces'
+import Loading from '../antd/Loading'
+import { getStorageUrl } from '@/helpers'
+import { FaEye } from 'react-icons/fa'
 
 interface Props {
-  galeria?: PictureProps[]
-  picture: PictureProps
+  galeria?: GaleriaDevaranaProps[]
+  picture: string
   setPicture?: any
+  isLoading?: boolean
   handleGallery?: () => void
 }
 
-interface PictureProps {
-  id: string
-  url: string
-}
+export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}: Props) => {
 
-export const Galeria = ({picture, setPicture, handleGallery}: Props) => {
+	const [visible, setVisible] = useState(false);
+	
+	if(isLoading) return <Loading />
 
-	const galeria: PictureProps[] = [
-		{
-			id: '1',
-			url: 'https://picsum.photos/201'
-		},
-		{
-			id: '2',
-			url: 'https://picsum.photos/202'
-		},
-		{
-			id: '3',
-			url: 'https://picsum.photos/203'
-		},
-		{
-			id: '4',
-			url: 'https://picsum.photos/204'
-		}
-	]
-
-  return (
-    <>
-       <div className='grid grid-cols-4 gap-10'>
-			<Image.PreviewGroup>
-				{ galeria.map((foto, index) => (
-					<div className={`rounded-xl overflow-hidden col-span-1 ${ picture.url === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto)}>
-						<Image src={foto.url} alt={foto.id} preview={false} className='w-full object-cover' />
-					</div>
+	return (
+		<>
+		<div className='grid grid-cols-4 gap-10'>
+			<Image.PreviewGroup preview={{
+				visible,
+				onVisibleChange: (vis) => setVisible(vis),
+			}}
+			>
+				{ galeria && galeria.map((foto, index) => (
+					<Image src={getStorageUrl(foto.url)} style={{ display: 'none' }} key={index}  className='object-fill' />
 				))}
 			</Image.PreviewGroup>
-	   </div>
+				
+			{ galeria && galeria.map((foto, index) => (
+				<div className={`rounded-xl overflow-hidden col-span-1 ${ picture === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
+					<Image src={getStorageUrl(foto.url)} preview={false} className='object-fill' />
+				</div>
+			))}
 
-		<div className='flex justify-end pt-5'>
-				<Button classType='regular' width={50} classColor='primary' onClick={handleGallery}>
-					<AiFillSave />
-				</Button>
+			<Button classType='regular' classColor='primary' onClick={() => setVisible(true)}>
+				<FaEye/>
+			</Button>
+
+				
+				
 		</div>
-    </>
- 	 )
+
+			<div className='flex justify-end pt-5'>
+					<Button classType='regular' width={50} classColor='primary' onClick={handleGallery}>
+						<AiFillSave />
+					</Button>
+			</div>
+		</>
+	)
 }

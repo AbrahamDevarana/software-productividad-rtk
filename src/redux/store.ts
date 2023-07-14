@@ -18,6 +18,7 @@ import tareasSlice from "./features/tareas/tareasSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
 import comentariosSlice from "./features/comentarios/comentariosSlice";
 import permisosSlice from "./features/permisos/PermisosSlice";
+import galeriaSlice from "./features/galeria/galeriaSlice";
 
 
 export const store = configureStore({
@@ -40,6 +41,7 @@ export const store = configureStore({
         tareas: tareasSlice,
         acciones: accionesSlice,
         comentarios: comentariosSlice,
+        galeria: galeriaSlice,
 
     },
     middleware: (getDefaultMiddleware) =>

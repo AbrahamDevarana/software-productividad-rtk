@@ -34,7 +34,7 @@ const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer}:Props)
                     <div className="flex items-center gap-x-2">
                         <h2>Objetivos Tácticos Estratégicos</h2>
                         <Tooltip
-                            title='Objetivos tacticos que contribuyen a los objetivos estratégicos'
+                            title='Objetivos anuales de las áreas que contribuyen directamente al cumplimiento de la Estrategía'
                             color='#408FE3'
                         >
                             <FaQuestionCircle className='text-primary-light'/>
@@ -43,9 +43,17 @@ const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer}:Props)
                     <TablaTacticos tacticos={tacticos}  handleCreateTactico={handleCreateTactico} estrategico={true} setShowDrawer={setShowDrawer}/>
                 </Box>
                 <Box>
-                    <Tooltip>
+                    <div className="flex items-center gap-x-2">
                         <h2>Objetivos Tácticos Core</h2>
-                    </Tooltip>
+                        <Tooltip>
+                            <Tooltip
+                                title='Objetivos anuales de las áreas enfocados en mantener una operación eficiente'
+                                color='#408FE3'
+                            >
+                                <FaQuestionCircle className='text-primary-light'/>
+                            </Tooltip>
+                        </Tooltip>
+                    </div>
                     <TablaTacticos tacticos={tacticos_core} handleCreateTactico={handleCreateTactico} estrategico={false} setShowDrawer={setShowDrawer}/>
                 </Box>
             </div>

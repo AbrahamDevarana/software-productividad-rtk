@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileThunk, uploadProfilePictureThunk } from './profileThunk';
+import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './profileThunk';
 
 
 const initialState: PerfilState = {
@@ -89,6 +89,17 @@ const profileSlice = createSlice({
                 state.perfil = action.payload
             })
             .addCase(uploadProfilePictureThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(updateProfileConfigThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateProfileConfigThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.perfil = action.payload
+            })
+            .addCase(updateProfileConfigThunk.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.error.message
             })

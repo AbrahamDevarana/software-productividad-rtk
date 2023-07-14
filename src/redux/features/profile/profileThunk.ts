@@ -72,6 +72,23 @@ export const uploadProfilePictureThunk = createAsyncThunk(
 )
 
 
+export const updateProfileConfigThunk = createAsyncThunk(
+    'profile/updateProfileConfig',
+    async (params: any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.put<Props>(`/usuarios/config`, params, config);
+            return response.data.usuario
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
             
 
 export const clearProfileThunk = () => {

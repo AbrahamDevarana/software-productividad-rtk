@@ -77,7 +77,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             )
         },
         {
-            title: () => ( <p className='tableTitle'>Duración</p>),
+            title: () => ( <p className='tableTitle'>Proyección</p>),
             dataIndex: 'periodos',
             width: 80,
             ellipsis: true,
@@ -90,7 +90,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                                     backgroundColor: trimestre.pivot_tactico_trimestre.activo ? ( record.estrategico? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)',
                                     color: trimestre.pivot_tactico_trimestre.activo ? '#FFFFFF' : '#6B7280',
                                 }}
-                            >T{index+1}</span>
+                            >Q{index+1}</span>
                         ))
                     }
                     

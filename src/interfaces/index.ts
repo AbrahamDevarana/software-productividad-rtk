@@ -20,3 +20,4 @@ export * from "./acciones";
 export * from "./comentarios";
 export * from "./departamentos";
 export * from "./trimestre";
+export * from "./galeria"

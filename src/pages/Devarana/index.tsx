@@ -2,17 +2,18 @@
 import { Link } from 'react-router-dom';
 import { Box } from '../../components/ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { FaLeaf, FaMedal, FaTree } from 'react-icons/fa';
-import { BiWorld } from 'react-icons/bi';
+import { FaLeaf, FaMedal } from 'react-icons/fa';
+import { PiFlowerLotusDuotone } from 'react-icons/pi';
+import { RiMentalHealthLine } from 'react-icons/ri';
 import { Avatar, Image } from 'antd';
 import { Adn, Amor, Apasionados, Colaborador, Extraordinario, Incluyentes, Innovacion, Triunfador, Lider } from '@/components/svg/devarana';
 import { getStorageUrl } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
 import {Swiper, SwiperSlide} from 'swiper/react';
-import { EffectFade } from 'swiper';
+import { Autoplay, EffectFade } from 'swiper';
 import 'swiper/css';
 import "swiper/css/effect-fade";
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -171,81 +172,104 @@ export const Devarana: React.FC = () => {
                 <p className='text-devarana-dark-graph text-xl font-bold pb-5'>
                     Competencias
                 </p>
-                <Swiper
-                    spaceBetween={50}
-                    slidesPerView={1}
-                    effect='fade'
-                    modules={[EffectFade]}
-                    autoplay={{
-                        delay: 5000,
-                    }}
-                    loop={true}
-                >
-                    <SwiperSlide className='bg-white'>
-                        <Lider />
-                    </SwiperSlide>
-                    <SwiperSlide className='bg-white'>
-                        <Colaborador />
-                    </SwiperSlide>
-                </Swiper>
+                <div className='p-10'>
+                    <Swiper
+                        spaceBetween={50}
+                        slidesPerView={1}
+                        effect='fade'
+                        modules={[EffectFade, Autoplay]}
+                        autoplay={{
+                            delay: 3000,
+                            pauseOnMouseEnter: true,
+                        }}                        
+                    >
+                        <SwiperSlide className='bg-white'>
+                            <Lider />
+                        </SwiperSlide>
+                        <SwiperSlide className='bg-white'>
+                            <Colaborador />
+                        </SwiperSlide>
+                    </Swiper>
+                </div>
 
             </Box>
             <Box className="col-span-12 bg-w-legendario bg-no-repeat bg-right">
                 <p className="text-devarana-dark-graph text-xl font-bold pb-5">Política de Responsabilidad</p>
+                <p className='text-[16px] font-light text-devarana-graph pb-1'>
+                    En DEVARANA como creadores, diseñadores y arquitectos de lo extrordinario nos comprometemos a implementar y mantener un Sistema Integral de Gestión que abarque aspectos de Calidad, el Cuidado del Medio Ambiente, Responsabilidad Social, Salud y la Seguridad Ocupacional. Nuestro principal objetivo es ofrecer desarrollos inmobiliarios del más alto nivel y asegurar la satisfacción de nuestros colaboradores, clientes y demás partes interesadas. 
+                </p>
                 <p className='text-[16px] font-light text-devarana-graph pb-10'>
-                    En DEVARANA como creadores, diseñadores y arquitectos de lo extrordinario nos comprometemos a implementar y mantener un Sistema Integral de gestión que abarque aspectos de calidad, el cuidado del medio ambiente, la salud y la seguridad ocupacional así como la responsabilidad social. Nuestro principal objetivo es ofrecer desarrollos inmobiliarios del más alto nivel y asegurar la satisfacción de nuestros colaboradores, clientes y demás partes interesadas. Esta política se basa en los siguientes principios:
+                    Esta política se basa en los siguientes principios y estará disponible para todas las partes interesadas y será comunicada y entendida dentro de la organización. Revisaremos periódicamente nuestro Sistema Integral de Gestión para garantizar su efectividad y su alineación con los cambios en las necesidades y expectativas de nuestros clientes, la legislación aplicable y los avances en las mejores prácticas en nuestro sector.
                 </p>
             </Box>
         </div>
 
         <div className='grid grid-cols-12 gap-10 pt-5'>
-            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
-                    <FaLeaf className='text-2xl'/>
-                    <p className="text-[16px] font-light text-white">Medio Ambiente</p>
-                </div>
-                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph text-[16px] font-light'>
-                        Nuestro propósito es alcanzar la excelencia en el diseño, construcción y comercialización de desarrollos inmobiliarios premium, cumpliendo con los más altos estándares de calidad, superando las expectativas de nuestros clientes y manteniendo un enfoque de mejora continua
-                    </p>
-                </div>
-            </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
                     <FaMedal className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Calidad</p>
                 </div>
-                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph text-[16px] font-light'>
-                        Nos comprometemos a minimizar el impacto ambiental promoviendo prácticas sostenibles en el diseño, construcción y operación de los proyectos.
-                    </p>
+                <div className='absolute py-5 pl-9 pr-3 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <ul className='list-outside list-disc'>
+                        <li className='text-devarana-graph text-[16px] font-light pb-2'>
+                            Mantenemos un enfoque constante en la mejora continua de los procesos, buscando un alto nivel en el diseño, construcción y atención a clientes. 
+                        </li>
+                        <li className='text-devarana-graph text-[16px] font-light'>
+                            Nuestra meta es  alcanzar la excelencia en cada etapa de nuestros desarrollos, cumpliendo rigurosamente con los más altos estándares de calidad, superando las expectativas de nuestros clientes y socios de negocios. 
+                        </li>
+                    </ul>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
+            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
+                    <FaLeaf className='text-2xl'/>
+                    <p className="text-[16px] font-light text-white">Responsabilidad Social</p>
+                </div>
+                <div className='absolute py-5 pl-9 pr-3 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <ul className='list-outside list-disc'>
+                        <li className='text-devarana-graph text-[16px] font-light pb-2'>
+                            Nuestro compromiso es reducir al mínimo el impacto ambiental mediante la promoción de prácticas sostenibles en todas las etapas de los proyectos. 
+                        </li>
+                        <li className='text-devarana-graph text-[16px] font-light'>
+                            Prometemos llevar a cabo nuestras actividades de manera ética y responsable, promoviendo la diversidad, la inclusión y generando un impacto positivo en nuestro entorno.
+                        </li>
+                    </ul>
+                </div>
+            </Box>
+            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
+                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
+                    <RiMentalHealthLine className='text-2xl'/>
+                    <p className="text-[16px] font-light text-white">Seguridad y Salud Ocupacional</p>
+                </div>
+                <div className='absolute py-5 pl-9 pr-3 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <ul className='list-outside list-disc'>
+                        <li className='text-devarana-graph text-[16px] font-light pb-2'>
+                            Cumplimos en todo momento con las regulaciones y normativas en materia de seguridad y salud ocupacional. 
+                        </li>
+                        <li className='text-devarana-graph text-[16px] font-light'>
+                            Velamos por la seguridad y bienestar de nuestros colaboradores brindando un entorno laboral seguro y promoviendo la cultura de prevención
+                        </li>
+                    </ul>
+                </div>
+            </Box>
+            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
-                    <FaTree className='text-2xl'/>
+                    <PiFlowerLotusDuotone className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Bienestar</p>
                 </div>
-                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph text-[16px] font-light'>
-                        Velamos por la seguridad y bienestar de nuestros colaboradores brindando un entorno laboral seguro y promoviendo la cultura de prevención.
-                    </p>
-                    <p className='text-devarana-graph text-[16px] font-light'>
-                     Cumplimos con las regulaciones y normativas en materia de seguridad y salud ocupacional.
-                    </p>
+                <div className='absolute py-5 pl-9 pr-3 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
+                    <ul className='list-outside list-disc'>
+                        <li className='text-devarana-graph text-[16px] font-light pb-2'>
+                            Valoramos a nuestros colaboradores como el recurso más importante de la organización por lo que buscamos crear un entorno laboral saludable, respetuoso y motivador.
+                        </li>
+                        <li className='text-devarana-graph text-[16px] font-light'>
+                            Fomentamos el bienestar y la productividad de nuestro capital humano, brindando oportunidades de crecimiento, capacitación continua y reconocimiento por su desempeño.
+                        </li>
+                    </ul>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[200px] overflow-y-hidden">
-                <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
-                    <BiWorld className='text-2xl'/>
-                    <p className="text-[16px] font-light text-white">Seguridad</p>
-                </div>
-                <div className='absolute p-5 inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out group-hover:overflow-y-auto'>
-                    <p className='text-devarana-graph text-[16px] font-light'>
-                    Fomentamos el desarrollo personal y profesional de nuestros colaboradores, brindándoles oportunidades de crecimiento, capacitación continua y reconocimiento por su desempeño.
-                    </p>
-                </div>
-            </Box>
+            
         </div>
     </div>
   )

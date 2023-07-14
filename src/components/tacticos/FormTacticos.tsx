@@ -64,6 +64,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     
     const handleOnSubmit = () => {        
         if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
+
+
+        if(form.getFieldsError().filter(({ errors }) => errors.length).length) return
+
         
         const query = {
             ...currentTactico,
@@ -95,7 +99,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             }
         })
 
-    }, [selectedPerspectiva])
+    }, [selectedPerspectiva, isLoadingEstrategico])
    
     const handleChangeTipoEstrategia = (e: RadioChangeEvent) => {
 
@@ -414,7 +418,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <Divider className='col-span-12'/>
 
                 <div className='flex flex-col gap-y-1'>
-                    <p className='text-devarana-graph font-medium block'>Periodos</p>
+                    <p className='text-devarana-graph font-medium block'>Proyección</p>
                     <div className='flex gap-x-1 '>
                         {
                             periodos.map((trimestre: TrimestreProps, index: number) => {
@@ -427,7 +431,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                         style={{
                                             backgroundColor: trimestre.pivot_tactico_trimestre.activo ?  ( currentTactico.estrategico? currentTactico.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ): 'rgba(243, 244, 246, 1)'
                                         }}
-                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`T${trimestre.trimestre}`}</span>
+                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`Q${trimestre.trimestre}`}</span>
                                 )
                             })
                         }

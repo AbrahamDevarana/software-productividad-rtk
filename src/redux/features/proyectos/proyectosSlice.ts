@@ -24,9 +24,6 @@ const initialState: ProyectosState = {
     isUpdating: false,
     error: false,
     infoMessage: '',
-    updated: false,
-    created: false,
-    deleted: false,
 }
 
 const proyectosSlice = createSlice({
@@ -78,7 +75,6 @@ const proyectosSlice = createSlice({
             .addCase(createProyectoThunk.fulfilled, (state, action) => {
                 state.isUpdating = false
                 state.proyectos.push(action.payload)
-                state.created = true
         })
             .addCase(createProyectoThunk.rejected, (state, action) => {
                 state.isUpdating = false
@@ -91,7 +87,6 @@ const proyectosSlice = createSlice({
             .addCase(updateProyectoThunk.fulfilled, (state, action) => {
                 state.isUpdating = false
                 state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
-                state.updated = true
         })
             .addCase(updateProyectoThunk.rejected, (state, action) => {
                 state.isUpdating = false
@@ -104,7 +99,6 @@ const proyectosSlice = createSlice({
             .addCase(deleteProyectoThunk.fulfilled, (state, action) => {
                 state.isLoadingProyecto = false
                 state.proyectos = state.proyectos.filter(proyecto => proyecto.id !== action.payload.id)
-                state.deleted = true
         })
             .addCase(deleteProyectoThunk.rejected, (state, action) => {
                 state.isLoadingProyecto = false

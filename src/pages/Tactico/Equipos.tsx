@@ -3,11 +3,14 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect } from "react"
 import { Badge, Box } from "@/components/ui"
 import { ImStatsBars2 } from "react-icons/im"
-import { motion } from 'framer-motion';
-import { Avatar, Divider, Tooltip } from "antd"
+import { clamp, motion } from 'framer-motion';
+import { Avatar, Divider, Image, Tooltip } from "antd"
 import { FaBrain, FaCrosshairs, FaRocket } from "react-icons/fa"
 import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/admin/areas/areasThunks"
 import Loading from "@/components/antd/Loading"
+import getBrokenUser from "@/helpers/getBrokenUser"
+import { getStorageUrl } from "@/helpers"
+import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
 
 interface Props {
     slug?: string
@@ -68,50 +71,55 @@ const Equipos = ({ slug, year }:Props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: .5 } }}
         >
-            <div className="flex flex-wrap gap-x-5 py-10">
-                {
-                    currentArea.departamentos?.map(equipo => (
-                        <motion.div key={equipo.id} className="max-w-sm w-full">
-                            <Box>
-                                <div className="flex justify-between items-center">
-                                    <Badge badgeType="dark" className="-mt-10">
-                                        <ImStatsBars2 />
-                                    </Badge>
-                                    <div className="text-right sm:py-0">
-                                        <p className="text-devarana-graph font-medium"> {equipo.nombre} </p>
-                                    </div>
-                                </div>
-                                <Divider className="my-3" />
-                                <div className="flex justify-between items-center">
-                                    <div className="flex gap-x-2 text-devarana-graph items-center">
-                                        <Tooltip title="Estrategia" className="flex items-center gap-x-2">
-                                            <FaRocket />
-                                            <p>5</p>
-                                        </Tooltip>
-                                        <Tooltip title="Táctica" className="flex items-center gap-x-2">
-                                            <FaBrain />
-                                            <p>4</p>
-                                        </Tooltip>
-                                        <Tooltip title="Operativos" className="flex items-center gap-x-2">
-                                            <FaCrosshairs />
-                                            <p>3</p>
-                                        </Tooltip>
-                                    </div>
-                                    <Avatar.Group>
-                                        {
-                                            equipo.usuarios.map(participante => (
-                                                <Tooltip title={participante.nombre} key={participante.id}>
-                                                    <Avatar key={participante.id} src={participante.foto} alt={participante.nombre} className="w-8 h-8 rounded-full" />
+            <div className="flex gap-5">
+                <div className="flex flex-wrap gap-x-5 gap-y-10 pt-5 flex-col w-[350px] h-screen">
+                        {
+                            currentArea.departamentos?.map(equipo => (
+                                <motion.div key={equipo.id}>
+                                    <Box className="w-[300px]">
+                                        <div className="">
+                                            <Badge badgeType="primary" className="-mt-10 mx-auto">
+                                                <ImStatsBars2 />
+                                            </Badge>
+                                        </div>
+                                        <div className="text-center sm:py-0 pt-7">
+                                            <p className="text-devarana-graph font-medium"> {equipo.nombre} </p>
+                                        </div>
+                                        <Divider className="my-3" />
+                                        <div className="flex justify-center w-full">
+                                            <div className="flex gap-x-3 text-devarana-graph items-center">
+                                                <Tooltip title="Objetivos Estratégicos" className="flex items-center gap-x-1">
+                                                    <FaRocket />
+                                                    <p>5</p>
                                                 </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
-                                </div>
-                            </Box>
-                        </motion.div>
-                    ))
-                }
-            </div>    
+                                                <Tooltip title="Objetivos Tácticos" className="flex items-center gap-x-1">
+                                                    <FaBrain />
+                                                    <p>4</p>
+                                                </Tooltip>
+                                                <Tooltip title="Objetivos Operativos" className="flex items-center gap-x-1">
+                                                    <FaCrosshairs />
+                                                    <p>3</p>
+                                                </Tooltip>
+                                            </div>
+                                            {/* <Avatar.Group>
+                                                {
+                                                    equipo.usuarios.map(participante => (
+                                                        <Tooltip title={participante.nombre} key={participante.id}>
+                                                            <Avatar key={participante.id} src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} alt={participante.nombre} className="w-8 h-8 rounded-full" />
+                                                        </Tooltip>
+                                                    ))
+                                                }
+                                            </Avatar.Group> */}
+                                        </div>
+                                    </Box>
+                                </motion.div>
+                            ))
+                        }
+                </div>    
+                <div className="pt-5">
+                    <TablaTacticos tacticos={[]} estrategico handleCreateTactico={ () => {} } setShowDrawer={ () => {}}  />
+                </div>
+            </div>
         </motion.div> 
     );
 }

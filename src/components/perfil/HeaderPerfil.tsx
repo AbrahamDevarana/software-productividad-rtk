@@ -6,7 +6,9 @@ import { getStorageUrl } from "@/helpers";
 import { useMemo, useState } from "react";
 import { Galeria } from "../ui/Galeria";
 import getBrokenUser from "@/helpers/getBrokenUser";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { getGaleriaDevaranaThunk } from "@/redux/features/galeria/galeriaThunk";
+import { updateProfileConfigThunk } from "@/redux/features/profile/profileThunk";
 
 interface HeaderProps {
     usuarioActivo: PerfilProps;
@@ -23,13 +25,10 @@ interface PictureProps {
 const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, visitante = false}) => {
 
 
-    // const { configuracion } = usuarioActivo
+    const {  galeriaDevarana, isLoading: isLoadingGaleria } = useAppSelector(state => state.galeria)
 
     const [panel, setPanel] = useState(false)
-    const [picture, setPicture] = useState<PictureProps>({
-        id: '',
-        url: ''
-    })
+    const [picture, setPicture] = useState(usuarioActivo.configuracion.portadaPerfil)
     const dispatch = useAppDispatch();
 
     const options = [
@@ -59,14 +58,13 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     }, [visitante])
         
 
-    const handlePanel = () => {
+    const handlePanel = async () => {
+        await dispatch(getGaleriaDevaranaThunk({}))
         setPanel(!panel)
     }
 
     const handleGallery = () => {
-        console.log('galeria', picture);
-
-        // dispatch(updateConfiguracionThunk())
+        dispatch(updateProfileConfigThunk({ portadaPerfil: picture }))
         
     }
 
@@ -76,21 +74,28 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
             <div className="shadow-ext bg-white rounded-ext h-80 overflow-hidden">
                 <div className="relative overflow-hidden w-full h-full">
                     <div className="absolute top-0 left-0 w-full h-full">
-                        <Image 
-                            className="w-full h-80 object-cover object-center" 
-                            src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
-                            preview={false}
-                            fallback={getStorageUrl('portadas/portada-default.jpg')}
-                            wrapperStyle={{
-                                objectFit: 'cover',
-                                objectPosition: 'center',
-                                width: '100%',
-                            }}
-                        />
+                        <div className="relative h-80">
+                            <Image
+                                src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
+                                preview={false}
+                                fallback={getStorageUrl('portadas/portada-default.jpg')}
+                                wrapperStyle={{
+                                    objectFit: 'cover',
+                                    objectPosition: 'center',
+                                    width: '100%',
+                                }}
+                                style={{
+                                    objectFit: 'cover',
+                                    objectPosition: 'center',
+                                    width: '100%',
+                                    height: '320px'
+                                }}
+                            />
+                        </div>
                     </div>
 
                    {
-                        false && (   
+                        true && (   
                         <button className="z-50 absolute top-3 right-3" onClick={handlePanel}>
                             <FaCog className=" text-2xl text-white drop-shadow-md"/>
                         </button> )
@@ -128,7 +133,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 open={panel}
                 width={ window.innerWidth < 768 ? '100%' : 600 }
             >
-                <Galeria galeria={[]} setPicture={setPicture} picture={picture} handleGallery={handleGallery} />
+                <Galeria galeria={galeriaDevarana} picture={picture} isLoading={isLoadingGaleria} setPicture={setPicture} handleGallery={handleGallery} />
             </Drawer>
         </> 
     );
