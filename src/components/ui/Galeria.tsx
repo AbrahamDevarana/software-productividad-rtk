@@ -23,16 +23,21 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 
 	return (
 		<>
+		
+
 		<div className='grid grid-cols-4 gap-10'>
-			<Image.PreviewGroup preview={{
-				visible,
-				onVisibleChange: (vis) => setVisible(vis),
-			}}
-			>
-				{ galeria && galeria.map((foto, index) => (
-					<Image src={getStorageUrl(foto.url)} style={{ display: 'none' }} key={index}  className='object-fill' />
-				))}
-			</Image.PreviewGroup>
+			<div className='hidden'>
+				<Image.PreviewGroup preview={{
+					visible,
+					onVisibleChange: (vis) => setVisible(vis),
+				}}
+				
+				>
+					{ galeria && galeria.map((foto, index) => (
+						<Image src={getStorageUrl(foto.url)} style={{ display: 'none' }} key={index}  className='object-fill' />
+					))}
+				</Image.PreviewGroup>
+			</div>
 				
 			{ galeria && galeria.map((foto, index) => (
 				<div className={`rounded-xl overflow-hidden col-span-1 ${ picture === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
@@ -40,16 +45,17 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 				</div>
 			))}
 
-			<Button classType='regular' classColor='primary' onClick={() => setVisible(true)}>
-				<FaEye/>
-			</Button>
 
 				
 				
 		</div>
 
-			<div className='flex justify-end pt-5'>
-					<Button classType='regular' width={50} classColor='primary' onClick={handleGallery}>
+
+			<div className='flex justify-end pt-5 gap-x-5'>
+					<Button width={'auto'} classType='regular' classColor='dark' onClick={() => setVisible(true)}>
+						<FaEye/>
+					</Button>
+					<Button classType='regular' width={'auto'} classColor='primary' onClick={handleGallery}>
 						<AiFillSave />
 					</Button>
 			</div>
