@@ -78,15 +78,16 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                             <Image
                                 src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
                                 preview={false}
+                                
                                 fallback={getStorageUrl('portadas/portada-default.jpg')}
                                 wrapperStyle={{
                                     objectFit: 'cover',
-                                    objectPosition: 'center',
+                                    objectPosition: 'top',
                                     width: '100%',
                                 }}
                                 style={{
                                     objectFit: 'cover',
-                                    objectPosition: 'center',
+                                    objectPosition: 'top',
                                     width: '100%',
                                     height: '320px'
                                 }}
