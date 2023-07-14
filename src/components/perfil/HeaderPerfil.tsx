@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     const {  galeriaDevarana, isLoading: isLoadingGaleria } = useAppSelector(state => state.galeria)
 
     const [panel, setPanel] = useState(false)
-    const [picture, setPicture] = useState(usuarioActivo.configuracion.portadaPerfil)
+    const [picture, setPicture] = useState(usuarioActivo.configuracion?.portadaPerfil)
     const dispatch = useAppDispatch();
 
     const options = [
