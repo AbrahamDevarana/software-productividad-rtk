@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { deleteTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { deleteTacticoThunk, updateQuartersThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, TrimestreProps, UsuarioProps } from '@/interfaces';
 import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal } from 'antd';
 import dayjs from 'dayjs';
@@ -30,7 +30,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
-    const { currentTactico, isLoadingCurrent } = useAppSelector(state => state.tacticos)
+    const { currentTactico, isLoadingCurrent, isLoadingQuarters} = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
@@ -52,7 +52,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
-        dispatch(getEstrategicosThunk({}))
+        dispatch(getEstrategicosThunk({year}))
         dispatch(getPerspectivasThunk({}))
     }, [])
     
@@ -222,7 +222,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     //   encontrar el trimestre clickeado en periodos y cambiarle el trimestre.pivot_tactico_trimestre.activo
     const trimestreEncontrado = periodos.map(periodo => periodo.trimestre === trimestre.trimestre ? {...periodo, pivot_tactico_trimestre: {...periodo.pivot_tactico_trimestre, activo: !periodo.pivot_tactico_trimestre.activo}} : periodo)
     setPeriodos(trimestreEncontrado)
-
         const query = {
             ...currentTactico,
             year,
@@ -230,13 +229,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             trimestresActivos: trimestreEncontrado.filter(periodo => periodo.pivot_tactico_trimestre.activo).map(periodo => {
                 return periodo.trimestre
             }),
-            responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
         }       
-    
-        dispatch(updateTacticoThunk(query))
         
-
-        
+        dispatch(updateQuartersThunk(query))        
     }
 
     const showDeleteConfirm = () => {
@@ -275,8 +270,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     ...currentTactico,
                     propietarioId: currentTactico.propietarioId,
                     responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
-                    fechaInicio: dayjs(currentTactico.fechaInicio).add(6, 'hour'),
-                    fechaFin: dayjs(currentTactico.fechaFin).add(6, 'hour'),
+                    fechaInicio: dayjs(currentTactico.fechaInicio),
+                    fechaFin: dayjs(currentTactico.fechaFin)
                 }}
             >
                 <Form.Item
@@ -333,11 +328,11 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     max={100}
                                     value={progreso}
                                     onChange={ (value ) => {
-                                        hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) &&
+                                        hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) &&
                                         setProgreso(value)
                                     }}
                                     onAfterChange={ (value ) => {
-                                        hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangeProgreso(value)
+                                        hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && handleChangeProgreso(value)
                                         setProgreso(value)
                                     } }
                                     trackStyle={{
@@ -405,7 +400,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         disabled={optEstrategicos.length === 0}
                         allowClear
                         showSearch
-                        onBlur={handleOnSubmit}
+                        onChange={handleOnSubmit}
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                         options={optEstrategicos}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
@@ -426,45 +421,18 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     <span 
                                         key={index} 
                                         onClick={() => {
+                                            if(isLoadingQuarters) return
                                             handleTrimestre(trimestre)
                                         }}
                                         style={{
                                             backgroundColor: trimestre.pivot_tactico_trimestre.activo ?  ( currentTactico.estrategico? currentTactico.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ): 'rgba(243, 244, 246, 1)'
                                         }}
-                                        className={`px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`Q${trimestre.trimestre}`}</span>
+                                        className={`${isLoadingQuarters? 'cursor-wait cur' : ''} px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`Q${trimestre.trimestre}`}</span>
                                 )
                             })
                         }
                     </div>
                 </div>
-                {/* <Form.Item
-                    label="Fecha de inicio"
-                    className='col-span-6'
-                    name={"fechaInicio"}
-                >
-                    <DatePicker
-                        format={"DD-MM-YYYY"}
-                        className='w-full'
-                        onBlur={handleOnSubmit}
-                        picker="quarter"
-                        clearIcon={false}
-                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Fecha de fin"
-                    className='col-span-6'
-                    name={"fechaFin"}
-                >
-                    <DatePicker
-                        format={"DD-MM-YYYY"}
-                        picker="quarter"
-                        onBlur={handleOnSubmit}
-                        className='w-full'
-                        clearIcon={false}
-                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    />
-                </Form.Item> */}
 
                 <Divider className='col-span-12'/>
 
@@ -477,7 +445,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         style={{ width: '100%' }}
                         placeholder="Selecciona al propietario"
                         tagRender={tagRender}
-                        onBlur={handleOnSubmit}
+                        onChange={handleOnSubmit}
                         bordered = {false}
                         showSearch
                         maxTagPlaceholder={(omittedValues) => (
@@ -508,7 +476,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         bordered = {false}
                         tagRender={tagRender}
                         maxLength={3}
-                        onBlur={handleOnSubmit}
+                        onChange={handleOnSubmit}
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}

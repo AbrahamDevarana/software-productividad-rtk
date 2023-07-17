@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -9,6 +9,7 @@ const initialState: TacticosState = {
     tacticosGeneral: [],
     isLoading: false,
     isLoadingCurrent: false,
+    isLoadingQuarters: false,
     infoMessage: '',
     error: false,
     currentTactico: {
@@ -126,13 +127,11 @@ const tacticosSlice = createSlice({
                 state.error = true
             })
             .addCase(updateTacticoThunk.pending, (state) => {
-                state.isLoading = true
+                // state.isLoadingCurrent = true
             })
             .addCase(updateTacticoThunk.fulfilled, (state, action) => {
-
-
                 // currentTactico
-                state.isLoading = false
+                // state.isLoadingCurrent = false
                 state.currentTactico = action.payload
                                                 
                 if(action.payload.estrategicoId){
@@ -158,20 +157,24 @@ const tacticosSlice = createSlice({
 
             })
             .addCase(updateTacticoThunk.rejected, (state, action) => {
-                state.isLoading = false
+                state.isLoadingCurrent = false
                 state.error = true
             })
             .addCase(createTacticoThunk.pending, (state) => {
-                state.isLoading = true
+                
             })
             .addCase(createTacticoThunk.fulfilled, (state, action) => {
-                
+        
                 if (action.payload.estrategicoId) {
 
                     state.tacticos = [...state.tacticos, action.payload]
                 }else {
                     state.tacticos_core = [...state.tacticos_core, action.payload]
                 }
+            })
+            .addCase(createTacticoThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
             })
             .addCase(getTacticosThunk.pending, (state) => {
                 state.isLoading = true
@@ -180,7 +183,6 @@ const tacticosSlice = createSlice({
                 state.isLoading = false
                 state.tacticosGeneral = action.payload
             })
-
             .addCase(deleteTacticoThunk.pending, (state) => {
                 state.isLoading = true
             })
@@ -194,7 +196,16 @@ const tacticosSlice = createSlice({
                 state.error = true
             })
 
-        
+            .addCase(updateQuartersThunk.pending, (state) => {
+                state.isLoadingQuarters = true
+            })
+            .addCase(updateQuartersThunk.fulfilled, (state, action) => {
+                state.isLoadingQuarters = false
+                state.currentTactico.trimestres = action.payload.trimestres
+                state.tacticos.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
+                state.tacticos_core.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
+
+            })
         }
 })
 

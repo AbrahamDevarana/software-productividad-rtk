@@ -1,74 +1,115 @@
 import { AppDispatch, RootState } from '@/redux/store';
-import { createPerspectivaProvider, deletePerspectivaProvider, getPerspectivaProvider, getPerspectivasProvider, updatePerspectivaProvider} from './perspectivasProvider';
-import { checkingPerspectivas, setPerspectivasError, getCurrentPerspectiva, createPerspectiva, deletePerspectiva, getPerspectivas, updatePerspectiva, clearCurrentPerspectiva, clearPerspectivas } from './perspectivasSlice';
+import {clearCurrentPerspectiva, clearPerspectivas } from './perspectivasSlice';
 import { PerspectivaProps } from '@/interfaces';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { clientAxios } from '@/config/axios';
 
 
-export const getPerspectivasThunk = (filtros: any) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await getPerspectivasProvider(filtros, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( getPerspectivas(result.perspectivas) )
-    }   
+interface Props {
+    perspectivas: PerspectivaProps[]
+    perspectiva: PerspectivaProps
 }
 
-export const getPerspectivaThunk = (perspectivaId: number) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await getPerspectivaProvider(perspectivaId, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( getCurrentPerspectiva(result.perspectiva) )
-    }   
-}
 
-export const createPerspectivaThunk = (perspectiva: PerspectivaProps) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await createPerspectivaProvider(perspectiva, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( createPerspectiva(result.perspectiva) )
-    }   
-}
 
-export const deletePerspectivaThunk = (perspectivaId: number) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await deletePerspectivaProvider(perspectivaId, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( deletePerspectiva(perspectivaId) )
-    }   
-}
-
-export const updatePerspectivaThunk = (perspectiva: PerspectivaProps) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await updatePerspectivaProvider(perspectiva, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( updatePerspectiva(result.perspectiva) )
-    }   
-}
-
-export const createPerspectivaAndClearThunk = (perspectiva: PerspectivaProps) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
-        const result = await createPerspectivaProvider(perspectiva, getState)
-        if(!result.ok) return dispatch( setPerspectivasError(result.errorMessage) )
-        dispatch( createPerspectiva(result.perspectiva) )
-        dispatch( clearCurrentPerspectiva() )
+export const getPerspectivasThunk = createAsyncThunk(
+    'perspectivas/getPerspectivas',
+    async (filtros: any, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+            const response = await clientAxios.get<Props>('/perspectivas', config);
+            return response.data.perspectivas
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
     }
-}
+})
+
+
+export const getPerspectivaThunk = createAsyncThunk(
+    'perspectivas/getPerspectiva',
+    async (perspectivaId: number, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.get<Props>(`/perspectivas/${perspectivaId}`, config);
+            return response.data.perspectiva
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+export const createPerspectivaThunk = createAsyncThunk(
+    'perspectivas/createPerspectiva',
+    async (perspectiva: PerspectivaProps, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.post<Props>('/perspectivas', perspectiva, config);
+            return response.data.perspectiva
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const deletePerspectivaThunk = createAsyncThunk(
+    'perspectivas/deletePerspectiva',
+    async (perspectivaId: number, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.delete<Props>(`/perspectivas/${perspectivaId}`, config);
+            return response.data.perspectiva
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+export const updatePerspectivaThunk = createAsyncThunk(
+    'perspectivas/updatePerspectiva',
+    async (perspectiva: PerspectivaProps, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            
+            const response = await clientAxios.put<Props>(`/perspectivas/${perspectiva.id}`, perspectiva, config);
+            return response.data.perspectiva
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 export const clearPerspectivasThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
         dispatch( clearPerspectivas() )        
     }   
 }
     
 export const clearCurrentPerspectivaThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingPerspectivas())
         dispatch( clearCurrentPerspectiva() )        
     }   
 }

@@ -8,9 +8,10 @@ import { Icon } from '../Icon'
 import { getStorageUrl } from '@/helpers';
 interface EstrategiaProps {
     perspectivas: PerspectivaProps[]
+    year: number
 }
 
-export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
+export const Estrategia = ({perspectivas, year}: EstrategiaProps) => {
     
     return (
         <>
@@ -44,7 +45,7 @@ export const Estrategia: React.FC<EstrategiaProps> = ({perspectivas}) => {
                         </div>
                     </div>
                     <div className='bg-white px-5 w-full relative rounded-r-ext shadow'>
-                        <TablaEstrategia perspectiva={perspectiva}/>
+                        <TablaEstrategia perspectiva={perspectiva} year={year}/>
                     </div>
                 </div>
             ))}

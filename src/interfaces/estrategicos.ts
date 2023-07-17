@@ -8,7 +8,6 @@ export interface EstrategicosState {
     estrategicos: EstrategicoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
-    paginate:     Paginate;
     error:        boolean;
     infoMessage:  string;
     currentEstrategico: EstrategicoProps;

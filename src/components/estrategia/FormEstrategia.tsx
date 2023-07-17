@@ -195,8 +195,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 initialValues={{
                     ...currentEstrategico,
                     responsables: currentEstrategico.responsables.map(responsable => responsable.id),
-                    fechaInicio: dayjs(currentEstrategico.fechaInicio).add(6, 'hour'),
-                    fechaFin: dayjs(currentEstrategico.fechaFin).add(6, 'hour'),
+                    fechaInicio: dayjs(currentEstrategico.fechaInicio),
+                    fechaFin: dayjs(currentEstrategico.fechaFin),
                     propietarioId: currentEstrategico.propietario?.id,
                 }}
                 form={form}
@@ -344,6 +344,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         tagRender={tagRender}
                         showSearch
                         bordered = {false}
+                        onChange={handleOnSubmit}
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
@@ -370,6 +371,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         allowClear
                         bordered = {false}
                         tagRender={tagRender}
+                        onChange={handleOnSubmit}
                         maxLength={3}
                         showSearch
                         maxTagPlaceholder={(omittedValues) => (

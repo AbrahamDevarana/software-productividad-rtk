@@ -4,11 +4,6 @@ import { createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, ge
 
 const initialState: EstrategicosState = {
     estrategicos: [],
-    paginate: {
-        totalItem: 0,
-        totalPages: 0,
-        currentPage: 0,
-    }, 
     isLoading: false,
     isLoadingCurrent: false,
     infoMessage: '',
@@ -80,12 +75,7 @@ const estrategicosSlice = createSlice({
             })
             .addCase(getEstrategicosThunk.fulfilled, (state, action) => {       
                 state.isLoading = false,
-                state.estrategicos = action.payload.rows
-                state.paginate = {
-                    totalItem: action.payload.totalItem,
-                    totalPages: action.payload.totalPages,
-                    currentPage: action.payload.currentPage,
-                }
+                state.estrategicos = action.payload
             })
             .addCase(getEstrategicosThunk.rejected, (state) => {
                 state.isLoading = false

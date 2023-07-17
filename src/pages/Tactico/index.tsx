@@ -8,6 +8,7 @@ import { Prox } from '@/components/ui/Prox';
 import dayjs from 'dayjs';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import Equipos from './Equipos';
+import Loading from '@/components/antd/Loading';
 
 export const Tactico: React.FC = () => {
 
@@ -16,7 +17,7 @@ export const Tactico: React.FC = () => {
     const {slug} = useParams<{slug:string}>()
 
     const dispatch = useAppDispatch()
-    const {tacticos, tacticos_core, currentTactico} = useAppSelector(state => state.tacticos)
+    const {tacticos, tacticos_core, currentTactico, isLoading} = useAppSelector(state => state.tacticos)
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [year, setYear] = useState(dayjs().year())
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
@@ -37,7 +38,6 @@ export const Tactico: React.FC = () => {
         setShowEdit(false)
         dispatch(clearCurrentTacticoThunk())
     }
-
 
     return (
         <>

@@ -30,6 +30,7 @@ export interface TacticosState {
     tacticosGeneral: TacticoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
+    isLoadingQuarters: boolean;
     error:        boolean;
     infoMessage:  string;
     currentTactico: TacticoProps;

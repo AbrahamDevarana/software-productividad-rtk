@@ -10,20 +10,20 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import { extraerNumero } from '@/helpers/getNumberCode';
-import { Icon } from '../Icon';
-
 
 interface TablaEstrategiaProps{
     perspectiva: PerspectivaProps;
+    year: number;
 }
 
 
-export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) => {
+export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
 
     const { color } = perspectiva
     const dispatch = useAppDispatch()   
-    const [ showEdit, setShowEdit ] = useState<boolean>(false);        
-    const {permisos} = useAppSelector(state => state.auth)
+    const [ showEdit, setShowEdit ] = useState<boolean>(false);
+    const { permisos } = useAppSelector(state => state.auth)
+    const { isLoading } = useAppSelector(state => state.perspectivas)
 
     const [columns, setColumns] = useState<ColumnsType<EstrategicoProps>>([
         {
@@ -132,6 +132,7 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) =
 
         await dispatch(createEstrategicoThunk({
             perspectivaId: perspectiva.id,
+            year
         }))
     }
 
@@ -159,8 +160,8 @@ export const TablaEstrategia: React.FC<TablaEstrategiaProps> = ({perspectiva}) =
             <Table
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
-                loading={ perspectiva.objetivosEstrategicos?.length === 0 ? true : false }
                 columns={columns}
+                loading={isLoading}
                 dataSource={objetivosOrdenados}
                 rowKey={(record) => record.id}
                 onRow={(record, rowIndex) => {

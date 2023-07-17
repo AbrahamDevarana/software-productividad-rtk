@@ -1,8 +1,6 @@
 
 import { AppDispatch, RootState } from '@/redux/store';
-import { createEstrategicoProvider } from './estrategicosProvider';
-import { checkingEstrategicos, setEstrategicosError, clearCurrentEstrategico, clearEstrategicos } from './estrategicosSlice';
-import { createEstrategicoFromProvider } from '../perspectivas/perspectivasSlice';
+import { checkingEstrategicos, clearCurrentEstrategico, clearEstrategicos } from './estrategicosSlice';
 import { EstrategicoProps } from '@/interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
@@ -11,12 +9,13 @@ import { clientAxios } from '@/config/axios';
 
 interface Props {
     objetivoEstrategico: EstrategicoProps
-    objetivosEstrategicos: {
-        rows: EstrategicoProps[]
-        totalItem: number
-        totalPages: number
-        currentPage: number
-    }
+    objetivosEstrategicos: EstrategicoProps[]
+    // objetivosEstrategicos: {
+    //     rows: EstrategicoProps[]
+    //     totalItem: number
+    //     totalPages: number
+    //     currentPage: number
+    // }
 }
 
 export const getEstrategicosThunk = createAsyncThunk(
@@ -28,7 +27,7 @@ export const getEstrategicosThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` },
                 params: filtros
             }
-            const response = await clientAxios.get<Props>('/estrategicos', config);
+            const response = await clientAxios.get('/estrategicos', config);
             return response.data.objetivosEstrategicos
         }
         catch (error: any) {
@@ -110,14 +109,6 @@ export const updateEstrategicoThunk = createAsyncThunk(
     }
 )
 
-export const createEstrategicoFromPerspectivaThunk = (estrategico: EstrategicoProps) => {
-    return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingEstrategicos())
-        const result = await createEstrategicoProvider(estrategico, getState)
-        if(!result.ok) return dispatch( setEstrategicosError(result.errorMessage) )
-        dispatch( createEstrategicoFromProvider(result.estrategico) )
-    }
-}
 
 export const clearEstrategicosThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
