@@ -24,7 +24,7 @@ export const getTacticosThunk = createAsyncThunk(
                 params: filtros
             }
             
-            const response = await clientAxios.get<Props>('/tacticos', config);
+            const response = await clientAxios.get<Props>('/tacticos', config);        
             return response.data.tacticosGeneral
         }
         catch (error: any) {

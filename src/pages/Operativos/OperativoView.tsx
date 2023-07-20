@@ -1,11 +1,12 @@
 import { Icon } from "@/components/Icon"
 import { FormAcciones } from "@/components/acciones/FormAcciones"
+import Loading from "@/components/antd/Loading"
 import ListadoOperativo from "@/components/operativo/ListadoOperativo"
 import { Proximamente } from "@/components/ui"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
-import { createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
+import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Avatar, Drawer, FloatButton, Image, Segmented, Tooltip } from "antd"
 import { useEffect, useState } from "react"
@@ -49,6 +50,7 @@ export const OperativoView = () => {
         dispatch(clearObjetivoThunk())
     }
 
+
     useEffect(() => {
         if(id){
             dispatch(getOperativoThunk(id))
@@ -56,8 +58,11 @@ export const OperativoView = () => {
 
         return () => {
             dispatch(clearObjetivoThunk())
+            dispatch(clearResultadoThunk())
         }
     }, [id])
+
+    if(isLoadingObjetivo) return <Loading />
 
     return (
         <>

@@ -26,6 +26,12 @@ const initialState: OperativoState = {
             iniciales: '',
             email: '',
             departamentos: [],
+            scoreCard: {
+                propietario: 0,
+                progresoAsignado: 0,
+                progresoFinal: 0,
+                progresoReal: 0,
+            }
         },
         propietarioId: '',
         operativosResponsable: [],

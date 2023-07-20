@@ -1,5 +1,5 @@
 import { Box } from '@/components/ui';
-import { Divider, FloatButton, Modal, Progress, Rate } from 'antd'
+import { DatePicker, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -18,7 +18,8 @@ export const Objetivos : React.FC = () => {
 
     const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
-    const { operativos, isLoading, currentOperativo } = useAppSelector(state => state.operativos)
+    const { operativos, isLoading } = useAppSelector(state => state.operativos)
+    const [year, setYear] = useState(dayjs().year())
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
@@ -29,11 +30,9 @@ export const Objetivos : React.FC = () => {
 
 
     useEffect(() => {
-        dispatch(getOperativosThunk({}))
-    }, [])
+        dispatch(getOperativosThunk({year}))
+    }, [year])
 
-
-    
     const ponderacionTotal = useMemo(() => {
         let total = 0
       
@@ -95,6 +94,16 @@ export const Objetivos : React.FC = () => {
                     </div>
                 </Box>
                 <Box className='md:col-span-3 col-span-12 row-span-3'>
+                    <DatePicker
+                        picker='year' 
+                        onChange={(date, dateString) => setYear(dayjs(dateString).year())} 
+                        value={dayjs(`${year}`)}
+                        disabledDate={(current) => {
+                            // no se puede mas del año actual y menos de hace 11 años
+                            return current.year() > dayjs().year() || current.year() < dayjs().subtract(11, 'year').year()
+                        }}
+                        allowClear={false}
+                    />
                     <pre>
                         {
                             JSON.stringify(operativos, null, 2)
@@ -126,7 +135,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo />
+                <FormObjetivo year={year} />
 
             </Modal>
 

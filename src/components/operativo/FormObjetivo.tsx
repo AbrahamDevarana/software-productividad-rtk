@@ -2,15 +2,18 @@ import { FC, useEffect, useMemo } from 'react'
 import { OperativoProps, TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { DatePicker, Form, Input, Select, Skeleton } from 'antd'
+import { DatePicker, Divider, Form, Input, Select, Skeleton } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
 import { createOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
 import { Button } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'
 
+interface Props {
+    year: number
+}
 
-export const FormObjetivo = () => {
+export const FormObjetivo = ({year}:Props) => {
 
     const { TextArea } = Input;
     const { RangePicker } = DatePicker;
@@ -23,7 +26,7 @@ export const FormObjetivo = () => {
 
 
     useEffect(() => {
-        dispatch(getTacticosThunk({}))
+        dispatch(getTacticosThunk({year}))
         dispatch(getUsuariosThunk({}))
     }, [])
 
@@ -35,6 +38,7 @@ export const FormObjetivo = () => {
             ...form.getFieldsValue(),
             propietarioId: userAuth.id,
         }
+        
         if(currentOperativo.id === ''){
             dispatch(createOperativoThunk(query))
         }else{
@@ -73,21 +77,18 @@ export const FormObjetivo = () => {
             return {
                 label: estrategico,
                 options: estrategicosGroup[estrategico].map((tactico: TacticoProps) => ({
-                    label: tactico.nombre,
+                    label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
                     value: tactico.id,
                     dataName: tactico.nombre
                 }))
             }
-        }
-
-        )
-
+        })
         return [
             ...options,
             {
                 label: 'Core',
                 options: core.map((tactico) => ({
-                    label: tactico.nombre,
+                    label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
                     value: tactico.id,
                     dataName: tactico.nombre
                 }))
@@ -95,12 +96,6 @@ export const FormObjetivo = () => {
 
            
         ]
-
-
-       
-       
-        
-
     }, [tacticosGeneral])
     
     
@@ -118,6 +113,7 @@ export const FormObjetivo = () => {
             initialValues={{
                 ...currentOperativo,
                 operativosResponsable: currentOperativo.operativosResponsable.map((item) => item.id),
+                progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado
             }}
             form={form}
         >
@@ -173,11 +169,6 @@ export const FormObjetivo = () => {
                     // @ts-ignore
                     filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                 >
-                    {/* {
-                        tacticosGeneral.map(tactico => (
-                            <Select.Option key={tactico.id} value={tactico.id}>{tactico.nombre}</Select.Option>
-                        ))
-                    } */}
                 </Select>
             </Form.Item>
 
@@ -203,6 +194,17 @@ export const FormObjetivo = () => {
                     }
                 </Select>
             </Form.Item>
+            <Divider className='col-span-12' />
+
+            <Form.Item
+                label="Progreso Asignado"
+                name="progresoAsignado"
+                className='col-span-6'
+                required
+            >
+                <Input name="progresoAsignado" />
+            </Form.Item>
+
 
             
             <div className='flex justify-end col-span-12'>

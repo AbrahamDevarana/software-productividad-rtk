@@ -17,7 +17,8 @@ export const getOperativosThunk = createAsyncThunk(
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
             }
 
             const response = await clientAxios.get<Props>(`/operativos`, config);

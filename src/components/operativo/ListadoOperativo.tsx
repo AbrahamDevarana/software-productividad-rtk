@@ -50,8 +50,6 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
         dispatch(updateAccionThunk(query))
     }
 
-    console.log(currentOperativo.fechaFin);
-    
 
 
     const defaultColumns: ColumnsType<any> = [
