@@ -70,7 +70,7 @@ export const Tactico: React.FC = () => {
                 segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
             }
             {
-                segmented === 'equipos' && (<Equipos slug={slug} year={year} />)
+                segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
             }
             {
                 segmented === 'gantt' && (<Prox avance={87} />)

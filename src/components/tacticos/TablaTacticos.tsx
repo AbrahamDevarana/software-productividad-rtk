@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
@@ -7,22 +7,20 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
+import { extraerNumero } from '@/helpers/getNumberCode';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void
     estrategico: boolean
     setShowDrawer: (showDrawer: boolean) => void
+    isLoading?: boolean
 }
 
-export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer}:TablaTacticosProps) => {
-
-    const { currentTactico } = useAppSelector(state => state.tacticos)
+export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
     const dispatch = useAppDispatch()
-
     
-
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
             title: () => ( 
@@ -138,8 +136,6 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
         },
     ]);
 
-
-
     const handleShowTactico = (tactico: TacticoProps) => {
         dispatch(getTacticoThunk(tactico.id))        
         setShowDrawer(true)
@@ -151,6 +147,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             <Table
                 columns={columns}
                 dataSource={tacticos}
+                loading={isLoading}
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 rowKey={(record) => record.id}

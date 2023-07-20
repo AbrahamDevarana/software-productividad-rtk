@@ -118,7 +118,6 @@ export const updateQuartersThunk = createAsyncThunk(
     }
 )
 
-
 export const getTacticoFromAreaThunk = createAsyncThunk(
     'tacticos/getTacticoFromAreaThunk',
     async ({slug, year}: {slug: string, year:number}, { rejectWithValue, getState }) => {
@@ -129,6 +128,23 @@ export const getTacticoFromAreaThunk = createAsyncThunk(
                 params: { year }
             }
             const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
+            return response.data.objetivosTacticos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const getTacticoFromEquiposThunk = createAsyncThunk(
+    'tacticos/getTacticoFromEquiposThunk',
+    async ({slug, year}: {slug: string, year:number}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.get<Props>(`/tacticos/equipo?slug=${slug}&year=${year}`, config);
             return response.data.objetivosTacticos
         }
         catch (error: any) {

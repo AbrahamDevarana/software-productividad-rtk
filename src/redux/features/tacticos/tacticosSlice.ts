@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEquiposThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -205,6 +205,23 @@ const tacticosSlice = createSlice({
                 state.tacticos.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
                 state.tacticos_core.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
 
+            })
+            .addCase(updateQuartersThunk.rejected, (state, action) => {
+                state.isLoadingQuarters = false
+                state.error = true
+            })
+            .addCase(getTacticoFromEquiposThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticoFromEquiposThunk.fulfilled, (state, action) => {
+
+                state.isLoading = false
+                state.tacticos = action.payload.tacticos
+                state.tacticos_core = action.payload.tacticos_core
+            })
+            .addCase(getTacticoFromEquiposThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
             })
         }
 })
