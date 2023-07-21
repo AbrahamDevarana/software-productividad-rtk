@@ -22,6 +22,6 @@ export interface DepartamentoProps {
     area?:     DepartamentoProps;
     areaId?:   number;
     leader?:   Lider;
-    color?:    string;
+    color:    string;
     usuarios: UsuarioProps[];
 }

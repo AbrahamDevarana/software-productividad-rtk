@@ -23,7 +23,8 @@ const initialState: DepartamentoState = {
         slug: '',
         leaderId: '',
         status: true,
-        usuarios: []
+        usuarios: [],
+        color: '#000000'
     },
     lideres: []
 }

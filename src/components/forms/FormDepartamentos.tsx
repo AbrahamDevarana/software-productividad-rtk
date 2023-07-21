@@ -2,12 +2,11 @@ import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
-import { Select, Input, Form, Skeleton } from 'antd'
+import { Select, Input, Form, Skeleton, ColorPicker, Space } from 'antd'
 import { DefaultOptionType } from 'antd/es/select';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { color } from 'framer-motion';
 import { FaSave } from 'react-icons/fa';
 
 
@@ -22,6 +21,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     const { currentDepartamento, isLoadingCurrent } = useAppSelector(state => state.departamentos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { areas } = useAppSelector(state => state.areas)
+    const [ color, setColor ] = useState<string>('#000000')
 
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
@@ -36,11 +36,17 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
         dispatch(getUsuariosThunk({}))
     }, [])
 
+    useEffect(() => {
+        if (currentDepartamento.id !== 0) {
+            setColor(currentDepartamento.color)
+        }
+    }, [currentDepartamento])
 
     const handleOnSubmit = async () => {      
         
         const query = {
             id: currentDepartamento.id,
+            color,
             ...form.getFieldsValue()
         }
 
@@ -55,8 +61,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     const handleCancel = () => {
         handleClose()
         dispatch(clearCurrentDepartamentoThunk())
-    }    
-
+    }
 
     if (isLoadingCurrent) return (<Skeleton active paragraph={{ rows: 10 }} />)
 
@@ -117,6 +122,19 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                                     ))
                                 }
                             </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Color Departamento"
+                        >
+                            <Space direction="vertical">
+                                <ColorPicker showText 
+                                    value={ color }
+                                    onChange={(color) => {
+                                        setColor(color.toHexString())
+                                    }}
+                                />                            
+                            </Space>
                         </Form.Item>
                     </div>
                     <div className='py-4 flex justify-end'>

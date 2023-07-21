@@ -56,40 +56,23 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
             animate={{ opacity: 1, transition: { duration: .5 } }}
         >
             <div className="flex gap-5 max-h-screen flex-row">
-                    <div className="flex flex-col gap-x-5 gap-y-10 pt-5 max-w-[320px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+                    <div className="flex flex-col gap-x-5 gap-y-5 pt-5 max-w-[320px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
                             {
                                 currentArea.departamentos?.map(equipo => (
                                     <motion.div key={equipo.id} className="cursor-pointer">
                                        <div onClick={() => handleGetDepartamentos(equipo.slug)}>
-                                        <div className={`p-5 shadow-ext rounded-ext w-[300px]`} 
+                                        <div className={`p-2 px-5 shadow-ext rounded-ext w-[300px]`} 
                                             style={{
                                                 backgroundColor: `${activeTeam === equipo.slug ? equipo.color : 'white'}`,
                                             }}
                                         >
-                                                <div className="">
-                                                    <div className={`text-white w-16 h-16 p-4 rounded-md shadow align-middle flex -mt-10 mx-auto`}
-                                                        style={{
-                                                            background: `${activeTeam === equipo.slug ? 'white' : `linear-gradient(to top right, ${equipo.color}, ${equipo.color}`}`,
-                                                        }}
-                                                    >
-                                                        <div className="text-3xl  w-full justify-center flex m-auto">
-                                                            <ImStatsBars2 className="drop-shadow"
-                                                                style={{
-                                                                    color: `${activeTeam === equipo.slug ? equipo.color : 'white'}`,
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="text-center sm:py-0 pt-710">
-                                                    <p className="font-medium pt-2"
-                                                        style={{
-                                                            color: `${activeTeam === equipo.slug ? 'white' : equipo.color}`,
-                                                        }}
-                                                    > {equipo.nombre} </p>
-                                                </div>
-                                                <Divider className="my-3" />
-                                                <div className="flex justify-center w-full">
+                                                <p className="font-medium"
+                                                    style={{
+                                                        color: `${activeTeam === equipo.slug ? 'white' : equipo.color}`,
+                                                    }}
+                                                > {equipo.nombre} </p>
+                                                <Divider className="my-1 bg-white" />
+                                                <div className="flex w-full">
                                                     <div className="flex gap-x-3 items-center"
                                                         style={{
                                                             color: `${activeTeam === equipo.slug ? 'white' : equipo.color}`,
