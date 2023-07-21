@@ -186,11 +186,13 @@ export const FormObjetivo = ({year}:Props) => {
                     maxTagPlaceholder={(omittedValues) => (
                         <span className='text-devarana-graph'>+{omittedValues.length}</span>
                     )}
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                 >
                     {
                         usuarios.map(usuario => (
-                            <Select.Option key={usuario.id} value={usuario.id}>{ spanUsuario(usuario) }</Select.Option>
-                        )).filter( usuario => usuario.key !== userAuth?.id)
+                            <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}>{ spanUsuario(usuario) }</Select.Option>
+                        ))
                     }
                 </Select>
             </Form.Item>

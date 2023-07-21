@@ -75,24 +75,17 @@ export const OperativoView = () => {
                         </h1>
                     </div>
 
-                    <div className="ml-auto flex items-center align-middle">
-                        <p className="text-xs text-devarana-graph text-opacity-50 block"> Responsables </p>
-                            <Tooltip title={`${currentOperativo.operativoPropietario.nombre} ${currentOperativo.operativoPropietario.apellidoPaterno}`}>
-                                <Avatar src={<Image src={`${getStorageUrl(currentOperativo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                    {currentOperativo.operativoPropietario.iniciales}
-                                </Avatar>
-                            </Tooltip>
-
+                    <div className="ml-auto flex items-center align-middle flex-col">
+                        <p className="text-xs text-devarana-graph text-opacity-50 block pb-2"> Responsables </p>
                         <Avatar.Group className=''>
                         {
-                                currentOperativo.operativosResponsable.map((participante) => (
-                                    <Tooltip key={participante.id} title={`${participante.nombre} ${participante.apellidoPaterno}`}>
-                                        <Avatar src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                            {participante.iniciales}
-                                        </Avatar>
-                                    </Tooltip>
-                                ))
-                                
+                            currentOperativo.operativosResponsable.map((participante) => (
+                                <Tooltip key={participante.id} title={`${participante.nombre} ${participante.apellidoPaterno}`}>
+                                    <Avatar src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                        {participante.iniciales}
+                                    </Avatar>
+                                </Tooltip>
+                            ))
                         }
                         </Avatar.Group>
                     </div>

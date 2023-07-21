@@ -20,22 +20,21 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
 
 
     const handleOnSubmit = async () => {
-
         const query = {
             ...currentUsuario,
             ...form.getFieldsValue(),
             id: currentUsuario.id,
         }
-
         if(currentUsuario.id) {
             await dispatch(updateUsuarioThunk(query))
         }else {
             await dispatch(createUsuarioThunk(query))
         }
-
         handleCancel()
+    }
 
-
+    const nextStep = () => {
+        handleSteps(1)
     }
 
 
@@ -119,19 +118,16 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
                         </Form.Item>
                         <Form.Item
                             label="Teléfono"
-                            required
                             name="telefono"
                             tooltip="Ingresa tu número de teléfono a 10 dígitos"
                             rules={[
                                 {
-                                    required: true,
                                     message: 'Por favor ingresa tu número de teléfono a 10 dígitos',
-                                    min: 10,
-                                    max: 10
+                                    pattern: new RegExp(/^[0-9]{10}$/),
                                 }
                             ]}
                         >
-                            <Input type='tel' className="w-full" maxLength={10} onChange={(e) => {
+                            <Input type='tel' className="w-full"  onChange={(e) => {
                                 const value = e.target.value.replace(/[^0-9]/g, '');
                                 form.setFieldsValue({telefono: value})
                             }} />
@@ -140,7 +136,7 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
                 </div>
                 <div className="flex justify-end mt-2 gap-x-2">
                     <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> <FaSave /> </Button>
-                    <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={() => handleSteps(1)} className="mr-2" disabled={currentUsuario.id === ''}>
+                    <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={nextStep} className="mr-2" disabled={currentUsuario.id === ''}>
                         <FaArrowRight /> 
                     </Button>
                 </div>

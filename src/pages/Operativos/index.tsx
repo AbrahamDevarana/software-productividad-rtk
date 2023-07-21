@@ -19,19 +19,21 @@ export const Objetivos : React.FC = () => {
     const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
-    const [year, setYear] = useState(dayjs().year())
+    const [ year, setYear] = useState(dayjs().year())
+    const [ quarter, setQuarter ] = useState(dayjs().quarter())
+
+    console.log(quarter);
+    
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
-
-    const validateRangePicker = (date: [Dayjs, Dayjs], dateString: [string, string]) => {
-        setLastDayOfQuarter(dayjs(dateString[0]).endOf('quarter'))
+     const handleDateChange = (date: any, dateString: string) => {
+        setYear(dayjs(date).year())
+        setQuarter(dayjs(date).quarter())
     }
-
-
     useEffect(() => {
-        dispatch(getOperativosThunk({year}))
-    }, [year])
+        dispatch(getOperativosThunk({year, quarter}))
+    }, [year, quarter])
 
     const ponderacionTotal = useMemo(() => {
         let total = 0
@@ -58,10 +60,6 @@ export const Objetivos : React.FC = () => {
         <>
             <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
                 <Box className='md:col-span-9 col-span-12 flex justify-evenly md:flex-row flex-col'>
-                    {/* <DatePicker.RangePicker onCalendarChange={ () => validateRangePicker} 
-                        disabledDate={ (current) => current && current > lastDayOfQuarter }
-                    /> */}
-
                     <div className='px-5 text-devarana-graph text-center'>
                         <p className='font-medium'>Avance Total de Objetivos</p>
                         <p className='py-3'>Ponderación  80% </p>
@@ -94,15 +92,16 @@ export const Objetivos : React.FC = () => {
                     </div>
                 </Box>
                 <Box className='md:col-span-3 col-span-12 row-span-3'>
-                    <DatePicker
-                        picker='year' 
-                        onChange={(date, dateString) => setYear(dayjs(dateString).year())} 
-                        value={dayjs(`${year}`)}
-                        disabledDate={(current) => {
-                            // no se puede mas del año actual y menos de hace 11 años
-                            return current.year() > dayjs().year() || current.year() < dayjs().subtract(11, 'year').year()
-                        }}
+                    
+                    
+                    <DatePicker 
+                        picker='quarter'
+                        className='block'
+                        onChange={handleDateChange}
+                        // disabledDate={(current) => { return current > dayjs().endOf('quarter') || current < dayjs().startOf('quarter').subtract(11, 'year') }}
+                        value={ dayjs().quarter(quarter).year(year) }
                         allowClear={false}
+                        format={'Qº [Trimestre] YYYY'}
                     />
                     <pre>
                         {

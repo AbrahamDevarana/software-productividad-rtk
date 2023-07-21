@@ -109,7 +109,7 @@ export const updateQuartersThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const response = await clientAxios.patch<Props>(`/tacticos/quarters/${tactico.id}`, tactico, config);            
+            const response = await clientAxios.put<Props>(`/tacticos/quarters/${tactico.id}`, tactico, config);            
             return response.data.objetivoTactico
         }
         catch (error: any) {
