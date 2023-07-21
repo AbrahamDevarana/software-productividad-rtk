@@ -37,6 +37,12 @@ export default defineConfig({
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
                 "react-dnd": ["react-dnd"],
+            },
+            onwarn(warning, warn) {
+                if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+                  return
+                }
+                warn(warning)
             }
         },
         chunkSizeWarningLimit: 1500
