@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useMemo} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
@@ -24,6 +24,9 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
         setIsModalVisible(true)
     }
 
+    const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
+
+
     return (
         <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
@@ -35,17 +38,17 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                     <p>Acciones </p>
                     <p> 0 / 0 </p>
                 </div>
+                <div>
+                    <p> Ponderacion </p>
+                    <p> 
+                        { progresoAsignado }%
+                    </p>
+                </div>
             </div>
             <Divider />
             <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
             <Progress 
-                percent={
-                    objetivo.operativosResponsable?.map(responsable => {
-                        if( responsable.id === userAuth?.id ) {
-                            return responsable.scoreCard?.progresoFinal
-                        }
-                    })[0]
-                }
+                percent={  progresoReal }
                 type='circle'
                 strokeLinecap='square'
                 className='flex justify-center py-5'

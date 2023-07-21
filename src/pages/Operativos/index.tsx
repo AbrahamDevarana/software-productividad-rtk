@@ -21,10 +21,6 @@ export const Objetivos : React.FC = () => {
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
-
-    console.log(quarter);
-    
-
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
      const handleDateChange = (date: any, dateString: string) => {
@@ -41,7 +37,7 @@ export const Objetivos : React.FC = () => {
         operativos.forEach(operativo => {
             operativo.operativosResponsable?.map(responsable => {
                 if( responsable.id === userAuth?.id ) {
-                    total += responsable.scoreCard?.progresoFinal || 0
+                    total += (responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100
                 }
             })
         })
