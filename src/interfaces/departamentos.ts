@@ -16,7 +16,7 @@ export interface DepartamentoProps {
     id:        number;
     nombre:    string;
     leaderId:  string;
-    status:    boolean;
+    status?:    boolean;
     slug:      string;
     parentId?: null;
     area?:     DepartamentoProps;

@@ -39,8 +39,8 @@ export const Personal: React.FC<any> = ({handleSteps, handleCancel}) => {
                 form={form}
                 initialValues={{
                     ...currentUsuario,
-                    fechaNacimiento: dayjs(currentUsuario.fechaNacimiento).add(6, 'hour'),
-                    fechaIngreso: dayjs(currentUsuario.fechaIngreso).add(6, 'hour')
+                    fechaNacimiento: dayjs(currentUsuario.fechaNacimiento),
+                    fechaIngreso: dayjs(currentUsuario.fechaIngreso),
                 }}
             >
                 <Divider orientation="center">Perfil</Divider>

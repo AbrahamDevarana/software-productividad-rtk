@@ -29,6 +29,7 @@ export interface UsuarioProps {
     foto?: string;
     descripcionPerfil?: string;
     departamentoId?: number;
+    departamento?: DepartamentoProps;
     leaderId?: number | null ;
     direccion?: Direccion;
     departamentos: DepartamentoProps[];

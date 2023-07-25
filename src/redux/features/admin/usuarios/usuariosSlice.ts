@@ -39,7 +39,16 @@ const initialState: UsuariosState = {
             ciudad: '',
             estado: ''
         },
-        departamentos: []
+        departamentos: [],
+        departamento: {
+            id: 0,
+            nombre: '',
+            color: '',
+            areaId: 0,
+            leaderId: '',
+            slug: '',
+            usuarios: []
+        }
     }
 }
 

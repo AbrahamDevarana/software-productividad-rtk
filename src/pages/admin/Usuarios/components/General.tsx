@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input, Form, Upload, Modal, Skeleton } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '@/components/ui';
@@ -18,6 +18,7 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
 
     const [loading, setLoading] = useState(false);
 
+    const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen, handleReset} = useUploadAvatar({currentUsuario})
 
     const handleOnSubmit = async () => {
         const query = {
@@ -37,8 +38,13 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
         handleSteps(1)
     }
 
+    useEffect(() => {
+        return () => {
+            handleReset()
+        }
+    }, [])
 
-    const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen} = useUploadAvatar({currentUsuario})
+
 
     if(isLoadingCurrentUsuario) return ( <Skeleton active paragraph={{ rows: 4 }} /> )
 

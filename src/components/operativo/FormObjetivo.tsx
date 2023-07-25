@@ -26,7 +26,7 @@ export const FormObjetivo = ({year}:Props) => {
 
 
     useEffect(() => {
-        dispatch(getTacticosThunk({year}))
+        dispatch(getTacticosThunk({ year }))
         dispatch(getUsuariosThunk({}))
     }, [])
 
@@ -37,8 +37,10 @@ export const FormObjetivo = ({year}:Props) => {
             ...currentOperativo,
             ...form.getFieldsValue(),
             propietarioId: userAuth.id,
+            fechaInicio: dayjs(form.getFieldsValue().fecha[0]).format('YYYY-MM-DD'),
+            fechaFin: dayjs(form.getFieldsValue().fecha[1]).format('YYYY-MM-DD'),
         }
-        
+
         if(currentOperativo.id === ''){
             dispatch(createOperativoThunk(query))
         }else{
@@ -75,7 +77,7 @@ export const FormObjetivo = ({year}:Props) => {
 
         const options = Object.keys(estrategicosGroup).map((estrategico) => {
             return {
-                label: estrategico,
+                label: <p className='text-devarana-pink font-medium'>{estrategico}</p>,
                 options: estrategicosGroup[estrategico].map((tactico: TacticoProps) => ({
                     label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
                     value: tactico.id,
@@ -113,7 +115,8 @@ export const FormObjetivo = ({year}:Props) => {
             initialValues={{
                 ...currentOperativo,
                 operativosResponsable: currentOperativo.operativosResponsable.map((item) => item.id),
-                progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado
+                progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
+                fecha: [dayjs(currentOperativo.fechaInicio), dayjs(currentOperativo.fechaFin)],
             }}
             form={form}
         >
@@ -145,16 +148,12 @@ export const FormObjetivo = ({year}:Props) => {
                 label="Fecha"
                 className='col-span-6'
                 required
+                name="fecha"
             >
                 <RangePicker 
                     disabledDate={disabledDate}
                     className='w-full' 
                     format="DD/MM/YYYY"
-                    value={[dayjs(currentOperativo.fechaInicio), dayjs(currentOperativo.fechaFin)]}
-                    onChange={ (dates, dateStrings) => {
-                        form.setFieldValue('fechaInicio', dateStrings[0])
-                        form.setFieldValue('fechaFin', dateStrings[1])
-                    }}
                 />
             </Form.Item>
             <Form.Item

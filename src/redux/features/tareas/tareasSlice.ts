@@ -25,6 +25,14 @@ const initialState:TareasState = {
             foto: '',
             iniciales: '',
 			departamentos: [],
+			departamento: {
+				id: 0,
+				nombre: '',
+				color: '',
+				leaderId: '',
+				slug: '',
+				usuarios: [],
+			}
         },
     },
     infoMessage: '',

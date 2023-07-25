@@ -1,6 +1,6 @@
 import { clearTacticosThunk, getTacticoFromEquiposThunk } from "@/redux/features/tacticos/tacticosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Box } from "@/components/ui"
 import { ImStatsBars2 } from "react-icons/im"
 import { motion } from 'framer-motion';
@@ -48,6 +48,11 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
         setActiveTeam(slug)
     }
 
+    const activeDepartamento = useMemo(() => {
+        const current = activeTeam ? currentArea?.departamentos?.find(equipo => equipo.slug === activeTeam) : null
+        return current
+    }, [activeTeam])
+
     if(isLoadingArea) return <Loading />
 
     return ( 
@@ -56,58 +61,30 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
             animate={{ opacity: 1, transition: { duration: .5 } }}
         >
             <div className="flex gap-5 max-h-screen flex-row">
-                    <div className="flex flex-col gap-x-5 gap-y-5 pt-5 max-w-[320px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+                    <div className="flex flex-col gap-x-5 gap-y-5 pt-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+
+                        <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
                             {
                                 currentArea.departamentos?.map(equipo => (
-                                    <motion.div key={equipo.id} className="cursor-pointer">
-                                       <div onClick={() => handleGetDepartamentos(equipo.slug)}>
-                                        <div className={`p-2 px-5 shadow-ext rounded-ext w-[300px]`} 
-                                            style={{
-                                                backgroundColor: `${activeTeam === equipo.slug ? equipo.color : 'white'}`,
-                                            }}
-                                        >
-                                                <p className="font-medium"
-                                                    style={{
-                                                        color: `${activeTeam === equipo.slug ? 'white' : equipo.color}`,
-                                                    }}
-                                                > {equipo.nombre} </p>
-                                                <Divider className="my-1 bg-white" />
-                                                <div className="flex w-full">
-                                                    <div className="flex gap-x-3 items-center"
-                                                        style={{
-                                                            color: `${activeTeam === equipo.slug ? 'white' : equipo.color}`,
-                                                        }}
-                                                    >
-                                                        <Tooltip title="Objetivos Estratégicos" className="flex items-center gap-x-1">
-                                                            <FaRocket />
-                                                            <p>5</p>
-                                                        </Tooltip>
-                                                        <Tooltip title="Objetivos Tácticos" className="flex items-center gap-x-1">
-                                                            <FaBrain />
-                                                            <p>4</p>
-                                                        </Tooltip>
-                                                        <Tooltip title="Objetivos Operativos" className="flex items-center gap-x-1">
-                                                            <FaCrosshairs />
-                                                            <p>3</p>
-                                                        </Tooltip>
-                                                    </div>
-                                                    {/* <Avatar.Group>
-                                                        {
-                                                            equipo.usuarios.map(participante => (
-                                                                <Tooltip title={participante.nombre} key={participante.id}>
-                                                                    <Avatar key={participante.id} src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} alt={participante.nombre} className="w-8 h-8 rounded-full" />
-                                                                </Tooltip>
-                                                            ))
-                                                        }
-                                                    </Avatar.Group> */}
-                                                </div>
-                                            </div>
-                                       </div>
-                                    </motion.div>
+                                    <div key={equipo.slug} 
+                                        onClick={() => handleGetDepartamentos(equipo.slug)} 
+                                        className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer`}
+                                        style={{
+                                            backgroundColor: activeTeam === equipo.slug ? 'rgb(229, 231, 235)' : '',
+                                        }}
+                                    >
+                                            <p className="font-medium"
+                                                style={{ color: equipo.color }}> {equipo.nombre} </p>
+                                        </div>
                                 ))
                             }
+                        </div>
                     </div>    
-                    <div className="pt-5 w-full flex flex-col gap-10">
+                    <div className="pt-5 w-full flex flex-col gap-y-5">
+                        <Box>
+                            <p className="text-sm text-opacity-20 text-devarana-midnight">{currentArea.nombre}</p>
+                            <h1 className="text-devarana-dark-graph font-medium">{activeDepartamento?.nombre}</h1>
+                        </Box>
                         <Box>
                             <div className="flex items-center gap-x-2">
                                 <h2>Objetivos Tácticos Estratégicos</h2>
@@ -132,7 +109,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
                                     </Tooltip>
                                 </Tooltip>
                             </div>
-                                <TablaTacticos tacticos={tacticos_core} estrategico handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} />
+                                <TablaTacticos tacticos={tacticos_core} estrategico={false} handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} />
                         </Box>
                         
                         

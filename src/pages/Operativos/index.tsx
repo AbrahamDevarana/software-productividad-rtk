@@ -11,6 +11,7 @@ import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk
 import { FaPlus } from 'react-icons/fa';
 import { getColor } from '@/helpers';
 import { FormObjetivo } from '@/components/operativo/FormObjetivo';
+import GaugeChart from '@/components/complexUI/Gauge';
 
 export const Objetivos : React.FC = () => {
 
@@ -54,8 +55,16 @@ export const Objetivos : React.FC = () => {
     
     return (
         <>
-            <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
-                <Box className='md:col-span-9 col-span-12 flex justify-evenly md:flex-row flex-col'>
+            <DatePicker 
+                picker='quarter'
+                className='block max-w-xs ml-auto mb-3'
+                onChange={handleDateChange}
+                value={ dayjs().quarter(quarter).year(year) }
+                allowClear={false}
+                format={'Qº [Trimestre] YYYY'}
+            />
+            <div className="grid grid-cols-12 gap-5">
+                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
                     <div className='px-5 text-devarana-graph text-center'>
                         <p className='font-medium'>Avance Total de Objetivos</p>
                         <p className='py-3'>Ponderación  80% </p>
@@ -68,17 +77,14 @@ export const Objetivos : React.FC = () => {
 
                         />
                     </div>
-                        <Divider type='vertical' className='h-full' />
+                </Box>
+                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
                     <div className='px-5 text-center text-devarana-graph'>
-                        <p className='font-medium'>Cumplimiento de Objetivos</p>
-                        <p className='py-3'> Decimales Extra </p>
-                        <div>
-                            <p className='text-3xl'>
-                                3 / {operativos.length}
-                            </p>
-                        </div>
+                        <p className='font-medium'>Avance</p>
+                        <GaugeChart />
                     </div>
-                    <Divider type='vertical' className='h-full' />
+                </Box>
+                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
                     <div className='text-devarana-graph text-center px-5'>
                         <p className='font-medium'>Desempeño</p>
                         <p className=''> Ponderación 20 %</p>
@@ -87,26 +93,9 @@ export const Objetivos : React.FC = () => {
                         </div>
                     </div>
                 </Box>
-                <Box className='md:col-span-3 col-span-12 row-span-3'>
-                    
-                    
-                    <DatePicker 
-                        picker='quarter'
-                        className='block'
-                        onChange={handleDateChange}
-                        // disabledDate={(current) => { return current > dayjs().endOf('quarter') || current < dayjs().startOf('quarter').subtract(11, 'year') }}
-                        value={ dayjs().quarter(quarter).year(year) }
-                        allowClear={false}
-                        format={'Qº [Trimestre] YYYY'}
-                    />
-                    <pre>
-                        {
-                            JSON.stringify(operativos, null, 2)
-                        }
-                    </pre>
-                </Box>
-
-                <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+            </div>
+            <div className='grid grid-cols-12 gap-x-10 gap-5'>
+                <div className='col-span-9 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
                     {
                         isLoading && operativos.length === 0 ? 
                             <div className='col-span-12'>
@@ -119,6 +108,10 @@ export const Objetivos : React.FC = () => {
                         )
                     }
                 </div>
+
+                <Box className='col-span-3 row-span-3 my-5'>
+
+                </Box>
             </div>
             
 

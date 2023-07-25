@@ -23,7 +23,7 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
     
     useEffect(() => {
         dispatch(getAreasThunk({}))
-        setSelectedArea(currentUsuario.departamentos[0]?.areaId)
+        setSelectedArea(currentUsuario.departamento?.areaId)
 
         return () => {
             dispatch(clearLideresThunk())
@@ -31,15 +31,15 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
     }, [])
 
     useEffect(() => {
-        if(currentUsuario.departamentos.length > 0 && currentUsuario.departamentos[0]?.areaId)
+        if(currentUsuario.departamento && currentUsuario.departamento.areaId)
         {
-            dispatch(getDepartamentosThunk({areaId: currentUsuario.departamentos[0]?.areaId}))
+            dispatch(getDepartamentosThunk({areaId: currentUsuario.departamento.areaId}))
         }        
-    }, [currentUsuario.departamentos])
+    }, [currentUsuario.departamento])
 
     useEffect(() => {
-        if (currentUsuario.departamentos[0]){ 
-            dispatch(getLideresDepartamentoThunk(currentUsuario.departamentos[0].id))
+        if (currentUsuario.departamento){ 
+            dispatch(getLideresDepartamentoThunk(currentUsuario.departamento.id))
         }
     }, [currentUsuario.departamentoId])
 
@@ -89,7 +89,6 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
                 form={form}
                 initialValues={{
                     ...currentUsuario,
-                    despartamentos: currentUsuario.departamentos?.map((departamento) => departamento.id)
                 }}
             >
                   <Space wrap className='grid grid-cols-2 gap-5'>
@@ -114,13 +113,12 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
                     <Form.Item
                         label="Departamento"
                         className='col-span-1'
-                        name='despartamentos'
+                        name='departamentoId'
                     >
                         <Select
                             showSearch
                             placeholder="Selecciona una opción"
                             allowClear
-                            mode="multiple"
                             disabled={departamentos.length === 0}
                             onChange={handleChangeDepartamento}
                         >

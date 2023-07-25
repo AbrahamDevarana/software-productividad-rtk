@@ -53,6 +53,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 strokeLinecap='square'
                 className='flex justify-center py-5'
                 strokeWidth={10}
+                // strokeColor={{ '0%': '#ff0025', '85%': '#ff0025', '87%': '#ff914d', '89%': '#ffbd59', '91%': '#ffde59', '93%': '#c1ff72' , '95%': '#7ed9577' , '97%': '#00bf63', '99%': '#5ce1e6' , '100%': '#0cc0df' }}
                 strokeColor={getColor('SIN_INICIAR').color}
 
             />

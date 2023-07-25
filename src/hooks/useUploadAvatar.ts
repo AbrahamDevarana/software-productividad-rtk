@@ -37,6 +37,10 @@ export const useUploadAvatar = ({currentUsuario}: Props) => {
         setPreviewOpen(true);
     }
 
+    const handleReset = () => {
+        setFileList([])
+    }
+
 
     useEffect(() => {
         if(currentUsuario.id && currentUsuario.foto) {
@@ -56,6 +60,7 @@ export const useUploadAvatar = ({currentUsuario}: Props) => {
         handleOnChange,
         handleOnRemove,
         handlePreview,
+        handleReset,
         setPreviewOpen
     }
 
