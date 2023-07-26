@@ -32,7 +32,7 @@ export const Areas: React.FC = () => {
             render: (text, record, index) => ( <p className="text-devarana-graph"> { record.nombre } </p>),
         },
         {
-            title: () => ( <p className='tableTitle'>Lider</p>),
+            title: () => ( <p className='tableTitle'>Responsable</p>),
             key: "leader",
             render: (text, record, index) => ( <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>),
         },

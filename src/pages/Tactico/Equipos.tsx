@@ -2,13 +2,14 @@ import { clearTacticosThunk, getTacticoFromEquiposThunk } from "@/redux/features
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useMemo, useState } from "react"
 import { Box } from "@/components/ui"
-import { ImStatsBars2 } from "react-icons/im"
 import { motion } from 'framer-motion';
-import { Divider, Tooltip } from "antd"
-import { FaBrain, FaCrosshairs, FaQuestionCircle, FaRocket } from "react-icons/fa"
+import { Avatar, Image, Tooltip } from "antd"
+import { FaQuestionCircle } from "react-icons/fa"
 import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/admin/areas/areasThunks"
 import Loading from "@/components/antd/Loading"
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
+import { getStorageUrl } from "@/helpers"
+import getBrokenUser from "@/helpers/getBrokenUser"
 
 interface Props {
     slug?: string
@@ -22,7 +23,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
     const dispatch = useAppDispatch()
     const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
     const { tacticos, tacticos_core, isLoading} = useAppSelector(state => state.tacticos)
-    const [activeTeam, setActiveTeam] = useState<string>('')
+    const [ activeTeam, setActiveTeam ] = useState<string>('')
     
     useEffect(() => {
         if(slug){
@@ -53,6 +54,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
         return current
     }, [activeTeam])
 
+
     if(isLoadingArea) return <Loading />
 
     return ( 
@@ -81,9 +83,36 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
                         </div>
                     </div>    
                     <div className="pt-5 w-full flex flex-col gap-y-5">
-                        <Box>
-                            <p className="text-sm text-opacity-20 text-devarana-midnight">{currentArea.nombre}</p>
-                            <h1 className="text-devarana-dark-graph font-medium">{activeDepartamento?.nombre}</h1>
+                        <Box className="flex" style={{
+                            backgroundColor: activeDepartamento?.color,
+                        }}>
+                            <div>
+                                <h1 className="text-white font-medium">{activeDepartamento?.nombre}</h1>
+                                <p className="text-white text-opacity-80 drop-shadow">{currentArea.nombre}</p>
+                            </div>
+
+                            <div className="mx-5 px-5 border-r-0 border-t-0 border-b-0 border-white border items-center flex">
+                                {
+                                    currentArea.leader && activeDepartamento && (
+                                        <div className="flex items-center gap-x-2 align-middle">
+                                            <Avatar 
+                                                    src={<Image src={`${getStorageUrl(activeDepartamento?.leader?.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                            />
+
+                                            {
+                                                activeDepartamento.leader &&
+                                               ( 
+                                                <div className="">
+                                                    <p className="text-white">{activeDepartamento.leader.nombre} {activeDepartamento.leader?.apellidoPaterno} {activeDepartamento?.leader?.apellidoMaterno}
+                                                    <p className="text-sm text-opacity-80 text-white drop-shadow">Lider de seguimiento</p>
+                                                    </p>
+                                                
+                                                </div>)
+                                            }
+                                        </div>
+                                    )
+                                }
+                            </div>
                         </Box>
                         <Box>
                             <div className="flex items-center gap-x-2">

@@ -54,6 +54,7 @@ export interface Lider {
     nombre: string;
     apellidoPaterno: string;
     apellidoMaterno: string;
+    foto: string;
 }
 
 export interface userAuthProps{

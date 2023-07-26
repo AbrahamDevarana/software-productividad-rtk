@@ -11,7 +11,7 @@ import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk
 import { FaPlus } from 'react-icons/fa';
 import { getColor } from '@/helpers';
 import { FormObjetivo } from '@/components/operativo/FormObjetivo';
-import GaugeChart from '@/components/complexUI/Gauge';
+import { GaugeChart } from '@/components/complexUI/Gauge';
 
 export const Objetivos : React.FC = () => {
 
@@ -81,7 +81,7 @@ export const Objetivos : React.FC = () => {
                 <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
                     <div className='px-5 text-center text-devarana-graph'>
                         <p className='font-medium'>Avance</p>
-                        <GaugeChart />
+                        <GaugeChart value={95} />
                     </div>
                 </Box>
                 <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>

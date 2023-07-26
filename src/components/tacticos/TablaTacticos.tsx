@@ -20,6 +20,9 @@ interface TablaTacticosProps {
 export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
     const dispatch = useAppDispatch()
+
+    console.log(tacticos);
+    
     
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
@@ -80,7 +83,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             width: 80,
             ellipsis: true,
             render: (text, record, index) => (
-                <div className='flex gap-x-1 items-center align-middle'>
+                <div className='flex gap-x-1 items-center align-middle'> 
                     {
                         record.trimestres.map((trimestre, index) => (
                             <span key={index} className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}

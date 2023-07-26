@@ -23,5 +23,6 @@ export interface DepartamentoProps {
     areaId?:   number;
     leader?:   Lider;
     color:    string;
+    order?:     number;
     usuarios: UsuarioProps[];
 }

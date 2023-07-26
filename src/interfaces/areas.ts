@@ -1,4 +1,5 @@
 import { DepartamentoProps } from "./departamentos";
+import { PerspectivaProps } from "./perspectiva";
 import { Paginate } from "./slice";
 import { UsuarioProps } from "./usuario";
 
@@ -11,6 +12,7 @@ export interface AreaProps {
     leader: UsuarioProps
     subAreas: AreaProps[]
     departamentos: DepartamentoProps[]
+    perspectivas?: PerspectivaProps
 }
 
 export interface AreasState {
@@ -21,6 +23,4 @@ export interface AreasState {
     error: boolean;
     infoMessage: string;
     currentArea: AreaProps;
-    
-    
 }
