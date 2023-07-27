@@ -1,17 +1,21 @@
 import { Box } from '@/components/ui';
-import { DatePicker, Divider, FloatButton, Modal, Progress, Rate } from 'antd'
+import { Avatar, DatePicker, Divider, FloatButton, Image, Modal, Progress, Rate } from 'antd'
 import { useState, useEffect, useMemo } from 'react';
-import dayjs, {Dayjs} from 'dayjs';
+import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import Loading from '@/components/antd/Loading';
-
+import CountUp from 'react-countup';
 import { Objetivo } from '@/components/operativo/Objetivo';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { FaPlus } from 'react-icons/fa';
-import { getColor } from '@/helpers';
+import { getStorageUrl } from '@/helpers';
 import { FormObjetivo } from '@/components/operativo/FormObjetivo';
 import { GaugeChart } from '@/components/complexUI/Gauge';
+import getBrokenUser from '@/helpers/getBrokenUser';
+import { TabStatus } from '@/components/ui/TabStatus';
+import MixedChart from '@/components/complexUI/MixedChart';
+import { AiOutlineEllipsis } from 'react-icons/ai';
 
 export const Objetivos : React.FC = () => {
 
@@ -55,44 +59,90 @@ export const Objetivos : React.FC = () => {
     
     return (
         <>
-            <DatePicker 
-                picker='quarter'
-                className='block max-w-xs ml-auto mb-3'
-                onChange={handleDateChange}
-                value={ dayjs().quarter(quarter).year(year) }
-                allowClear={false}
-                format={'Qº [Trimestre] YYYY'}
-            />
             <div className="grid grid-cols-12 gap-5">
-                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
-                    <div className='px-5 text-devarana-graph text-center'>
-                        <p className='font-medium'>Avance Total de Objetivos</p>
-                        <p className='py-3'>Ponderación  80% </p>
-                        <Progress 
-                            percent={ponderacionTotal} 
-                            type='dashboard' 
-                            className='flex justify-center'
-                            strokeColor={getColor('SIN_INICIAR').color}
-                            strokeWidth={10}
-
-                        />
+                <Box className='col-span-3 px-5 text-devarana-graph flex flex-col'>
+                    <div className='flex justify-between w-full'>
+                        <h1>Resumen</h1>
+                        <div>
+                            <DatePicker picker='quarter' onChange={handleDateChange} value={ dayjs().quarter(quarter).year(year) }  clearIcon={false} format={'Qº [Trimestre] YYYY'} size='small' suffixIcon={false} />
+                        </div>
+                    </div>
+                    <div className='my-5 p-5 flex items-center bg-gray-100 bg-opacity-15 rounded'>
+                        <Avatar src={<Image src={`${getStorageUrl(userAuth.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                        <div className='ml-2'>
+                            <p className='font-medium'>{userAuth.nombre}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div className='font-light flex justify-between'>
+                            <p>Mis Objetivos: </p> <CountUp end={10} separator="," />
+                        </div>
+                        <div className='font-light flex justify-between'>
+                            <p>Objetivos Compartidos: </p> <CountUp end={3} separator="," />
+                        </div>
+                        <div className='font-light flex justify-between'>
+                            <p>Resultadoc Clave: </p> <CountUp end={5} separator="," />
+                        </div>
+                        <div className='font-light flex justify-between'>
+                            <p>Acciones: </p> <CountUp end={32} separator="," />
+                        </div>
+                
+                    </div>
+                    <div className='mt-auto ml-auto'>
+                        <TabStatus status='EN_TIEMPO' />
                     </div>
                 </Box>
-                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
+                <Box className='col-span-3 flex justify-center'>
                     <div className='px-5 text-center text-devarana-graph'>
                         <p className='font-medium'>Avance</p>
-                        <GaugeChart value={95} />
-                    </div>
-                </Box>
-                <Box className='col-span-4 flex justify-evenly md:flex-row flex-col'>
-                    <div className='text-devarana-graph text-center px-5'>
-                        <p className='font-medium'>Desempeño</p>
-                        <p className=''> Ponderación 20 %</p>
-                        <div>
-                            <Rate allowHalf defaultValue={3} />
+                        <GaugeChart value={ponderacionTotal}/>
+                        <div className='pt-5'>
+                            <Progress percent={ponderacionTotal} />
+                            <p>Logro Objetivos</p>
+                            <Divider className='my-2'/>
+                            <Rate disabled defaultValue={4} />
+                            <p>Evaliación Competitiva</p>
                         </div>
                     </div>
                 </Box>
+                <Box className='col-span-3 flex w-full justify-center'>
+                    <div className='text-devarana-graph flex flex-col w-full'>
+                        <div className='flex justify-between w-full'>
+                            <h1>Historial de desempeño</h1>
+                            <DatePicker picker='year' size='small' suffixIcon={false} clearIcon={false} />
+                        </div>
+                        <div className='my-auto w-full'>
+                            <MixedChart />
+
+                        </div>
+                    </div>
+                </Box>
+                <div className='p-5 shadow-ext rounded-ext col-span-3 bg-devarana-blue'>
+                    <h1 className='text-white'>Mi Equipo</h1>
+                    <ul>
+                        <li className='flex items-center my-5 gap-x-5 w-full'>
+                            <Avatar src={<Image src={`${getStorageUrl(userAuth.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                            <p className='font-medium text-white mx-auto'>{userAuth.nombre}</p>
+                            <div className='px-2 bg-white rounded'>
+                                <p className='text-devarana-blue font-medium'> 93.5% </p>
+                            </div>
+                            <div className='border-white border rounded'>
+                                <AiOutlineEllipsis className='text-white text-2xl' />
+                            </div>
+                        </li>
+                        <li className='flex items-center my-5 gap-x-5 w-full'>
+                            <Avatar src={<Image src={`${getStorageUrl(userAuth.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                            <p className='font-medium text-white mx-auto'>{userAuth.nombre}</p>
+                            <div className='px-2 bg-white rounded'>
+                                <p className='text-devarana-blue font-medium'> 93.5% </p>
+                            </div>
+                            <div className='border-white border rounded'>
+                                <AiOutlineEllipsis className='text-white text-2xl' />
+                            </div>
+                        </li>
+                    </ul>
+                    
+                </div>
             </div>
             <div className='grid grid-cols-12 gap-x-10 gap-5'>
                 <div className='col-span-9 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
