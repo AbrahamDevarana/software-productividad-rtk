@@ -57,7 +57,9 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 strokeColor={getColor('SIN_INICIAR').color}
 
             />
-            <Avatar.Group className='flex justify-center'>
+            <Avatar.Group className='flex justify-center' maxCount={3}
+                maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+            >
                 {
                     objetivo.operativoPropietario && (
                         <Avatar src={<Image src={`${getStorageUrl(objetivo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >

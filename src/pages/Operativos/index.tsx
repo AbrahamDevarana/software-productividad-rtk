@@ -161,6 +161,12 @@ export const Objetivos : React.FC = () => {
 
                 <Box className='col-span-3 row-span-3 my-5'>
 
+                    <pre>
+                        {
+                            JSON.stringify(operativos, null, 2)
+                        }
+                    </pre>
+
                 </Box>
             </div>
             
