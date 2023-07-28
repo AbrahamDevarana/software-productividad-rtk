@@ -16,12 +16,12 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { TabStatus } from '@/components/ui/TabStatus';
 import MixedChart from '@/components/complexUI/MixedChart';
 import { AiOutlineEllipsis } from 'react-icons/ai';
+import { useObjetivo } from '@/hooks/useObjetivos';
 
 export const Objetivos : React.FC = () => {
 
     const dispatch = useAppDispatch()
 
-    const [ lastDayOfQuarter, setLastDayOfQuarter ] = useState<any>()
     const { userAuth } = useAppSelector(state => state.auth)
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const [ year, setYear] = useState(dayjs().year())
@@ -36,31 +36,18 @@ export const Objetivos : React.FC = () => {
         dispatch(getOperativosThunk({year, quarter}))
     }, [year, quarter])
 
-    const ponderacionTotal = useMemo(() => {
-        let total = 0
-      
-        operativos.forEach(operativo => {
-            operativo.operativosResponsable?.map(responsable => {
-                if( responsable.id === userAuth?.id ) {
-                    total += (responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100
-                }
-            })
-        })
-        return total
-        
-    }, [operativos])
-
-
     const handleCancel = () => {
         setIsModalVisible(false)
         dispatch(clearObjetivoThunk())
         dispatch(clearResultadoThunk())
     }
-    
+
+    const { ponderacionTotal, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount, accionesCount, misObjetivos, objetivosCompartidos} = useObjetivo({operativos})
+
     return (
         <>
-            <div className="grid grid-cols-12 gap-5">
-                <Box className='col-span-3 px-5 text-devarana-graph flex flex-col'>
+            <div className="flex gap-5">
+                <Box className='w-[20%] px-5 text-devarana-graph flex flex-col'>
                     <div className='flex justify-between w-full'>
                         <h1>Resumen</h1>
                         <div>
@@ -75,16 +62,16 @@ export const Objetivos : React.FC = () => {
                     </div>
                     <div>
                         <div className='font-light flex justify-between'>
-                            <p>Mis Objetivos: </p> <CountUp end={10} separator="," />
+                            <p>Mis Objetivos: </p> <CountUp end={misObjetivosCount} separator="," />
                         </div>
                         <div className='font-light flex justify-between'>
-                            <p>Objetivos Compartidos: </p> <CountUp end={3} separator="," />
+                            <p>Objetivos Compartidos: </p> <CountUp end={objetivosCompartidosCount} separator="," />
                         </div>
                         <div className='font-light flex justify-between'>
-                            <p>Resultadoc Clave: </p> <CountUp end={5} separator="," />
+                            <p>Resultadoc Clave: </p> <CountUp end={resultadosClaveCount} separator="," />
                         </div>
                         <div className='font-light flex justify-between'>
-                            <p>Acciones: </p> <CountUp end={32} separator="," />
+                            <p>Acciones: </p> <CountUp end={accionesCount} separator="," />
                         </div>
                 
                     </div>
@@ -92,32 +79,36 @@ export const Objetivos : React.FC = () => {
                         <TabStatus status='EN_TIEMPO' />
                     </div>
                 </Box>
-                <Box className='col-span-3 flex justify-center'>
+                <Box className='w-[20%] flex justify-center'>
                     <div className='px-5 text-center text-devarana-graph'>
                         <p className='font-medium'>Avance</p>
                         <GaugeChart value={ponderacionTotal}/>
                         <div className='pt-5'>
-                            <Progress percent={ponderacionTotal} format={percent => `${percent?.toFixed(2)}%`} />
+                            <Progress percent={ponderacionTotal} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
+                            strokeColor={{
+                                '0%': 'rgba(9, 103, 201, 1)',
+                                '100%': 'rgba(9, 103, 201, .5)',
+                            }}
+                            />
                             <p>Logro Objetivos</p>
                             <Divider className='my-2'/>
-                            <Rate disabled defaultValue={4} />
+                            <Rate defaultValue={4} allowHalf className='text-primary' />
                             <p>Evaliación Competitiva</p>
                         </div>
                     </div>
                 </Box>
-                <Box className='col-span-3 flex w-full justify-center'>
+                <Box className='w-[35%] flex justify-center'>
                     <div className='text-devarana-graph flex flex-col w-full'>
                         <div className='flex justify-between w-full'>
                             <h1>Historial de desempeño</h1>
                             <DatePicker picker='year' size='small' suffixIcon={false} clearIcon={false} />
                         </div>
                         <div className='my-auto w-full'>
-                            <MixedChart />
-
+                            <MixedChart  values={[100, 50, 80, 20]} quarter={quarter} year={year}/>
                         </div>
                     </div>
                 </Box>
-                <div className='p-5 shadow-ext rounded-ext col-span-3 bg-devarana-blue'>
+                <div className='w-[25%] p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr'>
                     <h1 className='text-white'>Mi Equipo</h1>
                     <ul>
                         <li className='flex items-center my-5 gap-x-5 w-full'>
@@ -140,10 +131,12 @@ export const Objetivos : React.FC = () => {
                                 <AiOutlineEllipsis className='text-white text-2xl' />
                             </div>
                         </li>
-                    </ul>
-                    
+                    </ul>                 
                 </div>
             </div>
+
+
+
             <div className='grid grid-cols-12 gap-5'>
                 <div className='col-span-9 py-5 grid grid-cols-12 gap-5'>
                     {
@@ -151,22 +144,25 @@ export const Objetivos : React.FC = () => {
                             <div className='col-span-12'>
                                 <Loading  />
                             </div>
-                        : (
-                            operativos && operativos.length > 0 && operativos.map((operativo, index) => (
+                        : 
+
+                        <>
+                        {
+                            misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
                                 <Objetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible}/>
                             ))
-                        )
+                        }
+                        {
+                            objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
+                                <Objetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible}/>
+                            ))
+                        }
+                        </>
                     }
                 </div>
 
-                <Box className='col-span-3 row-span-3 my-5'>
-
-                    <pre>
-                        {
-                            JSON.stringify(operativos, null, 2)
-                        }
-                    </pre>
-
+                <Box className='col-span-3 row-span-2 my-5'>
+                    <h1 className='text-devarana-graph'>Ranking Devarana</h1>
                 </Box>
             </div>
             

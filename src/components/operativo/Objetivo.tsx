@@ -3,13 +3,12 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Badge, Button, Card, Divider, Dropdown, Image, MenuProps, Progress, Space } from 'antd'
-import { getColor, getStorageUrl } from '@/helpers';
+import { Avatar, Card, Divider, Image, Progress, Space } from 'antd'
+import { getStorageUrl } from '@/helpers';
 import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
-import DoughnutChart from '../complexUI/Doughtnut';
-import { log } from 'console';
 
+import CountUp from 'react-countup';
 
 interface ObjetivoProps {
     objetivo: OperativoProps,
@@ -30,12 +29,20 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
 
 
-    const {first, second} = useMemo(() => {        
-
-        const first = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, 1)' : 'rgba(229, 17, 65, 1)'
-        const second = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, .5)' : 'rgba(229, 17, 65, .5)'
-        return {first, second}
+    const {firstColor, secondColor} = useMemo(() => {        
+        const firstColor = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, 1)' : 'rgba(229, 17, 65, 1)'
+        const secondColor = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, .5)' : 'rgba(229, 17, 65, .5)'
+        return {firstColor, secondColor}
     }, [objetivo.operativoPropietario?.id, userAuth?.id])
+
+    const resultadoClaveDoneCount = useMemo(() => {
+        let total = 0
+        objetivo.resultadosClave.forEach(resultado => {
+            resultado.progreso === 100 && total++
+        })
+        return total
+    }, [objetivo])
+
     
 
     return (
@@ -43,7 +50,7 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             <div className='w-full flex justify-around text-devarana-graph text-center'>  
                 <div>
                     <p> Resultados Clave </p>
-                    <p> 0 / { objetivo.resultadosClave?.length } </p>
+                    <p> {resultadoClaveDoneCount} / { objetivo.resultadosClave.length } </p>
                 </div>
                 <div>
                     <p>Acciones </p>
@@ -66,14 +73,16 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 rootClassName=''
                 type='circle'
                 strokeColor={{
-                    '0%': first,
-                    '100%': second,
+                    '0%': firstColor,
+                    '100%': secondColor,
                 }}
-                percent={fixedProgresoReal}
-                size={100}
+                percent={ fixedProgresoReal }
+
+                format={() => <CountUp className='text-devarana-graph' end={fixedProgresoReal} duration={2} suffix='%'/>}
+                strokeWidth={12}
                 
                 />
-            <Avatar.Group className='flex justify-center'>
+            <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
                 {
                     objetivo.operativoPropietario && (
                         <Avatar src={<Image src={`${getStorageUrl(objetivo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >

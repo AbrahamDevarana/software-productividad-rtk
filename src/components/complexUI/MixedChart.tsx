@@ -1,8 +1,14 @@
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import { useEffect } from "react";
 import { Bar, Chart } from "react-chartjs-2";
 
+interface Props {
+	values: number[]
+	quarter: number
+	year: number
+}
 
-const MixedChart = () => {
+const MixedChart = ({values, quarter, year}:Props) => {
 
     ChartJS.register(
         CategoryScale,
@@ -12,8 +18,15 @@ const MixedChart = () => {
         Tooltip,
         Legend
       );
+	  const chartWidth = document.querySelector('.barBox')?.getBoundingClientRect().width || 200;
+	  const ctx = document.createElement('canvas').getContext('2d');
+	  if (!ctx) return <></>;
+	  
+	  useEffect(() => {
+		ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend );
+	  }, [values, year])
 
-    const labels = ['Ene - Abr', 'May-Jun', 'Jul-Ago', 'Sep-Dic'];
+    const labels = ['Ene - Abr', 'May-Jun', 'Jul-Ago', 'Sep-Dic'];	
 
     const options = {
         responsive: true,
@@ -25,24 +38,46 @@ const MixedChart = () => {
                 enabled: false
             },
         },
-      };
+	};
+
+	const label = [
+		{
+			name: 'Ene - Abr',
+			color: '#0967C9',
+		},
+		{
+			name: 'May-Jun',
+			color: '#0967C9',
+		},
+		{
+			name: 'Jul-Ago',
+			color: '#0967C9',
+		},
+		{
+			name: 'Sep-Dic',
+			color: '#0967C9',
+		},
+	]
 
     const data = {
-        labels,
+        labels: label.map((item) => item.name),
         datasets: [
           {
             label: 'Dataset 1',
-            data: [10, 20, 30, 40],
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            data: values,
+            backgroundColor: label.map((item) => item.color),
             
           },
         ],
       };
 
 
-      return <Bar options={options} data={data} style={{
-        width: '100%',
-      }} />;
+      return <div className="barBox">
+        <Bar options={options} data={data} style={{
+          width: '100%',
+        }} />
+      
+      </div>;
 }
  
 export default MixedChart;

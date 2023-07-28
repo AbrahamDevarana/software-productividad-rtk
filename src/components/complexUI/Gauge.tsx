@@ -84,7 +84,7 @@ export const GaugeChart = ({value = 0}: Props) => {
                 // responsive font size
                 const fontSizeResponsive = fontSize * (width / 300)
                 ctx.font = `${fontSizeResponsive}px Roboto`
-                ctx.fillStyle = '#666'
+                ctx.fillStyle = '#848891'
                 ctx.textBaseLine = textBaseLine
                 ctx.textAlign = textAlign
                 // responsive x and y coordinates
