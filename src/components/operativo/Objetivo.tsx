@@ -7,6 +7,8 @@ import { Avatar, Badge, Button, Card, Divider, Dropdown, Image, MenuProps, Progr
 import { getColor, getStorageUrl } from '@/helpers';
 import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import DoughnutChart from '../complexUI/Doughtnut';
+import { log } from 'console';
 
 
 interface ObjetivoProps {
@@ -25,7 +27,16 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
     }
 
     const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
+    const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
 
+
+    const {first, second} = useMemo(() => {        
+
+        const first = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, 1)' : 'rgba(229, 17, 65, 1)'
+        const second = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, .5)' : 'rgba(229, 17, 65, .5)'
+        return {first, second}
+    }, [objetivo.operativoPropietario?.id, userAuth?.id])
+    
 
     return (
         <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
@@ -41,25 +52,28 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
                 <div>
                     <p> Ponderacion </p>
                     <p> 
-                        { progresoAsignado }%
+                        { progresoAsignado.toFixed(2) }%
                     </p>
                 </div>
             </div>
             <Divider />
             <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
-            <Progress 
-                percent={  progresoReal }
-                type='circle'
-                strokeLinecap='square'
-                className='flex justify-center py-5'
-                strokeWidth={10}
-                // strokeColor={{ '0%': '#ff0025', '85%': '#ff0025', '87%': '#ff914d', '89%': '#ffbd59', '91%': '#ffde59', '93%': '#c1ff72' , '95%': '#7ed9577' , '97%': '#00bf63', '99%': '#5ce1e6' , '100%': '#0cc0df' }}
-                strokeColor={getColor('SIN_INICIAR').color}
 
-            />
-            <Avatar.Group className='flex justify-center' maxCount={3}
-                maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
-            >
+            {/* <DoughnutChart value={progresoReal}/> */}
+
+            <Progress
+                className='flex items-center justify-center py-5'
+                rootClassName=''
+                type='circle'
+                strokeColor={{
+                    '0%': first,
+                    '100%': second,
+                }}
+                percent={fixedProgresoReal}
+                size={100}
+                
+                />
+            <Avatar.Group className='flex justify-center'>
                 {
                     objetivo.operativoPropietario && (
                         <Avatar src={<Image src={`${getStorageUrl(objetivo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >

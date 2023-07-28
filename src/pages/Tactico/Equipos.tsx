@@ -75,8 +75,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
                                             backgroundColor: activeTeam === equipo.slug ? 'rgb(229, 231, 235)' : '',
                                         }}
                                     >
-                                            <p className="font-medium"
-                                                style={{ color: equipo.color }}> {equipo.nombre} </p>
+                                            <p className="font-medium text-devarana-graph"> {equipo.nombre} </p>
                                         </div>
                                 ))
                             }

@@ -97,7 +97,7 @@ export const Objetivos : React.FC = () => {
                         <p className='font-medium'>Avance</p>
                         <GaugeChart value={ponderacionTotal}/>
                         <div className='pt-5'>
-                            <Progress percent={ponderacionTotal} />
+                            <Progress percent={ponderacionTotal} format={percent => `${percent?.toFixed(2)}%`} />
                             <p>Logro Objetivos</p>
                             <Divider className='my-2'/>
                             <Rate disabled defaultValue={4} />
@@ -144,8 +144,8 @@ export const Objetivos : React.FC = () => {
                     
                 </div>
             </div>
-            <div className='grid grid-cols-12 gap-x-10 gap-5'>
-                <div className='col-span-9 py-5 grid grid-cols-12 md:gap-x-5 gap-y-5'>
+            <div className='grid grid-cols-12 gap-5'>
+                <div className='col-span-9 py-5 grid grid-cols-12 gap-5'>
                     {
                         isLoading && operativos.length === 0 ? 
                             <div className='col-span-12'>
