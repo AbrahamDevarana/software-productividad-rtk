@@ -1,7 +1,7 @@
 import { Icon } from "@/components/Icon"
 import { FormAcciones } from "@/components/acciones/FormAcciones"
 import Loading from "@/components/antd/Loading"
-import ListadoOperativo from "@/components/operativo/ListadoOperativo"
+import ListadoResultados from "@/components/resultados/ListadoResultados"
 import { Proximamente } from "@/components/ui"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
@@ -103,7 +103,7 @@ export const OperativoView = () => {
                             {
                                 value === 'listado' && (
                                     <div>
-                                        <ListadoOperativo currentOperativo={currentOperativo} setVisible={ () => {} } />
+                                        <ListadoResultados currentOperativo={currentOperativo} setVisible={ () => {} } />
                                     </div>
                                 )
                             }

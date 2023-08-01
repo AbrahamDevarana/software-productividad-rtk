@@ -10,7 +10,7 @@ import { FaCog } from "react-icons/fa";
 import CustomDropdown from "../ui/CustomDropdown";
 import { TabStatus } from "../ui/TabStatus";
 import { BiTrash } from "react-icons/bi";
-import { FormResultados } from "../resultados/FormResultados";
+import { FormResultados } from "./FormResultados";
 import { BsFillCalendarFill } from "react-icons/bs";
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
@@ -21,7 +21,7 @@ interface Props {
     setVisible: (visible: boolean) => void
 }
 
-export default function ListadoOperativo({ currentOperativo, setVisible }: Props) {
+export default function ListadoResultados({ currentOperativo, setVisible }: Props) {
 
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
@@ -35,8 +35,6 @@ export default function ListadoOperativo({ currentOperativo, setVisible }: Props
             ...record,
             [e.target.name]: e.target.value,
         }
-
-        console.log(query);
         
         dispatch(updateAccionThunk(query))
     }

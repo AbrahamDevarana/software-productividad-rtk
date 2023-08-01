@@ -21,6 +21,11 @@ const MixedChart = ({values, quarter, year}:Props) => {
 	  const chartWidth = document.querySelector('.barBox')?.getBoundingClientRect().width || 200;
 	  const ctx = document.createElement('canvas').getContext('2d');
 	  if (!ctx) return <></>;
+
+    const gradient = ctx.createLinearGradient(0, 0, chartWidth, 0);
+    gradient.addColorStop(0, '#0967C9');
+    gradient.addColorStop(1, '#0967C9');
+    
 	  
 	  useEffect(() => {
 		ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend );
@@ -65,7 +70,8 @@ const MixedChart = ({values, quarter, year}:Props) => {
           {
             label: 'Dataset 1',
             data: values,
-            backgroundColor: label.map((item) => item.color),
+            // backgroundColor: [gradient, ...label.map((item) => item.color),]
+            backgroundColor: [gradient]
             
           },
         ],

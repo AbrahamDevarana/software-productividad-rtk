@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react'
+import {FC, useEffect, useMemo, useState} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
@@ -9,15 +9,18 @@ import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
 import CountUp from 'react-countup';
+import DoughnutChart from '../complexUI/Doughtnut';
+import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 
-interface ObjetivoProps {
+interface Props {
     objetivo: OperativoProps,
     setIsModalVisible: (value: boolean) => void
 }
 
-export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
+export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
+    const [value, setValue] = useState(0)
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
@@ -43,6 +46,9 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
         return total
     }, [objetivo])
 
+
+    
+
     
 
     return (
@@ -66,22 +72,13 @@ export const Objetivo: FC<ObjetivoProps> = ({objetivo, setIsModalVisible}) => {
             <Divider />
             <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
 
-            {/* <DoughnutChart value={progresoReal}/> */}
+            <div className='max-w-[130px] mx-auto py-5'>
+                {/* <DoughnutChart value={value} firstColor={firstColor} secondColor={secondColor}/>
+                <button onClick={ () =>  setValue (prev => prev + 10) }> + </button> */}
+            </div>
+            <ProgressBar maxValue={fixedProgresoReal} firstColor={firstColor} secondColor={secondColor} />
 
-            <Progress
-                className='flex items-center justify-center py-5'
-                rootClassName=''
-                type='circle'
-                strokeColor={{
-                    '0%': firstColor,
-                    '100%': secondColor,
-                }}
-                percent={ fixedProgresoReal }
-
-                format={() => <CountUp className='text-devarana-graph' end={fixedProgresoReal} duration={2} suffix='%'/>}
-                strokeWidth={12}
-                
-                />
+            
             <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
                 {
                     objetivo.operativoPropietario && (
