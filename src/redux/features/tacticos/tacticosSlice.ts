@@ -103,18 +103,6 @@ const tacticosSlice = createSlice({
                 state.isLoading = false
                 state.error = true
             })
-            // .addCase(getTacticoFromEstrategiaThunk.pending, (state) => {
-            //     state.isLoading = true
-            // })
-            // .addCase(getTacticoFromEstrategiaThunk.fulfilled, (state, action) => {
-            //     state.isLoading = false
-            //     state.tacticos = action.payload.tacticos
-            //     state.tacticos_core = action.payload.tacticos_core
-            // })
-            // .addCase(getTacticoFromEstrategiaThunk.rejected, (state, action) => {
-            //     state.isLoading = false
-            //     state.error = true
-            // })
             .addCase(getTacticoThunk.pending, (state) => {
                 state.isLoadingCurrent = true
             })

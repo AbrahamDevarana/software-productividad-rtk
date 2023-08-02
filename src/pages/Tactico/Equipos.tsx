@@ -10,20 +10,24 @@ import Loading from "@/components/antd/Loading"
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
+import { useDebounce } from "@/hooks/useDebouce";
 
 interface Props {
     slug?: string
     year: number
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void;
     setShowDrawer: (showDrawer: boolean) => void;
+    filter: object
 }
 
-const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
+const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Props) => {
     
     const dispatch = useAppDispatch()
     const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
     const { tacticos, tacticos_core, isLoading} = useAppSelector(state => state.tacticos)
     const [ activeTeam, setActiveTeam ] = useState<string>('')
+
+    const { debouncedValue } = useDebounce(filter, 500)
     
     useEffect(() => {
         if(slug){
@@ -36,16 +40,23 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
          }
     }, [slug, year])
 
+    
+
     useEffect(() => {
         if(currentArea?.departamentos?.length){
-            dispatch(getTacticoFromEquiposThunk({slug: currentArea.departamentos[0].slug, year}))
+            dispatch(getTacticoFromEquiposThunk({slug: currentArea.departamentos[0].slug, year, filter:debouncedValue}))
+            
+        }
+    }, [currentArea, debouncedValue])
+
+    useEffect(() => {
+        if(currentArea?.departamentos?.length){
             setActiveTeam(currentArea.departamentos[0].slug)
         }
     }, [currentArea])
 
-
     const handleGetDepartamentos = (slug: string) => {
-        dispatch(getTacticoFromEquiposThunk({slug, year}))
+        dispatch(getTacticoFromEquiposThunk({slug, year, filter: debouncedValue}))
         setActiveTeam(slug)
     }
 
@@ -55,7 +66,6 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer }:Props) => {
     }, [activeTeam])
 
 
-    if(isLoadingArea) return <Loading />
 
     return ( 
         <motion.div

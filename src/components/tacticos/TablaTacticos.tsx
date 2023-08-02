@@ -20,10 +20,7 @@ interface TablaTacticosProps {
 export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
     const dispatch = useAppDispatch()
-
-    console.log(tacticos);
-    
-    
+        
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
             title: () => ( 
@@ -73,6 +70,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                         from: getColor(record.status).color || '#108ee9',
                         to: getColor(record.status).lowColor || '#87d068',
                     }}
+                    format={(percent, successPercent) => <p className='text-white text-[11px]'>{percent}%</p>}
                     trailColor={getColor(record.status, .3).color} 
                 />
             )

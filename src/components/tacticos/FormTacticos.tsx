@@ -498,15 +498,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     name="meta"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Meta</p>
-                            <button onClick={() => {
-                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewMeta(!viewMeta)
-                            }} className='font-bold text-devarana-graph' type='button'>
-                                {
-                                    viewMeta ? <FaSave /> : <FaEdit />
-                                }
-                            </button>
-                            
+                            <p className='text-devarana-graph font-medium'>Meta</p>  
                     </div>
                     {
                         viewMeta 
@@ -514,11 +506,15 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                             <ReactQuill
                                 value={form.getFieldValue('meta')}
                                 onChange={(value) => form.setFieldsValue({meta: value}) }
-                                onBlur={handleOnSubmit}
+                                onBlur={() =>{ handleOnSubmit(); setViewMeta(false)}}
                                 readOnly={!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)}
                             />    
                         ) 
-                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('meta')}}></div> )
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('meta')}}
+                            onClick={() => { 
+                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewMeta(!viewMeta)
+                            }}
+                        ></div> )
                     }
                 </Form.Item>
                 <Form.Item
@@ -527,14 +523,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Indicador</p>
-                            <button onClick={() => {
-                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewIndicador(!viewIndicador)
-                            }} className='font-bold text-devarana-graph' type='button'>
-                                {
-                                    viewIndicador ? <FaSave /> : <FaEdit />
-                                }
-                            </button>
-                            
                     </div>
                     {
                         viewIndicador 
@@ -542,11 +530,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                             <ReactQuill
                                 value={form.getFieldValue('indicador')}
                                 onChange={(value) => form.setFieldsValue({indicador: value}) }
-                                onBlur={handleOnSubmit}
+                                onBlur={() =>{ handleOnSubmit(); setViewIndicador(false)}}
                                 readOnly={!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)}
                             />    
                         ) 
-                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}></div> )
+                        : ( <div className='text-devarana-graph richText bg-[#F9F9F7] p-5 rounded-ext max-h-[150px] overflow-y-auto' dangerouslySetInnerHTML={{ __html: form.getFieldValue('indicador')}}
+                            onClick={() => { hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && setViewIndicador(!viewIndicador)}}
+                        ></div> )
                     }
                 </Form.Item>
                 

@@ -437,6 +437,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                 onBlur={ () => {
                                     handleOnSubmit(); setViewIndicador(false)
                                 }}
+                                
                                 readOnly={!hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos)}
                             />    
                         ) 

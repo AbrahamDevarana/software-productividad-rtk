@@ -120,13 +120,14 @@ export const updateQuartersThunk = createAsyncThunk(
 
 export const getTacticoFromAreaThunk = createAsyncThunk(
     'tacticos/getTacticoFromAreaThunk',
-    async ({slug, year}: {slug: string, year:number}, { rejectWithValue, getState }) => {
+    async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { year }
+                params: { year, ...filter }
             }
+            
             const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
             return response.data.objetivosTacticos
         }
@@ -138,11 +139,12 @@ export const getTacticoFromAreaThunk = createAsyncThunk(
 
 export const getTacticoFromEquiposThunk = createAsyncThunk(
     'tacticos/getTacticoFromEquiposThunk',
-    async ({slug, year}: {slug: string, year:number}, { rejectWithValue, getState }) => {
+    async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}` },
+                params: { ...filter }
             }
             const response = await clientAxios.get<Props>(`/tacticos/equipo?slug=${slug}&year=${year}`, config);
             return response.data.objetivosTacticos
