@@ -89,6 +89,23 @@ export const deleteUsuarioThunk = createAsyncThunk(
     }
 )
 
+export const getResultadosThunk = createAsyncThunk(
+    'usuarios/getResultados',
+    async (filtros:any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+            const response = await clientAxios.get(`/usuarios/resultados`, config);
+            return response.data.usuarios
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 export const uploadImageThunk = (usuarioId: string, file: any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {

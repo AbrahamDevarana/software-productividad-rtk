@@ -1,21 +1,17 @@
-import { Box } from '@/components/ui';
-import { Avatar, DatePicker, Divider, FloatButton, Image, Modal, Progress, Rate } from 'antd'
-import { useState, useEffect, useMemo } from 'react';
-import dayjs from 'dayjs';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
+import { getResultadosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
+import { Box } from '@/components/ui';
+import {FloatButton, Modal, } from 'antd'
+import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
 import { CardObjetivo } from '@/components/operativo/CardObjetivo';
-import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { FaPlus } from 'react-icons/fa';
-import { getStorageUrl } from '@/helpers';
 import { FormObjetivo } from '@/components/operativo/FormObjetivo';
-import { GaugeChart } from '@/components/complexUI/Gauge';
-import getBrokenUser from '@/helpers/getBrokenUser';
-import { TabStatus } from '@/components/ui/TabStatus';
-import MixedChart from '@/components/complexUI/MixedChart';
-import { AiOutlineEllipsis } from 'react-icons/ai';
+
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { CardResumen } from '@/components/operativo/CardResumen';
 import { CardAvance } from '@/components/operativo/CardAvance';
@@ -28,6 +24,7 @@ export const Objetivos : React.FC = () => {
 
     
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
+    const { usuariosResultados } = useAppSelector(state => state.usuarios)
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
     const [ isModalVisible, setIsModalVisible ] = useState(false)
@@ -38,6 +35,10 @@ export const Objetivos : React.FC = () => {
     }
     useEffect(() => {
         dispatch(getOperativosThunk({year, quarter}))
+    }, [year, quarter])
+
+    useEffect(() => {
+        dispatch(getResultadosThunk({year, quarter}))
     }, [year, quarter])
 
     const handleCancel = () => {

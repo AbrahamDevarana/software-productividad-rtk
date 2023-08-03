@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UsuariosState  } from "@/interfaces";
-import { createUsuarioThunk, deleteUsuarioThunk, getUsuarioThunk, getUsuariosThunk, updateUsuarioThunk } from "./usuariosThunks";
+import { createUsuarioThunk, deleteUsuarioThunk, getResultadosThunk, getUsuarioThunk, getUsuariosThunk, updateUsuarioThunk } from "./usuariosThunks";
 
 const initialState: UsuariosState = {
     usuarios: [],
+    usuariosResultados: [],
     paginate: {
         totalItem: 0,
         totalPages: 0,
@@ -144,7 +145,21 @@ const usuariosSlice = createSlice({
                 state.isLoading = false
                 state.infoMessage = action.error.message!
                 state.error = true
-        })  
+        })
+        .addCase(getResultadosThunk.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(getResultadosThunk.fulfilled, (state, action) => {
+            state.usuariosResultados = action.payload
+            state.isLoading = false
+            state.error = false
+        })
+        .addCase(getResultadosThunk.rejected, (state, action) => {
+            state.isLoading = false
+            state.infoMessage = action.error.message!
+            state.error = true
+        })
+
     }
 })
 

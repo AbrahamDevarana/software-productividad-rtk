@@ -4,12 +4,25 @@ import { Paginate } from "./slice";
 
 export interface UsuariosState {
     usuarios: UsuarioProps[];
+    usuariosResultados: UsuarioResultados[];
     paginate: Paginate;
     isLoading: boolean;
     isLoadingCurrentUsuario: boolean;
     error: boolean;
     infoMessage: string;
     currentUsuario: UsuarioProps;
+}
+
+export interface UsuarioResultados extends UsuarioProps {
+    objetivosOperativos: {
+        id: string;
+        scoreCard: {
+            propietario:      number;
+            progresoFinal:    number;
+            progresoAsignado: number;
+            progresoReal:     number;
+        }
+    }
 }
 
 export interface UsuarioProps {

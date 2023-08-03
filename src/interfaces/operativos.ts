@@ -1,7 +1,7 @@
 import { InitialState, Paginate, ResultadoClaveProps, UsuarioProps } from ".";
 
 
-interface CustomUsuarioProps extends UsuarioProps {
+export interface CustomUsuarioProps extends UsuarioProps {
     scoreCard: {
         propietario:      number;
         progresoFinal:    number;
