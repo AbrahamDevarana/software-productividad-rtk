@@ -149,6 +149,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                 columns={columns}
                 dataSource={tacticos}
                 loading={isLoading}
+                
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 rowKey={(record) => record.id}

@@ -12,8 +12,8 @@ export const CardAvance = ({operativos}:Props) => {
     const { ponderacionTotal} = useObjetivo({operativos})
   return (
     <>
-        <div className='px-5 text-center text-devarana-graph'>
-            <p className='font-medium'>Avance</p>
+        <div className='px-5  text-devarana-graph'>
+            <p className='font-medium text-primary'>Avance</p>
             <GaugeChart value={ponderacionTotal}/>
             <div className='pt-5'>
                 <Progress percent={ponderacionTotal} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
