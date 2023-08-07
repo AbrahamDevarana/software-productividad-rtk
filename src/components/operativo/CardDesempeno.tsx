@@ -12,7 +12,7 @@ export const CardDesempeno = ({quarter, year}:Props) => {
     <>
         <div className='text-devarana-graph flex flex-col w-full'>
             <div className='flex justify-between w-full'>
-                <h1>Historial de desempeño</h1>
+                <h1 className='font-medium text-primary'>Historial de desempeño</h1>
                 <DatePicker picker='year' size='small' suffixIcon={false} clearIcon={false} />
             </div>
             <div className='my-auto w-full'>

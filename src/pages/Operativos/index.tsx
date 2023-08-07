@@ -4,7 +4,7 @@ import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operati
 import { getResultadosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { Box } from '@/components/ui';
-import {FloatButton, Modal, } from 'antd'
+import {FloatButton, Modal, Rate, } from 'antd'
 import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
@@ -17,35 +17,41 @@ import { CardResumen } from '@/components/operativo/CardResumen';
 import { CardAvance } from '@/components/operativo/CardAvance';
 import { CardDesempeno } from '@/components/operativo/CardDesempeno';
 import CardEquipo from '@/components/operativo/CardEquipo';
+import { useParams } from 'react-router-dom';
+import { getProfileThunk } from '@/redux/features/profile/profileThunk';
 
 export const Objetivos : React.FC = () => {
 
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()    
 
-    
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
-    const { usuariosResultados } = useAppSelector(state => state.usuarios)
+    const { userAuth } = useAppSelector(state => state.auth)
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
     const [ isModalVisible, setIsModalVisible ] = useState(false)
+    
+    
+    const {id} = useParams<{id: string}>()
 
-     const handleDateChange = (date: any, dateString: string) => {
+        const handleDateChange = (date: any, dateString: string) => {
         setYear(dayjs(date).year())
         setQuarter(dayjs(date).quarter())
     }
     useEffect(() => {
-        dispatch(getOperativosThunk({year, quarter}))
+        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
     }, [year, quarter])
 
     useEffect(() => {
-        dispatch(getResultadosThunk({year, quarter}))
-    }, [year, quarter])
+        dispatch(getProfileThunk(id || userAuth?.id))
+    }, [userAuth, id])
 
     const handleCancel = () => {
         setIsModalVisible(false)
         dispatch(clearObjetivoThunk())
         dispatch(clearResultadoThunk())
     }
+
+    
 
     const { ponderacionTotal, misObjetivos, objetivosCompartidos} = useObjetivo({operativos})
 
@@ -91,7 +97,7 @@ export const Objetivos : React.FC = () => {
                 </div>
 
                 <Box className='col-span-3 row-span-2 my-5'>
-                    <h1 className='text-devarana-graph'>Ranking Devarana</h1>
+                    <h1 className='text-primary font-medium'>Ranking Devarana</h1>
                 </Box>
             </div>
             
@@ -104,15 +110,17 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo year={year} />
-
+                <FormObjetivo year={year} quarter={quarter} />
             </Modal>
 
+          
             <FloatButton
                 shape="circle"
                 icon={<FaPlus />}
                 onClick={() => setIsModalVisible(true)}
             />
+
+            
         </>
     ) 
 

@@ -107,6 +107,12 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         title: "Objetivos Operativos",
         path: '/objetivos/:id',
         layout: LayoutApp,
+        component: Objetivos
+    },
+    {
+        title: "Objetivo Operativo",
+        path: '/objetivo/:id',
+        layout: LayoutApp,
         component: OperativoView
     },
     {

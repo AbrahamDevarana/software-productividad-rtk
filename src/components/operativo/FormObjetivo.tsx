@@ -11,12 +11,14 @@ import { useSelectUser } from '@/hooks/useSelectUser'
 
 interface Props {
     year: number
+    quarter: number
 }
 
-export const FormObjetivo = ({year}:Props) => {
+export const FormObjetivo = ({year, quarter}:Props) => {
 
     const { TextArea } = Input;
     const { RangePicker } = DatePicker;
+
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
     const { tacticosGeneral } = useAppSelector(state => state.tacticos)
@@ -39,6 +41,7 @@ export const FormObjetivo = ({year}:Props) => {
             propietarioId: userAuth.id,
             fechaInicio: dayjs(form.getFieldsValue().fecha[0]).format('YYYY-MM-DD'),
             fechaFin: dayjs(form.getFieldsValue().fecha[1]).format('YYYY-MM-DD'),
+            quarter, year
         }
 
         if(currentOperativo.id === ''){
@@ -49,12 +52,7 @@ export const FormObjetivo = ({year}:Props) => {
     }
 
     const disabledDate = ( current: Dayjs ) => {
-        return (
-            current && (
-            current.endOf('quarter') > dayjs().endOf('quarter') ||
-            current.startOf('quarter') < dayjs().startOf('quarter')
-            )
-        );
+        return current.quarter() !== quarter
     };
 
     const options = useMemo(() => {
@@ -121,12 +119,12 @@ export const FormObjetivo = ({year}:Props) => {
             form={form}
         >
             <Form.Item
-                label="Nombre"
+                label="Objetivo"
                 name="nombre"
                 className='col-span-12'
                 required
             >
-                <Input name="nombre" />
+                <Input placeholder='Nombre del objetivo' bordered={false} />
             </Form.Item>
             <Form.Item
                 label="Meta"
@@ -157,21 +155,6 @@ export const FormObjetivo = ({year}:Props) => {
                 />
             </Form.Item>
             <Form.Item
-                className='col-span-6'
-                label="Objetivo Tactico"
-                name="tacticoId"
-                required
-            >
-
-                <Select 
-                    onChange={ (value) => { form.setFieldValue('tacticoId', value)}} options={options} showSearch
-                    // @ts-ignore
-                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                >
-                </Select>
-            </Form.Item>
-
-            <Form.Item
                 className=' col-span-6'
                 label="Participantes"
                 name="operativosResponsable"
@@ -195,6 +178,39 @@ export const FormObjetivo = ({year}:Props) => {
                     }
                 </Select>
             </Form.Item>
+            
+            <Form.Item
+                className='col-span-6'
+                label="Objetivo Tactico"
+                name="tacticoId"
+                required
+            >
+                <Select >
+
+                </Select>
+
+                <Select>
+
+                </Select>
+
+                <Select
+                    options={
+                        tacticosGeneral.map((tactico) => ({
+                            label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
+                            value: tactico.id,
+                            dataName: tactico.nombre
+                        }))
+                    }
+                />
+                {/* <Select 
+                    onChange={ (value) => { form.setFieldValue('tacticoId', value)}} options={options} showSearch
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                >
+                </Select> */}
+            </Form.Item>
+
+          
             <Divider className='col-span-12' />
 
             <Form.Item

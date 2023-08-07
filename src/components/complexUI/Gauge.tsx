@@ -30,6 +30,13 @@ export const GaugeChart = ({value = 0}: Props) => {
     useEffect(() => {
         ChartJS.register(ArcElement, Tooltip, Legend);
     }, [value])
+
+    // redraw on window resize
+    useEffect(() => {
+        
+
+    }, []);
+
     
     const gradientSegment = ctx.createLinearGradient(0, 0, chartWidth, 0);
     gradientSegment.addColorStop(0.10, '#FF3131');
@@ -145,14 +152,14 @@ export const GaugeChart = ({value = 0}: Props) => {
             },
         },
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
     };
 
     const plugins = [gaugeChartText, gaugeNeedle];
 
     return (
         <div className="charBox w-full">
-            <Doughnut data={data} options={options} plugins={plugins} style={{
+            <Doughnut id="gaugeChart" data={data} options={options} plugins={plugins} style={{
                 width: '100%',
             }} />
         </div>

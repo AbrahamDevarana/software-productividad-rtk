@@ -100,7 +100,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible}) => {
 
 
             <div className='flex py-5 gap-10 justify-center'>
-                <Link to={`${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'>
+                <Link to={`/objetivo/${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'>
                     <Icon iconName='faEye'/>
                     <span> Ver </span> 
                 </Link>

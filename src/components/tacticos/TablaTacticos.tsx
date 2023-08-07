@@ -1,13 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { getColor, getStatus, getStorageUrl } from '@/helpers';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppDispatch } from '@/redux/hooks';
 import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
-import { extraerNumero } from '@/helpers/getNumberCode';
 
 interface TablaTacticosProps {
     tacticos?: TacticoProps[]
@@ -20,6 +19,7 @@ interface TablaTacticosProps {
 export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
     const dispatch = useAppDispatch()
+    
         
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
@@ -82,7 +82,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
             ellipsis: true,
             render: (text, record, index) => (
                 <div className='flex gap-x-1 items-center align-middle'> 
-                    {
+                    {/* {
                         record.trimestres.map((trimestre, index) => (
                             <span key={index} className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}
                                 style={{
@@ -91,8 +91,27 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, estrategico = fals
                                 }}
                             >Q{index+1}</span>
                         ))
+                    } */}
+
+                    {
+                        [0, 1, 2, 3].map((index) => {
+                            const trimestre = record.trimestres.find((t, tIndex) => tIndex === index);
+                            const pivotExists = trimestre && trimestre.pivot_tactico_trimestre;
+                            const isActive = pivotExists ? trimestre.pivot_tactico_trimestre.activo : false;
+                            const backgroundColor = isActive ? ( record.estrategico ? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)';
+                            const color = isActive ? '#FFFFFF' : '#6B7280';
+                        
+                            return (
+                                <span key={index} 
+                                    className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}
+                                    style={{backgroundColor, color}}
+                                >
+                                    Q{index+1}
+                                </span>
+                            )
+                        })
+                        
                     }
-                    
                 </div>
             ),
         },

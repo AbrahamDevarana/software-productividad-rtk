@@ -13,7 +13,7 @@ export const CardAvance = ({operativos}:Props) => {
   return (
     <>
         <div className='px-5  text-devarana-graph'>
-            <p className='font-medium text-primary'>Avance</p>
+            <h1 className='font-medium text-primary'>Avance</h1>
             <GaugeChart value={ponderacionTotal}/>
             <div className='pt-5'>
                 <Progress percent={ponderacionTotal} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
