@@ -185,15 +185,16 @@ export const FormObjetivo = ({year, quarter}:Props) => {
                 name="tacticoId"
                 required
             >
-                <Select >
+                {/* <Select >
 
                 </Select>
 
                 <Select>
 
-                </Select>
+                </Select> */}
 
                 <Select
+                    onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
                     options={
                         tacticosGeneral.map((tactico) => ({
                             label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
