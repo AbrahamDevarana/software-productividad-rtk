@@ -51,14 +51,14 @@ export const getResultadoThunk = createAsyncThunk(
 
 export const createResultadoThunk = createAsyncThunk(
     'resultados/createResultado',
-    async ( operativoId: string, {rejectWithValue, getState}) => {
+    async ( params:any, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.post<Props>(`/resultados`, {operativoId}, config);
+            const response = await clientAxios.post<Props>(`/resultados`, params, config);
                         
             return response.data.resultadoClave
         }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { getResultadosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
@@ -53,7 +53,10 @@ export const Objetivos : React.FC = () => {
 
     
 
-    const { ponderacionTotal, misObjetivos, objetivosCompartidos} = useObjetivo({operativos})
+    const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
+
+    
+ 
 
     return (
         <>
@@ -84,12 +87,12 @@ export const Objetivos : React.FC = () => {
                         <>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible}/>
+                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
                             ))
                         }
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible}/>
+                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
                             ))
                         }
                         </>
@@ -110,7 +113,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo year={year} quarter={quarter} />
+                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} />
             </Modal>
 
           

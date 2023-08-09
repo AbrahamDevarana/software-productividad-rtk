@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react'
+import {FC, useMemo,} from 'react'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
@@ -8,19 +8,18 @@ import { getStorageUrl } from '@/helpers';
 import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
-import CountUp from 'react-countup';
-import DoughnutChart from '../complexUI/Doughtnut';
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 
 interface Props {
     objetivo: OperativoProps,
     setIsModalVisible: (value: boolean) => void
+    year: number
+    quarter: number
 }
 
-export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible}) => {
+export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quarter}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-    const [value, setValue] = useState(0)
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
@@ -100,7 +99,12 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible}) => {
 
 
             <div className='flex py-5 gap-10 justify-center'>
-                <Link to={`/objetivo/${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'>
+                <Link to={`/objetivo/${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'
+                    state={{
+                        year,
+                        quarter
+                    }}
+                >
                     <Icon iconName='faEye'/>
                     <span> Ver </span> 
                 </Link>

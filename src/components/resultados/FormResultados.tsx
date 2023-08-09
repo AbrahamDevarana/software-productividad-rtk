@@ -46,8 +46,8 @@ export const FormResultados = () => {
             initialValues={{
                 ...currentResultadoClave,
                 propietarioId: currentResultadoClave.propietarioId,
-                fechaInicio: dayjs(currentResultadoClave.fechaInicio).add(6, 'hour'),
-                fechaFin: dayjs(currentResultadoClave.fechaFin).add(6, 'hour'),
+                fechaInicio: dayjs(currentResultadoClave.fechaInicio),
+                fechaFin: dayjs(currentResultadoClave.fechaFin)
             }}
         >
             <Form.Item

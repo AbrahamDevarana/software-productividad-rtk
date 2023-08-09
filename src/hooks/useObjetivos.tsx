@@ -11,13 +11,13 @@ export const useObjetivo = ({operativos}:Props) => {
 
         const { userAuth } = useAppSelector(state => state.auth)
         // HOOKS
-        const ponderacionTotal = useMemo(() => {
+        const ponderacionObjetivos = useMemo(() => {
             let total = 0
           
             operativos.forEach(operativo => {
                 operativo.operativosResponsable?.map(responsable => {
                     if( responsable.id === userAuth?.id ) {
-                        total += (responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100
+                        total += ((responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100) * .90
                     }
                 })
             })
@@ -69,15 +69,27 @@ export const useObjetivo = ({operativos}:Props) => {
             return objetivos
         }, [operativos])
     
+        const scoreLeft = useMemo(() => {
+        
+            let score = 0
+    
+            operativos.map(operativo => {
+                operativo.operativosResponsable.map(responsable => {      
+                    score += (responsable.scoreCard.progresoAsignado)
+                })
+            })
+            return score
+        }, [operativos])
 
 
     return {
-        ponderacionTotal,
+        ponderacionObjetivos,
         misObjetivosCount,
         objetivosCompartidosCount,
         resultadosClaveCount,
         accionesCount,
         misObjetivos,
-        objetivosCompartidos
+        objetivosCompartidos,
+        scoreLeft
     }
 }

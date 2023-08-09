@@ -43,7 +43,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Objetivos</p>
-                        <p className="font-light text-devarana-graph"> {usuarioActivo.objetivosOperativos.length } </p>
+                        <p className="font-light text-devarana-graph"> {usuarioActivo.responsableOperativos.length } </p>
                     </div>
                 </div>
             </Box>
@@ -181,7 +181,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
         <h2 className="py-10 px-2 text-lg font-medium">Objetivos</h2>
         <div className="gap-10 py-5 overflow-x-auto w-full flex">
             {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
+                usuarioActivo.responsableOperativos.map( objetivo => (
                     <Box className="w-[350px] flex-none" key={objetivo.id}>
                         <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
                             <div>

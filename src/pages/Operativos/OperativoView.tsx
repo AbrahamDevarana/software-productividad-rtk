@@ -10,7 +10,7 @@ import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resu
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Avatar, Drawer, FloatButton, Image, Segmented, Tooltip } from "antd"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams,  } from "react-router-dom"
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -21,6 +21,11 @@ export const OperativoView = () => {
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
+
+    // get sate from Link react-router-dom
+
+    const location = useLocation()
+
 
     const options = [
         {
@@ -42,7 +47,7 @@ export const OperativoView = () => {
 
 
     const handleNuevoResultado = () => {
-        dispatch(createResultadoThunk(currentOperativo.id))
+        dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
     }
 
     const handleClose = () => {

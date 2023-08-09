@@ -12,9 +12,10 @@ import { useSelectUser } from '@/hooks/useSelectUser'
 interface Props {
     year: number
     quarter: number
+    scoreLeft: number
 }
 
-export const FormObjetivo = ({year, quarter}:Props) => {
+export const FormObjetivo = ({year, quarter, scoreLeft}:Props) => {
 
     const { TextArea } = Input;
     const { RangePicker } = DatePicker;
@@ -43,6 +44,7 @@ export const FormObjetivo = ({year, quarter}:Props) => {
             fechaFin: dayjs(form.getFieldsValue().fecha[1]).format('YYYY-MM-DD'),
             quarter, year
         }
+        
 
         if(currentOperativo.id === ''){
             dispatch(createOperativoThunk(query))
@@ -97,7 +99,7 @@ export const FormObjetivo = ({year, quarter}:Props) => {
            
         ]
     }, [tacticosGeneral])
-    
+        
     
 
     if ( isLoadingObjetivo ) return <Skeleton active paragraph={{  rows: 10 }} />
@@ -107,7 +109,6 @@ export const FormObjetivo = ({year, quarter}:Props) => {
 
         <Form 
             onFinish={handleOnSubmit}
-            noValidate 
             layout='vertical' 
             className='grid grid-cols-12 md:gap-x-10'
             initialValues={{
@@ -219,8 +220,28 @@ export const FormObjetivo = ({year, quarter}:Props) => {
                 name="progresoAsignado"
                 className='col-span-6'
                 required
+                // rules type number, max 100 or scoreLimit
+                rules={
+                    [
+                       {
+                            validator: (rule, value) => {
+                                if (value > (100 - scoreLeft)) {
+                                    return Promise.reject(`El valor maximo es ${100 - scoreLeft}`)
+                                }
+                                return Promise.resolve()
+                            }
+                       }
+                    ]
+                }
             >
-                <Input name="progresoAsignado" />
+                <Input maxLength={3} 
+                    onChange={(e) => {
+                        const value = e.target.value as unknown as number
+                        if (value > (100 - scoreLeft)) {
+                            form.setFieldsValue({ progresoAsignado: 100 - (scoreLeft) })
+                        }
+                    }}
+                />
             </Form.Item>
 
 

@@ -9,14 +9,14 @@ interface Props {
 }
 export const CardAvance = ({operativos}:Props) => {
 
-    const { ponderacionTotal} = useObjetivo({operativos})
+    const { ponderacionObjetivos } = useObjetivo({operativos})
   return (
     <>
         <div className='px-5  text-devarana-graph'>
             <h1 className='font-medium text-primary'>Avance</h1>
-            <GaugeChart value={ponderacionTotal}/>
+            <GaugeChart value={ponderacionObjetivos}/>
             <div className='pt-5'>
-                <Progress percent={ponderacionTotal} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
+                <Progress percent={ponderacionObjetivos} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
                 strokeColor={{
                     '0%': 'rgba(9, 103, 201, 1)',
                     '100%': 'rgba(9, 103, 201, .5)',

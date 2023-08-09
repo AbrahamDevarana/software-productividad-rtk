@@ -55,7 +55,7 @@ export interface PerfilProps {
     direccionId?:          number;
     departamento?:         DepartamentoProps;
     direccion?:            DireccionProps;
-    objetivosOperativos: OperativoProps[];
+    responsableOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
     social: Social,
     configuracion: ConfiguracionUsuarioProps;

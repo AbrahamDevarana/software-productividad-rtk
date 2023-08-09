@@ -15,7 +15,7 @@ const initialState: PerfilState = {
         nombreCorto: '',
         email: '',
         foto: '',
-        objetivosOperativos: [],
+        responsableOperativos: [],
         proyectos: [],
         social: {
             facebook: {
