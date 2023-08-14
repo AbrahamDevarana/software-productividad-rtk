@@ -85,11 +85,13 @@ export const Objetivos : React.FC = () => {
                         : 
 
                         <>
+                        <h1 className='col-span-12'>Mis Objetivos</h1>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
                                 <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
                             ))
                         }
+                        <h1 className='col-span-12'>Objetivos Compartidos</h1>
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
                                 <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
@@ -113,7 +115,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} />
+                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} handleCancel={handleCancel} />
             </Modal>
 
           

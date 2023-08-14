@@ -60,12 +60,13 @@ export const useObjetivo = ({operativos}:Props) => {
         }, [operativos])
     
         const misObjetivos = useMemo(() => {
-            const objetivos = operativos.filter(operativo => operativo.propietarioId === userAuth?.id)
+            // buscar al objetivo operativo.operativosResponsable. propietario true
+            const objetivos = operativos.filter( operativo => operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === true))
             return objetivos
         }, [operativos])
     
         const objetivosCompartidos = useMemo(() => {
-            const objetivos = operativos.filter(operativo => operativo.propietarioId !== userAuth?.id)
+            const objetivos = operativos.filter( operativo => operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === false))
             return objetivos
         }, [operativos])
     

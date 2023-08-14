@@ -16,7 +16,6 @@ const initialState: OperativoState = {
         fechaFin: new Date(),
         fechaInicio: new Date(),
         tacticoId: '',
-        participantesIds: [],
         resultadosClave: [],
         operativoPropietario: {
             id: '',
@@ -27,7 +26,7 @@ const initialState: OperativoState = {
             email: '',
             departamentos: [],
             scoreCard: {
-                propietario: 0,
+                propietario: false,
                 progresoAsignado: 0,
                 progresoFinal: 0,
                 progresoReal: 0,

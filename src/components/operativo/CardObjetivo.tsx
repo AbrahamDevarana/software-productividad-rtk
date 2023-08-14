@@ -3,7 +3,7 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Card, Divider, Image, Progress, Space } from 'antd'
+import { Avatar, Card, Divider, Image, Progress, Space, Tooltip } from 'antd'
 import { getStorageUrl } from '@/helpers';
 import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -25,16 +25,36 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quar
     const handleEditObjetivo = (id: string) => {
         dispatch(getOperativoThunk(id))
         setIsModalVisible(true)
+
+        
     }
+    
 
     const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
     const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
 
 
-    const {firstColor, secondColor} = useMemo(() => {        
-        const firstColor = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, 1)' : 'rgba(229, 17, 65, 1)'
-        const secondColor = userAuth?.id === objetivo.propietarioId ? 'rgba(9, 103, 201, .5)' : 'rgba(229, 17, 65, .5)'
-        return {firstColor, secondColor}
+    const {firstColor, secondColor} = useMemo(() => { 
+        
+        
+    //  Encontrar si userAuth es autor del objetivo.operativoPropietario.find(responsable => responsable.id === userAuth?.id)
+
+''
+
+        const esAutor = objetivo.operativosResponsable.filter((item) => item.scoreCard.propietario === true).map((item) => item.id).includes(userAuth?.id!)
+
+        if(esAutor) {
+            return {
+                firstColor: 'rgba(9, 103, 201, 1)',
+                secondColor: 'rgba(9, 103, 201, .5)'
+            }
+        }
+
+        return {
+            firstColor: 'rgba(229, 17, 65, 1)',
+            secondColor: 'rgba(229, 17, 65, .5)'
+        }
+
     }, [objetivo.operativoPropietario?.id, userAuth?.id])
 
     const resultadoClaveDoneCount = useMemo(() => {
@@ -48,7 +68,14 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quar
 
     
 
-    
+    const orderedResponsables = useMemo(() => {
+        const responsables = objetivo.operativosResponsable
+        // poner primero al responsable.propietario === true
+        const responsablePropietario = responsables.find(responsable => responsable.scoreCard.propietario === true)
+        const responsablesSinPropietario = responsables.filter(responsable => responsable.scoreCard.propietario === false)
+        return [responsablePropietario, ...responsablesSinPropietario]
+    }, [objetivo.operativosResponsable])
+
 
     return (
         <Card className='md:col-span-4 col-span-12 group shadow-ext' key={objetivo.id} >
@@ -80,18 +107,15 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quar
             
             <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
                 {
-                    objetivo.operativoPropietario && (
-                        <Avatar src={<Image src={`${getStorageUrl(objetivo.operativoPropietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                            {objetivo.operativoPropietario.iniciales} 
-                        </Avatar>
-                    )
-                }
-                {
                     
-                    objetivo.operativosResponsable?.map((responsable, index) => (
-                        <Avatar key={index} src={<Image src={`${getStorageUrl(responsable.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                            {responsable.iniciales} 
-                        </Avatar>
+                    orderedResponsables?.map((responsable, index) => (
+                        <Link to={`/perfil/${responsable?.slug}`} className='first-of-type:border-devarana-pink border-2 rounded-full'>
+                            <Tooltip title={`${responsable?.nombre} ${responsable?.apellidoPaterno}`} placement='top' key={index} >
+                                <Avatar key={index} src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                    {responsable?.iniciales} 
+                                </Avatar>
+                            </Tooltip>
+                        </Link>
                     ))
                     
                 }
