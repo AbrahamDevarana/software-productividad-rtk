@@ -48,6 +48,8 @@ export const GaugeChart = ({value = 0}: Props) => {
     gradientSegment.addColorStop(0.70, '#00BF63');
     gradientSegment.addColorStop(0.80, '#5CE1E6');
     gradientSegment.addColorStop(0.90, '#0CC0DF');
+    gradientSegment.addColorStop(1.00, '#0C82DF');
+
 
     const data = {
         labels: ["Score", "Gray Area"],
@@ -102,8 +104,8 @@ export const GaugeChart = ({value = 0}: Props) => {
 
             textLabel({text: '0', x: left, y: yCoor + 15, fontSize: 17, textBaseLine: 'top', textAlign: 'left'})
             textLabel({text: '100', x: right, y: yCoor + 15, fontSize: 17, textBaseLine: 'top', textAlign: 'right'})
-            // textLabel({text: score, x: xCoor, y: yCoor - 50, fontSize: 32, textBaseLine: 'bottom', textAlign: 'center'})
-            // textLabel({text: rating, x: xCoor, y: yCoor - 80, fontSize: 12, textBaseLine: 'bottom', textAlign: 'center'})
+            textLabel({text: score.toFixed(2), x: xCoor, y: yCoor - 50, fontSize: 32, textBaseLine: 'bottom', textAlign: 'center'})
+            textLabel({text: rating, x: xCoor, y: yCoor - 80, fontSize: 12, textBaseLine: 'bottom', textAlign: 'center'})
         }
     }
 

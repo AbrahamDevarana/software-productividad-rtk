@@ -221,26 +221,26 @@ export const FormObjetivo = ({year, quarter, scoreLeft}:Props) => {
                 className='col-span-6'
                 required
                 // rules type number, max 100 or scoreLimit
-                rules={
-                    [
-                       {
-                            validator: (rule, value) => {
-                                if (value > (100 - scoreLeft)) {
-                                    return Promise.reject(`El valor maximo es ${100 - scoreLeft}`)
-                                }
-                                return Promise.resolve()
-                            }
-                       }
-                    ]
-                }
+                // rules={
+                //     [
+                //        {
+                //             validator: (rule, value) => {
+                //                 if (value > (100 - scoreLeft)) {
+                //                     return Promise.reject(`El valor maximo es ${100 - scoreLeft}`)
+                //                 }
+                //                 return Promise.resolve()
+                //             }
+                //        }
+                //     ]
+                // }
             >
                 <Input maxLength={3} 
-                    onChange={(e) => {
-                        const value = e.target.value as unknown as number
-                        if (value > (100 - scoreLeft)) {
-                            form.setFieldsValue({ progresoAsignado: 100 - (scoreLeft) })
-                        }
-                    }}
+                    // onChange={(e) => {
+                    //     const value = e.target.value as unknown as number
+                    //     if (value > (100 - scoreLeft)) {
+                    //         form.setFieldsValue({ progresoAsignado: 100 - (scoreLeft) })
+                    //     }
+                    // }}
                 />
             </Form.Item>
 
