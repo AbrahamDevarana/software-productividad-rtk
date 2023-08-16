@@ -1,32 +1,30 @@
 import {FC, useMemo,} from 'react'
+import { Link } from 'react-router-dom';
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Card, Divider, Image, Progress, Space, Tooltip } from 'antd'
+import { Avatar, Card, Divider, Image, Space, Tooltip } from 'antd'
 import { getStorageUrl } from '@/helpers';
-import { Link } from 'react-router-dom';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 
 interface Props {
     objetivo: OperativoProps,
-    setIsModalVisible: (value: boolean) => void
+    setFormVisible: (value: boolean) => void
     year: number
     quarter: number
 }
 
-export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quarter}) => {
+export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
         dispatch(getOperativoThunk(id))
-        setIsModalVisible(true)
-
-        
+        setFormVisible(true)
     }
     
 
@@ -36,11 +34,6 @@ export const CardObjetivo: FC<Props> = ({objetivo, setIsModalVisible, year, quar
 
     const {firstColor, secondColor} = useMemo(() => { 
         
-        
-    //  Encontrar si userAuth es autor del objetivo.operativoPropietario.find(responsable => responsable.id === userAuth?.id)
-
-''
-
         const esAutor = objetivo.operativosResponsable.filter((item) => item.scoreCard.propietario === true).map((item) => item.id).includes(userAuth?.id!)
 
         if(esAutor) {

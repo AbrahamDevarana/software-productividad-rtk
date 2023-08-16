@@ -123,6 +123,22 @@ export const getLideresDepartamentoThunk = createAsyncThunk(
     }
 )
   
+export const getUsuariosByDepartamentoThunk = createAsyncThunk(
+    'departamentos/getUsuariosByDepartamento',
+    async ({usuarioId}: {usuarioId: string}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+            const response = await clientAxios.get<Props>(`/departamentos/getUsuarios/${usuarioId}`, config);
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 
 //  Clean Departamento

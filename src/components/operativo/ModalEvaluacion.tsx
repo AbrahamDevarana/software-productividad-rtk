@@ -5,10 +5,10 @@ import { Modal, Rate } from "antd";
 interface Props {
     usuario: UsuarioProps
     visible: boolean
-    handleCancelEv: () => void
+    handleCancel: () => void
 }
 
-const ModalEvaluacion = ({usuario, visible, handleCancelEv}: Props) => {
+const ModalEvaluacion = ({usuario, visible, handleCancel}: Props) => {
     return (
     <>
         <Modal
@@ -17,6 +17,7 @@ const ModalEvaluacion = ({usuario, visible, handleCancelEv}: Props) => {
             width={1000}
             closable={false}
             destroyOnClose={true}
+            onCancel={handleCancel}
             title={  <h1 className='font-medium'> Evaluación competitiva </h1> }
         >
             <>

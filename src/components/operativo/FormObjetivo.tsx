@@ -69,10 +69,8 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
 
 
     // const filteredParticipantes = useMemo(() => {
-        
-    //     console.log(form.getFieldValue('propietarioId'));
-        
-    //     return usuarios.filter( usuario => form.getFieldValue('propietarioId') !== usuario.id)
+    //     // return usuarios.filter( usuario => form.getFieldValue('propietarioId') ? !form.getFieldValue('propietarioId').includes(usuario.id) : true )
+    //     return usuarios.filter( usuario => form.getFieldValue('propietarioId') !== usuario.id )
     // }, [form.getFieldValue('propietarioId')])
 
 
@@ -86,7 +84,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                 initialValues={{
                     ...currentOperativo,
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
-                    propietarioId: currentOperativo.operativosResponsable ? currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === true).map((item) => item.id) : userAuth.id,
+                    propietarioId: currentOperativo.operativosResponsable ? currentOperativo.operativosResponsable.find((item) => item.scoreCard.propietario === true)?.id : '',
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
                     fechaInicio: dayjs(currentOperativo.fechaInicio),
                     fechaFin: dayjs(currentOperativo.fechaFin)
@@ -148,6 +146,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                         className='col-span-6'
                         name='propietarioId'
                         rules={[{ required: true, message: 'Por favor selecciona al propietario' }]}
+                        shouldUpdate = {(prevValues, curValues) => prevValues.propietarioId !== curValues.propietarioId}
                     >
                         <Select
                             style={{ width: '100%' }}
@@ -176,11 +175,13 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     label="Co-Responsables"
                     name="operativosResponsable"
                     rules={[{ required: true, message: 'Por favor selecciona a los participantes' }]}
+                    shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
                 >
                     <Select
                         mode="multiple"
                         tagRender={tagRender}
                         onChange={ (value) => { setSelectedUsers(value) } }
+                        
                         value={ selectedUsers }
                         bordered = {false}
                         maxTagCount={3} style={{ width: '100%' }}

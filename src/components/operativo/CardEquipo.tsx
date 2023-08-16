@@ -1,16 +1,17 @@
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Image } from "antd";
+import { Avatar, Dropdown, Image } from "antd";
 import { useEffect, useState } from "react";
 import { AiOutlineEllipsis } from "react-icons/ai";
 import ModalEvaluacion from "./ModalEvaluacion";
 import { getDepartamentoThunk } from "@/redux/features/admin/departamentos/departamentosThunks";
+import { UserDropdown } from "../antd/DropDownUser";
 
-const CardEquipo = () => {
+export const CardEquipo = () => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-    const [ isModalVisibleEv, setIsModalVisibleEv ] = useState(false)
+    const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
     const [ usuarioEv , setUsuarioEv ] = useState<any>(null)
 
     const dispatch = useAppDispatch()
@@ -20,14 +21,18 @@ const CardEquipo = () => {
         // dispatch(getDepartamentoThunk({}))
     }, [])    
 
-    const handleCancelEv = () => {
-        setIsModalVisibleEv(false)
+    const handleCancel = () => {
+        setEvaluacionVisible(false)
     }
     
+    const handleEvaluation = (usuario: any) => {
+        setUsuarioEv(usuario)
+        setEvaluacionVisible(true)
+    }
 
     return ( 
         <>
-        <div className='w-[25%] p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr'>
+        <div className='p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr h-full'>
             <h1 className='font-medium text-white'>Mi Equipo</h1>
             <ul>
                 <li className='flex items-center my-5 gap-x-5 w-full'>
@@ -37,7 +42,7 @@ const CardEquipo = () => {
                         <p className='text-devarana-blue font-medium'> 93.5% </p>
                     </div>
                     <div className='rounded'>
-                        <AiOutlineEllipsis className='text-white text-2xl' />
+                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} handleEvaluation={handleEvaluation}/>
                     </div>
                 </li>
                 <li className='flex items-center my-5 gap-x-5 w-full'>
@@ -47,14 +52,13 @@ const CardEquipo = () => {
                         <p className='text-devarana-blue font-medium'> 93.5% </p>
                     </div>
                     <div className='rounded'>
-                        <AiOutlineEllipsis className='text-white text-2xl' />
+                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} handleEvaluation={handleEvaluation} />
                     </div>
                 </li>
             </ul>                 
         </div>
-        <ModalEvaluacion  handleCancelEv={handleCancelEv} visible={isModalVisibleEv} usuario={usuarioEv}/>
+            <ModalEvaluacion  handleCancel={handleCancel} visible={isEvaluacionVisible} usuario={usuarioEv}/>
         </>
      );
 }
  
-export default CardEquipo;

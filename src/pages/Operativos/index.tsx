@@ -1,24 +1,25 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
-import { getResultadosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { Box } from '@/components/ui';
-import {FloatButton, Modal, Rate, } from 'antd'
+import { getProfileThunk } from '@/redux/features/profile/profileThunk';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, FormPonderacion } from '@/components/operativo';
+import { useObjetivo } from '@/hooks/useObjetivos';
+import { Box, Button } from '@/components/ui';
+import {FloatButton, Modal } from 'antd'
 import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
-import { CardObjetivo } from '@/components/operativo/CardObjetivo';
 import { FaPlus } from 'react-icons/fa';
-import { FormObjetivo } from '@/components/operativo/FormObjetivo';
 
-import { useObjetivo } from '@/hooks/useObjetivos';
-import { CardResumen } from '@/components/operativo/CardResumen';
-import { CardAvance } from '@/components/operativo/CardAvance';
-import { CardDesempeno } from '@/components/operativo/CardDesempeno';
-import CardEquipo from '@/components/operativo/CardEquipo';
-import { useParams } from 'react-router-dom';
-import { getProfileThunk } from '@/redux/features/profile/profileThunk';
+// Import Swiper styles
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import { PiStrategyBold } from 'react-icons/pi';
+import { getUsuariosByDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
 
 export const Objetivos : React.FC = () => {
 
@@ -28,7 +29,8 @@ export const Objetivos : React.FC = () => {
     const { userAuth } = useAppSelector(state => state.auth)
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
-    const [ isModalVisible, setIsModalVisible ] = useState(false)
+    const [ isFormVisible, setFormVisible ] = useState(false)
+    const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
     
     
     const {id} = useParams<{id: string}>()
@@ -45,18 +47,23 @@ export const Objetivos : React.FC = () => {
         dispatch(getProfileThunk(id || userAuth?.id))
     }, [userAuth, id])
 
-    const handleCancel = () => {
-        setIsModalVisible(false)
+    useEffect(() => {
+        dispatch(getUsuariosByDepartamentoThunk({usuarioId: id || userAuth?.id}))
+    }, [])
+
+    const handleCancelForm = () => {
+        setFormVisible(false)
         dispatch(clearObjetivoThunk())
         dispatch(clearResultadoThunk())
     }
 
-    
+    const handleCancelPonderacion = () => {
+        setPonderacionVisible(false)
+    }
+
 
     const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
 
-    
- 
 
     return (
         <>
@@ -70,7 +77,29 @@ export const Objetivos : React.FC = () => {
                 <Box className='w-[35%] flex justify-center'>
                     <CardDesempeno quarter={quarter} year={year}/>
                 </Box>
-                <CardEquipo />
+                <div className='w-[25%] relative'>
+                    {/* <Swiper
+                        effect={'cards'}
+                        grabCursor={true}
+                        modules={[EffectCards]}
+                        className='mySwiper h-[100%]'
+                    >
+                        <SwiperSlide className='rounded-ext'>
+                            <CardEquipo />
+                        </SwiperSlide>
+                        <SwiperSlide className='rounded-ext'>
+                            <CardEquipo />
+                        </SwiperSlide>
+                        <SwiperSlide className='rounded-ext'>
+                            <CardEquipo />
+                        </SwiperSlide>
+
+                    </Swiper> */}
+                    {/* Mi Equipo */}
+                    {/* // Favoritos */}
+                    {/* Circuito de evaluacion */}
+                    <CardEquipo />
+                </div>
             </div>
 
 
@@ -85,16 +114,21 @@ export const Objetivos : React.FC = () => {
                         : 
 
                         <>
-                        <h1 className='col-span-12'>Mis Objetivos</h1>
+                        <div className='col-span-12 flex justify-between'>
+                            <h1>Mis Objetivos</h1>
+                            <Button width={70} classColor='primary' classType='regular' onClick={() => setPonderacionVisible(true)}>
+                                <PiStrategyBold className='text-xl'/>
+                            </Button>
+                        </div>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} year={year} quarter={quarter} />
                             ))
                         }
                         <h1 className='col-span-12'>Objetivos Compartidos</h1>
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setIsModalVisible={setIsModalVisible} year={year} quarter={quarter}/>
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} year={year} quarter={quarter} />
                             ))
                         }
                         </>
@@ -105,24 +139,37 @@ export const Objetivos : React.FC = () => {
                     <h1 className='text-primary font-medium'>Ranking Devarana</h1>
                 </Box>
             </div>
-            
+
 
             <Modal 
-                open={isModalVisible}
+                open={isFormVisible}
                 footer={null}
-                onCancel={handleCancel}
+                onCancel={handleCancelForm}
                 width={1000}
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} handleCancel={handleCancel} />
+                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} handleCancel={handleCancelForm} />
+            </Modal>
+            
+
+
+            <Modal
+                open={isPonderacionVisible}
+                footer={null}
+                width={1000}
+                closable={false}
+                destroyOnClose={true}
+                onCancel={handleCancelPonderacion}
+            >
+                <FormPonderacion />
             </Modal>
 
           
             <FloatButton
                 shape="circle"
                 icon={<FaPlus />}
-                onClick={() => setIsModalVisible(true)}
+                onClick={() => setFormVisible(true)}
             />
 
             
