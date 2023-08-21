@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '@/redux/hooks';
-import { clearUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { clearUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 // import { CustomDropdown } from './CustomDropdown'
 import { Avatar, Select } from 'antd'
 import { UsuarioProps } from '@/interfaces';

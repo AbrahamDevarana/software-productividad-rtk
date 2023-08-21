@@ -19,7 +19,7 @@ import { EffectCards } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import { PiStrategyBold } from 'react-icons/pi';
-import { getUsuariosByDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
+import { getUsuariosByDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
 
 export const Objetivos : React.FC = () => {
 

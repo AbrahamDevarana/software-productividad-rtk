@@ -2,7 +2,7 @@ import { createTareaThunk, updateTareaThunk } from '@/redux/features/tareas/tare
 import { Avatar, DatePicker, Dropdown, Form, Input, Select, Skeleton, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
 import { TareasProps, UsuarioProps } from '@/interfaces'
 import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';

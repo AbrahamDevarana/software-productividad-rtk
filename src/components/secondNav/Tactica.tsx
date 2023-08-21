@@ -5,7 +5,7 @@ import type { DatePickerProps } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { getAreasThunk } from '@/redux/features/areas/areasThunks';
 import { FaBuilding } from 'react-icons/fa';
 
 interface TacticaProps {

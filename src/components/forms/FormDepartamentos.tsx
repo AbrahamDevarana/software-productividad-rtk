@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
-import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
+import { getAreasThunk } from '@/redux/features/areas/areasThunks';
 import { useEffect, useMemo, useState } from 'react';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { Select, Input, Form, Skeleton, ColorPicker, Space } from 'antd'
 import { DefaultOptionType } from 'antd/es/select';
 import { useSelectUser } from '@/hooks/useSelectUser';

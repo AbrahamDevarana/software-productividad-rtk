@@ -1,7 +1,7 @@
 import { FloatButton, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
-import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk, clearCurrentAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk, clearCurrentAreaThunk } from '@/redux/features/areas/areasThunks';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { FormAreas } from '@/components/forms/FormAreas';
 

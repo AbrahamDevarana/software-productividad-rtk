@@ -2,10 +2,10 @@ import { Select, Form, Input, Space, Skeleton } from 'antd';
 import { Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useMemo, useState } from 'react';
-import { getAreasThunk } from '@/redux/features/admin/areas/areasThunks';
+import { getAreasThunk } from '@/redux/features/areas/areasThunks';
 import { useAppDispatch } from '@/redux/hooks';
-import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
-import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
+import { updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaArrowRight, FaSave } from 'react-icons/fa';
 

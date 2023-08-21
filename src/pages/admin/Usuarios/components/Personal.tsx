@@ -2,7 +2,7 @@ import { Alert, Divider, Form, Input, DatePicker } from 'antd'
 import { Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import dayjs from 'dayjs';
-import { updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { UsuarioProps } from '@/interfaces';
 
 

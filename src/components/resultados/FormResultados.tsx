@@ -1,6 +1,6 @@
 import { useSelectUser } from '@/hooks/useSelectUser'
 import { UsuarioProps } from '@/interfaces'
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
 import { updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Button, DatePicker, Form, Input, Radio, Select } from 'antd'

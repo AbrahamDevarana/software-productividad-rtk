@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { FloatButton, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import type { ColumnsType } from 'antd/es/table';
-import { cleanDepartamentoThunk, getDepartamentoThunk, getDepartamentosThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
-import { deleteDepartamentoThunk } from '@/redux/features/admin/departamentos/departamentosThunks';
+import { cleanDepartamentoThunk, getDepartamentoThunk, getDepartamentosThunk } from '@/redux/features/departamentos/departamentosThunks';
+import { deleteDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
 import { FormDepartamentos } from '@/components/forms/FormDepartamentos';
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa';
 import { DepartamentoProps } from '@/interfaces';

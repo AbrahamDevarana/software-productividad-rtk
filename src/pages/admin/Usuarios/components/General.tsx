@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Input, Form, Upload, Modal, Skeleton } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '@/components/ui';
-import { createUsuarioThunk, updateUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { createUsuarioThunk, updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { uploadUserPicture } from '@/helpers';
 import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { uploadButton } from '@/components/ui/UploadButton';

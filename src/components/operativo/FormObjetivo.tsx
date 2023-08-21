@@ -4,7 +4,7 @@ import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { DatePicker, Divider, Form, Input, Select, Skeleton } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks'
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
 import { Button } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'

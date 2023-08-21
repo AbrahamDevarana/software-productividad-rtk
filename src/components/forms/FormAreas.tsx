@@ -1,9 +1,9 @@
 
 import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/admin/areas/areasThunks';
+import { clearCurrentAreaThunk, createAreaThunk, updateAreaThunk } from '@/redux/features/areas/areasThunks';
 import { useEffect } from 'react';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { Select, Input, Form, Skeleton } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaSave } from 'react-icons/fa';

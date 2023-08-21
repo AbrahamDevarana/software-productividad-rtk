@@ -1,6 +1,6 @@
 import { getBase64, getStorageUrl } from "@/helpers";
 import { UsuarioProps } from "@/interfaces";
-import { deleteProfilePhotoThunk } from "@/redux/features/admin/usuarios/usuariosThunks";
+import { deleteProfilePhotoThunk } from "@/redux/features/usuarios/usuariosThunks";
 import { useAppDispatch } from "@/redux/hooks";
 import { UploadFile, UploadProps } from "antd";
 import { RcFile } from "antd/es/upload";

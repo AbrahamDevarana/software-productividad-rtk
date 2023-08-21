@@ -6,7 +6,7 @@ import { clearProyectoThunk, deleteProyectoThunk, getCreatedProyectoThunk, getPr
 import { FaPlus } from "react-icons/fa"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { FloatButton, Modal } from "antd"
-import { getUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
+import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks"
 import { ProyectoCard } from "@/components/proyectos/ProyectoCard"
 
 export const Proyectos = () => {

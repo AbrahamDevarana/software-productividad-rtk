@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box } from '../../components/ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useRef, useState } from 'react';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { FaLeaf, FaMedal } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { RiMentalHealthLine } from 'react-icons/ri';

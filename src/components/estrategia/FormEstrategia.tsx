@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
 import { PerspectivaProps } from '@/interfaces';
 

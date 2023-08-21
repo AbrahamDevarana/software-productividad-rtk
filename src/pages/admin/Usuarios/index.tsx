@@ -2,7 +2,7 @@ import { Pagination, Table, Tooltip, Input, FloatButton, Modal } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
-import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/admin/usuarios/usuariosThunks"
+import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks"
 import { ColumnsType } from "antd/es/table"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';

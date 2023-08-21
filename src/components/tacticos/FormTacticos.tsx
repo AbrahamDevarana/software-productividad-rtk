@@ -1,7 +1,7 @@
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getUsuariosThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { deleteTacticoThunk, updateQuartersThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, TrimestreProps, UsuarioProps } from '@/interfaces';

@@ -5,7 +5,7 @@ import { Avatar, Dropdown, Image } from "antd";
 import { useEffect, useState } from "react";
 import { AiOutlineEllipsis } from "react-icons/ai";
 import ModalEvaluacion from "./ModalEvaluacion";
-import { getDepartamentoThunk } from "@/redux/features/admin/departamentos/departamentosThunks";
+import { getDepartamentoThunk } from "@/redux/features/departamentos/departamentosThunks";
 import { UserDropdown } from "../antd/DropDownUser";
 
 export const CardEquipo = () => {

@@ -5,7 +5,7 @@ import { General } from "./General";
 import { Personal } from "./Personal";
 import { Profesional } from "./Profesional";
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { cleanCurrentUsuarioThunk } from '@/redux/features/admin/usuarios/usuariosThunks';
+import { cleanCurrentUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
 
 
 interface Props {

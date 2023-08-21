@@ -1,5 +1,5 @@
 import { DepartamentoProps } from '@/interfaces';
-import { AppDispatch, RootState } from '../../../store';
+import { AppDispatch, RootState } from '@/redux/store';
 import { clearDepartamentos, clearCurrentDepartamento, clearLideres } from './departamentosSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
