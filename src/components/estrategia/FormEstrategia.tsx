@@ -15,7 +15,6 @@ import { statusType } from '@/types';
 import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { FaEdit, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
 import { Comentarios } from '../general/Comentarios';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 
@@ -296,7 +295,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                         hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangePerspectiva(perspectiva.id)
                                     }}
                                     key={perspectiva.id} 
-                                    className={`rounded-ext px-2 py-1 text-white font-bold hover:transform transition-all duration-200 hover:scale-105`}
+                                    className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
                                     style={{
                                         backgroundColor: currentEstrategico.perspectivaId === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
                                     }}

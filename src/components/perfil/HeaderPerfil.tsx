@@ -8,7 +8,7 @@ import { Galeria } from "../ui/Galeria";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getGaleriaDevaranaThunk } from "@/redux/features/galeria/galeriaThunk";
-import { updateProfileConfigThunk } from "@/redux/features/profile/profileThunk";
+import { updateProfileConfigThunk } from "@/redux/features/perfil/perfilThunk";
 
 interface HeaderProps {
     usuarioActivo: PerfilProps;

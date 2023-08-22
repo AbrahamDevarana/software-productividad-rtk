@@ -6,7 +6,7 @@ import { PerfilProps } from '@/interfaces';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { getStorageUrl } from '@/helpers';
 import { FaUpload } from 'react-icons/fa';
-import { uploadProfilePictureThunk } from '@/redux/features/profile/profileThunk';
+import { uploadProfilePictureThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import ImgCrop from 'antd-img-crop';
 

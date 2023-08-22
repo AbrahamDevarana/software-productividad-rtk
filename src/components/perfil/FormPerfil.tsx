@@ -1,6 +1,6 @@
 
 import { DatePicker, Form, Input, message } from 'antd';
-import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
+import { updateProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import { PerfilProps } from "@/interfaces";
 import dayjs from 'dayjs';

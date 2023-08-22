@@ -7,7 +7,7 @@ import { PerfilProps } from '@/interfaces'
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { updateProfileThunk } from '@/redux/features/profile/profileThunk'
+import { updateProfileThunk } from '@/redux/features/perfil/perfilThunk'
 import { useAppDispatch } from '@/redux/hooks'
 import { useState } from 'react'
 import { Button } from '@/components/ui'

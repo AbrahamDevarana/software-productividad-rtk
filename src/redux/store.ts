@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./features/auth/authThunks";
 
 import authSlice from "./features/auth/authSlice";
-import profileSlice from "./features/profile/profileSlice";
+import profileSlice from "./features/perfil/perfilSlice";
 import socketSlice from "./features/socket/socketSlice";
 import areasSlice from './features/areas/areasSlice';
 import usuariosSlice from './features/usuarios/usuariosSlice';

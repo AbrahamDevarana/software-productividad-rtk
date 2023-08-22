@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearProfileThunk, getProfileThunk } from "@/redux/features/profile/profileThunk";
+import { clearProfileThunk, getProfileThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";

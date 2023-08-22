@@ -106,7 +106,6 @@ export const getResultadosThunk = createAsyncThunk(
     }
 )
 
-
 export const uploadImageThunk = (usuarioId: string, file: any) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(checkingUsuarios())

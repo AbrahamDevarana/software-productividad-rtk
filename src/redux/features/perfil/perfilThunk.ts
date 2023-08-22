@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
 import { PerfilProps } from "@/interfaces";
-import { clearProfile } from "./profileSlice";
+import { clearProfile } from "./perfilSlice";
 
 
 interface Props {
@@ -89,7 +89,28 @@ export const updateProfileConfigThunk = createAsyncThunk(
     }
 )
 
+
+export const getProfileEvaluationThunk = createAsyncThunk(
+    'profile/getProfileEvaluation',
+    async (usuarioId:any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+            }
+            const response = await clientAxios.get(`/evaluacion-usuario/${usuarioId}`, config);
             
+            console.log(response.data.evaluaciones);
+            
+            return response.data.evaluaciones
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+
 
 export const clearProfileThunk = () => {
     return (dispatch: any) => {

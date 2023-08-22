@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { getProfileThunk } from '@/redux/features/profile/profileThunk';
+import { getProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, FormPonderacion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box, Button } from '@/components/ui';

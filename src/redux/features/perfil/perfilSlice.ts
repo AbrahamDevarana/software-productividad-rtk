@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './profileThunk';
+import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './perfilThunk';
 
 
 const initialState: PerfilState = {
@@ -45,7 +45,8 @@ const initialState: PerfilState = {
             notificacionesEmailTrimestral: false,
             portadaPerfil: ''
         }
-    }
+    },
+
 }
     
 

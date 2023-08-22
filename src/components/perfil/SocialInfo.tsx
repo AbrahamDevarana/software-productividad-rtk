@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { AiFillAccountBook, AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiOutlineLink } from 'react-icons/ai';
 import { IoShareSocialSharp } from 'react-icons/io5';
 import { useAppDispatch } from '@/redux/hooks';
-import { updateProfileThunk } from '@/redux/features/profile/profileThunk';
+import { updateProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { Button } from '../ui';
 
 
