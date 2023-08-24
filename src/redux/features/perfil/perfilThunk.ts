@@ -19,7 +19,9 @@ export const getProfileThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const response = await clientAxios.get<Props>(`/usuarios/perfil/${userId}`, config);            
+            const response = await clientAxios.get<Props>(`/usuarios/perfil/${userId}`, config);    
+            console.log(response.data.usuario);
+                    
             return response.data.usuario
         }
         catch (error: any) {
