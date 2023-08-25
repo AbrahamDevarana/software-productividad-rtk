@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './perfilThunk';
+import { getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './perfilThunk';
 
 
 const initialState: PerfilState = {
@@ -16,6 +16,8 @@ const initialState: PerfilState = {
         email: '',
         foto: '',
         slug: '',
+        equipo: [],
+        colaboradores: [],
         objetivosOperativos: [],
         proyectos: [],
         social: {
@@ -104,6 +106,30 @@ const profileSlice = createSlice({
                 state.perfil = action.payload
             })
             .addCase(updateProfileConfigThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(getEquipoThunk.pending, (state) => {
+                // state.isLoading = true
+            })
+            .addCase(getEquipoThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                console.log(action.payload);
+                
+                state.perfil.equipo = action.payload
+            })
+            .addCase(getEquipoThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(getColaboradoresThunk.pending, (state) => {
+                // state.isLoading = true
+            })
+            .addCase(getColaboradoresThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.perfil.colaboradores = action.payload
+            })
+            .addCase(getColaboradoresThunk.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.error.message
             })

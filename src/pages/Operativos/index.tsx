@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { getProfileThunk } from '@/redux/features/perfil/perfilThunk';
+import { getColaboradoresThunk, getEquipoThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, FormPonderacion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box, Button } from '@/components/ui';
@@ -27,10 +27,13 @@ export const Objetivos : React.FC = () => {
 
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
+    const { perfil } = useAppSelector(state => state.profile)
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
+
+    const [ gettingProfile, setGettingProfile ] = useState(false)
     
     
     const {id} = useParams<{id: string}>()
@@ -39,16 +42,30 @@ export const Objetivos : React.FC = () => {
         setYear(dayjs(date).year())
         setQuarter(dayjs(date).quarter())
     }
-    useEffect(() => {
-        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-    }, [year, quarter])
+
 
     useEffect(() => {
-        dispatch(getProfileThunk(id || userAuth?.id))
-    }, [userAuth, id])
+
+        setGettingProfile(true)
+
+        const fetchData = async () => {
+
+            await dispatch(getProfileThunk(id || userAuth?.id))
+            await dispatch(getEquipoThunk(userAuth.id))
+            await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
+            await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+
+            setGettingProfile(false)
+        }
+
+        fetchData()
+
+
+    }, [userAuth, id, year, quarter])
+    
 
     useEffect(() => {
-        dispatch(getUsuariosByDepartamentoThunk({usuarioId: id || userAuth?.id}))
+        // dispatch(getUsuariosByDepartamentoThunk({usuarioId: id || userAuth?.id}))
     }, [])
 
     const handleCancelForm = () => {
@@ -64,6 +81,7 @@ export const Objetivos : React.FC = () => {
 
     const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
 
+    if(gettingProfile) return <Loading dynamic={true}/>
 
     return (
         <>
@@ -78,27 +96,25 @@ export const Objetivos : React.FC = () => {
                     <CardDesempeno quarter={quarter} year={year}/>
                 </Box>
                 <div className='w-[25%] relative'>
-                    {/* <Swiper
+                    <Swiper
                         effect={'cards'}
                         grabCursor={true}
                         modules={[EffectCards]}
-                        className='mySwiper h-[100%]'
+                        className='mySwiper h-[100%] px-5'
+                        loop={true}
                     >
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo />
+                            <CardEquipo equipo={perfil.equipo} />
                         </SwiperSlide>
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo />
-                        </SwiperSlide>
-                        <SwiperSlide className='rounded-ext'>
-                            <CardEquipo />
+                            <CardEquipo equipo={perfil.colaboradores}/>
                         </SwiperSlide>
 
-                    </Swiper> */}
+                    </Swiper>
                     {/* Mi Equipo */}
                     {/* // Favoritos */}
                     {/* Circuito de evaluacion */}
-                    <CardEquipo />
+                    {/* <CardEquipo equipo={perfil.equipo} /> */}
                 </div>
             </div>
 

@@ -64,7 +64,8 @@ export interface PerfilProps extends SinglePerfilProps {
     proyectos:     ProyectosProps[];
     social: Social,
     configuracion: ConfiguracionUsuarioProps;
-
+    equipo: SinglePerfilProps[];
+    colaboradores: SinglePerfilProps[];
     evaluacionesRecibidas: EvaluacionesProps[];
     evaluacionesRealizadas: EvaluacionesProps[];
 }

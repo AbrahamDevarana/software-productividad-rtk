@@ -19,8 +19,7 @@ export const getProfileThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const response = await clientAxios.get<Props>(`/usuarios/perfil/${userId}`, config);    
-            console.log(response.data.usuario);
+            const response = await clientAxios.get<Props>(`/usuarios/perfil/${userId}`, config);
                     
             return response.data.usuario
         }
@@ -111,7 +110,43 @@ export const getProfileEvaluationThunk = createAsyncThunk(
     }
 )
 
+export const getEquipoThunk = createAsyncThunk(
+    'profile/getEquipo',
+    async (usuarioId:string, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+            }
+            const response = await clientAxios.get(`/perfiles/get-equipo/${usuarioId}`, config);
+            
+            return response.data.equipo
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
+export const getColaboradoresThunk = createAsyncThunk(
+    'profile/getColaboradores',
+    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year,
+                    quarter
+                }
+            }
+            const response = await clientAxios.get(`/perfiles/get-colaboradores/${usuarioId}`, config);
+            return response.data.colaboradores
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+    
 
 
 export const clearProfileThunk = () => {
