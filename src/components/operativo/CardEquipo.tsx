@@ -11,8 +11,7 @@ import { UserDropdown } from "../antd/DropDownUser";
 export const CardEquipo = () => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-    const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
-    const [ usuarioEv , setUsuarioEv ] = useState<any>(null)
+
 
     const dispatch = useAppDispatch()
 
@@ -21,14 +20,8 @@ export const CardEquipo = () => {
         // dispatch(getDepartamentoThunk({}))
     }, [])    
 
-    const handleCancel = () => {
-        setEvaluacionVisible(false)
-    }
     
-    const handleEvaluation = (usuario: any) => {
-        setUsuarioEv(usuario)
-        setEvaluacionVisible(true)
-    }
+
 
     return ( 
         <>
@@ -42,7 +35,7 @@ export const CardEquipo = () => {
                         <p className='text-devarana-blue font-medium'> 93.5% </p>
                     </div>
                     <div className='rounded'>
-                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} handleEvaluation={handleEvaluation}/>
+                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} onClick={()=>{}}/>
                     </div>
                 </li>
                 <li className='flex items-center my-5 gap-x-5 w-full'>
@@ -52,12 +45,12 @@ export const CardEquipo = () => {
                         <p className='text-devarana-blue font-medium'> 93.5% </p>
                     </div>
                     <div className='rounded'>
-                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} handleEvaluation={handleEvaluation} />
+                        <UserDropdown userId={userAuth.id} slug={userAuth.iniciales} onClick={()=>{}} />
                     </div>
                 </li>
             </ul>                 
         </div>
-            <ModalEvaluacion  handleCancel={handleCancel} visible={isEvaluacionVisible} usuario={usuarioEv}/>
+            
         </>
      );
 }

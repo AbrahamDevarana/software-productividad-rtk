@@ -1,49 +1,69 @@
-import { UsuarioProps } from "@/interfaces";
-import { Avatar, Modal, Rate, Segmented, Space } from "antd";
-import { useState } from "react";
+import { getStorageUrl } from "@/helpers";
+import getBrokenUser from "@/helpers/getBrokenUser";
+import { PerfilProps } from "@/interfaces";
+import { useAppSelector } from "@/redux/hooks";
+import { Avatar, Image, Modal, Rate, Segmented, Space } from "antd";
+import { useMemo, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 
 
 interface Props {
-    usuario: UsuarioProps
+    perfil: PerfilProps
     visible: boolean
     handleCancel: () => void
 }
 
-const ModalEvaluacion = ({usuario, visible, handleCancel}: Props) => {
+const ModalEvaluacion = ({perfil, visible, handleCancel,}: Props) => {
 
     const [activeEvaluate, setActiveEvaluate] = useState<string | number>('user1')
+    const {userAuth} = useAppSelector(state => state.auth)
+    const [evaluacion, setEvaluacion] = useState<any>({
+        usuarioId: '',
+        preguntas: []
+    })
+      
 
-    const options = [
-        {
-        label: (
-            <div style={{ padding: 4 }}>
-                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-                <div>Abraham</div>
-            </div>
-        ),
-        value: 'user1',
-        },
-        {
-        label: (
-            <div style={{ padding: 4 }}>
-                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-                <div>Fatima</div>
-            </div>
-        ),
-        value: 'user2',
-        },
-        {
-        label: (
-            <div style={{ padding: 4 }}>
-                <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-                <div>Ximena</div>
-            </div>
-        ),
-        value: 'user3',
-        },
-    ]
+    const usuariosEvaluar = useMemo(() => {
+        return perfil.evaluacionesRecibidas?.map((evaluacion) => {
+            if(evaluacion.usuarioEvaluador.id !== userAuth.id){
+                return evaluacion.usuarioEvaluador
+            }
+        })
+    }, [perfil])
+
+    // const usuariosEvaluadores = useMemo(() => {
+    //     return perfil.evaluacionesRealizadas?.map((evaluacion) => {
+    //         if(evaluacion.usuarioEvaluador.id !== userAuth.id){
+    //             return evaluacion.usuarioEvaluador
+    //         }
+    //     })
+    // }, [perfil])
+            
     
+    const options = usuariosEvaluar.map((usuario) => {
+        if(usuario){
+            return {
+                label: (
+                    <div style={{ padding: 4 }}>
+                        <Avatar 
+                            src={<Image src={`${getStorageUrl(usuario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                            className=''
+                        >
+                            {usuario?.iniciales}
+                        </Avatar>
+                        <div>{ usuario.nombre }</div>
+                    </div>
+                ),
+                value: usuario.id
+            }
+        }else{
+            return {
+                label: 'Sin usuarios',
+                value: 'user1'
+            }
+        }
+    })
+
     return (
     <>
         <Modal

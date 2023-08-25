@@ -1,4 +1,4 @@
-import { DepartamentoProps, OperativoProps, ProyectosProps } from "./";
+import { DepartamentoProps, EvaluacionesProps, OperativoProps, ProyectosProps } from "./";
 
 
 
@@ -33,8 +33,7 @@ export interface ConfiguracionUsuarioProps {
     portadaPerfil: string;
 }
 
-
-export interface PerfilProps {
+export interface SinglePerfilProps {
     id:                   string;
     nombre:               string;
     apellidoPaterno:      string;
@@ -43,6 +42,12 @@ export interface PerfilProps {
     nombreCorto:          string;
     email:                string;
     foto:                 string;
+    slug:                 string; 
+}
+
+
+
+export interface PerfilProps extends SinglePerfilProps {
     fechaNacimiento?:      string;
     fechaIngreso?:         string;
     telefono?:             number;
@@ -55,10 +60,13 @@ export interface PerfilProps {
     direccionId?:          number;
     departamento?:         DepartamentoProps;
     direccion?:            DireccionProps;
-    responsableOperativos: OperativoProps[];
+    objetivosOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
     social: Social,
     configuracion: ConfiguracionUsuarioProps;
+
+    evaluacionesRecibidas: EvaluacionesProps[];
+    evaluacionesRealizadas: EvaluacionesProps[];
 }
 
 

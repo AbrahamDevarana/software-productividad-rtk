@@ -15,7 +15,8 @@ const initialState: PerfilState = {
         nombreCorto: '',
         email: '',
         foto: '',
-        responsableOperativos: [],
+        slug: '',
+        objetivosOperativos: [],
         proyectos: [],
         social: {
             facebook: {
@@ -35,6 +36,8 @@ const initialState: PerfilState = {
                 url: ''
             },
         },
+        evaluacionesRecibidas: [],
+        evaluacionesRealizadas: [],
         configuracion:{
             usuarioId: '',
             notificacionesWeb: false,

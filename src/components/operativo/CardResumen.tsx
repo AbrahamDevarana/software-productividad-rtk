@@ -3,10 +3,13 @@ import { OperativoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
-import { Avatar, DatePicker, Image } from 'antd'
+import { Avatar, DatePicker, Divider, Image } from 'antd'
 import dayjs from 'dayjs'
 import { TabStatus } from '../ui/TabStatus'
 import CountUp from 'react-countup';
+import { Button } from '../ui'
+import { useState } from 'react'
+import ModalEvaluacion from './ModalEvaluacion'
 
 
 interface Props {
@@ -18,7 +21,20 @@ interface Props {
 
 export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props) => {
 	const { userAuth } = useAppSelector(state => state.auth)
+	const { perfil } = useAppSelector(state => state.profile)
+	
+
 	const { accionesCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount } = useObjetivo({operativos})
+
+	const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
+	const handleCancel = () => {
+		setEvaluacionVisible(false)
+	}
+
+	    
+    const handleEvaluation = () => {
+        setEvaluacionVisible(!isEvaluacionVisible)
+    }
 
   return (
     <>
@@ -33,9 +49,9 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 			</div>
 		</div>
 		<div className='my-5 p-5 flex items-center bg-primary bg-opacity-20 rounded'>
-			<Avatar className='h-20 w-20 border-primary border-2' src={<Image src={`${getStorageUrl(userAuth.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+			<Avatar className='h-20 w-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil.foto)}`} preview={false} fallback={getBrokenUser()} />} />
 			<div className='ml-5'>
-				<p className='font-medium text-xl text-devarana-graph'>{userAuth.nombre}</p>
+				<p className='font-medium text-xl text-devarana-graph'>{perfil.nombre}</p>
 			</div>
 		</div>
 		<div>
@@ -52,6 +68,11 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 				<p>Acciones: </p> <CountUp end={accionesCount} separator="," />
 			</div>
 
+			<Divider className='my-5' />
+			<Button classType='regular' classColor='dark' onClick={handleEvaluation}>
+				Evaluar
+			</Button>
+			<ModalEvaluacion  handleCancel={handleCancel} visible={isEvaluacionVisible} perfil={perfil} />
 		</div>
 	</>
   )

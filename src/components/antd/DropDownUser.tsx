@@ -8,10 +8,10 @@ import { Link } from 'react-router-dom';
 interface Props {
     userId: string;
     slug: string;
-    handleEvaluation: (userId: string) => void;
+    onClick: () => void;
 }
 
-export const UserDropdown:FC<Props> = ({ userId, slug, handleEvaluation }) => {
+export const UserDropdown:FC<Props> = ({ userId, slug, onClick }) => {
     const items: MenuProps['items'] = [
         {
             key: '1',
@@ -24,7 +24,7 @@ export const UserDropdown:FC<Props> = ({ userId, slug, handleEvaluation }) => {
         {
             key: '2',
             label: 'Evaluar',
-            onClick: () => handleEvaluation(userId),
+            onClick: () => onClick(),
         }
     ];
 
