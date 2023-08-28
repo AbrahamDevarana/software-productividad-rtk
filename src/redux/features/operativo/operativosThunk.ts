@@ -10,6 +10,19 @@ interface Props {
     operativo: OperativoProps
 }
 
+interface PonderacionesResponseProps {  
+    usuarioId: string
+    ponderaciones: PonderacionesProps[]
+}
+
+interface PonderacionesProps {
+    objetivoId: string
+    progresoAsignado: number,
+    nombreObjetivo: string
+}
+
+
+
 
 export const getOperativosThunk = createAsyncThunk(
     'operativos/getOperativos',
@@ -58,6 +71,10 @@ export const createOperativoThunk = createAsyncThunk(
             }
 
             const response = await clientAxios.post<Props>(`/operativos`, operativo, config);
+
+            console.log(response.data.operativo);
+            
+
             return response.data.operativo
         }
         catch (error: any) {
@@ -83,6 +100,22 @@ export const updateOperativoThunk = createAsyncThunk(
     }
 )
 
+export const setPonderacionesThunk = createAsyncThunk(
+    'operativos/setPonderaciones',
+    async ({usuarioId, ponderaciones}:{usuarioId: string, ponderaciones: object[]}, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.put<PonderacionesResponseProps>(`/operativos/set-ponderaciones/${usuarioId}`, {ponderaciones}, config);          
+            return response.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {

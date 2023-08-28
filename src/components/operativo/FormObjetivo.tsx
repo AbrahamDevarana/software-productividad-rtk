@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { OperativoProps, TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
@@ -9,6 +9,9 @@ import { createOperativoThunk, updateOperativoThunk } from '@/redux/features/ope
 import { Button } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'
 import { BsFillCalendarFill } from 'react-icons/bs'
+import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk'
+import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk'
+import { DefaultOptionType } from 'antd/es/select'
 
 interface Props {
     year: number
@@ -20,17 +23,23 @@ interface Props {
 export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => {
 
     const { TextArea } = Input;
-    const { RangePicker } = DatePicker;
 
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
+    const { perspectivas } = useAppSelector(state => state.perspectivas)
+    const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { tacticosGeneral } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { userAuth } = useAppSelector(state => state.auth)
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
 
+    const [filteredObjetivosTacticos, setFilteredObjetivosTacticos] = useState<TacticoProps[]>(tacticosGeneral)
+    const [filteredEstrategicos, setFilteredEstrategicos] = useState(estrategicos)
+
 
     useEffect(() => {
+        dispatch(getPerspectivasThunk({ year }))
+        dispatch(getEstrategicosThunk({ year }))
         dispatch(getTacticosThunk({ year }))
         dispatch(getUsuariosThunk({}))
     }, [])
@@ -55,23 +64,45 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
         handleCancel()
     }
 
+    useEffect(() => {
+        setFilteredObjetivosTacticos(tacticosGeneral)
+  }, [tacticosGeneral])
+
     const disabledDate = ( current: Dayjs ) => {
         return current.quarter() !== quarter
     };
 
     if ( isLoadingObjetivo ) return <Skeleton active paragraph={{  rows: 10 }} />
+    
 
+    const handlePerspectivaChange = (value: string) => {
+        form.setFieldValue('estrategicoId', null)
+        form.setFieldValue('tacticoId', null)
 
-    // const filteredPropietario = useMemo(() => {
-    //     return usuarios.filter( usuario => form.getFieldValue('operativosResponsable') ? !form.getFieldValue('operativosResponsable').includes(usuario.id) : true )
-    // }, [form.getFieldValue('operativosResponsable')])
+        if( value === null ) {
+            handleClear()
+        } else {
+            setFilteredEstrategicos(estrategicos.filter((estrategico) => estrategico.perspectivaId === value))
+            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategico.perspectivaId === value))
+        }
 
+       
+    }
 
+    const handleEstrategico = (value: string) => {
+        form.setFieldValue('tacticoId', null)
 
-    // const filteredParticipantes = useMemo(() => {
-    //     // return usuarios.filter( usuario => form.getFieldValue('propietarioId') ? !form.getFieldValue('propietarioId').includes(usuario.id) : true )
-    //     return usuarios.filter( usuario => form.getFieldValue('propietarioId') !== usuario.id )
-    // }, [form.getFieldValue('propietarioId')])
+        if( value === null ) {
+            handleClear()
+        }else {
+            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategicoId === value))
+        }
+    }
+
+    const handleClear = () => {
+        setFilteredObjetivosTacticos(tacticosGeneral)
+    }
+
 
 
     return (
@@ -84,7 +115,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                 initialValues={{
                     ...currentOperativo,
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
-                    propietarioId: currentOperativo.operativosResponsable ? currentOperativo.operativosResponsable.find((item) => item.scoreCard.propietario === true)?.id : '',
+                    propietarioId: currentOperativo.operativosResponsable ? currentOperativo.operativosResponsable.find((item) => item.scoreCard.propietario === true)?.id : userAuth.id,
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
                     fechaInicio: dayjs(currentOperativo.fechaInicio),
                     fechaFin: dayjs(currentOperativo.fechaFin)
@@ -105,7 +136,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     className='col-span-12'
                     rules={[{ required: true, message: 'Por favor ingresa la meta del objetivo' }]}
                 >
-                    <TextArea name="meta" />
+                    <TextArea name="meta" className='bg-[#F9F9F7]' bordered={false}/>
                 </Form.Item>
                 <Form.Item
                     label="Indicador"
@@ -113,7 +144,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     className='col-span-12'
                     rules={[{ required: true, message: 'Por favor ingresa el indicador del objetivo' }]}
                 >
-                    <TextArea name="indicador" />
+                    <TextArea name="indicador" className='bg-[#F9F9F7]' bordered={false}/>
                 </Form.Item>
                 <Form.Item
                     label="Fecha Inicio"
@@ -146,7 +177,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                         className='col-span-6'
                         name='propietarioId'
                         rules={[{ required: true, message: 'Por favor selecciona al propietario' }]}
-                        shouldUpdate = {(prevValues, curValues) => prevValues.propietarioId !== curValues.propietarioId}
+                        // shouldUpdate = {(prevValues, curValues) => prevValues.propietarioId !== curValues.propietarioId}
                     >
                         <Select
                             style={{ width: '100%' }}
@@ -175,7 +206,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     label="Co-Responsables"
                     name="operativosResponsable"
                     rules={[{ required: true, message: 'Por favor selecciona a los participantes' }]}
-                    shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
+                    // shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
                 >
                     <Select
                         mode="multiple"
@@ -199,6 +230,51 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                         }
                     </Select>
                 </Form.Item>
+
+                <Divider className='col-span-12' />
+
+                <Form.Item
+                    className='col-span-6'
+                    label="Perspectiva"
+                    name="perspectivaId"
+                >
+                   
+                   <Select
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                        showSearch
+                        onChange={handlePerspectivaChange}
+                        onClear={handleClear}
+                        allowClear
+                        options={
+                            perspectivas.map((perspectiva) => ({
+                                label: <p className='text-devarana-graph'>{perspectiva.nombre}</p>,
+                                value: perspectiva.id,
+                                dataName: perspectiva.nombre
+                            }))
+                        }
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    className='col-span-6'
+                    label="Objetivo Estrategico"
+                    name="estrategicoId"
+                >
+                    <Select 
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                        showSearch
+                        onChange={handleEstrategico}
+                        onClear={handleClear}
+                        allowClear
+                        options={
+                            filteredEstrategicos.map((estrategico) => ({
+                                label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
+                                value: estrategico.id,
+                                dataName: estrategico.nombre
+                            }))
+                        }
+                    />
+                </Form.Item>
                 
                 <Form.Item
                     className='col-span-6'
@@ -206,30 +282,22 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     name="tacticoId"
                     rules={[{ required: true, message: 'Por favor selecciona el objetivo tactico' }]}
                 >
-                    {/* <Select >
-
-                    </Select>
-
-                    <Select>
-
-                    </Select> */}
-
+                    
+                    
                     <Select
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                        showSearch
                         onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
                         options={
-                            tacticosGeneral.map((tactico) => ({
+                            filteredObjetivosTacticos.map((tactico) => ({
                                 label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
                                 value: tactico.id,
                                 dataName: tactico.nombre
                             }))
                         }
                     />
-                    {/* <Select 
-                        onChange={ (value) => { form.setFieldValue('tacticoId', value)}} options={options} showSearch
-                        // @ts-ignore
-                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                    >
-                    </Select> */}
+
+                    
                 </Form.Item>
                 
                 <div className='flex justify-end col-span-12'>

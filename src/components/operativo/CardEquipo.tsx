@@ -18,9 +18,9 @@ export const CardEquipo = ({ equipo }: Props) => {
 
     return ( 
         <>
-        <div className='p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr h-full'>
+        <div className='p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr h-full max-h-[400px] overflow-y-auto'>
             <h1 className='font-medium text-white'>Mi Equipo</h1>
-            <ul>
+            <ul className="my-3">
                 {
                     equipo?.map((item, index) => (
                         <li className='flex items-center my-5 gap-x-5 w-full' key={index}>

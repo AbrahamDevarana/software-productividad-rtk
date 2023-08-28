@@ -114,8 +114,6 @@ const profileSlice = createSlice({
             })
             .addCase(getEquipoThunk.fulfilled, (state, action) => {
                 state.isLoading = false
-                console.log(action.payload);
-                
                 state.perfil.equipo = action.payload
             })
             .addCase(getEquipoThunk.rejected, (state, action) => {

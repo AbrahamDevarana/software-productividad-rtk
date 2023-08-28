@@ -3,13 +3,15 @@ import { OperativoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
-import { Avatar, DatePicker, Divider, Image } from 'antd'
+import { Avatar, DatePicker, Divider, Image, Modal } from 'antd'
 import dayjs from 'dayjs'
-import { TabStatus } from '../ui/TabStatus'
+import { MdStarRate } from 'react-icons/md'
 import CountUp from 'react-countup';
 import { Button } from '../ui'
 import { useState } from 'react'
 import ModalEvaluacion from './ModalEvaluacion'
+import { FormPonderacion } from './FormPonderacion'
+import { PiStrategyBold } from 'react-icons/pi'
 
 
 interface Props {
@@ -22,8 +24,8 @@ interface Props {
 export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props) => {
 	const { userAuth } = useAppSelector(state => state.auth)
 	const { perfil } = useAppSelector(state => state.profile)
+	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
 	
-
 	const { accionesCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount } = useObjetivo({operativos})
 
 	const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
@@ -34,6 +36,10 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 	    
     const handleEvaluation = () => {
         setEvaluacionVisible(!isEvaluacionVisible)
+    }
+
+	const handleCancelPonderacion = () => {
+        setPonderacionVisible(false)
     }
 
   return (
@@ -69,10 +75,26 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 			</div>
 
 			<Divider className='my-5' />
-			<Button classType='regular' classColor='dark' onClick={handleEvaluation}>
-				Evaluar
-			</Button>
+			<div className='flex justify-between'>
+				<Button classType='regular' width={60} classColor='dark' onClick={handleEvaluation}>
+					<MdStarRate className='text-xl' />
+				</Button>
+				<Button width={60} classColor='primary' classType='regular' onClick={() => setPonderacionVisible(true)}>
+					<PiStrategyBold className='text-xl'/>
+				</Button>
+			</div>
 			<ModalEvaluacion  handleCancel={handleCancel} visible={isEvaluacionVisible} perfil={perfil} />
+			
+			<Modal
+                open={isPonderacionVisible}
+                footer={null}
+                width={1000}
+                closable={false}
+                destroyOnClose={true}
+                onCancel={handleCancelPonderacion}
+            >
+                <FormPonderacion operativos={operativos} />
+            </Modal>
 		</div>
 	</>
   )

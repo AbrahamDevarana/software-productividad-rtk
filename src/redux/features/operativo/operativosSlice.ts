@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { createOperativoThunk, getOperativoThunk, getOperativosThunk, updateOperativoThunk } from "./operativosThunk";
+import { createOperativoThunk, getOperativoThunk, getOperativosThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -91,6 +91,23 @@ const operativoSlice = createSlice({
         })
         .addCase(updateOperativoThunk.rejected, (state) => {
             state.isLoadingObjetivo = false
+        })
+        .addCase(setPonderacionesThunk.pending, (state) => {
+            
+        })
+        .addCase(setPonderacionesThunk.fulfilled, (state, { payload }) => {
+            const { ponderaciones, usuarioId } = payload
+            ponderaciones.forEach((ponderacion) => {
+                const objetivo = state.operativos.find(operativo => operativo.id === ponderacion.objetivoId)
+                if (objetivo) {
+                    const pivot = objetivo.operativosResponsable.find((pivot) => pivot.id === usuarioId)
+                    if (pivot) {
+                        pivot.scoreCard.progresoAsignado = ponderacion.progresoAsignado
+                    }
+                }            
+            })
+        })
+        .addCase(setPonderacionesThunk.rejected, (state) => {
         })
     }
 })

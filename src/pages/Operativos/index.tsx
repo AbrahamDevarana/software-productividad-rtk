@@ -4,22 +4,20 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getColaboradoresThunk, getEquipoThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, FormPonderacion } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
-import { Box, Button } from '@/components/ui';
-import {FloatButton, Modal } from 'antd'
+import { Box } from '@/components/ui';
+import {Drawer, FloatButton } from 'antd'
 import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
 import { FaPlus } from 'react-icons/fa';
 
 // Import Swiper styles
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCards } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
-import { PiStrategyBold } from 'react-icons/pi';
-import { getUsuariosByDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCards, FreeMode } from 'swiper';
 
 export const Objetivos : React.FC = () => {
 
@@ -31,7 +29,7 @@ export const Objetivos : React.FC = () => {
     const [ year, setYear] = useState(dayjs().year())
     const [ quarter, setQuarter ] = useState(dayjs().quarter())
     const [ isFormVisible, setFormVisible ] = useState(false)
-    const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
+    
 
     const [ gettingProfile, setGettingProfile ] = useState(false)
     
@@ -74,10 +72,7 @@ export const Objetivos : React.FC = () => {
         dispatch(clearResultadoThunk())
     }
 
-    const handleCancelPonderacion = () => {
-        setPonderacionVisible(false)
-    }
-
+    
 
     const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
 
@@ -99,7 +94,7 @@ export const Objetivos : React.FC = () => {
                     <Swiper
                         effect={'cards'}
                         grabCursor={true}
-                        modules={[EffectCards]}
+                        modules={[EffectCards, FreeMode]}
                         className='mySwiper h-[100%] px-5'
                         loop={true}
                     >
@@ -132,9 +127,7 @@ export const Objetivos : React.FC = () => {
                         <>
                         <div className='col-span-12 flex justify-between'>
                             <h1>Mis Objetivos</h1>
-                            <Button width={70} classColor='primary' classType='regular' onClick={() => setPonderacionVisible(true)}>
-                                <PiStrategyBold className='text-xl'/>
-                            </Button>
+                            
                         </div>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
@@ -157,31 +150,17 @@ export const Objetivos : React.FC = () => {
             </div>
 
 
-            <Modal 
+            <Drawer 
                 open={isFormVisible}
                 footer={null}
-                onCancel={handleCancelForm}
-                width={1000}
+                onClose={handleCancelForm}
+                width={window.innerWidth > 1200 ? 700 : '100%'}
                 closable={false}
                 destroyOnClose={true}
             >
                 <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} handleCancel={handleCancelForm} />
-            </Modal>
+            </Drawer>
             
-
-
-            <Modal
-                open={isPonderacionVisible}
-                footer={null}
-                width={1000}
-                closable={false}
-                destroyOnClose={true}
-                onCancel={handleCancelPonderacion}
-            >
-                <FormPonderacion />
-            </Modal>
-
-          
             <FloatButton
                 shape="circle"
                 icon={<FaPlus />}
