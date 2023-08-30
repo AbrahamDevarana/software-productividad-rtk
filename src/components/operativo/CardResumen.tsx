@@ -1,6 +1,6 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
 import { OperativoProps } from '@/interfaces'
-import { useAppSelector } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { Avatar, DatePicker, Divider, Image, Modal } from 'antd'
@@ -9,9 +9,10 @@ import { MdStarRate } from 'react-icons/md'
 import CountUp from 'react-countup';
 import { Button } from '../ui'
 import { useState } from 'react'
-import ModalEvaluacion from './ModalEvaluacion'
+import FormEvaluacion from './FormEvaluacion'
 import { FormPonderacion } from './FormPonderacion'
 import { PiStrategyBold } from 'react-icons/pi'
+import { getEvaluacionesThunk } from '@/redux/features/perfil/perfilThunk'
 
 
 interface Props {
@@ -25,22 +26,26 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 	const { userAuth } = useAppSelector(state => state.auth)
 	const { perfil } = useAppSelector(state => state.profile)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
+
+	const dispatch = useAppDispatch()
 	
 	const { accionesCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount } = useObjetivo({operativos})
 
 	const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
-	const handleCancel = () => {
+
+	const handleCancelEvaluacion = () => {
 		setEvaluacionVisible(false)
 	}
-
 	    
-    const handleEvaluation = () => {
+    const handleEvaluation = async () => {
+		dispatch(getEvaluacionesThunk({usuarioId: perfil.id, year, quarter }))
         setEvaluacionVisible(!isEvaluacionVisible)
     }
 
 	const handleCancelPonderacion = () => {
         setPonderacionVisible(false)
     }
+
 
   return (
     <>
@@ -83,8 +88,7 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 					<PiStrategyBold className='text-xl'/>
 				</Button>
 			</div>
-			<ModalEvaluacion  handleCancel={handleCancel} visible={isEvaluacionVisible} perfil={perfil} />
-			
+
 			<Modal
                 open={isPonderacionVisible}
                 footer={null}
@@ -94,6 +98,17 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
                 onCancel={handleCancelPonderacion}
             >
                 <FormPonderacion operativos={operativos} />
+            </Modal>
+
+			<Modal
+                open={isEvaluacionVisible}
+                footer={null}
+                width={1000}
+                closable={false}
+                destroyOnClose={true}
+                onCancel={handleCancelEvaluacion}
+            >
+                <FormEvaluacion perfil={perfil} />
             </Modal>
 		</div>
 	</>

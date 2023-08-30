@@ -15,6 +15,7 @@ export interface DireccionProps {
 
 
 export interface PerfilState{
+    isLoadingEvaluation: boolean;
     isLoading: boolean;
     error: unknown;
     perfil: PerfilProps;

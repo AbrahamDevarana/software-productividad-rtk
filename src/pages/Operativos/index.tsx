@@ -43,36 +43,23 @@ export const Objetivos : React.FC = () => {
 
 
     useEffect(() => {
-
         setGettingProfile(true)
-
         const fetchData = async () => {
-
             await dispatch(getProfileThunk(id || userAuth?.id))
             await dispatch(getEquipoThunk(userAuth.id))
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-
             setGettingProfile(false)
         }
-
         fetchData()
-
-
     }, [userAuth, id, year, quarter])
     
-
-    useEffect(() => {
-        // dispatch(getUsuariosByDepartamentoThunk({usuarioId: id || userAuth?.id}))
-    }, [])
 
     const handleCancelForm = () => {
         setFormVisible(false)
         dispatch(clearObjetivoThunk())
         dispatch(clearResultadoThunk())
     }
-
-    
 
     const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
 
