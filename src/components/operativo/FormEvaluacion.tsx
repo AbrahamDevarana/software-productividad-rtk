@@ -15,11 +15,23 @@ interface Props {
     quarter: number
 }
 
+interface RespuestaProps {
+    id: string
+    rate: number
+    comentario: string
+}
+
 const FormEvaluacion = ({perfil, year, quarter}: Props) => {
 
     const [ activeEvaluate, setActiveEvaluate ] = useState<string | number>('')
     const { isLoadingEvaluation } = useAppSelector(state => state.profile)
     const [current, setCurrent] = useState(0);
+    const [fetching, setFetching] = useState(false);
+    const [ respuesta , setRespuesta ] = useState<RespuestaProps>({
+        id: '',
+        rate: 0,
+        comentario: ''
+    })
 
 
     const dispatch = useAppDispatch()
@@ -53,17 +65,17 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
     })
 
 
-    const handleSelectUser = (value: SegmentedValue) => {        
-        dispatch(getEvaluacionThunk({usuarioId: perfil.id, year, quarter, asignadorId: value as string }))
+    const handleSelectUser = async (value: SegmentedValue) => {        
+        setFetching(true)
+        await dispatch(getEvaluacionThunk({usuarioId: perfil.id, year, quarter, asignadorId: value as string }))
         setActiveEvaluate(value)
+        setFetching(false)
     }
 
-    const items = perfil.evaluaciones.evaluacion?.preguntasEvaluacion.map((pregunta) => {
-        let count = 0
+    const items = perfil.evaluaciones.evaluacion?.preguntasEvaluacion.map((pregunta, index) => {
         return {
-            title: 'Pregunta', count: count++,
+            title: `Pregunta ${index + 1}`,
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            value: count
         }
     })
 
@@ -79,20 +91,27 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
     return (
     <>
         <div>
-            <div className="gap-5 grid">
+
+            
+            <div className="gap-5 flex align-middle items-center flex-col">
                 <Space align="center" size={12}>
                     <Segmented
                         options={options}
                         value={activeEvaluate}
                         onChange={handleSelectUser}
-
                     />
                 </Space>
                 {
-
-                    perfil.evaluaciones.evaluacion.preguntasEvaluacion.length > 0 &&
+                    activeEvaluate === ''
+                    ? 
+                    <div className="flex items-center align-middle">
+                        <h1>Es tiempo de evaluar, selecciona un usuario a quien evaluar</h1>
+                    </div>
+                    : fetching 
+                    ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 
+                    : perfil.evaluaciones.evaluacion.preguntasEvaluacion.length > 0 &&
                     <>
-                        <div className="border rounded-ext">
+                        <div className="shadow-ext rounded-ext">
                             <div className="p-5 shadow-ext rounded-ext from-dark to-dark-light bg-gradient-to-tr flex justify-between items-center">
                                 <h1 className="text-white">{perfil.evaluaciones.evaluacion? perfil.evaluaciones.evaluacion.nombre : 'Sin evaluación'}</h1>
                                 <Steps
@@ -100,12 +119,12 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
                                     initial={0}
                                     items={items}
                                     type="inline"
-                                    current={0}
                                     onChange={(current) => setCurrent(current)}
+                                    current={current}
                             />
                         </div>
                         <div className="p-5">
-                            <StepEvaluacion pregunta={perfil.evaluaciones.evaluacion.preguntasEvaluacion[current]} />
+                            <StepEvaluacion pregunta={perfil.evaluaciones.evaluacion.preguntasEvaluacion[current]} respuesta={respuesta} setRespuesta={setRespuesta}/>
                         </div>
                     </div>
                     </>
