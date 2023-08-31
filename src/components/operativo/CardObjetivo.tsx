@@ -102,7 +102,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter
                 {
                     
                     orderedResponsables?.map((responsable, index) => (
-                        <Link key={index} to={`/perfil/${responsable?.slug}`} className='first-of-type:border-devarana-pink border-2 rounded-full'>
+                        <Link key={index} to={`/perfil/${responsable?.slug}`} className={`border-2 rounded-full ${responsable?.scoreCard.propietario === true ? 'border-devarana-pink' : '' }`}>
                             <Tooltip title={`${responsable?.nombre} ${responsable?.apellidoPaterno}`} placement='top' key={index} >
                                 <Avatar key={index} src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
                                     {responsable?.iniciales} 

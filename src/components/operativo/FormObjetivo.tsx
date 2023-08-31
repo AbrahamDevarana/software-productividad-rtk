@@ -68,6 +68,9 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
         setFilteredObjetivosTacticos(tacticosGeneral)
   }, [tacticosGeneral])
 
+    const propietarioItem = currentOperativo.operativosResponsable?.find(item => item.scoreCard.propietario === true);
+    const propietario = propietarioItem?.id || userAuth.id;
+
     const disabledDate = ( current: Dayjs ) => {
         return current.quarter() !== quarter
     };
@@ -103,10 +106,11 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
         setFilteredObjetivosTacticos(tacticosGeneral)
     }
 
-
+    
 
     return (
         <>
+
 
             <Form 
                 onFinish={handleOnSubmit}
@@ -115,13 +119,15 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                 initialValues={{
                     ...currentOperativo,
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
-                    propietarioId: currentOperativo.operativosResponsable ? currentOperativo.operativosResponsable.find((item) => item.scoreCard.propietario === true)?.id : userAuth.id,
+                    propietarioId: propietario,
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
                     fechaInicio: dayjs(currentOperativo.fechaInicio),
                     fechaFin: dayjs(currentOperativo.fechaFin)
                 }}
                 form={form}
             >
+                
+
                 <Form.Item
                     label="Objetivo"
                     name="nombre"
@@ -207,12 +213,12 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     name="operativosResponsable"
                     rules={[{ required: true, message: 'Por favor selecciona a los participantes' }]}
                     // shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
-                >
+                    >
                     <Select
                         mode="multiple"
                         tagRender={tagRender}
                         onChange={ (value) => { setSelectedUsers(value) } }
-                        
+                        placeholder="Selecciona los responsables"
                         value={ selectedUsers }
                         bordered = {false}
                         maxTagCount={3} style={{ width: '100%' }}
@@ -310,6 +316,14 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                     >Guardar</Button>
                 </div>
             </Form>
+
+            <div>
+                <pre>
+                    {
+                        JSON.stringify(propietario)
+                    }
+                </pre>
+            </div>
         
         </>
     )

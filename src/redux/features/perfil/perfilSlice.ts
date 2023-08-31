@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getColaboradoresThunk, getEquipoThunk, getEvaluacionesThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk } from './perfilThunk';
+import { getUsuariosAEvaluarThunk, getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, getEvaluacionThunk } from './perfilThunk';
 
 
 const initialState: PerfilState = {
@@ -39,8 +39,16 @@ const initialState: PerfilState = {
                 url: ''
             },
         },
-        evaluacionesRecibidas: [],
-        evaluacionesRealizadas: [],
+        evaluaciones: {
+            usuariosColaborador: [],
+            usuariosLider: [],
+            evaluacion: {
+                id: '',
+                nombre: '',
+                descripcion: '',
+                preguntasEvaluacion: []
+            }
+        },
         configuracion:{
             usuarioId: '',
             notificacionesWeb: false,
@@ -71,7 +79,10 @@ const profileSlice = createSlice({
             })
             .addCase(getProfileThunk.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.perfil = action.payload
+                state.perfil = {
+                    ...state.perfil,
+                    ...action.payload
+                }
             })
             .addCase(getProfileThunk.rejected, (state, action) => {
                 state.isLoading = false
@@ -133,14 +144,26 @@ const profileSlice = createSlice({
                 state.error = action.error.message
             })
 
-            .addCase(getEvaluacionesThunk.pending, (state) => {
+            .addCase(getUsuariosAEvaluarThunk.pending, (state) => {
                 state.isLoadingEvaluation = true
             })
-            .addCase(getEvaluacionesThunk.fulfilled, (state, action) => {
+            .addCase(getUsuariosAEvaluarThunk.fulfilled, (state, action) => {
                 state.isLoadingEvaluation = false
-                state.perfil.evaluacionesRecibidas = action.payload
+                state.perfil.evaluaciones.usuariosColaborador = action.payload.usuariosColaborador
+                state.perfil.evaluaciones.usuariosLider = action.payload.usuariosLider
             })
-            .addCase(getEvaluacionesThunk.rejected, (state, action) => {
+            .addCase(getUsuariosAEvaluarThunk.rejected, (state, action) => {
+                state.isLoadingEvaluation = false
+                state.error = action.error.message
+            })
+            .addCase(getEvaluacionThunk.pending, (state) => {
+                // state.isLoadingEvaluation = true
+            })
+            .addCase(getEvaluacionThunk.fulfilled, (state, action) => {
+                state.isLoadingEvaluation = false
+                state.perfil.evaluaciones.evaluacion = action.payload
+            })
+            .addCase(getEvaluacionThunk.rejected, (state, action) => {
                 state.isLoadingEvaluation = false
                 state.error = action.error.message
             })

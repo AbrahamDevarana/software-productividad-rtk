@@ -419,13 +419,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 >
                     <div className='flex justify-between items-center'>
                             <p className='text-devarana-graph font-medium'>Indicador</p>
-                            {/* <button onClick={() => {
-                                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar estrategias'], permisos) && setViewIndicador(!viewIndicador)
-                            }} className='font-bold text-devarana-graph' type='button'>
-                                {
-                                    viewIndicador ? <FaSave /> : <FaEdit />
-                                }
-                            </button> */}
                     </div>
                     {
                         viewIndicador 

@@ -11,6 +11,7 @@ interface Props {
 }
 
 
+
 export const getProfileThunk = createAsyncThunk(
     'profile/getProfile',
     async (userId: string, {rejectWithValue, getState}) => {
@@ -148,8 +149,9 @@ export const getColaboradoresThunk = createAsyncThunk(
     }
 )
 
-export const getEvaluacionesThunk = createAsyncThunk(
-    'profile/getEvaluaciones',
+
+export const getUsuariosAEvaluarThunk = createAsyncThunk(
+    'profile/getUsuariosAEvaluar',
     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
@@ -160,7 +162,29 @@ export const getEvaluacionesThunk = createAsyncThunk(
                     quarter
                 }
             }
-            const response = await clientAxios.get(`evaluacion/${usuarioId}`, config);
+            const response = await clientAxios.get(`/evaluacion/usuarios/${usuarioId}`, config);
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+export const getEvaluacionThunk = createAsyncThunk(
+    'profile/getEvaluacion',
+    async ({usuarioId, year, quarter, asignadorId}:{usuarioId: string, year:number, quarter:number, asignadorId:string}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year,
+                    quarter,
+                    asignadorId
+                }
+            }
+            const response = await clientAxios.get(`/evaluacion/${usuarioId}`, config);
             return response.data.evaluacion
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -168,6 +192,9 @@ export const getEvaluacionesThunk = createAsyncThunk(
     }
 )
     
+
+
+
 
 
 export const clearProfileThunk = () => {

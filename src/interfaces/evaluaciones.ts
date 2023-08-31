@@ -3,11 +3,13 @@ import { SinglePerfilProps } from "./perfil";
 export interface EvaluacionesProps {
 
     id: string;
-    evaluadorId: string;
-    evaluadoId: string;
-    evaluacionId: string;
-    year: number;
-    quarter: number;
-    respuestaUsuario: any[]
-    usuarioEvaluador: SinglePerfilProps;
+    nombre: string;
+    descripcion: string;
+    preguntasEvaluacion: PreguntasEvaluacionProps[];
+}
+
+export interface PreguntasEvaluacionProps {
+    id: string;
+    texto: string;
+    descripcion: string;
 }

@@ -12,7 +12,7 @@ import { useState } from 'react'
 import FormEvaluacion from './FormEvaluacion'
 import { FormPonderacion } from './FormPonderacion'
 import { PiStrategyBold } from 'react-icons/pi'
-import { getEvaluacionesThunk } from '@/redux/features/perfil/perfilThunk'
+import { getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk'
 
 
 interface Props {
@@ -38,7 +38,7 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
 	}
 	    
     const handleEvaluation = async () => {
-		dispatch(getEvaluacionesThunk({usuarioId: perfil.id, year, quarter }))
+		dispatch(getUsuariosAEvaluarThunk({usuarioId: perfil.id, year, quarter }))
         setEvaluacionVisible(!isEvaluacionVisible)
     }
 
@@ -108,7 +108,7 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
                 destroyOnClose={true}
                 onCancel={handleCancelEvaluacion}
             >
-                <FormEvaluacion perfil={perfil} />
+                <FormEvaluacion perfil={perfil} quarter={quarter} year={year} />
             </Modal>
 		</div>
 	</>
