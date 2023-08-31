@@ -7,6 +7,7 @@ import { Avatar, Image, Rate, Segmented, Skeleton, Space, Steps } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import { useEffect, useState } from "react";
 import { StepEvaluacion } from "./StepEvaluacion";
+import { Button } from "../ui";
 
 
 interface Props {
@@ -125,6 +126,19 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
                         </div>
                         <div className="p-5">
                             <StepEvaluacion pregunta={perfil.evaluaciones.evaluacion.preguntasEvaluacion[current]} respuesta={respuesta} setRespuesta={setRespuesta}/>
+                        </div>
+
+                        <div className="p-5 flex justify-between">
+                            <Button classType="regular" width={100} classColor="dark" onClick={prev} disabled={current === 0}>
+                                Anterior
+                            </Button>
+                            <Button  classType="regular" width={100} classColor="dark" onClick={next} disabled={current === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length - 1}>
+                                Siguiente
+                            </Button>
+
+                            <Button classType="regular" width={100} classColor="dark" onClick={() => {}}>
+                                Finalizar
+                            </Button>
                         </div>
                     </div>
                     </>
