@@ -6,6 +6,7 @@ export interface EvaluacionesProps {
     nombre: string;
     descripcion: string;
     preguntasEvaluacion: PreguntasEvaluacionProps[];
+    status: boolean;
 }
 
 export interface PreguntasEvaluacionProps {

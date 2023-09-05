@@ -46,7 +46,8 @@ const initialState: PerfilState = {
                 id: '',
                 nombre: '',
                 descripcion: '',
-                preguntasEvaluacion: []
+                preguntasEvaluacion: [],
+                status: false
             }
         },
         configuracion:{
@@ -161,7 +162,15 @@ const profileSlice = createSlice({
             })
             .addCase(getEvaluacionThunk.fulfilled, (state, action) => {
                 state.isLoadingEvaluation = false
-                state.perfil.evaluaciones.evaluacion = action.payload
+                const evaluacion = {
+                    ...action.payload.evaluacion,
+                    status: action.payload.asignacion.status
+                }
+
+                console.log(action.payload.asignacion.status);
+                
+                
+                state.perfil.evaluaciones.evaluacion = evaluacion
             })
             .addCase(getEvaluacionThunk.rejected, (state, action) => {
                 state.isLoadingEvaluation = false

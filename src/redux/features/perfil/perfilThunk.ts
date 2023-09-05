@@ -11,6 +11,15 @@ interface Props {
 }
 
 
+interface Respuesta {
+    id: string;
+    preguntaId: string;
+    evaluacionId: number;
+    usuarioId: string;
+    rate: number;
+    comentarios: string;
+  }
+
 
 export const getProfileThunk = createAsyncThunk(
     'profile/getProfile',
@@ -50,6 +59,7 @@ export const updateProfileThunk = createAsyncThunk(
         }
     }
 )
+
 
 // TODO:Revisar
 export const uploadProfilePictureThunk = createAsyncThunk(
@@ -91,25 +101,6 @@ export const updateProfileConfigThunk = createAsyncThunk(
     }
 )
 
-// TODO:Revisar
-export const getProfileEvaluationThunk = createAsyncThunk(
-    'profile/getProfileEvaluation',
-    async (usuarioId:any, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-            }
-            const response = await clientAxios.get(`/evaluacion-usuario/${usuarioId}`, config);
-            
-            console.log(response.data.evaluaciones);
-            
-            return response.data.evaluaciones
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
 
 
 export const getEquipoThunk = createAsyncThunk(
@@ -149,7 +140,6 @@ export const getColaboradoresThunk = createAsyncThunk(
     }
 )
 
-
 export const getUsuariosAEvaluarThunk = createAsyncThunk(
     'profile/getUsuariosAEvaluar',
     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
@@ -170,7 +160,6 @@ export const getUsuariosAEvaluarThunk = createAsyncThunk(
     }
 )
 
-
 export const getEvaluacionThunk = createAsyncThunk(
     'profile/getEvaluacion',
     async ({usuarioId, year, quarter, asignadorId}:{usuarioId: string, year:number, quarter:number, asignadorId:string}, {rejectWithValue, getState}) => {
@@ -185,7 +174,26 @@ export const getEvaluacionThunk = createAsyncThunk(
                 }
             }
             const response = await clientAxios.get(`/evaluacion/${usuarioId}`, config);
-            return response.data.evaluacion
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+
+  
+export const postEvaluacionThunk = createAsyncThunk(
+    'profile/postEvaluacion',
+    async (props: any, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.post(`/evaluacion/respuestas`, props, config);
+            return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)
         }

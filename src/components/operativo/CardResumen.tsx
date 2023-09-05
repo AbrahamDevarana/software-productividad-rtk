@@ -23,7 +23,6 @@ interface Props {
 }
 
 export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props) => {
-	const { userAuth } = useAppSelector(state => state.auth)
 	const { perfil } = useAppSelector(state => state.profile)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
 

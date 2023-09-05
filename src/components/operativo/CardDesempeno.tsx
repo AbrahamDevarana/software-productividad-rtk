@@ -1,7 +1,6 @@
 import { DatePicker } from 'antd'
 import React, { useEffect } from 'react'
 import MixedChart from '../complexUI/MixedChart'
-import { getProfileEvaluationThunk } from '@/redux/features/perfil/perfilThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 interface Props {
@@ -15,11 +14,7 @@ export const CardDesempeno = ({quarter, year}:Props) => {
 
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        if(userAuth) {
-            dispatch(getProfileEvaluationThunk(userAuth?.id))
-        }
-    }, [userAuth])
+    
   return (
     <>
         <div className='text-devarana-graph flex flex-col w-full'>
