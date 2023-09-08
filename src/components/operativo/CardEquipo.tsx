@@ -23,7 +23,7 @@ export const CardEquipo = ({ equipo }: Props) => {
             <ul className="my-3">
                 {
                     equipo?.map((item, index) => (
-                        <li className='flex items-center my-5 gap-x-5 w-full' key={index}>
+                        <li className='flex items-center my-5 gap-x-5 w-full border-b border-white border-dotted border-opacity-40 py-3' key={index}>
                             <Avatar src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />} />
                             <p className='font-medium text-white mx-auto'>{item.nombre} {item.apellidoPaterno}</p>
                             <div className='px-2 bg-white rounded'>

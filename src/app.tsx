@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import relativeTime from 'dayjs/plugin/relativeTime';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { AnimatePresence } from "framer-motion";
 import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -16,8 +17,7 @@ dayjs.locale('es')
 dayjs.extend(quarterOfYear)
 dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime);
-
-
+dayjs.extend(isSameOrBefore);
 
 export default function App() {
     const location = useLocation();

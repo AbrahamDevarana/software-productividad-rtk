@@ -1,14 +1,12 @@
-import { useLocation, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { clearCurrentTacticoThunk, clearTacticosThunk, createTacticoThunk, getTacticoFromAreaThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { clearCurrentTacticoThunk, createTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { DatePicker, Drawer, Input, Segmented, Select } from 'antd';
+import { Drawer, Input, Segmented, Select } from 'antd';
 import ListadoTacticos from '@/components/tacticos/ListadoTacticos';
 import { Prox } from '@/components/ui/Prox';
-import dayjs from 'dayjs';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import Equipos from './Equipos';
-import Loading from '@/components/antd/Loading';
 import { Button } from '@/components/ui';
 import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
@@ -21,7 +19,8 @@ export const Tactico: React.FC = () => {
     const {currentTactico} = useAppSelector(state => state.tacticos)
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
-    const [year, setYear] = useState(dayjs().year())
+    const { quarter, year } = useAppSelector(state => state.global.currentConfig)
+
     const [filter, setFilter] = useState({})
 
 
@@ -95,17 +94,6 @@ export const Tactico: React.FC = () => {
                         <Select.Option key={4} value={4}> <p className='text-devarana-graph'> Q4 </p></Select.Option>
 
                     </Select>
-
-                    <DatePicker 
-                        picker='year' 
-                        onChange={(date, dateString) => setYear(dayjs(dateString).year())} 
-                        value={dayjs(`${year}`)}
-                        disabledDate={(current) => {
-                            // no se puede mas del año actual y menos de hace 11 años
-                            return current.year() > dayjs().year() || current.year() < dayjs().subtract(11, 'year').year()
-                        }}
-                        allowClear={false}
-                    />
                     <Button classType='regular' width={50} classColor='primary'><FaBrush/></Button>
                 </div>
             </div>

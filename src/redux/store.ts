@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./features/auth/authThunks";
 
 import authSlice from "./features/auth/authSlice";
+import globalSlice from "./features/global/globalSlice";
 import profileSlice from "./features/perfil/perfilSlice";
 import socketSlice from "./features/socket/socketSlice";
 import areasSlice from './features/areas/areasSlice';
@@ -25,6 +26,7 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         
         auth: authSlice,
+        global: globalSlice,
         areas: areasSlice,
         profile: profileSlice,
         socket: socketSlice,

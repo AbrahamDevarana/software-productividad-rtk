@@ -39,6 +39,7 @@ export const ProgressBar = ({maxValue, firstColor, secondColor}: Props) => {
                 '0%': firstColor,
                 '100%': secondColor,
             }}
+            size={ 150 }
             percent={ percent }
             format={() => <CountUp className='text-devarana-graph' end={maxValue} duration={1} suffix='%' decimals={2} decimal='.' />}
             strokeWidth={12}    

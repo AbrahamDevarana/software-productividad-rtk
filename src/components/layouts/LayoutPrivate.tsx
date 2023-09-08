@@ -13,6 +13,8 @@ import { motion } from 'framer-motion';
 import { useAuth } from "@/hooks/useAuth";
 import { Drawer } from "antd";
 import { getPermisosThunk } from "@/redux/features/permisos/PermisosThunk";
+import { changeConfigThunk } from "@/redux/features/global/globalThunk";
+import dayjs from "dayjs";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -57,6 +59,10 @@ export default function LayoutApp({ children }: LayoutAppProps) {
             dispatch(getPermisosThunk())
         }
     }, [isAuthenticated])
+
+    useEffect(() => {
+        dispatch(changeConfigThunk({year: dayjs().year(), quarter: dayjs().quarter()}))
+    }, [])
             
     
 	const onClose = () => {
@@ -92,15 +98,10 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         }
     }
 
-
-
     // TODO: Obtener Permisos de la APP y guardarlos en el store
     // TODO: Pantalla de carga en lo que se obtienen los permisos con un isLoadingPermisos
 
-
-
-   
-    if (isLoading && userAuth?.id === '') return <Loading />;
+    if (isLoading && userAuth?.id === '') return <> </>
     
     return (
         <>

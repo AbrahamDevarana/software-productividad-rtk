@@ -4,33 +4,32 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Card, Divider, Image, Space, Tooltip } from 'antd'
+import { Avatar, Card, Divider, Image, Space, Switch, Tooltip } from 'antd'
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
+import { TabStatus } from '../ui/TabStatus';
+import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 
 interface Props {
     objetivo: OperativoProps,
     setFormVisible: (value: boolean) => void
-    year: number
-    quarter: number
 }
 
-export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter}) => {
+export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
+    const { currentConfig: {year, quarter}} = useAppSelector(state => state.global)
     const dispatch = useAppDispatch()
 
     const handleEditObjetivo = (id: string) => {
         dispatch(getOperativoThunk(id))
         setFormVisible(true)
     }
-    
 
     const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
     const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
-
 
     const {firstColor, secondColor} = useMemo(() => { 
         
@@ -58,9 +57,6 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter
         return total
     }, [objetivo])
 
-
-    
-
     const orderedResponsables = useMemo(() => {
         const responsables = objetivo.operativosResponsable
         // poner primero al responsable.propietario === true
@@ -68,6 +64,13 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter
         const responsablesSinPropietario = responsables.filter(responsable => responsable.scoreCard.propietario === false)
         return [responsablePropietario, ...responsablesSinPropietario]
     }, [objetivo.operativosResponsable])
+
+
+
+    const statusObjetivo = useMemo(() => {
+        const miScoreCard = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
+        return miScoreCard.status
+    }, [objetivo])
 
 
     return (
@@ -91,11 +94,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter
             <Divider />
             <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
 
-            <div className='max-w-[130px] mx-auto py-5'>
-                {/* <DoughnutChart value={value} firstColor={firstColor} secondColor={secondColor}/>
-                <button onClick={ () =>  setValue (prev => prev + 10) }> + </button> */}
-            </div>
-            <ProgressBar maxValue={fixedProgresoReal} firstColor={firstColor} secondColor={secondColor} />
+            <ProgressBar maxValue={fixedProgresoReal} firstColor={firstColor} secondColor={secondColor}  />
 
             
             <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
@@ -130,7 +129,21 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible, year, quarter
                     <span> Editar </span>
                 </Space>
             </div>
-            
+
+            <div className='flex items-center justify-between'>
+                <div className='items-start'>
+                    <Switch
+                        defaultChecked={statusObjetivo}
+                    />
+                </div>
+                <div className=''>
+                    {
+                        statusObjetivo === true 
+                        ? <TabStatus status={'EN_TIEMPO'} /> 
+                        : <TabStatus status={'RETRASADO'} /> 
+                    }
+                </div>
+            </div>
         </Card>
     )
 }

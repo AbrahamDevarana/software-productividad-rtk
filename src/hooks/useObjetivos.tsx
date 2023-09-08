@@ -28,7 +28,7 @@ export const useObjetivo = ({operativos}:Props) => {
         const misObjetivosCount = useMemo(() => {
             let total = 0
             operativos.forEach(operativo => {
-                operativo.propietarioId === userAuth?.id && total++
+                operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === true) && total++                
             })
             return total
         }, [operativos])
@@ -36,7 +36,7 @@ export const useObjetivo = ({operativos}:Props) => {
         const objetivosCompartidosCount = useMemo(() => {
             let total = 0
             operativos.forEach(operativo => {
-                operativo.propietarioId !== userAuth?.id && total++
+                operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === false) && total++
             })
             return total
         }, [operativos])
@@ -52,7 +52,7 @@ export const useObjetivo = ({operativos}:Props) => {
         const accionesCount = useMemo(() => {
             let total = 0
             operativos.forEach(operativo => {
-                operativo.resultadosClave.forEach(resultado => {
+                operativo.resultadosClave.forEach(resultado => {                    
                     total += resultado.acciones?.length 
                 })
             })

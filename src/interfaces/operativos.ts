@@ -7,6 +7,8 @@ export interface CustomUsuarioProps extends UsuarioProps {
         progresoFinal:    number;
         progresoAsignado: number;
         progresoReal:     number;
+        extra:            number;
+        status:           boolean
     }
 }
 

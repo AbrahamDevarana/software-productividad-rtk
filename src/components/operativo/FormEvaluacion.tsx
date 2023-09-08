@@ -88,9 +88,11 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
 
     const handleSelectUser = async (value: SegmentedValue) => {        
         setFetching(true)
-        await dispatch(getEvaluacionThunk({usuarioId: perfil.id, year, quarter, asignadorId: value as string }))
+        await dispatch(getEvaluacionThunk({usuarioId: perfil.id, year, quarter, evaluadoId: value as string }))
         setActiveEvaluate(value)
         setFetching(false)
+
+       setRespuestas([])
     }
 
     const items = perfil.evaluaciones.evaluacion?.preguntasEvaluacion.map((pregunta, index) => {

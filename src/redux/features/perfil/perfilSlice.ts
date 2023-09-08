@@ -166,10 +166,6 @@ const profileSlice = createSlice({
                     ...action.payload.evaluacion,
                     status: action.payload.asignacion.status
                 }
-
-                console.log(action.payload.asignacion.status);
-                
-                
                 state.perfil.evaluaciones.evaluacion = evaluacion
             })
             .addCase(getEvaluacionThunk.rejected, (state, action) => {

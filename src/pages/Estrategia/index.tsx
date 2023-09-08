@@ -14,7 +14,7 @@ export const EstrategiaHome: React.FC = () => {
 
     const [segment, setSegment] = useState<React.SetStateAction<any>>('Listado') // ['Listado', 'Mapa', 'Gantt'
     const { perspectivas, isLoading } = useAppSelector(state => state.perspectivas);
-    const [year, setYear] = useState(dayjs().year())
+    const { year } = useAppSelector(state => state.global.currentConfig)
 
     const options = [
         {
@@ -44,16 +44,6 @@ export const EstrategiaHome: React.FC = () => {
                     <div className='max-w-sm w-full'>
                         <Segmented block options={options} value={segment} onChange={setSegment} />
                     </div>
-                    <DatePicker 
-                        picker='year' 
-                        onChange={(date, dateString) => setYear(dayjs(dateString).year())} 
-                        value={dayjs(`${year}`)}
-                        disabledDate={(current) => {
-                            // no se puede mas del año actual y menos de hace 11 años
-                            return current.year() > dayjs().year() || current.year() < dayjs().subtract(11, 'year').year()
-                        }}
-                        allowClear={false}
-                    />
                 </div>
                 {
                     segment === 'Listado' && <Estrategia perspectivas={perspectivas} year={year}/>

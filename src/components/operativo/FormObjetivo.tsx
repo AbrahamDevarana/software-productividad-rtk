@@ -14,18 +14,16 @@ import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicos
 import { DefaultOptionType } from 'antd/es/select'
 
 interface Props {
-    year: number
-    quarter: number
-    scoreLeft: number
     handleCancel: () => void
 }
 
-export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => {
+export const FormObjetivo = ({handleCancel}:Props) => {
 
     const { TextArea } = Input;
 
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
+    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { tacticosGeneral } = useAppSelector(state => state.tacticos)
@@ -315,16 +313,7 @@ export const FormObjetivo = ({year, quarter, scoreLeft, handleCancel}:Props) => 
                         className='btn-primary'
                     >Guardar</Button>
                 </div>
-            </Form>
-
-            <div>
-                <pre>
-                    {
-                        JSON.stringify(propietario)
-                    }
-                </pre>
-            </div>
-        
+            </Form>        
         </>
     )
 }

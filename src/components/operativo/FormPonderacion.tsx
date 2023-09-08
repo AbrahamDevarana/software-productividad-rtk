@@ -1,18 +1,18 @@
 	import { OperativoProps } from '@/interfaces';
 	import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 	import { Input, message } from 'antd'; // Import message from antd for alerts
-	import React, { useState, useMemo } from 'react';
+	import { useState, useMemo } from 'react';
 	import { Button } from '../ui';
-import { setPonderacionesThunk } from '@/redux/features/operativo/operativosThunk';
+	import { setPonderacionesThunk } from '@/redux/features/operativo/operativosThunk';
 
 	interface Props {
 	operativos: OperativoProps[];
 	}
 
 	interface ResultItem {
-	objetivoId: string;
-	nombreObjetivo: string;
-	progresoAsignado: number;
+		objetivoId: string;
+		nombreObjetivo: string;
+		progresoAsignado: number;
 	}
 
 	export const FormPonderacion = ({ operativos }: Props) => {
@@ -66,6 +66,21 @@ import { setPonderacionesThunk } from '@/redux/features/operativo/operativosThun
 		dispatch(setPonderacionesThunk({ ponderaciones, usuarioId: userAuth.id}))
 	};
 
+
+	const isActive = (objetivoId: string) => {
+
+		const objetivo = operativos.find(objetivo => objetivo.id === objetivoId)
+
+		if(!objetivo) return false
+
+		const { status } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth.id)!.scoreCard
+
+		return status
+
+	}
+
+	
+
 	return (
 		<div>
 		<div className='text-center font-mulish pb-5'>
@@ -93,6 +108,7 @@ import { setPonderacionesThunk } from '@/redux/features/operativo/operativosThun
 					max={100}
 					value={ponderacion.progresoAsignado}
 					onChange={e => handleChange(ponderacion.objetivoId, Number(e.target.value))}
+					disabled={!isActive(ponderacion.objetivoId)}
 				/>
 				</div>
 			</div>

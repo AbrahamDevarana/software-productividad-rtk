@@ -18,6 +18,7 @@ import 'swiper/css';
 import 'swiper/css/effect-cards';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode } from 'swiper';
+import { changeConfigThunk } from '@/redux/features/global/globalThunk';
 
 export const Objetivos : React.FC = () => {
 
@@ -26,9 +27,9 @@ export const Objetivos : React.FC = () => {
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
     const { perfil } = useAppSelector(state => state.profile)
-    const [ year, setYear] = useState(dayjs().year())
-    const [ quarter, setQuarter ] = useState(dayjs().quarter())
     const [ isFormVisible, setFormVisible ] = useState(false)
+
+    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     
 
     const [ gettingProfile, setGettingProfile ] = useState(false)
@@ -36,9 +37,8 @@ export const Objetivos : React.FC = () => {
     
     const {id} = useParams<{id: string}>()
 
-        const handleDateChange = (date: any, dateString: string) => {
-        setYear(dayjs(date).year())
-        setQuarter(dayjs(date).quarter())
+    const handleDateChange = (date: any, dateString: string) => {
+        dispatch(changeConfigThunk({year: date.year(), quarter: date.quarter()}))
     }
 
 
@@ -61,7 +61,7 @@ export const Objetivos : React.FC = () => {
         dispatch(clearResultadoThunk())
     }
 
-    const { misObjetivos, objetivosCompartidos, scoreLeft } = useObjetivo({operativos})
+    const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
 
     if(gettingProfile) return <Loading dynamic={true}/>
 
@@ -69,13 +69,13 @@ export const Objetivos : React.FC = () => {
         <>
             <div className="flex gap-5">
                 <Box className='w-[20%] px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} handleDateChange={handleDateChange} quarter={quarter} year={year} />
+                    <CardResumen operativos={operativos} handleDateChange={handleDateChange} />
                 </Box>
                 <Box className='w-[20%] flex justify-center'>
                     <CardAvance operativos={operativos} />
                 </Box>
                 <Box className='w-[35%] flex justify-center'>
-                    <CardDesempeno quarter={quarter} year={year}/>
+                    <CardDesempeno />
                 </Box>
                 <div className='w-[25%] relative'>
                     <Swiper
@@ -118,13 +118,13 @@ export const Objetivos : React.FC = () => {
                         </div>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} year={year} quarter={quarter} />
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />
                             ))
                         }
                         <h1 className='col-span-12'>Objetivos Compartidos</h1>
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} year={year} quarter={quarter} />
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />
                             ))
                         }
                         </>
@@ -145,7 +145,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo year={year} quarter={quarter} scoreLeft={scoreLeft} handleCancel={handleCancelForm} />
+                <FormObjetivo handleCancel={handleCancelForm} />
             </Drawer>
             
             <FloatButton

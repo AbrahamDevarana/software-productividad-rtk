@@ -3,14 +3,10 @@ import React, { useEffect } from 'react'
 import MixedChart from '../complexUI/MixedChart'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
-interface Props {
-    quarter: number,
-    year: number
-}
-
-export const CardDesempeno = ({quarter, year}:Props) => {
+export const CardDesempeno = () => {
 
     const { userAuth } = useAppSelector(state => state.auth)
+    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
     const dispatch = useAppDispatch()
 

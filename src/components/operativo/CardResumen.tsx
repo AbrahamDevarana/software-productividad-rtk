@@ -18,13 +18,12 @@ import { getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk'
 interface Props {
 	operativos: OperativoProps[]
 	handleDateChange: (date: any, dateString: string) => void
-	quarter: number
-	year: number
 }
 
-export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props) => {
+export const CardResumen = ({operativos, handleDateChange }:Props) => {
 	const { perfil } = useAppSelector(state => state.profile)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
+	const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
 	const dispatch = useAppDispatch()
 	
@@ -50,13 +49,13 @@ export const CardResumen = ({operativos, handleDateChange, quarter, year}:Props)
     <>
 		<div className='flex justify-between w-full'>
 			<h1 className='text-primary font-medium text-[16px]'>Resumen</h1>
-			<div>
+			{/* <div>
 				<DatePicker className='border-primary w-auto' picker='quarter' onChange={handleDateChange} value={ dayjs().quarter(quarter).year(year) }  clearIcon={false} format={'[Q]Q YYYY'} size='small' suffixIcon={false} 
 					style={{
 						width: '75px',
 					}}
 				/>
-			</div>
+			</div> */}
 		</div>
 		<div className='my-5 p-5 flex items-center bg-primary bg-opacity-20 rounded'>
 			<Avatar className='h-20 w-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil.foto)}`} preview={false} fallback={getBrokenUser()} />} />

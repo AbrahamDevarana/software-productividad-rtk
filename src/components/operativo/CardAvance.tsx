@@ -24,8 +24,10 @@ export const CardAvance = ({operativos}:Props) => {
                     />
                     <p className='text-center'>Logro Objetivos</p>
                     <Divider className='my-2'/>
-                    <Rate defaultValue={4} allowHalf className='text-primary' />
-                    <p>Evaliación Competitiva</p>
+                   <div className='flex items-center flex-col align-middle h-full'>
+                        <Rate defaultValue={4} allowHalf className='text-primary' />
+                        <p>Evaluación Competitiva</p>
+                   </div>
                 </div>
             </div>
         

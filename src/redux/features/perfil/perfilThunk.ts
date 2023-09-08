@@ -162,7 +162,7 @@ export const getUsuariosAEvaluarThunk = createAsyncThunk(
 
 export const getEvaluacionThunk = createAsyncThunk(
     'profile/getEvaluacion',
-    async ({usuarioId, year, quarter, asignadorId}:{usuarioId: string, year:number, quarter:number, asignadorId:string}, {rejectWithValue, getState}) => {
+    async ({usuarioId, year, quarter, evaluadoId}:{usuarioId: string, year:number, quarter:number, evaluadoId:string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -170,7 +170,7 @@ export const getEvaluacionThunk = createAsyncThunk(
                 params: {
                     year,
                     quarter,
-                    asignadorId
+                    evaluadoId
                 }
             }
             const response = await clientAxios.get(`/evaluacion/${usuarioId}`, config);
