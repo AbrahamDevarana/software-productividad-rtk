@@ -13,7 +13,12 @@ export interface GlobalState {
         quarter: number,
         year: number
     },
-    nextPeriodAvailable: {
-        days: number
+    periodControls: {
+        prePeriodDefinitionDays: number
+        postPeriodDefinitionDays: number,
+        preClosureDays: number,
+        postClosureDays: number
+        preEvaluationDays: number,
+        postEvaluationDays: number
     }
-}
+}        

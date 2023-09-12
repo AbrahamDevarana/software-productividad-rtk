@@ -12,8 +12,13 @@ const initialState: GlobalState = {
         quarter: Math.ceil((new Date().getMonth() + 1) / 3),
         year: new Date().getFullYear()
     },
-    nextPeriodAvailable: {
-        days: 100
+    periodControls: {
+        prePeriodDefinitionDays: 100, 
+        postPeriodDefinitionDays: 100, 
+        preClosureDays: 100, 
+        postClosureDays: 100,
+        preEvaluationDays: 100, 
+        postEvaluationDays: 100
     }
 }
 

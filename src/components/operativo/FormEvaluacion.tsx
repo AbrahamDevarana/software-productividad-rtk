@@ -1,12 +1,13 @@
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { PerfilProps } from "@/interfaces";
-import { getEvaluacionThunk, postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
+import { getEvaluacionThunk, postEvaluacionThunk, postSolicitarEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Avatar, Image, Input, Rate, Segmented, Skeleton, Space, Steps, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import { useState } from "react";
 import { Button } from "../ui";
+import dayjs from 'dayjs'
 
 
 interface Props {
@@ -41,6 +42,7 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
     const [ activeEvaluate, setActiveEvaluate ] = useState<string | number>('')
     const { isLoadingEvaluation } = useAppSelector(state => state.profile)
     const [fetching, setFetching] = useState(false);
+    const { periodControls: nextPeriodAvailable, currentConfig } = useAppSelector(state => state.global)
 
     const [currentStep, setCurrentStep] = useState<number>(0);
     const [respuestas, setRespuestas] = useState<Respuesta[]>([]);
@@ -145,10 +147,6 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
         if (currentStep < preguntasEvaluacion.length - 1) {
             setCurrentStep(currentStep + 1);
         } else {
-            // Si estás en el último paso, puedes enviar las respuestas
-            console.log('Respuestas finales:', respuestas);
-            console.log('General', general);
-            
             await dispatch(postEvaluacionThunk({respuestas, ...general}));
         }
     };
@@ -160,6 +158,26 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
     };
 
 
+    const isDueDate = () => {
+        const { year, quarter } = currentConfig
+        const { prePeriodDefinitionDays: days } = nextPeriodAvailable
+
+        // obtener mes del trimestre
+        const month = (quarter - 1) * 3 + 1;
+        // obtener ultimo día del trimestre
+        const lastDay = dayjs(`${year}-${month}-01`).endOf('quarter')
+        // obtener ultimo día del trimestre - days
+        const lastDayMinusRange = lastDay.subtract(days, 'day')
+        // obtener fecha actual
+        const today = dayjs()
+        // validar si la fecha actual esta entre el ultimo día del trimestre y el ultimo día del trimestre - days
+        const isDue = !today.isBetween(lastDayMinusRange, lastDay)
+        return isDue
+    }
+
+    const getEvaluadores = () => {
+        dispatch(postSolicitarEvaluacionThunk({usuarioId: perfil.id, year, quarter}))
+    }
 
     return (
     <>
@@ -175,64 +193,70 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
                     />
                 </Space>
                 {
-                    activeEvaluate === ''
+                    // Validar si estamos en periodo de evaluación y sino se han solicitado las evaluaciones
+                    isDueDate() && usuariosAEvaluar.length === 0
                     ? 
-                    <div className="flex items-center align-middle">
-                        <h1>Es tiempo de evaluar, selecciona un usuario a quien evaluar</h1>
-                    </div>
-                    : fetching 
-                    ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 
-                    : perfil.evaluaciones.evaluacion.preguntasEvaluacion.length > 0 &&
-
-                    !perfil.evaluaciones.evaluacion.status ?
                     <>
-                        <div className="shadow-ext rounded-ext">
-                            <div className="p-5 shadow-ext rounded-ext from-dark to-dark-light bg-gradient-to-tr flex justify-between items-center">
-                                <h1 className="text-white">{perfil.evaluaciones.evaluacion? perfil.evaluaciones.evaluacion.nombre : 'Sin evaluación'}</h1>
-                                <Steps
-                                    direction="vertical"
-                                    initial={0}
-                                    items={items}
-                                    type="inline"
-                                    current={currentStep}
-                                    responsive={true}
-                                    onChange={(current) => setCurrentStep(current)}
-                            />
+                        <h1>Aún no es periodo de evaluación, espera los próximos días serán asignados tus compañeros</h1>
+                    </>
+                    : activeEvaluate === '' 
+                        ? 
+                        <div className="flex items-center align-middle">
+                            <h1>Es tiempo de evaluar, selecciona un usuario a quien evaluar</h1>
                         </div>
-                        <div className="p-5">
-                            <div>
-                                <h2 className="text-devarana-dark-graph">{preguntasEvaluacion[currentStep].texto}</h2>
-                                <p className="text-devarana-graph font-light">{preguntasEvaluacion[currentStep].descripcion}</p>
+                        : fetching 
+                        ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 
+                        : perfil.evaluaciones.evaluacion.preguntasEvaluacion.length > 0 &&
 
-                                <p className="text-devarana-graph">Calificación: </p>
-                                <Rate
-                                    onChange={handleRateChange}
-                                    value={respuestas[currentStep]?.rate || 0}
-                                />
-                                <p className="text-devarana-graph">Comentarios:</p>
-                                <TextArea
-                                    onChange={(e) => handleComentariosChange(e.target.value)}
-                                    value={respuestas[currentStep]?.comentarios || ''}
+                        !perfil.evaluaciones.evaluacion.status ?
+                        <>
+                            <div className="shadow-ext rounded-ext">
+                                <div className="p-5 shadow-ext rounded-ext from-dark to-dark-light bg-gradient-to-tr flex justify-between items-center">
+                                    <h1 className="text-white">{perfil.evaluaciones.evaluacion? perfil.evaluaciones.evaluacion.nombre : 'Sin evaluación'}</h1>
+                                    <Steps
+                                        direction="vertical"
+                                        initial={0}
+                                        items={items}
+                                        type="inline"
+                                        current={currentStep}
+                                        responsive={true}
+                                        onChange={(current) => setCurrentStep(current)}
                                 />
                             </div>
-                        </div>
+                            <div className="p-5">
+                                <div>
+                                    <h2 className="text-devarana-dark-graph">{preguntasEvaluacion[currentStep].texto}</h2>
+                                    <p className="text-devarana-graph font-light">{preguntasEvaluacion[currentStep].descripcion}</p>
 
-                        <div className="p-5 flex justify-between">
-                            <Button classType="regular" width={100} classColor="dark" onClick={prevStep} disabled={currentStep === 0}>
-                                Anterior
-                            </Button>
-                            <Button  classType="regular" width={100} classColor="dark" onClick={nextStep} disabled={currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length}>
-                                {
-                                    currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length - 1 ? 'Finalizar' : 'Siguiente'
-                                }
-                            </Button>
+                                    <p className="text-devarana-graph">Calificación: </p>
+                                    <Rate
+                                        onChange={handleRateChange}
+                                        value={respuestas[currentStep]?.rate || 0}
+                                    />
+                                    <p className="text-devarana-graph">Comentarios:</p>
+                                    <TextArea
+                                        onChange={(e) => handleComentariosChange(e.target.value)}
+                                        value={respuestas[currentStep]?.comentarios || ''}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="p-5 flex justify-between">
+                                <Button classType="regular" width={100} classColor="dark" onClick={prevStep} disabled={currentStep === 0}>
+                                    Anterior
+                                </Button>
+                                <Button  classType="regular" width={100} classColor="dark" onClick={nextStep} disabled={currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length}>
+                                    {
+                                        currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length - 1 ? 'Finalizar' : 'Siguiente'
+                                    }
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                    </>
-                    : 
-                    <>
-                     <h1>Ya has presentado esta encuesta</h1>
-                    </>
+                        </>
+                        : 
+                        <>
+                        <h1>Ya has presentado esta encuesta</h1>
+                        </>
                 }
             </div>
         </div>

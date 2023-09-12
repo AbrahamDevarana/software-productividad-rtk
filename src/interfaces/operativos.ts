@@ -8,7 +8,7 @@ export interface CustomUsuarioProps extends UsuarioProps {
         progresoAsignado: number;
         progresoReal:     number;
         extra:            number;
-        status:           boolean
+        status:           'abierto' | 'cerrado' | 'cancelado' | 'retrasado'
     }
 }
 

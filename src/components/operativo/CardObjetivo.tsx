@@ -10,7 +10,6 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 import { TabStatus } from '../ui/TabStatus';
-import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 
 interface Props {
     objetivo: OperativoProps,
@@ -133,14 +132,21 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
             <div className='flex items-center justify-between'>
                 <div className='items-start'>
                     <Switch
-                        defaultChecked={statusObjetivo}
+                        defaultChecked={statusObjetivo !== 'abierto'? true : false}
                     />
                 </div>
                 <div className=''>
                     {
-                        statusObjetivo === true 
-                        ? <TabStatus status={'EN_TIEMPO'} /> 
-                        : <TabStatus status={'RETRASADO'} /> 
+                        statusObjetivo === 'abierto' && <TabStatus status={'abierto'} /> 
+                    }
+                    {
+                        statusObjetivo === 'cerrado' && <TabStatus status={'cerrado'} /> 
+                    }
+                    {
+                        statusObjetivo === 'retrasado' && <TabStatus status={'retrasado'} />
+                    }
+                    {
+                        statusObjetivo === 'cancelado' && <TabStatus status={'cancelado'} />
                     }
                 </div>
             </div>

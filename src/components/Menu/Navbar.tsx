@@ -12,7 +12,7 @@ import { changeConfigThunk } from "@/redux/features/global/globalThunk";
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-	const { currentConfig: {quarter, year}, nextPeriodAvailable } = useAppSelector(state => state.global)
+	const { currentConfig: {quarter, year}, periodControls: nextPeriodAvailable } = useAppSelector(state => state.global)
 
     const dispatch = useAppDispatch()
 
@@ -115,7 +115,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 									// Habilitar fechas dentro del próximo año si falta más de 1 mes
 									if (current.year() === nextYear) {
 									const nextYearStart = dayjs().add(1, 'year').startOf('year');
-									const dateAhead = dayjs().add(nextPeriodAvailable.days, 'days');
+									const dateAhead = dayjs().add(nextPeriodAvailable.prePeriodDefinitionDays, 'days');
 									return current.isBefore(nextYearStart) || current.isAfter(dateAhead);
 									}
 								

@@ -39,7 +39,7 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             color = `rgba(243, 184, 96, ${opacity})`;
             lowColor = `rgba(240, 152, 20, ${opacity})`;
             break;
-        
+            
         default:
             color = `rgba(101, 106, 118, ${opacity})`;
             lowColor = `rgba(101, 106, 118, ${opacity})`;

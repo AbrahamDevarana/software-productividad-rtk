@@ -182,6 +182,24 @@ export const getEvaluacionThunk = createAsyncThunk(
 )
 
 
+export const postSolicitarEvaluacionThunk = createAsyncThunk(
+    'profile/postSolicitarEvaluacion',
+    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const response = await clientAxios.post(`/evaluacion/asignar`, {year, quarter, usuarioId}, config);
+            console.log(response.data);
+            
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
   
 export const postEvaluacionThunk = createAsyncThunk(

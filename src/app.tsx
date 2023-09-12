@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import relativeTime from 'dayjs/plugin/relativeTime';
+import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { AnimatePresence } from "framer-motion";
 import './app.scss'
@@ -18,6 +19,7 @@ dayjs.extend(quarterOfYear)
 dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime);
 dayjs.extend(isSameOrBefore);
+dayjs.extend(isBetween);
 
 export default function App() {
     const location = useLocation();
