@@ -28,7 +28,10 @@ export default defineConfig({
                 "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
                 "react-dom": ["react-dom"],
                 "animate.css": ["animate.css"],
-                "font-awesome": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-regular-svg-icons", "@fortawesome/free-solid-svg-icons", "@fortawesome/react-fontawesome"],
+                "@fortawesome/fontawesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
+                "@fortawesome/free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
+                "@fortawesome/free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
+                "@fortawesome/react-fontawesome": ["@fortawesome/react-fontawesome"],
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
@@ -44,6 +47,7 @@ export default defineConfig({
                 "react-countup": ["react-countup"],
                 "react-chartjs-2": ["react-chartjs-2"],
                 "dompurify": ["dompurify"],
+                "chart.js": ["chart.js"],
             },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
