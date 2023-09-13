@@ -32,11 +32,18 @@ export default defineConfig({
                 "sweetalert2": ["sweetalert2"],
                 "react-icons": ["react-icons"],
                 "antd": ["antd"],
+                "antd-img-crop": ["antd-img-crop"],
                 "axios": ["axios"],
                 "framer-motion": ["framer-motion"],
                 "yup": ["yup"],
                 "react-quill": ["react-quill"],
                 "react-dnd": ["react-dnd"],
+                "swiper": ["swiper"],
+                "react-draggable": ["react-draggable"],
+                "react-dropzone": ["react-dropzone"],
+                "react-countup": ["react-countup"],
+                "react-chartjs-2": ["react-chartjs-2"],
+                "dompurify": ["dompurify"],
             },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
