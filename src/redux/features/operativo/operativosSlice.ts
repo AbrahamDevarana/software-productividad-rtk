@@ -30,6 +30,8 @@ const initialState: OperativoState = {
                 progresoAsignado: 0,
                 progresoFinal: 0,
                 progresoReal: 0,
+                extra: 0,
+                status: 'abierto',
             }
         },
         propietarioId: '',
