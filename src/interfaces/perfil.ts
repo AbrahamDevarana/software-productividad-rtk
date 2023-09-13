@@ -71,6 +71,7 @@ export interface PerfilProps extends SinglePerfilProps {
         usuariosColaborador: SinglePerfilProps[];
         usuariosLider: SinglePerfilProps[];
         evaluacion: EvaluacionesProps
+        resultados: number;
     }
 }
 

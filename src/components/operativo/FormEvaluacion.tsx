@@ -232,6 +232,7 @@ const FormEvaluacion = ({perfil, year, quarter}: Props) => {
                                     <Rate
                                         onChange={handleRateChange}
                                         value={respuestas[currentStep]?.rate || 0}
+                                        allowHalf
                                     />
                                     <p className="text-devarana-graph">Comentarios:</p>
                                     <TextArea
