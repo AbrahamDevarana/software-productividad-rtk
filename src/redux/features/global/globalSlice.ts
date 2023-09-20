@@ -4,21 +4,18 @@ import dayjs from 'dayjs';
 
 
 const initialState: GlobalState = {
-    objetivosConfig: {
-        diasApertura: 10,
-        diasCierre: 15,
-    },
     currentConfig: {
         quarter: Math.ceil((new Date().getMonth() + 1) / 3),
-        year: new Date().getFullYear()
+        year: new Date().getFullYear(),
+        currentDate: dayjs().format('YYYY-MM-DD')
     },
     periodControls: {
-        prePeriodDefinitionDays: 100, 
-        postPeriodDefinitionDays: 100, 
-        preClosureDays: 100, 
-        postClosureDays: 100,
-        preEvaluationDays: 100, 
-        postEvaluationDays: 100
+        prePeriodDefinitionDays: 5,
+        postPeriodDefinitionDays: 5,
+        preClosureDays: 5, 
+        postClosureDays: 5,
+        preEvaluationDays: 5, 
+        postEvaluationDays: 5
     }
 }
 

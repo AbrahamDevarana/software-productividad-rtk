@@ -7,18 +7,16 @@ import { SinglePerfilProps } from "@/interfaces";
 
 interface Props {
     equipo: SinglePerfilProps[]
+    color: string
 }
 
-export const CardEquipo = ({ equipo }: Props) => {
+export const CardEquipo = ({ equipo, color }: Props) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
 
-    const { perfil } = useAppSelector(state => state.profile)
-
-
     return ( 
         <>
-        <div className='p-5 shadow-ext rounded-ext from-primary to-primary-light bg-gradient-to-tr h-full max-h-[400px] overflow-y-auto'>
+        <div className={`p-5 shadow-ext rounded-ext from-${color} to-${color}-light bg-gradient-to-tr h-full max-h-[400px] overflow-y-auto`}>
             <h1 className='font-medium text-white'>Mi Equipo</h1>
             <ul className="my-3">
                 {

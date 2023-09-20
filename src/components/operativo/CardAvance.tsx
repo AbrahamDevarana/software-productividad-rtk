@@ -33,7 +33,7 @@ export const CardAvance = ({operativos}:Props) => {
                    <div className='flex flex-col items-end'>
                         <div className='flex items-center gap-5 align-middle'>
                             <Rate value={resultados} allowHalf disabled className='text-primary' />
-                            <p> {`${ resultados?.toFixed(2) } / 5` } </p>
+                            <p> {`${ resultados.toFixed(2) || 0 } / 5` } </p>
                         </div>
                         <p>Evaluación Competitiva</p>
                    </div>

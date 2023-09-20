@@ -64,8 +64,6 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
         return [responsablePropietario, ...responsablesSinPropietario]
     }, [objetivo.operativosResponsable])
 
-
-
     const statusObjetivo = useMemo(() => {
         const miScoreCard = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
         return miScoreCard.status
@@ -130,25 +128,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
             </div>
 
             <div className='flex items-center justify-between'>
-                <div className='items-start'>
-                    <Switch
-                        defaultChecked={statusObjetivo !== 'abierto'? true : false}
-                    />
-                </div>
-                <div className=''>
-                    {
-                        statusObjetivo === 'abierto' && <TabStatus status={'abierto'} /> 
-                    }
-                    {
-                        statusObjetivo === 'cerrado' && <TabStatus status={'cerrado'} /> 
-                    }
-                    {
-                        statusObjetivo === 'retrasado' && <TabStatus status={'retrasado'} />
-                    }
-                    {
-                        statusObjetivo === 'cancelado' && <TabStatus status={'cancelado'} />
-                    }
-                </div>
+            
             </div>
         </Card>
     )

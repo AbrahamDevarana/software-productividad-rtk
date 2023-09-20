@@ -87,10 +87,10 @@ export const Objetivos : React.FC = () => {
                         loop={true}
                     >
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo equipo={perfil.equipo} />
+                            <CardEquipo equipo={perfil.equipo} color='primary' />
                         </SwiperSlide>
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo equipo={perfil.colaboradores}/>
+                            <CardEquipo equipo={perfil.colaboradores} color='secondary'/>
                         </SwiperSlide>
 
                     </Swiper>
