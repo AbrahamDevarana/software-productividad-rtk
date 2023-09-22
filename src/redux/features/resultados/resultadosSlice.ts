@@ -27,7 +27,10 @@ const initialState: ResultadoClaveState = {
             email: '',
             iniciales: '',
             id: '',
-            departamentos: [],
+            apellidoMaterno: '',
+            foto: '',
+            nombreCorto: '',
+            slug: ''
         }
     }
 }
