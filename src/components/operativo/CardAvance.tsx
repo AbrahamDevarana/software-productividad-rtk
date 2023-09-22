@@ -1,23 +1,63 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
 import { GaugeChart } from '../complexUI/Gauge'
-import { Divider, Progress, Rate } from 'antd'
+import { Divider, Modal, Progress, Rate } from 'antd'
 import { OperativoProps } from '@/interfaces'
-import { useAppSelector } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper';
+import { useState } from 'react'
+import { getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk'
+import FormEvaluacion from './Evaluaciones/FormEvaluacion'
 
 
 interface Props {
     operativos: OperativoProps[]
 }
-export const CardAvance = ({operativos}:Props) => {
+export const CardAvance = ( { operativos }: Props ) => {
+
+    const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({operativos})
     const {perfil: {evaluaciones: {resultados}}} = useAppSelector(state => state.profile)
+    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
+    const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
+
+    const dispatch = useAppDispatch()
+
+    const handleEvaluation = async () => {
+		dispatch(getUsuariosAEvaluarThunk({usuarioId: perfil.id, year, quarter }))
+        setEvaluacionVisible(!isEvaluacionVisible)
+    }
+
+    const handleCancelEvaluacion = () => {
+		setEvaluacionVisible(false)
+	}
 
     return (
         <>
-            <div className='px-5  text-devarana-graph flex flex-col'>
+            <div className='px-5 text-devarana-graph w-full'>
                 <h1 className='font-medium text-primary'>Avance</h1>
-                <div className='pb-5'>
-                    <GaugeChart value={ponderacionObjetivos}/>
+                <div className='relative w-full py-5'>
+
+                    <Swiper
+                        spaceBetween={50}
+                        centeredSlides={true}
+                        slidesPerView={1}
+                        modules={[Navigation]}
+                        className='mySwiper'
+                    >
+                        <SwiperSlide>
+                            <div className='relative'>
+                                <GaugeChart value={ponderacionObjetivos} label='Avance'/>
+                            </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <div className="relative">
+                                <GaugeChart value={ponderacionObjetivos} label='Bono' />
+                            </div>
+                        </SwiperSlide>
+                    </Swiper>
+
                 </div>
                 <div className='flex flex-col items-center align-middle'>
                     <div className='w-full'>
@@ -35,10 +75,27 @@ export const CardAvance = ({operativos}:Props) => {
                             <Rate value={resultados} allowHalf disabled className='text-primary' />
                             <p> {`${ resultados.toFixed(2) || 0 } / 5` } </p>
                         </div>
-                        <p>Evaluación Competitiva</p>
+                        <p>Evaluación de Competencias</p>
+                   </div>
+
+                   <div className='flex justify-between text-bold pt-5 w-full'>
+                        <p>Mi Evaluacion</p>
+                        |
+                        <p className='cursor-pointer' onClick={handleEvaluation}>Evaluar</p>
                    </div>
                 </div>
             </div>
+
+            <Modal
+                open={isEvaluacionVisible}
+                footer={null}
+                width={1000}
+                closable={false}
+                destroyOnClose={true}
+                onCancel={handleCancelEvaluacion}
+            >
+                <FormEvaluacion perfil={perfil}  />
+            </Modal>
         
         </>
     )

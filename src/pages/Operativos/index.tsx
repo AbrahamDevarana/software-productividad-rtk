@@ -8,7 +8,6 @@ import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, Card
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
-import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
 import { FaPlus } from 'react-icons/fa';

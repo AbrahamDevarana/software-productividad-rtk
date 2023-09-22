@@ -26,4 +26,12 @@ export const objetivosTypes = {
     FINALIZADO: 'Finalizado', // Cuando se finaliza un objetivo
 }
 
+
+export const periodoTypes = {
+    EN_DEFINICION: 'En Definición',
+    EN_CURSO: 'En Curso',
+    EN_EVALUACION: 'En Evaluación',
+    FINALIZADO: 'Finalizado',
+}
+
 export type objetivosType = keyof typeof objetivosTypes

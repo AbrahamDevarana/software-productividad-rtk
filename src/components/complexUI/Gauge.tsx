@@ -14,9 +14,10 @@ interface ChartProps {
 
 interface Props {
     value: number
+    label: 'Avance' | 'Bono'
 }
 
-export const GaugeChart = ({value = 0}: Props) => {
+export const GaugeChart = ({value = 0, label}: Props) => {
 
 
     
@@ -33,9 +34,17 @@ export const GaugeChart = ({value = 0}: Props) => {
 
     // redraw on window resize
     useEffect(() => {
-        
-
+        const resizeObserver = new ResizeObserver(() => {
+            const chart = ChartJS.getChart('gaugeChart');
+            if (chart) {
+                chart.resize();
+            }
+        });
+        resizeObserver.observe(document.querySelector('.charBox') as Element);
     }, []);
+
+
+
 
     
     const gradientSegment = ctx.createLinearGradient(0, 0, chartWidth, 0);
@@ -73,22 +82,9 @@ export const GaugeChart = ({value = 0}: Props) => {
             const yCoor = chart.getDatasetMeta(0).data[0].y
 
             const score = data.datasets[0].data[0]
-            let rating;            
+            let rating = label  
 
-            if (score < 20) {
-                rating = 'Poor';
-            } else if (score < 40) {
-                rating = 'Fair';
-            } else if (score < 60) {
-                rating = 'Good';
-            } else if (score < 80) {
-                rating = 'Very Good';
-            } else if (score <= 100) {
-                rating = 'Excellent';
-            } else {
-                rating = 'No Rating';
-            }
-
+    
             function textLabel({text, x, y, fontSize, textBaseLine, textAlign}: ChartProps) {
                 // responsive font size
                 const fontSizeResponsive = fontSize * (width / 300)
