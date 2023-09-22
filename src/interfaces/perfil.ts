@@ -43,6 +43,7 @@ export interface SinglePerfilProps {
     nombreCorto:          string;
     email:                string;
     foto:                 string;
+    leaderId?:              string;
     slug:                 string; 
 }
 
@@ -61,15 +62,15 @@ export interface PerfilProps extends SinglePerfilProps {
     direccionId?:          number;
     departamento?:         DepartamentoProps;
     direccion?:            DireccionProps;
-    objetivosOperativos: OperativoProps[];
     proyectos:     ProyectosProps[];
     social: Social,
     configuracion: ConfiguracionUsuarioProps;
     equipo: SinglePerfilProps[];
     colaboradores: SinglePerfilProps[];
     evaluaciones : {
-        usuariosColaborador: SinglePerfilProps[];
-        usuariosLider: SinglePerfilProps[];
+        evaluacionColaborador: SinglePerfilProps[];
+        evaluacionLider: SinglePerfilProps;
+        evaluacionPropia: SinglePerfilProps;
         evaluacion: EvaluacionesProps
         resultados: number;
     }

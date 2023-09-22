@@ -8,6 +8,7 @@ import { EditarPerfil } from "./editarPerfil";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loading from "@/components/antd/Loading";
+import { getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
 
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ const Perfil: React.FC = () => {
     const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
     const { perfil, isLoading } = useAppSelector(state => state.profile)
+    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
     const [ visitante, setVisitante ] = useState(false)
 
@@ -29,6 +31,8 @@ const Perfil: React.FC = () => {
                 dispatch(getProfileThunk(userAuth.id))
             }
         }
+
+        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
 
         return () => {
             dispatch(clearProfileThunk())

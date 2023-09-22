@@ -1,13 +1,15 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { createOperativoThunk, getOperativoThunk, getOperativosThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { createOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
     operativos: [],
+    operativosUsuario: [],
     proyectos: [],
     isLoading: false,
     isLoadingObjetivo: false,
+    isLoadingOperativosUsuario: false,
     error: false,
     infoMessage: '',
     currentOperativo: {
@@ -17,23 +19,6 @@ const initialState: OperativoState = {
         fechaInicio: new Date(),
         tacticoId: '',
         resultadosClave: [],
-        operativoPropietario: {
-            id: '',
-            nombre: '',
-            apellidoMaterno: '',
-            apellidoPaterno: '',
-            iniciales: '',
-            email: '',
-            departamentos: [],
-            scoreCard: {
-                propietario: false,
-                progresoAsignado: 0,
-                progresoFinal: 0,
-                progresoReal: 0,
-                extra: 0,
-                status: 'abierto',
-            }
-        },
         propietarioId: '',
         operativosResponsable: [],
         indicador: '',
@@ -110,6 +95,17 @@ const operativoSlice = createSlice({
             })
         })
         .addCase(setPonderacionesThunk.rejected, (state) => {
+        })
+        .addCase(getOperativosUsuarioThunk.pending, (state) => {
+            state.isLoadingOperativosUsuario = true
+        })
+        .addCase(getOperativosUsuarioThunk.fulfilled, (state, { payload }) => {
+            state.isLoadingOperativosUsuario = false
+            state.operativosUsuario = payload
+        })
+        .addCase(getOperativosUsuarioThunk.rejected, (state) => {
+            state.isLoadingOperativosUsuario = false
+            state.error = true
         })
     }
 })

@@ -9,7 +9,7 @@ import { MdStarRate } from 'react-icons/md'
 import CountUp from 'react-countup';
 import { Button } from '../ui'
 import { useState } from 'react'
-import FormEvaluacion from './FormEvaluacion'
+import FormEvaluacion from './Evaluaciones/FormEvaluacion'
 import { FormPonderacion } from './FormPonderacion'
 import { PiStrategyBold } from 'react-icons/pi'
 import { getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk'
@@ -106,7 +106,7 @@ export const CardResumen = ({operativos, handleDateChange }:Props) => {
                 destroyOnClose={true}
                 onCancel={handleCancelEvaluacion}
             >
-                <FormEvaluacion perfil={perfil} quarter={quarter} year={year} />
+                <FormEvaluacion perfil={perfil}  />
             </Modal>
 		</div>
 	</>

@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import { Avatar, Tooltip } from "antd";
 import { Proximamente } from '@/components/ui';
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
+import { getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -20,7 +22,12 @@ interface Props {
 }
 
 const Profile = ({usuarioActivo, visitante}: Props) => {
-    
+
+    const {operativos} = useAppSelector(state => state.operativos)
+    const {year, quarter} = useAppSelector(state => state.global.currentConfig)
+    const {userAuth} = useAppSelector(state => state.auth)
+
+
 
     return ( 
     <div className="animate__animated animate__fadeIn animate__faster">
@@ -43,7 +50,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Objetivos</p>
-                        <p className="font-light text-devarana-graph"> {usuarioActivo.objetivosOperativos.length } </p>
+                        <p className="font-light text-devarana-graph"> {operativos.length } </p>
                     </div>
                 </div>
             </Box>
@@ -181,7 +188,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
         <h2 className="py-10 px-2 text-lg font-medium">Objetivos</h2>
         <div className="gap-10 py-5 overflow-x-auto w-full flex">
             {
-                usuarioActivo.objetivosOperativos.map( objetivo => (
+                operativos.map( objetivo => (
                     <Box className="w-[350px] flex-none" key={objetivo.id}>
                         <div className="p-5 shadow rounded bg-gradient-to-tr from-dark to-dark-light  flex gap-x-10 -mt-12">
                             <div>
@@ -204,15 +211,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                                     </Button>
                                 </Link>}
                                 <div className="flex justify-center my-auto">
-                                    <Avatar.Group>
-                                        {
-                                            objetivo.operativosResponsable && objetivo.operativosResponsable.map( responsable => (
-                                                <Tooltip title={responsable.nombre} key={responsable.id}>
-                                                    <Avatar className="cursor-pointer" src={responsable.foto} />
-                                                </Tooltip>
-                                            ))
-                                        }
-                                    </Avatar.Group>
+                                  
                                 </div>
                             </div>
                         </div>

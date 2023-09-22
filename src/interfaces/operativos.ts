@@ -1,3 +1,4 @@
+import { objetivosType } from "@/types";
 import { InitialState, Paginate, ResultadoClaveProps, UsuarioProps } from ".";
 
 
@@ -8,7 +9,7 @@ export interface CustomUsuarioProps extends UsuarioProps {
         progresoAsignado: number;
         progresoReal:     number;
         extra:            number;
-        status:           'abierto' | 'cerrado' | 'cancelado' | 'retrasado'
+        status:           objetivosType
     }
 }
 
@@ -21,7 +22,6 @@ export interface OperativoProps {
     tacticoId:       string;
     fechaInicio:     Date;
     fechaFin:        Date;
-    operativoPropietario:  CustomUsuarioProps;
     operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
     resultadosClave: ResultadoClaveProps[];
@@ -31,8 +31,10 @@ export interface OperativoProps {
 
 export interface OperativoState extends InitialState {
     operativos: OperativoProps[];
+    operativosUsuario: OperativoProps[];
     proyectos:  OperativoProps[];
     paginate?:     Paginate;
     isLoadingObjetivo: boolean;
+    isLoadingOperativosUsuario: boolean;
     currentOperativo: OperativoProps;
 }

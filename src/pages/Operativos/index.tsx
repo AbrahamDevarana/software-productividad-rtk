@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
-import {Drawer, FloatButton } from 'antd'
+import {Drawer, FloatButton, Modal } from 'antd'
 import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 
@@ -19,6 +19,7 @@ import 'swiper/css/effect-cards';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode } from 'swiper';
 import { changeConfigThunk } from '@/redux/features/global/globalThunk';
+import { SinglePerfilProps } from '@/interfaces';
 
 export const Objetivos : React.FC = () => {
 
@@ -28,6 +29,9 @@ export const Objetivos : React.FC = () => {
     const { userAuth } = useAppSelector(state => state.auth)
     const { perfil } = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
+    const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
+
+    const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
 
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     
@@ -66,6 +70,16 @@ export const Objetivos : React.FC = () => {
 
     if(gettingProfile) return <Loading dynamic={true}/>
 
+
+    const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
+        setActiveUsuarioReview(usuario)
+        setIsAdminModalVisible(true)
+    }
+
+    const handleCloseAdminModal = () => {
+        setIsAdminModalVisible(false)
+    }
+
     return (
         <>
             <div className="flex gap-5">
@@ -85,9 +99,11 @@ export const Objetivos : React.FC = () => {
                         modules={[EffectCards, FreeMode]}
                         className='mySwiper h-[100%] px-5'
                         loop={true}
+                        
+                        
                     >
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo equipo={perfil.equipo} color='primary' />
+                            <CardEquipo equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
                         </SwiperSlide>
                         <SwiperSlide className='rounded-ext'>
                             <CardEquipo equipo={perfil.colaboradores} color='secondary'/>
@@ -154,6 +170,26 @@ export const Objetivos : React.FC = () => {
                 icon={<FaPlus />}
                 onClick={() => setFormVisible(true)}
             />
+
+
+            <Modal
+                title="Administración"
+                open={isAdminModalVisible}
+                onCancel={handleCloseAdminModal}
+                footer={null}
+                width={window.innerWidth > 1200 ? 'CALC(95% - 80px)' : '100%' }
+                style={{
+                    top: 50,
+                    left: 35,
+                    bottom: 0,
+                    height: 'calc(100% - 100px)',
+                    overflowY: 'hidden',
+                    borderRadius: '10px'
+                }}
+                destroyOnClose={true}
+            >
+                <Administracion activeUsuario={activeUsuarioReview}/>
+            </Modal>
 
             
         </>

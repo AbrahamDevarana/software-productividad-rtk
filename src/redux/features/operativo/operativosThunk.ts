@@ -21,7 +21,11 @@ interface PonderacionesProps {
     nombreObjetivo: string
 }
 
-
+interface Filtros {
+    usuarioId?: string
+    year: number
+    quarter: number
+}
 
 
 export const getOperativosThunk = createAsyncThunk(
@@ -34,6 +38,25 @@ export const getOperativosThunk = createAsyncThunk(
                 params: filtros
             }
 
+            const response = await clientAxios.get<Props>(`/operativos`, config);
+            return response.data.operativos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+// Obtener los objetivos de un usuario
+export const getOperativosUsuarioThunk = createAsyncThunk(
+    'operativos/getOperativosUsuario',
+    async (filtros: Filtros, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: filtros
+            }
+                
             const response = await clientAxios.get<Props>(`/operativos`, config);
             return response.data.operativos
         }

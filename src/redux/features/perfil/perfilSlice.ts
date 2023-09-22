@@ -19,7 +19,6 @@ const initialState: PerfilState = {
         slug: '',
         equipo: [],
         colaboradores: [],
-        objetivosOperativos: [],
         proyectos: [],
         social: {
             facebook: {
@@ -40,8 +39,29 @@ const initialState: PerfilState = {
             },
         },
         evaluaciones: {
-            usuariosColaborador: [],
-            usuariosLider: [],
+            evaluacionColaborador: [],
+            evaluacionLider: {
+                id: '',
+                nombre: '',
+                apellidoPaterno: '',
+                apellidoMaterno: '',
+                iniciales: '',
+                nombreCorto: '',
+                email: '',
+                foto: '',
+                slug: '',
+            },
+            evaluacionPropia: {
+                id: '',
+                nombre: '',
+                apellidoPaterno: '',
+                apellidoMaterno: '',
+                iniciales: '',
+                nombreCorto: '',
+                email: '',
+                foto: '',
+                slug: '',
+            },
             evaluacion: {
                 id: '',
                 nombre: '',
@@ -151,8 +171,10 @@ const profileSlice = createSlice({
             })
             .addCase(getUsuariosAEvaluarThunk.fulfilled, (state, action) => {
                 state.isLoadingEvaluation = false
-                state.perfil.evaluaciones.usuariosColaborador = action.payload.usuariosColaborador
-                state.perfil.evaluaciones.usuariosLider = action.payload.usuariosLider
+                state.perfil.evaluaciones.evaluacionColaborador = action.payload.evaluacionColaborador
+                state.perfil.evaluaciones.evaluacionLider = action.payload.evaluacionLider
+                state.perfil.evaluaciones.evaluacionPropia = action.payload.evaluacionPropia
+                state.perfil.evaluaciones.evaluacion = action.payload.evaluacion
             })
             .addCase(getUsuariosAEvaluarThunk.rejected, (state, action) => {
                 state.isLoadingEvaluation = false

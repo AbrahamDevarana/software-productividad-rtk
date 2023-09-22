@@ -46,7 +46,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
             secondColor: 'rgba(229, 17, 65, .5)'
         }
 
-    }, [objetivo.operativoPropietario?.id, userAuth?.id])
+    }, [userAuth?.id])
 
     const resultadoClaveDoneCount = useMemo(() => {
         let total = 0
