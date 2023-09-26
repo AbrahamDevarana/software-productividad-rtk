@@ -6,6 +6,7 @@ import { ComentarioProps } from './comentarios';
 
 export interface EstrategicosState {
     estrategicos: EstrategicoProps[];
+    estrategicosTacticos: EstrategicoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
     error:        boolean;

@@ -266,7 +266,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                             key={index}
                             header={
                                 <div className='flex justify-between items-center'>
-                                    <p className='text-devarana-graph font-light font-roboto'>{resultado.nombre} {resultado.progreso}</p>
+                                    <p className='text-primary font-light font-roboto'>{resultado.nombre} {resultado.progreso}</p>
                                 </div>
                             }
                             extra={genExtra(resultado.id)}

@@ -109,6 +109,25 @@ export const updateEstrategicoThunk = createAsyncThunk(
     }
 )
 
+export const getEstrategicosByAreaThunk = createAsyncThunk(
+    'estrategicos/getEstrategicosByArea',
+    async ({year, slug}: {year: number, slug: string}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { year, slug }
+            }
+            
+            const response = await clientAxios.get('/estrategicos/byArea', config);            
+            return response.data.objetivosEstrategicos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 export const clearEstrategicosThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {

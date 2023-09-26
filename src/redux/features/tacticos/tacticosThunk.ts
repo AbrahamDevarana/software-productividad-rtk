@@ -118,26 +118,6 @@ export const updateQuartersThunk = createAsyncThunk(
     }
 )
 
-export const getTacticoFromAreaThunk = createAsyncThunk(
-    'tacticos/getTacticoFromAreaThunk',
-    async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
-
-        try {
-            const { accessToken } = (getState() as RootState).auth
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: { year, ...filter }
-            }
-            
-            const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
-            return response.data.objetivosTacticos
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
 export const getTacticoFromEquiposThunk = createAsyncThunk(
     'tacticos/getTacticoFromEquiposThunk',
     async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
@@ -157,6 +137,41 @@ export const getTacticoFromEquiposThunk = createAsyncThunk(
     }
 )
 
+export const getTacticoFromObjetivoIdThunk = createAsyncThunk(
+    'tacticos/getTacticoFromObjetivoIdThunk',
+    async ({id, year}: {id: string | undefined, year: number}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { year, id}
+            }
+            const response = await clientAxios.get(`/tacticos/objetivo/${id}`, config);            
+            return response.data.objetivosTacticos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
+export const clearTacticosThunk = () => {
+    return async ( dispatch : AppDispatch) => {
+        dispatch( clearTacticos() )        
+    }   
+}
+    
+export const clearCurrentTacticoThunk = () => {
+    return async ( dispatch : AppDispatch) => {
+        dispatch( clearCurrentTactico() )        
+    }   
+}
+
+
+
+
+// TODO: No esta funcionando
 export const getTacticoFromEstrategiaThunk = createAsyncThunk(
     'tacticos/getTacticoFromEstrategiaThunk',
     async (estrategiaId: string, { rejectWithValue, getState }) => {
@@ -173,15 +188,22 @@ export const getTacticoFromEstrategiaThunk = createAsyncThunk(
         }
     }
 )
+export const getTacticoFromAreaThunk = createAsyncThunk(
+    'tacticos/getTacticoFromAreaThunk',
+    async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
 
-export const clearTacticosThunk = () => {
-    return async ( dispatch : AppDispatch) => {
-        dispatch( clearTacticos() )        
-    }   
-}
-    
-export const clearCurrentTacticoThunk = () => {
-    return async ( dispatch : AppDispatch) => {
-        dispatch( clearCurrentTactico() )        
-    }   
-}
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { year, ...filter }
+            }
+            
+            const response = await clientAxios.get<Props>(`/tacticos/area/${slug}`, config);  
+            return response.data.objetivosTacticos
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)

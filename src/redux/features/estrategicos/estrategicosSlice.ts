@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { EstrategicosState } from '@/interfaces';
-import { createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
+import { createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosByAreaThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
 
 const initialState: EstrategicosState = {
     estrategicos: [],
+    estrategicosTacticos: [],
     isLoading: false,
     isLoadingCurrent: false,
     infoMessage: '',
@@ -127,6 +128,19 @@ const estrategicosSlice = createSlice({
                 state.estrategicos = state.estrategicos.filter(estrategico => estrategico.id !== action.payload.id)
             })
             .addCase(deleteEstrategicoThunk.rejected, (state) => {
+                state.isLoading = false
+                state.error = true
+            })
+
+            .addCase(getEstrategicosByAreaThunk.pending, (state) => {
+                state.isLoading = true
+                state.error = false
+            })
+            .addCase(getEstrategicosByAreaThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.estrategicosTacticos = action.payload
+            })
+            .addCase(getEstrategicosByAreaThunk.rejected, (state) => {
                 state.isLoading = false
                 state.error = true
             })

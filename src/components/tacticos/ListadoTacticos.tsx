@@ -46,7 +46,7 @@ const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer, filter
                             <FaQuestionCircle className='text-primary-light'/>
                         </Tooltip>
                     </div>
-                    <TablaTacticos tacticos={tacticos}  handleCreateTactico={handleCreateTactico} estrategico={true} setShowDrawer={setShowDrawer} isLoading={isLoading}/>
+                    <TablaTacticos tacticos={tacticos}  handleCreateTactico={handleCreateTactico} isEstrategico={true} setShowDrawer={setShowDrawer} isLoading={isLoading}/>
                 </Box>
                 <Box>
                     <div className="flex items-center gap-x-2">
@@ -60,7 +60,7 @@ const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer, filter
                             </Tooltip>
                         </Tooltip>
                     </div>
-                    <TablaTacticos tacticos={tacticos_core} handleCreateTactico={handleCreateTactico} estrategico={false} setShowDrawer={setShowDrawer} isLoading={isLoading}/>
+                    <TablaTacticos tacticos={tacticos_core} handleCreateTactico={handleCreateTactico} isEstrategico={false} setShowDrawer={setShowDrawer} isLoading={isLoading}/>
                 </Box>
             </div>
      );

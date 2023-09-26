@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEquiposThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEquiposThunk, getTacticoFromEstrategiaThunk, getTacticoFromObjetivoIdThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -133,6 +133,15 @@ const tacticosSlice = createSlice({
                     // si existe en el array de tacticos_core, lo elimina
                     state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== action.payload.id )
 
+                    // same to tactucosGeneral
+                    const findGeneral = state.tacticosGeneral.find( tactico => tactico.id === action.payload.id )
+                    if(findGeneral){
+                        state.tacticosGeneral = state.tacticosGeneral.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
+                    }else {
+                        state.tacticosGeneral = [ ...state.tacticosGeneral, action.payload]
+                    }
+                    state.tacticosGeneral = state.tacticosGeneral.filter( objetivo => objetivo.id !== action.payload.id )
+
                 }else{
                     const find = state.tacticos_core.find( tactico => tactico.id === action.payload.id )
                     if(find){
@@ -141,7 +150,19 @@ const tacticosSlice = createSlice({
                         state.tacticos_core = [ ...state.tacticos_core, action.payload]
                     }
                     state.tacticos = state.tacticos.filter( objetivo => objetivo.id !== action.payload.id )
+
+                    // same to tactucosGeneral
+
+                    const findGeneral = state.tacticosGeneral.find( tactico => tactico.id === action.payload.id )
+                    if(findGeneral){
+                        state.tacticosGeneral = state.tacticosGeneral.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
+                    }else{
+                        state.tacticosGeneral = [ ...state.tacticosGeneral, action.payload]
+                    }
+                    state.tacticosGeneral = state.tacticosGeneral.filter( objetivo => objetivo.id !== action.payload.id )
                 }
+
+            
 
             })
             .addCase(updateTacticoThunk.rejected, (state, action) => {
@@ -159,6 +180,8 @@ const tacticosSlice = createSlice({
                 }else {
                     state.tacticos_core = [...state.tacticos_core, action.payload]
                 }
+
+                state.tacticosGeneral = [...state.tacticosGeneral, action.payload]
             })
             .addCase(createTacticoThunk.rejected, (state, action) => {
                 state.isLoading = false
@@ -192,7 +215,6 @@ const tacticosSlice = createSlice({
                 state.currentTactico.trimestres = action.payload.trimestres
                 state.tacticos.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
                 state.tacticos_core.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
-
             })
             .addCase(updateQuartersThunk.rejected, (state, action) => {
                 state.isLoadingQuarters = false
@@ -211,6 +233,19 @@ const tacticosSlice = createSlice({
                 state.isLoading = false
                 state.error = true
             })
+
+            .addCase(getTacticoFromObjetivoIdThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticoFromObjetivoIdThunk.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tacticosGeneral = action.payload
+            })
+            .addCase(getTacticoFromObjetivoIdThunk.rejected, (state, action) => {
+                state.isLoading = false
+                state.error = true
+            })
+
         }
 })
 

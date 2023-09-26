@@ -10,6 +10,7 @@ import Equipos from './Equipos';
 import { Button } from '@/components/ui';
 import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
+import Estrategia from './Estrategia';
 
 export const Tactico: React.FC = () => {
 
@@ -28,7 +29,9 @@ export const Tactico: React.FC = () => {
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
         e.stopPropagation()
         e.preventDefault()
-    
+
+        console.log('create tactico', slug, year, estrategico);
+        
         dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
     }
 
@@ -41,10 +44,10 @@ export const Tactico: React.FC = () => {
     return (
         <>
             <div className='flex w-full items-center pb-5'>
-                <div className='max-w-sm w-full'>
+                <div className='max-w-md w-full'>
                     <Segmented block
                         options={[
-                            {label: 'Listado', value: 'listado'},
+                            {label: 'Objetivo Estrategico', value: 'listado'},
                             {label: 'Equipos', value: 'equipos'},
                             {label: 'Gantt', value: 'gantt'},
                         ]}
@@ -99,7 +102,8 @@ export const Tactico: React.FC = () => {
             </div>
 
             {
-                segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
+                // segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
+                segmented === 'listado' && (<Estrategia handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} setShowDrawer={setShowDrawer} />)
             }
             {
                 segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)

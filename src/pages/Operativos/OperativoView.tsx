@@ -29,20 +29,20 @@ export const OperativoView = () => {
 
     const options = [
         {
-            label: 'Listado',
+            label: 'Resultados Clave',
             value: 'listado',
             icon: <Icon iconName='faList' />
+        },
+        {
+            label: 'Kanban',
+            value: 'kanban',
+            icon: <Icon iconName='faColumns' />
         },
         {
             label: 'Gantt',
             value: 'gantt',
             icon: <Icon iconName='faChartGantt' />
         },
-        {
-            label: 'Kanban',
-            value: 'kanban',
-            icon: <Icon iconName='faColumns' />
-        }
     ]
 
 
@@ -72,11 +72,12 @@ export const OperativoView = () => {
     return (
         <>
             <div className='min-h-[500px]'>
-                <div className="flex w-full items-center px-5">
+                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
                     <div>
-                        <p className="text-xs text-devarana-graph text-opacity-50"> Operativo </p>
-                        <h1>
-                            { currentOperativo.nombre }
+                        <p className="text-base text-devarana-graph text-opacity-50"> Objetivo </p>
+                        <h1 className="text-2xl">
+                            {/* { currentOperativo.nombre } */}
+                            Implementación de software CRM Salesforce
                         </h1>
                     </div>
 
@@ -93,6 +94,14 @@ export const OperativoView = () => {
                             ))
                         }
                         </Avatar.Group>
+                    </div>
+                    <div className="absolute -bottom-0.5 left-0 h-3 bg-gradient-to-r  from-primary to-primary-light text-right rounded-bl-ext rounded-br-ext"
+                    style={{
+                        width: `75%`
+                    }}
+                    >
+                        <p className="text-white -translate-x-3 -translate-y-0.5 text-xs">75%</p>
+
                     </div>
                 </div>
                 <Segmented

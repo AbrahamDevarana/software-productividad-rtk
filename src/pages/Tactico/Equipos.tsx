@@ -14,7 +14,7 @@ import { useDebounce } from "@/hooks/useDebouce";
 interface Props {
     slug?: string
     year: number
-    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void;
+    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, isEstrategico: boolean) => void;
     setShowDrawer: (showDrawer: boolean) => void;
     filter: object
 }
@@ -132,7 +132,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
                                     <FaQuestionCircle className='text-primary-light'/>
                                 </Tooltip>
                             </div>
-                                <TablaTacticos tacticos={tacticos} estrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
+                                <TablaTacticos tacticos={tacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
                         </Box>
                         <Box>
                             <div className="flex items-center gap-x-2">
@@ -146,7 +146,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
                                     </Tooltip>
                                 </Tooltip>
                             </div>
-                                <TablaTacticos tacticos={tacticos_core} estrategico={false} handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} />
+                                <TablaTacticos tacticos={tacticos_core} isEstrategico={false} handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} />
                         </Box>
                         
                         
