@@ -446,6 +446,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         placeholder="Selecciona al propietario"
                         tagRender={tagRender}
                         onChange={handleOnSubmit}
+                        size='large'
                         bordered = {false}
                         showSearch
                         maxTagPlaceholder={(omittedValues) => (

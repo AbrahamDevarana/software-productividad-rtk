@@ -11,17 +11,17 @@ export const CardDesempeno = () => {
     const dispatch = useAppDispatch()
 
     
-  return (
-    <>
-        <div className='text-devarana-graph flex flex-col w-full'>
-            <div className='flex justify-between w-full'>
-                <h1 className='font-medium text-primary'>Historial de desempeño</h1>
-                <DatePicker picker='year' size='small' suffixIcon={false} clearIcon={false} />
+    return (
+        <>
+            <div className='text-devarana-graph flex flex-col w-full'>
+                <div className='flex justify-between w-full'>
+                    <h1 className='font-medium text-primary'>Historial de desempeño</h1>
+                    <DatePicker picker='year' size='small' suffixIcon={false} clearIcon={false} />
+                </div>
+                <div className='my-auto w-full'>
+                    <MixedChart  values={[0, 0, 0, 0]} quarter={quarter} year={year}/>
+                </div>
             </div>
-            <div className='my-auto w-full'>
-                <MixedChart  values={[100, 50, 80, 20]} quarter={quarter} year={year}/>
-            </div>
-        </div>
-    </>
-  )
+        </>
+    )
 }

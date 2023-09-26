@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getUsuariosAEvaluarThunk, getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, getEvaluacionThunk, getEvaluacionResultadosThunk } from './perfilThunk';
+import { getUsuariosAEvaluarThunk, getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, getEvaluacionThunk, getEvaluacionResultadosThunk, updatePortraitThunk } from './perfilThunk';
 
 
 const initialState: PerfilState = {
     isLoading: false,
     isLoadingEvaluation: true,
+    isLoadingConfiguration: false,
     error: '',
     perfil: {
         id: '',
@@ -206,6 +207,17 @@ const profileSlice = createSlice({
             })
             .addCase(getEvaluacionResultadosThunk.rejected, (state, action) => {
                 state.isLoadingEvaluation = false
+                state.error = action.error.message
+            })
+            .addCase(updatePortraitThunk.pending, (state) => {
+                state.isLoadingConfiguration = true
+            })
+            .addCase(updatePortraitThunk.fulfilled, (state, action) => {
+                state.isLoadingConfiguration = false
+                state.perfil.configuracion.portadaPerfil = action.payload.configuracionUsuario.portadaPerfil
+            })
+            .addCase(updatePortraitThunk.rejected, (state, action) => {
+                state.isLoadingConfiguration = false
                 state.error = action.error.message
             })
     }

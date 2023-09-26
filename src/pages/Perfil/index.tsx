@@ -37,7 +37,7 @@ const Perfil: React.FC = () => {
         return () => {
             dispatch(clearProfileThunk())
         }
-    }, [userAuth, id])    
+    }, [id])    
     
 
     

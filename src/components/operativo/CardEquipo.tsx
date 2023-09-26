@@ -9,14 +9,15 @@ interface Props {
     equipo: SinglePerfilProps[]
     color: string
     handleMiEquipo?: (usuario: SinglePerfilProps) => void
+    title?: string
 }
 
-export const CardEquipo = ({ equipo, color, handleMiEquipo }: Props) => {
+export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
 
     const handleOpenAdmin = (usuario: SinglePerfilProps) => {
-        console.log(usuario);
+
         
         // TODO cambiar a ===
         if(usuario.leaderId !== userAuth?.id){
@@ -26,7 +27,7 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo }: Props) => {
     return ( 
         <>
         <div className={`p-5 shadow-ext rounded-ext from-${color} to-${color}-light bg-gradient-to-tr h-full max-h-[400px] hover:overflow-y-auto overflow-hidden`}>
-            <h1 className='font-medium text-white'>Mi Equipo</h1>
+            <h1 className='font-medium text-white'>{ title }</h1>
             <ul className="my-3">
                 {
                     equipo?.map((item, index) => (

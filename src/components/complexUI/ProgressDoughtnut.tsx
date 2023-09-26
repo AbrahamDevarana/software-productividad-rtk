@@ -7,9 +7,10 @@ interface Props {
     maxValue: number,
     firstColor: string,
     secondColor: string,
+    type?: 'circle' | 'line'
 }
 
-export const ProgressBar = ({maxValue, firstColor, secondColor}: Props) => {
+export const ProgressBar = ({maxValue, firstColor, secondColor, type='circle'}: Props) => {
     const [percent, setPercent] = useState(0);
   
     useEffect(() => {
@@ -32,16 +33,16 @@ export const ProgressBar = ({maxValue, firstColor, secondColor}: Props) => {
   
     return (
         <Progress
-            className='flex items-center justify-center py-5'
+            className={`flex items-center justify-center py-5 ${ type === 'line' ? 'progressStyle' : '' }`}
             rootClassName=''
-            type='circle'
+            type={type}
             strokeColor={{
                 '0%': firstColor,
                 '100%': secondColor,
             }}
-            size={ 150 }
+            size={ type === 'circle' ? 150 : 'small' }
             percent={ percent }
-            format={() => <CountUp className='text-devarana-graph' end={maxValue} duration={1} suffix='%' decimals={2} decimal='.' />}
+            format={() => <CountUp className={` ${type === 'line' ? 'text-devarana-graph text-[10px]' : 'text-devarana-graph'} `} end={maxValue} duration={1} suffix='%' decimals={2} decimal='.' />}
             strokeWidth={12}    
         />
     );

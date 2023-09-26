@@ -31,7 +31,13 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
             <div className='flex gap-3 items-center relative'>
                 <p className='tableTitlePrincipal'>Objetivo</p>
                 { hasGroupPermission(['crear estrategias'], permisos) &&
-                    <button onClick={(e) => handleCreateEstrategia(e)} className='z-50'> <FaPlus /> </button>
+                    <button 
+                        onClick={(e) => handleCreateEstrategia(e)} 
+                        className={`z-50 p-1 text-white rounded-full`}
+                        style={{
+                            backgroundColor: color,
+                        }}
+                    > <FaPlus /> </button>
                 }
             </div>
             ),
@@ -73,10 +79,11 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
         {
             title: () => ( <p className='tableTitle text-right'>Progreso</p>),
             dataIndex: 'progreso',
-            width: 50,
+            width: 60,
             render: (text, record, index) => (
-                <Progress 
-                    className='drop-shadow progressStyle ml-auto' percent={record.progreso} strokeWidth={20} 
+               <div className='pl-10'>
+                 <Progress 
+                    className='drop-shadow progressStyle w-full' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
                         '0%': getColor(record.status).lowColor,
                         '100%': getColor(record.status, .8).color,
@@ -84,11 +91,12 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
                     }}
                     trailColor={getColor(record.status, .3).color} 
                 />
+               </div>
             ),
         },
         {
             title: () => ( <p className='tableTitle text-right'>Responsable</p>),
-            width: 50,
+            width: 30,
             render: (text, record, index) => (
                 <div className='flex justify-end'>
                     <Avatar.Group maxCount={3} key={index} className='z-50'

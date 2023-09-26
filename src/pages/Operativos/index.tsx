@@ -102,10 +102,10 @@ export const Objetivos : React.FC = () => {
                         
                     >
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
+                            <CardEquipo title="Mi Equipo" equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
                         </SwiperSlide>
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo equipo={perfil.colaboradores} color='secondary'/>
+                            <CardEquipo title="Colaboradores de objetivos" equipo={perfil.colaboradores} color='secondary'/>
                         </SwiperSlide>
 
                     </Swiper>

@@ -1,4 +1,4 @@
-import { Avatar, Drawer, Image, Segmented } from "antd";
+import { Avatar, Drawer, Image, Segmented, Spin } from "antd";
 import Box from "@/components/ui/Box";
 import { PerfilProps } from "@/interfaces";
 import { FaCog, FaEye } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { Galeria } from "../ui/Galeria";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getGaleriaDevaranaThunk } from "@/redux/features/galeria/galeriaThunk";
-import { updateProfileConfigThunk } from "@/redux/features/perfil/perfilThunk";
+import { updatePortraitThunk, updateProfileConfigThunk } from "@/redux/features/perfil/perfilThunk";
 
 interface HeaderProps {
     usuarioActivo: PerfilProps;
@@ -26,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
 
 
     const {  galeriaDevarana, isLoading: isLoadingGaleria } = useAppSelector(state => state.galeria)
+    const { isLoadingConfiguration } = useAppSelector(state => state.profile)
 
     const [panel, setPanel] = useState(false)
     const [picture, setPicture] = useState(usuarioActivo.configuracion?.portadaPerfil)
@@ -64,9 +65,12 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     }
 
     const handleGallery = () => {
-        dispatch(updateProfileConfigThunk({ portadaPerfil: picture }))
+        dispatch(updatePortraitThunk({ id:usuarioActivo.id,  portadaPerfil: picture }))
         
     }
+
+    console.log(usuarioActivo.configuracion?.portadaPerfil);
+    
 
     return ( 
         <>
@@ -75,22 +79,28 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 <div className="relative overflow-hidden w-full h-full">
                     <div className="absolute top-0 left-0 w-full h-full">
                         <div className="relative h-80">
-                            <Image
-                                src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
-                                fallback={getStorageUrl('portadas/portada-default.jpg')}
-                                preview={false}
-                                wrapperStyle={{
-                                    objectFit: 'cover',
-                                    objectPosition: 'center',
-                                    width: '100%',
-                                }}
-                                style={{
-                                    objectFit: 'cover',
-                                    objectPosition: 'center',
-                                    width: '100%',
-                                    height: '350px'
-                                }}
-                            />
+                            {
+                                isLoadingConfiguration ? 
+                                <Spin className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> 
+                                :
+                                <Image
+                                    src={`${getStorageUrl(usuarioActivo.configuracion?.portadaPerfil)}`}
+                                    fallback={getStorageUrl('portadas/portada-default.jpg')}
+                                    preview={false}
+                                    wrapperStyle={{
+                                        objectFit: 'cover',
+                                        objectPosition: 'center',
+                                        width: '100%',
+                                    }}
+                                    style={{
+                                        objectFit: 'cover',
+                                        objectPosition: 'center',
+                                        width: '100%',
+                                        height: '350px'
+                                    }}
+                                /> 
+                            }
+                            
                         </div>
                     </div>
 

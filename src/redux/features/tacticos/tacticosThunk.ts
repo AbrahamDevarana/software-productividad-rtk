@@ -121,6 +121,7 @@ export const updateQuartersThunk = createAsyncThunk(
 export const getTacticoFromAreaThunk = createAsyncThunk(
     'tacticos/getTacticoFromAreaThunk',
     async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
+
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
@@ -140,6 +141,7 @@ export const getTacticoFromAreaThunk = createAsyncThunk(
 export const getTacticoFromEquiposThunk = createAsyncThunk(
     'tacticos/getTacticoFromEquiposThunk',
     async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
+
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {

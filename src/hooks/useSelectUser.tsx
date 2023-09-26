@@ -28,6 +28,7 @@ export const useSelectUser = (usuarios?:UsuarioProps[]) => {
                     style={{
                         marginRight: -5
                     }}
+                    size={'large'}
                 >
                     {usuario?.iniciales}
                 </Avatar>
@@ -38,9 +39,10 @@ export const useSelectUser = (usuarios?:UsuarioProps[]) => {
 
     const spanUsuario = (usuario: UsuarioProps) => (
 
-        <div className='flex items-center gap-x-2'>
+        <div className='flex items-center gap-x-2 h-full'>
             <Avatar
                 src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                size={'large'}
             >
                 {usuario.iniciales}
             </Avatar>

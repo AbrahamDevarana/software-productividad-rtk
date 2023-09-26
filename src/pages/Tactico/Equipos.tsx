@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { Avatar, Image, Tooltip } from "antd"
 import { FaQuestionCircle } from "react-icons/fa"
 import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/areas/areasThunks"
-import Loading from "@/components/antd/Loading"
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"

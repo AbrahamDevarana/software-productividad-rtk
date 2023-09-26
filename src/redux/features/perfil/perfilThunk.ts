@@ -254,6 +254,24 @@ export const getEvaluacionesRealizadasThunk = createAsyncThunk(
 )
 
 
+export const updatePortraitThunk = createAsyncThunk(
+    'profile/updatePortrait',
+    async ({id, portadaPerfil}: {id:string, portadaPerfil:string}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const response = await clientAxios.put(`/perfiles/portrait/${id}`, {portadaPerfil}, {
+                headers: { "accessToken": `${accessToken}` }
+            });
+
+            console.log(response.data);
+            
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 
 

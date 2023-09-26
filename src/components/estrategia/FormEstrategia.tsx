@@ -299,7 +299,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                     style={{
                                         backgroundColor: currentEstrategico.perspectivaId === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
                                     }}
-                                > <span className='drop-shadow'>{ perspectiva.nombre }</span>
+                                > <span className='drop-shadow text-xs'>{ perspectiva.nombre }</span>
                                 </button>
                             ))
                         }
@@ -338,10 +338,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     name='propietarioId'
                 >
                     <Select
-                        style={{ width: '100%' }}
+                        style={{ height: '100%' }}
                         placeholder="Selecciona al propietario"
                         tagRender={tagRender}
                         showSearch
+                        size='large'
                         bordered = {false}
                         onChange={handleOnSubmit}
                         maxTagPlaceholder={(omittedValues) => (
@@ -418,7 +419,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     name="indicador"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Indicador</p>
+                        <p className='text-devarana-graph font-medium'>Indicador</p>
                     </div>
                     {
                         viewIndicador 
@@ -459,7 +460,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     <span className='text-white'>Eliminar</span> 
                 </button> */}
             {/* <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-10 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} />  */}
-            <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-xs'/> } /> 
+            <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-sm'/> } /> 
 
 
         </>

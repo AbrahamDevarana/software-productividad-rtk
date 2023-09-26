@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-import { DatePicker, Segmented } from 'antd';
+import { DatePicker, FloatButton, Image, Segmented } from 'antd';
 import { Proximamente } from '@/components/ui';
 import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
+import { FaPlus } from 'react-icons/fa';
+import { Icon } from '@/components/Icon';
+import { getStorageUrl } from '@/helpers';
 
 
 export const EstrategiaHome: React.FC = () => {
@@ -35,11 +38,11 @@ export const EstrategiaHome: React.FC = () => {
         dispatch(getPerspectivasThunk({year}));
     }, [year]);
 
-    if(isLoading) return <Loading />
+    if(isLoading) return <Loading />    
 
     return (
         <>
-            <>
+            
                 <div className='flex justify-between w-full items-center pb-5'>
                     <div className='max-w-sm w-full'>
                         <Segmented block options={options} value={segment} onChange={setSegment} />
@@ -54,7 +57,23 @@ export const EstrategiaHome: React.FC = () => {
                 {
                     segment === 'Gantt' && <Proximamente size='default' avance={28} />
                 }
-            </>
+            
+            {/* <FloatButton.Group
+                trigger='hover'
+                icon={<FaPlus />}
+            >
+                {
+                    perspectivas.map((perspectiva, index) => (
+                        <FloatButton
+                            key={index}
+                            tooltip={perspectiva.nombre}
+                            
+                            icon={<Image src={getStorageUrl(perspectiva.icono)} width={20} height={20} preview={false} />}
+                            onClick={() => console.log('click')}
+                        />  
+                    ))
+                }
+            </FloatButton.Group> */}
         </>
     )
 }
