@@ -20,7 +20,22 @@ const initialState: OperativoState = {
         tacticoId: '',
         resultadosClave: [],
         propietarioId: '',
-        operativosResponsable: [],
+        operativosResponsable: [{
+            nombre: '',
+            apellidoPaterno: '',
+            departamentos: [],
+            id: '',
+            email: '',
+            iniciales: '',
+            scoreCard: {
+                progresoAsignado: 0,
+                progresoReal: 0,
+                extra: 0,
+                progresoFinal: 0,
+                propietario: false,
+                status: 'ABIERTO'
+            },
+        }],
         indicador: '',
         meta: '',
     }

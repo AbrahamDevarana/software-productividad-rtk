@@ -38,6 +38,7 @@ export const getOperativosThunk = createAsyncThunk(
                 params: filtros
             }
 
+
             const response = await clientAxios.get<Props>(`/operativos`, config);
             return response.data.operativos
         }
@@ -74,6 +75,8 @@ export const getOperativoThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
+            console.log('operativoId', operativoId);
+            
 
             const response = await clientAxios.get<Props>(`/operativos/${operativoId}`, config);            
             return response.data.operativo

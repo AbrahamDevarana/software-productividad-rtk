@@ -1,16 +1,18 @@
 import { Icon } from "@/components/Icon"
 import { FormAcciones } from "@/components/acciones/FormAcciones"
 import Loading from "@/components/antd/Loading"
+import EmptyResultado from "@/components/resultados/EmptyResultado"
 import ListadoResultados from "@/components/resultados/ListadoResultados"
 import { Proximamente } from "@/components/ui"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
+import { useOperativo } from "@/hooks/useOperativo"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
 import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Avatar, Drawer, FloatButton, Image, Segmented, Tooltip } from "antd"
 import { useEffect, useState } from "react"
-import { useLocation, useParams,  } from "react-router-dom"
+import { Link, useParams,  } from "react-router-dom"
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -21,11 +23,7 @@ export const OperativoView = () => {
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
-
-    // get sate from Link react-router-dom
-
-    const location = useLocation()
-
+    const { resultadosClave } = useAppSelector(state => state.resultados)
 
     const options = [
         {
@@ -44,7 +42,6 @@ export const OperativoView = () => {
             icon: <Icon iconName='faChartGantt' />
         },
     ]
-
 
     const handleNuevoResultado = () => {
         dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
@@ -67,8 +64,10 @@ export const OperativoView = () => {
         }
     }, [id])
 
+    const {orderedResponsables, usuarioPropietaro} = useOperativo({objetivo: currentOperativo})
+    
     if(isLoadingObjetivo) return <Loading />
-
+    
     return (
         <>
             <div className='min-h-[500px]'>
@@ -76,23 +75,24 @@ export const OperativoView = () => {
                     <div>
                         <p className="text-base text-devarana-graph text-opacity-50"> Objetivo </p>
                         <h1 className="text-2xl">
-                            {/* { currentOperativo.nombre } */}
-                            Implementación de software CRM Salesforce
+                            { currentOperativo.nombre }
                         </h1>
                     </div>
 
                     <div className="ml-auto flex items-center align-middle flex-col">
                         <p className="text-xs text-devarana-graph text-opacity-50 block pb-2"> Responsables </p>
-                        <Avatar.Group className=''>
-                        {
-                            currentOperativo.operativosResponsable.map((participante) => (
-                                <Tooltip key={participante.id} title={`${participante.nombre} ${participante.apellidoPaterno}`}>
-                                    <Avatar src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                        {participante.iniciales}
-                                    </Avatar>
-                                </Tooltip>
-                            ))
-                        }
+                        <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
+                            {
+                                orderedResponsables?.map((responsable, index) => (
+                                    <Link key={index} to={`/perfil/${responsable?.slug}`} className={`border-2 rounded-full ${responsable?.scoreCard.propietario === true ? 'border-devarana-pink' : '' }`}>
+                                        <Tooltip title={`${responsable?.nombre} ${responsable?.apellidoPaterno}`} placement='top' key={index} >
+                                            <Avatar key={index} src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                                {responsable?.iniciales} 
+                                            </Avatar>
+                                        </Tooltip>
+                                    </Link>
+                                ))
+                            }
                         </Avatar.Group>
                     </div>
                     <div className="absolute -bottom-0.5 left-0 h-3 bg-gradient-to-r  from-primary to-primary-light text-right rounded-bl-ext rounded-br-ext"
@@ -133,14 +133,19 @@ export const OperativoView = () => {
                             }
                         </>
                     )
+                        
 
                 }
             </div>
 
-            <FloatButton
-                onClick={() => handleNuevoResultado()}
-                icon={<Icon iconName='faPlus' />}
-            />
+            {
+                resultadosClave && resultadosClave.length > 0 && (
+                    <FloatButton
+                        onClick={() => handleNuevoResultado()}
+                        icon={<Icon iconName='faPlus' />}
+                    />
+                )
+            }
 
             
             <Drawer

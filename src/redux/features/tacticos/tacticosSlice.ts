@@ -118,8 +118,6 @@ const tacticosSlice = createSlice({
                 // state.isLoadingCurrent = true
             })
             .addCase(updateTacticoThunk.fulfilled, (state, action) => {
-                // currentTactico
-                // state.isLoadingCurrent = false
                 state.currentTactico = action.payload
                                                 
                 if(action.payload.estrategicoId){
@@ -132,16 +130,6 @@ const tacticosSlice = createSlice({
                     }
                     // si existe en el array de tacticos_core, lo elimina
                     state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== action.payload.id )
-
-                    // same to tactucosGeneral
-                    const findGeneral = state.tacticosGeneral.find( tactico => tactico.id === action.payload.id )
-                    if(findGeneral){
-                        state.tacticosGeneral = state.tacticosGeneral.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
-                    }else {
-                        state.tacticosGeneral = [ ...state.tacticosGeneral, action.payload]
-                    }
-                    state.tacticosGeneral = state.tacticosGeneral.filter( objetivo => objetivo.id !== action.payload.id )
-
                 }else{
                     const find = state.tacticos_core.find( tactico => tactico.id === action.payload.id )
                     if(find){
@@ -150,20 +138,7 @@ const tacticosSlice = createSlice({
                         state.tacticos_core = [ ...state.tacticos_core, action.payload]
                     }
                     state.tacticos = state.tacticos.filter( objetivo => objetivo.id !== action.payload.id )
-
-                    // same to tactucosGeneral
-
-                    const findGeneral = state.tacticosGeneral.find( tactico => tactico.id === action.payload.id )
-                    if(findGeneral){
-                        state.tacticosGeneral = state.tacticosGeneral.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
-                    }else{
-                        state.tacticosGeneral = [ ...state.tacticosGeneral, action.payload]
-                    }
-                    state.tacticosGeneral = state.tacticosGeneral.filter( objetivo => objetivo.id !== action.payload.id )
-                }
-
-            
-
+                }            
             })
             .addCase(updateTacticoThunk.rejected, (state, action) => {
                 state.isLoadingCurrent = false
@@ -174,14 +149,13 @@ const tacticosSlice = createSlice({
             })
             .addCase(createTacticoThunk.fulfilled, (state, action) => {
         
-                if (action.payload.estrategicoId) {
+                if (action.payload.response.estrategicoId) {
 
-                    state.tacticos = [...state.tacticos, action.payload]
+                    state.tacticos = [...state.tacticos, action.payload.response]
                 }else {
-                    state.tacticos_core = [...state.tacticos_core, action.payload]
+                    state.tacticos_core = [...state.tacticos_core, action.payload.response]
                 }
-
-                state.tacticosGeneral = [...state.tacticosGeneral, action.payload]
+                state.tacticosGeneral = [...state.tacticosGeneral, action.payload.response]
             })
             .addCase(createTacticoThunk.rejected, (state, action) => {
                 state.isLoading = false

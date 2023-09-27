@@ -1,9 +1,9 @@
 import { AccionesProps, OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, MenuProps, Popconfirm, Table, Tooltip } from "antd";
+import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, MenuProps, Popconfirm, Spin, Table, Tooltip } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
+import { createResultadoThunk, getResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
 import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "@/redux/features/acciones/accionesThunk";
 import { FaCog } from "react-icons/fa";
@@ -15,6 +15,7 @@ import { BsFillCalendarFill } from "react-icons/bs";
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import dayjs from "dayjs";
+import EmptyResultado from "./EmptyResultado";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -25,10 +26,14 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
 
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
-    const { isLoading, resultadosClave } = useAppSelector(state => state.resultados)
+    const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const [showDrawer, setShowDrawer] = useState(false)
     const inputRef = useRef(null);
 
+
+    const handleNuevoResultado = () => {
+        dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
+    }
 
     const handleOnUpdate = (e: any, record: AccionesProps) => {
         const query = {
@@ -47,8 +52,6 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
         }    
         dispatch(updateAccionThunk(query))
     }
-
-
 
     const defaultColumns: ColumnsType<any> = [
         {
@@ -251,9 +254,13 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
 
     if(isLoading) return ( <Loading /> )
 
+    if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
+
     return (
         <>
-
+        {
+            isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
+        }
             <Collapse 
                 collapsible='header'
                 defaultActiveKey={activeKey}

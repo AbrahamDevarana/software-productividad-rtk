@@ -8,6 +8,7 @@ import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "../acci
 const initialState: ResultadoClaveState = {
     resultadosClave: [],
     isLoading: false,
+    isCreatingResultado: false,
     isLoadingResultado: false,
     infoMessage: '',
     error: false,
@@ -75,14 +76,14 @@ const resultadoClaveSlice = createSlice({
                 state.error = true
             })
             .addCase(createResultadoThunk.pending, (state) => {
-                state.isLoadingResultado = true
+                state.isCreatingResultado = true
             })
             .addCase(createResultadoThunk.fulfilled, (state, {payload}) => {
-                state.isLoadingResultado = false
+                state.isCreatingResultado = false
                 state.resultadosClave = [...state.resultadosClave, payload]
             })
             .addCase(createResultadoThunk.rejected, (state) => {
-                state.isLoadingResultado = false
+                state.isCreatingResultado = false
                 state.error = true
             })
             .addCase(updateResultadoThunk.pending, (state) => {

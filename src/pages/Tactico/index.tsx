@@ -29,8 +29,6 @@ export const Tactico: React.FC = () => {
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
         e.stopPropagation()
         e.preventDefault()
-
-        console.log('create tactico', slug, year, estrategico);
         
         dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
     }
@@ -56,7 +54,7 @@ export const Tactico: React.FC = () => {
                     />
 
                 </div>
-                <div className='flex gap-1 ml-auto items-center'>
+                <div className='gap-1 ml-auto items-center hidden'>
                  <Input
                         placeholder="Buscar"
                         allowClear

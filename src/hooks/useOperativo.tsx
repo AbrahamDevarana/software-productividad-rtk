@@ -10,8 +10,9 @@ export const useOperativo = ({objetivo}: Props) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
 
+    
 
-    const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
+    const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable?.id === userAuth?.id)?.scoreCard || { progresoAsignado: 0, progresoReal: 0 }
     const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
 
     const {firstColor, secondColor} = useMemo(() => { 
@@ -49,10 +50,14 @@ export const useOperativo = ({objetivo}: Props) => {
     }, [objetivo.operativosResponsable])
 
     const statusObjetivo = useMemo(() => {
-        const miScoreCard = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)!.scoreCard
+        const miScoreCard = objetivo.operativosResponsable.find(responsable => responsable.id === userAuth?.id)?.scoreCard || { progresoAsignado: 0, progresoReal: 0, status: 'ABIERTO' }
         return miScoreCard.status
     }, [objetivo])
 
+    const usuarioPropietaro = useMemo(() => {
+        const usuario = objetivo.operativosResponsable.find(responsable => responsable.scoreCard.propietario === true)
+        return usuario
+    }, [objetivo])
 
     return {
         progresoAsignado,
@@ -62,7 +67,8 @@ export const useOperativo = ({objetivo}: Props) => {
         secondColor,
         resultadoClaveDoneCount,
         orderedResponsables,
-        statusObjetivo
+        statusObjetivo,
+        usuarioPropietaro
     }
 
 }

@@ -29,7 +29,9 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
         dispatch(getOperativoThunk(id))
         setFormVisible(true)
     }
-    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, progresoReal, resultadoClaveDoneCount, secondColor, statusObjetivo} = useOperativo({objetivo})
+    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro} = useOperativo({objetivo})
+
+
     return (
         <div className='md:col-span-4 col-span-12 group shadow-ext bg-white' key={objetivo.id} >
             <Segmented
@@ -94,10 +96,15 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                 <Icon iconName='faEye'/>
                                 <span> Ver </span> 
                             </Link>
-                            <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
-                                <Icon iconName='faEdit'/>
-                                <span> Editar </span>
-                            </Space>
+                          {
+                            ( usuarioPropietaro?.id === userAuth?.id ) && (
+                                <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
+                                    <Icon iconName='faEdit'/>
+                                    <span> Editar </span>
+                                </Space>
+                            )
+                                
+                          }
                         </div>
 
                         <div className='flex items-center justify-between'>

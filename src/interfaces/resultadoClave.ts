@@ -23,6 +23,7 @@ export interface ResultadoClaveProps {
 export interface ResultadoClaveState extends InitialState{
     resultadosClave: ResultadoClaveProps[];
     isLoadingResultado: boolean;
+    isCreatingResultado: boolean;
     paginate?:     Paginate;
     currentResultadoClave: ResultadoClaveProps;
 }

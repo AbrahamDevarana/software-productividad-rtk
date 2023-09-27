@@ -15,9 +15,10 @@ import { DefaultOptionType } from 'antd/es/select'
 
 interface Props {
     handleCancel: () => void
+    setPonderacionVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const FormObjetivo = ({handleCancel}:Props) => {
+export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
     const { TextArea } = Input;
 
@@ -44,7 +45,7 @@ export const FormObjetivo = ({handleCancel}:Props) => {
 
     const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
 
-    const handleOnSubmit = () => {
+    const handleOnSubmit = async () => {
 
         const query =  {
             ...currentOperativo,
@@ -54,12 +55,14 @@ export const FormObjetivo = ({handleCancel}:Props) => {
         
 
         if(currentOperativo.id === ''){
-            dispatch(createOperativoThunk(query))
+            await dispatch(createOperativoThunk(query))
         }else{
-            dispatch(updateOperativoThunk(query))
+            await dispatch(updateOperativoThunk(query))
         }
 
-        handleCancel()
+        setPonderacionVisible(true)
+
+        // handleCancel()
     }
 
     useEffect(() => {
@@ -108,8 +111,6 @@ export const FormObjetivo = ({handleCancel}:Props) => {
 
     return (
         <>
-
-
             <Form 
                 onFinish={handleOnSubmit}
                 layout='vertical' 
@@ -189,6 +190,7 @@ export const FormObjetivo = ({handleCancel}:Props) => {
                             tagRender={tagRender}
                             showSearch
                             bordered = {false}
+                            size='large'
                             onChange={ (value) => { form.setFieldValue('propietarioId', value) }}
                             value={ form.getFieldValue('propietarioId') }
                             maxTagPlaceholder={(omittedValues) => (
@@ -311,7 +313,7 @@ export const FormObjetivo = ({handleCancel}:Props) => {
                         type='submit' 
                         width={150} 
                         className='btn-primary'
-                    >Guardar</Button>
+                    >Guardar y Ponderar</Button>
                 </div>
             </Form>        
         </>

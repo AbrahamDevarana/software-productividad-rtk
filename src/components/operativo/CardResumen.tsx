@@ -12,12 +12,13 @@ import { periodoTypes } from '@/types'
 
 interface Props {
 	operativos: OperativoProps[]
-	handleDateChange: (date: any, dateString: string) => void
+	isPonderacionVisible: boolean
+	setPonderacionVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const CardResumen = ({operativos, handleDateChange }:Props) => {
+export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible }:Props) => {
 	const { perfil } = useAppSelector(state => state.profile)
-	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
+
 	
 	const { accionesCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount } = useObjetivo({operativos})
 
@@ -57,21 +58,15 @@ export const CardResumen = ({operativos, handleDateChange }:Props) => {
 			<div className='flex justify-between'>
 				<p> { periodoTypes.EN_CURSO } </p>
 				<p className='cursor-pointer text-primary' onClick={ () => setPonderacionVisible(true)}>
-					Asignación Ponderación
+					Asignar Ponderación
 				</p>
-				{/* <Button classType='regular' width={60} classColor='dark' onClick={handleEvaluation}>
-					<MdStarRate className='text-xl' />
-				</Button>
-				<Button width={60} classColor='primary' classType='regular' onClick={() => setPonderacionVisible(true)}>
-					<PiStrategyBold className='text-xl'/>
-				</Button> */}
 			</div>
 
 			<Modal
                 open={isPonderacionVisible}
                 footer={null}
                 width={1000}
-                closable={false}
+                
                 destroyOnClose={true}
                 onCancel={handleCancelPonderacion}
             >

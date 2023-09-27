@@ -29,7 +29,7 @@ export const Objetivos : React.FC = () => {
     const { perfil } = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
-
+	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
     const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
 
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
@@ -83,7 +83,7 @@ export const Objetivos : React.FC = () => {
         <>
             <div className="flex gap-5">
                 <Box className='w-[20%] px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} handleDateChange={handleDateChange} />
+                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
                 </Box>
                 <Box className='w-[20%] flex justify-center'>
                     <CardAvance operativos={operativos} />
@@ -161,7 +161,7 @@ export const Objetivos : React.FC = () => {
                 closable={false}
                 destroyOnClose={true}
             >
-                <FormObjetivo handleCancel={handleCancelForm} />
+                <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
             </Drawer>
             
             <FloatButton

@@ -81,7 +81,7 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
             dataIndex: 'progreso',
             width: 60,
             render: (text, record, index) => (
-               <div className='pl-10'>
+               <div className=''>
                  <Progress 
                     className='drop-shadow progressStyle w-full' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{

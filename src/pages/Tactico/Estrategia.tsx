@@ -25,14 +25,21 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     const [isCore , setIsCore] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
+
     useEffect(() => {
         if(slug){
             dispatch(getEstrategicosByAreaThunk({slug, year}))
         }
     }, [])
 
+    useEffect(() => {
+        if(estrategicosTacticos?.length) {
+            handleGetTacticos(estrategicosTacticos?.[0]?.id)
+        }
+    }, [estrategicosTacticos])
+
     const handleGetTacticos = (id: string | undefined) => {
-        dispatch(getTacticoFromObjetivoIdThunk({id, year}))      
+        dispatch(getTacticoFromObjetivoIdThunk({id, year, slug}))      
         id ? setIsCore(false) : setIsCore(true)
     }
 

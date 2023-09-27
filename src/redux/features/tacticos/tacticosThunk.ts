@@ -52,14 +52,18 @@ export const getTacticoThunk = createAsyncThunk(
 
 export const createTacticoThunk = createAsyncThunk(
     'tacticos/createTacticoThunk',
-    async (tactico: any, { rejectWithValue, getState }) => {
+    async ({slug, year, estrategico}: {slug?: string, year: number, estrategico: boolean}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}` },
+                params:  slug, year, estrategico 
             }
-            const response = await clientAxios.post<Props>('/tacticos', tactico, config);
-            return response.data.objetivoTactico
+            const response = await clientAxios.post<Props>('/tacticos', config);
+            return { 
+                response: response.data.objetivoTactico,
+                isCore: estrategico
+            }
         }
         catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -139,12 +143,12 @@ export const getTacticoFromEquiposThunk = createAsyncThunk(
 
 export const getTacticoFromObjetivoIdThunk = createAsyncThunk(
     'tacticos/getTacticoFromObjetivoIdThunk',
-    async ({id, year}: {id: string | undefined, year: number}, { rejectWithValue, getState }) => {
+    async ({id, year, slug}: {id: string | undefined, year: number, slug?: string}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { year, id}
+                params: { year, id, slug}
             }
             const response = await clientAxios.get(`/tacticos/objetivo/${id}`, config);            
             return response.data.objetivosTacticos

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
@@ -9,7 +9,7 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 
 interface TablaTacticosProps {
-    tacticos?: TacticoProps[]
+    tacticos: TacticoProps[]
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, isEstrategico: boolean) => void
     isEstrategico: boolean
     setShowDrawer: (showDrawer: boolean) => void
@@ -18,8 +18,7 @@ interface TablaTacticosProps {
 
 export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
-    const dispatch = useAppDispatch()
-    
+    const dispatch = useAppDispatch()    
         
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
         {
@@ -33,38 +32,39 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             width: 150,
             ellipsis: true,
             render: (text, record, index) => ({
-                children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: ( record.estrategico ? record.estrategico.perspectivas.color : getColor(record.status).color )  }}></div>
+                children: <div className='flex items-center'> 
+                <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor:  getColor(record.status).color   }}></div>
                     <p className='text-default'>{record.nombre}</p>
                 </div>,
             }),
         },
         {
-            title: () => ( <p className='tableTitle'>Código</p>),
+            title: () => ( <p className='tableTitle text-right'>Código</p>),
             width: 50,
             ellipsis: true,
             render: (text, record, index) => (
-                <span className='text-default'>{record.codigo}</span>
+                <p className='text-default text-right'>{record.codigo}</p>
             ),
         },
         {
-            title: () => ( <p className='tableTitle'>Estatus</p>),
+            title: () => ( <p className='tableTitle text-right'>Estatus</p>),
             dataIndex: 'status',
             width: 50,
             ellipsis: true,
             render: (text, record, index) => (
-                <span className='font-semibold'
+                <p className='font-semibold text-right'
                  style={{
                     color: getColor(record.status).color,
-                }}>{getStatus(record.status)}</span>
+                }}>{getStatus(record.status)}</p>
             ),
         },
         {
-            title: () => ( <p className='tableTitle'>Progreso</p>),
+            title: () => ( <p className='tableTitle text-right'>Progreso</p>),
             dataIndex: 'progreso',
-            width: 60,
+            width: 80,
             render: (text, record, index) => (
-                <Progress 
+                <div className='pl-5'>
+                    <Progress 
                     className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
                     strokeColor={{
                         from: getColor(record.status).color || '#108ee9',
@@ -73,26 +73,16 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                     format={(percent, successPercent) => <p className='text-white text-[11px]'>{percent}%</p>}
                     trailColor={getColor(record.status, .3).color} 
                 />
+                </div>
             )
         },
         {
-            title: () => ( <p className='tableTitle'>Proyección</p>),
+            title: () => ( <p className='tableTitle text-right'>Proyección</p>),
             dataIndex: 'periodos',
             width: 80,
             ellipsis: true,
             render: (text, record, index) => (
-                <div className='flex gap-x-1 items-center align-middle'> 
-                    {/* {
-                        record.trimestres.map((trimestre, index) => (
-                            <span key={index} className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}
-                                style={{
-                                    backgroundColor: trimestre.pivot_tactico_trimestre.activo ? ( record.estrategico? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)',
-                                    color: trimestre.pivot_tactico_trimestre.activo ? '#FFFFFF' : '#6B7280',
-                                }}
-                            >Q{index+1}</span>
-                        ))
-                    } */}
-
+                <div className='flex gap-x-1 justify-end'> 
                     {
                         [0, 1, 2, 3].map((index) => {
                             const trimestre = record.trimestres.find((t, tIndex) => tIndex === index);
@@ -116,34 +106,36 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             ),
         },
         {
-            title: () => ( <p className='tableTitle'>Responsables</p>),
-            width: 80,
+            title: () => ( <p className='tableTitle text-right'>Responsables</p>),
+            width: 50,
             render: (text, record, index) => (
-                <Avatar.Group maxCount={3} key={index} className='z-50'
-                    maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
-                >
-                    {
-                        record.propietario && (
-                            <Tooltip title={`${record.propietario.nombreCorto || record.propietario.nombre + ' ' + record.propietario.apellidoPaterno}`}>
-                                <Avatar
-                                    src={ <Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} /> }
-                                    style={{borderColor: '#F472B6'}}
+                <div className='flex justify-end'>
+                    <Avatar.Group maxCount={3} key={index} className='z-50'
+                        maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+                    >
+                        {
+                            record.propietario && (
+                                <Tooltip title={`${record.propietario.nombreCorto || record.propietario.nombre + ' ' + record.propietario.apellidoPaterno}`}>
+                                    <Avatar
+                                        src={ <Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} /> }
+                                        style={{borderColor: '#F472B6'}}
+                                    >
+                                        {record.propietario?.iniciales}
+                                    </Avatar>
+                                </Tooltip>
+                            )
+                        }
+                        { record.responsables?.map((responsable, index) => (
+                            <Tooltip title={`${responsable.nombreCorto || responsable.nombre + ' ' + responsable.apellidoPaterno}`} key={index}>
+                                <Avatar 
+                                    src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />}
                                 >
-                                    {record.propietario?.iniciales}
+                                    {responsable?.iniciales}
                                 </Avatar>
                             </Tooltip>
-                        )
-                    }
-                    { record.responsables?.map((responsable, index) => (
-                        <Tooltip title={`${responsable.nombreCorto || responsable.nombre + ' ' + responsable.apellidoPaterno}`} key={index}>
-                            <Avatar 
-                                src={<Image src={`${getStorageUrl(responsable?.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                            >
-                                {responsable?.iniciales}
-                            </Avatar>
-                        </Tooltip>
-                    )) }
-                </Avatar.Group>
+                        )) }
+                    </Avatar.Group>
+                </div>
             ),
             onCell: (record, rowIndex) => {
                 return {
