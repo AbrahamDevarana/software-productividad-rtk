@@ -22,7 +22,10 @@ const initialState: AccionesState = {
             apellidoMaterno: '',
             email: '',
             iniciales: '',
-            departamentos: [],
+            foto: '',
+            nombreCorto: '',
+            leaderId: '',
+            slug: '',
         }
     },
     infoMessage: '',

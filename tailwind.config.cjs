@@ -64,7 +64,7 @@ module.exports = {
               'card-picture': 'rgba(0, 0, 0, 0.1) 0rem 0.25rem 0.375rem -0.0625rem, rgba(0, 0, 0, 0.06) 0rem 0.125rem 0.25rem -0.0625rem'
             },
             backgroundImage:{
-              'login': "url('./assets/img/background/Devarana-Website.webp')",
+              'login': "url('./assets/img/background/devarana-website.webp')",
               // watermark 
               'w-isotipo': "url('./assets/img/watermark/Devarana.svg')",
               'w-logotipo': "url('./assets/img/watermark/Logotipo.svg')",

@@ -1,6 +1,7 @@
 import { statusType } from "@/types";
 import { UsuarioProps } from "./usuario";
 import { InitialState } from "./slice";
+import { SinglePerfilProps } from "./perfil";
 
 export interface AccionesProps {
     id: string;
@@ -11,7 +12,7 @@ export interface AccionesProps {
     fechaFin: Date | string;
     propietarioId: string;
     resultadoClaveId: string;
-    propietario: UsuarioProps
+    propietario: SinglePerfilProps;
 }
 
 

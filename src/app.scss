@@ -490,3 +490,9 @@ textarea.ant-input-borderless[disabled]{
 .richText p, .richText li, .richText span, .richText strong, .richText{ 
     color: $dark-light !important;
 }
+
+.customResultadosPanel {
+    .ant-collapse-header-text  {
+        width: 100%;
+    }
+}
