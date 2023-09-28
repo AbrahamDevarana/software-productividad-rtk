@@ -64,7 +64,7 @@ export const OperativoView = () => {
         }
     }, [id])
 
-    const {orderedResponsables, usuarioPropietaro} = useOperativo({objetivo: currentOperativo})
+    const {orderedResponsables, usuarioPropietaro, progresoReal} = useOperativo({objetivo: currentOperativo})    
     
     if(isLoadingObjetivo) return <Loading />
     
@@ -97,15 +97,15 @@ export const OperativoView = () => {
                     </div>
                     <div className="absolute -bottom-0.5 left-0 h-3 bg-gradient-to-r  from-primary to-primary-light text-right rounded-bl-ext rounded-br-ext"
                     style={{
-                        width: `75%`
+                        width: `${Math.min(progresoReal + 5, 100)}%`
                     }}
                     >
-                        <p className="text-white -translate-x-3 -translate-y-0.5 text-xs">75%</p>
+                        <p className="text-white -translate-x-3 -translate-y-0.5 text-xs">{Math.min(progresoReal, 100)}%</p>
 
                     </div>
                 </div>
                 <Segmented
-                    className='my-4 px-5'
+                    className='my-4'
                     options={options}
                     value={value}
                     onChange={(value) => setValue(value as SegmentTypes)}

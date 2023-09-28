@@ -176,7 +176,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     
             </Box>
             <Box className="xl:col-span-1 col-span-3 flex flex-col">
-                <p className="text-lg font-medium py-2 text-devarana-dark-graph ">Logros</p>
+                <p className="text-lg font-medium py-2 text-devarana-dark-graph ">Trayectoria</p>
                 {/* <Logros /> */}
                 <div className="flex h-full items-center">
                     <Proximamente avance={25} size="small" />

@@ -1,6 +1,7 @@
 
 
 import { AccionesProps, InitialState, Paginate, SinglePerfilProps, UsuarioProps } from ".";
+import { TaskProps } from "./tasks";
 
 
 
@@ -16,6 +17,7 @@ export interface ResultadoClaveProps {
     propietarioId: string
     propietario: SinglePerfilProps
     acciones: AccionesProps[]
+    task: TaskProps[]
 }
 
 
@@ -24,6 +26,7 @@ export interface ResultadoClaveState extends InitialState{
     resultadosClave: ResultadoClaveProps[];
     isLoadingResultado: boolean;
     isCreatingResultado: boolean;
+    isCreatedResultado: boolean;
     paginate?:     Paginate;
     currentResultadoClave: ResultadoClaveProps;
 }

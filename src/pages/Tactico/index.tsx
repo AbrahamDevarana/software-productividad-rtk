@@ -42,12 +42,12 @@ export const Tactico: React.FC = () => {
     return (
         <>
             <div className='flex w-full items-center pb-5'>
-                <div className='max-w-md w-full'>
+                <div className='max-w-lg w-full'>
                     <Segmented block
                         options={[
-                            {label: 'Objetivo Estrategico', value: 'listado'},
-                            {label: 'Equipos', value: 'equipos'},
-                            {label: 'Gantt', value: 'gantt'},
+                            {label: 'Tácticos Estrategicos', value: 'listado'},
+                            {label: 'Tácticos Core', value: 'gantt'},
+                            {label: 'Tácticos por Equipos', value: 'equipos'},
                         ]}
                         value={segmented}
                         onChange={setSegmented}

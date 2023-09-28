@@ -288,7 +288,7 @@ label{
     font-weight: 500!important;
 }
 
-input, textarea {
+input:not(.rs-input), textarea {
     color: #848891!important;
     font-weight: 300;
     // font-size: 14px!important;
@@ -489,6 +489,12 @@ textarea.ant-input-borderless[disabled]{
 // Quill
 .richText p, .richText li, .richText span, .richText strong, .richText{ 
     color: $dark-light !important;
+}
+
+.richText ul, .richText ol .richText li {
+    list-style: disc!important;
+    list-style-position: outside!important;
+    list-style-type: disc!important;
 }
 
 .customResultadosPanel {

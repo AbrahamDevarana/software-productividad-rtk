@@ -3,6 +3,7 @@ import { ResultadoClaveState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk} from "./resultadosThunk";
 import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "../acciones/accionesThunk";
+import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "../tasks/tasksThunk";
 
 
 const initialState: ResultadoClaveState = {
@@ -10,6 +11,7 @@ const initialState: ResultadoClaveState = {
     isLoading: false,
     isCreatingResultado: false,
     isLoadingResultado: false,
+    isCreatedResultado: false,
     infoMessage: '',
     error: false,
     currentResultadoClave: {
@@ -32,8 +34,12 @@ const initialState: ResultadoClaveState = {
             foto: '',
             nombreCorto: '',
             slug: ''
-        }
+        },
+        task: []
     }
+
+    // Tasks
+
 }
 
 
@@ -49,6 +55,9 @@ const resultadoClaveSlice = createSlice({
         },
         getUpdatedAccion: (state, { payload }) => {
             state.currentResultadoClave.acciones = [...state.currentResultadoClave.acciones, payload]
+        },
+        clearCreatedResultado: (state) => {
+            state.isCreatedResultado = false
         }
     },
     extraReducers: (builder) => {
@@ -77,13 +86,16 @@ const resultadoClaveSlice = createSlice({
             })
             .addCase(createResultadoThunk.pending, (state) => {
                 state.isCreatingResultado = true
+                state.isCreatedResultado = false
             })
             .addCase(createResultadoThunk.fulfilled, (state, {payload}) => {
                 state.isCreatingResultado = false
                 state.resultadosClave = [...state.resultadosClave, payload]
+                state.isCreatedResultado = true
             })
             .addCase(createResultadoThunk.rejected, (state) => {
                 state.isCreatingResultado = false
+                state.isCreatedResultado = false
                 state.error = true
             })
             .addCase(updateResultadoThunk.pending, (state) => {
@@ -174,10 +186,63 @@ const resultadoClaveSlice = createSlice({
             .addCase(deleteAccionThunk.rejected, (state) => {
                 state.error = true
             })
+
+
+
+            // Tasks sustituye a Acciones
+            // createTaskThunk
+            // updateTaskThunk
+            // deleteTaskThunk
+
+            .addCase(createTaskThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(createTaskThunk.fulfilled, (state, { payload }) => {
+                const resultadoClave = state.resultadosClave.find(resultado => resultado.id === payload.taskeableId)
+                
+                if(resultadoClave){
+                    resultadoClave.task = [...resultadoClave.task, payload]
+                    resultadoClave.progreso = resultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / resultadoClave.task.length * 100
+                }
+            })
+            .addCase(createTaskThunk.rejected, (state) => {
+                state.error = true
+            })
+            .addCase(updateTaskThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(updateTaskThunk.fulfilled, (state, { payload }) => {
+                const updatedResultadoClave = state.resultadosClave.find(resultado => resultado.id === payload.taskeableId)
+
+                if(updatedResultadoClave){
+                    updatedResultadoClave.task = updatedResultadoClave.task.map(task => task.id === payload.id ? payload : task)
+
+                    updatedResultadoClave.progreso = updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / updatedResultadoClave.task.length * 100
+
+                    console.log(updatedResultadoClave.progreso);
+                    
+                }
+
+            })
+            .addCase(updateTaskThunk.rejected, (state) => {
+                state.error = true
+            })
+            .addCase(deleteTaskThunk.pending, (state) => {
+                state.error = false
+            })
+            .addCase(deleteTaskThunk.fulfilled, (state, { payload }) => {
+                const deletedTask = state.resultadosClave.find(resultado => resultado.id === payload.taskeableId)
+
+                if(deletedTask){
+                    deletedTask.task = deletedTask.task.filter(task => task.id !== payload.id)
+                    deletedTask.progreso = deletedTask.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / deletedTask.task.length * 100
+                }
+            })
+
     }
 })
 
-export const { clearResultadoClave } = resultadoClaveSlice.actions
+export const { clearResultadoClave, clearCreatedResultado } = resultadoClaveSlice.actions
 
 export default resultadoClaveSlice.reducer
 

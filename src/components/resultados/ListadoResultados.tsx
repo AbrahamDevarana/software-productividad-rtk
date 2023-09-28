@@ -1,21 +1,23 @@
-import { AccionesProps, OperativoProps, ResultadoClaveProps } from "@/interfaces";
+import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, Popconfirm, Spin, Table, Tooltip } from "antd";
+import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, Popconfirm, Spin, Table, Tooltip, message } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createResultadoThunk, getResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
+import { useEffect, useMemo, useRef } from "react";
+import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
-import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "@/redux/features/acciones/accionesThunk";
-import { FaCog } from "react-icons/fa";
+import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "@/redux/features/tasks/tasksThunk";
 import { BiTrash } from "react-icons/bi";
 import { BsFillCalendarFill } from "react-icons/bs";
 import dayjs from "dayjs";
 import EmptyResultado from "./EmptyResultado";
-import ResultadoClaveForm from "./NewFormResultados";
+import ResultadoClaveForm from "./FormResultado";
 import { Link } from "react-router-dom";
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
+import { FaRegComment } from "react-icons/fa";
+import { AiOutlineFileSearch } from "react-icons/ai";
+import { clearCreatedResultado } from "@/redux/features/resultados/resultadosSlice";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -26,7 +28,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
 
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
-    const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
+    const { isLoading, resultadosClave, isCreatingResultado, isCreatedResultado} = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -37,48 +39,54 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
         dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
     }
 
-    const handleOnUpdate = (e: any, record: AccionesProps) => {
+    const handleOnUpdate = (e: any, record: TaskProps) => {
         const query = {
             ...record,
             [e.target.name]: e.target.value,
         }
         
-        dispatch(updateAccionThunk(query))
+        dispatch(updateTaskThunk(query))
     }
 
-    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: AccionesProps) => {
+    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: TaskProps) => {
         const query = {
             ...record,
-            fechaInicio: fechaInicio ? dayjs(fechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaInicio,
+            // fechaInicio: fechaInicio ? dayjs(fechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaInicio,
             fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
         }    
-        dispatch(updateAccionThunk(query))
+        // dispatch(updateAccionThunk(query))
+        dispatch(updateTaskThunk(query))
     }
 
-    const defaultColumns: ColumnsType<AccionesProps> = [
+    const defaultColumns: ColumnsType<TaskProps> = [
         {
             title: () => ( <p className='tableTitlePrincipal'>Acciones</p>),
-            render: (text, record, index) => ({
-                children: <div className='flex'>
-                    <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-dark-light' }`} />
-                    <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} />
-                </div>,
-            }),
-            width: 250,
+            render: (text, record, index) => {
+                return (
+                    <div className='flex'>
+                        <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-dark-light' }`} />
+                        <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} />
+                    </div>
+                )
+            },
         },
         {
-            title: () => ( <p className='tableTitle'>Responsable</p>),
+            title: () => ( <p className='tableTitle text-center'>Responsable</p>),
             render: (text, record, index) => {
-                return <Link key={index} to={`/perfil/${record.propietario?.slug}`} className={`border-2 rounded-full`}>
-                    <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`} placement='top' key={index} >
-                        <Avatar key={index} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                            {record.propietario?.iniciales} 
-                        </Avatar>
-                    </Tooltip>
-                </Link>
+                return (
+                  <div className="flex justify-center">
+                      <Link key={index} to={`/perfil/${record.propietario?.slug}`} className={`rounded-full`}>
+                        <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`} placement='top' key={index} >
+                            <Avatar key={index} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                {record.propietario?.iniciales} 
+                            </Avatar>
+                        </Tooltip>
+                    </Link>
+                  </div>
+                )
 
             },
-            width: 200,
+            width: 100,
         },
         {
             title: () => ( <p className='tableTitle'>Fecha Fin</p>),
@@ -87,64 +95,90 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
             render: (text, record, index) => {
 
                 const disabledDate = (current: any): boolean => {
-                    return current && current < dayjs(record.fechaInicio)
+                    return current && current < dayjs(record.fechaFin)
                 }
                 
-                return ({
-                    children: (
-                        <DatePicker 
-                            className='w-full'
-                            format={"DD-MM-YYYY"}
-                            defaultValue={ dayjs(record.fechaFin)  }
-                            showToday
-                            clearIcon={null}
-                            disabledDate={disabledDate}
-                            placeholder="Fecha Fin"
-                            bordered={false}
-                            name="fechaFin"
-                            suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                            onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
-                        />
-                    ),
-                })},
+                return (
+                <DatePicker 
+                    className='w-full' 
+                    format={"DD-MM-YYYY"}
+                    defaultValue={ dayjs(record.fechaFin)  }
+                    showToday
+                    clearIcon={null}
+                    disabledDate={disabledDate}
+                    placeholder="Fecha Fin"
+                    bordered={false}
+                    name="fechaFin"
+                    suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                    onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
+                />
+            )},
             width: 200,
         },
         {
-            title: () => ( <p className='tableTitle'>Completado</p>),
-            width: 20,
-            render: (text, record, index) => ({
-                children:
-                        <Checkbox
-                            defaultChecked={record.status ===  1 ? true : false} 
-                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 1 : 0)}
-                        />
-            }),
+            title: () => ( <p className='tableTitle'>Prioridad</p>),
+            render: (text, record, index) => {
+                return ( <> </> ) 
+            },
+            width: 150,
         },
         {
-            title: () => ( <p className='tableTitle'>Acciones</p>),
-            render: (text, record, index) => ({
-                children: 
-                <div className='flex items-center group-hover:opacity-100 group-hover:z-0 -z-50 opacity-0 transition-all duration-700'>
-                    <Popconfirm
-                        title="¿Estas seguro de eliminar esta accion?"
-                        onConfirm={ () => handleDeleteAccion(record.id)}
-                        onCancel={() => {}}
-                        okText="Si"
-                        cancelText="No"
-                        placement="left"
-                    >
-                        <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                    </Popconfirm>
-                    
-                </div>,
-                
-            }),
-            width: 20,
+            title: () => ( <p className='tableTitle'>Estado</p>),
+            render: (text, record, index) => {
+                return ( <> </> ) 
+            },
+            width: 150,
+        },
+        {
+            title: () => ( <p className='tableTitle'>Completado</p>),
+            render: (text, record, index) => {
+                return (
+                    <div className="flex justify-center">
+                        <Checkbox
+                            defaultChecked={record.status ===  'FINALIZADA' ? true : false} 
+                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 'FINALIZADA' : 'SIN_INICIAR')}
+                        />  
+                    </div>
+                )
+            },
+            width: 50,
+        },
+        {
+            title: () => ( <p className='tableTitle text-center'>Acciones</p>),
+            render: (text, record, index) => {
+                return (
+                    <div className='flex items-center group-hover:opacity-100 group-hover:z-0 -z-50 opacity-0 transition-all duration-700 gap-x-5'>
+                        <Popconfirm
+                            title="¿Estas seguro de eliminar esta accion?"
+                            onConfirm={ () => handleDeleteTask(record.id)}
+                            onCancel={() => {}}
+                            okText="Si"
+                            cancelText="No"
+                            placement="left"
+                            okButtonProps={{
+                                className: 'rounded-full mr-2 bg-primary'
+                            }}
+                            cancelButtonProps={{
+                                className: 'rounded-full mr-2 bg-error-light text-white'
+                            }}
+                        >
+                            <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
+                        </Popconfirm>
+
+                        <AiOutlineFileSearch className="text-default text-lg"/>
+
+                        <FaRegComment className="text-default text-lg" />
+                        
+
+                    </div>
+                )
+            },
+            width: 50,
         }
     ]
 
     useEffect(() => {
-        if (currentOperativo) {
+        if (currentOperativo.id !== '') {
             dispatch(getResultadosThunk(currentOperativo.id))
         }
     }, [currentOperativo])
@@ -161,12 +195,12 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
     const footerComponent = (resultadoClave: ResultadoClaveProps) => {
 
         const [form] = Form.useForm();
-        const handleCreateAccion = () => {
+        const handleCreateTask = () => {
             const query = {
                 ...form.getFieldsValue(),
-                resultadoClaveId: resultadoClave.id
+                taskeableId: resultadoClave.id
             }
-            dispatch(createAccionThunk(query))
+            dispatch(createTaskThunk(query))
             form.resetFields()
         }
         return (
@@ -176,7 +210,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                     nombre: '',
                 }}
                 form={form}
-                onBlur={handleCreateAccion}
+                onBlur={handleCreateTask}
             >
 
                 <Form.Item name="nombre" className="mb-0">
@@ -203,28 +237,38 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
     )
 
     //* FORM
-    const handleDeleteAccion = (id: string) => {
-        dispatch(deleteAccionThunk(id))
+
+
+    const handleDeleteTask = (id: number) => {
+        dispatch(deleteTaskThunk(id))
     }
 
-    const handleUpdateStatus = async (accion: AccionesProps, status: number) => {
+    const handleUpdateStatus = async (task: TaskProps, status: any) => {
         const query = {
-            ...accion,
+            ...task,
             status
         }
-        dispatch(updateAccionThunk(query))
+
+        console.log(query);
+        
+        
+        dispatch(updateTaskThunk(query))
     }
 
 
-    if(isLoading) return ( <Loading /> )
+    useEffect(() => {
+        if(isCreatedResultado){
+            message.success('Resultado creado correctamente')
+            dispatch(clearCreatedResultado())
+        }
+    }, [ isCreatedResultado ])
 
+    if(isLoading) return ( <Loading /> )
     if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
 
     return (
         <>
-        {
-            isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
-        }
+
             <Collapse 
                 defaultActiveKey={activeKey}
                 ghost
@@ -247,7 +291,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                                 pagination={false}
                                 bordered={false}
                                 columns={defaultColumns}
-                                dataSource={resultado.acciones}
+                                dataSource={resultado.task}
                                 rowKey={record => record.id}
                                 footer={() => footerComponent(resultado)}
                                 rowClassName={ (record, index) => {
@@ -268,6 +312,10 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                 
 
             </Collapse>
+
+            {
+                isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
+            }
         </>
     )
 

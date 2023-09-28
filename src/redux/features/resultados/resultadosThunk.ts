@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { ResultadoClaveProps } from "@/interfaces";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { clientAxios } from "@/config/axios";
-import { clearResultadoClave } from "./resultadosSlice";
+import { clearResultadoClave, clearCreatedResultado } from "./resultadosSlice";
 
 interface Props {
     resultadosClave: ResultadoClaveProps[]
@@ -21,7 +21,7 @@ export const getResultadosThunk = createAsyncThunk(
                 params: {operativoId: operativoId}
             }
 
-            const response = await clientAxios.get<Props>(`/resultados`, config);           
+            const response = await clientAxios.get<Props>(`/resultados`, config);            
             return response.data.resultadosClave
         }
         catch (error: any) {
@@ -106,4 +106,8 @@ export const deleteResultadoThunk = createAsyncThunk(
 
 export const clearResultadoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearResultadoClave())
+}
+
+export const clearCreatedResultadoThunk = () => async (dispatch: AppDispatch) => {
+    dispatch(clearCreatedResultado())
 }

@@ -24,3 +24,5 @@ export * from "./galeria"
 
 export * from "./evaluaciones";
 export * from "./global"
+
+export * from "./tasks";

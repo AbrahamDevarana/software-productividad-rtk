@@ -8,15 +8,17 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { Icon } from '../Icon';
 import { useAppSelector } from '@/redux/hooks';
 import CountUp from 'react-countup';
+import { OperativoProps } from '@/interfaces';
 
 interface Props {
-	objetivo: any;
+	objetivo: OperativoProps;
 	visitante?: boolean;
 }
 
 export const Objetivos = ({objetivo, visitante}: Props) => {
 
 	const { currentConfig: {year, quarter}} = useAppSelector(state => state.global)
+	const { userAuth } = useAppSelector(state => state.auth)
 	const { resultadoClaveDoneCount, progresoAsignado, firstColor, fixedProgresoReal, secondColor, orderedResponsables} = useOperativo({objetivo})
 
   	return (

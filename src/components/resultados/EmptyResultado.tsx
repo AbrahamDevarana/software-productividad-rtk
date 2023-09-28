@@ -15,7 +15,7 @@ const EmptyResultado = ({handleCreate} :Props) => {
                         <BsWindowPlus className="fill-devarana-graph"/>
                     </div>
                     <div className="text-devarana-graph">
-                        No hay resultados clave
+                        Agregar Resultado Clave
                     </div>
                 </div>
             </div>

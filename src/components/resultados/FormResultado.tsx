@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
-import { Form, Input, DatePicker, Select, Radio, Progress, Popover, Slider, InputNumber, Row, Col } from 'antd';
+import  { useMemo } from 'react';
+import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col } from 'antd';
 import dayjs from 'dayjs';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
-import { ResultadoClaveProps, UsuarioProps } from '@/interfaces';
-import { useDebounce } from '@/hooks/useDebouce';
+import { ResultadoClaveProps } from '@/interfaces';
 
 interface Props {
     resultado: ResultadoClaveProps
@@ -19,10 +17,6 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
     const { usuarios } = useAppSelector(state => state.usuarios)
 
     const [form] = Form.useForm()
-    const { tagRender, spanUsuario} = useSelectUser(usuarios)
-
-
-
 
     const handleOnSubmit = () => {
         const query = {
@@ -39,7 +33,6 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
     const content = (
         <>
             <Form.Item
-                label="Tipo de progreso"
                 name="tipoProgreso"
                 required
                 
@@ -51,7 +44,7 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
             </Form.Item>
 
             <Row>
-                <Col span={16}>
+                <Col span={16} >
                     <Form.Item
                             name="progreso"
                             hidden={!isVisible}
@@ -98,13 +91,13 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                 fechaFin: dayjs(resultado.fechaFin)
             }}
         >
-            <Row className='w-full' gutter={10}>
+            <Row className='w-full items-center' gutter={10}>
                 <Col span={8} order={1}>
                     <Form.Item
                         name="nombre"
                         required
                     >
-                        <Input className='text-lg bg-transparent' onPressEnter={ (e) => {
+                        <Input className="rs-input border-none bg-transparent hover:bg-white hover:drop-shadow-sm font-medium text-lg text-primary"  onPressEnter={ (e) => {
                             handleOnSubmit()
                             e.currentTarget.blur()
                             e.stopPropagation()
@@ -127,9 +120,9 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                     <Form.Item
                         className='w-full'
                     >
-                        <Popover content={content} title="Tipo de Progreso" trigger="click"  className='w-full'>
+                        <Popover content={content} title="Tipo de Progreso" trigger="click"  className='w-full cursor-pointer'>
                             <Progress 
-                                className='drop-shadow progressStyle w-full' percent={resultado.progreso} strokeWidth={20} 
+                                className='drop-shadow progressStyle w-full' percent={resultado.progreso} strokeWidth={20}
                                 strokeColor={{
                                     '0%': '#FFD600',
                                     '100%': '#FFD600',

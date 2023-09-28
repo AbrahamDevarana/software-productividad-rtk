@@ -31,6 +31,7 @@ const Perfil: React.FC = () => {
                 dispatch(getProfileThunk(userAuth.id))
             }
         }
+        
 
         dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
 

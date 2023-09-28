@@ -33,8 +33,8 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
 
 
     return (
-        <div className='md:col-span-4 col-span-12 group shadow-ext bg-white' key={objetivo.id} >
-            <Segmented
+        <div className='md:col-span-4 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
+            {/* <Segmented
                 options={[
                     { label: 'Objetivo', value: 'objetivo' },
                     { label: 'Historial', value: 'historial' },
@@ -45,7 +45,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                 size='small'
                 
                 
-            />
+            /> */}
             {
                 setCardSegmented === 'objetivo' && 
                 (
@@ -67,7 +67,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                             </div>
                         </div>
                         <Divider />
-                        <p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
+                        <p className='text-center text-devarana-graph font-medium text-lg'> {objetivo.nombre} </p>
                         <ProgressBar maxValue={fixedProgresoReal} firstColor={firstColor} secondColor={secondColor}  /> 
                         <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
                             {
