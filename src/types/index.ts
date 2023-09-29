@@ -26,6 +26,15 @@ export const objetivosTypes = {
     FINALIZADO: 'Finalizado', // Cuando se finaliza un objetivo
 }
 
+export const taskStatusTypes = {
+    SIN_INICIAR: 'Sin Iniciar',
+    EN_PROCESO: 'En Proceso',
+    FINALIZADO: 'Finalizada',
+    CANCELADO: 'Cancelada',
+}
+
+export type TaskStatusType = keyof typeof taskStatusTypes
+
 
 export const periodoTypes = {
     EN_DEFINICION: 'En Definición',
@@ -35,3 +44,18 @@ export const periodoTypes = {
 }
 
 export type objetivosType = keyof typeof objetivosTypes
+
+
+
+export enum Prioridad {
+	Baja = 'Baja',
+	Normal = 'Normal',
+	Alta = 'Alta',
+}
+
+
+export const styles: { [key in Prioridad]: string } = {
+    [Prioridad.Baja]: 'rgba(238, 152, 25, 1)',
+    [Prioridad.Normal]: 'rgba(64, 143, 227, 1)',
+    [Prioridad.Alta]: 'rgba(236, 77, 73, 1)',
+};

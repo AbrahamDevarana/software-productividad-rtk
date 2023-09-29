@@ -2,7 +2,6 @@
 import { ResultadoClaveState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk} from "./resultadosThunk";
-import { createAccionThunk, deleteAccionThunk, updateAccionThunk } from "../acciones/accionesThunk";
 import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "../tasks/tasksThunk";
 
 
@@ -24,6 +23,7 @@ const initialState: ResultadoClaveState = {
         operativoId: '',
         propietarioId: '',
         acciones: [],
+        color: 'rgba(101, 106, 118, 1)',
         propietario:{
             nombre: '',
             apellidoPaterno: '',
@@ -37,9 +37,6 @@ const initialState: ResultadoClaveState = {
         },
         task: []
     }
-
-    // Tasks
-
 }
 
 
@@ -123,77 +120,6 @@ const resultadoClaveSlice = createSlice({
             })
 
 
-
-
-            // Acciones
-
-            .addCase(createAccionThunk.pending, (state) => {
-                state.error = false
-            })
-            .addCase(createAccionThunk.fulfilled, (state, { payload }) => {
-                const { resultadoClaveId } = payload
-                const resultadoClave = state.resultadosClave.find(resultado => resultado.id === resultadoClaveId)
-                
-                if(resultadoClave){
-                    resultadoClave.acciones = [...resultadoClave.acciones, payload]
-
-
-                    if( resultadoClave.tipoProgreso === 'acciones'){
-                        // el resultadoClave.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
-                        resultadoClave.progreso = resultadoClave.acciones.reduce((acc, accion) => acc + accion.status, 0) / resultadoClave.acciones.length * 100
-                    }
-                    
-                }
-            })
-            .addCase(createAccionThunk.rejected, (state) => {
-                state.error = true
-            })
-            .addCase(updateAccionThunk.pending, (state) => {
-                state.error = false
-            })
-            .addCase(updateAccionThunk.fulfilled, (state, { payload }) => {
-                
-                const updatedResultadoClave = state.resultadosClave.find(resultado => resultado.id === payload.resultadoClaveId)
-
-                if(updatedResultadoClave){
-                    updatedResultadoClave.acciones = updatedResultadoClave.acciones.map(accion => accion.id === payload.id ? payload : accion)
-
-                    if( updatedResultadoClave.tipoProgreso === 'acciones'){
-                        // el updatedResultadoClave.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
-                        updatedResultadoClave.progreso = updatedResultadoClave.acciones.reduce((acc, accion) => acc + accion.status, 0) / updatedResultadoClave.acciones.length * 100
-                    }
-                }
-
-            })
-            .addCase(updateAccionThunk.rejected, (state) => {
-                state.error = true
-            })
-            .addCase(deleteAccionThunk.pending, (state) => {
-                state.error = false
-            })
-            .addCase(deleteAccionThunk.fulfilled, (state, { payload }) => {
-                const deletedAccion = state.resultadosClave.find(resultado => resultado.id === payload.resultadoClaveId)
-
-                if(deletedAccion){
-                    deletedAccion.acciones = deletedAccion.acciones.filter(accion => accion.id !== payload.id)
-
-                    if( deletedAccion.tipoProgreso === 'acciones'){
-                        // el deletedAccion.pogreso es el promedio de las accion.status completadas (1) y las no completadas (0)
-                        deletedAccion.progreso = deletedAccion.acciones.reduce((acc, accion) => acc + accion.status, 0) / deletedAccion.acciones.length * 100
-                    }
-                }
-            })
-            .addCase(deleteAccionThunk.rejected, (state) => {
-                state.error = true
-            })
-
-
-
-            // Tasks sustituye a Acciones
-            // createTaskThunk
-            // updateTaskThunk
-            // deleteTaskThunk
-
             .addCase(createTaskThunk.pending, (state) => {
                 state.error = false
             })
@@ -202,7 +128,10 @@ const resultadoClaveSlice = createSlice({
                 
                 if(resultadoClave){
                     resultadoClave.task = [...resultadoClave.task, payload]
-                    resultadoClave.progreso = resultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / resultadoClave.task.length * 100
+                   
+                    if( resultadoClave.tipoProgreso === 'acciones'){
+                        (resultadoClave.progreso = resultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / resultadoClave.task.length * 100).toFixed(2)
+                    }
                 }
             })
             .addCase(createTaskThunk.rejected, (state) => {
@@ -217,9 +146,10 @@ const resultadoClaveSlice = createSlice({
                 if(updatedResultadoClave){
                     updatedResultadoClave.task = updatedResultadoClave.task.map(task => task.id === payload.id ? payload : task)
 
-                    updatedResultadoClave.progreso = updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / updatedResultadoClave.task.length * 100
-
-                    console.log(updatedResultadoClave.progreso);
+                if( updatedResultadoClave.tipoProgreso === 'acciones'){
+                    updatedResultadoClave.progreso = (updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / updatedResultadoClave.task.length * 100)
+                }
+                
                     
                 }
 
@@ -235,7 +165,7 @@ const resultadoClaveSlice = createSlice({
 
                 if(deletedTask){
                     deletedTask.task = deletedTask.task.filter(task => task.id !== payload.id)
-                    deletedTask.progreso = deletedTask.task.reduce((acc, task) => acc + (task.status === 'FINALIZADA' ? 1 : 0), 0) / deletedTask.task.length * 100
+                    deletedTask.progreso = (deletedTask.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / deletedTask.task.length * 100)
                 }
             })
 

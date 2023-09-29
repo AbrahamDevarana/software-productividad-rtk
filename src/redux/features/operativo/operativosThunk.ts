@@ -75,9 +75,6 @@ export const getOperativoThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            console.log('operativoId', operativoId);
-            
-
             const response = await clientAxios.get<Props>(`/operativos/${operativoId}`, config);            
             return response.data.operativo
         }

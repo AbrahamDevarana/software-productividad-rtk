@@ -10,7 +10,7 @@ export interface ResultadoClaveProps {
     id: string
     nombre: string
     tipoProgreso: string
-    progreso?: number
+    progreso: number
     fechaInicio: string | Date
     fechaFin: string | Date
     operativoId: string
@@ -18,6 +18,7 @@ export interface ResultadoClaveProps {
     propietario: SinglePerfilProps
     acciones: AccionesProps[]
     task: TaskProps[]
+    color: string
 }
 
 

@@ -28,6 +28,7 @@ export const createTaskThunk = createAsyncThunk(
 export const updateTaskThunk = createAsyncThunk(
     'tasks/updateTask',
     async (task: TaskProps, { rejectWithValue, getState }) => {
+
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -35,7 +36,6 @@ export const updateTaskThunk = createAsyncThunk(
             }
 
             const response = await clientAxios.put<Props>(`/tasks/${task.id}`, task, config);
-            console.log(response.data.task);
             
             return response.data.task
         } catch (error: any) {

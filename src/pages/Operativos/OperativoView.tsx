@@ -21,7 +21,6 @@ export const OperativoView = () => {
     const dispatch = useAppDispatch()
     const { id } = useParams<{ id: string }>()
     const [value, setValue] = useState<SegmentTypes>('listado');
-    const [visible, setVisible] = useState<boolean>(false);
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
     const { resultadosClave } = useAppSelector(state => state.resultados)
 
@@ -47,12 +46,6 @@ export const OperativoView = () => {
         dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
     }
 
-    const handleClose = () => {
-        setVisible(false)
-        dispatch(clearObjetivoThunk())
-    }
-
-
     useEffect(() => {
         if(id){
             dispatch(getOperativoThunk(id))
@@ -70,6 +63,10 @@ export const OperativoView = () => {
     
     return (
         <>
+            <div className="mb-2">
+                <Link to='/objetivos' className='text-devarana-midnight text-sm'> <Icon iconName='faArrowLeft' /> Regresar </Link>
+            </div>
+
             <div className='min-h-[500px]'>
                 <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
                     <div>
@@ -146,18 +143,6 @@ export const OperativoView = () => {
                     />
                 )
             }
-
-            
-            <Drawer
-                open={visible}
-                onClose={handleClose}
-                destroyOnClose={true}
-                placement='right'
-                width={600}
-            >
-                <FormAcciones />
-            </Drawer>
-
 
         </>
     )

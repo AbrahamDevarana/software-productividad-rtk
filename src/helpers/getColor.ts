@@ -6,6 +6,7 @@ type StatusTypes = typeof statusTypes[keyof typeof statusTypes];
 
 export const getColor = (status: StatusTypes, opacity: number = 1) => {
 
+
     let color, lowColor;
 
 
@@ -16,6 +17,11 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             break;
         
         case 'EN_TIEMPO':
+            color = `rgba(64, 143, 227, ${opacity})`;
+            lowColor = `rgba(9, 103, 201, ${opacity})`;
+            break;
+        
+        case 'EN_PROCESO':
             color = `rgba(64, 143, 227, ${opacity})`;
             lowColor = `rgba(9, 103, 201, ${opacity})`;
             break;

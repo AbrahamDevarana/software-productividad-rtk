@@ -1,23 +1,24 @@
 import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Checkbox, Collapse, DatePicker, Drawer, Form, Image, Input, Popconfirm, Spin, Table, Tooltip, message } from "antd";
+import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Spin, Table, Tooltip, message } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo, useRef } from "react";
 import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
 import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "@/redux/features/tasks/tasksThunk";
 import { BiTrash } from "react-icons/bi";
-import { BsFillCalendarFill } from "react-icons/bs";
+import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
 import dayjs from "dayjs";
 import EmptyResultado from "./EmptyResultado";
 import ResultadoClaveForm from "./FormResultado";
 import { Link } from "react-router-dom";
-import { getStorageUrl } from "@/helpers";
+import { getColor, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
-import { FaRegComment } from "react-icons/fa";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import { clearCreatedResultado } from "@/redux/features/resultados/resultadosSlice";
+import { PopoverPrioridad } from "./PopoverPrioridad";
+import { Prioridad, styles, taskStatusTypes } from "@/types";
+import { PopoverEstado } from "./PopoverEstado";
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -51,10 +52,8 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
     const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: TaskProps) => {
         const query = {
             ...record,
-            // fechaInicio: fechaInicio ? dayjs(fechaInicio, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaInicio,
             fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
         }    
-        // dispatch(updateAccionThunk(query))
         dispatch(updateTaskThunk(query))
     }
 
@@ -64,17 +63,17 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
             render: (text, record, index) => {
                 return (
                     <div className='flex'>
-                        <div className={`border-2 rounded-full mr-2 ${record.status ? 'border-success' : 'border-dark-light' }`} />
+                        <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(record.status).color }}/> 
                         <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} />
                     </div>
                 )
             },
         },
         {
-            title: () => ( <p className='tableTitle text-center'>Responsable</p>),
+            title: () => ( <p className='tableTitle text-right'>Responsable</p>),
             render: (text, record, index) => {
                 return (
-                  <div className="flex justify-center">
+                  <div className="flex justify-end">
                       <Link key={index} to={`/perfil/${record.propietario?.slug}`} className={`rounded-full`}>
                         <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`} placement='top' key={index} >
                             <Avatar key={index} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
@@ -89,7 +88,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
             width: 100,
         },
         {
-            title: () => ( <p className='tableTitle'>Fecha Fin</p>),
+            title: () => ( <p className='tableTitle text-right'>Fecha Fin</p>),
             dataIndex: 'fechaFin',
             key: 'fechaFin',
             render: (text, record, index) => {
@@ -113,30 +112,71 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                     onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
                 />
             )},
-            width: 200,
+            width: 170,
         },
         {
-            title: () => ( <p className='tableTitle'>Prioridad</p>),
+            title: () => ( <p className='tableTitle text-right'>Prioridad</p>),
             render: (text, record, index) => {
-                return ( <> </> ) 
+                return ( 
+                    <Popover
+                        title={ <p className='text-center text-devarana-graph'>Prioridad</p> }
+                        trigger={'click'}
+                        content={
+                            <PopoverPrioridad current={record} dispatchFunction={updateTaskThunk} />
+                        }
+                    > 
+
+                            <div
+                                className="flex items-center justify-center py-1 rounded-sm cursor-pointer text-white font-medium drop-shadow-sm"
+                                style={{
+                                    backgroundColor: styles[record.prioridad as Prioridad]
+                                }}
+                            >
+                                { record.prioridad }
+                            </div>
+                    </Popover>
+            ) 
             },
-            width: 150,
+            width: 120,
         },
         {
-            title: () => ( <p className='tableTitle'>Estado</p>),
+            title: () => ( <p className='tableTitle text-right'>Estatus</p>),
             render: (text, record, index) => {
-                return ( <> </> ) 
+                return ( 
+                    <Popover
+                        title={ <p className='text-center text-devarana-graph'>Estatus</p> }
+                        content= {
+                            <PopoverEstado current={record} dispatchFunction={updateTaskThunk} />
+                        }
+                        trigger={'click'}
+                    >
+                            <div className="flex items-center justify-end gap-2 py-1 cursor-pointer">
+                                <div className={`shadow`}
+                                    style={{
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '25%',
+                                        backgroundImage: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
+                                    }}
+                                >  </div>
+                                <p className='text-right py-1' style={{
+                                    color: getColor(record.status).color
+                                }}>  { taskStatusTypes[record.status] } </p>
+                            </div>  
+
+                    </Popover>
+                ) 
             },
-            width: 150,
+            width: 120,
         },
         {
-            title: () => ( <p className='tableTitle'>Completado</p>),
+            title: () => ( <p className='tableTitle text-right'>Completado</p>),
             render: (text, record, index) => {
                 return (
-                    <div className="flex justify-center">
+                    <div className="flex justify-end">
                         <Checkbox
-                            defaultChecked={record.status ===  'FINALIZADA' ? true : false} 
-                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 'FINALIZADA' : 'SIN_INICIAR')}
+                            defaultChecked={record.status ===  'FINALIZADO' ? true : false} 
+                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 'FINALIZADO' : 'SIN_INICIAR')}
                         />  
                     </div>
                 )
@@ -144,33 +184,38 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
             width: 50,
         },
         {
-            title: () => ( <p className='tableTitle text-center'>Acciones</p>),
+            title: () => ( <p className='tableTitle text-right'>Acciones</p>),
             render: (text, record, index) => {
                 return (
-                    <div className='flex items-center group-hover:opacity-100 group-hover:z-0 -z-50 opacity-0 transition-all duration-700 gap-x-5'>
-                        <Popconfirm
-                            title="¿Estas seguro de eliminar esta accion?"
-                            onConfirm={ () => handleDeleteTask(record.id)}
-                            onCancel={() => {}}
-                            okText="Si"
-                            cancelText="No"
-                            placement="left"
-                            okButtonProps={{
-                                className: 'rounded-full mr-2 bg-primary'
-                            }}
-                            cancelButtonProps={{
-                                className: 'rounded-full mr-2 bg-error-light text-white'
-                            }}
-                        >
-                            <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                        </Popconfirm>
+                    <Popover
+                        trigger={'click'}
+                        content={
+                            <div className="">
+                                <Popconfirm
+                                    title="¿Estas seguro de eliminar esta acción?"
+                                    onConfirm={ () => handleDeleteTask(record.id)}
+                                    onCancel={() => {}}
+                                    okText="Si"
+                                    cancelText="No"
+                                    placement="left"
+                                    okButtonProps={{
+                                        className: 'rounded-full mr-2 bg-primary'
+                                    }}
+                                    cancelButtonProps={{
+                                        className: 'rounded-full mr-2 bg-error-light text-white'
+                                    }}
+                                >
+                                    <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
+                                </Popconfirm>
 
-                        <AiOutlineFileSearch className="text-default text-lg"/>
+                                {/* <AiOutlineFileSearch className="text-default text-lg"/>
 
-                        <FaRegComment className="text-default text-lg" />
-                        
-
-                    </div>
+                                <FaRegComment className="text-default text-lg" /> */}
+                            </div>
+                        }
+                    >
+                            <BsThreeDots className='text-devarana-graph text-xl ml-auto' />
+                    </Popover>
                 )
             },
             width: 50,
@@ -232,7 +277,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
 
     const genHeader = (resultado: any) => (
         <div onClick={ event => event.stopPropagation() }>
-            <ResultadoClaveForm resultado={resultado} /> 
+            <ResultadoClaveForm resultado={resultado} />
         </div>
     )
 
@@ -272,7 +317,6 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
             <Collapse 
                 defaultActiveKey={activeKey}
                 ghost
-                // expandIcon={({ isActive }) => <div className="flex items-center justify-center"><FaCog className={`text-default text-sm ${isActive ? 'rotate-90' : ''}`} /></div>}
             >
 
                 {
