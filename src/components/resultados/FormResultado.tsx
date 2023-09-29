@@ -171,7 +171,10 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Progreso</p>
                 <Popover content={content} title={ <p className='text-devarana-graph'>Tipo de Progreso</p> } trigger="click"  className='w-full cursor-pointer'>
                     <Progress
-                        className='drop-shadow progressStyle w-[150px]' strokeWidth={15} percent={Number(resultado.progreso.toFixed(2))}
+                        style={{
+                            width: '150px'
+                        }}
+                        className='drop-shadow progressStyle' strokeWidth={15} percent={Number(resultado.progreso.toFixed(2))}
                         strokeColor={{
                             '0%': getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').lowColor,
                             '100%': getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').color,
