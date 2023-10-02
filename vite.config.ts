@@ -48,6 +48,7 @@ export default defineConfig({
                 "react-chartjs-2": ["react-chartjs-2"],
                 "dompurify": ["dompurify"],
                 "chart.js": ["chart.js"],
+                "react-gauge-chart": ["react-gauge-chart"],
             },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {

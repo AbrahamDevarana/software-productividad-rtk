@@ -48,6 +48,10 @@ const operativoSlice = createSlice({
         clearObjetivo: (state) => {
             state.currentOperativo = initialState.currentOperativo
         },
+        clearObjetivos: (state) => {
+            state.operativos = initialState.operativos
+            state.operativosUsuario = initialState.operativosUsuario
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getOperativosThunk.pending, (state) => {
@@ -125,6 +129,6 @@ const operativoSlice = createSlice({
     }
 })
 
-export const { clearObjetivo } = operativoSlice.actions
+export const { clearObjetivo, clearObjetivos } = operativoSlice.actions
 
 export default operativoSlice.reducer

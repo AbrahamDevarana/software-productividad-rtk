@@ -455,12 +455,11 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 
             </Form>
 
-                {/* <button onClick={showDeleteConfirm} className='bg-red-500 py-1 px-2 rounded-l-full flex items-center gap-x-2 right-0 absolute top-10 transition-all duration-500 translate-x-[58px] hover:translate-x-0'>
-                    
-                    <span className='text-white'>Eliminar</span> 
-                </button> */}
-            {/* <Button onClick={()=>handleView(currentEstrategico.id)} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-10 hover:opacity-80' icon={<Icon iconName='faArrowLeft' className='text-white' />} />  */}
-            <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-sm'/> } /> 
+            {
+                hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) ?
+                <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-sm'/> } /> 
+                : null
+            }
 
 
         </>

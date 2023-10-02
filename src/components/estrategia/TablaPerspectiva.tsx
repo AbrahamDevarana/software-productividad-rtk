@@ -175,6 +175,7 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
+                            hasGroupPermission(['ver estrategias'], permisos) &&
                             handleShowEstrategia(record.id)                            
                         }
                     }}

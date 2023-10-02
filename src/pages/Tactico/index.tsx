@@ -11,6 +11,7 @@ import { Button } from '@/components/ui';
 import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
 import Estrategia from './Estrategia';
+import Core from './Core';
 
 export const Tactico: React.FC = () => {
 
@@ -46,7 +47,7 @@ export const Tactico: React.FC = () => {
                     <Segmented block
                         options={[
                             {label: 'Tácticos Estrategicos', value: 'listado'},
-                            {label: 'Tácticos Core', value: 'gantt'},
+                            {label: 'Tácticos Core', value: 'core'},
                             {label: 'Tácticos por Equipos', value: 'equipos'},
                         ]}
                         value={segmented}
@@ -107,7 +108,7 @@ export const Tactico: React.FC = () => {
                 segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
             }
             {
-                segmented === 'gantt' && (<Prox avance={87} />)
+                segmented === 'core' && ( <Core handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} setShowDrawer={setShowDrawer} />)
             }
             
 

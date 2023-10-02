@@ -311,7 +311,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         classColor='primary' 
                         classType='regular' 
                         type='submit' 
-                        width={150} 
+                        width={250} 
                         className='btn-primary'
                     >Guardar y Ponderar</Button>
                 </div>

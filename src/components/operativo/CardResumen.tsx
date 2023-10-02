@@ -8,6 +8,7 @@ import CountUp from 'react-countup';
 import { useState } from 'react'
 import { FormPonderacion } from './FormPonderacion'
 import { periodoTypes } from '@/types'
+import { Button } from '../ui'
 
 
 interface Props {
@@ -41,25 +42,25 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			<div className='font-light flex justify-between'>
 				<p>Mis Objetivos: </p> <CountUp end={misObjetivosCount} separator="," />
 			</div>
-			<Divider className='my-2' dashed />
+			<Divider className='my-3' dashed />
 			<div className='font-light flex justify-between'>
 				<p>Objetivos Compartidos: </p> <CountUp end={objetivosCompartidosCount} separator="," />
 			</div>
-			<Divider className='my-2' dashed />
+			<Divider className='my-3' dashed />
 			<div className='font-light flex justify-between'>
 				<p>Resultados Clave: </p> <CountUp end={resultadosClaveCount} separator="," />
 			</div>
-			<Divider className='my-2' dashed />
+			<Divider className='my-3' dashed />
 			<div className='font-light flex justify-between'>
 				<p>Acciones: </p> <CountUp end={accionesCount} separator="," />
 			</div>
-			<Divider className='my-2' dashed />
+			<Divider className='my-3' dashed />
 			
-			<div className='flex justify-between'>
+			<div className='flex justify-between items-center'>
 				<p> { periodoTypes.EN_CURSO } </p>
-				<p className='cursor-pointer text-primary' onClick={ () => setPonderacionVisible(true)}>
+				<button className='bg-gradient-to-tr from-dark to-dark-light px-2 py-1 text-white rounded-ext font-light' onClick={ () => setPonderacionVisible(true)}>
 					Asignar Ponderación
-				</p>
+				</button>
 			</div>
 
 			<Modal

@@ -69,9 +69,6 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
         
     }
 
-    console.log(usuarioActivo.configuracion?.portadaPerfil);
-    
-
     return ( 
         <>
 
@@ -127,7 +124,11 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                         />
                     </div>
                     <div className="my-auto px-5 text-center md:text-left">
-                        <p className="text-devarana-dark-graph lg:text-lg font-bold">{`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno}`} </p>
+                        <p className="text-devarana-dark-graph lg:text-lg font-bold">{`
+                            ${usuarioActivo.nombre ? usuarioActivo.nombre : ''}
+                            ${usuarioActivo.apellidoPaterno ? usuarioActivo.apellidoPaterno : ''}
+                            ${usuarioActivo.apellidoMaterno ? usuarioActivo.apellidoMaterno : ''}
+                        `}</p>
                         <p className="lg:text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
                     </div>
                     

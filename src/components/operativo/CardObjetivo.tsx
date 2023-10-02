@@ -87,13 +87,12 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                 <span> Ver </span> 
                             </Link>
                           {
-                            ( usuarioPropietaro?.id === userAuth?.id ) && ( statusObjetivo === 'APROBADO' || statusObjetivo === 'CANCELADO' ) && (
+                            ( usuarioPropietaro?.id === userAuth?.id && statusObjetivo !== 'APROBADO' ) && (
                                 <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
                                     <Icon iconName='faEdit'/>
                                     <span> Editar </span>
                                 </Space>
                             )
-                                
                           }
                         </div>
 

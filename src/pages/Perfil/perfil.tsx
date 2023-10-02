@@ -91,7 +91,11 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <div>
                     <p className="font-medium py-2 text-devarana-dark-graph">
                         Nombre: 
-                        <span className="font-light text-devarana-graph"> {`${usuarioActivo.nombre} ${usuarioActivo.apellidoPaterno} ${usuarioActivo.apellidoMaterno} ` } </span>
+                        <span className="font-light text-devarana-graph"> 
+                            { usuarioActivo.nombre && ` ${usuarioActivo.nombre}` }
+                            { usuarioActivo.apellidoPaterno && ` ${usuarioActivo.apellidoPaterno}` }
+                            { usuarioActivo.apellidoMaterno && ` ${usuarioActivo.apellidoMaterno}` }
+                        </span>
                     </p>
                 </div>
                 <div>

@@ -24,11 +24,11 @@ const Perfil: React.FC = () => {
     useEffect(() => {
         if(id){
             setVisitante(true)
-            dispatch(getProfileThunk(id))
+            dispatch(getProfileThunk({userId: id, year, quarter}))
         }else{
             setVisitante(false)
             if(userAuth){   
-                dispatch(getProfileThunk(userAuth.id))
+                dispatch(getProfileThunk({userId: userAuth.id, year, quarter}))
             }
         }
         

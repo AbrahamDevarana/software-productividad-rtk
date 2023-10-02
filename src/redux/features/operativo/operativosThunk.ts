@@ -1,7 +1,7 @@
 import { clientAxios } from '@/config/axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '@/redux/store';
-import { clearObjetivo, } from './operativosSlice';
+import { clearObjetivo, clearObjetivos } from './operativosSlice';
 import { OperativoProps } from '@/interfaces';
 
 
@@ -143,5 +143,9 @@ export const setPonderacionesThunk = createAsyncThunk(
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearObjetivo())
+}
+
+export const clearOperativosThunk = () => async (dispatch: AppDispatch) => {
+    dispatch(clearObjetivos())
 }
 

@@ -1,12 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { getColor, getStatus, getStorageUrl } from '@/helpers';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
+
+import { hasGroupPermission } from '@/helpers/hasPermission';
+
 
 interface TablaTacticosProps {
     tacticos: TacticoProps[]
@@ -18,6 +21,7 @@ interface TablaTacticosProps {
 
 export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = false, setShowDrawer, isLoading}:TablaTacticosProps) => {
 
+    const { permisos } = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()    
         
     const [columns, setColumns] = useState<ColumnsType<TacticoProps>>([
@@ -25,7 +29,13 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             title: () => ( 
                 <div className='flex gap-3 items-center relative'>
                     <p className='tableTitlePrincipal'>Objetivo</p>
-                    <button onClick={(e) => handleCreateTactico(e, isEstrategico)} className={`z-50 p-1 text-white rounded-full bg-primary`}> <FaPlus /> </button>
+                    {
+                        hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && (
+                            <Tooltip title='Crear Objetivo Táctico'>
+                                <button onClick={(e) => handleCreateTactico(e, isEstrategico)} className={`z-50 p-1 text-white rounded-full bg-primary`}> <FaPlus /> </button>
+                            </Tooltip>
+                        )
+                    }
                     
                 </div>
             ),
@@ -167,7 +177,9 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {
-                            handleShowTactico(record)
+                            hasGroupPermission(['ver tacticos'], permisos) && (
+                                handleShowTactico(record)
+                            )
                         }
                     }}
                 }

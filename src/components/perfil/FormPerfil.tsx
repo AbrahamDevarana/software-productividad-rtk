@@ -25,7 +25,7 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
         }
         
         await dispatch(updateProfileThunk(query)).unwrap().then(() => {
-            messageApi.success('Perfil actualizado')
+            messageApi.success('Perfil actualizado correctamente')
         }).catch((err) => {
             messageApi.error('Error al actualizar el perfil')
         })
@@ -100,9 +100,8 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
                 rules={[
                     {
                         required: true,
-                        message: 'Por favor ingresa tu número de teléfono a 10 dígitos',
-                        min: 10,
-                        max: 10
+                        pattern: new RegExp(/^[0-9]{10}$/),
+                        message: 'Ingresa un número de teléfono válido'
                     }
                 ]}
                 >

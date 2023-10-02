@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
+import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
+import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -48,7 +48,7 @@ export const Objetivos : React.FC = () => {
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
-            await dispatch(getProfileThunk(id || userAuth?.id))
+            await dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter}))
             await dispatch(getEquipoThunk(userAuth.id))
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
@@ -56,6 +56,11 @@ export const Objetivos : React.FC = () => {
             setGettingProfile(false)
         }
         fetchData()
+
+        return () => {
+            dispatch(clearOperativosThunk())
+            dispatch(clearProfileThunk())
+        }
     }, [userAuth, id, year, quarter])
     
 
@@ -85,7 +90,7 @@ export const Objetivos : React.FC = () => {
                 <Box className='w-[20%] px-5 text-devarana-graph flex flex-col'>
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
                 </Box>
-                <Box className='w-[20%] flex justify-center'>
+                <Box className='w-[20%]'>
                     <CardAvance operativos={operativos} />
                 </Box>
                 <Box className='w-[35%] flex justify-center'>

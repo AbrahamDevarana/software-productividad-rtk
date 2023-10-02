@@ -56,9 +56,9 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 				</div>
 			))}
 		</div>
-			<div className='flex justify-end pt-5 gap-x-5'>
+			<div className='flex justify-between pt-5 gap-x-5'>
 					<Button width={'auto'} classType='regular' classColor='dark' onClick={() => setVisible(true)}>
-						<FaEye/>
+						<FaEye className='mr-2'/> Ver Galería
 					</Button>
 					<Button classType='regular' width={'auto'} classColor='primary' onClick={handleGallery}>
 						<AiFillSave />

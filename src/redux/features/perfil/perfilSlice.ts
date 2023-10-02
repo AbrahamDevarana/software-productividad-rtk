@@ -5,6 +5,7 @@ import { getUsuariosAEvaluarThunk, getColaboradoresThunk, getEquipoThunk, getPro
 
 const initialState: PerfilState = {
     isLoading: false,
+    isUpdating: false,
     isLoadingEvaluation: true,
     isLoadingConfiguration: false,
     error: '',
@@ -112,14 +113,14 @@ const profileSlice = createSlice({
                 state.error = action.error.message
             })
             .addCase(updateProfileThunk.pending, (state) => {
-                state.isLoading = true
+                state.isUpdating = true
             })
             .addCase(updateProfileThunk.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.isUpdating = false
                 state.perfil = action.payload
             })
             .addCase(updateProfileThunk.rejected, (state, action) => {
-                state.isLoading = false
+                state.isUpdating = false
                 state.error = action.error.message
             })
             .addCase(uploadProfilePictureThunk.pending, (state) => {

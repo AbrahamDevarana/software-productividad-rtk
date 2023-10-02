@@ -7,6 +7,7 @@ const initialState: EstrategicosState = {
     estrategicosTacticos: [],
     isLoading: false,
     isLoadingCurrent: false,
+    isLoadingEstrategicosByArea: false,
     infoMessage: '',
     error: false,
     currentEstrategico: {
@@ -133,15 +134,15 @@ const estrategicosSlice = createSlice({
             })
 
             .addCase(getEstrategicosByAreaThunk.pending, (state) => {
-                state.isLoading = true
+                state.isLoadingEstrategicosByArea = true
                 state.error = false
             })
             .addCase(getEstrategicosByAreaThunk.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.isLoadingEstrategicosByArea = false
                 state.estrategicosTacticos = action.payload
             })
             .addCase(getEstrategicosByAreaThunk.rejected, (state) => {
-                state.isLoading = false
+                state.isLoadingEstrategicosByArea = false
                 state.error = true
             })
     }

@@ -12,7 +12,7 @@ import { changeConfigThunk } from "@/redux/features/global/globalThunk";
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-	const { currentConfig: {quarter, year}, periodControls: nextPeriodAvailable } = useAppSelector(state => state.global)
+	const { currentConfig: {quarter, year, currentDate}, periodControls: {prePeriodDefinitionDays} } = useAppSelector(state => state.global)
 
     const dispatch = useAppDispatch()
 
@@ -100,36 +100,32 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 						{
 							isGlobal() ? (
 								<DatePicker
-								picker={ isGlobal() ? 'year' : 'quarter' }
-								value={ dayjs().quarter(quarter).year(year) }
-								onChange={handleChangeDate}
-								disabledDate={(current) => {
-									const currentYear = dayjs().year();
-									const nextYear = currentYear + 1;
+									picker={ isGlobal() ? 'year' : 'quarter' }
+									value={ dayjs().quarter(quarter).year(year) }
+									onChange={handleChangeDate}
+									disabledDate={(current) => {
+										const year = dayjs(currentDate).year();
+
+										if(current < dayjs(currentDate)){
+											// mostrar todos los trimestres hasta el 2023
+											return current && current.year() < year;
+										}
+										
+										// Mostrar el próximo trimestre si está dentro de prePeriodDefinitionDays días
+										if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
+											return current && current.year() > year;
+										}
+										
+										return false;
+									}}
+									clearIcon={false} 
+									size='small' 
+									style={{
+										width: '75px',
+									}}
 								
-									// Deshabilitar años anteriores a 2021 y años posteriores al próximo año
-									if (current.year() < 2021 || current.year() > nextYear) {
-									return true;
-									}
-								
-									// Habilitar fechas dentro del próximo año si falta más de 1 mes
-									if (current.year() === nextYear) {
-									const nextYearStart = dayjs().add(1, 'year').startOf('year');
-									const dateAhead = dayjs().add(nextPeriodAvailable.prePeriodDefinitionDays, 'days');
-									return current.isBefore(nextYearStart) || current.isAfter(dateAhead);
-									}
-								
-									return false;
-								}}
-								clearIcon={false} 
-								size='small' 
-								style={{
-									width: '75px',
-								}}
-								
-							/> )
-							:
-							( 
+							/> ) 
+							:  ( 
 								<DatePicker 
 									onChange={handleChangeDate} 
 									value={ dayjs().quarter(quarter).year(year) } 
@@ -140,16 +136,22 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 									style={{
 										width: '100px',
 									}}
-									disabledDate = { current => { // Establece un límite inferior (2021)
-										const lowerLimit = dayjs('2021-01-01');
-										// Calcula el límite superior basado en X días antes del próximo quarter
-										let upperLimit = dayjs().endOf('quarter').add(1, 'day'); // Inicio del próximo quarter
-										const X = 15; // Define cuántos días antes del próximo quarter quieres habilitar la selección
-										if (dayjs().isSameOrBefore(upperLimit.subtract(X, 'day'))) {
-										  upperLimit = dayjs().startOf('quarter');
+									disabledDate = { current => { 
+
+										// Obtener el quarter de currentDate
+										const year = dayjs(currentDate).year();
+
+										if(current < dayjs(currentDate)){
+											// mostrar todos los trimestres hasta el 2023
+											return current && current.year() < year;
 										}
-									  
-										return current.isBefore(lowerLimit) || current.isAfter(upperLimit);
+										
+										// Mostrar el próximo trimestre si está dentro de prePeriodDefinitionDays días
+										if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
+											return current && current.year() > year;
+										}
+										
+										return false;
 									}}
 								/>
 							)

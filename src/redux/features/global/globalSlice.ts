@@ -10,12 +10,12 @@ const initialState: GlobalState = {
         currentDate: dayjs().format('YYYY-MM-DD')
     },
     periodControls: {
-        prePeriodDefinitionDays: 5,
-        postPeriodDefinitionDays: 5,
-        preClosureDays: 5, 
-        postClosureDays: 5,
-        preEvaluationDays: 5, 
-        postEvaluationDays: 5
+        prePeriodDefinitionDays: 15,
+        postPeriodDefinitionDays: 15,
+        preClosureDays: 15, 
+        postClosureDays: 15,
+        preEvaluationDays: 15, 
+        postEvaluationDays: 15
     }
 }
 

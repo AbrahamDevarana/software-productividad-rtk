@@ -9,6 +9,7 @@ export interface EstrategicosState {
     estrategicosTacticos: EstrategicoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
+    isLoadingEstrategicosByArea: boolean;
     error:        boolean;
     infoMessage:  string;
     currentEstrategico: EstrategicoProps;

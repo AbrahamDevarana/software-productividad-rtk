@@ -18,6 +18,7 @@ export interface PerfilState{
     isLoadingEvaluation: boolean;
     isLoadingConfiguration: boolean;
     isLoading: boolean;
+    isUpdating: boolean;
     error: unknown;
     perfil: PerfilProps;
 

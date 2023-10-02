@@ -19,7 +19,6 @@ import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
 import { DefaultOptionType } from 'antd/es/select';
 
-
 interface FormTacticoProps {
     handleCloseDrawer: () => void
     year: number
@@ -376,6 +375,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     onClick={(e) => {
                                         e.preventDefault()
                                         e.stopPropagation()
+                                        hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) &&
                                         handleSelectPerspectiva(perspectiva.id)
                                     }}
                                     key={perspectiva.id} 
@@ -397,7 +397,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 >
                     <Select
                         placeholder="Selecciona el objetivo estratégico"
-                        disabled={optEstrategicos.length === 0}
+                        
+                        disabled={
+                            hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true
+                        }
                         allowClear
                         showSearch
                         onChange={handleOnSubmit}
@@ -422,6 +425,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                         key={index} 
                                         onClick={() => {
                                             if(isLoadingQuarters) return
+                                            hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) &&
                                             handleTrimestre(trimestre)
                                         }}
                                         style={{
@@ -551,8 +555,12 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 >
                 </Tabs>
             </div>
-                    
-        <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-xs'/> } /> 
+
+        {
+            hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && (
+                <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-xs'/> } /> 
+            )
+        } 
         </>
     )
 }

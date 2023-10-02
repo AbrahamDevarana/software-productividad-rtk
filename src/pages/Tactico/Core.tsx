@@ -18,7 +18,7 @@ interface Props {
 }
 
 
-const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
+const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
@@ -42,7 +42,7 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     }, [estrategicosTacticos])
 
     const handleGetTacticos = (objetivo: EstrategicoProps ) => {
-        dispatch(getTacticoFromObjetivoIdThunk({id: objetivo.id, year, slug}))
+        dispatch(getTacticoFromObjetivoIdThunk({id:undefined, year, slug}))
         setActiveEstrategico(objetivo)
     }
     
@@ -54,20 +54,7 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                     <div className="flex flex-col gap-x-5 gap-y-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
                         <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
-                            {
-                                estrategicosTacticos?.map(objetivo => (
-                                    <div key={objetivo.id}
-                                        onClick={() => handleGetTacticos(objetivo)} 
-                                        className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer relative`}
-                                        style={{
-                                 
-                                        }}
-                                    >
-                                            <p className="font-medium text-devarana-graph"> {objetivo.codigo} </p>
-                                        </div>
-                                ))
-                                
-                            }
+                            
                         </div>
                     </div>    
                     <div className="w-full flex flex-col gap-y-5 align-middle">
@@ -76,13 +63,13 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                             <Box className="flex" style={{
                                     backgroundColor: activeEstrategico?.perspectivas?.color ,
                             }}>
-                                <div className='flex items-center'>
+                                {/* <div className='flex items-center'>
                                     <p className="text-white text-opacity-80 drop-shadow text-3xl">{activeEstrategico?.codigo}</p>
-                                </div>
-                                <Divider type='vertical' className='mx-2 h-full bg-white bg-opacity-70 shadow' />
+                                </div> */}
+                                {/* <Divider type='vertical' className='mx-2 h-full bg-white bg-opacity-70 shadow' /> */}
                                 <div>
-                                    <h1 className="text-white font-medium">{activeEstrategico?.nombre}</h1>
-                                    <p className="text-white text-opacity-80 drop-shadow">{activeEstrategico?.perspectivas.nombre}</p>
+                                    <h1 className="text-white font-medium">Objetivos Tácticos Core</h1>
+                                    <p className="text-white text-opacity-80 drop-shadow"> Objetivos anuales de las áreas que contribuyen directamente al cumplimiento de la Estrategía </p>
                                 </div>
                             </Box>
                         }
@@ -106,4 +93,4 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     );
 }
  
-export default Estrategia;
+export default Core;

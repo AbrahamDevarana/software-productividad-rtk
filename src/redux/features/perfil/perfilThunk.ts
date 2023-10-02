@@ -23,11 +23,15 @@ interface Respuesta {
 
 export const getProfileThunk = createAsyncThunk(
     'profile/getProfile',
-    async (userId: string, {rejectWithValue, getState}) => {
+    async ({userId, year, quarter}:{userId: string, year: number, quarter: number}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
-                headers: { "accessToken": `${accessToken}` }
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year,
+                    quarter
+                }
             }
             const response = await clientAxios.get<Props>(`/perfiles/${userId}`, config);
                     
