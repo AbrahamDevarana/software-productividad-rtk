@@ -22,10 +22,10 @@ import { PopoverEstado } from "./PopoverEstado";
 
 interface Props {
     currentOperativo: OperativoProps,
-    setVisible: (visible: boolean) => void
+    statusObjetivo: any
 }
 
-export default function ListadoResultados({ currentOperativo, setVisible }: Props) {
+export default function ListadoResultados({ currentOperativo, statusObjetivo }: Props) {
 
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
@@ -324,7 +324,7 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                         <Panel
                             key={index}
                             header={genHeader(resultado) }
-                            className="customResultadosPanel cursor-default"
+                            className="customResultadosPanel"
                             collapsible="icon"
                             
                         >
@@ -340,13 +340,6 @@ export default function ListadoResultados({ currentOperativo, setVisible }: Prop
                                 footer={() => footerComponent(resultado)}
                                 rowClassName={ (record, index) => {
                                     return 'group'
-                                }}
-                                onRow={(record: any, index: any) => {
-                                    return {
-                                        onClick: () => {
-                                            setVisible(true)
-                                        }
-                                    }
                                 }}
                             />
                         </Panel>

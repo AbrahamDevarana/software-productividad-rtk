@@ -2,9 +2,11 @@ import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { OperativoProps } from '@/interfaces'
 import { objetivosTypes } from '@/types'
-import { Avatar, Image, Tooltip } from 'antd'
-import React, { useMemo } from 'react'
+import { Avatar, Image, Modal, Tooltip } from 'antd'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ObjetivoPreview from './ObjetivoPreview'
+import { FaEye } from 'react-icons/fa'
 
 interface Props {
     objetivo: OperativoProps
@@ -13,6 +15,14 @@ interface Props {
 
 export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
 
+    const [ isModalObjetivoVisible, setIsModalObjetivoVisible ] = useState(false)
+    const handleOpenModaObjetivo = () => {
+        setIsModalObjetivoVisible(true)
+    }
+
+    const handleCloseModalObjetivo = () => {
+        setIsModalObjetivoVisible(false)
+    }
 
     const orderedResponsables = useMemo(() => {
         const responsables = objetivo.operativosResponsable
@@ -54,9 +64,33 @@ export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
                             }
                         </p>
                     </div>
+                    <div className='flex justify-center gap-x-10'>
+                            <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
+                                <FaEye className='mr-2 text-devarana-graph' />
+                            </button>
+                    </div>        
                 </div>
 
             </div>
+
+            <Modal
+				title='Objetivo View 1'
+				open={isModalObjetivoVisible}
+				onCancel={handleCloseModalObjetivo}
+				destroyOnClose={true}
+				footer={null}
+				width={window.innerWidth > 1200 ? 'CALC(95% - 90px)' : '100%' }
+				style={{
+					top: 60,
+					left: 35,
+					bottom: 0,
+					height: 'calc(100% - 100px)',
+					overflowY: 'hidden',
+					borderRadius: '10px'
+				}}
+			>
+				<ObjetivoPreview objetivo={objetivo} />
+			</Modal>
         </>
     )
     }

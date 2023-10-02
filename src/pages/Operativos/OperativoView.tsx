@@ -57,7 +57,7 @@ export const OperativoView = () => {
         }
     }, [id])
 
-    const {orderedResponsables, usuarioPropietaro, progresoReal} = useOperativo({objetivo: currentOperativo})    
+    const {orderedResponsables, statusObjetivo, progresoReal} = useOperativo({objetivo: currentOperativo})    
     
     if(isLoadingObjetivo) return <Loading />
     
@@ -114,7 +114,7 @@ export const OperativoView = () => {
                             {
                                 value === 'listado' && (
                                     <div>
-                                        <ListadoResultados currentOperativo={currentOperativo} setVisible={ () => {} } />
+                                        <ListadoResultados currentOperativo={currentOperativo} statusObjetivo={statusObjetivo} />
                                     </div>
                                 )
                             }

@@ -59,6 +59,7 @@ export const useOperativo = ({objetivo}: Props) => {
         return usuario
     }, [objetivo])
 
+    
     return {
         progresoAsignado,
         progresoReal,

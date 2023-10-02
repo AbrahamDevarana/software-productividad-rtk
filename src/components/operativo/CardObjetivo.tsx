@@ -29,23 +29,13 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
         dispatch(getOperativoThunk(id))
         setFormVisible(true)
     }
-    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro} = useOperativo({objetivo})
+    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro, statusObjetivo} = useOperativo({objetivo})
+
+
 
 
     return (
         <div className='md:col-span-4 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
-            {/* <Segmented
-                options={[
-                    { label: 'Objetivo', value: 'objetivo' },
-                    { label: 'Historial', value: 'historial' },
-                ]}
-                block
-                value={setCardSegmented}
-                onChange={(value) => setCardSegmentedValue(value)}
-                size='small'
-                
-                
-            /> */}
             {
                 setCardSegmented === 'objetivo' && 
                 (
@@ -97,7 +87,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                 <span> Ver </span> 
                             </Link>
                           {
-                            ( usuarioPropietaro?.id === userAuth?.id ) && (
+                            ( usuarioPropietaro?.id === userAuth?.id ) && ( statusObjetivo === 'APROBADO' || statusObjetivo === 'CANCELADO' ) && (
                                 <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
                                     <Icon iconName='faEdit'/>
                                     <span> Editar </span>

@@ -7,7 +7,7 @@ import getBrokenUser from '@/helpers/getBrokenUser'
 import { FaArrowRight, FaEquals } from 'react-icons/fa'
 import { getOperativosUsuarioThunk } from '@/redux/features/operativo/operativosThunk'
 import { CardObjetivo } from '../CardObjetivo'
-import { CardObjetivoSimple } from '../CardObjetivoSimple'
+import { CardObjetivoSimple } from './CardObjetivoSimple'
 
 interface Props {
 	activeUsuario: SinglePerfilProps
@@ -18,7 +18,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 	const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
 	const { operativosUsuario, isLoadingOperativosUsuario } = useAppSelector(state => state.operativos)
-	const [ isModalObjetivoVisible, setIsModalObjetivoVisible ] = useState(true)
+
 
 
 
@@ -28,6 +28,9 @@ export const Administracion = ({activeUsuario}:Props) => {
 		if(!activeUsuario) return
 		dispatch(getOperativosUsuarioThunk({usuarioId: activeUsuario.id, year, quarter}))
 	}, [activeUsuario,])
+
+
+
 
 	return (
 		<>
@@ -101,25 +104,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 				</div>
 			</div>
 
-			<Modal
-				title='Objetivo View 1'
-				open={!isModalObjetivoVisible}
-				onCancel={() => setIsModalObjetivoVisible(false)}
-				destroyOnClose={true}
-				footer={null}
-				width={window.innerWidth > 1200 ? 'CALC(95% - 90px)' : '100%' }
-				style={{
-					top: 60,
-					left: 35,
-					bottom: 0,
-					height: 'calc(100% - 100px)',
-					overflowY: 'hidden',
-					borderRadius: '10px'
-				}}
-			>
-				<div className='grid grid-cols-12 gap-10'>
-				</div>
-			</Modal>
+			
 		</>
 	)
 }
