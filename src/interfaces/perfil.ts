@@ -76,8 +76,21 @@ export interface PerfilProps extends SinglePerfilProps {
         evaluacion: EvaluacionesProps
         resultados: number;
     }
+    rendimiento: Rendimiento;
 }
 
+export interface Rendimiento {
+
+    id: string;
+    year?: number;
+    quarter?: number;
+    usuarioId: string;
+    resultadoObjetivos: number;
+    resultadoCompetencias: number;
+    resultadoFinal: number;
+    extra: number;
+    status: string;
+}
 
 
 export interface Social {

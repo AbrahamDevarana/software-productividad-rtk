@@ -40,9 +40,7 @@ const baseQueryWithReauth:BaseQueryFn <string | FetchArgs, unknown, FetchBaseQue
                 return baseQuery(args, api, extraOptions);
             }
         }else{
-
-            console.log('result.data', result.data);
-            
+        
             const { accessToken, usuario }  = result.data as IAuthProps;
             if( accessToken ) localStorage.setItem('accessToken', accessToken);
             if( accessToken ) {

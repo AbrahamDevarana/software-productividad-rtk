@@ -32,6 +32,15 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
     const { isLoading, resultadosClave, isCreatingResultado, isCreatedResultado} = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
 
+    
+    const isClosed = useMemo(() => {
+        if (statusObjetivo) {
+            return statusObjetivo.status === 'CERRADO'
+        }
+        return false
+    }, [statusObjetivo])
+    
+
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
     }, [])

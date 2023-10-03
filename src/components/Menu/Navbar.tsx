@@ -76,8 +76,10 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
 	const isGlobal = () => {
 		const currentRoute = window.location.pathname;
-		
-		if(currentRoute.includes('/objetivos')) {
+
+		const urls = ['/perfil', '/objetivos'];
+
+		if(urls.includes(currentRoute)) {
 			return false;
 		} else {
 			return true;
@@ -138,15 +140,20 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 									}}
 									disabledDate = { current => { 
 
+										// Obtener el segundo quarter del 2023
+										const secondQuarter = dayjs().quarter(3).year(2023);
+
+										// SI la fecha actual es mayor o igual al segundo quarter del 2023, entonces no mostrar el picker
+										if(current < secondQuarter){
+											return true;
+										}
+
 										// Obtener el quarter de currentDate
 										const year = dayjs(currentDate).year();
 
 										if(current < dayjs(currentDate)){
-											// mostrar todos los trimestres hasta el 2023
-											return current && current.year() < year;
+											return current && current.year() < 2023;
 										}
-										
-										// Mostrar el próximo trimestre si está dentro de prePeriodDefinitionDays días
 										if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
 											return current && current.year() > year;
 										}

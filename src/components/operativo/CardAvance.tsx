@@ -20,7 +20,8 @@ export const CardAvance = ( { operativos }: Props ) => {
     const { periodControls: { preEvaluationDays, postClosureDays}, currentConfig: { currentDate, quarter, year } } = useAppSelector(state => state.global)
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({operativos})
-    const {perfil: { evaluaciones: {resultados}}} = useAppSelector(state => state.profile)
+    const {perfil: { evaluaciones: {resultados}, rendimiento}} = useAppSelector(state => state.profile)
+
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
 
     const dispatch = useAppDispatch()
@@ -65,12 +66,14 @@ export const CardAvance = ( { operativos }: Props ) => {
 
     const calculoAvance = useMemo(() => {
         
+        const {resultadoCompetencias, resultadoObjetivos}  = rendimiento
         // PonderacionObjetivos equivale al 90% del total
-        const totalObjetivos = ponderacionObjetivos * 90 / 100
-        const subTotalResultados = resultados * 100 / 5
-        const totalResultados = subTotalResultados * 10 / 100
+        // const totalObjetivos = ponderacionObjetivos * 90 / 100
+        // const subTotalResultados = resultados * 100 / 5
+        // const totalResultados = subTotalResultados * 10 / 100
                   
-        const total = totalObjetivos + totalResultados
+        const total = resultadoCompetencias + resultadoObjetivos
+        // const total = totalObjetivos + totalResultados
 
         return total
 
@@ -95,9 +98,7 @@ export const CardAvance = ( { operativos }: Props ) => {
 
         let puntuacion = 0;
         for (let rango in rangos) {
-            if (calculoAvance >= parseInt(rango)) {
-                console.log(rango);
-                
+            if (calculoAvance >= parseInt(rango)) {                
                 puntuacion = rangos[rango];
             } else {
                 break;

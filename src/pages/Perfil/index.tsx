@@ -41,7 +41,7 @@ const Perfil: React.FC = () => {
         return () => {
             dispatch(clearProfileThunk())
         }
-    }, [id])    
+    }, [id, year, quarter])    
     
 
     

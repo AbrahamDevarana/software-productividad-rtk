@@ -276,7 +276,24 @@ export const updatePortraitThunk = createAsyncThunk(
     }
 )
 
-
+export const getRendimientoThunk = createAsyncThunk(
+    'profile/getRendimiento',
+    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const response = await clientAxios.get(`/rendimiento/${usuarioId}`, {
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year,
+                    quarter
+                }
+            });
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 
 export const clearProfileThunk = () => {

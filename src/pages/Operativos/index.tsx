@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
+import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk, getRendimientoThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -54,6 +54,7 @@ export const Objetivos : React.FC = () => {
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch (getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
+            await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             setGettingProfile(false)
         }
         fetchData()
