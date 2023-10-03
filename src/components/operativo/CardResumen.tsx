@@ -71,7 +71,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
                 destroyOnClose={true}
                 onCancel={handleCancelPonderacion}
             >
-                <FormPonderacion operativos={operativos} />
+                <FormPonderacion operativos={operativos} handleCancelPonderacion={handleCancelPonderacion} />
             </Modal>
 
 			

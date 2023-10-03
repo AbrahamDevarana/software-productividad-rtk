@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { createOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -20,22 +20,7 @@ const initialState: OperativoState = {
         tacticoId: '',
         resultadosClave: [],
         propietarioId: '',
-        operativosResponsable: [{
-            nombre: '',
-            apellidoPaterno: '',
-            departamentos: [],
-            id: '',
-            email: '',
-            iniciales: '',
-            scoreCard: {
-                progresoAsignado: 0,
-                progresoReal: 0,
-                extra: 0,
-                progresoFinal: 0,
-                propietario: false,
-                status: 'ABIERTO'
-            },
-        }],
+        operativosResponsable: [],
         indicador: '',
         meta: '',
     }
@@ -97,6 +82,15 @@ const operativoSlice = createSlice({
         })
         .addCase(updateOperativoThunk.rejected, (state) => {
             state.isLoadingObjetivo = false
+        })
+        .addCase(deleteOperativoThunk.pending, (state) => {
+                
+        })
+        .addCase(deleteOperativoThunk.fulfilled, (state, { payload }) => {
+            state.operativos = state.operativos.filter(operativo => operativo.id !== payload)
+        })
+        .addCase(deleteOperativoThunk.rejected, (state) => {
+            
         })
         .addCase(setPonderacionesThunk.pending, (state) => {
             

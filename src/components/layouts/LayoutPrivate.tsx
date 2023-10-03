@@ -1,10 +1,9 @@
-import Loading from "../antd/Loading";
+
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
-import 'animate.css';
 import { SecondNav } from '../Menu/SecondNav';
 import { useSocket } from "@/hooks/useSocket";
 import { connectSocketThunk, disconnectSocketThunk } from '@/redux/features/socket/socketThunk';

@@ -95,7 +95,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                 <div className='flex gap-x-1 justify-end'> 
                     {
                         [0, 1, 2, 3].map((index) => {
-                            const trimestre = record.trimestres.find((t, tIndex) => tIndex === index);
+                            const trimestre = record.trimestres?.find((t, tIndex) => tIndex === index);
                             const pivotExists = trimestre && trimestre.pivot_tactico_trimestre;
                             const isActive = pivotExists ? trimestre.pivot_tactico_trimestre.activo : false;
                             const backgroundColor = isActive ? ( record.estrategico ? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)';

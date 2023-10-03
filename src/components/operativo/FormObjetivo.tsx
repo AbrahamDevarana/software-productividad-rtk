@@ -1,17 +1,19 @@
-import { FC, useEffect, useMemo, useState } from 'react'
-import { OperativoProps, TacticoProps } from '@/interfaces'
+import { useEffect, useState } from 'react'
+import {  TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { DatePicker, Divider, Form, Input, Select, Skeleton } from 'antd'
+import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
-import { createOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
+import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
 import { Button } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'
 import { BsFillCalendarFill } from 'react-icons/bs'
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk'
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk'
 import { DefaultOptionType } from 'antd/es/select'
+import { useOperativo } from '@/hooks/useOperativo'
+import { FaTrash } from 'react-icons/fa'
 
 interface Props {
     handleCancel: () => void
@@ -65,6 +67,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         // handleCancel()
     }
 
+    const { statusObjetivo } = useOperativo({objetivo: currentOperativo})
+
     useEffect(() => {
         setFilteredObjetivosTacticos(tacticosGeneral)
   }, [tacticosGeneral])
@@ -83,11 +87,14 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         form.setFieldValue('estrategicoId', null)
         form.setFieldValue('tacticoId', null)
 
+
         if( value === null ) {
             handleClear()
         } else {
             setFilteredEstrategicos(estrategicos.filter((estrategico) => estrategico.perspectivaId === value))
-            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategico.perspectivaId === value))
+            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategico?.perspectivaId === value))
+
+            
         }
 
        
@@ -107,14 +114,20 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         setFilteredObjetivosTacticos(tacticosGeneral)
     }
 
-    
+    const handleDeleteObjetivo = () => {
+        dispatch(deleteOperativoThunk(currentOperativo.id))
+        handleCancel()
+    }
 
+
+    
+    
     return (
         <>
             <Form 
                 onFinish={handleOnSubmit}
                 layout='vertical' 
-                className='grid grid-cols-12 md:gap-x-10'
+                className='grid grid-cols-12 md:gap-x-10 editableForm'
                 initialValues={{
                     ...currentOperativo,
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
@@ -132,25 +145,11 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     name="nombre"
                     className='col-span-12'
                     rules={[{ required: true, message: 'Por favor ingresa el nombre del objetivo' }]}
+                    
                 >
-                    <Input placeholder='Nombre del objetivo' bordered={false} />
+                    <Input placeholder='Nombre del objetivo' className='text-2xl' bordered={false} />
                 </Form.Item>
-                <Form.Item
-                    label="Meta"
-                    name="meta"
-                    className='col-span-12'
-                    rules={[{ required: true, message: 'Por favor ingresa la meta del objetivo' }]}
-                >
-                    <TextArea name="meta" className='bg-[#F9F9F7]' bordered={false}/>
-                </Form.Item>
-                <Form.Item
-                    label="Indicador"
-                    name="indicador"
-                    className='col-span-12'
-                    rules={[{ required: true, message: 'Por favor ingresa el indicador del objetivo' }]}
-                >
-                    <TextArea name="indicador" className='bg-[#F9F9F7]' bordered={false}/>
-                </Form.Item>
+               
                 <Form.Item
                     label="Fecha Inicio"
                     className='col-span-6'
@@ -237,6 +236,23 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     </Select>
                 </Form.Item>
 
+                <Form.Item
+                    label="Meta"
+                    name="meta"
+                    className='col-span-12'
+                    rules={[{ required: true, message: 'Por favor ingresa la meta del objetivo' }]}
+                >
+                    <TextArea name="meta" className='bg-[#F9F9F7]' bordered={false}/>
+                </Form.Item>
+                <Form.Item
+                    label="Indicador"
+                    name="indicador"
+                    className='col-span-12'
+                    rules={[{ required: true, message: 'Por favor ingresa el indicador del objetivo' }]}
+                >
+                    <TextArea name="indicador" className='bg-[#F9F9F7]' bordered={false}/>
+                </Form.Item>
+
                 <Divider className='col-span-12' />
 
                 <Form.Item
@@ -306,7 +322,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     
                 </Form.Item>
                 
-                <div className='flex justify-end col-span-12'>
+                <div className='flex col-span-12 justify-end'>
                     <Button 
                         classColor='primary' 
                         classType='regular' 
@@ -315,7 +331,22 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         className='btn-primary'
                     >Guardar y Ponderar</Button>
                 </div>
-            </Form>        
+            </Form>   
+            {
+                currentOperativo.id !== '' && statusObjetivo !== 'APROBADO' && (
+                    <Popconfirm
+                        title="¿Estás seguro de eliminar este objetivo?"
+                        onConfirm={handleDeleteObjetivo}
+                        okText="Si"
+                        cancelText="No"
+                        okButtonProps={{ className: 'bg-red-500 text-white rounded-full px-5 py-2' }}
+                    >
+                        <button type='button' className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80 p-2'>
+                            <FaTrash />
+                        </button>
+                    </Popconfirm>
+                )
+            }     
         </>
     )
 }

@@ -140,6 +140,23 @@ export const setPonderacionesThunk = createAsyncThunk(
     }
 )
 
+export const deleteOperativoThunk = createAsyncThunk(
+    'operativos/deleteObjetivo',
+    async (operativoId: string, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            await clientAxios.delete<Props>(`/operativos/${operativoId}`, config);            
+            return operativoId
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearObjetivo())

@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import Cookies from 'js-cookie';
 import { PermisoProps, userAuthProps } from "@/interfaces";
 
 

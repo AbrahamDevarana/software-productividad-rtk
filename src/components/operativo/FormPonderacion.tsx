@@ -7,6 +7,7 @@
 
 	interface Props {
 	operativos: OperativoProps[];
+	handleCancelPonderacion: () => void;
 	}
 
 	interface ResultItem {
@@ -15,7 +16,10 @@
 		progresoAsignado: number;
 	}
 
-	export const FormPonderacion = ({ operativos }: Props) => {
+	export const FormPonderacion = ({ operativos, handleCancelPonderacion}: Props) => {
+
+
+
 	const { userAuth } = useAppSelector(state => state.auth);
 
 	const dispatch = useAppDispatch();
@@ -63,7 +67,13 @@
 	};
 
 	const handleUpdate = () => {
-		dispatch(setPonderacionesThunk({ ponderaciones, usuarioId: userAuth.id}))
+		dispatch(setPonderacionesThunk({ ponderaciones, usuarioId: userAuth.id})).unwrap().then(() => {
+			message.success({
+				key: 'ponderacion',
+				content: 'Ponderaciones actualizadas correctamente'
+			});
+			handleCancelPonderacion()
+		})
 	};
 
 

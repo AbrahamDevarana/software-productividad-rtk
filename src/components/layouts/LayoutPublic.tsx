@@ -25,9 +25,11 @@ export default function LayoutLogin({ children }: LayoutLoginProps) {
     
     if (isLoading) return <Loading />;
     return (
-        <div className="w-full flex justify-center bg-devarana-midnight bg-login h-screen items-center bg-cover bg-center">
-            { children }
-        </div>
+        // <div className="w-full flex justify-center bg-devarana-midnight bg-login h-screen items-center bg-cover bg-center">
+            <>
+                { children }
+            </>
+        // </div>
     )
     
 };
