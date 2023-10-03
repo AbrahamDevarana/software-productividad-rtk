@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loading from "@/components/antd/Loading";
 import { getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
+import { setCurrentConfig } from "@/helpers";
 
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -21,6 +22,8 @@ const Perfil: React.FC = () => {
 
     const [ visitante, setVisitante ] = useState(false)
 
+
+    setCurrentConfig()
     useEffect(() => {
         if(id){
             setVisitante(true)

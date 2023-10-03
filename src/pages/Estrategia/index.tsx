@@ -8,7 +8,8 @@ import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
 import { FaPlus } from 'react-icons/fa';
 import { Icon } from '@/components/Icon';
-import { getStorageUrl } from '@/helpers';
+import { getStorageUrl, setCurrentConfig } from '@/helpers';
+import { changeConfigThunk } from '@/redux/features/global/globalThunk';
 
 
 export const EstrategiaHome: React.FC = () => {
@@ -34,9 +35,13 @@ export const EstrategiaHome: React.FC = () => {
         }
     ]
 
+    setCurrentConfig()
+
     useEffect(() => {
         dispatch(getPerspectivasThunk({year}));
+        
     }, [year]);
+
 
     if(isLoading) return <Loading />    
 

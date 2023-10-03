@@ -17,7 +17,7 @@ export const useObjetivo = ({operativos}:Props) => {
             operativos.forEach(operativo => {
                 operativo.operativosResponsable?.map(responsable => {
                     if( responsable.id === userAuth?.id ) {
-                        total += ((responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100) * .90
+                        total += ((responsable.scoreCard?.progresoReal * responsable.scoreCard?.progresoAsignado) / 100)
                     }
                 })
             })

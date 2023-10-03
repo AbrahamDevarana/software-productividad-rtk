@@ -57,12 +57,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         if(isAuthenticated){
             dispatch(getPermisosThunk())
         }
-    }, [isAuthenticated])
-
-    useEffect(() => {
-        dispatch(changeConfigThunk({year: dayjs().year(), quarter: dayjs().quarter()}))
-    }, [])
-            
+    }, [isAuthenticated])            
     
 	const onClose = () => {
 		setSettingVisible(false);

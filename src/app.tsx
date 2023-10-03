@@ -26,9 +26,6 @@ dayjs.extend(isBetween);
 export default function App() {
     const location = useLocation();
 
-    console.log(process.env.NODE_ENV);
-    
-    
     return (
         
         <Provider store={store} >

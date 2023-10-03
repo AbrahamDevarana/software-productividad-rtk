@@ -63,6 +63,53 @@ export const CardAvance = ( { operativos }: Props ) => {
 
     }, [currentDate, postClosureDays, preEvaluationDays, perfil.evaluaciones])
 
+    const calculoAvance = useMemo(() => {
+        
+        // PonderacionObjetivos equivale al 90% del total
+        const totalObjetivos = ponderacionObjetivos * 90 / 100
+        const subTotalResultados = resultados * 100 / 5
+        const totalResultados = subTotalResultados * 10 / 100
+                  
+        const total = totalObjetivos + totalResultados
+
+        return total
+
+        
+    }, [ponderacionObjetivos, resultados])
+
+    
+
+    const calculoBono = useMemo(() => {
+        const rangos: { [key: number]: number } = {
+            0: 0,
+            85: 0,
+            86: 75,
+            88: 80,
+            90: 85,
+            92: 90,
+            94: 95,
+            96: 100,
+            98: 105,
+            100: 110,
+        };
+
+        let puntuacion = 0;
+        for (let rango in rangos) {
+            if (calculoAvance >= parseInt(rango)) {
+                console.log(rango);
+                
+                puntuacion = rangos[rango];
+            } else {
+                break;
+            }
+        }
+
+        return puntuacion;
+    }, [calculoAvance]);
+    
+    
+    
+
     return (
         <>
             <h1 className='font-medium text-primary px-5'>Avance</h1>
@@ -80,23 +127,25 @@ export const CardAvance = ( { operativos }: Props ) => {
                             <SwiperSlide>
                                 <div className='relative'>
                                     <GaugeChart 
-                                        percent={ponderacionObjetivos / 100}
+                                        percent={calculoAvance / 100}
                                         nrOfLevels={10}
                                         className='w-full'
                                         colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
                                         textColor='#848891'
                                     />
+                                    <p className='text-center text-devarana-graph'>Avance Total</p>
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="relative">
                                 <GaugeChart 
-                                        percent={(ponderacionObjetivos + resultados) / 100}
+                                        percent={calculoBono / 100}
                                         nrOfLevels={10}
                                         className='w-full'
                                         colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
                                         textColor='#848891'
                                     />
+                                    <p className='text-center text-devarana-graph'>Bono Obtenido</p>
                                 </div>
                             </SwiperSlide>
                         </Swiper>

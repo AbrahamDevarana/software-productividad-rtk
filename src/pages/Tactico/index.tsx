@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { clearCurrentTacticoThunk, createTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Drawer, Input, Segmented, Select } from 'antd';
-import ListadoTacticos from '@/components/tacticos/ListadoTacticos';
-import { Prox } from '@/components/ui/Prox';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import Equipos from './Equipos';
 import { Button } from '@/components/ui';
@@ -12,6 +10,7 @@ import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
 import Estrategia from './Estrategia';
 import Core from './Core';
+import { setCurrentConfig } from '@/helpers';
 
 export const Tactico: React.FC = () => {
 
@@ -25,6 +24,7 @@ export const Tactico: React.FC = () => {
 
     const [filter, setFilter] = useState({})
 
+    setCurrentConfig()
 
 
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {

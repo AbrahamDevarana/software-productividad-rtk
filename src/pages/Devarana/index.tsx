@@ -9,7 +9,7 @@ import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { RiMentalHealthLine } from 'react-icons/ri';
 import { Avatar, Image } from 'antd';
 import { Adn, Amor, Apasionados, Colaborador, Extraordinario, Incluyentes, Innovacion, Triunfador, Lider } from '@/components/svg/devarana';
-import { getStorageUrl } from '@/helpers';
+import { getStorageUrl, setCurrentConfig } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -26,6 +26,9 @@ export const Devarana: React.FC = () => {
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
     }, [])
+
+    setCurrentConfig()
+
 
   return (
     <div className="animate__animated animate__fadeIn animate__faster">
