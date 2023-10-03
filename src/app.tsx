@@ -13,6 +13,7 @@ import './app.scss'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'dayjs/locale/es'
 
+
 dayjs.locale('es')
 
 dayjs.extend(quarterOfYear)
@@ -24,6 +25,9 @@ dayjs.extend(isBetween);
 
 export default function App() {
     const location = useLocation();
+
+    console.log(process.env.NODE_ENV);
+    
     
     return (
         

@@ -210,7 +210,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     className='col-span-6'
                     label="Co-Responsables"
                     name="operativosResponsable"
-                    rules={[{ required: true, message: 'Por favor selecciona a los participantes' }]}
                     // shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
                     >
                     <Select
