@@ -23,6 +23,7 @@ const initialState: OperativoState = {
         operativosResponsable: [],
         indicador: '',
         meta: '',
+        status: 'ABIERTO'
     }
 }
 

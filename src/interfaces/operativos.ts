@@ -25,6 +25,7 @@ export interface OperativoProps {
     operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
     resultadosClave: ResultadoClaveProps[];
+    status:          'ABIERTO' | 'CERRADO';
 }
 
 

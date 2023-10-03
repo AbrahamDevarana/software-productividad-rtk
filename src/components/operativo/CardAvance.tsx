@@ -1,33 +1,31 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
-// import { GaugeChart } from '../complexUI/Gauge'
 import { Divider, Modal, Progress } from 'antd'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
-import { useState } from 'react'
-import { getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk'
+import { useMemo, useState } from 'react'
 import FormEvaluacion from './Evaluaciones/FormEvaluacion'
 import { Rating } from 'react-simple-star-rating'
 import GaugeChart from 'react-gauge-chart'
-
+import 'swiper/css';
+import 'swiper/css/navigation';
+import dayjs from 'dayjs'
 
 interface Props {
     operativos: OperativoProps[]
 }
 export const CardAvance = ( { operativos }: Props ) => {
 
+    const { periodControls: { preEvaluationDays, postClosureDays}, currentConfig: { currentDate, quarter, year } } = useAppSelector(state => state.global)
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({operativos})
-    const {perfil: {evaluaciones: {resultados}}} = useAppSelector(state => state.profile)
-    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
+    const {perfil: { evaluaciones: {resultados}}} = useAppSelector(state => state.profile)
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
 
     const dispatch = useAppDispatch()
 
     const handleEvaluation = async () => {
-		dispatch(getUsuariosAEvaluarThunk({usuarioId: perfil.id, year, quarter }))
         setEvaluacionVisible(!isEvaluacionVisible)
     }
 
@@ -35,18 +33,49 @@ export const CardAvance = ( { operativos }: Props ) => {
 		setEvaluacionVisible(false)
 	}
 
+    const isOpen = useMemo(() => {        
+
+        const { evaluaciones } = perfil
+        const { evaluacionLider, evaluacionPropia } = evaluaciones
+        
+        const today = dayjs()
+        
+        // Obtener ultimo mes del quarter
+        const month = quarter * 3        
+        //  Obtener el ultimo dia del quarter
+        const lastDay = dayjs(`${year}-${month}-01`).endOf('quarter')
+        // Obtener la fecha de inicio de evaluacion
+        const preEvaluationDate = lastDay.subtract(preEvaluationDays, 'day')
+        // Obtener la fecha de cierre de evaluacion
+        const postClosureDate = lastDay.add(postClosureDays, 'day')
+
+        // si está entree el rango de fechas devolver false
+        if (today.isBetween(preEvaluationDate, postClosureDate)) {
+            // Si evaluacionLider y evaluacionPropia.id === '' o undefined devolver true
+            if (evaluacionLider?.id === '' || evaluacionPropia?.id === '') {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return true
+        }
+
+    }, [currentDate, postClosureDays, preEvaluationDays, perfil.evaluaciones])
+
     return (
         <>
             <h1 className='font-medium text-primary px-5'>Avance</h1>
-            <div className='px-5 text-devarana-graph w-full flex justify-center items-center flex-col'>
-                    <div className='relative w-full py-5'>
+            <div className='text-devarana-graph flex flex-col h-full'>
+                    <div className='flex-1 flex items-center'>
 
                         <Swiper
                             spaceBetween={50}
                             centeredSlides={true}
                             slidesPerView={1}
                             modules={[Navigation]}
-                            className='mySwiper'
+                            className='swiperAvance'
+                            navigation={true}
                         >
                             <SwiperSlide>
                                 <div className='relative'>
@@ -74,28 +103,29 @@ export const CardAvance = ( { operativos }: Props ) => {
 
                     </div>
                     <Divider className='my-3'/>
-                        <div className='flex flex-col items-center align-middle w-full'>
-                        <div className='w-full'>
-                            <Progress percent={ponderacionObjetivos} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
-                            strokeColor={{
-                                '0%': 'rgba(9, 103, 201, 1)',
-                                '100%': 'rgba(9, 103, 201, .5)',
-                            }}
+                    <div className='flex-1 flex flex-col'>
+                        <div className='px-5 flex-1 flex flex-col items-center'>
+                                <p className='text-center'>Logro Objetivos</p>
+                                <Progress percent={ponderacionObjetivos} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
+                                strokeColor={{
+                                    '0%': 'rgba(9, 103, 201, 1)',
+                                    '100%': 'rgba(9, 103, 201, .5)',
+                                }}
                             />
-                            <p className='text-center'>Logro Objetivos</p>
                         </div>
-                    <Divider className='my-3'/>
-                        <div className='flex flex-col items-center'>
+                        <Divider className='my-3'/>
+                        <div className='flex-1 flex flex-col items-center'>
+                            <p>Competencias</p>
                             <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
-                            <p> {`${ resultados.toFixed(2) || 0 } / 5` } </p>
-                            <p>Evaluación de Competencias</p>
                         </div>
-
-                        <div className='flex justify-between pt-5 w-full'>
-                            <button className='text-light text-sm'>Mi Evaluación</button>
-                            <button className='text-light text-sm' onClick={handleEvaluation}>Realizar Evaluación</button>
+                        <div className='flex justify-center pb-5 pt-2 w-full'>
+                            <button 
+                                className='border border-secondary px-2 py-1 text-secondary text-xs rounded-ext font-light disabled:opacity-50 disabled:cursor-not-allowed disabled:border-devarana-graph disabled:text-devarana-graph' 
+                                onClick={handleEvaluation}
+                                disabled={ isOpen }
+                            >Realizar Evaluación</button>
                         </div>
-                </div>
+                    </div>
             </div>
 
             <Modal

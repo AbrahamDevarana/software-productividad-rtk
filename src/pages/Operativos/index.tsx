@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk } from '@/redux/features/perfil/perfilThunk';
+import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -53,6 +53,7 @@ export const Objetivos : React.FC = () => {
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch (getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+            await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
             setGettingProfile(false)
         }
         fetchData()
@@ -114,10 +115,6 @@ export const Objetivos : React.FC = () => {
                         </SwiperSlide>
 
                     </Swiper>
-                    {/* Mi Equipo */}
-                    {/* // Favoritos */}
-                    {/* Circuito de evaluacion */}
-                    {/* <CardEquipo equipo={perfil.equipo} /> */}
                 </div>
             </div>
 
@@ -133,7 +130,7 @@ export const Objetivos : React.FC = () => {
                         : 
 
                         <>
-                        <div className='col-span-12 flex justify-between'>
+                        <div className='col-span-12 flex justify-between h-10 items-center'>
                             <h1>Mis Objetivos</h1>
                             
                         </div>
@@ -152,9 +149,14 @@ export const Objetivos : React.FC = () => {
                     }
                 </div>
 
-                <Box className='col-span-3 row-span-2 my-5'>
-                    <h1 className='text-primary font-medium'>Ranking Devarana</h1>
-                </Box>
+                <div className='col-span-3 row-span-2 my-5'>
+                    <div className='h-10'>
+
+                    </div>
+                    <Box className='mt-5'>
+                        <h1 className='text-primary font-medium'>Ranking Devarana</h1>
+                    </Box>
+                </div>
             </div>
 
 

@@ -58,7 +58,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			
 			<div className='flex justify-between items-center'>
 				<p> { periodoTypes.EN_CURSO } </p>
-				<button className='bg-gradient-to-tr from-dark to-dark-light px-2 py-1 text-white rounded-ext font-light' onClick={ () => setPonderacionVisible(true)}>
+				<button className='border border-devarana-dark-graph px-2 py-1 text-devarana-dark-graph text-xs rounded-ext font-light' onClick={ () => setPonderacionVisible(true)}>
 					Asignar Ponderación
 				</button>
 			</div>

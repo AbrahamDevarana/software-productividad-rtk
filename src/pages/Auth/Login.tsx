@@ -12,7 +12,7 @@ export default function Login() {
     return (
         <div className="grid grid-cols-2">
             <div className="h-screen w-full flex items-center justify-center col-span-1">
-                <Box className="bg-white max-w-[470px] w-full">
+                {/* <Box className="bg-white max-w-[470px] w-full">
                     <Box className="-my-10 mb-3 h-28 bg-gradient-to-tr from-primary to-primary-light flex" >
                         <h1 className='text-white text-2xl align-middle m-auto'> DevaranApp </h1>
                     </Box>
@@ -22,14 +22,21 @@ export default function Login() {
                             Iniciar Sesión
                         </Button>    
                     </div>
-                </Box>
+                </Box> */}
+                <div className="text-center flex flex-col items-center">
+                    <h1 className="text-3xl text-devarana-midnight">Iniciar Sesión</h1>
+                    <p className="text-sm text-devarana-graph py-5">Tu cuenta está ligada a tu correo de DEVARANA</p>
+                    <Button classType="regular" width={150} classColor="dark" type="button" className="block w-full my-2" onClick={redirectToGoogleSSO}>
+                        Acceder
+                    </Button>    
+                </div>
             </div>
 
             <div className="col-span-1 p-5" >
                 <Box className="bg-primary-light w-full col-span-1 bg-login bg-cover flex items-center justify-center relative" style={{
                 height: 'calc(100vh - 40px)',
             }}>
-                <div className="bg-black bg-opacity-30 absolute inset-0"/>
+                <div className="bg-black bg-opacity-30 absolute inset-0 rounded-ext"/>
                     <div className="z-50">
                         <h1 className="text-white text-5xl font-playfair drop-shadow">
                             DEVARANA

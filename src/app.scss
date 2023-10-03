@@ -502,3 +502,22 @@ textarea.ant-input-borderless[disabled]{
         width: 100%;
     }
 }
+
+.swiperAvance{
+    .swiper-button-prev{
+        left: 0;
+        &::after{
+            content: "<";
+            font-size: 1.5rem;
+            color: $dark-light;
+        }
+    }
+    .swiper-button-next{
+        right: 0;
+        &::after{
+            content: ">";
+            font-size: 1.5rem;
+            color: $dark-light;
+        }
+    }
+}
