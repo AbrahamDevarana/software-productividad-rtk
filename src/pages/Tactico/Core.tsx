@@ -54,6 +54,9 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                     <div className="flex flex-col gap-x-5 gap-y-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
                         <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
+                            <p className='text-devarana-graph'>
+                                El objetivo de esta sección es mantener una operación eficiente, por lo que los objetivos tácticos que se creen en esta sección deben estar enfocados en mantener la operación de la empresa.
+                            </p>
                             
                         </div>
                     </div>    
@@ -69,7 +72,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                 {/* <Divider type='vertical' className='mx-2 h-full bg-white bg-opacity-70 shadow' /> */}
                                 <div>
                                     <h1 className="text-white font-medium">Objetivos Tácticos Core</h1>
-                                    <p className="text-white text-opacity-80 drop-shadow"> Objetivos anuales de las áreas que contribuyen directamente al cumplimiento de la Estrategía </p>
+                                    <p className="text-white text-opacity-80 drop-shadow"> Objetivos anuales de las áreas enfocados en mantener una operación eficiente </p>
                                 </div>
                             </Box>
                         }
@@ -78,7 +81,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                 <div className="flex items-center gap-x-2">
                                     <h2>Objetivos Tácticos Estratégicos</h2>
                                     <Tooltip
-                                        title='Objetivos anuales de las áreas que contribuyen directamente al cumplimiento de la Estrategía'
+                                        title='Objetivos anuales de las áreas enfocados en mantener una operación eficiente'
                                         color='#408FE3'
                                     >
                                         <FaQuestionCircle className='text-primary-light'/>
