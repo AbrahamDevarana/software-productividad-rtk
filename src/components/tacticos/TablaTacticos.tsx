@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
 import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
@@ -163,12 +163,44 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
         setShowDrawer(true)
     }
 
+    const orderedTacticos = useMemo(() => {
+        if (tacticos?.length) {
+            // CDX-OT-y, donde X y y son números.
+            const regex = /\D/g;
+            const clonedArray = [...(tacticos || [])];
+    
+            const ordered = clonedArray.sort((a, b) => {
+                const [aCodigo, aOT, aNumero] = a.codigo.split('-');
+                const [bCodigo, bOT, bNumero] = b.codigo.split('-');
+                const aCodigoNumber = Number(aCodigo.replace(regex, ''));
+                const bCodigoNumber = Number(bCodigo.replace(regex, ''));
+                const aOTNumber = Number(aOT.replace(regex, ''));
+                const bOTNumber = Number(bOT.replace(regex, ''));
+                const aNumeroNumber = Number(aNumero.replace(regex, ''));
+                const bNumeroNumber = Number(bNumero.replace(regex, ''));
+    
+                // Primero ordena por CDX, luego por OT y finalmente por y.
+                if (aCodigoNumber !== bCodigoNumber) {
+                    return aCodigoNumber - bCodigoNumber;
+                } else if (aOTNumber !== bOTNumber) {
+                    return aOTNumber - bOTNumber;
+                } else {
+                    return aNumeroNumber - bNumeroNumber;
+                }
+            });
+    
+            return ordered;
+        } else {
+            return [];
+        }
+    }, [tacticos]);
+    
 
     return (
         <>
             <Table
                 columns={columns}
-                dataSource={tacticos}
+                dataSource={orderedTacticos}
                 loading={isLoading}
                 
                 className='w-full customTable' 

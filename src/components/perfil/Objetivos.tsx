@@ -42,7 +42,9 @@ export const Objetivos = ({objetivo, visitante}: Props) => {
 					</div>
 			</div>
 			<div className="pt-5">
-				<p className='text-center text-devarana-graph font-medium uppercase'> {objetivo.nombre} </p>
+				<div className='h-16 overflow-y-auto flex flex-col justify-center items-center'>
+					<p className='text-center text-devarana-graph font-medium'> {objetivo.nombre} </p>
+				</div>
 				<Progress 
 					percent={fixedProgresoReal} 
 					strokeWidth={15}

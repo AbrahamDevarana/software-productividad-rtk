@@ -118,7 +118,7 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
                 label="Sobre mi"
                 name="descripcionPerfil"
             >
-                <Input.TextArea className="w-full" name="descripcionPerfil"  />
+                <Input.TextArea className="w-full" name="descripcionPerfil" rows={7} />
             </Form.Item>  
             <div className="col-span-12 ml-auto">
                 <Button classColor="dark" classType='regular' className="block ml-auto" type='submit' width={150}>  Guardar </Button>

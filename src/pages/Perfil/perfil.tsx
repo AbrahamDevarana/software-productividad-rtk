@@ -82,10 +82,19 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <p className="py-2 text-lg font-medium text-devarana-dark-graph">Acerca de mí</p>
 
                 <div className="py-4 font-light">
-                    <div className="max-h-[170px] overflow-y-auto">
-                        <p className="font-light text-devarana-graph">
-                            { usuarioActivo.descripcionPerfil }
-                        </p>
+                    <div className="h-[200px] max-h-[150px] overflow-y-auto">
+                       
+                            { 
+                                usuarioActivo.descripcionPerfil 
+                                ? 
+                                    <p className="font-light text-devarana-graph"> 
+                                    { usuarioActivo.descripcionPerfil }
+                                    </p>
+                                : <div className="h-full flex justify-center items-center ">
+                                    <p className="text-default"> Añade algo de información para que te puedan conocer.</p>
+                                </div> 
+                            }
+                        
                     </div>
                 </div>
                 <div>
@@ -173,9 +182,17 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
-                <div className="max-h-[385px] overflow-y-auto text-devarana-graph">
-                    <div className="richText font-light text-devarana-graph" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}>
-                    </div>
+                <div className="max-h-[450px] overflow-y-auto text-devarana-graph">
+                { 
+                    usuarioActivo.responsabilidades
+                    ? 
+                        <div className="richText font-light text-devarana-graph" dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(usuarioActivo.responsabilidades)}}>
+                        </div>
+                    : <div className="h-full flex justify-center items-center">
+                        <p className="text-default"> Añade algo de información para que conozcan tus funciones en DEVARANA.</p>
+                    </div> 
+                }
+                    
                 </div>
                     
             </Box>

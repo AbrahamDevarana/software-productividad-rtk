@@ -129,24 +129,26 @@ export const CardAvance = ( { operativos }: Props ) => {
                                 <div className='relative'>
                                     <GaugeChart 
                                         percent={calculoAvance / 100}
-                                        nrOfLevels={10}
+                                        nrOfLevels={30}
                                         className='w-full'
-                                        colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
+                                        // colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
+                                        colors={['#d64767', '#56739B']}
                                         textColor='#848891'
                                     />
-                                    <p className='text-center text-devarana-graph'>Avance Total</p>
+                                    <p className='text-center text-devarana-graph font-bold'>Avance Total</p>
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide>
                                 <div className="relative">
                                 <GaugeChart 
                                         percent={calculoBono / 100}
-                                        nrOfLevels={10}
+                                        nrOfLevels={30}
                                         className='w-full'
-                                        colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
+                                        // colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
+                                        colors={['#d64767', '#56739B']}
                                         textColor='#848891'
                                     />
-                                    <p className='text-center text-devarana-graph'>Bono Obtenido</p>
+                                    <p className='text-center text-devarana-graph font-bold'>Bono Obtenido</p>
                                 </div>
                             </SwiperSlide>
                         </Swiper>

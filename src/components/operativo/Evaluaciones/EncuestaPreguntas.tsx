@@ -4,6 +4,7 @@ import { postEvaluacionThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Input, Rate, Steps } from 'antd'
 import React, { useState } from 'react'
+import { Rating } from 'react-simple-star-rating';
 
 
 interface Respuesta {
@@ -87,11 +88,26 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
         };
     
         const nextStep = async () => {
-            if (currentStep < preguntasEvaluacion.length - 1) {
+            if (!respuestas[currentStep]) {
+                return;
+            }
+            // Validar que el usuario haya seleccionado un rate sino no dejar avanzar
+            const { rate } = respuestas[currentStep];
+            const { comentarios } = respuestas[currentStep];
+
+            if (rate === 0) {
+                return;
+            }
+        
+            const siguientePregunta = preguntasEvaluacion[currentStep + 1];
+            if (siguientePregunta) {
                 setCurrentStep(currentStep + 1);
             } else {
                 await dispatch(postEvaluacionThunk({respuestas, ...general}));
             }
+
+         
+           
         };
         
         const prevStep = () => {
@@ -113,7 +129,8 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
                         type="inline"
                         current={currentStep}
                         responsive={true}
-                        onChange={(current) => setCurrentStep(current)}
+                        
+                        // onChange={(current) => setCurrentStep(current)}
                 />
             </div>
             <div className="p-5">
@@ -122,11 +139,7 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
                     <p className="text-devarana-graph font-light">{preguntasEvaluacion[currentStep].descripcion}</p>
 
                     <p className="text-devarana-graph">Calificación: </p>
-                    <Rate
-                        onChange={handleRateChange}
-                        value={respuestas[currentStep]?.rate || 0}
-                        allowHalf
-                    />
+                    <Rating onClick={handleRateChange} initialValue={Number(respuestas[currentStep]?.rate || 0)} allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
                     <p className="text-devarana-graph">Comentarios:</p>
                     <TextArea
                         onChange={(e) => handleComentariosChange(e.target.value)}

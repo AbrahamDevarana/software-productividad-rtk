@@ -7,7 +7,7 @@ import { getTacticoFromObjetivoIdThunk } from '@/redux/features/tacticos/tactico
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Divider, Spin, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
@@ -34,6 +34,24 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
         }
     }, [])
 
+    const orderedEstrategicos = useMemo(() => {
+        if (estrategicosTacticos?.length) {
+            // CD1, CD3, CD4, etc. Ordenar por el dígito y ignorar las letras con regex.
+            const regex = /\D/g; // \D coincide con cualquier carácter que no sea un dígito.
+            const clonedArray = [...(estrategicosTacticos || [])]; // Clonar el array original para evitar mutaciones.
+    
+            const ordered = clonedArray.sort((a, b) => {
+                const aNumber = Number(a.codigo.replace(regex, ''));
+                const bNumber = Number(b.codigo.replace(regex, ''));
+                return aNumber - bNumber;
+            });
+    
+            return ordered;
+        } else {
+            return [];
+        }
+    }, [estrategicosTacticos])
+
     useEffect(() => {
         if(estrategicosTacticos?.length) {
             handleGetTacticos(estrategicosTacticos?.[0])
@@ -55,7 +73,7 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
 
                         <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
                             {
-                                estrategicosTacticos?.map(objetivo => (
+                                orderedEstrategicos?.map(objetivo => (
                                     <div key={objetivo.id}
                                         onClick={() => handleGetTacticos(objetivo)} 
                                         className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer relative`}
@@ -63,7 +81,7 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                  
                                         }}
                                     >
-                                            <p className="font-medium text-devarana-graph"> {objetivo.codigo} </p>
+                                            <p className="font-medium text-devarana-graph"> Objetivo Estratégico - {objetivo.codigo} </p>
                                         </div>
                                 ))
                                 
