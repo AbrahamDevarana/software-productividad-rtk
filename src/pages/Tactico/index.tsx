@@ -28,9 +28,6 @@ export const Tactico: React.FC = () => {
 
 
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
-        e.stopPropagation()
-        e.preventDefault()
-        
         dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
     }
 

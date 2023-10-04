@@ -40,7 +40,7 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 			</div>
 				
 			{ galeria && galeria.map((foto, index) => (
-				<div className={`rounded-xl overflow-hidden col-span-1 cursor-pointer ${ picture === foto.url ? 'border border-black' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
+				<div className={`rounded-xl overflow-hidden col-span-1 cursor-pointer ${ picture === foto.url ? 'border-2 border-secondary' : ''}`} key={index} onClick={() => setPicture(foto.url)}>
 					<Image src={getStorageUrl(foto.url)} preview={false}
 						wrapperStyle={{
 							width: '100%',
@@ -51,6 +51,7 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 						style={{
 							width: '100%',
 							height: '100%',
+							minHeight: '50px',
 							objectFit: 'cover',
 						}}
 					/>
@@ -62,7 +63,7 @@ export const Galeria = ({galeria, isLoading, picture, setPicture, handleGallery}
 						<FaEye className='mr-2'/> Ver Galería
 					</Button>
 					<Button classType='regular' width={'auto'} classColor='primary' onClick={handleGallery}>
-						<AiFillSave />
+						<AiFillSave className='mr-2' /> Seleccionar
 					</Button>
 			</div>
 		</>

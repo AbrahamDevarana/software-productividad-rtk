@@ -7,8 +7,10 @@ const LoginError: React.FC = () => {
         }, 1500)
     })
     return ( 
-        <div className="p-5 text-white text-center">
-            <h1 className="text-3xl">Tu correo no está activo porfavor contacta a DH</h1>
+        <div className="p-5 text-devarana-graph text-center">
+            <h1 className="text-3xl">El lanzamiento está cerca...</h1>
+            <h2>Estamos afinando los últimos detalles de tu perfil, por lo que no aún está activo.</h2>
+            <p>Prepárate.</p>
         </div>
     );
 }

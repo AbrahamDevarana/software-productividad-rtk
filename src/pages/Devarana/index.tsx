@@ -8,7 +8,7 @@ import { FaLeaf, FaMedal } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { RiMentalHealthLine } from 'react-icons/ri';
 import { Avatar, Image } from 'antd';
-import { Adn, Amor, Apasionados, Colaborador, Extraordinario, Incluyentes, Innovacion, Triunfador, Lider } from '@/components/svg/devarana';
+import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
 import { getStorageUrl, setCurrentConfig } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
@@ -18,6 +18,8 @@ import 'swiper/css';
 import "swiper/css/effect-fade";
 import 'swiper/css/navigation';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import Lider from '@/components/svg/devarana/Lider';
+import Colaborador from '@/components/svg/devarana/Colaborador';
 
 export const Devarana: React.FC = () => {
 
@@ -176,7 +178,7 @@ export const Devarana: React.FC = () => {
                 <p className='text-devarana-dark-graph text-xl font-bold pb-5'>
                     Competencias
                 </p>
-                <div className='px-20 grid grid-cols-1 items-center' style={{
+                <div className='px-10 grid grid-cols-1 items-center' style={{
                     height: 'calc(100% - 100px)'
                 }}>
                     <div className="relative">
@@ -188,9 +190,10 @@ export const Devarana: React.FC = () => {
                             autoplay={{
                                 delay: 3000,
                             }}
+                            loop={true}
                             navigation={true}
                             grabCursor={true}
-                            className='my-auto'                    
+                            className='my-auto swiperCompetencias px-10'                    
                         >
                             <SwiperSlide className='bg-white'>
                                 <Lider />

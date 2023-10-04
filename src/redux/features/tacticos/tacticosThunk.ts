@@ -57,9 +57,10 @@ export const createTacticoThunk = createAsyncThunk(
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params:  slug, year, estrategico 
             }
-            const response = await clientAxios.post<Props>('/tacticos', config);
+            const params = {slug, year, estrategico }
+
+            const response = await clientAxios.post<Props>('/tacticos', params, config);
             return { 
                 response: response.data.objetivoTactico,
                 isCore: estrategico
