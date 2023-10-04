@@ -55,12 +55,14 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
             title: () => ( <p className='tableTitle text-right'>Código</p>),
             render: (text, record, index) => ( <p className='text-default text-right'> { record.codigo } </p>   ),
             width: 20,
+            responsive: ['md'],
             ellipsis: true,
         },
         {
             title: () => ( <p className='tableTitle text-right'>Tácticos</p>),
             width: 23,
             ellipsis: true,
+            responsive: ['md'],
             render: (text, record, index) => ( <p className='text-default text-right'> { record.tacticos?.length } </p>   ),
         },
         {
@@ -96,7 +98,7 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
         },
         {
             title: () => ( <p className='tableTitle text-right'>Responsable</p>),
-            width: 30,
+            width: 40,
             render: (text, record, index) => (
                 <div className='flex justify-end'>
                     <Avatar.Group maxCount={3} key={index} className='z-50'
@@ -172,6 +174,7 @@ export const TablaEstrategia = ({perspectiva, year}: TablaEstrategiaProps) => {
                 loading={isLoading}
                 dataSource={objetivosOrdenados}
                 rowKey={(record) => record.id}
+                scroll={{ x: 1000 }}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => {

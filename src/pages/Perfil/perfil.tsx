@@ -82,7 +82,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                 <p className="py-2 text-lg font-medium text-devarana-dark-graph">Acerca de mí</p>
 
                 <div className="py-4 font-light">
-                    <div className="h-[200px] max-h-[150px] overflow-y-auto">
+                    <div className="h-[100px] max-h-[100px] overflow-y-auto">
                        
                             { 
                                 usuarioActivo.descripcionPerfil 
@@ -182,7 +182,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
             </Box>
             <Box className="xl:col-span-1 col-span-3">
                 <p className="text-lg font-medium py-2 text-devarana-dark-graph">Responsabilidades</p>
-                <div className="max-h-[450px] overflow-y-auto text-devarana-graph">
+                <div className="max-h-[385px] overflow-y-auto text-devarana-graph">
                 { 
                     usuarioActivo.responsabilidades
                     ? 

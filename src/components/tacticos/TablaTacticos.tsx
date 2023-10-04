@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
+import {Avatar, Image, Pagination, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { getColor, getStatus, getStorageUrl } from '@/helpers';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -40,13 +40,17 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                 </div>
             ),
             width: 150,
-            ellipsis: true,
-            render: (text, record, index) => ({
-                children: <div className='flex items-center'> 
-                <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor:  getColor(record.status).color   }}></div>
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text, record, index) => (
+            <Tooltip placement='top' title={record.nombre}>
+                <div className='flex items-center'> 
+                    <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor:  getColor(record.status).color   }}></div>
                     <p className='text-default'>{record.nombre}</p>
-                </div>,
-            }),
+                </div>
+            </Tooltip>
+            )
         },
         {
             title: () => ( <p className='tableTitle text-right'>Código</p>),
@@ -55,6 +59,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             render: (text, record, index) => (
                 <p className='text-default text-right'>{record.codigo}</p>
             ),
+            responsive: ['md'],
         },
         {
             title: () => ( <p className='tableTitle text-right'>Estatus</p>),
@@ -89,7 +94,8 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
         {
             title: () => ( <p className='tableTitle text-right'>Proyección</p>),
             dataIndex: 'periodos',
-            width: 80,
+            width: 120,
+            responsive: ['md'],
             ellipsis: true,
             render: (text, record, index) => (
                 <div className='flex gap-x-1 justify-end'> 
@@ -117,7 +123,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
         },
         {
             title: () => ( <p className='tableTitle text-right'>Responsables</p>),
-            width: 50,
+            width: 70,
             render: (text, record, index) => (
                 <div className='flex justify-end'>
                     <Avatar.Group maxCount={3} key={index} className='z-50'
@@ -202,7 +208,7 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                 columns={columns}
                 dataSource={orderedTacticos}
                 loading={isLoading}
-                
+                scroll={{ x: 800 }}
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 rowKey={(record) => record.id}
@@ -217,8 +223,6 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
                 }
                 pagination={false}
             />
-
-            
         </>
     )
 }

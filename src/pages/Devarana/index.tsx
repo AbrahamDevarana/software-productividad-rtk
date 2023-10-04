@@ -13,9 +13,10 @@ import { getStorageUrl, setCurrentConfig } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
 import {Swiper, SwiperSlide} from 'swiper/react';
-import { Autoplay, EffectFade } from 'swiper';
+import { Autoplay, EffectFade, Navigation } from 'swiper';
 import 'swiper/css';
 import "swiper/css/effect-fade";
+import 'swiper/css/navigation';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
 export const Devarana: React.FC = () => {
@@ -78,7 +79,7 @@ export const Devarana: React.FC = () => {
             </Box>
         </div>
 
-        <div className="grid grid-cols-12 gap-10">
+        <div className="grid grid-cols-12 md:gap-10 gap-y-10">
             <Box className="col-span-12 md:col-span-6 bg-w-logotipo bg-auto bg-no-repeat bg-right">
                 <div className="flex">
                     <p className="text-devarana-dark-graph text-xl font-bold pb-5">Logotipo</p>
@@ -96,19 +97,19 @@ export const Devarana: React.FC = () => {
                     El isotipo que nos identifica es un ave que representa la fusión de tres especies, conjuntando la cabeza de un gorrión, cola de golondrina y alas de colibrí, que simboliza la diversidad entre nuestros clientes.
                 </p>
             </Box>
-            <Box className="col-span-6 md:col-span-4 bg-w-proposito bg-no-repeat bg-right">
+            <Box className="col-span-12 md:col-span-4 bg-w-proposito bg-no-repeat bg-right">
                 <p className="text-devarana-dark-graph text-xl font-bold pb-5">Propósito</p>
                 <p className="pb-2 text-[16px] font-medium text-devarana-graph">¿Qué hacemos?</p>
                 <p className='text-[16px] font-light text-devarana-graph'>Creamos espacios extraordinarios que evocan la alegría y el placer del buen vivir.</p>
             </Box>
-            <Box className="col-span-6 md:col-span-4 bg-w-mision bg-no-repeat bg-right"> 
+            <Box className="col-span-12 md:col-span-4 bg-w-mision bg-no-repeat bg-right"> 
                 <p className="text-devarana-dark-graph text-xl font-bold pb-5">Misión</p>
                 <p className="pb-2 text-[16px] font-medium text-devarana-graph">¿Para qué?</p>
                 <p className='text-[16px] font-light text-devarana-graph'>
                     Inspiramos al mundo creando espacios únicos con amor y pasión, cuidando nuestro entorno, la rentabilidad y el bienestar de nuestros clientes.
                 </p>
             </Box>
-            <Box className="col-span-6 md:col-span-4 bg-w-vision bg-no-repeat bg-right">
+            <Box className="col-span-12 md:col-span-4 bg-w-vision bg-no-repeat bg-right">
                 <p className="text-devarana-dark-graph text-xl font-bold pb-5">Futuro</p>
                 <p className="pb-2 text-[16px] font-medium text-devarana-graph">¿Cómo queremos ser?</p>
                 <p className='text-[16px] font-light text-devarana-graph'>Inspiramos al mundo creando espacios únicos con amor y pasión, cuidando nuestro entorno, la rentabilidad y el bienestar de nuestros clientes.</p>
@@ -118,56 +119,56 @@ export const Devarana: React.FC = () => {
                     Valores
                 </p>
                 <p className='pb-2 text-[16px] font-medium text-devarana-graph'>¿Cómo lo hacemos?</p>
-                <div className='flex gap-x-6 items-center py-5'>
+                <div className='flex gap-x-6 items-center py-3'>
                     <Extraordinario className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LO EXTRAORDINARIO ES PRIMERO</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>La atención en los detalles, nuestro servicio legendario y esfuerzo por la satisfacción total, son parte de nuestra esencia.</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>La atención en los detalles, nuestro servicio legendario y esfuerzo por la satisfacción total, son parte de nuestra esencia.</p>
                     </div>
                 </div>
-                <div className='flex gap-x-6 items-center pb-5'>
+                <div className='flex gap-x-6 items-center pb-3'>
                     <div className='text-right'>
                         <h3 className='text-base font-medium text-devarana-pink'>SOMOS APASIONADOS</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>Buscamos nuestra esencia para dedicarnos a lo que amamos y hacer nuestro trabajo siempre con pasión. ¡Nos levantamos cada día con entusiasmo para enfrentar los retos que encontramos en nuestro camino!</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>Buscamos nuestra esencia para dedicarnos a lo que amamos y hacer nuestro trabajo siempre con pasión. ¡Nos levantamos cada día con entusiasmo para enfrentar los retos que encontramos en nuestro camino!</p>
                     </div>
                     <Apasionados className='fill-devarana-pink text-3xl' />
                 </div>
                
-                <div className='flex gap-x-6 items-center py-5'>
+                <div className='flex gap-x-6 items-center py-3'>
                     <Adn className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LA EXCELENCIA ESTÁ EN NUESTRO ADN</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>Buscamos la excelencia en todo lo que hacemos y damos todos los días lo mejor de nosotros mismos para vivir plenamente y sentirnos felices.</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>Buscamos la excelencia en todo lo que hacemos y damos todos los días lo mejor de nosotros mismos para vivir plenamente y sentirnos felices.</p>
                     </div>
                 </div>
-                <div className='flex gap-x-6 items-center pb-5'>
+                <div className='flex gap-x-6 items-center pb-3'>
                     <div className='text-right'>
                         <h3 className='text-base font-medium text-devarana-pink'>SOMOS INCLUYENTES</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>Vamos más allá de la tolerancia y hacemos siempre un esfuerzo por incluir a todos. El respeto a la diversidad nos hace una empresa incluyente.</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>Vamos más allá de la tolerancia y hacemos siempre un esfuerzo por incluir a todos. El respeto a la diversidad nos hace una empresa incluyente.</p>
                     </div>
                     <Incluyentes className='fill-devarana-pink text-3xl' />
                 </div>
                
-                <div className='flex gap-x-6 items-center py-5'>
+                <div className='flex gap-x-6 items-center py-3'>
                     <Innovacion className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LA INNOVACIÓN NOS DISTINGUE</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>¡Creemos firmemente en la constante innovación! Nos ilusionan los retos y buscamos siempre estar a la vanguardia.</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>¡Creemos firmemente en la constante innovación! Nos ilusionan los retos y buscamos siempre estar a la vanguardia.</p>
                     </div>
                 </div>
-                <div className='flex gap-x-6 items-center pb-5'>
+                <div className='flex gap-x-6 items-center pb-3'>
                     <div className='text-right'>
                         <h3 className='text-base font-medium text-devarana-pink'>INSPIRAMOS CON AMOR</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>El amor verdadero es preeminente en esta vida y nos motiva a hacer el bien en todo lo que emprendemos. Con nuestras acciones tratamos de hacer de este mundo un lugar mejor.</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>El amor verdadero es preeminente en esta vida y nos motiva a hacer el bien en todo lo que emprendemos. Con nuestras acciones tratamos de hacer de este mundo un lugar mejor.</p>
                     </div>
                     <Amor className='fill-devarana-pink text-3xl' />
                 </div>
                
-                <div className='flex gap-x-6 items-center py-5'>
+                <div className='flex gap-x-6 items-center py-3'>
                     <Triunfador className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>ESPÍRITU TRIUNFADOR</h3>
-                        <p className='text-[16px] font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
+                        <p className='text-[15px] font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
                     </div>
                 </div>
             </Box>
@@ -175,24 +176,30 @@ export const Devarana: React.FC = () => {
                 <p className='text-devarana-dark-graph text-xl font-bold pb-5'>
                     Competencias
                 </p>
-                <div className='p-10'>
-                    <Swiper
-                        spaceBetween={50}
-                        slidesPerView={1}
-                        effect='fade'
-                        modules={[EffectFade, Autoplay]}
-                        autoplay={{
-                            delay: 3000,
-                            pauseOnMouseEnter: true,
-                        }}                        
-                    >
-                        <SwiperSlide className='bg-white'>
-                            <Lider />
-                        </SwiperSlide>
-                        <SwiperSlide className='bg-white'>
-                            <Colaborador />
-                        </SwiperSlide>
-                    </Swiper>
+                <div className='px-20 grid grid-cols-1 items-center' style={{
+                    height: 'calc(100% - 100px)'
+                }}>
+                    <div className="relative">
+                        <Swiper
+                            spaceBetween={50}
+                            slidesPerView={1}
+                            effect='fade'
+                            modules={[EffectFade, Autoplay, Navigation]}
+                            autoplay={{
+                                delay: 3000,
+                            }}
+                            navigation={true}
+                            grabCursor={true}
+                            className='my-auto'                    
+                        >
+                            <SwiperSlide className='bg-white'>
+                                <Lider />
+                            </SwiperSlide>
+                            <SwiperSlide className='bg-white'>
+                                <Colaborador />
+                            </SwiperSlide>
+                        </Swiper>
+                    </div>
                 </div>
 
             </Box>
@@ -207,8 +214,8 @@ export const Devarana: React.FC = () => {
             </Box>
         </div>
 
-        <div className='grid grid-cols-12 gap-10 pt-5'>
-            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
+        <div className='grid grid-cols-12 md:gap-10 gap-y-10 pt-5'>
+            <Box className="col-span-12 md:col-span-3 relative group h-[250px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-pink transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
                     <FaMedal className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Calidad</p>
@@ -224,7 +231,7 @@ export const Devarana: React.FC = () => {
                     </ul>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-hidden">
+            <Box className="col-span-12 md:col-span-3 relative group h-[250px] overflow-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-blue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">  
                     <FaLeaf className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Responsabilidad Social</p>
@@ -240,7 +247,7 @@ export const Devarana: React.FC = () => {
                     </ul>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
+            <Box className="col-span-12 md:col-span-3 relative group h-[250px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-salmon transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
                     <RiMentalHealthLine className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Seguridad y Salud Ocupacional</p>
@@ -256,7 +263,7 @@ export const Devarana: React.FC = () => {
                     </ul>
                 </div>
             </Box>
-            <Box className="col-span-6 md:col-span-3 relative group h-[250px] overflow-y-hidden">
+            <Box className="col-span-12 md:col-span-3 relative group h-[250px] overflow-y-hidden">
                 <div className="flex flex-col gap-y-2 h-full justify-center items-center align-middle text-white p-5 rounded-ext bg-devarana-babyblue transition-all duration-500 ease-in-out group-hover:transform group-hover:scale-105 group-hover:opacity-0">
                     <PiFlowerLotusDuotone className='text-2xl'/>
                     <p className="text-[16px] font-light text-white">Bienestar</p>

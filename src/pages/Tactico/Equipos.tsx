@@ -71,10 +71,10 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: .5 } }}
         >
-            <div className="flex gap-5 max-h-screen flex-row">
-                    <div className="flex flex-col gap-x-5 gap-y-5 pt-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+            <div className="flex gap-5 max-h-screen flex-row md:flex-nowrap flex-wrap">
+                <div className="flex flex-col gap-x-5 gap-y-5 md:max-w-[280px] w-full md:max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
-                        <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
+                    <div className="bg-white shadow-ext rounded-ext md:w-[275px] w-full p-3">
                             {
                                 currentArea.departamentos?.map(equipo => (
                                     <div key={equipo.slug} 
@@ -91,15 +91,15 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
                         </div>
                     </div>    
                     <div className="pt-5 w-full flex flex-col gap-y-5">
-                        <Box className="flex" style={{
+                        <Box className="flex flex-col md:flex-row" style={{
                             backgroundColor: activeDepartamento?.color,
                         }}>
                             <div>
-                                <h1 className="text-white font-medium">{activeDepartamento?.nombre}</h1>
-                                <p className="text-white text-opacity-80 drop-shadow">{currentArea.nombre}</p>
+                                <h1 className="text-white font-medium md:text-left text-center">{activeDepartamento?.nombre}</h1>
+                                <p className="text-white text-opacity-80 drop-shadow md:text-left text-center">{currentArea.nombre}</p>
                             </div>
 
-                            <div className="mx-5 px-5 border-r-0 border-t-0 border-b-0 border-white border items-center flex">
+                            <div className="mx-5 px-5 md:border-r-0 md:border-t-0 md:border-b-0 md:border-white md:border items-center flex">
                                 {
                                     currentArea.leader && activeDepartamento && (
                                         <div className="flex items-center gap-x-2 align-middle">

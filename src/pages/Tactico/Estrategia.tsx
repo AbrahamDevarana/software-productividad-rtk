@@ -53,11 +53,11 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     }, [estrategicosTacticos])
 
     useEffect(() => {
-        if(estrategicosTacticos?.length) {
-            handleGetTacticos(estrategicosTacticos?.[0])
-            setActiveEstrategico(estrategicosTacticos?.[0])
+        if(orderedEstrategicos?.length) {
+            handleGetTacticos(orderedEstrategicos?.[0])
+            setActiveEstrategico(orderedEstrategicos?.[0])
         }
-    }, [estrategicosTacticos])
+    }, [orderedEstrategicos])
 
     const handleGetTacticos = (objetivo: EstrategicoProps ) => {
         dispatch(getTacticoFromObjetivoIdThunk({id: objetivo.id, year, slug}))
@@ -68,15 +68,17 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     return ( 
         <motion.div>
 
-            <div className="flex gap-5 max-h-screen flex-row">
-                    <div className="flex flex-col gap-x-5 gap-y-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+            <div className="flex gap-5 max-h-screen flex-row md:flex-nowrap flex-wrap">
+                    <div className="flex flex-col gap-x-5 gap-y-5 md:max-w-[280px] w-full md:max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
-                        <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
+                        <div className="bg-white shadow-ext rounded-ext md:w-[275px] w-full p-3">
                             {
                                 orderedEstrategicos?.map(objetivo => (
                                     <div key={objetivo.id}
                                         onClick={() => handleGetTacticos(objetivo)} 
-                                        className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer relative`}
+                                        className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out first:rounded-t-ext last:rounded-b-ext cursor-pointer relative
+                                            ${activeEstrategico?.id === objetivo.id && 'bg-gray-200'}
+                                        `}
                                         style={{
                                  
                                         }}
