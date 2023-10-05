@@ -28,12 +28,15 @@ interface Props {
 
 export default function ListadoResultados({ currentOperativo, statusObjetivo }: Props) {
 
+    const {  currentConfig: { currentDate, quarter, year }  } = useAppSelector(state => state.global)
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
-    const {perfil} = useAppSelector(state => state.profile)
     const [messageApi, contextHolder] = message.useMessage();
+
+    console.log(quarter, year);
+    
 
     
     const isClosed = useMemo(() => {
@@ -84,7 +87,9 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                 return (
                     <div className='flex'>
                         <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(record.status).color }}/> 
-                        <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} />
+                        <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} 
+                            onFocus={(e) => { e.currentTarget.select() }}
+                        />
                     </div>
                 )
             },
@@ -113,8 +118,18 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
             key: 'fechaFin',
             render: (text, record, index) => {
 
-                const disabledDate = (current: any): boolean => {
-                    return current && current < dayjs(record.fechaFin)
+                const disabledDate = (current: any) => {
+
+                    // Se puede ver desde el primer día del trimestre usando quarter y year y hasta el ultimo día del trimestre
+                    
+                    // // encontrar el primer día del trimestre
+                    // const month = quarter * 3 - 2
+                    // const startDate = dayjs(`${year}-${month}-01`)
+                    // // encontrar el ultimo día del trimestre
+                    // const endDate = startDate.add(3, 'month').subtract(1, 'day')
+                    // // deshabilitar fechas fuera del rang
+
+                    // return current < startDate || current > endDate;
                 }
                 
                 return (
@@ -124,7 +139,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                     defaultValue={ dayjs(record.fechaFin)  }
                     showToday
                     clearIcon={null}
-                    disabledDate={disabledDate}
+                    // disabledDate={disabledDate}
                     placeholder="Fecha Fin"
                     bordered={false}
                     name="fechaFin"

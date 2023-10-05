@@ -161,6 +161,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Resultado Clave</p>
                 <Input className="rs-input border-none bg-transparent hover:bg-white hover:drop-shadow-sm font-medium text-lg"
                     onBlur={ (e) => { handleUpdateResultado( e.currentTarget.value ) } }
+                    onFocus={ (e) => { e.currentTarget.select() } }
                     onPressEnter={ (e) => {    
                         e.currentTarget.blur()
                         e.stopPropagation()
