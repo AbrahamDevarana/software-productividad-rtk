@@ -38,7 +38,7 @@ export const CardAvance = ( { operativos }: Props ) => {
 
         const { evaluaciones } = perfil
         const { evaluacionLider, evaluacionPropia } = evaluaciones
-        
+
         const today = dayjs()
         
         // Obtener ultimo mes del quarter
@@ -53,7 +53,7 @@ export const CardAvance = ( { operativos }: Props ) => {
         // si está entree el rango de fechas devolver false
         if (today.isBetween(preEvaluationDate, postClosureDate)) {
             // Si evaluacionLider y evaluacionPropia.id === '' o undefined devolver true
-            if (evaluacionLider?.id === '' || evaluacionPropia?.id === '') {
+            if (evaluacionLider?.id !== '' && evaluacionPropia?.id !== '') {
                 return true
             } else {
                 return false
@@ -66,15 +66,8 @@ export const CardAvance = ( { operativos }: Props ) => {
 
     const calculoAvance = useMemo(() => {
         
-        const {resultadoCompetencias, resultadoObjetivos}  = rendimiento
-        // PonderacionObjetivos equivale al 90% del total
-        // const totalObjetivos = ponderacionObjetivos * 90 / 100
-        // const subTotalResultados = resultados * 100 / 5
-        // const totalResultados = subTotalResultados * 10 / 100
-                  
+        const {resultadoCompetencias, resultadoObjetivos}  = rendimiento     
         const total = resultadoCompetencias + resultadoObjetivos
-        // const total = totalObjetivos + totalResultados
-
         return total
 
         

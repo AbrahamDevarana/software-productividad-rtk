@@ -66,10 +66,6 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                             <Box className="flex" style={{
                                     backgroundColor: activeEstrategico?.perspectivas?.color ,
                             }}>
-                                {/* <div className='flex items-center'>
-                                    <p className="text-white text-opacity-80 drop-shadow text-3xl">{activeEstrategico?.codigo}</p>
-                                </div> */}
-                                {/* <Divider type='vertical' className='mx-2 h-full bg-white bg-opacity-70 shadow' /> */}
                                 <div>
                                     <h1 className="text-white font-medium">Objetivos Tácticos Core</h1>
                                     <p className="text-white text-opacity-80 drop-shadow"> Objetivos anuales de las áreas enfocados en mantener una operación eficiente </p>

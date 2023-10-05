@@ -257,7 +257,6 @@ export const getEvaluacionesRealizadasThunk = createAsyncThunk(
     }
 )
 
-
 export const updatePortraitThunk = createAsyncThunk(
     'profile/updatePortrait',
     async ({id, portadaPerfil}: {id:string, portadaPerfil:string}, {rejectWithValue, getState}) => {
@@ -288,6 +287,25 @@ export const getRendimientoThunk = createAsyncThunk(
                     quarter
                 }
             });
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const getHistorialRendimientoThunk = createAsyncThunk(
+    'profile/getHistorialRendimiento',
+    async ({usuarioId, year}:{usuarioId: string, year: number}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year
+                }
+            }
+            const response = await clientAxios.get(`/rendimiento/historial/${usuarioId}`, config);
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)

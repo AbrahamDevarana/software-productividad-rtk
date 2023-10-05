@@ -77,13 +77,14 @@ export interface PerfilProps extends SinglePerfilProps {
         resultados: number;
     }
     rendimiento: Rendimiento;
+    historialRendimiento: Rendimiento[];
 }
 
 export interface Rendimiento {
 
     id: string;
-    year?: number;
-    quarter?: number;
+    year: number;
+    quarter: number;
     usuarioId: string;
     resultadoObjetivos: number;
     resultadoCompetencias: number;

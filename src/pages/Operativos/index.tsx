@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getProfileThunk, getRendimientoThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
+import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -26,24 +26,15 @@ export const Objetivos : React.FC = () => {
 
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil } = useAppSelector(state => state.profile)
+    const { perfil}  = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
     const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
-
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
-    
-
     const [ gettingProfile, setGettingProfile ] = useState(false)
-    
-    
+     
     const {id} = useParams<{id: string}>()
-
-    const handleDateChange = (date: any, dateString: string) => {
-        dispatch(changeConfigThunk({year: date.year(), quarter: date.quarter()}))
-    }
-
 
     useEffect(() => {
         setGettingProfile(true)
@@ -55,6 +46,7 @@ export const Objetivos : React.FC = () => {
             await dispatch (getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
+            await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))
             setGettingProfile(false)
         }
         fetchData()
@@ -177,7 +169,6 @@ export const Objetivos : React.FC = () => {
                 icon={<FaPlus />}
                 onClick={() => setFormVisible(true)}
             />
-
 
             <Modal
                 title="Administración"

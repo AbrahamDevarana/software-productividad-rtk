@@ -40,7 +40,7 @@ const MixedChart = ({values, quarter, year}:Props) => {
                 display: false
             },
             tooltip: {
-                enabled: false
+                enabled: true
             },
         },
 	};
@@ -67,19 +67,18 @@ const MixedChart = ({values, quarter, year}:Props) => {
     const data = {
         labels: label.map((item) => item.name),
         datasets: [
-          {
-            label: 'Dataset 1',
-            data: values,
-            // backgroundColor: [gradient, ...label.map((item) => item.color),]
-            backgroundColor: [gradient]
-            
-          },
+            {
+				data: values,
+				backgroundColor: label.map((item) => item.color),
+				borderColor: label.map((item) => item.color),
+				borderWidth: 1,
+            },
         ],
       };
 
 
       return <div className="barBox">
-        <Bar options={options} data={data} style={{
+        <Bar options={options} data={data}  style={{
           width: '100%',
         }} />
       
