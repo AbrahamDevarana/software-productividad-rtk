@@ -68,6 +68,7 @@ const operativoSlice = createSlice({
         .addCase(createOperativoThunk.fulfilled, (state, { payload }) => {
             state.isLoadingObjetivo = false
             state.operativos.push(payload)
+            state.currentOperativo = payload
         })
         .addCase(createOperativoThunk.rejected, (state) => {
             state.isLoadingObjetivo = false
