@@ -31,7 +31,7 @@ const MixedChart = ({values, quarter, year}:Props) => {
 		ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend );
 	  }, [values, year])
 
-    const labels = ['Ene - Abr', 'May-Jun', 'Jul-Ago', 'Sep-Dic'];	
+    const labels = ['Ene - Mar', 'Abr-Jun', 'Jul-Sept', 'Oct-Dic'];	
 
     const options = {
         responsive: true,
@@ -47,19 +47,19 @@ const MixedChart = ({values, quarter, year}:Props) => {
 
 	const label = [
 		{
-			name: 'Ene - Abr',
+			name: 'Ene - Mar',
 			color: '#0967C9',
 		},
 		{
-			name: 'May-Jun',
+			name: 'Abr-Jun',
 			color: '#0967C9',
 		},
 		{
-			name: 'Jul-Ago',
+			name: 'Jul-Sept',
 			color: '#0967C9',
 		},
 		{
-			name: 'Sep-Dic',
+			name: 'Oct-Dic',
 			color: '#0967C9',
 		},
 	]
