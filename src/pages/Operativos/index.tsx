@@ -170,6 +170,7 @@ export const Objetivos : React.FC = () => {
                 shape="circle"
                 icon={<FaPlus />}
                 onClick={() => setFormVisible(true)}
+                type='primary'
             />
 
             <Modal

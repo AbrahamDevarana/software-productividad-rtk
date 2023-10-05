@@ -152,8 +152,6 @@ export const OperativoView = () => {
                         }}
                         icon={<Icon iconName='faPlus' />}
                         type="primary"
-                        
-                        
                     />
                 )
             }
