@@ -222,40 +222,44 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                 <Popover
                     trigger="click"
                     content={<div className='flex gap-x-5'>
-                          <Popconfirm
-                            title="¿Estas seguro de duplicar esta acción?"
-                            onConfirm={ () => handleDupliateResultado( resultado.id )}
-                            onCancel={() => {}}
-                            okText="Si"
-                            cancelText="No"
-                            placement="left"
-                            okButtonProps={{
-                                className: 'rounded-full mr-2 bg-primary'
-                            }}
-                            cancelButtonProps={{
-                                className: 'rounded-full mr-2 bg-error-light text-white'
-                            }}
+                        <Tooltip title="Duplicar Resultado Clave">
+                            <Popconfirm
+                                title="¿Estas seguro de duplicar este resultado clave?"
+                                onConfirm={ () => handleDupliateResultado( resultado.id )}
+                                onCancel={() => {}}
+                                okText="Si"
+                                cancelText="No"
+                                placement="left"
+                                okButtonProps={{
+                                    className: 'rounded-full mr-2 bg-primary'
+                                }}
+                                cancelButtonProps={{
+                                    className: 'rounded-full mr-2 bg-error-light text-white'
+                                }}
 
-                        >
-                            <FaCopy className='text-default text-right hover:text-error-light text-lg cursor-pointer' />
-                        </Popconfirm>
-                        <Popconfirm
-                            title="¿Estas seguro de eliminar esta acción?"
-                            onConfirm={ () => handleDeleteResultado( resultado.id )}
-                            onCancel={() => {}}
-                            okText="Si"
-                            cancelText="No"
-                            placement="left"
-                            okButtonProps={{
-                                className: 'rounded-full mr-2 bg-primary'
-                            }}
-                            cancelButtonProps={{
-                                className: 'rounded-full mr-2 bg-error-light text-white'
-                            }}
-                        >
-                            <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                            
-                        </Popconfirm>         
+                            >
+                                <FaCopy className='text-default text-right hover:text-dark-light text-lg cursor-pointer' />
+                            </Popconfirm>
+                        </Tooltip>
+                        <Tooltip title="Eliminar Resultado Clave">
+                            <Popconfirm
+                                    title="¿Estas seguro de eliminar este resultado clave?"
+                                    onConfirm={ () => handleDeleteResultado( resultado.id )}
+                                    onCancel={() => {}}
+                                    okText="Si"
+                                    cancelText="No"
+                                    placement="left"
+                                    okButtonProps={{
+                                        className: 'rounded-full mr-2 bg-primary'
+                                    }}
+                                    cancelButtonProps={{
+                                        className: 'rounded-full mr-2 bg-error-light text-white'
+                                    }}
+                                >
+                                    <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
+                                    
+                                </Popconfirm>        
+                            </Tooltip> 
                     </div>}
                 >
                     <BsThreeDots className='text-devarana-babyblue text-2xl cursor-pointer' />

@@ -247,7 +247,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     label="Indicador"
                     name="indicador"
                     className='col-span-12'
-                    rules={[{ required: true, message: 'Por favor ingresa el indicador del objetivo' }]}
                 >
                     <TextArea name="indicador" className='bg-[#F9F9F7]' bordered={false}/>
                 </Form.Item>
