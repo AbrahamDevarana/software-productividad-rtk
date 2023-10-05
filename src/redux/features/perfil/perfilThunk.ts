@@ -280,7 +280,7 @@ export const getRendimientoThunk = createAsyncThunk(
     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
-            const response = await clientAxios.get(`/rendimiento/${usuarioId}`, {
+            const response = await clientAxios.get(`/rendimiento/avance/${usuarioId}`, {
                 headers: { "accessToken": `${accessToken}` },
                 params: {
                     year,

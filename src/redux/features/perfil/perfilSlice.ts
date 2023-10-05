@@ -87,7 +87,7 @@ const initialState: PerfilState = {
             resultadoObjetivos: 0,
             resultadoCompetencias: 0,
             resultadoFinal: 0,
-            status: '',
+            status: 'ABIERTO',
             extra: 0,
             id: '',
             year: new Date().getFullYear(),

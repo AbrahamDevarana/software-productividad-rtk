@@ -26,3 +26,5 @@ export * from "./evaluaciones";
 export * from "./global"
 
 export * from "./tasks";
+export * from "./rendimiento";
+export * from "./ranking";

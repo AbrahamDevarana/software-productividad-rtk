@@ -21,6 +21,7 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
         // TODO cambiar a ===
         // if(usuario.leaderId !== userAuth?.id){
         if(false){
+            // @ts-ignore
             handleMiEquipo && handleMiEquipo(usuario)
         }
     }

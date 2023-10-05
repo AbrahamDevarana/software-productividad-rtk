@@ -19,7 +19,7 @@ import tareasSlice from "./features/tareas/tareasSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
 import comentariosSlice from "./features/comentarios/comentariosSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
-
+import rankingsSlice from "./features/ranking/rankingSlice";
 
 export const store = configureStore({
     reducer: {
@@ -43,6 +43,7 @@ export const store = configureStore({
         acciones: accionesSlice,
         comentarios: comentariosSlice,
         galeria: galeriaSlice,
+        rankings: rankingsSlice,
 
     },
     middleware: (getDefaultMiddleware) =>

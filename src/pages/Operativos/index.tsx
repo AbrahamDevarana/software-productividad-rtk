@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
@@ -19,6 +19,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode } from 'swiper';
 import { changeConfigThunk } from '@/redux/features/global/globalThunk';
 import { SinglePerfilProps } from '@/interfaces';
+import { getRankingsThunk } from '@/redux/features/ranking/rankingThunk';
 
 export const Objetivos : React.FC = () => {
 
@@ -47,6 +48,7 @@ export const Objetivos : React.FC = () => {
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))
+            await dispatch(getRankingsThunk({year, quarter}))
             setGettingProfile(false)
         }
         fetchData()
@@ -146,9 +148,9 @@ export const Objetivos : React.FC = () => {
                     <div className='h-10'>
 
                     </div>
-                    <Box className='mt-5'>
-                        <h1 className='text-primary font-medium'>Ranking Devarana</h1>
-                    </Box>
+                        <Box className='mt-5 min-h-[500px]'>
+                            <CardRanking />
+                        </Box>
                 </div>
             </div>
 
