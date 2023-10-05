@@ -1,8 +1,8 @@
 import  { useMemo } from 'react';
-import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm } from 'antd';
+import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm, message } from 'antd';
 import dayjs from 'dayjs';
 import { BsFillCalendarFill, BsThreeDots } from 'react-icons/bs';
-import { deleteResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
+import { deleteResultadoThunk, duplicateResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { ResultadoClaveProps } from '@/interfaces';
@@ -10,25 +10,20 @@ import { Link } from 'react-router-dom';
 import { getColor, getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { BiTrash } from 'react-icons/bi';
+import { FaCopy } from 'react-icons/fa';
 
 interface Props {
     resultado: ResultadoClaveProps
+    isClosed: boolean
 }
 
-const ResultadoClaveForm = ({ resultado }: Props ) => {
+const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
 
     const dispatch = useAppDispatch()
     const { usuarios } = useAppSelector(state => state.usuarios)
+    const [messageApi, contextHolder] = message.useMessage();
 
     const [form] = Form.useForm()
-
-    const handleOnSubmit = () => {
-        const query = {
-            ...resultado,
-            ...form.getFieldsValue(),
-        }
-        dispatch(updateResultadoThunk(query))
-    }
 
     const isVisible = useMemo(() => {
         return resultado.tipoProgreso === 'porcentaje'
@@ -43,7 +38,6 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                     tipoProgreso: resultado.tipoProgreso
                 }}
                 className='w-[350px]'
-
             >
 
                 <Form.Item
@@ -58,7 +52,7 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                 </Form.Item>
 
 
-                <Row gutter={ 10}>
+                <Row gutter={20}>
                     <Col span={16}>
                         <Form.Item
                             name="progreso"
@@ -78,13 +72,20 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                         <Form.Item
                             name="progreso"
                             className={`w-full ${isVisible ? 'block' : 'hidden'}`}
+                            rules={[
+                                {
+                                    type: 'number',
+                                    min: 0,
+                                    max: 100,
+                                },
+                            ]}
                         >
                             <InputNumber 
                                 min={0} 
                                 max={100} 
                                 onChange={(value) => handleUpdateProgress(value)} 
                                 className={`w-full ${isVisible ? 'block' : 'hidden'}`}
-                                value={resultado.progreso}
+                                defaultValue={resultado.progreso}
                             />
                         </Form.Item>
                     </Col>
@@ -113,7 +114,7 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
     const handleUpdateProgress = (value: any) => {
         const query = {
             ...resultado,
-            progreso: value
+            progreso: Math.max(0, value)
         }
         dispatch(updateResultadoThunk(query))
     }
@@ -141,7 +142,20 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
         dispatch(deleteResultadoThunk(id))
     }
 
+    const handleDupliateResultado = async (resultadoId: string) => {
+        await dispatch(duplicateResultadoThunk({resultadoId})).unwrap().then((data:any) => {
+            message.success('Resultado creado correctamente')
+            const element = document.getElementById(`resultado-${data.id}`)
+            element?.classList.add('ant-collapse-item-active')
+            element?.scrollIntoView({behavior: 'smooth'})
+        })
+    }
+
     return (
+        <>
+        {
+            contextHolder
+        }
         <div className='flex items-center gap-x-5'>
             <div className='flex flex-col w-full'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Resultado Clave</p>
@@ -205,7 +219,25 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
             <div className='flex flex-col items-center'>
                 <div></div>
                 <Popover
-                    content={<>
+                    trigger="click"
+                    content={<div className='flex gap-x-5'>
+                          <Popconfirm
+                            title="¿Estas seguro de duplicar esta acción?"
+                            onConfirm={ () => handleDupliateResultado( resultado.id )}
+                            onCancel={() => {}}
+                            okText="Si"
+                            cancelText="No"
+                            placement="left"
+                            okButtonProps={{
+                                className: 'rounded-full mr-2 bg-primary'
+                            }}
+                            cancelButtonProps={{
+                                className: 'rounded-full mr-2 bg-error-light text-white'
+                            }}
+
+                        >
+                            <FaCopy className='text-default text-right hover:text-error-light text-lg cursor-pointer' />
+                        </Popconfirm>
                         <Popconfirm
                             title="¿Estas seguro de eliminar esta acción?"
                             onConfirm={ () => handleDeleteResultado( resultado.id )}
@@ -221,14 +253,16 @@ const ResultadoClaveForm = ({ resultado }: Props ) => {
                             }}
                         >
                             <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                        </Popconfirm>
-                    </>}
+                            
+                        </Popconfirm>         
+                    </div>}
                 >
                     <BsThreeDots className='text-devarana-babyblue text-2xl cursor-pointer' />
                 </Popover>
             </div>
                 
         </div>
+        </>
     )
 };
 

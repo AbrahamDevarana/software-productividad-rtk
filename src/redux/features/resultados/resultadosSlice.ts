@@ -1,7 +1,7 @@
 
 import { ResultadoClaveState } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
-import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk} from "./resultadosThunk";
+import { getResultadosThunk, createResultadoThunk, deleteResultadoThunk, getResultadoThunk, updateResultadoThunk, duplicateResultadoThunk} from "./resultadosThunk";
 import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "../tasks/tasksThunk";
 
 
@@ -91,6 +91,20 @@ const resultadoClaveSlice = createSlice({
                 state.isCreatedResultado = true
             })
             .addCase(createResultadoThunk.rejected, (state) => {
+                state.isCreatingResultado = false
+                state.isCreatedResultado = false
+                state.error = true
+            })
+            .addCase(duplicateResultadoThunk.pending, (state) => {
+                state.isCreatingResultado = true
+                state.isCreatedResultado = false
+            })
+            .addCase(duplicateResultadoThunk.fulfilled, (state, {payload}) => {
+                state.isCreatingResultado = false
+                state.resultadosClave = [...state.resultadosClave, payload]
+                state.isCreatedResultado = true
+            })
+            .addCase(duplicateResultadoThunk.rejected, (state) => {
                 state.isCreatingResultado = false
                 state.isCreatedResultado = false
                 state.error = true

@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { cerrarObjetivoThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -120,6 +120,20 @@ const operativoSlice = createSlice({
         .addCase(getOperativosUsuarioThunk.rejected, (state) => {
             state.isLoadingOperativosUsuario = false
             state.error = true
+        })
+
+        .addCase(cerrarObjetivoThunk.pending, (state) => {
+        })
+        .addCase(cerrarObjetivoThunk.fulfilled, (state, { payload }) => {
+            const { id, status } = payload
+            // encontrar objetivo y cambiar el status
+                const objetivo = state.operativos.find(operativo => operativo.id === id)
+                if (objetivo) {
+                    objetivo.status = status
+                    state.operativos = state.operativos.map(operativo => operativo.id === id ? objetivo : operativo)
+                }
+        })
+        .addCase(cerrarObjetivoThunk.rejected, (state) => {
         })
     }
 })

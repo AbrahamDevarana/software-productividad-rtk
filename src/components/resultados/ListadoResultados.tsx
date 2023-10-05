@@ -1,5 +1,6 @@
 import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Spin, Table, Tooltip, message } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo, useRef } from "react";
@@ -29,8 +30,10 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
 
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
-    const { isLoading, resultadosClave, isCreatingResultado, isCreatedResultado} = useAppSelector(state => state.resultados)
+    const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
+    const {perfil} = useAppSelector(state => state.profile)
+    const [messageApi, contextHolder] = message.useMessage();
 
     
     const isClosed = useMemo(() => {
@@ -38,15 +41,23 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
             return statusObjetivo.status === 'CERRADO'
         }
         return false
-    }, [statusObjetivo])
+    }, [statusObjetivo])    
     
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
     }, [])
 
-    const handleNuevoResultado = () => {
-        dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
+    const handleNuevoResultado = async () => {
+        await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
+            message.success('Resultado creado correctamente')
+            const element = document.getElementById(`resultado-${data.id}`)
+            element?.classList.add('ant-collapse-item-active')
+            element?.scrollIntoView({behavior: 'smooth'})
+        
+        }).catch((err) => {
+            message.error('Hubo un error al crear el resultado')
+        })
     }
 
     const handleOnUpdate = (e: any, record: TaskProps) => {
@@ -216,10 +227,6 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                                 >
                                     <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
                                 </Popconfirm>
-
-                                {/* <AiOutlineFileSearch className="text-default text-lg"/>
-
-                                <FaRegComment className="text-default text-lg" /> */}
                             </div>
                         }
                     >
@@ -286,15 +293,19 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
 
     const genHeader = (resultado: any) => (
         <div onClick={ event => event.stopPropagation() }>
-            <ResultadoClaveForm resultado={resultado} />
+            <ResultadoClaveForm resultado={resultado} isClosed={isClosed}/>
         </div>
     )
 
     //* FORM
 
 
-    const handleDeleteTask = (id: number) => {
-        dispatch(deleteTaskThunk(id))
+    const handleDeleteTask = async (id: number) => {
+        await dispatch(deleteTaskThunk(id)).unwrap().then(() => {
+            messageApi.success('Acción eliminada.')
+        }).catch((err) => {
+            messageApi.error('Hubo un error al eliminar la acción.')
+        })
     }
 
     const handleUpdateStatus = async (task: TaskProps, status: any) => {
@@ -302,20 +313,8 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
             ...task,
             status
         }
-
-        console.log(query);
-        
-        
         dispatch(updateTaskThunk(query))
     }
-
-
-    useEffect(() => {
-        if(isCreatedResultado){
-            message.success('Resultado creado correctamente')
-            dispatch(clearCreatedResultado())
-        }
-    }, [ isCreatedResultado ])
 
     if(isLoading) return ( <Loading /> )
     if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
@@ -335,8 +334,10 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                             header={genHeader(resultado) }
                             className="customResultadosPanel"
                             collapsible="icon"
+                            id={`resultado-${resultado.id}`}
                             
                         >
+                            
                             <Table 
                                 loading={isLoading}
                                 scroll={{ x: 1000 }}
@@ -358,7 +359,9 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                 
 
             </Collapse>
-
+            {
+                contextHolder
+            }
             {
                 isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
             }

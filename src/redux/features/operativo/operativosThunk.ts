@@ -27,6 +27,11 @@ interface Filtros {
     quarter: number
 }
 
+interface CierreProps {
+    id: string
+    status: 'ABIERTO' | 'CERRADO'
+}
+
 
 export const getOperativosThunk = createAsyncThunk(
     'operativos/getOperativos',
@@ -93,10 +98,7 @@ export const createOperativoThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
 
-            const response = await clientAxios.post<Props>(`/operativos`, operativo, config);
-
-            console.log(response.data.operativo);
-            
+            const response = await clientAxios.post<Props>(`/operativos`, operativo, config);            
 
             return response.data.operativo
         }
@@ -157,6 +159,23 @@ export const deleteOperativoThunk = createAsyncThunk(
     }
 )
 
+
+export const cerrarObjetivoThunk = createAsyncThunk(
+    'operativos/cerrarObjetivo',
+    async (operativoId: string, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const result = await clientAxios.get<CierreProps>(`/operativos/cierre/${operativoId}`, config);                        
+            return result.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 export const clearObjetivoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearObjetivo())

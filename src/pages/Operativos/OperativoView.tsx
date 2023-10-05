@@ -23,6 +23,7 @@ export const OperativoView = () => {
     const [value, setValue] = useState<SegmentTypes>('listado');
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
     const { resultadosClave } = useAppSelector(state => state.resultados)
+    const [isCreating , setIsCreating] = useState(false)
 
     const options = [
         {
@@ -42,8 +43,15 @@ export const OperativoView = () => {
         },
     ]
 
-    const handleNuevoResultado = () => {
-        dispatch(createResultadoThunk({operativoId: currentOperativo.id}))
+    const handleNuevoResultado = async () => {
+        setIsCreating(true)
+        await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
+            const element = document.getElementById(`resultado-${data.id}`)
+            element?.classList.add('ant-collapse-item-active')
+            element?.scrollIntoView({behavior: 'smooth'})
+        })
+        setIsCreating(false)
+        
     }
 
     useEffect(() => {
@@ -138,8 +146,14 @@ export const OperativoView = () => {
             {
                 resultadosClave && resultadosClave.length > 0 && (
                     <FloatButton
-                        onClick={() => handleNuevoResultado()}
+                        onClick={() => {
+                            isCreating ? null :
+                            handleNuevoResultado()
+                        }}
                         icon={<Icon iconName='faPlus' />}
+                        type="primary"
+                        
+                        
                     />
                 )
             }

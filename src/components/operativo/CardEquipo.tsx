@@ -45,7 +45,7 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
             <ul className="my-3">
                 {
                     equipo && equipo.length > 0 && equipo.map((item, index) => (
-                        <li className='flex justify-between items-center my-5 gap-x-5 w-full border-b border-white border-dotted border-opacity-40 py-3' key={index} >
+                        <li className='flex justify-between items-center my-2 gap-x-5 w-full border-b border-white border-dotted border-opacity-40 py-3' key={index} >
                             <Avatar  size="large" src={<Image src={`${getStorageUrl(item?.foto)}`} preview={false} fallback={getBrokenUser()} />} />
                             <p className='font-medium text-white'>{item?.nombre} {item?.apellidoPaterno}</p>
                             <Popover content={getContent(item)} placement='bottom' trigger={'click'} >

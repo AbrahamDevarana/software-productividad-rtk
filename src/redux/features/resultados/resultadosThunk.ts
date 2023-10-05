@@ -68,6 +68,27 @@ export const createResultadoThunk = createAsyncThunk(
     }
 )
 
+
+export const duplicateResultadoThunk = createAsyncThunk(
+    'resultados/duplicateResultado',
+    async ( {resultadoId}:{resultadoId:string}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+
+
+            const response = await clientAxios.post<Props>(`/resultados/duplicate`, {resultadoId}, config);
+                        
+            return response.data.resultadoClave
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const updateResultadoThunk = createAsyncThunk(
     'resultados/updateResultado',
     async (resultado: ResultadoClaveProps, {rejectWithValue, getState}) => {
