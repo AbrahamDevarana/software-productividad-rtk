@@ -10,7 +10,7 @@ import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
 import Loading from '@/components/antd/Loading';
 
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -82,17 +82,17 @@ export const Objetivos : React.FC = () => {
 
     return (
         <>
-            <div className="flex gap-5">
-                <Box className='w-[20%] px-5 text-devarana-graph flex flex-col'>
+            <div className="flex lg:flex-nowrap flex-wrap gap-5">
+                <Box className='lg:w-[20%] md:w-[45%] w-full px-5 text-devarana-graph flex flex-col'>
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
                 </Box>
-                <Box className='w-[20%]'>
+                <Box className='lg:w-[20%] md:w-[45%] w-full'>
                     <CardAvance operativos={operativos} />
                 </Box>
-                <Box className='w-[35%] flex justify-center'>
+                <Box className='lg:w-[35%] md:w-[49%] w-full flex justify-center'>
                     <CardDesempeno />
                 </Box>
-                <div className='w-[25%] relative'>
+                <div className='lg:w-[25%] md:w-[49%] w-full relative'>
                     <Swiper
                         effect={'cards'}
                         grabCursor={true}
@@ -116,7 +116,7 @@ export const Objetivos : React.FC = () => {
 
 
             <div className='grid grid-cols-12 gap-5'>
-                <div className='col-span-9 py-5 grid grid-cols-12 gap-5'>
+                <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 gap-5'>
                     {
                         isLoading && operativos.length === 0 ? 
                             <div className='col-span-12'>
@@ -144,7 +144,7 @@ export const Objetivos : React.FC = () => {
                     }
                 </div>
 
-                <div className='col-span-3 row-span-2 my-5'>
+                <div className='md:col-span-3 col-span-12 row-span-2 my-5'>
                     <div className='h-10'>
 
                     </div>
@@ -160,10 +160,15 @@ export const Objetivos : React.FC = () => {
                 footer={null}
                 onClose={handleCancelForm}
                 width={window.innerWidth > 1200 ? 700 : '100%'}
-                closable={false}
                 destroyOnClose={true}
+                closable={false}
             >
-                <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
+                <div className='relative'>
+                    {/* <button onClick={handleCancelForm} className='absolute top-0 right-0'>
+                        <FaTimes className='text-xl text-devarana-midnight' />
+                    </button> */}
+                    <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
+                </div>
             </Drawer>
             
             <FloatButton
@@ -178,6 +183,7 @@ export const Objetivos : React.FC = () => {
                 open={isAdminModalVisible}
                 onCancel={handleCloseAdminModal}
                 footer={null}
+                
                 width={window.innerWidth > 1200 ? 'CALC(95% - 80px)' : '100%' }
                 style={{
                     top: 50,
