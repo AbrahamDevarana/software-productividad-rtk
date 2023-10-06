@@ -26,6 +26,8 @@ export interface OperativoProps {
     propietarioId:   string;
     resultadosClave: ResultadoClaveProps[];
     status:          'ABIERTO' | 'CERRADO';
+    year:            number;
+    quarter:         number;
 }
 
 

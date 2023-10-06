@@ -1,18 +1,14 @@
 import { getColor } from '@/helpers'
 import { TaskStatusType, taskStatusTypes } from '@/types'
-import React from 'react'
 import { useDispatch } from 'react-redux'
 
 interface Props {
     current: any
     dispatchFunction: any
+    isClosed: boolean
 }
 
-
-
-
-
-export const PopoverEstado = ({ current, dispatchFunction}: Props) => {
+export const PopoverEstado = ({ current, dispatchFunction, isClosed}: Props) => {
 
     const dispatch = useDispatch()
     const statusKeys: TaskStatusType[] = Object.keys(taskStatusTypes) as TaskStatusType[];
@@ -28,7 +24,9 @@ export const PopoverEstado = ({ current, dispatchFunction}: Props) => {
     return (
         <div>
             {statusKeys.map((status, index) => (
-                <div className="flex items-center gap-2 py-1 cursor-pointer" key={index} onClick={() => handleChangeStatus(status)}>
+                <div className={`flex items-center gap-2 py-1 cursor-pointer ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} onClick={() => {
+                    !isClosed && handleChangeStatus(status)
+                }}>
                     <div className={`shadow`}
                         style={{
                             width: '6px',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {  TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
@@ -121,7 +121,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
 
     
-    
     return (
         <>
             <Form 
@@ -133,6 +132,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
                     propietarioId: propietario,
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
+                    // sino tiene operativoId es porque es nuevo por lo tanto se pone la fecha de Inicio del primer día del quarter y la fecha de fin del último día del quarter
                     fechaInicio: dayjs(currentOperativo.fechaInicio),
                     fechaFin: dayjs(currentOperativo.fechaFin)
                 }}

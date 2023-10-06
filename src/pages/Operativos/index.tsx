@@ -179,19 +179,22 @@ export const Objetivos : React.FC = () => {
             />
 
             <Modal
-                title="Administración"
                 open={isAdminModalVisible}
                 onCancel={handleCloseAdminModal}
                 footer={null}
-                
-                width={window.innerWidth > 1200 ? 'CALC(95% - 80px)' : '100%' }
+                width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
                 style={{
                     top: 50,
                     left: 35,
                     bottom: 0,
-                    height: 'calc(100% - 100px)',
                     overflowY: 'hidden',
-                    borderRadius: '10px'
+                    borderRadius: '10px',
+                    height: 'calc(100% - 100px)',
+                }}
+                bodyStyle={{
+                    height: 'calc(100% - 100px)',
+                    overflowY: 'auto',
+                    padding: '0px'
                 }}
                 destroyOnClose={true}
             >

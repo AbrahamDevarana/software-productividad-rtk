@@ -1,7 +1,5 @@
 import { Icon } from "@/components/Icon"
-import { FormAcciones } from "@/components/acciones/FormAcciones"
 import Loading from "@/components/antd/Loading"
-import EmptyResultado from "@/components/resultados/EmptyResultado"
 import ListadoResultados from "@/components/resultados/ListadoResultados"
 import { Proximamente } from "@/components/ui"
 import { getStorageUrl } from "@/helpers"
@@ -10,8 +8,8 @@ import { useOperativo } from "@/hooks/useOperativo"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
 import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, Drawer, FloatButton, Image, Segmented, Tooltip } from "antd"
-import { useEffect, useState } from "react"
+import { Avatar, FloatButton, Image, Segmented, Tooltip } from "antd"
+import { useEffect, useMemo, useState } from "react"
 import { Link, useParams,  } from "react-router-dom"
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
@@ -65,7 +63,12 @@ export const OperativoView = () => {
         }
     }, [id])
 
-    const {orderedResponsables, statusObjetivo, progresoReal} = useOperativo({objetivo: currentOperativo})    
+    const {orderedResponsables, statusObjetivo, progresoReal} = useOperativo({objetivo: currentOperativo})  
+    
+    const isClosed = useMemo(() => {
+        return currentOperativo.status === 'CERRADO'
+    }, [currentOperativo])    
+    
     
     if(isLoadingObjetivo) return <Loading />
     
@@ -122,7 +125,7 @@ export const OperativoView = () => {
                             {
                                 value === 'listado' && (
                                     <div>
-                                        <ListadoResultados currentOperativo={currentOperativo} statusObjetivo={statusObjetivo} />
+                                        <ListadoResultados currentOperativo={currentOperativo} isClosed={isClosed}/>
                                     </div>
                                 )
                             }
@@ -144,15 +147,17 @@ export const OperativoView = () => {
             </div>
 
             {
-                resultadosClave && resultadosClave.length > 0 && (
-                    <FloatButton
-                        onClick={() => {
-                            isCreating ? null :
-                            handleNuevoResultado()
-                        }}
-                        icon={<Icon iconName='faPlus' />}
-                        type="primary"
-                    />
+                resultadosClave && resultadosClave.length > 0 && !isClosed && (
+                    (
+                        <FloatButton
+                            onClick={() => {
+                                isCreating ? null :
+                                handleNuevoResultado()
+                            }}
+                            icon={<Icon iconName='faPlus' />}
+                            type="primary"
+                        />
+                    )
                 )
             }
 

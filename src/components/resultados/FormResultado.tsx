@@ -5,7 +5,7 @@ import { BsFillCalendarFill, BsThreeDots } from 'react-icons/bs';
 import { deleteResultadoThunk, duplicateResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { ResultadoClaveProps } from '@/interfaces';
+import { OperativoProps, ResultadoClaveProps } from '@/interfaces';
 import { Link } from 'react-router-dom';
 import { getColor, getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -15,19 +15,29 @@ import { FaCopy } from 'react-icons/fa';
 interface Props {
     resultado: ResultadoClaveProps
     isClosed: boolean
+    currentOperativo: OperativoProps
 }
 
-const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
+const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) => {
 
     const dispatch = useAppDispatch()
     const { usuarios } = useAppSelector(state => state.usuarios)
     const [messageApi, contextHolder] = message.useMessage();
+    const { year, quarter } = currentOperativo
 
     const [form] = Form.useForm()
 
     const isVisible = useMemo(() => {
         return resultado.tipoProgreso === 'porcentaje'
     }, [resultado])
+
+    const disabledDate = (current: any) => {
+        const month = quarter * 3 - 2    
+        const startDate = dayjs(`${year}-${month}-01`)
+        const endDate = startDate.add(3, 'month').subtract(1, 'day')
+        return current < startDate || current > endDate;
+    }
+
 
     const content = (
         <>
@@ -38,13 +48,14 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                     tipoProgreso: resultado.tipoProgreso
                 }}
                 className='w-[350px]'
+                disabled={isClosed}
             >
 
                 <Form.Item
                     name="tipoProgreso"
                     className='mb-0'
                 >
-                    <Radio.Group onChange={(e) => handleChangeTipoProgreso(e.target.value)}>
+                    <Radio.Group onChange={(e) => handleChangeTipoProgreso(e.target.value)} disabled={isClosed}>
                         <Radio value="porcentaje">Manual</Radio>
                         <Radio value="acciones">Acciones</Radio>
                     </Radio.Group>
@@ -64,7 +75,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                                 onAfterChange={(value) => handleUpdateProgress(value)} 
                                 className={`w-full ${isVisible ? 'block' : 'hidden'}`}
                                 value={resultado.progreso}
-
+                                disabled={isClosed}
                             />   
                         </Form.Item>
                     </Col>
@@ -86,6 +97,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                                 onChange={(value) => handleUpdateProgress(value)} 
                                 className={`w-full ${isVisible ? 'block' : 'hidden'}`}
                                 defaultValue={resultado.progreso}
+                                disabled={isClosed}
                             />
                         </Form.Item>
                     </Col>
@@ -127,10 +139,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
         dispatch(updateResultadoThunk(query))
     }
 
-    const handleChangeColor = (value: any) => {
-
-        console.log(value);
-        
+    const handleChangeColor = (value: any) => {        
         const query = {
             ...resultado,
             color: value
@@ -159,7 +168,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
         <div className='flex items-center gap-x-5'>
             <div className='flex flex-col w-full'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Resultado Clave</p>
-                <Input className="rs-input border-none bg-transparent hover:bg-white hover:drop-shadow-sm font-medium text-lg"
+                <Input className="rs-input border-none bg-transparent hover:bg-white hover:drop-shadow-sm font-medium text-lg disabled:bg-transparent"
                     onBlur={ (e) => { handleUpdateResultado( e.currentTarget.value ) } }
                     onFocus={ (e) => { e.currentTarget.select() } }
                     onPressEnter={ (e) => {    
@@ -170,11 +179,12 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                         color: resultado.color
                     }}
                     defaultValue={resultado.nombre}
+                    disabled={isClosed}
                 />
             </div>
             <div className='flex flex-col items-center'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Responsable</p>
-                <Link to={`/perfil/${resultado.propietario?.slug}`} className={`rounded-full`}>
+                <Link to={`/perfil/${resultado.propietario?.slug}`} className={`rounded-full`} >
                     <Tooltip title={`${resultado.propietario?.nombre} ${resultado.propietario?.apellidoPaterno}`} placement='top' >
                         <Avatar src={<Image src={`${getStorageUrl(resultado.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
                             {resultado.propietario?.iniciales} 
@@ -206,11 +216,13 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                     defaultValue={ dayjs(resultado.fechaFin)  }
                     placeholder={ `${dayjs(resultado.fechaFin)}`}
                     showToday
+                    disabledDate={disabledDate}
                     clearIcon={null}
                     bordered={false}
                     suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
                     onChange={(date, dateString) => handleUpdateDate(dateString)}
                     className='w-[130px]'
+                    disabled={isClosed}
                 />
             </div>
             <div className='flex flex-col items-center'>
@@ -224,6 +236,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                     content={<div className='flex gap-x-5'>
                         <Tooltip title="Duplicar Resultado Clave">
                             <Popconfirm
+                                disabled={isClosed}
                                 title="¿Estas seguro de duplicar este resultado clave?"
                                 onConfirm={ () => handleDupliateResultado( resultado.id )}
                                 onCancel={() => {}}
@@ -243,6 +256,7 @@ const ResultadoClaveForm = ({ resultado, isClosed }: Props ) => {
                         </Tooltip>
                         <Tooltip title="Eliminar Resultado Clave">
                             <Popconfirm
+                                    disabled={isClosed}
                                     title="¿Estas seguro de eliminar este resultado clave?"
                                     onConfirm={ () => handleDeleteResultado( resultado.id )}
                                     onCancel={() => {}}

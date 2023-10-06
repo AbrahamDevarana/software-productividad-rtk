@@ -16,36 +16,27 @@ import { Link } from "react-router-dom";
 import { getColor, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
-import { clearCreatedResultado } from "@/redux/features/resultados/resultadosSlice";
 import { PopoverPrioridad } from "./PopoverPrioridad";
 import { Prioridad, styles, taskStatusTypes } from "@/types";
 import { PopoverEstado } from "./PopoverEstado";
 
 interface Props {
     currentOperativo: OperativoProps,
-    statusObjetivo: any
+    isClosed: boolean
 }
 
-export default function ListadoResultados({ currentOperativo, statusObjetivo }: Props) {
+export default function ListadoResultados({ currentOperativo, isClosed }: Props) {
 
-    const {  currentConfig: { currentDate, quarter, year }  } = useAppSelector(state => state.global)
     const { Panel } = Collapse;
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
     const [messageApi, contextHolder] = message.useMessage();
 
-    console.log(quarter, year);
+    const { year, quarter } = currentOperativo
     
 
-    
-    const isClosed = useMemo(() => {
-        if (statusObjetivo) {
-            return statusObjetivo.status === 'CERRADO'
-        }
-        return false
-    }, [statusObjetivo])    
-    
+
 
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
@@ -79,7 +70,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
         }    
         dispatch(updateTaskThunk(query))
     }
-
+    
     const defaultColumns: ColumnsType<TaskProps> = [
         {
             title: () => ( <p className='tableTitlePrincipal'>Acciones</p>),
@@ -87,8 +78,8 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                 return (
                     <div className='flex'>
                         <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(record.status).color }}/> 
-                        <Input name="nombre" className="border-none" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} 
-                            onFocus={(e) => { e.currentTarget.select() }}
+                        <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} 
+                            onFocus={(e) => { e.currentTarget.select() }} disabled={isClosed}
                         />
                     </div>
                 )
@@ -119,17 +110,10 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
             render: (text, record, index) => {
 
                 const disabledDate = (current: any) => {
-
-                    // Se puede ver desde el primer día del trimestre usando quarter y year y hasta el ultimo día del trimestre
-                    
-                    // // encontrar el primer día del trimestre
-                    // const month = quarter * 3 - 2
-                    // const startDate = dayjs(`${year}-${month}-01`)
-                    // // encontrar el ultimo día del trimestre
-                    // const endDate = startDate.add(3, 'month').subtract(1, 'day')
-                    // // deshabilitar fechas fuera del rang
-
-                    // return current < startDate || current > endDate;
+                    const month = quarter * 3 - 2    
+                    const startDate = dayjs(`${year}-${month}-01`)
+                    const endDate = startDate.add(3, 'month').subtract(1, 'day')
+                    return current < startDate || current > endDate;
                 }
                 
                 return (
@@ -139,12 +123,13 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                     defaultValue={ dayjs(record.fechaFin)  }
                     showToday
                     clearIcon={null}
-                    // disabledDate={disabledDate}
+                    disabledDate={disabledDate}
                     placeholder="Fecha Fin"
                     bordered={false}
                     name="fechaFin"
                     suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
                     onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
+                    disabled={isClosed}
                 />
             )},
             width: 170,
@@ -155,12 +140,11 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                 return ( 
                     <Popover
                         title={ <p className='text-center text-devarana-graph'>Prioridad</p> }
-                        trigger={'click'}
+                        trigger={"click"}
                         content={
-                            <PopoverPrioridad current={record} dispatchFunction={updateTaskThunk} />
+                            <PopoverPrioridad current={record} dispatchFunction={updateTaskThunk} isClosed={isClosed}/>
                         }
-                    > 
-
+                    >
                             <div
                                 className="flex items-center justify-center py-1 rounded-sm cursor-pointer text-white font-medium drop-shadow-sm"
                                 style={{
@@ -181,7 +165,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                     <Popover
                         title={ <p className='text-center text-devarana-graph'>Estatus</p> }
                         content= {
-                            <PopoverEstado current={record} dispatchFunction={updateTaskThunk} />
+                            <PopoverEstado current={record} dispatchFunction={updateTaskThunk} isClosed={isClosed}/>
                         }
                         trigger={'click'}
                     >
@@ -210,6 +194,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                 return (
                     <div className="flex justify-end">
                         <Checkbox
+                            disabled={isClosed}
                             defaultChecked={record.status ===  'FINALIZADO' ? true : false} 
                             onChange={(e) => handleUpdateStatus(record, e.target.checked ? 'FINALIZADO' : 'SIN_INICIAR')}
                         />  
@@ -227,6 +212,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                         content={
                             <div className="">
                                 <Popconfirm
+                                    disabled={isClosed}
                                     title="¿Estas seguro de eliminar esta acción?"
                                     onConfirm={ () => handleDeleteTask(record.id)}
                                     onCancel={() => {}}
@@ -290,7 +276,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
             >
 
                 <Form.Item name="nombre" className="mb-0">
-                    <Input placeholder="Nombre de la Accion"
+                    <Input placeholder="Crear Nueva Acción"
                         onPressEnter={
                             (e) => {
                                 e.preventDefault()
@@ -308,7 +294,7 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
 
     const genHeader = (resultado: any) => (
         <div onClick={ event => event.stopPropagation() }>
-            <ResultadoClaveForm resultado={resultado} isClosed={isClosed}/>
+            <ResultadoClaveForm resultado={resultado} isClosed={isClosed} currentOperativo={currentOperativo}/>
         </div>
     )
 
@@ -362,7 +348,9 @@ export default function ListadoResultados({ currentOperativo, statusObjetivo }: 
                                 columns={defaultColumns}
                                 dataSource={resultado.task}
                                 rowKey={record => record.id}
-                                footer={() => footerComponent(resultado)}
+                                footer={() => (
+                                    isClosed ? null : footerComponent(resultado)
+                                )}
                                 rowClassName={ (record, index) => {
                                     return 'group'
                                 }}

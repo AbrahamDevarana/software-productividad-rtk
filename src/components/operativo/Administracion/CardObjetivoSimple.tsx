@@ -1,19 +1,20 @@
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
-import { OperativoProps } from '@/interfaces'
+import { OperativoProps, SinglePerfilProps } from '@/interfaces'
 import { objetivosTypes } from '@/types'
-import { Avatar, Image, Modal, Tooltip } from 'antd'
+import { Avatar, Image, Modal, Progress, Tooltip } from 'antd'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ObjetivoPreview from './ObjetivoPreview'
 import { FaEye } from 'react-icons/fa'
+import { useOperativo } from '@/hooks/useOperativo'
 
 interface Props {
     objetivo: OperativoProps
-    usuarioId: string
+    activeUsuario:  SinglePerfilProps
 }
 
-export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
+export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
 
     const [ isModalObjetivoVisible, setIsModalObjetivoVisible ] = useState(false)
     const handleOpenModaObjetivo = () => {
@@ -32,7 +33,9 @@ export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
         return [responsablePropietario, ...responsablesSinPropietario]
     }, [objetivo.operativosResponsable])
 
-    const statusObjetivo = objetivo.operativosResponsable.find(responsable => responsable.id === usuarioId)?.scoreCard.status || 'ABIERTO'
+    const statusObjetivo = objetivo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status || 'ABIERTO'
+
+    const { progresoReal } = useOperativo({objetivo})
 
     return (
         <>
@@ -57,6 +60,7 @@ export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
                     </Avatar.Group>
 
                     <div className='text-center py-5'>
+                        <Progress percent={ progresoReal } />
                         <p className='text-devarana-dark-graph font-light'>Estatus: </p>
                         <p className='text-devarana-graph font-bold uppercase'>
                             {
@@ -65,31 +69,30 @@ export const CardObjetivoSimple = ({objetivo, usuarioId}: Props) => {
                         </p>
                     </div>
                     <div className='flex justify-center gap-x-10'>
-                            <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
-                                <FaEye className='mr-2 text-devarana-graph' />
-                            </button>
+                        <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
+                            <FaEye className='mr-2 text-devarana-graph' />
+                        </button>
                     </div>        
                 </div>
 
             </div>
 
             <Modal
-				title='Objetivo View 1'
 				open={isModalObjetivoVisible}
 				onCancel={handleCloseModalObjetivo}
 				destroyOnClose={true}
 				footer={null}
 				width={window.innerWidth > 1200 ? 'CALC(95% - 90px)' : '100%' }
 				style={{
-					top: 60,
+					top: 100,
 					left: 35,
 					bottom: 0,
-					height: 'calc(100% - 100px)',
+					height: 'calc(100% - 150px)',
 					overflowY: 'hidden',
 					borderRadius: '10px'
 				}}
 			>
-				<ObjetivoPreview objetivo={objetivo} />
+				<ObjetivoPreview objetivo={objetivo} activeUsuario={activeUsuario} />
 			</Modal>
         </>
     )

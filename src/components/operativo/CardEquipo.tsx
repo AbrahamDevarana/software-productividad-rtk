@@ -18,8 +18,6 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
     const { userAuth } = useAppSelector(state => state.auth)
 
     const handleOpenAdmin = (usuario: SinglePerfilProps) => {
-        // TODO cambiar a ===
-        // if(usuario.leaderId !== userAuth?.id){
         if(false){
             // @ts-ignore
             handleMiEquipo && handleMiEquipo(usuario)
@@ -31,7 +29,8 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
             <Link to={`/perfil/${usuario.slug}`} className='text-devarana-blue hover:text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext'>Ver perfil</Link>
             {
                 usuario.leaderId === userAuth?.id && (
-                    <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
+                    <></>
+                    // <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
                 )
             }
         </div>
@@ -50,7 +49,7 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
                             <p className='font-medium text-white'>{item?.nombre} {item?.apellidoPaterno}</p>
                             <Popover content={getContent(item)} placement='bottom' trigger={'click'} >
                                 <div className='p-2 bg-white rounded cursor-pointer'>
-                                        <BsThreeDots className='text-devarana-blue font-medium' />
+                                    <BsThreeDots className='text-devarana-blue font-medium' />
                                 </div>
                             </Popover>
                         </li>

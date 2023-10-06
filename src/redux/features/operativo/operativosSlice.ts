@@ -23,7 +23,9 @@ const initialState: OperativoState = {
         operativosResponsable: [],
         indicador: '',
         meta: '',
-        status: 'ABIERTO'
+        status: 'ABIERTO',
+        year: 0,
+        quarter: 0
     }
 }
 
