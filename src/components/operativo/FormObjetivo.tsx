@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {  TacticoProps } from '@/interfaces'
 import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton } from 'antd'
+import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton, Tooltip } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
@@ -267,7 +267,10 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         allowClear
                         options={
                             perspectivas.map((perspectiva) => ({
-                                label: <p className='text-devarana-graph'>{perspectiva.nombre}</p>,
+                                label: (
+                                <Tooltip title={perspectiva.nombre}>
+                                    <p className='text-devarana-graph'>{perspectiva.nombre}</p>
+                                </Tooltip>),
                                 value: perspectiva.id,
                                 dataName: perspectiva.nombre
                             }))
@@ -288,7 +291,9 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         allowClear
                         options={
                             filteredEstrategicos.map((estrategico) => ({
-                                label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
+                                label: (<Tooltip title={estrategico.nombre}>
+                                    <p className='text-devarana-graph'>{estrategico.nombre}</p>
+                                </Tooltip>),
                                 value: estrategico.id,
                                 dataName: estrategico.nombre
                             }))
@@ -310,7 +315,9 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
                         options={
                             filteredObjetivosTacticos.map((tactico) => ({
-                                label: <p className='text-devarana-graph'>{tactico.nombre}</p>,
+                                label: <Tooltip title={tactico.nombre}>
+                                    <p className='text-devarana-graph'>{tactico.nombre}</p>
+                                </Tooltip>,
                                 value: tactico.id,
                                 dataName: tactico.nombre
                             }))

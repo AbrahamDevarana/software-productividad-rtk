@@ -21,7 +21,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 	const { perfil } = useAppSelector(state => state.profile)
 
 	
-	const { accionesCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount } = useObjetivo({operativos})
+	const { taskCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount,  } = useObjetivo({operativos})
 
 	const handleCancelPonderacion = () => {
         setPonderacionVisible(false)
@@ -52,7 +52,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			</div>
 			<Divider className='my-3' dashed />
 			<div className='font-light flex justify-between'>
-				<p>Acciones: </p> <CountUp end={accionesCount} separator="," />
+				<p>Acciones: </p> <CountUp end={taskCount} separator="," />
 			</div>
 			<Divider className='my-3' dashed />
 			

@@ -31,8 +31,10 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
         dispatch(getOperativoThunk(id))
         setFormVisible(true)
     }
-    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro, statusObjetivo} = useOperativo({objetivo})
+    const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro, statusObjetivo, taskCount, taskCountDone } = useOperativo({objetivo})
 
+
+    
 
     const showConfirm = (id: string) => {
         confirm({
@@ -80,7 +82,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                             </div>
                             <div>
                                 <p>Acciones </p>
-                                <p> 0 / 0 </p>
+                                <p> {taskCountDone} / { taskCount } </p>
                             </div>
                             <div>
                                 <p> Ponderacion </p>

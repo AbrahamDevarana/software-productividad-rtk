@@ -59,6 +59,24 @@ export const useOperativo = ({objetivo}: Props) => {
         return usuario
     }, [objetivo])
 
+    const taskCount = useMemo(() => {
+        let total = 0
+        objetivo.resultadosClave.forEach(resultado => {
+            total += resultado.task.length
+        })
+        return total
+    }, [objetivo])
+
+    const taskCountDone = useMemo(() => {
+        let total = 0
+        objetivo.resultadosClave.forEach(resultado => {
+            resultado.task.forEach(task => {
+                task.status === 'FINALIZADO' && total++
+            })
+        })
+        return total
+    }, [objetivo])
+
     
     return {
         progresoAsignado,
@@ -69,7 +87,9 @@ export const useOperativo = ({objetivo}: Props) => {
         resultadoClaveDoneCount,
         orderedResponsables,
         statusObjetivo,
-        usuarioPropietaro
+        usuarioPropietaro,
+        taskCount,
+        taskCountDone
     }
 
 }

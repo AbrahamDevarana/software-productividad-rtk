@@ -44,7 +44,7 @@ export const Objetivos : React.FC = () => {
             await dispatch(getEquipoThunk(userAuth.id))
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-            await dispatch (getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+            await dispatch(getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))

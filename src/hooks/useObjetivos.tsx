@@ -49,11 +49,11 @@ export const useObjetivo = ({operativos}:Props) => {
             return total
         }, [operativos])
     
-        const accionesCount = useMemo(() => {
+        const taskCount = useMemo(() => {
             let total = 0
             operativos.forEach(operativo => {
                 operativo.resultadosClave.forEach(resultado => {                    
-                    total += resultado.acciones?.length 
+                    total += resultado.task?.length 
                 })
             })
             return total
@@ -88,7 +88,7 @@ export const useObjetivo = ({operativos}:Props) => {
         misObjetivosCount,
         objetivosCompartidosCount,
         resultadosClaveCount,
-        accionesCount,
+        taskCount,
         misObjetivos,
         objetivosCompartidos,
         scoreLeft
