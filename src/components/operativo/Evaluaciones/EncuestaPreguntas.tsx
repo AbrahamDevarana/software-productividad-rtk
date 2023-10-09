@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui'
+import { getValueColaborador } from '@/helpers/getValueComment';
 import { PerfilProps } from '@/interfaces';
 import { postEvaluacionThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Input, Rate, Steps } from 'antd'
+import { Input, Rate, Spin, Steps, message } from 'antd'
 import React, { useState } from 'react'
 import { Rating } from 'react-simple-star-rating';
 
@@ -18,35 +19,38 @@ interface Respuesta {
 
 
 interface Props {
+    isLider: boolean
     perfil: PerfilProps
     activeEvaluate: string | number
     setRespuestas: React.Dispatch<React.SetStateAction<Respuesta[]>>
     respuestas: any[]
+    setActiveEvaluate: React.Dispatch<React.SetStateAction<string | number>>
 }
 
-export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respuestas}: Props) => {
+export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respuestas, setActiveEvaluate, isLider}: Props) => {
 
     const { TextArea } = Input
+    const { evaluacion } = useAppSelector(state => state.evaluaciones)
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     const [currentStep, setCurrentStep] = useState<number>(0);
         
     const dispatch = useAppDispatch()
 
     const general = {
-        evaluacionId: perfil.evaluaciones.evaluacion?.id,
+        evaluacionId: evaluacion?.id,
         usuarioId: perfil.id,
         evaluacionUsuarioId: activeEvaluate as string,
         quarter,
         year
     }
 
-        const items = perfil.evaluaciones.evaluacion?.preguntasEvaluacion.map((pregunta, index) => {
+        const items = evaluacion?.preguntasEvaluacion.map((pregunta, index) => {
             return {
                 title: `Pregunta ${index + 1}`,
             }
         })
 
-        const preguntasEvaluacion = perfil.evaluaciones.evaluacion?.preguntasEvaluacion
+        const preguntasEvaluacion = evaluacion?.preguntasEvaluacion
 
 
         const handleComentariosChange = (comentarios: string) => {
@@ -89,6 +93,7 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
     
         const nextStep = async () => {
             if (!respuestas[currentStep]) {
+                message.error('Debes seleccionar una calificación');
                 return;
             }
             // Validar que el usuario haya seleccionado un rate sino no dejar avanzar
@@ -103,7 +108,10 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             if (siguientePregunta) {
                 setCurrentStep(currentStep + 1);
             } else {
-                await dispatch(postEvaluacionThunk({respuestas, ...general}));
+                await dispatch(postEvaluacionThunk({respuestas, ...general})).unwrap().then(() => {
+                    message.success('Evaluación enviada correctamente')
+                })
+                setActiveEvaluate('')
             }
 
          
@@ -116,12 +124,11 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
         }
     };
     
-
     return (
         <>
-            <div className="shadow-ext rounded-ext">
-                <div className="p-5 shadow-ext rounded-ext from-dark to-dark-light bg-gradient-to-tr flex justify-between items-center">
-                    <h1 className="text-white">{perfil.evaluaciones.evaluacion? perfil.evaluaciones.evaluacion.nombre : 'Sin evaluación'}</h1>
+            <div className="shadow-ext rounded-ext w-full">
+                <div className={`p-5 shadow-ext rounded-ext ${isLider ? 'from-devarana-blue to-devarana-blue' : 'from-devarana-pink to-devarana-pink' } bg-gradient-to-r flex justify-between items-center`}>
+                    <h1 className="text-white">{evaluacion? evaluacion.nombre : 'Sin evaluación'}</h1>
                     <Steps
                         direction="vertical"
                         initial={0}
@@ -135,12 +142,10 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             </div>
             <div className="p-5">
                 <div>
-                    <h2 className="text-devarana-dark-graph">{preguntasEvaluacion[currentStep].texto}</h2>
-                    <p className="text-devarana-graph font-light">{preguntasEvaluacion[currentStep].descripcion}</p>
-
-                    <p className="text-devarana-graph">Calificación: </p>
-                    <Rating onClick={handleRateChange} initialValue={Number(respuestas[currentStep]?.rate || 0)} allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
-                    <p className="text-devarana-graph">Comentarios:</p>
+                    <h2 className="text-devarana-dark-graph pb-2 text-xl font-light">{preguntasEvaluacion[currentStep].texto}</h2>
+                    <Rating fillColor={isLider ? '#56739B' : '#d64767'} onClick={handleRateChange} initialValue={Number(respuestas[currentStep]?.rate || 0)} allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+                    <div className=' text-default'> { isLider? '' : getValueColaborador(Number(respuestas[currentStep]?.rate || 0) ) } </div>
+                    <p className="text-devarana-graph py-2">Comentarios:</p>
                     <TextArea
                         onChange={(e) => handleComentariosChange(e.target.value)}
                         value={respuestas[currentStep]?.comentarios || ''}
@@ -149,12 +154,23 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             </div>
 
             <div className="p-5 flex justify-between">
-                <Button classType="regular" width={100} classColor="dark" onClick={prevStep} disabled={currentStep === 0}>
-                    Anterior
-                </Button>
-                <Button  classType="regular" width={100} classColor="dark" onClick={nextStep} disabled={currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length}>
+                {
+                    currentStep === 0 && (
+                        <Button classType="regular" width={100} classColor="error" onClick={() => setActiveEvaluate('')} >
+                            Cancelar
+                        </Button>
+                    )
+                }
+               {
+                    currentStep > 0 && (
+                        <Button classType="regular" width={100} classColor="dark" onClick={prevStep} disabled={currentStep === 0}>
+                            Anterior
+                        </Button>
+                    )
+               }
+                <Button  classType="regular" width={100} classColor="dark" onClick={nextStep} disabled={currentStep === evaluacion.preguntasEvaluacion.length}>
                     {
-                        currentStep === perfil.evaluaciones.evaluacion.preguntasEvaluacion.length - 1 ? 'Finalizar' : 'Siguiente'
+                        currentStep === evaluacion.preguntasEvaluacion.length - 1 ? 'Finalizar' : 'Siguiente'
                     }
                 </Button>
             </div>

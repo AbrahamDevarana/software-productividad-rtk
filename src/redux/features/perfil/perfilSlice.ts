@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getUsuariosAEvaluarThunk, getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, getEvaluacionThunk, getEvaluacionResultadosThunk, updatePortraitThunk, getRendimientoThunk, getHistorialRendimientoThunk } from './perfilThunk';
+import { getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk, getHistorialRendimientoThunk } from './perfilThunk';
 
 
 const initialState: PerfilState = {
@@ -181,48 +181,6 @@ const profileSlice = createSlice({
                 state.error = action.error.message
             })
 
-            .addCase(getUsuariosAEvaluarThunk.pending, (state) => {
-                state.isLoadingEvaluation = true
-            })
-            .addCase(getUsuariosAEvaluarThunk.fulfilled, (state, action) => {
-                state.isLoadingEvaluation = false
-                state.perfil.evaluaciones.evaluacionColaborador = action.payload.evaluacionColaborador
-                state.perfil.evaluaciones.evaluacionLider = action.payload.evaluacionLider
-                state.perfil.evaluaciones.evaluacionPropia = action.payload.evaluacionPropia
-                state.perfil.evaluaciones.evaluacion = action.payload.evaluacion
-            })
-            .addCase(getUsuariosAEvaluarThunk.rejected, (state, action) => {
-                state.isLoadingEvaluation = false
-                state.error = action.error.message
-            })
-            .addCase(getEvaluacionThunk.pending, (state) => {
-                // state.isLoadingEvaluation = true
-            })
-            .addCase(getEvaluacionThunk.fulfilled, (state, action) => {
-                state.isLoadingEvaluation = false
-                const evaluacion = {
-                    ...action.payload.evaluacion,
-                    status: action.payload.asignacion.status
-                }
-                state.perfil.evaluaciones.evaluacion = evaluacion
-            })
-            .addCase(getEvaluacionThunk.rejected, (state, action) => {
-                state.isLoadingEvaluation = false
-                state.error = action.error.message
-            })
-
-            .addCase(getEvaluacionResultadosThunk.pending, (state) => {
-                // state.isLoadingEvaluation = true
-            })
-
-            .addCase(getEvaluacionResultadosThunk.fulfilled, (state, action) => {
-                state.isLoadingEvaluation = false
-                state.perfil.evaluaciones.resultados = action.payload.promedio
-            })
-            .addCase(getEvaluacionResultadosThunk.rejected, (state, action) => {
-                state.isLoadingEvaluation = false
-                state.error = action.error.message
-            })
             .addCase(updatePortraitThunk.pending, (state) => {
                 state.isLoadingConfiguration = true
             })

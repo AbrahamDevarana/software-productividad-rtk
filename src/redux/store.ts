@@ -20,6 +20,7 @@ import accionesSlice from "./features/acciones/accionesSlice";
 import comentariosSlice from "./features/comentarios/comentariosSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
 import rankingsSlice from "./features/ranking/rankingSlice";
+import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -44,6 +45,7 @@ export const store = configureStore({
         comentarios: comentariosSlice,
         galeria: galeriaSlice,
         rankings: rankingsSlice,
+        evaluaciones: evaluacionsSlice,
 
     },
     middleware: (getDefaultMiddleware) =>

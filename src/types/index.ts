@@ -24,6 +24,7 @@ export const objetivosTypes = {
     SIN_APROBAR: 'Sin Aprobar', // Cuando se rechaza un objetivo
     CANCELADO: 'Cancelado', // Cuando se cancela un objetivo
     FINALIZADO: 'Finalizado', // Cuando se finaliza un objetivo
+    CERRADO: 'CERRADO'
 }
 
 export const taskStatusTypes = {

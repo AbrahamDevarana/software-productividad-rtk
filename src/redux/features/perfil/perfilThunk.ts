@@ -106,7 +106,7 @@ export const updateProfileConfigThunk = createAsyncThunk(
 
 export const getEquipoThunk = createAsyncThunk(
     'profile/getEquipo',
-    async (usuarioId:string, {rejectWithValue, getState}) => {
+    async ({usuarioId}: {usuarioId:string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -140,65 +140,6 @@ export const getColaboradoresThunk = createAsyncThunk(
         }
     }
 )
-
-export const getUsuariosAEvaluarThunk = createAsyncThunk(
-    'profile/getUsuariosAEvaluar',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter
-                }
-            }
-            const response = await clientAxios.get(`/evaluacion/usuarios/${usuarioId}`, config);
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const getEvaluacionThunk = createAsyncThunk(
-    'profile/getEvaluacion',
-    async ({usuarioId, year, quarter, evaluadoId}:{usuarioId: string, year:number, quarter:number, evaluadoId:string}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter,
-                    evaluadoId
-                }
-            }
-            const response = await clientAxios.get(`/evaluacion/${usuarioId}`, config);
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const postSolicitarEvaluacionThunk = createAsyncThunk(
-    'profile/postSolicitarEvaluacion',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.post(`/evaluacion/asignar`, {year, quarter, usuarioId}, config);
-            console.log(response.data);
-            
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
  
 export const postEvaluacionThunk = createAsyncThunk(
     'profile/postEvaluacion',
@@ -216,46 +157,6 @@ export const postEvaluacionThunk = createAsyncThunk(
     }
 )
 
-export const getEvaluacionResultadosThunk = createAsyncThunk(
-    'profile/getEvaluacionResultados',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter
-                }
-            }
-
-            const response = await clientAxios.get(`/evaluacion/resultados/${usuarioId}`, config);
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-    
-export const getEvaluacionesRealizadasThunk = createAsyncThunk(
-    'profile/getEvaluacionesRealizadas',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter
-                }
-            }
-            const response = await clientAxios.get(`/evaluacion/realizadas/${usuarioId}`, config);
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
 
 export const updatePortraitThunk = createAsyncThunk(
     'profile/updatePortrait',
@@ -319,3 +220,42 @@ export const clearProfileThunk = () => {
         dispatch(clearProfile());
     }
 }
+
+
+// export const postSolicitarEvaluacionThunk = createAsyncThunk(
+//     'profile/postSolicitarEvaluacion',
+//     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+//         try {
+//             const { accessToken } = (getState() as RootState).auth;
+//             const config = {
+//                 headers: { "accessToken": `${accessToken}` }
+//             }
+//             const response = await clientAxios.post(`/evaluacion/asignar`, {year, quarter, usuarioId}, config);
+//             console.log(response.data);
+            
+//             return response.data
+//         } catch (error: any) {
+//             return rejectWithValue(error.response.data)
+//         }
+//     }
+// )
+
+// export const getEvaluacionesRealizadasThunk = createAsyncThunk(
+//     'profile/getEvaluacionesRealizadas',
+//     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+//         try {
+//             const { accessToken } = (getState() as RootState).auth;
+//             const config = {
+//                 headers: { "accessToken": `${accessToken}` },
+//                 params: {
+//                     year,
+//                     quarter
+//                 }
+//             }
+//             const response = await clientAxios.get(`/evaluacion/realizadas/${usuarioId}`, config);
+//             return response.data
+//         } catch (error: any) {
+//             return rejectWithValue(error.response.data)
+//         }
+//     }
+// )

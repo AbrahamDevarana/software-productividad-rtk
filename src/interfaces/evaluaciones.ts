@@ -1,4 +1,5 @@
 import { SinglePerfilProps } from "./perfil";
+import { InitialState } from "./slice";
 
 export interface EvaluacionesProps {
 
@@ -13,4 +14,15 @@ export interface PreguntasEvaluacionProps {
     id: string;
     texto: string;
     descripcion: string;
+}
+
+export interface EvaluacionState extends InitialState {
+    isLoadingEvaluacion: boolean;
+    isLoadingResultados: boolean;
+    evaluaciones: EvaluacionesProps[];
+    evaluacion: EvaluacionesProps;
+    evaluacionColaborador: EvaluacionesProps[];
+    evaluacionLider: SinglePerfilProps;
+    evaluacionPropia: SinglePerfilProps;
+    resultados: number;
 }

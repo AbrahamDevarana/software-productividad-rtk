@@ -1,16 +1,14 @@
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { PerfilProps } from "@/interfaces";
-import { getEvaluacionThunk, postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
+import { postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Image, Input, Rate, Segmented, Skeleton, Space, Steps, message } from "antd";
+import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Steps, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
-import { useState } from "react";
-import { Button } from "../../ui";
-import dayjs from 'dayjs'
-import { NoEvaluacion } from "./NoEvaluacion";
+import { useMemo, useState } from "react";
 import { EncuestaPresentada } from "./EncuestaPresentada";
 import { EncuestaPreguntas } from "./EncuestaPreguntas";
+import { getEvaluacionThunk } from "@/redux/features/evaluaciones/evaluacionesThunk";
 
 
 interface Props {
@@ -31,7 +29,7 @@ interface Respuesta {
 const FormEvaluacion = ({perfil}: Props) => {
 
     
-    const { isLoadingEvaluation } = useAppSelector(state => state.profile)
+    const { isLoading, evaluacionLider, evaluacionPropia, evaluacion } = useAppSelector(state => state.evaluaciones)
     const [fetching, setFetching] = useState(false);
     const { periodControls: nextPeriodAvailable, currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ activeEvaluate, setActiveEvaluate ] = useState<string | number>('')
@@ -41,86 +39,78 @@ const FormEvaluacion = ({perfil}: Props) => {
     const dispatch = useAppDispatch()
 
 
-    if(isLoadingEvaluation) return <Skeleton active={true} paragraph={{ rows: 4 }} />
-
-    const usuariosAEvaluar = [...perfil.evaluaciones.evaluacionColaborador, perfil.evaluaciones.evaluacionLider, perfil.evaluaciones.evaluacionPropia]
-    
-    const options = usuariosAEvaluar?.map((usuario) => {
-        if(usuario){
-            return {
-                label: (
-                    <div style={{ padding: 4 }}>
-                        <Avatar 
-                            src={<Image src={`${getStorageUrl(usuario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                            className=''
-                        >
-                            {usuario?.iniciales}
-                        </Avatar>
-                        <div>{ usuario.nombre }</div>
-                    </div>
-                ),
-                value: usuario.id
-            }
-        }else{
-            return {
-                label: 'Sin usuarios',
-                value: 'user1'
-            }
-        }
-    })
+    if(isLoading) return <Skeleton active={true} paragraph={{ rows: 4 }} />
 
     const handleSelectUser = async (value: SegmentedValue) => {        
         setFetching(true)
         await dispatch(getEvaluacionThunk({usuarioId: perfil.id, year, quarter, evaluadoId: value as string }))
         setActiveEvaluate(value)
         setFetching(false)
-
        setRespuestas([])
     }
 
-    const isDueDate = () => {
+    const isLider = useMemo(() => {
+        return activeEvaluate === evaluacionLider.id
+    }, [activeEvaluate, evaluacionLider])
 
-        const { prePeriodDefinitionDays: days } = nextPeriodAvailable
 
-        // obtener mes del trimestre
-        const month = (quarter - 1) * 3 + 1;
-        // obtener ultimo día del trimestre
-        const lastDay = dayjs(`${year}-${month}-01`).endOf('quarter')
-        // obtener ultimo día del trimestre - days
-        const lastDayMinusRange = lastDay.subtract(days, 'day')
-        // obtener fecha actual
-        const today = dayjs()
-        // validar si la fecha actual esta entre el ultimo día del trimestre y el ultimo día del trimestre - days
-        const isDue = !today.isBetween(lastDayMinusRange, lastDay)
-        return isDue
-    }
 
     return (
     <>
         <div>
-
-            
             <div className="gap-5 flex align-middle items-center flex-col">
                 <Space align="center" size={12}>
-                    <Segmented
-                        options={options}
-                        value={activeEvaluate}
-                        onChange={handleSelectUser}
-                    />
+                    <div className="px-2">
+                        { evaluacionPropia.id !== '' && (
+                            <div className="flex flex-col items-center">
+                                <h1 className="text-devarana-graph font-medium">Auto Evaluación</h1>
+                                <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionPropia.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionPropia.id)}>
+                                    <Avatar 
+                                        src={<Image src={`${getStorageUrl(evaluacionPropia.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                        className=''
+                                    >
+                                        {evaluacionPropia.iniciales}
+                                    </Avatar>
+                                    <p className={`text-devarana-dark-graph`}>{ evaluacionPropia.nombre } {evaluacionPropia.apellidoPaterno} </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <Divider type="vertical" className="h-20"/>
+                    <div className="px-2">
+                        { evaluacionLider.id !== '' && (
+                            <div className="flex flex-col items-center">
+                                <h1 className="text-devarana-graph font-medium">Evaluación de Líder</h1>
+                                <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionLider.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionLider.id)}>
+                                    <Avatar 
+                                        src={<Image src={`${getStorageUrl(evaluacionLider.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                        className=''
+                                    >
+                                        {evaluacionLider.iniciales}
+                                    </Avatar>
+                                    <p className={` text-devarana-dark-graph`}>{ evaluacionLider.nombre } {evaluacionLider.apellidoPaterno} </p>
+                                </div>
+                            </div>
+                        )}
+                        
+                    </div>
                 </Space>
                 {
-                    // Validar si estamos en periodo de evaluación y sino se han solicitado las evaluaciones
-                    isDueDate() && usuariosAEvaluar.length === 0
-                    ? <NoEvaluacion/>
-                    : activeEvaluate === '' 
+                    activeEvaluate === '' 
                     ? 
-                        <div className="flex items-center align-middle">
-                            <h1>Es tiempo de evaluar, selecciona un usuario a quien evaluar</h1>
+                        <div className="px-10">
+                            <h1 className="text-xl ">¡Hola {perfil.nombre}!</h1>
+                            <p className="text-devarana-graph py-3">Bienvenido a nuestra evaluación de competencias DEVARANA. Este espacio esta diseñado para realizar de forma trimestral la evaluación de las competencias que nos definen como colaborador DEVARANA y nos impulsan a ser mejores día a día.</p>
+                            <p className="text-devarana-graph">Tu evaluación de competencias, representa el <span className="font-bold">10%</span> de tu calificación total y se compone de la siguiente manera: </p>
+                            <p className="text-devarana-graph py-3"><span className="font-bold text-devarana-dark-graph">Evaluación de Lider: </span> Te permite realizar una evaluación cualitativa de las habilidades de liderazgo de tu líder de área.</p>
+                            <p className="text-devarana-graph"><span className="font-bold text-devarana-dark-graph">Autoevaluación: </span> Te brinda un espacio para tomar consciencia y reflexionar sobre tu desempeño en el trimestre. Reconociendo tus logros, fortalezas o áreas de oportunidad. </p>
                         </div>
                     : fetching 
                         ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 
-                        : perfil.evaluaciones.evaluacion.preguntasEvaluacion.length > 0 && !perfil.evaluaciones.evaluacion.status ?
-                        <EncuestaPreguntas perfil={perfil} activeEvaluate={activeEvaluate} respuestas={respuestas} setRespuestas={setRespuestas}/>
+                        : evaluacion.preguntasEvaluacion.length === 0 ? 
+                            <p className="text-2xl text-devarana-graph">Esta encuesta no está completada, contacta soporte.</p>
+                        : !evaluacion.status 
+                        ? <EncuestaPreguntas perfil={perfil} isLider={isLider} activeEvaluate={activeEvaluate} setActiveEvaluate={setActiveEvaluate} respuestas={respuestas} setRespuestas={setRespuestas}/>
                         : <EncuestaPresentada />
                 }
             </div>

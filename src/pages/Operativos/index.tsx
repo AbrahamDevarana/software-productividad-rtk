@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getEvaluacionResultadosThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk, getUsuariosAEvaluarThunk } from '@/redux/features/perfil/perfilThunk';
+import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -17,9 +17,9 @@ import 'swiper/css';
 import 'swiper/css/effect-cards';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode } from 'swiper';
-import { changeConfigThunk } from '@/redux/features/global/globalThunk';
 import { SinglePerfilProps } from '@/interfaces';
 import { getRankingsThunk } from '@/redux/features/ranking/rankingThunk';
+import { getEvaluacionResultadosThunk, getUsuariosAEvaluarThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
 
 export const Objetivos : React.FC = () => {
 
@@ -41,10 +41,10 @@ export const Objetivos : React.FC = () => {
         setGettingProfile(true)
         const fetchData = async () => {
             await dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter}))
-            await dispatch(getEquipoThunk(userAuth.id))
+            await dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id }))
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-            await dispatch(getEvaluacionResultadosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+            await dispatch(getEvaluacionResultadosThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))
@@ -164,9 +164,6 @@ export const Objetivos : React.FC = () => {
                 closable={false}
             >
                 <div className='relative'>
-                    {/* <button onClick={handleCancelForm} className='absolute top-0 right-0'>
-                        <FaTimes className='text-xl text-devarana-midnight' />
-                    </button> */}
                     <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
                 </div>
             </Drawer>

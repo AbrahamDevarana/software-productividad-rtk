@@ -1,5 +1,5 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
-import { Divider, Modal, Progress } from 'antd'
+import { Divider, Modal, Progress, Tooltip } from 'antd'
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -19,12 +19,11 @@ export const CardAvance = ( { operativos }: Props ) => {
 
     const { periodControls: { preEvaluationDays, postClosureDays}, currentConfig: { currentDate, quarter, year } } = useAppSelector(state => state.global)
     const { perfil } = useAppSelector(state => state.profile)
-    const { ponderacionObjetivos } = useObjetivo({operativos})
-    const {perfil: { evaluaciones: {resultados}, rendimiento}} = useAppSelector(state => state.profile)
+    const { ponderacionObjetivos } = useObjetivo({ operativos })
+    const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
+    const { evaluacionLider, evaluacionPropia, isLoading, resultados } = useAppSelector(state => state.evaluaciones)
 
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
-
-    const dispatch = useAppDispatch()
 
     const handleEvaluation = async () => {
         setEvaluacionVisible(!isEvaluacionVisible)
@@ -34,13 +33,8 @@ export const CardAvance = ( { operativos }: Props ) => {
 		setEvaluacionVisible(false)
 	}
 
-    const isOpen = useMemo(() => {        
-
-        const { evaluaciones } = perfil
-        const { evaluacionLider, evaluacionPropia } = evaluaciones
-
+    const isOpen = useMemo(() => {
         const today = dayjs()
-        
         // Obtener ultimo mes del quarter
         const month = quarter * 3        
         //  Obtener el ultimo dia del quarter
@@ -49,20 +43,20 @@ export const CardAvance = ( { operativos }: Props ) => {
         const preEvaluationDate = lastDay.subtract(preEvaluationDays, 'day')
         // Obtener la fecha de cierre de evaluacion
         const postClosureDate = lastDay.add(postClosureDays, 'day')
-
         // si está entree el rango de fechas devolver false
         if (today.isBetween(preEvaluationDate, postClosureDate)) {
-            // Si evaluacionLider y evaluacionPropia.id === '' o undefined devolver true
-            if (evaluacionLider?.id !== '' && evaluacionPropia?.id !== '') {
-                return true
-            } else {
-                return false
+            if(!isLoading){
+                if (evaluacionLider?.id === '' && evaluacionPropia?.id === '') {
+                    return true
+                } else {
+                    return false
+                }
             }
         } else {
             return true
         }
 
-    }, [currentDate, postClosureDays, preEvaluationDays, perfil.evaluaciones])
+    }, [currentDate, postClosureDays, preEvaluationDays, evaluacionLider, evaluacionPropia])
 
     const calculoAvance = useMemo(() => {
         
@@ -161,7 +155,9 @@ export const CardAvance = ( { operativos }: Props ) => {
                         <Divider className='my-3'/>
                         <div className='flex-1 flex flex-col items-center'>
                             <p>Competencias</p>
-                            <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+                            <Tooltip title={resultados} >
+                                <div><Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/></div>
+                            </Tooltip>
                         </div>
                         <div className='flex justify-center pb-5 pt-2 w-full'>
                             <button 
