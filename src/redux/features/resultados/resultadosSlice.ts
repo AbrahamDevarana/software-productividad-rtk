@@ -161,7 +161,8 @@ const resultadoClaveSlice = createSlice({
                     updatedResultadoClave.task = updatedResultadoClave.task.map(task => task.id === payload.id ? payload : task)
 
                 if( updatedResultadoClave.tipoProgreso === 'acciones'){
-                    updatedResultadoClave.progreso = (updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / updatedResultadoClave.task.length * 100)
+                    const taskLength = updatedResultadoClave.task.filter(task => task.status !== 'CANCELADO').length
+                    updatedResultadoClave.progreso = (updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / taskLength * 100)
                 }
                 
                     

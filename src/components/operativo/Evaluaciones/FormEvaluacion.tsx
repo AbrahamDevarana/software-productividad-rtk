@@ -123,6 +123,7 @@ const FormEvaluacion = ({perfil}: Props) => {
                         
                     </div>
                 </Space>
+                <p>{activeEvaluate === '' ? '¡Comienza tu evaluación!' : ''}</p>
                 {
                     activeEvaluate === '' 
                     ? 

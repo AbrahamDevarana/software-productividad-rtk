@@ -103,6 +103,11 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             if (rate === 0) {
                 return;
             }
+
+            if (!comentarios && comentarios.trim() === '') {
+                message.error('Debes agregar un comentario');
+                return;
+            }
         
             const siguientePregunta = preguntasEvaluacion[currentStep + 1];
             if (siguientePregunta) {
