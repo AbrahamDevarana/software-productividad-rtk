@@ -83,16 +83,16 @@ export const Objetivos : React.FC = () => {
     return (
         <>
             <div className="flex lg:flex-nowrap flex-wrap gap-5">
-                <Box className='lg:w-[20%] md:w-[45%] w-full px-5 text-devarana-graph flex flex-col'>
+                <Box className='lg:w-[20%] sm:w-[45%] w-full px-5 text-devarana-graph flex flex-col'>
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
                 </Box>
-                <Box className='lg:w-[20%] md:w-[45%] w-full'>
+                <Box className='lg:w-[20%] sm:w-[45%] w-full'>
                     <CardAvance operativos={operativos} />
                 </Box>
-                <Box className='lg:w-[35%] md:w-[49%] w-full flex justify-center'>
+                <Box className='lg:w-[35%] sm:w-[49%] w-full flex justify-center'>
                     <CardDesempeno />
                 </Box>
-                <div className='lg:w-[25%] md:w-[49%] w-full relative'>
+                <div className='lg:w-[25%] sm:w-[49%] w-full relative'>
                     <Swiper
                         effect={'cards'}
                         grabCursor={true}

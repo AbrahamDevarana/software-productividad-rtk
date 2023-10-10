@@ -192,8 +192,8 @@ export const Devarana: React.FC = () => {
                             }}
                             loop={true}
                             navigation={true}
-                            grabCursor={true}
                             className='my-auto swiperCompetencias px-10'                    
+                            draggable={false}
                         >
                             <SwiperSlide className='bg-white'>
                                 <Lider />

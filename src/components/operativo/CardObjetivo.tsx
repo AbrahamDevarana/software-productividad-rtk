@@ -147,10 +147,11 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                                     objetivo.status === 'CERRADO' ? true : false
                                                 } 
                                                 // si el objetivo esta cerrado, no se puede cambiar el estado
-                                                disabled={ true || objetivo.status === 'CERRADO' ? true : false }
+                                                // disabled={ true && objetivo.status === 'CERRADO' ? true : false }
+                                                disabled={ true }
                                                 onChange={ () => showConfirm(objetivo.id) }
                                             />
-                                            <span className='text-devarana-graph'> Cerrar </span>
+                                            <span className='text-devarana-graph'> Cierre </span>
                                         </Space>
                                     </Tooltip>
                                 )

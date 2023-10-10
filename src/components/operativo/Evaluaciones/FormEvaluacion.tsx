@@ -3,7 +3,7 @@ import getBrokenUser from "@/helpers/getBrokenUser";
 import { PerfilProps } from "@/interfaces";
 import { postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Steps, message } from "antd";
+import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Steps, Tooltip, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import { useMemo, useState } from "react";
 import { EncuestaPresentada } from "./EncuestaPresentada";
@@ -29,7 +29,7 @@ interface Respuesta {
 const FormEvaluacion = ({perfil}: Props) => {
 
     
-    const { isLoading, evaluacionLider, evaluacionPropia, evaluacion } = useAppSelector(state => state.evaluaciones)
+    const { isLoading, evaluacionLider, evaluacionPropia, evaluacionColaborador ,evaluacion } = useAppSelector(state => state.evaluaciones)
     const [fetching, setFetching] = useState(false);
     const { periodControls: nextPeriodAvailable, currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ activeEvaluate, setActiveEvaluate ] = useState<string | number>('')
@@ -50,7 +50,7 @@ const FormEvaluacion = ({perfil}: Props) => {
     }
 
     const isLider = useMemo(() => {
-        return activeEvaluate === evaluacionLider.id
+        return activeEvaluate === evaluacionLider?.id
     }, [activeEvaluate, evaluacionLider])
 
 
@@ -65,30 +65,58 @@ const FormEvaluacion = ({perfil}: Props) => {
                             <div className="flex flex-col items-center">
                                 <h1 className="text-devarana-graph font-medium">Auto Evaluación</h1>
                                 <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionPropia.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionPropia.id)}>
-                                    <Avatar 
-                                        src={<Image src={`${getStorageUrl(evaluacionPropia.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                                        className=''
-                                    >
-                                        {evaluacionPropia.iniciales}
-                                    </Avatar>
-                                    <p className={`text-devarana-dark-graph`}>{ evaluacionPropia.nombre } {evaluacionPropia.apellidoPaterno} </p>
+                                   <Tooltip title={`${ evaluacionPropia.nombre } ${evaluacionPropia.apellidoPaterno}`}>
+                                        <Avatar 
+                                                src={<Image src={`${getStorageUrl(evaluacionPropia.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                                className=''
+                                            >
+                                            {evaluacionPropia.iniciales}
+                                        </Avatar>
+                                   </Tooltip>
                                 </div>
                             </div>
                         )}
                     </div>
-                    <Divider type="vertical" className="h-20"/>
+                    {
+
+                    evaluacionColaborador.length > 0 &&
+                    <>
+                        <Divider type="vertical" className="h-20"/>
+                        <div className="px-2" >
+                                <h1 className="text-devarana-graph font-medium text-center">Evaluación de Colaborador</h1>
+                                <div className="flex items-center justify-center">
+                                    {
+                                        evaluacionColaborador.length > 0 && evaluacionColaborador.map((item, index) => (
+                                            <div key={index} className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === item.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(item.id)}>
+                                                <Tooltip title={`${ item.nombre } ${item.apellidoPaterno}`}>
+                                                    <Avatar 
+                                                            src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                                            className=''
+                                                        >
+                                                        {item.iniciales}
+                                                    </Avatar>
+                                                </Tooltip>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </>
+                    }
+                    <Divider type="vertical" className="h-20"/>                
                     <div className="px-2">
                         { evaluacionLider.id !== '' && (
                             <div className="flex flex-col items-center">
                                 <h1 className="text-devarana-graph font-medium">Evaluación de Líder</h1>
                                 <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionLider.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionLider.id)}>
-                                    <Avatar 
-                                        src={<Image src={`${getStorageUrl(evaluacionLider.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                                        className=''
-                                    >
-                                        {evaluacionLider.iniciales}
-                                    </Avatar>
-                                    <p className={` text-devarana-dark-graph`}>{ evaluacionLider.nombre } {evaluacionLider.apellidoPaterno} </p>
+                                    <Tooltip title={`${ evaluacionLider.nombre } ${evaluacionLider.apellidoPaterno}`}>
+                                        <Avatar 
+                                                src={<Image src={`${getStorageUrl(evaluacionLider.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                                className=''
+                                            >
+                                            {evaluacionLider.iniciales}
+                                        </Avatar>
+                                    </Tooltip>
                                 </div>
                             </div>
                         )}
@@ -104,6 +132,7 @@ const FormEvaluacion = ({perfil}: Props) => {
                             <p className="text-devarana-graph">Tu evaluación de competencias, representa el <span className="font-bold">10%</span> de tu calificación total y se compone de la siguiente manera: </p>
                             <p className="text-devarana-graph py-3"><span className="font-bold text-devarana-dark-graph">Evaluación de Lider: </span> Te permite realizar una evaluación cualitativa de las habilidades de liderazgo de tu líder de área.</p>
                             <p className="text-devarana-graph"><span className="font-bold text-devarana-dark-graph">Autoevaluación: </span> Te brinda un espacio para tomar consciencia y reflexionar sobre tu desempeño en el trimestre. Reconociendo tus logros, fortalezas o áreas de oportunidad. </p>
+                            <p className="text-devarana-graph"><span className="font-bold text-devarana-dark-graph">Evaluación de Colaborador: </span> En caso de tener personal a tu cargo, te permite realizar una evaluación cualitativa de su desempeño basado en competencias. </p>
                         </div>
                     : fetching 
                         ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 

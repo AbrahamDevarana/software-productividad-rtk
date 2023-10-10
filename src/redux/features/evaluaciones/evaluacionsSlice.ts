@@ -1,12 +1,13 @@
 import { EvaluacionState } from '@/interfaces'
 import { createSlice } from '@reduxjs/toolkit'
-import { getEvaluacionResultadosThunk, getEvaluacionThunk, getUsuariosAEvaluarThunk } from './evaluacionesThunk'
+import { getEvaluacionResultadosLiderThunk, getEvaluacionResultadosThunk, getEvaluacionThunk, getUsuariosAEvaluarThunk } from './evaluacionesThunk'
 
 
 const initialState: EvaluacionState = {
     error: false,
     isLoading: false,
     isLoadingResultados: false,
+    isLoadingResultadosLider: false,
     isLoadingEvaluacion: false,
     infoMessage: '',
     evaluaciones: [],
@@ -40,7 +41,9 @@ const initialState: EvaluacionState = {
         email: '',
         foto: '',
         slug: '',
-    }
+    },
+    evaluacionResultados:[],
+    evaluacionResultadosColaboradores:[],
 }
 
 
@@ -56,6 +59,7 @@ const evaluacionesSlice = createSlice({
             state.isLoading = false
             state.evaluacionLider = action.payload.evaluacionLider
             state.evaluacionPropia = action.payload.evaluacionPropia
+            state.evaluacionColaborador = action.payload.evaluacionColaborador
         })
         .addCase(getUsuariosAEvaluarThunk.rejected, (state, action) => {
             state.isLoading = false
@@ -89,6 +93,19 @@ const evaluacionesSlice = createSlice({
         })
         .addCase(getEvaluacionResultadosThunk.rejected, (state, action) => {
             state.isLoadingResultados = false
+            state.error = true
+        })
+
+        .addCase(getEvaluacionResultadosLiderThunk.pending, (state) => {
+            state.isLoadingResultadosLider = true
+        })
+        .addCase(getEvaluacionResultadosLiderThunk.fulfilled, (state, action) => {
+            state.isLoadingResultadosLider = false
+            state.evaluacionResultados = action.payload.evaluacionResultados
+            state.evaluacionResultadosColaboradores = action.payload.evaluacionResultadosColaboradores
+        })
+        .addCase(getEvaluacionResultadosLiderThunk.rejected, (state, action) => {
+            state.isLoadingResultadosLider = false
             state.error = true
         })
     },

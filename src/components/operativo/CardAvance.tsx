@@ -21,7 +21,7 @@ export const CardAvance = ( { operativos }: Props ) => {
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
     const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
-    const { evaluacionLider, evaluacionPropia, isLoading, resultados } = useAppSelector(state => state.evaluaciones)
+    const { evaluacionLider, evaluacionPropia, evaluacionColaborador,isLoading, resultados } = useAppSelector(state => state.evaluaciones)
 
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
 
@@ -46,10 +46,14 @@ export const CardAvance = ( { operativos }: Props ) => {
         // si está entree el rango de fechas devolver false
         if (today.isBetween(preEvaluationDate, postClosureDate)) {
             if(!isLoading){
-                if (evaluacionLider?.id === '' && evaluacionPropia?.id === '') {
+                if(evaluacionLider && evaluacionPropia){
+                    if(evaluacionLider.id !== '' && evaluacionPropia.id !== ''){
+                        return false
+                    }else{
+                        return true
+                    }
+                }else{
                     return true
-                } else {
-                    return false
                 }
             }
         } else {
