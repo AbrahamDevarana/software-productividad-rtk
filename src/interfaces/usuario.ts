@@ -38,7 +38,7 @@ export interface UsuarioProps {
     status?: boolean;
     fechaNacimiento?: Date | string;
     fechaIngreso?: Date | string;
-    telefono?: string;
+    telefono?: number;
     foto?: string;
     descripcionPerfil?: string;
     departamentoId?: number;

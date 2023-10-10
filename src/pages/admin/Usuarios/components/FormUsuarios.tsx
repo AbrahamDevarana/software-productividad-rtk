@@ -40,7 +40,6 @@ export const FormUsuarios = ({visible, handleModal}: Props) => {
             destroyOnClose={true}
             width={1000}
             footer={null}
-            closable = {false}
             bodyStyle={{ backgroundColor: 'transparent' }}
         >
             <div className="animate__animated animate__fadeIn animate__faster">

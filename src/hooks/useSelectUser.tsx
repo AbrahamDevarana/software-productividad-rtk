@@ -41,7 +41,7 @@ export const useSelectUser = (usuarios?:UsuarioProps[]) => {
 
         <div className='flex items-center gap-x-2 h-full'>
             <Avatar
-                src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                src={<Image src={`${getStorageUrl(usuario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
                 size={'large'}
             >
                 {usuario.iniciales}

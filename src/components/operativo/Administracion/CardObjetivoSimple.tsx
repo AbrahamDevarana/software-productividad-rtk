@@ -35,12 +35,22 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
 
     const statusObjetivo = objetivo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status || 'ABIERTO'
 
-    const { progresoReal } = useOperativo({objetivo})
+    const { progresoReal, progresoAsignado } = useOperativo({objetivo})
 
     return (
         <>
             <div className=''>
-                <h1 className='text-center '>{ objetivo.nombre }</h1>
+                <div className='h-10 flex items-center'>
+                    <Tooltip title={objetivo.nombre} >
+                        <h1 className='text-center' style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{ objetivo.nombre }</h1>
+                    </Tooltip>
+                </div>
 
                 <div className='py-5'>
                     <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
@@ -61,6 +71,9 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
 
                     <div className='text-center py-5'>
                         <Progress percent={ progresoReal } />
+                        <p className='text-devarana-graph'>
+                            Ponderación: <span>{ progresoAsignado.toFixed(2) }%</span>
+                        </p>
                         <p className='text-devarana-dark-graph font-light'>Estatus: </p>
                         <p className='text-devarana-graph font-bold uppercase'>
                             {

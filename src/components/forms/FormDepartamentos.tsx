@@ -23,6 +23,9 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     const { areas } = useAppSelector(state => state.areas)
     const [ color, setColor ] = useState<string>('#000000')
 
+   console.log(usuarios);
+    
+
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
 
@@ -91,6 +94,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                         <Form.Item label="Lider Departamento" name="leaderId" rules={[{ required: true, message: 'El lider es requerido' }]}>
                             <Select
                                 showSearch
+                                size='large'
                                 placeholder="Selecciona una opción"
                                 allowClear
                                 // @ts-ignore

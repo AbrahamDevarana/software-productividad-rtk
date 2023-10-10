@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Box } from '../../components/ui';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect} from 'react';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { FaLeaf, FaMedal } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
@@ -18,8 +18,6 @@ import 'swiper/css';
 import "swiper/css/effect-fade";
 import 'swiper/css/navigation';
 import getBrokenUser from '@/helpers/getBrokenUser';
-import Lider from '@/components/svg/devarana/Lider';
-import Colaborador from '@/components/svg/devarana/Colaborador';
 
 export const Devarana: React.FC = () => {
 
@@ -196,10 +194,10 @@ export const Devarana: React.FC = () => {
                             draggable={false}
                         >
                             <SwiperSlide className='bg-white'>
-                                <Lider />
+                                <Image src={`https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/devarana-perfil/CompetenciasLider.png`} preview={false} />
                             </SwiperSlide>
                             <SwiperSlide className='bg-white'>
-                                <Colaborador />
+                                <Image src={`https://devarana-storage.sfo3.cdn.digitaloceanspaces.com/devaranapp/devarana-perfil/CompetenciasColaborador.png`} preview={false} />
                             </SwiperSlide>
                         </Swiper>
                     </div>

@@ -94,9 +94,6 @@ export const getEvaluacionResultadosLiderThunk = createAsyncThunk(
             }
 
             const response = await clientAxios.get<Props>(`/evaluacion/resultados/lider/${usuarioId}`, config);
-            console.log(response.data);
-            
-                   
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)

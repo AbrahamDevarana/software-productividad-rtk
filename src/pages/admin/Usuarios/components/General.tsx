@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Input, Form, Upload, Modal, Skeleton } from 'antd';
+import { Input, Form, Upload, Modal, Skeleton, message } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Button } from '@/components/ui';
 import { createUsuarioThunk, updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
@@ -15,6 +15,7 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
     const dispatch = useAppDispatch();
     const { currentUsuario, isLoadingCurrentUsuario } = useAppSelector(state => state.usuarios)
     const [form] = Form.useForm();
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const [loading, setLoading] = useState(false);
 
@@ -26,12 +27,19 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
             ...form.getFieldsValue(),
             id: currentUsuario.id,
         }
+        setIsSubmitting(true)
         if(currentUsuario.id) {
-            await dispatch(updateUsuarioThunk(query))
+            await dispatch(updateUsuarioThunk(query)).unwrap().then(() => {
+                message.success('Usuario Actualizado Correctamente.')
+                setIsSubmitting(false)
+            })
         }else {
-            await dispatch(createUsuarioThunk(query))
+            await dispatch(createUsuarioThunk(query)).unwrap().then(() => {
+                message.success('Usuario Creado Correctamente.')
+                setIsSubmitting(false)
+            })
         }
-        handleCancel()
+        // handleCancel()
     }
 
     const nextStep = () => {
@@ -141,7 +149,7 @@ export const General: React.FC<any> = ({handleSteps, handleCancel}) => {
                     </div>
                 </div>
                 <div className="flex justify-end mt-2 gap-x-2">
-                    <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> <FaSave /> </Button>
+                    <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2" disabled={isSubmitting}> <FaSave /> </Button>
                     <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={nextStep} className="mr-2" disabled={currentUsuario.id === ''}>
                         <FaArrowRight /> 
                     </Button>

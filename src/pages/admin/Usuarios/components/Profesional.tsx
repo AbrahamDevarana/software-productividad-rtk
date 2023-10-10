@@ -19,6 +19,9 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
 
     const [form] = Form.useForm();
 
+    console.log(lideres);
+    
+
     const { spanUsuario } = useSelectUser(lideres as any)
     
     useEffect(() => {
@@ -146,6 +149,7 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
                     >
                         <Select 
                             showSearch
+                            size='large'
                             placeholder="Selecciona una opción"
                             allowClear
                             disabled={lidersList.length === 0}

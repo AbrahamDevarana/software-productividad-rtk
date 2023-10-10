@@ -20,7 +20,7 @@ export const FormAreas = ({handleClose}: Props) => {
     const { currentArea, isLoadingCurrent } = useAppSelector( state => state.areas)
     const { areas } = useAppSelector( state => state.areas)
     const { usuarios } = useAppSelector( state => state.usuarios)
-
+    
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
 
@@ -77,6 +77,7 @@ export const FormAreas = ({handleClose}: Props) => {
                             name='leaderId'
                         >
                              <Select
+                                size='large'
                                 showSearch
                                 placeholder="Selecciona una opción"
                                 allowClear

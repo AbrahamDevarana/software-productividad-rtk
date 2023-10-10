@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Avatar, Divider, Image, Modal, Tooltip } from 'antd'
+import { Avatar, Divider, Image, Modal, Skeleton, Tooltip } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { SinglePerfilProps } from '@/interfaces'
 import { getStorageUrl } from '@/helpers'
@@ -34,9 +34,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 
 	const { ponderacionObjetivos } = useObjetivo({operativos: operativosUsuario})
 
-	const allClosed = useMemo(() => {
-		return operativosUsuario.every(operativo => operativo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status === 'PENDIENTE_APROBACION')
-	}, [operativosUsuario])
+
 
 	const resultadoMisEvaluaciones = useMemo(() => {
 		return evaluacionResultados.map(evaluacion => {
@@ -67,23 +65,27 @@ export const Administracion = ({activeUsuario}:Props) => {
 
 
 	const evaluacionesCheck = useMemo(() => {
-		// resultadoMisEvaluaciones.every(evaluacion => evaluacion.status === true)
-		// resultadoMisEvaluados.every(evaluacion => evaluacion.status === true)
-
 		if(resultadoMisEvaluaciones.length === 0 || resultadoMisEvaluados.length === 0) return false
-
 		const evaluaciones = resultadoMisEvaluaciones.every(evaluacion => evaluacion.status === true)
-
 		const evaluados = resultadoMisEvaluados.every(evaluacion => evaluacion.status === true)
-
-		return allClosed && evaluaciones && evaluados
+		return evaluaciones && evaluados
 	}, [resultadoMisEvaluaciones, resultadoMisEvaluados])
 
+	const allClosed = useMemo(() => {
+		if(operativosUsuario.length === 0) return false
+		const operativos = operativosUsuario.every(operativo => operativo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status === 'PENDIENTE_APROBACION')
+		const evaluaciones = evaluacionesCheck
+		return operativos && evaluaciones
+	}, [operativosUsuario])
+
+
+
+	if(isLoadingOperativosUsuario) return <Skeleton paragraph={{ rows: 8 }} />
 
 	return (
 		<div className='p-5'>
 			<div className='flex gap-x-10 p-5 border shadow-ext rounded-ext justify-between bg-gradient-to-tr from-dark to-dark-light'>
-				<div className='flex gap-x-10'>
+				<div className='flex gap-x-10 items-center'>
 					<Avatar src={<Image src={`${getStorageUrl(activeUsuario?.foto)}`} preview={false} fallback={getBrokenUser()} />} size={'large'}>
 						{activeUsuario?.iniciales} 
 					</Avatar>
@@ -139,7 +141,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 					<div className='w-full'>
 						<div className='h-full max-h-[60%] overflow-y-auto'>
 							<table className='w-full'>
-								<thead className=''>
+								<thead className='text-devarana-dark-graph'>
 									<tr>
 										<th className='w-2/4'>Mis Evaluadores</th>
 										<th className='w-1/4'>Resultado</th>
@@ -149,7 +151,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 								<tbody>
 								{
 									resultadoMisEvaluaciones.map((evaluacion, index) => (
-										<tr key={index}>
+										<tr key={index} className='text-devarana-graph'>
 											<td>{evaluacion.evaluador}</td>
 											<td className='text-center'>{evaluacion?.resultado.toFixed(2) || 0 }</td>
 											<td> {evaluacion.status ? <FaCheck className="text-green-500 mx-auto" /> : <FaTimes className="text-red-500 mx-auto" />}  </td>
@@ -160,7 +162,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 							</table>		
 							<Divider className='my-5' />					
 							<table className='w-full'>
-								<thead className=''>
+								<thead className='text-devarana-graph'>
 									<tr>
 										<th className='w-2/4'>Mis Evaluados</th>
 										<th className='w-1/4'>Resultado</th>
@@ -170,7 +172,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 								<tbody>
 								{
 									resultadoMisEvaluados.map((evaluacion, index) => (
-										<tr key={index}>
+										<tr key={index} className='text-devarana-graph'>
 											<td>{evaluacion.evaluado}</td>
 											<td className='text-center'>{evaluacion?.resultado.toFixed(2) || 0 }</td>
 											<td> {evaluacion.status ? <FaCheck className="text-green-500 mx-auto" /> : <FaTimes className="text-red-500 mx-auto" />}  </td>
@@ -182,7 +184,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 						</div>
 						<Divider className='my-5' />
 						<div className="flex items-center">
-							<Button disabled={!evaluacionesCheck} classColor='dark' classType='regular' >
+							<Button disabled={!allClosed} classColor='dark' classType='regular' >
 								Autorizar Cierre de Objetivos
 							</Button>
 						</div>

@@ -1,6 +1,11 @@
+import { getColor, getStorageUrl } from "@/helpers";
+import getBrokenUser from "@/helpers/getBrokenUser";
+import { useOperativo } from "@/hooks/useOperativo";
 import { OperativoProps, SinglePerfilProps } from "@/interfaces";
-import { taskStatusTypes } from "@/types";
-import { Progress } from "antd";
+import { Prioridad, styles, taskStatusTypes } from "@/types";
+import { Avatar, DatePicker, Image, Progress, Tooltip } from "antd";
+import dayjs from "dayjs";
+
 
 interface Props {
     objetivo: OperativoProps
@@ -9,6 +14,9 @@ interface Props {
 
 
 const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
+
+    const { progresoReal, progresoAsignado } = useOperativo({objetivo})
+
     return ( 
         <div className="overflow-y-auto"
         style={{
@@ -37,15 +45,52 @@ const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
                 {
                     objetivo.resultadosClave.map((resultado, index) => (
                         <div key={index} className="p-5">
-                            <div className="bg-devarana-salmon bg-opacity-10 px-5 py-2 flex gap-x-10 items-center justify-between">
-                                <h1>{resultado.nombre}</h1>
-                                <Progress percent={resultado.progreso} className="max-w-md my-3" />
+                            <div className="bg-devarana-babyblue bg-opacity-10 px-5 py-2 flex gap-x-10 items-center justify-between">
+                                <Tooltip title={resultado.nombre}>
+                                    <h1
+                                    className="w-1/2"
+                                    style={{
+                                        display: '-webkit-box',
+                                        WebkitLineClamp: 1,
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis'
+                                    }}
+                                    >{resultado.nombre} </h1>
+                                </Tooltip>
+                                <Tooltip title={`${resultado.propietario?.nombre} ${resultado.propietario?.apellidoPaterno}`}>
+                                    <Avatar style={{ width: '45px' }} size="large" src={<Image src={`${getStorageUrl(resultado.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                                </Tooltip>
+                                <DatePicker size="small" value={dayjs(resultado.fechaFin)} disabled format={'DD-MM-YYYY'}/>
+                                <Progress percent={resultado.progreso} className="max-w-xs my-3" />
                             </div>
                             {
                                 resultado.task.map((task, index) => (
-                                    <div key={index} className="flex gap-x-10 ml-10">
-                                        <h2>{task.nombre}</h2>
-                                        <p>{taskStatusTypes[task.status]}</p>
+                                    <div key={index} className="flex gap-x-10 ml-10 py-2 items-center">
+                                        <h2 className="w-1/2"
+                                            style={{
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: 1,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis'
+                                            }}
+                                        > {task.nombre} </h2>
+                                        <Tooltip title={`${task.propietario?.nombre} ${task.propietario?.apellidoPaterno}`}>
+                                            <Avatar size="large" src={<Image src={`${getStorageUrl(task.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                                        </Tooltip>
+                                        <p className='text-right py-1' style={{
+                                            color: getColor(task.status).color
+                                        }}>  { taskStatusTypes[task.status] } </p>
+                                            <div
+                                                className="flex items-center justify-center py-1 px-2 rounded-sm text-white font-medium drop-shadow-sm"
+                                                style={{
+                                                    backgroundColor: styles[task.prioridad as Prioridad]
+                                                }}
+                                            >
+                                                { task.prioridad }
+                                            </div>
+                                        <DatePicker size="small" value={dayjs(task.fechaFin)} disabled format={'DD-MM-YYYY'}/>
                                     </div>
                                 ))
                             }

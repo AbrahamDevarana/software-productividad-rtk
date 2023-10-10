@@ -27,7 +27,7 @@ const initialState: UsuariosState = {
         status: false,
         fechaNacimiento: new Date(),
         fechaIngreso: new Date(),
-        telefono: '',
+        telefono: 1234567890,
         descripcionPerfil: '',
         leaderId: null,
         direccion: {
@@ -137,7 +137,7 @@ const usuariosSlice = createSlice({
                 state.isLoading = true
         })
             .addCase(deleteUsuarioThunk.fulfilled, (state, action) => {
-                state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload)
+                state.usuarios = state.usuarios.filter(usuario => usuario.id !== action.payload.id)
                 state.isLoading = false
                 state.error = false
         })

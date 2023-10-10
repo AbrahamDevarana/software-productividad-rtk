@@ -82,6 +82,7 @@ export const deleteUsuarioThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
             const response = await clientAxios.delete(`/usuarios/${usuarioId}`, config);
+        
             return response.data.usuario
         } catch (error: any) {
             return rejectWithValue(error.response.data)
