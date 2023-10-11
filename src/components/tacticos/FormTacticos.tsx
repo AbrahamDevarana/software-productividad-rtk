@@ -130,8 +130,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         
         if(currentTactico.id && currentTactico.progreso !== value){
 
+         
             const updateTactico = {
                 ...currentTactico,
+                responables: currentTactico.responsables?.map(responsable => responsable.id),
                 progreso: value,
                 year,
                 slug
@@ -268,9 +270,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 initialValues={{
                     ...currentTactico,
                     propietarioId: currentTactico.propietarioId,
-                    responsablesArray: currentTactico.responsables.map((responsable) => responsable.id),
                     fechaInicio: dayjs(currentTactico.fechaInicio),
-                    fechaFin: dayjs(currentTactico.fechaFin)
+                    fechaFin: dayjs(currentTactico.fechaFin),
+                    responsables: currentTactico.responsables?.map(responsable => responsable.id),
                 }}
             >
                 <Form.Item
@@ -470,7 +472,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 </Form.Item>
                 <Form.Item
                     label="Co-Responsables"
-                    name="responsablesArray"
+                    name="responsables"
                     className='col-span-6'
                 >
                     <Select

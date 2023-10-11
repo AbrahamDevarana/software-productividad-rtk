@@ -19,17 +19,24 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
 
     const handleOpenAdmin = (usuario: SinglePerfilProps) => {
         // if(usuario.leaderId === userAuth?.id){
-        if(false){
-            // @ts-ignore
-            handleMiEquipo && handleMiEquipo(usuario)
-        }
+        // // if(true){
+        //     // @ts-ignore
+        //     handleMiEquipo && handleMiEquipo(usuario)
+        // }
     }
 
+
+
     const getContent = (usuario: SinglePerfilProps) => (
+        
+        
         <div className='flex flex-col gap-y-2'>
-            <Link to={`/perfil/${usuario.slug}`} className='text-devarana-blue hover:text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext'>Ver perfil</Link>
+            <Link to={`/perfil/${usuario.slug}`} 
+                className='text-devarana-blue hover:text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext'>
+                    Ver perfil
+                </Link>
             {
-                usuario.leaderId !== userAuth?.id && (
+                usuario.leaderId === userAuth?.id && (
                     <></>
                     // <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
                 )

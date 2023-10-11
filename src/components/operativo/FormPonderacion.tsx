@@ -118,7 +118,7 @@
 						max={100}
 						value={ponderacion.progresoAsignado}
 						onChange={e => handleChange(ponderacion.objetivoId, Number(e.target.value))}
-						disabled={!isActive(ponderacion.objetivoId)}
+						disabled={isActive(ponderacion.objetivoId) === 'CERRADO'}
 					/>
 					</div>
 				</div>

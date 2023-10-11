@@ -4,7 +4,7 @@ import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { Icon } from '../Icon';
 import { cerrarObjetivoThunk, getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Button, Card, Divider, Image, Modal, Segmented, Space, Switch, Tooltip } from 'antd'
+import { Avatar, Button, Card, Divider, Image, Modal, Segmented, Space, Switch, Tooltip, message } from 'antd'
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 
@@ -61,6 +61,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
             </div>,
             async onOk() {
                await dispatch(cerrarObjetivoThunk(id)).unwrap().then(() => {
+                    message.success('Objetivo cerrado correctamente')
                })
             },
             onCancel() {
@@ -147,8 +148,8 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                                     objetivo.status === 'CERRADO' ? true : false
                                                 } 
                                                 // si el objetivo esta cerrado, no se puede cambiar el estado
-                                                // disabled={ true && objetivo.status === 'CERRADO' ? true : false }
-                                                disabled={ true }
+                                                // disabled={ objetivo.status === 'CERRADO' ? true : false }
+                                                disabled={true}
                                                 onChange={ () => showConfirm(objetivo.id) }
                                             />
                                             <span className='text-devarana-graph'> Cierre </span>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
@@ -9,8 +9,8 @@ import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
 import Loading from '@/components/antd/Loading';
-
-import { FaPlus, FaTimes } from 'react-icons/fa';
+import dayjs from 'dayjs';
+import { FaPlus } from 'react-icons/fa';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -27,26 +27,28 @@ export const Objetivos : React.FC = () => {
 
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil}  = useAppSelector(state => state.profile)
+    const { perfil }  = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
     const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
-    const { year, quarter } = useAppSelector(state => state.global.currentConfig)
+    const { currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ gettingProfile, setGettingProfile ] = useState(false)
      
     const {id} = useParams<{id: string}>()
 
+    const { rendimiento } = perfil
+
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
+            await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter}))
             await dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id }))
             await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getEvaluacionResultadosThunk({usuarioId: id || userAuth.id, year, quarter }))
             await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
-            await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
             await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))
             await dispatch(getRankingsThunk({year, quarter}))
             setGettingProfile(false)
@@ -168,12 +170,16 @@ export const Objetivos : React.FC = () => {
                 </div>
             </Drawer>
             
-            <FloatButton
-                shape="circle"
-                icon={<FaPlus />}
-                onClick={() => setFormVisible(true)}
-                type='primary'
-            />
+           {
+
+                rendimiento.status === 'ABIERTO' &&
+                (<FloatButton
+                    shape="circle"
+                    icon={<FaPlus />}
+                    onClick={() => setFormVisible(true)}
+                    type='primary'
+                />)
+           }
 
             <Modal
                 open={isAdminModalVisible}
@@ -181,18 +187,13 @@ export const Objetivos : React.FC = () => {
                 footer={null}
                 width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
                 style={{
-                    top: 50,
-                    left: 35,
-                    bottom: 0,
-                    overflowY: 'hidden',
-                    borderRadius: '10px',
-                    height: 'calc(100% - 100px)',
-                }}
-                bodyStyle={{
-                    height: 'calc(100% - 100px)',
-                    overflowY: 'auto',
-                    padding: '0px'
-                }}
+					top: 50,
+					left: 35,
+					bottom: 0,
+					height: 'calc(100% - 150px)',
+					overflowY: 'hidden',
+					borderRadius: '10px'
+				}}
                 destroyOnClose={true}
             >
                 <Administracion activeUsuario={activeUsuarioReview}/>

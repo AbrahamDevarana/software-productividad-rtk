@@ -28,8 +28,7 @@ interface Filtros {
 }
 
 interface CierreProps {
-    id: string
-    status: 'ABIERTO' | 'CERRADO'
+   objetivo: OperativoProps
 }
 
 
@@ -169,7 +168,44 @@ export const cerrarObjetivoThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const result = await clientAxios.get<CierreProps>(`/operativos/cierre/${operativoId}`, config);                        
+            const result = await clientAxios.get<CierreProps>(`/operativos/cierre/${operativoId}`, config);
+            console.log(result.data.objetivo);
+            
+            return result.data.objetivo
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const cierreCicloThunk = createAsyncThunk(
+    'operativos/cierreCiclo',
+    async ( { usuarioId, year, quarter }:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const result = await clientAxios.post(`/operativos/cierre-ciclo`, {usuarioId, year, quarter}, config);                        
+            return result.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const cierreObjetivoLiderThunk = createAsyncThunk(
+    'operativos/cierreObjetivoLider',
+    async ( { usuarioId, objetivoId, checked }:{usuarioId: string, objetivoId:string, checked:boolean}, {rejectWithValue, getState}) => {
+        try {   
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const result = await clientAxios.post(`/operativos/cierre-objetivo-lider`, {usuarioId, objetivoId, checked}, config);                        ;
+            
             return result.data
         }
         catch (error: any) {

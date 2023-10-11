@@ -2,16 +2,9 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
 import { Estrategia } from '@/components/estrategia/Estrategia';
-import { DatePicker, FloatButton, Image, Segmented } from 'antd';
+import {  Segmented } from 'antd';
 import { Proximamente } from '@/components/ui';
-import dayjs from 'dayjs';
 import Loading from '@/components/antd/Loading';
-import { FaPlus } from 'react-icons/fa';
-import { Icon } from '@/components/Icon';
-import { getStorageUrl, setCurrentConfig } from '@/helpers';
-import { changeConfigThunk } from '@/redux/features/global/globalThunk';
-
-
 export const EstrategiaHome: React.FC = () => {
 
     const dispatch = useAppDispatch();
@@ -35,7 +28,7 @@ export const EstrategiaHome: React.FC = () => {
         }
     ]
 
-    setCurrentConfig()
+
 
     useEffect(() => {
         dispatch(getPerspectivasThunk({year}));

@@ -9,7 +9,7 @@ import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { RiMentalHealthLine } from 'react-icons/ri';
 import { Avatar, Image } from 'antd';
 import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
-import { getStorageUrl, setCurrentConfig } from '@/helpers';
+import { getStorageUrl } from '@/helpers';
 
 import '@/assets/scss/devarana.scss'
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -28,7 +28,7 @@ export const Devarana: React.FC = () => {
         dispatch(getUsuariosThunk({}))
     }, [])
 
-    setCurrentConfig()
+
 
 
   return (

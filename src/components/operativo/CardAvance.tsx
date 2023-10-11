@@ -48,7 +48,11 @@ export const CardAvance = ( { operativos }: Props ) => {
             if(!isLoading){
                 if(evaluacionLider && evaluacionPropia){
                     if(evaluacionLider.id !== '' && evaluacionPropia.id !== ''){
-                        return false
+                        if(rendimiento.status === 'ABIERTO'){
+                            return false
+                        }else{
+                            return true
+                        }
                     }else{
                         return true
                     }
@@ -67,8 +71,6 @@ export const CardAvance = ( { operativos }: Props ) => {
         const {resultadoCompetencias, resultadoObjetivos}  = rendimiento     
         const total = resultadoCompetencias + resultadoObjetivos
         return total
-
-        
     }, [ponderacionObjetivos, resultados])
 
     
@@ -160,7 +162,7 @@ export const CardAvance = ( { operativos }: Props ) => {
                         <div className='flex-1 flex flex-col items-center'>
                             <p>Competencias</p>
                             <Tooltip title={resultados} >
-                                <div><Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/></div>
+                                <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
                             </Tooltip>
                         </div>
                         <div className='flex justify-center pb-5 pt-2 w-full'>

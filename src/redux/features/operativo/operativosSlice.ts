@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { cerrarObjetivoThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { cerrarObjetivoThunk, cierreObjetivoLiderThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -128,7 +128,7 @@ const operativoSlice = createSlice({
         .addCase(cerrarObjetivoThunk.pending, (state) => {
         })
         .addCase(cerrarObjetivoThunk.fulfilled, (state, { payload }) => {
-            const { id, status } = payload
+            const { status, id } = payload
             // encontrar objetivo y cambiar el status
                 const objetivo = state.operativos.find(operativo => operativo.id === id)
                 if (objetivo) {
@@ -138,6 +138,26 @@ const operativoSlice = createSlice({
         })
         .addCase(cerrarObjetivoThunk.rejected, (state) => {
         })
+
+        .addCase(cierreObjetivoLiderThunk.pending, (state) => {
+        })
+        .addCase(cierreObjetivoLiderThunk.fulfilled, (state, { payload }) => {
+            const { objetivo } = payload
+           
+            const findObjetivo = state.operativosUsuario.find(operativo => operativo.id === objetivo.objetivoOperativoId)
+
+            if (findObjetivo) {
+               
+               findObjetivo.operativosResponsable.forEach((pivot) => {
+                     if (pivot.id === objetivo.usuarioId) {
+                          pivot.scoreCard.status = objetivo.status
+                     }
+                })
+            }
+        })
+        .addCase(cierreObjetivoLiderThunk.rejected, (state) => {
+        })
+
     }
 })
 

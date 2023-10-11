@@ -6,6 +6,9 @@ export const statusTypes = {
     CANCELADO: 'Cancelado',
     EN_PAUSA: 'En Pausa',
     RETRASADO: 'Retrasado',
+
+    ABIERTO: 'Abierto',
+    CERRADO: 'Cerrado',
 }
 
 export type statusType = keyof typeof statusTypes

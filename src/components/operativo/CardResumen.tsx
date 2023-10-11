@@ -5,10 +5,10 @@ import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { Avatar, Divider, Image, Modal } from 'antd'
 import CountUp from 'react-countup';
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FormPonderacion } from './FormPonderacion'
-import { periodoTypes } from '@/types'
 import { Button } from '../ui'
+import dayjs from 'dayjs'
 
 
 interface Props {
@@ -19,13 +19,44 @@ interface Props {
 
 export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible }:Props) => {
 	const { perfil } = useAppSelector(state => state.profile)
-
+	const { currentConfig: {year, quarter}, periodControls } = useAppSelector(state => state.global)
 	
+	const { rendimiento } = perfil
 	const { taskCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount,  } = useObjetivo({operativos})
+
 
 	const handleCancelPonderacion = () => {
         setPonderacionVisible(false)
     }
+
+	const etapaPeriodo = useMemo(() => {
+
+        const {postPeriodDefinitionDays, prePeriodDefinitionDays, postClosureDays, preClosureDays} = periodControls
+        const today = dayjs()
+        const month = quarter * 3       
+        const lastDay = dayjs(`${year}-${month}-01`).endOf('quarter')
+
+        const preClosureDate = lastDay.subtract(preClosureDays, 'day')
+        const postClosureDate = lastDay.add(postClosureDays, 'day')
+
+        const preDefinitionDate = lastDay.subtract(prePeriodDefinitionDays, 'day')
+        const postDefinitionDate = lastDay.add(postPeriodDefinitionDays, 'day')
+
+
+		if(today.isBefore(preDefinitionDate)) return <p className=''> No Iniciado </p>
+
+        if (today.isBetween(preDefinitionDate, postDefinitionDate) && rendimiento.status === 'ABIERTO') {
+            return <p className=''> En Definición </p>
+        }
+
+        if (today.isBetween(preClosureDate, postClosureDate) && rendimiento.status === 'ABIERTO') {
+            return <p className=''> En Cierre </p>
+        }
+        if(rendimiento.status === 'ABIERTO') return <p className=''> En Progreso </p>
+        if(rendimiento.status === 'CERRADO') return <p className=''> Cerrado </p>
+
+        return <p className=''> Cerrado </p>
+    }, [rendimiento])
 
   return (
     <>
@@ -57,8 +88,10 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			<Divider className='my-3' dashed />
 			
 			<div className='flex justify-between items-center'>
-				<p> { periodoTypes.EN_CURSO } </p>
-				<button className='border border-devarana-dark-graph px-2 py-1 text-devarana-dark-graph text-xs rounded-ext font-light' onClick={ () => setPonderacionVisible(true)}>
+				<p> { etapaPeriodo } </p>
+				<button 
+				disabled={rendimiento.status === 'CERRADO'}
+				className='border border-devarana-dark-graph px-2 py-1 text-devarana-dark-graph text-xs rounded-ext font-light disabled:cursor-not-allowed' onClick={ () => setPonderacionVisible(true)}>
 					Asignar Ponderación
 				</button>
 			</div>

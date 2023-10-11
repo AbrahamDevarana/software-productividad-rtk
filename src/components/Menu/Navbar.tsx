@@ -99,70 +99,39 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 					</div>
 					<div className="sm:ml-auto flex items-center gap-x-5">
 
-						{
-							isGlobal() ? (
-								<DatePicker
-									picker={ isGlobal() ? 'year' : 'quarter' }
-									value={ dayjs().quarter(quarter).year(year) }
-									onChange={handleChangeDate}
-									disabledDate={(current) => {
-										const year = dayjs(currentDate).year();
+						<DatePicker 
+							onChange={handleChangeDate} 
+							value={ dayjs().quarter(quarter).year(year) } 
+							format={'Q° [Trimestre] YYYY'} 
+							picker='quarter' 
+							clearIcon={false} 
+							size='small' 
+							style={{
+								width: '150px',
+							}}
+							disabledDate = { current => { 
 
-										if(current < dayjs(currentDate)){
-											// mostrar todos los trimestres hasta el 2023
-											return current && current.year() < year;
-										}
-										
-										// Mostrar el próximo trimestre si está dentro de prePeriodDefinitionDays días
-										if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
-											return current && current.year() > year;
-										}
-										
-										return false;
-									}}
-									clearIcon={false} 
-									size='small' 
-									style={{
-										width: '75px',
-									}}
+								// Obtener el segundo quarter del 2023
+								const secondQuarter = dayjs().quarter(3).year(2023);
+
+								// SI la fecha actual es mayor o igual al segundo quarter del 2023, entonces no mostrar el picker
+								if(current < secondQuarter){
+									return true;
+								}
+
+								// Obtener el quarter de currentDate
+								const year = dayjs(currentDate).year();
+
+								if(current < dayjs(currentDate)){
+									return current && current.year() < 2023;
+								}
+								if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
+									return current && current.year() > year;
+								}
 								
-							/> ) 
-							:  ( 
-								<DatePicker 
-									onChange={handleChangeDate} 
-									value={ dayjs().quarter(quarter).year(year) } 
-									format={'[Q]Q YYYY'} 
-									picker='quarter' 
-									clearIcon={false} 
-									size='small' 
-									style={{
-										width: '100px',
-									}}
-									disabledDate = { current => { 
-
-										// Obtener el segundo quarter del 2023
-										const secondQuarter = dayjs().quarter(3).year(2023);
-
-										// SI la fecha actual es mayor o igual al segundo quarter del 2023, entonces no mostrar el picker
-										if(current < secondQuarter){
-											return true;
-										}
-
-										// Obtener el quarter de currentDate
-										const year = dayjs(currentDate).year();
-
-										if(current < dayjs(currentDate)){
-											return current && current.year() < 2023;
-										}
-										if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
-											return current && current.year() > year;
-										}
-										
-										return false;
-									}}
-								/>
-							)
-						}
+								return false;
+							}}
+						/>
 						
 						<Dropdown menu={{items:menu}} trigger={['click']}>
 							<a onClick={(e) => e.preventDefault()} className="items-center flex">
