@@ -31,6 +31,13 @@ interface CierreProps {
    objetivo: OperativoProps
 }
 
+interface CierreCicloProps {
+    ok: boolean
+    objetivos: OperativoProps[]
+    pivot: any
+}
+
+
 
 export const getOperativosThunk = createAsyncThunk(
     'operativos/getOperativos',
@@ -162,13 +169,13 @@ export const deleteOperativoThunk = createAsyncThunk(
 
 export const cerrarObjetivoThunk = createAsyncThunk(
     'operativos/cerrarObjetivo',
-    async (operativoId: string, {rejectWithValue, getState}) => {
+    async ({operativoId, checked} : { operativoId: string, checked: boolean }, {rejectWithValue, getState}) => {
         try {   
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const result = await clientAxios.get<CierreProps>(`/operativos/cierre/${operativoId}`, config);
+            const result = await clientAxios.post<CierreProps>(`/operativos/cierre`, {operativoId, checked} , config);
             console.log(result.data.objetivo);
             
             return result.data.objetivo
@@ -181,13 +188,13 @@ export const cerrarObjetivoThunk = createAsyncThunk(
 
 export const cierreCicloThunk = createAsyncThunk(
     'operativos/cierreCiclo',
-    async ( { usuarioId, year, quarter }:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
+    async ( { usuarioId, year, quarter, objetivosId }:{usuarioId: string, year:number, quarter:number, objetivosId:string[]}, {rejectWithValue, getState}) => {
         try {   
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const result = await clientAxios.post(`/operativos/cierre-ciclo`, {usuarioId, year, quarter}, config);                        
+            const result = await clientAxios.post<CierreCicloProps>(`/operativos/cierre-ciclo`, {usuarioId, year, quarter, objetivosId}, config);                                    
             return result.data
         }
         catch (error: any) {

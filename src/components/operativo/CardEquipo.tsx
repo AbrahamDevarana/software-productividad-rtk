@@ -18,11 +18,11 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
     const { userAuth } = useAppSelector(state => state.auth)
 
     const handleOpenAdmin = (usuario: SinglePerfilProps) => {
-        // if(usuario.leaderId === userAuth?.id){
-        // // if(true){
-        //     // @ts-ignore
-        //     handleMiEquipo && handleMiEquipo(usuario)
-        // }
+        if(usuario.leaderId === userAuth?.id){
+        // if(true){
+            // @ts-ignore
+            handleMiEquipo && handleMiEquipo(usuario)
+        }
     }
 
 
@@ -37,8 +37,8 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
                 </Link>
             {
                 usuario.leaderId === userAuth?.id && (
-                    <></>
-                    // <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
+                    // <></>
+                    <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
                 )
             }
         </div>

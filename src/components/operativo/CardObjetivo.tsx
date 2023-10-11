@@ -33,41 +33,69 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
     }
     const {firstColor, fixedProgresoReal, orderedResponsables, progresoAsignado, resultadoClaveDoneCount, secondColor, usuarioPropietaro, statusObjetivo, taskCount, taskCountDone } = useOperativo({objetivo})
 
+    const showConfirm = (checked :boolean) => {
 
-    
 
-    const showConfirm = (id: string) => {
-        confirm({
-            title: <p>¿ Confirmas que deseas cerrar el objetivo ?</p>,
-            width: 600,
-            okButtonProps: {
-                danger: true
-            },
-            okText: 'Cerrar',
-            cancelText: 'Volver',
-            content: 
-            <div>
-                <p> 
-                    Te sugerimos considerar los siguientes aspectos:
-                </p>
-                <ul style={{
-                    listStyle: 'disc',
-                    listStylePosition: 'inside',
-                }}>
-                    <li> En este punto debes haber revisado con los participantes del objetivo el avance y resultados obtenidos. </li>
-                    <li> El objetivo no podrá ser modificado por el propietario y/o sus participantes. </li>
-                    <li> Una vez cerrado, el objetivo está listo para ser revisado y autorizado por tu líder. </li>
-                </ul>
-            </div>,
-            async onOk() {
-               await dispatch(cerrarObjetivoThunk(id)).unwrap().then(() => {
-                    message.success('Objetivo cerrado correctamente')
-               })
-            },
-            onCancel() {
-                console.log('Cancel');  
-            },
-        });
+        if(checked) {
+            confirm({
+                title: <p className='text-devarana-dark-graph'>¿ Confirmas deseas enviar a aprobación ?</p>,
+                width: 600,
+                okButtonProps: {
+                    danger: true
+                },
+                okText: 'Enviar',
+                cancelText: 'Cancelar',
+                content: 
+                <div className='text-devarana-graph'>
+                    <p> 
+                        Te sugerimos considerar los siguientes aspectos:
+                    </p>
+                    <ul style={{
+                        listStyle: 'disc',
+                        listStylePosition: 'inside',
+                    }}>
+                        <li> En este punto debes haber revisado con los participantes del objetivo el avance y resultados obtenidos. </li>
+                        <li> El objetivo no podrá ser modificado por el propietario y/o sus participantes. </li>
+                        <li> Una vez cerrado, el objetivo está listo para ser revisado y autorizado por tu líder. </li>
+                    </ul>
+                </div>,
+                async onOk() {
+                   await dispatch(cerrarObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
+                        message.success('Objetivo cerrado correctamente')
+                   })
+                },
+                onCancel() {
+                    console.log('Cancel');  
+                },
+            })
+        }else {
+            confirm({
+                title: <p>¿ Confirmas que deseas abrir el objetivo ?</p>,
+                width: 600,
+                okButtonProps: {
+                    danger: true
+                },
+                okText: 'Abrir',
+                cancelText: 'Volver',
+                content: 
+                <div>
+                    <p> 
+                        Al habilitar esto los participantes no podrán realizar el cierre de ciclo
+                    </p>
+                    
+                </div>,
+                async onOk() {
+                   await dispatch(cerrarObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
+                        message.success('Objetivo abierto correctamente')
+                   })
+                },
+                onCancel() {
+                    console.log('Cancel');  
+                },
+            })
+        }
+
+      
     };
 
     return (
@@ -124,7 +152,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                     <span> Ver </span> 
                                 </Link>
                             {
-                                ( usuarioPropietaro?.id === userAuth?.id && objetivo.status !== 'CERRADO'  ) && (
+                                ( usuarioPropietaro?.id === userAuth?.id && objetivo.status === 'ABIERTO'  ) && (
                                     <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
                                         <Icon iconName='faEdit'/>
                                         <span> Editar </span>
@@ -133,24 +161,21 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                             }
                             {
                                ( usuarioPropietaro?.id === userAuth?.id ) && (
-                                    // <Space onClick={ () => showConfirm(objetivo.id) } className='cursor-pointer text-devarana-graph hover: opacity-80'>
-                                    //     <Icon iconName='faCheckDouble'/>
-                                    //     <span> Cerrar </span>
-                                    // </Space>
                                     <Tooltip
-                                        title='El cierre se estará habilitando proximamente'
+                                        title={
+                                            ( objetivo.status === 'CERRADO' ) ? 'El objetivo ya se encuentra cerrado' : 
+                                            ( objetivo.status === 'POR_APROBAR' ) ? 'El objetivo ya se encuentra en proceso de aprobación' : 'Enviar a aprobación'
+                                        }
                                     >
                                         <Space>
                                             <Switch 
                                                 // size='small'
                                                 size='small'
                                                 checked={
-                                                    objetivo.status === 'CERRADO' ? true : false
+                                                    ( objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR' ) ? true : false
                                                 } 
-                                                // si el objetivo esta cerrado, no se puede cambiar el estado
-                                                // disabled={ objetivo.status === 'CERRADO' ? true : false }
-                                                disabled={true}
-                                                onChange={ () => showConfirm(objetivo.id) }
+                                                disabled={ (objetivo.status === 'CERRADO' ) ? true : false }
+                                                onChange={ showConfirm }
                                             />
                                             <span className='text-devarana-graph'> Cierre </span>
                                         </Space>

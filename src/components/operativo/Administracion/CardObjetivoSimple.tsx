@@ -21,9 +21,6 @@ interface Props {
 
 export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
 
-    console.log(objetivo);
-    
-
     const dispatch = useAppDispatch()
     const [ isUpdating, setIsUpdating ] = useState(false)
 
@@ -92,7 +89,8 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
                         <Progress type='line' percent={Number(progresoReal.toFixed(2))} 
                             strokeColor={{
                                 '0%': firstColor,
-                                '100%': secondColor,
+                                '50%': firstColor,
+                                // '100%': secondColor,
                             }}  
                             format={() => <CountUp className='text-devarana-graph text-[10px]' end={progresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}
                         /> 
@@ -117,7 +115,7 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
                                         color: getColor(statusObjetivo).color,
                                         fontWeight: 600
     
-                                    }}> {objetivosTypes[statusObjetivo]} </p>
+                                    }}> {objetivosTypes[statusObjetivo]}</p>
                                    </>
                                 )
                             }

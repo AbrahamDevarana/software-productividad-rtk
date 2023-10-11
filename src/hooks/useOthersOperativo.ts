@@ -4,7 +4,7 @@ import { useMemo } from "react"
 
 interface Props {
     objetivo: OperativoProps
-    usuarioId?: string
+    usuarioId: string
 }
 
 export const useOthersOperativo = ({objetivo, usuarioId}: Props) => {
@@ -15,7 +15,7 @@ export const useOthersOperativo = ({objetivo, usuarioId}: Props) => {
 
     const {firstColor, secondColor} = useMemo(() => { 
         
-        const esAutor = objetivo.operativosResponsable.filter((item) => item.scoreCard.propietario === true).map((item) => item.id).includes(usuarioId!)
+        const esAutor = objetivo.operativosResponsable.filter((item) => item.scoreCard.propietario === true).map((item) => item.id).includes(usuarioId)
 
         if(esAutor) {
             return {
@@ -25,8 +25,8 @@ export const useOthersOperativo = ({objetivo, usuarioId}: Props) => {
         }
 
         return {
-            firstColor: 'rgba(229, 17, 65, 1)',
-            secondColor: 'rgba(229, 17, 65, .5)'
+            firstColor: 'rgba(214, 71, 103, 1)',
+            secondColor: 'rgba(214, 71, 103, .5)'
         }
 
     }, [usuarioId])

@@ -11,6 +11,7 @@ import { useObjetivo } from '@/hooks/useObjetivos'
 import { Button } from '@/components/ui'
 import { getEvaluacionResultadosLiderThunk } from '@/redux/features/evaluaciones/evaluacionesThunk'
 import { Rating } from 'react-simple-star-rating'
+import { useOtherObjetivo } from '@/hooks/useOthersObjetivos'
 
 interface Props {
 	activeUsuario: SinglePerfilProps
@@ -20,7 +21,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 	
 	const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
-	const { operativosUsuario, isLoadingOperativosUsuario } = useAppSelector(state => state.operativos)
+	const { operativosUsuario, isLoadingOperativosUsuario, isClosingCicle } = useAppSelector(state => state.operativos)
 	const { evaluacionResultados, evaluacionResultadosColaboradores } = useAppSelector(state => state.evaluaciones)
 
 	const dispatch = useAppDispatch()
@@ -31,7 +32,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 		dispatch(getEvaluacionResultadosLiderThunk({usuarioId: activeUsuario.id, year, quarter}))
 	}, [activeUsuario])
 
-	const { ponderacionObjetivos } = useObjetivo({operativos: operativosUsuario})
+	const { ponderacionObjetivos } = useOtherObjetivo({operativos: operativosUsuario, usuarioId: activeUsuario.id})
 
 	const { confirm } = Modal;
 
@@ -73,6 +74,10 @@ export const Administracion = ({activeUsuario}:Props) => {
 		// 5 es a 100 como promedioEvaluaciones es a x
 		return  (promedioEvaluaciones * 100) / 5
 	}, [promedioEvaluaciones])
+
+	const finalEvaluaciones = useMemo(() => {
+		return (ponderacionEvaluciones * 10) / 100
+	}, [ponderacionEvaluciones])
 
 
 
@@ -120,19 +125,24 @@ export const Administracion = ({activeUsuario}:Props) => {
 		}
 	}, [quarter])
 
+	const objetivosId = useMemo(() => {
+		return operativosUsuario.map(operativo => operativo.id)
+	}, [operativosUsuario])
+
 
 	const handleCierraObjetivos = () => {
 
 		confirm({
-			title: <h1> Cerrar Objetivos </h1>,
-			content: 'Una vez cerrados los objetivos no podrán ser modificados',
-			okText: 'Si, Cerrar',
-			okButtonProps: { 
-				type: 'default',
-			 },
+			title: <h1 className='text-devarana-dark-graph'> Autorizar Cierre </h1>,
+			content: <p className='text-devarana-graph'>Toma en cuenta que una vez que hayas aprobado los objetivos de <span className='font-medium'>{ activeUsuario.nombre } { activeUsuario.apellidoPaterno }</span> y autorices el cierre, ya no podrán ser modificados.</p>,
+			okText: 'Autorizar',
+			width: 800,
+			okButtonProps: {
+				danger: true	
+			},
 			cancelText: 'Cancelar',
 			onOk() {
-				dispatch(cierreCicloThunk({usuarioId: activeUsuario.id, year, quarter}))
+				dispatch(cierreCicloThunk({usuarioId: activeUsuario.id, year, quarter, objetivosId}))
 			},
 			onCancel() {
 				console.log('Cancel');
@@ -167,28 +177,31 @@ export const Administracion = ({activeUsuario}:Props) => {
 				</div>
 				<div className='flex items-center gap-x-3'>
 					<div>
-						<h2 className='font-light text-lg text-white t'>Objetivos: </h2>
-						<p className='text-2xl text-white text-center'>
+						<h2 className='font-light text-lg text-white'>Objetivos: </h2>
+						<p className='text-xl text-white text-center'>
 							{
-								promedioOjetivos.toFixed(2) 
+								ponderacionObjetivos.toFixed(2) 
 							} %
 						</p>
+						<p className='text-[9px] text-white mx-auto text-center leading-none'> Representa el 90%</p>
 					</div>
 					<div>
 						<h2 className='font-light text-lg text-white text-center'>Competencias Soft: </h2>
-						<p className='text-2xl text-white text-center'>
+						<p className='text-xl text-white text-center'>
 							{
 								ponderacionEvaluciones.toFixed(2)
 							} %
 						</p>
+						<p className='text-[9px] text-white mx-auto text-center leading-none'> Representa el 10%</p>
 					</div>
 					<div>
 						<h2 className='font-light text-lg text-white text-center'>Resultado Final: </h2>
-						<p className='text-2xl text-white text-center'>
+						<p className='text-xl text-white text-center'>
 							{
-								(promedioOjetivos + promedioEvaluaciones).toFixed(2)
+								(promedioOjetivos + finalEvaluaciones).toFixed(2)
 							} %
 						</p>
+						<p className="invisible text-[9px] text-white mx-auto text-center leading-none">100%</p>
 					</div>
 					
 				</div>
@@ -229,8 +242,8 @@ export const Administracion = ({activeUsuario}:Props) => {
 								<table className='w-full'>
 									<thead className='text-devarana-dark-graph'>
 										<tr>
-											<th className='w-2/4'>Mis Evaluadores</th>
-											<th className='w-2/4'></th>
+											<th className='w-2/4 text-left' colSpan={2}>Personas que evaluaron a {activeUsuario.nombre} { activeUsuario.apellidoPaterno }</th>
+											{/* <th className='w-2/4'></th> */}
 										</tr>
 									</thead>
 									<tbody>
@@ -248,8 +261,7 @@ export const Administracion = ({activeUsuario}:Props) => {
 								<table className='w-full'>
 									<thead className='text-devarana-graph'>
 										<tr>
-											<th className='w-2/4'>Mis Evaluados</th>
-											<th className='w-2/4'></th>
+											<th className='w-2/4 text-left' colSpan={2}>Personas que {activeUsuario.nombre} { activeUsuario.apellidoPaterno } evaluó</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -267,9 +279,9 @@ export const Administracion = ({activeUsuario}:Props) => {
 							<Divider className='my-5' />
 							<div className="flex items-center">
 								<Button 
-									disabled={!allClosed} 
+									disabled={!allClosed || isClosingCicle} 
 									classColor='dark' classType='regular' onClick={handleCierraObjetivos} >
-									Autorizar Cierre de Objetivos
+									{ isClosingCicle ? <Spin /> : 'Autorizar Cierre' }
 								</Button>
 							</div>
 						</div>

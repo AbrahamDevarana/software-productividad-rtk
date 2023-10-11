@@ -3,7 +3,7 @@ import getBrokenUser from "@/helpers/getBrokenUser";
 import { PerfilProps } from "@/interfaces";
 import { postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Steps, Tooltip, message } from "antd";
+import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Spin, Steps, Tooltip, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
 import { useMemo, useState } from "react";
 import { EncuestaPresentada } from "./EncuestaPresentada";
@@ -39,7 +39,7 @@ const FormEvaluacion = ({perfil}: Props) => {
     const dispatch = useAppDispatch()
 
 
-    if(isLoading) return <Skeleton active={true} paragraph={{ rows: 4 }} />
+    if(isLoading) return <div className="h-52 flex justify-center items-center"> <Spin/> </div>
 
     const handleSelectUser = async (value: SegmentedValue) => {        
         setFetching(true)
@@ -123,7 +123,7 @@ const FormEvaluacion = ({perfil}: Props) => {
                         
                     </div>
                 </Space>
-                <p>{activeEvaluate === '' ? '¡Comienza tu evaluación!' : ''}</p>
+                <p>{activeEvaluate === '' ? <p className="text-devarana-graph text-lg">¡Comienza tu evaluación!</p> : ''}</p>
                 {
                     activeEvaluate === '' 
                     ? 
@@ -136,7 +136,7 @@ const FormEvaluacion = ({perfil}: Props) => {
                             <p className="text-devarana-graph"><span className="font-bold text-devarana-dark-graph">Evaluación de Colaborador: </span> En caso de tener personal a tu cargo, te permite realizar una evaluación cualitativa de su desempeño basado en competencias. </p>
                         </div>
                     : fetching 
-                        ? <Skeleton active={true} paragraph={{ rows: 4 }} className="shadow-ext rounded-ext p-5" /> 
+                        ? <div className="h-52 flex justify-center items-center"> <Spin/> </div>
                         : evaluacion.preguntasEvaluacion.length === 0 ? 
                             <p className="text-2xl text-devarana-graph">Esta encuesta no está completada, contacta soporte.</p>
                         : !evaluacion.status 

@@ -25,7 +25,7 @@ export interface OperativoProps {
     operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
     resultadosClave: ResultadoClaveProps[];
-    status:          'ABIERTO' | 'CERRADO';
+    status:          'ABIERTO' | 'POR_APROBAR' | 'CERRADO';
     year:            number;
     quarter:         number;
 }
@@ -39,5 +39,6 @@ export interface OperativoState extends InitialState {
     paginate?:     Paginate;
     isLoadingObjetivo: boolean;
     isLoadingOperativosUsuario: boolean;
+    isClosingCicle: boolean;
     currentOperativo: OperativoProps;
 }

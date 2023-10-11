@@ -2,8 +2,8 @@ import React from 'react'
 
 export const EncuestaPresentada = () => {
   return (
-    <div>
-        <p className='text-devarana-graph'>Encuesta Presentada</p>
+    <div className='h-52 flex items-center justify-center'>
+        <p className='text-devarana-graph text-2xl'>Encuesta Presentada</p>
     </div>
   )
 }
