@@ -28,3 +28,4 @@ export * from "./global"
 export * from "./tasks";
 export * from "./rendimiento";
 export * from "./ranking";
+export * from "./gestion";

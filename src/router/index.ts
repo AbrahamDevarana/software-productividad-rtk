@@ -21,6 +21,7 @@ import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
 import { OperativoView } from '@/pages/Operativos/OperativoView';
 import { Actividades } from '@/pages/Actividades';
 import { Comite } from '@/pages/Comite';
+import { Gestion } from '@/pages/Gestion';
 
 
 interface Props {
@@ -150,6 +151,12 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         path: '/comite',
         layout: LayoutApp,
         component: Comite
+    },
+    {
+        title: "Gestión",
+        path: '/gestion',
+        layout: LayoutApp,
+        component: Gestion
     },
     {
         title: "Proyectos",
