@@ -36,7 +36,15 @@ export const Admin = ({handleBar}:AdminProps) => {
                 <span>Usuarios</span>
             </div>
         </NavLink>
-    }
+        }
+        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        <NavLink to={'/admin/gestion'} onClick={handleBar}>
+            <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
+                <FaUsers />
+                <span>Gestion</span>
+            </div>
+        </NavLink>
+        }
     </div>
   )
 }

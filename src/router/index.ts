@@ -154,7 +154,7 @@ export const  rutaPrivada:PrivateRouteProps[] = [
     },
     {
         title: "Gestión",
-        path: '/gestion',
+        path: '/admin/gestion',
         layout: LayoutApp,
         component: Gestion
     },
