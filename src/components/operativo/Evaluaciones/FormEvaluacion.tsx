@@ -1,7 +1,6 @@
 import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { PerfilProps } from "@/interfaces";
-import { postEvaluacionThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Spin, Steps, Tooltip, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";

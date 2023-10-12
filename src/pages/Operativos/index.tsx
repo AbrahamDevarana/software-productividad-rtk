@@ -128,7 +128,7 @@ export const Objetivos : React.FC = () => {
 
                         <>
                         <div className='col-span-12 flex justify-between h-10 items-center'>
-                            <h1>Mis Objetivos</h1>
+                            <h1 className='text-primary font-medium text-[16px]'>Mis Objetivos</h1>
                             
                         </div>
                         {
@@ -136,7 +136,7 @@ export const Objetivos : React.FC = () => {
                                 <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />
                             ))
                         }
-                        <h1 className='col-span-12'>Objetivos Compartidos</h1>
+                        <h1 className='col-span-12 text-primary font-medium text-[16px]'>Objetivos Compartidos</h1>
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
                                 <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />

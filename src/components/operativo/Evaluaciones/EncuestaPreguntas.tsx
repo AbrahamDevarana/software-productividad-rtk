@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui'
 import { getValueColaborador } from '@/helpers/getValueComment';
 import { PerfilProps } from '@/interfaces';
-import { postEvaluacionThunk } from '@/redux/features/perfil/perfilThunk';
+import { postEvaluacionThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Input, Rate, Spin, Steps, message } from 'antd'
 import React, { useState } from 'react'

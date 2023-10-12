@@ -1,6 +1,6 @@
 import { EvaluacionState } from '@/interfaces'
 import { createSlice } from '@reduxjs/toolkit'
-import { getEvaluacionResultadosLiderThunk, getEvaluacionResultadosThunk, getEvaluacionThunk, getUsuariosAEvaluarThunk } from './evaluacionesThunk'
+import { getEvaluacionResultadosLiderThunk, getEvaluacionResultadosThunk, getEvaluacionThunk, getUsuariosAEvaluarThunk, postEvaluacionThunk } from './evaluacionesThunk'
 
 
 const initialState: EvaluacionState = {
@@ -106,6 +106,21 @@ const evaluacionesSlice = createSlice({
         })
         .addCase(getEvaluacionResultadosLiderThunk.rejected, (state, action) => {
             state.isLoadingResultadosLider = false
+            state.error = true
+        })
+        .addCase(postEvaluacionThunk.pending, (state) => {
+            // state.isLoading = true
+        })
+        .addCase(postEvaluacionThunk.fulfilled, (state, action) => {
+            
+            const {promedio, isAutoevaluacion} = action.payload
+            if(isAutoevaluacion){
+                state.resultados = promedio
+            }
+            // state.isLoading = false
+        })
+        .addCase(postEvaluacionThunk.rejected, (state, action) => {
+            // state.isLoading = false
             state.error = true
         })
     },

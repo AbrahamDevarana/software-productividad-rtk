@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
 import { getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk, getHistorialRendimientoThunk } from './perfilThunk';
+import { postEvaluacionThunk } from '../evaluaciones/evaluacionesThunk';
 
 
 const initialState: PerfilState = {
@@ -214,6 +215,12 @@ const profileSlice = createSlice({
             })
             .addCase(getHistorialRendimientoThunk.rejected, (state, action) => {
                 state.isLoading = false
+                state.error = action.error.message
+            })
+            .addCase(postEvaluacionThunk.fulfilled, (state, action) => {
+                state.perfil.rendimiento = action.payload.rendimiento
+            })
+            .addCase(postEvaluacionThunk.rejected, (state, action) => {
                 state.error = action.error.message
             })
     }

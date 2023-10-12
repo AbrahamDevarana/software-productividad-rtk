@@ -3,7 +3,7 @@ import getBrokenUser from "@/helpers/getBrokenUser";
 import { useOperativo } from "@/hooks/useOperativo";
 import { OperativoProps, SinglePerfilProps } from "@/interfaces";
 import { Prioridad, styles, taskStatusTypes } from "@/types";
-import { Avatar, DatePicker, Image, Progress, Tooltip } from "antd";
+import { Avatar, DatePicker, Divider, Image, Progress, Tooltip } from "antd";
 import dayjs from "dayjs";
 import { BsFillCalendarFill } from "react-icons/bs";
 
@@ -25,19 +25,19 @@ const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
         }}
         >
 
-            <div className='flex gap-x-10 p-5 border shadow-ext rounded-ext justify-between bg-gradient-to-tr from-dark to-dark-light'>
-				<div className='flex gap-x-10'>
+            <div className='grid grid-cols-12 gap-x-10 p-5 border shadow-ext rounded-ext justify-between bg-gradient-to-tr from-dark to-dark-light'>
+				<div className='flex gap-x-10 col-span-9'>
 					<div className='flex flex-col'>
 						<h1 className='font-bold text-white'>{objetivo.nombre}</h1>
 						<p className='text-white'>{objetivo.meta}</p>
 					</div>
 				</div>
-				<div className='flex items-center gap-x-3'>
+				<div className='flex items-center gap-x-3 col-span-3 justify-end'>
 					<h2 className='font-light text-lg text-white'>Avance objetivo: </h2>
-					<p className='text-2xl text-white'>
+					<p className='text-xl text-white'>
                         {
-                            objetivo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.progresoReal
-                        }
+                            (objetivo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.progresoReal)?.toFixed(2)
+                        } %
 					</p>
 				</div>
 			</div>
@@ -45,7 +45,8 @@ const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
                 {/* Resultados y sus objetivos */}
                 {
                     objetivo.resultadosClave.map((resultado, index) => (
-                        <div key={index} className="p-5 ">
+                        <>
+                        <div key={index} className="p-3">
                             <div className='flex items-center gap-x-5 shadow p-2 rounded-ext'>
                                 <div className='flex flex-col w-full'>
                                     <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Resultado Clave</p>
@@ -91,7 +92,7 @@ const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
                             </div>
                             {
                                 resultado.task.map((task, index) => (
-                                    <div key={index} className="flex gap-x-10 ml-10 py-2 items-center">
+                                    <div key={index} className="flex gap-x-10 mx-5 py-2 items-center">
                                         <div className='flex items-center w-1/2'>
                                             <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(task.status).color }}/> 
                                             <h2
@@ -146,6 +147,8 @@ const ObjetivoPreview = ({objetivo, activeUsuario}: Props) => {
                                 ))
                             }
                         </div>
+                        <Divider />
+                        </>
                     ))
                 }
             </div>
