@@ -164,10 +164,11 @@ export const Objetivos : React.FC = () => {
                 width={window.innerWidth > 1200 ? 700 : '100%'}
                 destroyOnClose={true}
                 closable={false}
+                className='rounded-l-ext'
             >
-                <div className='relative'>
-                    <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
-                </div>
+
+                <FormObjetivo handleCancel={handleCancelForm} setPonderacionVisible={setPonderacionVisible} />
+
             </Drawer>
             
            {

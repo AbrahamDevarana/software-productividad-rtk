@@ -4,12 +4,13 @@ import { InitialState } from "./slice";
 
 export interface UsuarioGestion extends SinglePerfilProps {
 
-    rendimiento: [{
+    rendimiento: {
         resultadoCompetencias: number
         resultadoObjetivos: number
         resultadoFinal: number
+        bono: number
         status: 'ABIERTO' | 'CERRADO'
-    }]
+    }
 
 }
 
@@ -17,5 +18,6 @@ export interface UsuarioGestion extends SinglePerfilProps {
 export interface GestionState extends InitialState{
     isLoadingUsuarios: boolean
     usuarios: UsuarioGestion[]
+    isGeneratingReport: boolean
 
 }
