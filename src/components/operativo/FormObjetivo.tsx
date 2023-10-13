@@ -257,7 +257,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     label ="Contribuye a:"
                     className='col-span-12'
                 >
-                    <Proximamente avance={72} />
+                    <Proximamente avance={72} text= 'Estamos rediseñando esta sección para que pronto esté disponible para ti' />
 
                 </Form.Item>
 
