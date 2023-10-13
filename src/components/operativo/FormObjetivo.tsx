@@ -6,7 +6,7 @@ import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton, Tooltip
 import dayjs, {Dayjs} from 'dayjs';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
-import { Button } from '../ui'
+import { Button, Proximamente } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'
 import { BsFillCalendarFill } from 'react-icons/bs'
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk'
@@ -253,7 +253,15 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                 <Divider className='col-span-12' />
 
-                <Form.Item
+                <Form.Item 
+                    label ="Contribuye a:"
+                    className='col-span-12'
+                >
+                    <Proximamente avance={72} />
+
+                </Form.Item>
+
+                {/* <Form.Item
                     className='col-span-6'
                     label="Perspectiva"
                     name="perspectivaId"
@@ -299,8 +307,9 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                             }))
                         }
                     />
-                </Form.Item>
-                
+                </Form.Item> */}
+
+                {/*                 
                 <Form.Item
                     className='col-span-6'
                     label="Objetivo Tactico"
@@ -326,13 +335,13 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                     
                 </Form.Item>
-                
+                 */}
                 <div className='flex col-span-12 justify-end'>
                     <Button 
                         classColor='primary' 
                         classType='regular' 
                         type='submit' 
-                        width={250} 
+                        width={170} 
                         className='btn-primary'
                     >Guardar y Ponderar</Button>
                 </div>
