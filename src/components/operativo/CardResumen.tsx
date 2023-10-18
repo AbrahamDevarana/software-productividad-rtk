@@ -63,10 +63,11 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 		<div className='flex justify-between w-full'>
 			<h1 className='text-primary font-medium text-[16px]'>Resumen</h1>
 		</div>
-		<div className='my-5 p-5 flex items-center bg-primary bg-opacity-20 rounded'>
-			<Avatar className='h-20 w-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil.foto)}`} preview={false} fallback={getBrokenUser()} />} />
-			<div className='ml-5'>
-				<p className='font-medium text-xl text-devarana-graph'>{perfil.nombre}</p>
+		<div className='my-5 p-5 flex flex-wrap bg-primary bg-opacity-20 rounded gap-x-5 gap-y-3 items-center justify-center'>
+			<Avatar className='w-20 h-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+			<div className=''>
+				<p className='font-medium text-devarana-graph text-xl'
+				>{perfil.nombre}</p>
 			</div>
 		</div>
 		<div>
@@ -87,7 +88,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			</div>
 			<Divider className='my-3' dashed />
 			
-			<div className='flex justify-between items-center'>
+			<div className='flex justify-between items-center flex-wrap align-middle'>
 				<p> { etapaPeriodo } </p>
 				<button 
 				disabled={rendimiento.status === 'CERRADO'}

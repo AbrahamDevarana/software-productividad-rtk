@@ -64,6 +64,7 @@ export const CardAvance = ( { operativos }: Props ) => {
             return true
         }
 
+
     }, [currentDate, postClosureDays, preEvaluationDays, evaluacionLider, evaluacionPropia])
 
     const calculoAvance = useMemo(() => {
@@ -123,7 +124,6 @@ return (
                                 percent={calculoAvance / 100}
                                 nrOfLevels={30}
                                 className='w-full'
-                                // colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
                                 colors={['#d64767', '#56739B']}
                                 textColor='#848891'
                             />
@@ -136,7 +136,6 @@ return (
                                 percent={calculoBono / 100}
                                 nrOfLevels={30}
                                 className='w-full'
-                                // colors={['#FF3131', '#FF914D', '#FFBD59', '#FFDE59', '#C1FF72', '#7ED957', '#00BF63', '#5CE1E6', '#0CC0DF', '#0C82DF']}
                                 colors={['#d64767', '#56739B']}
                                 textColor='#848891'
                             />
@@ -160,7 +159,9 @@ return (
                 <div className='flex-1 flex flex-col items-center'>
                     <p>Competencias</p>
                     <Tooltip title={resultados} >
-                        <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+                        <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}
+                            fillColor='rgba(9, 103, 201, 1)'
+                        />
                     </Tooltip>
                 </div>
                 <div className='flex justify-center pb-5 pt-2 w-full'>

@@ -132,9 +132,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     operativosResponsable: currentOperativo.operativosResponsable.filter((item) => item.scoreCard.propietario === false).map((item) => item.id),
                     propietarioId: propietario,
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
-                    // sino tiene operativoId es porque es nuevo por lo tanto se pone la fecha de Inicio del primer día del quarter y la fecha de fin del último día del quarter
-                    fechaInicio: dayjs(currentOperativo.fechaInicio),
-                    fechaFin: dayjs(currentOperativo.fechaFin)
+                    fechaInicio: currentOperativo.id === '' ? dayjs().quarter(quarter).startOf('quarter') : dayjs(currentOperativo.fechaInicio),
+                    fechaFin: currentOperativo.id === '' ? dayjs().quarter(quarter).endOf('quarter') : dayjs(currentOperativo.fechaFin),
                 }}
                 form={form}
             >

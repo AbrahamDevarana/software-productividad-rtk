@@ -42,7 +42,7 @@ export default function Login() {
                             DEVARANA
                         </h1>
                         <p className="text-white font-light">
-                            Somos arquitectos de lo extraordinario.
+                            Somos creadores, arquitectos y diseñadores de lo extraordinario
                         </p>
                     </div>
 

@@ -26,6 +26,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
     const { year, quarter } = currentOperativo
 
     const [form] = Form.useForm()
+    const { RangePicker } = DatePicker
 
     const isVisible = useMemo(() => {
         return resultado.tipoProgreso === 'porcentaje'
@@ -211,7 +212,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             </div>
             <div className='flex flex-col items-center'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Fecha Fin</p>
-                <DatePicker
+                {/* <DatePicker
                     format={"DD-MM-YYYY"}
                     defaultValue={ dayjs(resultado.fechaFin)  }
                     placeholder={ `${dayjs(resultado.fechaFin)}`}
@@ -223,7 +224,16 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                     onChange={(date, dateString) => handleUpdateDate(dateString)}
                     className='w-[130px]'
                     disabled={isClosed}
+                /> */}
+                <RangePicker
+                    format={'D [días]'}
+                    defaultValue={[dayjs(resultado.fechaInicio), dayjs(resultado.fechaFin)]}
+                    disabledDate={disabledDate}
+                    disabled={isClosed}
+                    
+
                 />
+
             </div>
             <div className='flex flex-col items-center'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Color</p>

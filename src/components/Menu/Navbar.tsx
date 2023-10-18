@@ -8,6 +8,7 @@ import {FaSignOutAlt } from "react-icons/fa";
 import MyBreadcrumb from "../ui/Breadcrumb";
 import dayjs from "dayjs";
 import { changeConfigThunk } from "@/redux/features/global/globalThunk";
+import { BsFillCalendarFill } from "react-icons/bs";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
@@ -107,8 +108,9 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 							clearIcon={false} 
 							size='small' 
 							style={{
-								width: '150px',
+								width: '160px',
 							}}
+							suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
 							disabledDate = { current => { 
 
 								// Obtener el segundo quarter del 2023

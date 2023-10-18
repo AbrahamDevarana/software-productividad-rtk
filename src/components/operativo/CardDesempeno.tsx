@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import MixedChart from '../complexUI/MixedChart'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import dayjs from 'dayjs'
+import { BsFillCalendarFill } from 'react-icons/bs'
 
 export const CardDesempeno = () => {
 
@@ -31,7 +32,7 @@ export const CardDesempeno = () => {
             <div className='text-devarana-graph flex flex-col w-full'>
                 <div className='flex justify-between w-full'>
                     <h1 className='font-medium text-primary'>Historial de desempeño</h1>
-                    <DatePicker picker='year' size='small' value={dayjs()} suffixIcon={false} clearIcon={false} disabled />
+                    <DatePicker picker='year' size='small' style={{ width: '80px' }} value={dayjs()} suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />} clearIcon={false} disabled />
                 </div>
                 <div className='my-auto w-full'>
                     <MixedChart values={historial} quarter={quarter} year={year}/>

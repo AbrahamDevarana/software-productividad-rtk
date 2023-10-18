@@ -55,10 +55,10 @@ export const Objetivos : React.FC = () => {
         }
         fetchData()
 
-        return () => {
-            dispatch(clearOperativosThunk())
-            dispatch(clearProfileThunk())
-        }
+        // return () => {
+        //     dispatch(clearOperativosThunk())
+        //     dispatch(clearProfileThunk())
+        // }
     }, [userAuth, id, year, quarter])
     
 
@@ -72,7 +72,6 @@ export const Objetivos : React.FC = () => {
 
     if(gettingProfile) return <Loading dynamic={true}/>
 
-
     const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
         setActiveUsuarioReview(usuario)
         setIsAdminModalVisible(true)
@@ -84,7 +83,7 @@ export const Objetivos : React.FC = () => {
 
     return (
         <>
-            <div className="flex lg:flex-nowrap flex-wrap gap-5">
+            {/* <div className="flex lg:flex-nowrap flex-wrap gap-5">
                 <Box className='lg:w-[20%] sm:w-[45%] w-full px-5 text-devarana-graph flex flex-col'>
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
                 </Box>
@@ -113,12 +112,40 @@ export const Objetivos : React.FC = () => {
 
                     </Swiper>
                 </div>
+            </div> */}
+            <div className="grid 2xl:grid-cols-11 lg:grid-cols-12 md:grid-cols-6 grid-cols-12 gap-5">
+                <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full px-5 text-devarana-graph flex flex-col'>
+                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
+                </Box>
+                <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full'>
+                    <CardAvance operativos={operativos} />
+                </Box>
+                <Box className='2xl:col-span-4 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full flex justify-center'>
+                    <CardDesempeno />
+                </Box>
+                <div className='2xl:col-span-3 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full relative'>
+                    <Swiper
+                        effect={'cards'}
+                        grabCursor={true}
+                        modules={[EffectCards, FreeMode]}
+                        className='mySwiper h-[100%] px-5'
+                        loop={true}
+                        
+                        
+                    >
+                        <SwiperSlide className='rounded-ext'>
+                            <CardEquipo title="Mi Equipo" equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
+                        </SwiperSlide>
+                        <SwiperSlide className='rounded-ext'>
+                            <CardEquipo title="Colaboradores de objetivos" equipo={perfil.colaboradores} color='secondary'/>
+                        </SwiperSlide>
+
+                    </Swiper>
+                </div>
             </div>
 
-
-
             <div className='grid grid-cols-12 gap-5'>
-                <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 gap-5'>
+                <div className='xl:col-span-9 lg:col-span-8 col-span-12 py-5 grid grid-cols-12 gap-5'>
                     {
                         isLoading && operativos.length === 0 ? 
                             <div className='col-span-12'>
@@ -146,7 +173,7 @@ export const Objetivos : React.FC = () => {
                     }
                 </div>
 
-                <div className='md:col-span-3 col-span-12 row-span-2 my-5'>
+                <div className='xl:col-span-3 lg:col-span-4 col-span-12 row-span-2 my-5'>
                     <div className='h-10'>
 
                     </div>
@@ -155,7 +182,6 @@ export const Objetivos : React.FC = () => {
                         </Box>
                 </div>
             </div>
-
 
             <Drawer 
                 open={isFormVisible}
@@ -172,7 +198,6 @@ export const Objetivos : React.FC = () => {
             </Drawer>
             
            {
-
                 rendimiento.status === 'ABIERTO' &&
                 (<FloatButton
                     shape="circle"
@@ -199,8 +224,6 @@ export const Objetivos : React.FC = () => {
             >
                 <Administracion activeUsuario={activeUsuarioReview}/>
             </Modal>
-
-            
         </>
     ) 
 

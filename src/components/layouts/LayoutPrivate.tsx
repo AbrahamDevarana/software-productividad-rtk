@@ -40,11 +40,11 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 
     const {socket} = useSocket(import.meta.env.VITE_SERVER_URL)
     
-    useEffect(() => {
-        if(socket && isAuthenticated){
-            dispatch(connectSocketThunk(socket))
-        }
-    }, [socket, isAuthenticated])
+    // useEffect(() => {
+    //     if(socket && isAuthenticated){
+    //         dispatch(connectSocketThunk(socket))
+    //     }
+    // }, [socket, isAuthenticated])
 
 
     useEffect(() => {
@@ -62,27 +62,6 @@ export default function LayoutApp({ children }: LayoutAppProps) {
 	const onClose = () => {
 		setSettingVisible(false);
 	};
-
-    // const setTheme = (e: any) => {
-
-    //     if (e.target.checked) {
-    //         localStorage.setItem('theme', 'dark');
-    //         document.documentElement.classList.add('dark')
-    //     }else{
-    //         localStorage.setItem('theme', 'light');
-    //         document.documentElement.classList.remove('dark')
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     const theme = localStorage.getItem('theme');
-    //     if (theme === 'dark') {
-    //         document.documentElement.classList.add('dark')
-    //     }else{
-    //         document.documentElement.classList.remove('dark')
-    //     }
-    // }, [])
-    
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         if(e.currentTarget.scrollTop > 30){

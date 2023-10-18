@@ -99,7 +99,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
     };
 
     return (
-        <div className='lg:col-span-4 md:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
+        <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
             {
                 setCardSegmented === 'objetivo' && 
                 (
@@ -168,8 +168,8 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                         }
                                     >
                                         <Space>
-                                            <Switch 
-                                                // size='small'
+                                            <Switch
+                                                
                                                 size='small'
                                                 checked={
                                                     ( objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR' ) ? true : false
