@@ -48,7 +48,18 @@ const initialState: UsuariosState = {
             areaId: 0,
             leaderId: '',
             slug: '',
-            usuarios: []
+            usuario: [],
+            leader: {
+                id: '',
+                nombre: '',
+                apellidoPaterno: '',
+                apellidoMaterno: '',
+                email: '',
+                foto: '',
+                iniciales: '',
+                nombreCorto: '',
+                slug: ''
+            },
         }
     }
 }

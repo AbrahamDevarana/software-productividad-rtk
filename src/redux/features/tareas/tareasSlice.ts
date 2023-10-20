@@ -31,7 +31,18 @@ const initialState:TareasState = {
 				color: '',
 				leaderId: '',
 				slug: '',
-				usuarios: [],
+				leader: {
+					id: '',
+					nombre: '',
+					apellidoPaterno: '',
+					apellidoMaterno: '',
+					email: '',
+					foto: '',
+					iniciales: '',
+					nombreCorto: '',
+					slug: ''
+				},
+				usuario: []
 			}
         },
     },

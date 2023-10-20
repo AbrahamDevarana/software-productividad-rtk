@@ -8,7 +8,7 @@ import { UsuarioProps } from '@/interfaces';
 
 export const getUsuariosThunk = createAsyncThunk(
     'usuarios/getUsuarios',
-    async ({filtros, search} : {filtros: any, search: string}, {rejectWithValue, getState}) => {
+    async ({filtros, search} : {filtros?: any, search?: string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
