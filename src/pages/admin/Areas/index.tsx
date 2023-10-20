@@ -1,4 +1,4 @@
-import { FloatButton, Input, Modal, Pagination, Table } from "antd"
+import { Avatar, FloatButton, Image, Input, Modal, Pagination, Table } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useEffect, useState } from 'react';
 import { getAreaThunk, getAreasThunk, cleanAreaThunk, deleteAreaThunk, clearCurrentAreaThunk } from '@/redux/features/areas/areasThunks';
@@ -8,6 +8,8 @@ import { FormAreas } from '@/components/forms/FormAreas';
 import type { ColumnsType } from 'antd/es/table';
 import { AreaProps } from "@/interfaces";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { getStorageUrl } from "@/helpers";
+import getBrokenUser from "@/helpers/getBrokenUser";
 
 
 const initialValues = {
@@ -34,7 +36,13 @@ export const Areas: React.FC = () => {
         {
             title: () => ( <p className='tableTitle'>Responsable</p>),
             key: "leader",
-            render: (text, record, index) => ( <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>),
+            render: (text, record, index) => ( 
+            <div className='flex items-center gap-x-2'>
+                <Avatar src={<Image src={`${getStorageUrl(record.leader.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                    {record.leader.iniciales}
+                </Avatar>
+                <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>
+            </div>),
         },
         {
             

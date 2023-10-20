@@ -8,12 +8,15 @@ import { UsuarioProps } from '@/interfaces';
 
 export const getUsuariosThunk = createAsyncThunk(
     'usuarios/getUsuarios',
-    async (filtros:any, {rejectWithValue, getState}) => {
+    async ({filtros, search} : {filtros: any, search: string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: filtros
+                params: {
+                    ...filtros,
+                    search
+                }
             }
             const response = await clientAxios.get(`/usuarios`, config);
             return response.data.usuarios

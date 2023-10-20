@@ -1,5 +1,6 @@
+import { SinglePerfilProps } from "./perfil";
 import { Paginate } from "./slice";
-import { Lider, UsuarioProps } from "./usuario";
+import { Lider } from "./usuario";
 
 export interface DepartamentoState {
     departamentos: DepartamentoProps[];
@@ -21,8 +22,8 @@ export interface DepartamentoProps {
     parentId?: null;
     area?:     DepartamentoProps;
     areaId?:   number;
-    leader?:   Lider;
+    leader:   SinglePerfilProps;
     color:    string;
     order?:     number;
-    usuarios: UsuarioProps[];
+    usuario: SinglePerfilProps[];
 }

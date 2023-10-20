@@ -1,23 +1,24 @@
 import { useEffect, useMemo } from 'react'
-import { Avatar, Divider, Image, Modal, Popconfirm, Skeleton, Spin, Tooltip } from 'antd'
+import { Avatar, Divider, Image, Modal, Spin, Tooltip } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { SinglePerfilProps } from '@/interfaces'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
-import { FaCheck, FaTimes } from 'react-icons/fa'
 import { cierreCicloThunk, getOperativosUsuarioThunk } from '@/redux/features/operativo/operativosThunk'
 import { CardObjetivoSimple } from './CardObjetivoSimple'
-import { useObjetivo } from '@/hooks/useObjetivos'
 import { Button } from '@/components/ui'
 import { getEvaluacionResultadosLiderThunk } from '@/redux/features/evaluaciones/evaluacionesThunk'
 import { Rating } from 'react-simple-star-rating'
 import { useOtherObjetivo } from '@/hooks/useOthersObjetivos'
+import { usePonderaciones } from '@/hooks/usePonderaciones'
+import {getMesFin, getMesInicio} from '@/helpers'
 
 interface Props {
 	activeUsuario: SinglePerfilProps
-}
+	isLeader: boolean
+}	
 
-export const Administracion = ({activeUsuario}:Props) => {
+export const Administracion = ({activeUsuario, isLeader}:Props) => {
 	
 	const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
@@ -32,53 +33,9 @@ export const Administracion = ({activeUsuario}:Props) => {
 		dispatch(getEvaluacionResultadosLiderThunk({usuarioId: activeUsuario.id, year, quarter}))
 	}, [activeUsuario])
 
-	const { ponderacionObjetivos } = useOtherObjetivo({operativos: operativosUsuario, usuarioId: activeUsuario.id})
-
 	const { confirm } = Modal;
-
-
-	const resultadoMisEvaluaciones = useMemo(() => {
-		return evaluacionResultados.map(evaluacion => {
-		 	return {
-				evaluador: evaluacion.evaluador.nombre + ' ' + evaluacion.evaluador.apellidoPaterno,
-				resultado: ( evaluacion.evaluacion_respuesta.reduce((acc, respuesta) => acc + respuesta.resultado, 0)) / evaluacion.evaluacion_respuesta.length || 0,
-				status: evaluacion.evaluacion_respuesta.length > 0 ? evaluacion.evaluacion_respuesta?.every(respuesta => respuesta.status === true) : false
-				
-			}
-		})
-	}, [evaluacionResultados])
-
-
-	const resultadoMisEvaluados = useMemo(() => {
-		return evaluacionResultadosColaboradores.map(evaluacion => {
-		 	return {
-				evaluado: evaluacion.evaluado.nombre + ' ' + evaluacion.evaluado.apellidoPaterno,
-				resultado: ( evaluacion.evaluacion_respuesta.reduce((acc, respuesta) => acc + respuesta.resultado, 0)) / evaluacion.evaluacion_respuesta.length || 0,
-				status: evaluacion.evaluacion_respuesta.length > 0 ? evaluacion.evaluacion_respuesta?.every(respuesta => respuesta.status === true) : false
-			}
-		})
-	}, [evaluacionResultados])
-
-
-	const promedioOjetivos = useMemo(() => {
-		// 100 es a 90% como promedio es a x
-		const total = (ponderacionObjetivos * 90) / 100
-		return total
-	}, [ponderacionObjetivos])
-
-	const promedioEvaluaciones = useMemo(() => {
-		return resultadoMisEvaluaciones.reduce((acc, evaluacion) => acc + evaluacion.resultado, 0) / resultadoMisEvaluaciones.length || 0
-	}, [resultadoMisEvaluaciones])
-
-	const ponderacionEvaluciones = useMemo(() => {
-		// 5 es a 100 como promedioEvaluaciones es a x
-		return  (promedioEvaluaciones * 100) / 5
-	}, [promedioEvaluaciones])
-
-	const finalEvaluaciones = useMemo(() => {
-		return (ponderacionEvaluciones * 10) / 100
-	}, [ponderacionEvaluciones])
-
+	const { ponderacionObjetivos } = useOtherObjetivo({operativos: operativosUsuario, usuarioId: activeUsuario.id})
+	const { resultadoMisEvaluaciones, resultadoMisEvaluados, ponderacionEvaluciones, promedioOjetivos, finalEvaluaciones, promedioEvaluaciones } = usePonderaciones({evaluacionResultados, evaluacionResultadosColaboradores, ponderacionObjetivos})
 
 
 	const evaluacionesCheck = useMemo(() => {
@@ -95,35 +52,9 @@ export const Administracion = ({activeUsuario}:Props) => {
 		return operativos && evaluaciones
 	}, [operativosUsuario])
 
-	const mesInicio = useMemo(() => {
-		switch (quarter) {
-			case 1:
-				return 'ENE'
-			case 2:
-				return 'ABR'
-			case 3:
-				return 'JUL'
-			case 4:
-				return 'OCT'
-			default:
-				return ''
-		}
-	}, [quarter])
-
-	const mesFin = useMemo(() => {
-		switch (quarter) {
-			case 1:
-				return 'MAR'
-			case 2:
-				return 'JUN'
-			case 3:
-				return 'SEP'
-			case 4:
-				return 'DIC'
-			default:
-				return ''
-		}
-	}, [quarter])
+	const mesInicio = getMesInicio(quarter)
+	const mesFin = getMesFin(quarter)
+	
 
 	const objetivosId = useMemo(() => {
 		return operativosUsuario.map(operativo => operativo.id)
@@ -150,6 +81,32 @@ export const Administracion = ({activeUsuario}:Props) => {
 		});
 
 	}
+
+
+	const orderedObjetivos = useMemo(() => {
+		return operativosUsuario
+			.filter(item => item.operativosResponsable && item.operativosResponsable.length > 0) // Filtrar los elementos con operativosResponsable definido y no vacío
+			.sort((a, b) => {
+				const aResponsable = a.operativosResponsable.find(item => item.id === activeUsuario.id);
+				const bResponsable = b.operativosResponsable.find(item => item.id === activeUsuario.id);
+	
+				// Comprobar si aResponsable y bResponsable son definidos antes de comparar
+				if (aResponsable && bResponsable) {
+					return  bResponsable.scoreCard.progresoAsignado - aResponsable.scoreCard.progresoAsignado ; // Reemplaza someProperty con la propiedad que deseas comparar
+				}
+	
+				// Si aResponsable o bResponsable son undefined, colócalos al final del arreglo
+				if (aResponsable) {
+					return -1;
+				}
+				if (bResponsable) {
+					return 1;
+				}
+	
+				return 0; // Ambos son undefined, mantener el orden original
+			});
+	}, [operativosUsuario, activeUsuario]);
+	
 
 	if(isLoadingOperativosUsuario) return (<div className='h-96 flex items-center justify-center'> <Spin /> </div>)
 
@@ -208,18 +165,15 @@ export const Administracion = ({activeUsuario}:Props) => {
 			</div>
 			<div className='grid grid-cols-12 items-start' style={{
 				height: 'calc(100vh - 315px)'
-			}} >
-
-		
-								
-				<div className='md:col-span-8 col-span-12  p-5 overflow-y-auto '
+			}} >							
+				<div className='md:col-span-8 col-span-12 p-5 overflow-y-auto '
 				>
 					<h1 className='font-bold text-primary pb-2'> Objetivos </h1>
 					<div className='grid grid-cols-12 gap-5'>
 						{
-							operativosUsuario.map((operativo, index) => (
+							orderedObjetivos.map((operativo, index) => (
 								<div className='p-5 rounded-ext shadow-ext col-span-4 max-h-[350px]' key={index}>
-									<CardObjetivoSimple objetivo={operativo} activeUsuario={activeUsuario} />
+									<CardObjetivoSimple objetivo={operativo} activeUsuario={activeUsuario} isLeader={isLeader}/>
 								</div>
 							))
 						}
@@ -238,52 +192,62 @@ export const Administracion = ({activeUsuario}:Props) => {
 										<Rating initialValue={Number(promedioEvaluaciones)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
 									</Tooltip>
 								</div>
-								
-								<table className='w-full'>
-									<thead className='text-devarana-dark-graph'>
-										<tr>
-											<th className='w-2/4 text-left' colSpan={2}>Personas que evaluaron a {activeUsuario.nombre} { activeUsuario.apellidoPaterno }</th>
-											{/* <th className='w-2/4'></th> */}
-										</tr>
-									</thead>
-									<tbody>
-									{
-										resultadoMisEvaluaciones.map((evaluacion, index) => (
-											<tr key={index} className='text-devarana-graph'>
-												<td>{evaluacion.evaluador}</td>
-												<td> {evaluacion.status ? <p className='text-green-500'> Completado </p> : <p className='text-red-500'> Pendiente </p>}  </td>
-											</tr>
-											))	
-										}
-									</tbody>
-								</table>		
-								<Divider className='my-5' />					
-								<table className='w-full'>
-									<thead className='text-devarana-graph'>
-										<tr>
-											<th className='w-2/4 text-left' colSpan={2}>Personas que {activeUsuario.nombre} { activeUsuario.apellidoPaterno } evaluó</th>
-										</tr>
-									</thead>
-									<tbody>
-									{
-										resultadoMisEvaluados.map((evaluacion, index) => (
-											<tr key={index} className='text-devarana-graph'>
-												<td>{evaluacion.evaluado}</td>
-												<td> {evaluacion.status ? <p className='text-green-500'> Completado </p> : <p className='text-red-500'> Pendiente </p>}  </td>
-											</tr>
-											))	
-										}
-									</tbody>
-								</table>							
+								{
+									resultadoMisEvaluaciones.length > 0 &&  resultadoMisEvaluados.length > 0 && (
+									<>
+										<table className='w-full'>
+											<thead className='text-devarana-dark-graph'>
+												<tr>
+													<th className='w-2/4 text-left' colSpan={2}>Personas que evaluaron a {activeUsuario.nombre} { activeUsuario.apellidoPaterno }</th>
+													{/* <th className='w-2/4'></th> */}
+												</tr>
+											</thead>
+											<tbody>
+											{
+												resultadoMisEvaluaciones.map((evaluacion, index) => (
+													<tr key={index} className='text-devarana-graph'>
+														<td>{evaluacion.evaluador}</td>
+														<td> {evaluacion.status ? <p className='text-green-500'> Completado </p> : <p className='text-red-500'> Pendiente </p>}  </td>
+													</tr>
+													))	
+												}
+											</tbody>
+										</table>
+										<Divider className='my-5' />					
+										<table className='w-full'>
+											<thead className='text-devarana-graph'>
+												<tr>
+													<th className='w-2/4 text-left' colSpan={2}>Personas que {activeUsuario.nombre} { activeUsuario.apellidoPaterno } evaluó</th>
+												</tr>
+											</thead>
+											<tbody>
+											{
+												resultadoMisEvaluados.map((evaluacion, index) => (
+													<tr key={index} className='text-devarana-graph'>
+														<td>{evaluacion.evaluado}</td>
+														<td> {evaluacion.status ? <p className='text-green-500'> Completado </p> : <p className='text-red-500'> Pendiente </p>}  </td>
+													</tr>
+													))	
+												}
+											</tbody>
+										</table>
+									</>
+									) 
+								}							
 							</div>
 							<Divider className='my-5' />
-							<div className="flex items-center">
-								<Button 
-									disabled={!allClosed || isClosingCicle} 
-									classColor='dark' classType='regular' onClick={handleCierraObjetivos} >
-									{ isClosingCicle ? <Spin /> : 'Autorizar Cierre' }
-								</Button>
-							</div>
+							{
+								isLeader && (
+								<div className="flex items-center">
+									<Button 
+										disabled={!allClosed || isClosingCicle} 
+										classColor='dark' classType='regular' onClick={handleCierraObjetivos} >
+										{ isClosingCicle ? <Spin /> : 'Autorizar Cierre' }
+									</Button>
+								</div>
+								)
+							}
+							
 						</div>
 					</div>
 				</div>

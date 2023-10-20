@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react'
 import { getColor } from '@/helpers'
-import { UsuarioGestion } from '@/interfaces'
+import { SinglePerfilProps, UsuarioGestion } from '@/interfaces'
 import { generarReporteRendimientoThunk, obtenerUsuariosThunk } from '@/redux/features/gestion/gestionThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { Input, Segmented, Select, Table } from 'antd'
+import { Input, Modal, Segmented, Select, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useDebounce } from '@/hooks/useDebouce'
 import { Button } from '@/components/ui'
+import { Administracion } from '@/components/operativo'
+import { FaEye } from 'react-icons/fa'
 
 
 export const Gestion = () => {
 
 	const { currentConfig: { quarter, year }} = useAppSelector(state => state.global)
-	const { usuarios, isLoadingUsuarios, isGeneratingReport } = useAppSelector(state => state.gestion)	
+	const { usuarios, isLoadingUsuarios, isGeneratingReport } = useAppSelector(state => state.gestion)
+	const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
+	const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
 	const [search, setSearch] = useState('')
 	const [status, setStatus] = useState('')
 	const dispatch = useAppDispatch()
@@ -27,6 +31,11 @@ export const Gestion = () => {
 		}
 	}, [year, quarter, debouncedValue, status])
 	
+	const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
+        setActiveUsuarioReview(usuario)
+        setIsAdminModalVisible(true)
+    }
+
 
 	const options = [
 		{
@@ -44,6 +53,14 @@ export const Gestion = () => {
 					{record.nombre} {record.apellidoPaterno}  {record.apellidoMaterno} 
 				</p>
 			)
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Total Objetivos </p>),
+			key: 'totalObjetivos',
+			render: (text, record) => (
+				<p className='text-default text-right'> {record.rendimiento.countObjetivos}  </p>
+			),
+			sorter: (a, b) => a.rendimiento.countObjetivos - b.rendimiento.countObjetivos,
 		},
 		{
 			title: () => ( <p className='tableTitle text-right'> Resultado Objetivos </p>),
@@ -89,13 +106,25 @@ export const Gestion = () => {
 				</p>
 			),
 			sorter: (a, b) => a.rendimiento.status.localeCompare(b.rendimiento.status),
-
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'>  </p>),
+			key: '',
+			render: (text, record) => (
+				<button className='px-2 py-1 text-devarana-blue' onClick={ () => handleOpenAdminModal(record)}>
+					<FaEye />
+				</button>
+			)
 		}
 	]
 
 	const handleGenerateReport = () => {
 		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status }))
 	}
+
+    const handleCloseAdminModal = () => {
+        setIsAdminModalVisible(false)
+    }
 
 
 	return (
@@ -137,6 +166,24 @@ export const Gestion = () => {
 		>
 
 		</Table>
+
+		<Modal
+                open={isAdminModalVisible}
+                onCancel={handleCloseAdminModal}
+                footer={null}
+                width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
+                style={{
+					top: 50,
+					left: 35,
+					bottom: 0,
+					height: 'calc(100% - 150px)',
+					overflowY: 'hidden',
+					borderRadius: '10px'
+				}}
+                destroyOnClose={true}
+            >
+                <Administracion activeUsuario={activeUsuarioReview} isLeader={false}/>
+            </Modal>
 		</>
 	)
 }

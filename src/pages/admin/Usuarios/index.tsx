@@ -1,4 +1,4 @@
-import { Pagination, Table, Tooltip, Input, FloatButton, Modal } from "antd"
+import { Pagination, Table, Tooltip, Input, FloatButton, Modal, Avatar, Image } from "antd"
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
@@ -8,6 +8,9 @@ import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
 import { FaExclamationTriangle, FaPen, FaPlus, FaTrash } from "react-icons/fa"
 import { UsuarioProps } from "@/interfaces"
+import { useDebounce } from "@/hooks/useDebouce"
+import { getStorageUrl } from "@/helpers"
+import getBrokenUser from "@/helpers/getBrokenUser"
 
 
 
@@ -30,16 +33,20 @@ interface DataType {
 export const Usuarios: React.FC = () => {
     const [filtros, setFiltros] = useState<any>(initialValues)
 	const [formVisible, setFormVisible] = useState<boolean>(false)
-	const { usuarios, infoMessage, paginate} = useAppSelector((state) => state.usuarios)
+	const { usuarios, infoMessage, paginate, isLoading} = useAppSelector((state) => state.usuarios)
     const dispatch = useAppDispatch()
     const { confirm } = Modal;
+    const [search, setSearch] = useState('')
+
+
+    const { debouncedValue } = useDebounce(search, 500)
 
     useEffect(() => {
-      dispatch(getUsuariosThunk(filtros))
+      dispatch(getUsuariosThunk({filtros, search}))
 	  return () => {
 		  dispatch(clearUsuariosThunk())
 	  }
-    }, [filtros])
+    }, [filtros, debouncedValue])
 
 
 
@@ -69,6 +76,17 @@ export const Usuarios: React.FC = () => {
 
 			width: 35
 		},
+        {
+            title: () => ( <p className='tableTitle'></p>),
+            width: 60,
+            render: (text, record, index) => ( 
+            <Avatar
+                src={<Image src={`${getStorageUrl(record.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                className=''
+            >
+                {record.iniciales}
+            </Avatar>),
+        },
         {
             title: () => ( <p className='tableTitlePrincipal'>Nombre</p>),
             key: "nombre",
@@ -143,10 +161,7 @@ export const Usuarios: React.FC = () => {
                         className="max-w-xs w-full"
                         allowClear
                         onChange={(e: any) => {
-                            setFiltros({
-                                ...filtros,
-                                nombre: e.target.value
-                            })
+                            setSearch(e.target.value)
                         }}
                     />
                     <FloatButton
@@ -158,13 +173,14 @@ export const Usuarios: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={usuarios}
+                loading={isLoading}
                 rowKey={(record) => record.id}
-                pagination={false}
+                // pagination={false}
                 className="customTable"
                 // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
             >
             </Table>
-            <Pagination
+            {/* <Pagination
                     className="flex justify-end mt-5"
                     current={paginate.currentPage + 1}
                     total={paginate.totalItem}
@@ -176,7 +192,7 @@ export const Usuarios: React.FC = () => {
                         })
                     }}
 
-            />
+            /> */}
             </Box>
             <FormUsuarios visible={formVisible} handleModal={handleModal}/>
         </>

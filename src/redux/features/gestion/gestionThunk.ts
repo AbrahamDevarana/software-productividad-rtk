@@ -22,6 +22,8 @@ export const obtenerUsuariosThunk = createAsyncThunk(
                 }
             }
             const response = await clientAxios.get<GestionState>(`/reportes/usuarios`, config);
+            console.log(response.data);
+            
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)

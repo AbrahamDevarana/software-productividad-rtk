@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { FloatButton, Input, Modal, Pagination, Table } from "antd"
+import { Avatar, FloatButton, Image, Input, Modal, Pagination, Table, Tooltip } from "antd"
 import { Box, Button } from "@/components/ui"
 import type { ColumnsType } from 'antd/es/table';
 import { cleanDepartamentoThunk, getDepartamentoThunk, getDepartamentosThunk } from '@/redux/features/departamentos/departamentosThunks';
@@ -8,6 +8,8 @@ import { deleteDepartamentoThunk } from '@/redux/features/departamentos/departam
 import { FormDepartamentos } from '@/components/forms/FormDepartamentos';
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa';
 import { DepartamentoProps } from '@/interfaces';
+import { getStorageUrl } from '@/helpers';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 
 const initialValues = {
@@ -23,7 +25,6 @@ export const Departamentos: React.FC = () => {
     const [filtros, setFiltros] = useState<any>(initialValues)
     const { confirm } = Modal;
 
-
     const columns: ColumnsType <DepartamentoProps> = [
         {
             title: () => ( <p className='tableTitlePrincipal'>Departamentos</p>),
@@ -34,14 +35,39 @@ export const Departamentos: React.FC = () => {
         {
             title: () => ( <p className='tableTitle'>Responsable</p>),
             key: "leader",
-            render: (text, record, index) => ( <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>),
+            render: (text, record, index) => ( 
+            <div className='flex items-center gap-x-2'>
+                   <Avatar src={<Image src={`${getStorageUrl(record.leader.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                        {record.leader.iniciales}
+                    </Avatar>
+                <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>
+            </div>
+            ),
         },
         {
-            title: () => ( <p className='tableTitle'>Area</p>),
+            title: () => ( <p className='tableTitle'>Miembros</p>),
+            render: (text, record, index) => ( 
+                <Avatar.Group maxCount={3} key={index} className='z-50'
+                        maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+                    >
+                        {
+                            record.usuario.map((usuario, index) => (
+                                <Tooltip key={index} title={`${usuario.nombre} ${usuario.apellidoPaterno}`} placement="top">
+                                    <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                        {usuario.iniciales}
+                                    </Avatar>
+                                </Tooltip>
+                            ))
+                        }
+            </Avatar.Group>
+            ),
+        },
+        {
+            title: () => ( <p className='tableTitle'>Área</p>),
             key: "area",
             render: (text, record, index) => ( <p className="text-devarana-graph"> { record.area && record.area.nombre } </p>),
             ellipsis: true
-        },
+        }, 
         {
             title: () => ( <p className='tableTitle'>Acciones</p>),
             key: "acciones",

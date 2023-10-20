@@ -17,9 +17,10 @@ import CountUp from 'react-countup';
 interface Props {
     objetivo: OperativoProps
     activeUsuario:  SinglePerfilProps
+    isLeader: boolean
 }
 
-export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
+export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) => {
 
     const dispatch = useAppDispatch()
     const [ isUpdating, setIsUpdating ] = useState(false)
@@ -121,17 +122,21 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario}: Props) => {
                             }
                             </div>
                         </div>
-                    <div className='flex justify-center gap-x-10'>
-                        <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
-                            <FaEye className='mr-2 text-devarana-graph' />
-                        </button>
-                        <Switch
-                            onChange={ aprovacionObjetivo }
-                            disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' )}
-                            defaultChecked={ statusObjetivo === 'APROBADO' }
-                        />
+                        {
+                            isLeader && (
+                                <div className='flex justify-center gap-x-10'>  
+                                    <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
+                                        <FaEye className='mr-2 text-devarana-graph' />
+                                    </button>
+                                    <Switch
+                                        onChange={ aprovacionObjetivo }
+                                        disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' )}
+                                        defaultChecked={ statusObjetivo === 'APROBADO' }
+                                        />
+                                </div>        
+                            )
 
-                    </div>        
+                        }
                 </div>
 
             </div>

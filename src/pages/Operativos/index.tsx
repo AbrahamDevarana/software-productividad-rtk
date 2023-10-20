@@ -222,7 +222,7 @@ export const Objetivos : React.FC = () => {
 				}}
                 destroyOnClose={true}
             >
-                <Administracion activeUsuario={activeUsuarioReview}/>
+                <Administracion activeUsuario={activeUsuarioReview} isLeader={ true } />
             </Modal>
         </>
     ) 

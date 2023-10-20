@@ -5,6 +5,7 @@ import { InitialState } from "./slice";
 export interface UsuarioGestion extends SinglePerfilProps {
 
     rendimiento: {
+        countObjetivos: number
         resultadoCompetencias: number
         resultadoObjetivos: number
         resultadoFinal: number
