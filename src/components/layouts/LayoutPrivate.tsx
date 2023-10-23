@@ -38,21 +38,8 @@ export default function LayoutApp({ children }: LayoutAppProps) {
         }
     }, [isLoading, userAuth])
 
-    const {socket} = useSocket(import.meta.env.VITE_SERVER_URL)
+    useSocket(import.meta.env.VITE_SERVER_URL)
     
-    // useEffect(() => {
-    //     if(socket && isAuthenticated){
-    //         dispatch(connectSocketThunk(socket))
-    //     }
-    // }, [socket, isAuthenticated])
-
-
-    useEffect(() => {
-        if(!isAuthenticated){
-            dispatch(disconnectSocketThunk(socket))
-        }
-    }, [isAuthenticated])
-
     useEffect(() => {
         if(isAuthenticated){
             dispatch(getPermisosThunk())

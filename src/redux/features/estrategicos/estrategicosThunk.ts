@@ -132,14 +132,14 @@ export const getEstrategicosByAreaThunk = createAsyncThunk(
 
 export const clearEstrategicosThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingEstrategicos())
-        dispatch( clearEstrategicos() )        
+        dispatch( checkingEstrategicos() )
+        dispatch( clearEstrategicos() )
     }   
 }
     
 export const clearCurrentEstrategicoThunk = () => {
     return async ( dispatch : AppDispatch, getState: () => RootState ) => {
-        dispatch(checkingEstrategicos())
+        dispatch( checkingEstrategicos() )
         dispatch( clearCurrentEstrategico() )        
     }   
 }

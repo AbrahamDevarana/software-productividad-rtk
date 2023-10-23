@@ -18,18 +18,18 @@ const socketSlice = createSlice({
     name: 'socket',
     initialState,
     reducers: {
-    },
-    extraReducers: builder => {
-        builder.addCase(connectSocketThunk.fulfilled, (state, action) => {
-            state.socket = action.payload.socket;
-            state.online = action.payload.online;
-        })
-        builder.addCase(disconnectSocketThunk.fulfilled, (state, action) => {
-            state.socket = action.payload.socket;
-            state.online = action.payload.online;
-        })
+
+        connectSocket: (state, {payload}) => {
+            state.online = payload.online
+            state.socket = payload.socket
+        },
+        disconnectSocket: (state, {payload}) => {
+            state.online = payload.online
+            state.socket = payload.socket
+        }
+
     }
 })
 
-export const { } = socketSlice.actions;
+export const { connectSocket, disconnectSocket } = socketSlice.actions;
 export default socketSlice.reducer;

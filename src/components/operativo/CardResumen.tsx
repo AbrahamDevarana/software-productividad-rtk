@@ -5,9 +5,8 @@ import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { Avatar, Divider, Image, Modal } from 'antd'
 import CountUp from 'react-countup';
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FormPonderacion } from './FormPonderacion'
-import { Button } from '../ui'
 import dayjs from 'dayjs'
 
 
@@ -89,7 +88,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			<Divider className='my-3' dashed />
 			
 			<div className='flex justify-between items-center flex-wrap align-middle'>
-				<p> { etapaPeriodo } </p>
+				<div> { etapaPeriodo } </div>
 				<button 
 				disabled={rendimiento.status === 'CERRADO'}
 				className='border border-devarana-dark-graph px-2 py-1 text-devarana-dark-graph text-xs rounded-ext font-light disabled:cursor-not-allowed' onClick={ () => setPonderacionVisible(true)}>

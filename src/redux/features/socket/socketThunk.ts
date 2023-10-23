@@ -1,29 +1,15 @@
+import { AppDispatch } from "@/redux/store";
+import { connectSocket, disconnectSocket } from "./socketSlice";
 
-
-import { Socket } from "socket.io-client";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-
-export const connectSocketThunk = createAsyncThunk(
-    'socket/connectSocket',
-    async (socket: any, {rejectWithValue, getState}) => {
-        try {
-            const online = socket.connected;
-            return {socket, online}
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
+export const connectSocketThunk = (socket: any) => {
+    return async ( dispatch : AppDispatch ) => {
+        const online = socket.connected;
+        dispatch(connectSocket({socket, online}))
     }
-)
-
-
-export const disconnectSocketThunk = createAsyncThunk(
-    'socket/disconnectSocket',
-    async (socket: any, {rejectWithValue, getState}) => {
-        try {
-            socket?.disconnect();
-            return {socket, online: false}
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
+}
+export const disconnectSocketThunk = (socket: any) => {
+    return async ( dispatch : AppDispatch ) => {
+        socket?.disconnect()
+        dispatch(disconnectSocket({socket, online: false}))
     }
-)
+}

@@ -1,3 +1,5 @@
+import { connectSocketThunk, disconnectSocketThunk } from '@/redux/features/socket/socketThunk';
+import { useAppDispatch } from '@/redux/hooks';
 import { useMemo, useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
 
@@ -14,37 +16,29 @@ interface ServerToClientEvents {
 
 export const useSocket = (serverPath:string) => { 
 
+    const dispatch = useAppDispatch()
+
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = useMemo( () => io( serverPath , {
         transports: ['websocket'],
-        autoConnect: true,
         query: {
             token: localStorage.getItem('accessToken')
         }
-        
     } ), [ serverPath ] );
-
-    const [ online, setOnline ] = useState(false);
-
-    useEffect(() => {
-        setOnline( socket?.connected );
-    }, [ socket ])
+    
 
     useEffect( () => {
         socket?.on('connect', () => {
-            setOnline( true );
+            dispatch(connectSocketThunk(socket))
         })
-
     }, [ socket ])
 
     useEffect( () => {
         socket?.on('disconnect', () => {
-            setOnline( false );
+            dispatch(disconnectSocketThunk(socket))
         })
-
     }, [ socket ])
 
     return {
-        socket,
-        online
+        socket
     }
 }
