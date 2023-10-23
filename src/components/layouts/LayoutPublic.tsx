@@ -9,7 +9,7 @@ export default function LayoutLogin({ children }: LayoutLoginProps) {
 
     const navigate = useNavigate();
     const location = useLocation()
-    const { isLoading, userAuth } = useAppSelector((state: any) => state.auth);
+    const { isLoading, userAuth } = useAppSelector( state => state.auth);
     
     useAuth()
 

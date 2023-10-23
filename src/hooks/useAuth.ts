@@ -6,7 +6,7 @@ export const useAuth = () => {
     // si el tiempo de expiracion es menor a 5 minutos, refrescar el token
 
     useGetValidationQuery(null, {
-        skip: !localStorage.getItem('accessToken'),
+        // skip: !localStorage.getItem('accessToken'),
         refetchOnReconnect: true,
         pollingInterval: 3600 * 60 * 360,
         refetchOnMountOrArgChange: true,
