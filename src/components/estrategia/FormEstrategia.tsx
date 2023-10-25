@@ -150,10 +150,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         },
     ]
 
-    const handleView = (id:string) => {
-        navigate(`/estrategia/${id}`)
-    }
-
     const itemTab: TabsProps['items'] = [
         {
             key: '1',
@@ -185,7 +181,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     }
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
-
+    
     return (
         <>
 
@@ -197,9 +193,10 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     fechaInicio: dayjs(currentEstrategico.fechaInicio),
                     fechaFin: dayjs(currentEstrategico.fechaFin),
                     propietarioId: currentEstrategico.propietario?.id,
+                    rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)]
                 }}
                 form={form}
-                onBlur={handleOnSubmit}
+                
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                 disabled={
                     hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) ? false : true
@@ -216,6 +213,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         bordered={false}
                         ref={inputRef}
                         onPressEnter={ () => inputRef.current?.blur() }
+                        onBlur={handleOnSubmit}
                     />
                 </Form.Item>
                 <Form.Item
@@ -229,6 +227,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         className='text-2xl'
                         ref={inputRef}
                         onPressEnter={ () => inputRef.current?.blur() }
+                        onBlur={handleOnSubmit}
                     />
                 </Form.Item>
                 <Space className={`${ form.getFieldValue('id') === ''? 'hidden': 'block'} col-span-12`}>
@@ -307,29 +306,19 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
                 </Form.Item>
                 <Form.Item
-                    label="Fecha de inicio"
-                    className='col-span-6'
-                    name={'fechaInicio'}
+                    label="Fecha"
+                    className='col-span-12'
+                    name={'rangeDate'}
                 >
-                    <DatePicker
-                        format={"DD-MM-YYYY"}
+                    <DatePicker.RangePicker
+                        format={"YYYY"}
                         className='w-full'
+                        picker='year'
                         clearIcon={false}
                         ref={inputRef}
-                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label="Fecha de fin"
-                    className='col-span-6'
-                    name={'fechaFin'}
-                >
-                    <DatePicker
-                        format={"DD-MM-YYYY"}
-                        className='w-full'
-                        clearIcon={false}
-                        ref={inputRef}
-                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                        suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
+                        onChange={handleOnSubmit}
+                        
                     />
                 </Form.Item>
                 <Form.Item
