@@ -122,21 +122,25 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) =
                             }
                             </div>
                         </div>
-                        {
-                            isLeader && (
-                                <div className='flex justify-center gap-x-10'>  
+                            <div className='flex justify-center gap-x-10'>  
+                            {
+                                true && (
                                     <button className='btn btn-devarana-primary' onClick={handleOpenModaObjetivo}>
                                         <FaEye className='mr-2 text-devarana-graph' />
                                     </button>
-                                    <Switch
-                                        onChange={ aprovacionObjetivo }
-                                        disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' )}
-                                        defaultChecked={ statusObjetivo === 'APROBADO' }
-                                        />
-                                </div>        
-                            )
-
-                        }
+                                    )
+                            }
+                            {
+                                isLeader && (
+                                <Switch
+                                    onChange={ aprovacionObjetivo }
+                                    disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' )}
+                                    defaultChecked={ statusObjetivo === 'APROBADO' }
+                                    />
+                                )
+                            }
+                            
+                        </div> 
                 </div>
 
             </div>

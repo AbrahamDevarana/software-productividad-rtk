@@ -8,7 +8,7 @@ import { EditarPerfil } from "./editarPerfil";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Loading from "@/components/antd/Loading";
-import { getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
+import { clearOperativosThunk, getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
 
 const Perfil: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -31,13 +31,18 @@ const Perfil: React.FC = () => {
             }
         }
         
-
-        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-
         return () => {
             dispatch(clearProfileThunk())
         }
     }, [id, year, quarter])    
+    
+
+    useEffect( () => {
+        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+        return () => {
+            dispatch(clearOperativosThunk())
+        }
+    }, [id, year, quarter])  
     
 
     

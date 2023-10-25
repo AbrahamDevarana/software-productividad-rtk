@@ -2,21 +2,22 @@ import { BiTargetLock } from "react-icons/bi";
 import { ImStatsBars2 } from 'react-icons/im'
 import { GiPodiumWinner } from 'react-icons/gi'
 import Box from "@/components/ui/Box";
-import { Button } from "@/components/ui/Button";
 import { FaLink, FaProjectDiagram } from "react-icons/fa";
 import { Badge } from "@/components/ui/Badge";
 import { PerfilProps } from "@/interfaces";
 import DOMPurify from "dompurify";
 
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
-import { Avatar, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { Proximamente } from '@/components/ui';
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
-import { getOperativosThunk } from "@/redux/features/operativo/operativosThunk";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { useObjetivo } from "@/hooks/useObjetivos";
 import { Objetivos } from "@/components/perfil/Objetivos";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css/pagination';
+import { FreeMode, Mousewheel, Navigation, Pagination } from "swiper";
+import { useOtherObjetivo } from "@/hooks/useOthersObjetivos";
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -26,10 +27,10 @@ interface Props {
 const Profile = ({usuarioActivo, visitante}: Props) => {
 
     const { operativos } = useAppSelector(state => state.operativos)
-    const { ponderacionObjetivos } = useObjetivo({operativos})
+    const { ponderacionObjetivos } = useOtherObjetivo({operativos, usuarioId:usuarioActivo.id})
 
     return ( 
-    <div className="animate__animated animate__fadeIn animate__faster">
+    <>
         <div className="grid grid-cols-4 gap-10 pt-10">
             <Box className="xl:col-span-1 sm:col-span-2 col-span-4">
                 <div className="flex justify-between items-center flex-wrap lg:gap-x-0 gap-x-5">
@@ -207,13 +208,28 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
 
         <h2 className="py-10 px-2 text-lg font-medium">Objetivos</h2>
         <div className="gap-10 py-5 overflow-x-auto w-full flex">
-            {
-                operativos.map( objetivo => (
-                    <Objetivos objetivo={objetivo} key={objetivo.id} visitante={visitante} />
-                ))
-            }
+            <Swiper
+                slidesPerView={'auto'}
+                spaceBetween={50}
+                navigation={true}
+                
+                mousewheel={true}
+                modules={[ Navigation, Mousewheel]}
+                className="swiperAvance py-5"
+            
+            >
+                {
+                    operativos.map( objetivo => (
+                        <SwiperSlide key={objetivo.id} style={{
+                            maxWidth: '350px'
+                        }}>
+                            <Objetivos objetivo={objetivo} visitante={visitante} usuarioActivo={usuarioActivo}/>
+                        </SwiperSlide>
+                    ))
+                }
+            </Swiper>
         </div>
-    </div> );
+    </> );
 }
  
 export default Profile;

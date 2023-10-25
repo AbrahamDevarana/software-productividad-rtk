@@ -1,7 +1,4 @@
 @import 'antd/dist/reset.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;700&family=Playfair+Display&display=swap');
 @import './assets/scss/_variables.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
@@ -256,7 +253,7 @@ p, li, span, a{
 
 .progressStyle {
     .ant-progress-text{
-        translate: -15px;
+        translate: -20px;
         color: white;
         font-weight: bold;
         font-size: 12px;

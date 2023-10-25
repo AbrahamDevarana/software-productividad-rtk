@@ -8,18 +8,19 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { Icon } from '../Icon';
 import { useAppSelector } from '@/redux/hooks';
 import CountUp from 'react-countup';
-import { OperativoProps } from '@/interfaces';
+import { OperativoProps, SinglePerfilProps } from '@/interfaces';
+import { useOthersOperativo } from '@/hooks/useOthersOperativo';
 
 interface Props {
 	objetivo: OperativoProps;
 	visitante?: boolean;
+	usuarioActivo: SinglePerfilProps
 }
 
-export const Objetivos = ({objetivo, visitante}: Props) => {
+export const Objetivos = ({objetivo, visitante, usuarioActivo}: Props) => {
 
 	const { currentConfig: {year, quarter}} = useAppSelector(state => state.global)
-	const { userAuth } = useAppSelector(state => state.auth)
-	const { resultadoClaveDoneCount, progresoAsignado, firstColor, fixedProgresoReal, secondColor, orderedResponsables} = useOperativo({objetivo})
+	const { resultadoClaveDoneCount, progresoAsignado, firstColor, fixedProgresoReal, secondColor, orderedResponsables} = useOthersOperativo({objetivo, usuarioId: usuarioActivo.id})
 
   	return (
 		<Box className="w-[350px] flex-none" key={objetivo.id}>
@@ -57,7 +58,8 @@ export const Objetivos = ({objetivo, visitante}: Props) => {
 					format={() => <CountUp style={{
 						fontSize: '10px',
 						fontWeight: 'bold',
-					}}  className='text-devarana-graph' end={fixedProgresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}
+						// color: fixedProgresoReal > 85 ? '#848891' : '#fff'
+					}}  end={fixedProgresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}
 					
 				/>
 

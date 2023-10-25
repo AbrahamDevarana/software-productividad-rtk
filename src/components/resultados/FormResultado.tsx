@@ -11,6 +11,7 @@ import { getColor, getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { BiTrash } from 'react-icons/bi';
 import { FaCopy } from 'react-icons/fa';
+import CountUp from 'react-countup';
 
 interface Props {
     resultado: ResultadoClaveProps
@@ -206,7 +207,11 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                             '100%': getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').color,
                             direction: 'to top',
                         }}
-                        trailColor={ getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO', .5).color}                                       
+                        trailColor={ getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO', .5).color}      
+                        format={() => <CountUp style={{
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                        }}  className={`${resultado.progreso > 90? 'text-white' : 'text-devarana-graph' }`} end={resultado.progreso} duration={1} suffix='%' decimals={2} decimal='.' />}                                 
                     />
                 </Popover>
             </div>

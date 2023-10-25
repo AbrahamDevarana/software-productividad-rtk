@@ -10,8 +10,14 @@ import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { AnimatePresence } from "framer-motion";
 import './app.scss'
+import './index.css'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'dayjs/locale/es'
+
+// import styleProduction from './build.css';
+// import styleDevelopment from './index.css';
+
+// process.env.NODE_ENV === 'development' ?  styleDevelopment : styleProduction 
 
 
 dayjs.locale('es')
