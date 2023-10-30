@@ -1,4 +1,4 @@
-import { clearTacticosThunk, getTacticoFromEquiposThunk } from "@/redux/features/tacticos/tacticosThunk"
+import { clearTacticosThunk } from "@/redux/features/tacticos/tacticosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useMemo, useState } from "react"
 import { Box } from "@/components/ui"
@@ -23,7 +23,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
     
     const dispatch = useAppDispatch()
     const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
-    const { tacticos, tacticos_core, isLoading} = useAppSelector(state => state.tacticos)
+    const { objetivosTacticos, isLoading} = useAppSelector(state => state.tacticos)
     const [ activeTeam, setActiveTeam ] = useState<string>('')
 
     const { debouncedValue } = useDebounce(filter, 500)
@@ -42,10 +42,10 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
     
 
     useEffect(() => {
-        if(currentArea?.departamentos?.length){
-            dispatch(getTacticoFromEquiposThunk({slug: currentArea.departamentos[0].slug, year, filter:debouncedValue}))
+        // if(currentArea?.departamentos?.length){
+        //     dispatch(getTacticoFromEquiposThunk({slug: currentArea.departamentos[0].slug, year, filter:debouncedValue}))
             
-        }
+        // }
     }, [currentArea, debouncedValue])
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
     }, [currentArea])
 
     const handleGetDepartamentos = (slug: string) => {
-        dispatch(getTacticoFromEquiposThunk({slug, year, filter: debouncedValue}))
+        // dispatch(getTacticoFromEquiposThunk({slug, year, filter: debouncedValue}))
         setActiveTeam(slug)
     }
 
@@ -132,7 +132,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
                                     <FaQuestionCircle className='text-primary-light'/>
                                 </Tooltip>
                             </div>
-                                <TablaTacticos tacticos={tacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
+                                <TablaTacticos tacticos={objetivosTacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
                         </Box>
                         <Box>
                             <div className="flex items-center gap-x-2">
@@ -146,7 +146,7 @@ const Equipos = ({ slug, year, handleCreateTactico, setShowDrawer, filter }:Prop
                                     </Tooltip>
                                 </Tooltip>
                             </div>
-                                <TablaTacticos tacticos={tacticos_core} isEstrategico={false} handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} />
+                                {/* <TablaTacticos tacticos={tacticos_core} isEstrategico={false} handleCreateTactico={ handleCreateTactico} setShowDrawer={ setShowDrawer }  isLoading={isLoading} /> */}
                         </Box>
                         
                         

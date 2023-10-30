@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
-
+import dayjs from 'dayjs';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 
 
@@ -97,29 +97,37 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             width: 120,
             responsive: ['md'],
             ellipsis: true,
-            render: (text, record, index) => (
-                <div className='flex gap-x-1 justify-end'> 
-                    {
-                        [0, 1, 2, 3].map((index) => {
-                            const trimestre = record.trimestres?.find((t, tIndex) => tIndex === index);
-                            const pivotExists = trimestre && trimestre.pivot_tactico_trimestre;
-                            const isActive = pivotExists ? trimestre.pivot_tactico_trimestre.activo : false;
-                            const backgroundColor = isActive ? ( record.estrategico ? record.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ) : 'rgba(243, 244, 246, 1)';
-                            const color = isActive ? '#FFFFFF' : '#6B7280';
-                        
-                            return (
-                                <span key={index} 
-                                    className={`px-4 text-[11px] font-medium rounded-full text-devarana-midnight`}
-                                    style={{backgroundColor, color}}
-                                >
-                                    Q{index+1}
-                                </span>
-                            )
-                        })
-                        
-                    }
-                </div>
-            ),
+            render: (text, record, index) => {
+
+                // Obtener el trimestre inicial de fecha de inicio con dayjs
+                const quarterInicial = dayjs(record.fechaInicio).quarter();
+                const quarterFinal = dayjs(record.fechaFin).quarter();                
+
+                return (
+                    <div className='flex gap-x-1 justify-end'> 
+                        {
+                            [0, 1, 2, 3].map((index) => {
+                                const isQuarterInRange = index + 1 >= quarterInicial && index + 1 <= quarterFinal;
+                                const colorStyle = isQuarterInRange ? 'rgb(64, 143, 227, .5)' : 'rgba(243, 244, 246, 1)';
+                                const textColor = isQuarterInRange ? '#FFFFFF' : '#6B7280';
+
+                
+                                return (
+                                    <span key={index} 
+                                        className={`px-4 text-[11px] font-medium rounded-full`}
+                                        style={{
+                                            backgroundColor: colorStyle,
+                                            color: textColor
+                                        }}
+                                    >
+                                        Q{index + 1}
+                                    </span>
+                                );
+                            })
+                        }
+                    </div>
+                );
+            },
         },
         {
             title: () => ( <p className='tableTitle text-right'>Responsables</p>),
@@ -200,6 +208,8 @@ export const TablaTacticos = ({tacticos, handleCreateTactico, isEstrategico = fa
             return [];
         }
     }, [tacticos]);
+    
+
     
 
     return (

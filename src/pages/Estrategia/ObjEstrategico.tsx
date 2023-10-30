@@ -21,7 +21,7 @@ export const ObjEstrategico: React.FC = () => {
     const [showDrawer, setShowDrawer] = useState(false)
 
 	const { currentEstrategico } = useAppSelector(state => state.estrategicos)
-    const { tacticos } = useAppSelector(state => state.tacticos)
+    const { objetivosTacticos: tacticos } = useAppSelector(state => state.tacticos)
 	const { perspectivas = [] } = currentEstrategico
 
 	useEffect(() => {

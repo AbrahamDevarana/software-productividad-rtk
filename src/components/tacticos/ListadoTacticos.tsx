@@ -19,7 +19,7 @@ interface Props {
 const ListadoTacticos = ({handleCreateTactico, slug, year, setShowDrawer, filter}:Props) => {
 
     const dispatch = useAppDispatch()
-    const {tacticos, tacticos_core, isLoading} = useAppSelector(state => state.tacticos)
+    const {objetivosTacticos: tacticos, tacticos_core, isLoading} = useAppSelector(state => state.tacticos)
 
     const { debouncedValue } = useDebounce(filter, 500)
 

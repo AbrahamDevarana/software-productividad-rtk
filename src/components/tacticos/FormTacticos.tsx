@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { deleteTacticoThunk, updateQuartersThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { PerspectivaProps, TrimestreProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal } from 'antd';
+import { deleteTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { PerspectivaProps, UsuarioProps } from '@/interfaces';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -13,7 +13,6 @@ import { TabStatus } from '../ui/TabStatus';
 import { getColor } from '@/helpers';
 import { statusType } from '@/types';
 import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
-import { FaEdit, FaSave } from 'react-icons/fa';
 import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
@@ -29,7 +28,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
-    const { currentTactico, isLoadingCurrent, isLoadingQuarters} = useAppSelector(state => state.tacticos)
+    const { currentTactico, isLoadingCurrent} = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
@@ -39,7 +38,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
-    const [ periodos, setPeriodos ] = useState<TrimestreProps[]>([])
+
 
     const [progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
@@ -122,7 +121,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         
         setStatusTactico(currentTactico.status); 
         setProgreso(currentTactico.progreso)
-        setPeriodos(currentTactico.trimestres)
 
     }, [currentTactico])
 
@@ -218,23 +216,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         }
     ]
 
-
-    const handleTrimestre = (trimestre: TrimestreProps) => {
-    //   encontrar el trimestre clickeado en periodos y cambiarle el trimestre.pivot_tactico_trimestre.activo
-    const trimestreEncontrado = periodos.map(periodo => periodo.trimestre === trimestre.trimestre ? {...periodo, pivot_tactico_trimestre: {...periodo.pivot_tactico_trimestre, activo: !periodo.pivot_tactico_trimestre.activo}} : periodo)
-    setPeriodos(trimestreEncontrado)
-        const query = {
-            ...currentTactico,
-            year,
-            slug,
-            trimestresActivos: trimestreEncontrado.filter(periodo => periodo.pivot_tactico_trimestre.activo).map(periodo => {
-                return periodo.trimestre
-            }),
-        }       
-        
-        dispatch(updateQuartersThunk(query))        
-    }
-
     const showDeleteConfirm = () => {
         confirm({
             title: (<p className='text-devarana-graph'>¿Estas seguro de eliminar esta estrategia?</p>),
@@ -273,6 +254,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     fechaInicio: dayjs(currentTactico.fechaInicio),
                     fechaFin: dayjs(currentTactico.fechaFin),
                     responsables: currentTactico.responsables?.map(responsable => responsable.id),
+                    proyeccion: [dayjs(currentTactico.fechaInicio), dayjs(currentTactico.fechaFin)],
                 }}
             >
                 <Form.Item
@@ -417,28 +399,19 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
                 <Divider className='col-span-12'/>
 
-                <div className='flex flex-col gap-y-1'>
-                    <p className='text-devarana-graph font-medium block'>Proyección</p>
-                    <div className='flex gap-x-1 '>
-                        {
-                            periodos.map((trimestre: TrimestreProps, index: number) => {
-                                return (
-                                    <span 
-                                        key={index} 
-                                        onClick={() => {
-                                            if(isLoadingQuarters) return
-                                            hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) &&
-                                            handleTrimestre(trimestre)
-                                        }}
-                                        style={{
-                                            backgroundColor: trimestre.pivot_tactico_trimestre.activo ?  ( currentTactico.estrategico? currentTactico.estrategico.perspectivas.color : 'rgb(64, 143, 227, .5)' ): 'rgba(243, 244, 246, 1)'
-                                        }}
-                                        className={`${isLoadingQuarters? 'cursor-wait cur' : ''} px-4 text-[11px] hover:opacity-70 font-medium cursor-pointer rounded-full ${trimestre.pivot_tactico_trimestre.activo ? 'text-white' : 'bg-gray-100 text-devarana-dark-graph'}`}>{`Q${trimestre.trimestre}`}</span>
-                                )
-                            })
-                        }
-                    </div>
-                </div>
+                <Form.Item
+                    label="Proyección"
+                    name="proyeccion"
+                    className='col-span-12'
+                >
+                
+                        <DatePicker.RangePicker
+                            picker='quarter'
+                            className='w-full'
+                            onChange={handleOnSubmit}
+                        />
+
+                </Form.Item>
 
                 <Divider className='col-span-12'/>
 

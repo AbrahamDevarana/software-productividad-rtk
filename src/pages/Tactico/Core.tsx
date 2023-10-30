@@ -3,7 +3,7 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { EstrategicoProps } from '@/interfaces';
 import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getTacticoFromObjetivoIdThunk } from '@/redux/features/tacticos/tacticosThunk';
+// import { getTacticoFromObjetivoIdThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Divider, Spin, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
@@ -22,7 +22,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
-    const { tacticosGeneral, isLoading } = useAppSelector(state => state.tacticos)
+    const { objetivosTacticos, isLoading } = useAppSelector(state => state.tacticos)
 
     const [ activeEstrategico, setActiveEstrategico ] = useState<EstrategicoProps>()
 
@@ -42,7 +42,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     }, [estrategicosTacticos])
 
     const handleGetTacticos = (objetivo: EstrategicoProps ) => {
-        dispatch(getTacticoFromObjetivoIdThunk({id:undefined, year, slug}))
+        // dispatch(getTacticoFromObjetivoIdThunk({id:undefined, year, slug}))
         setActiveEstrategico(objetivo)
     }
     
@@ -83,7 +83,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos tacticos={tacticosGeneral} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
+                                    <TablaTacticos tacticos={objetivosTacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
                             </Box>
                         </div>
                     </div>

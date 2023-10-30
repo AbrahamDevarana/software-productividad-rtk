@@ -20,15 +20,13 @@ export const Tactico: React.FC = () => {
     const {currentTactico} = useAppSelector(state => state.tacticos)
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
-    const { quarter, year } = useAppSelector(state => state.global.currentConfig)
+    const { year } = useAppSelector(state => state.global.currentConfig)
+
 
     const [filter, setFilter] = useState({})
 
-    setCurrentConfig()
-
-
-    const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => {
-        dispatch(createTacticoThunk({slug, year: 2023, estrategico}))
+    const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>) => {
+        dispatch(createTacticoThunk({slug, year: 2023}))
     }
 
     const handleCloseDrawer = () => {

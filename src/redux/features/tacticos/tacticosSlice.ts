@@ -1,15 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEquiposThunk, getTacticoFromEstrategiaThunk, getTacticoFromObjetivoIdThunk, getTacticoThunk, getTacticosThunk, updateQuartersThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
-    tacticos: [],
-    tacticos_core: [],
-    tacticosGeneral: [],
+    objetivosTacticos: [],
     isLoading: false,
     isLoadingCurrent: false,
-    isLoadingQuarters: false,
     infoMessage: '',
     error: false,
     currentTactico: {
@@ -72,7 +69,6 @@ const initialState: TacticosState = {
             responsables: [],
         },
         comentarios: [],
-        trimestres: [],
         
     }
 }
@@ -82,8 +78,7 @@ const tacticosSlice = createSlice({
     initialState,
     reducers: {
         clearTacticos: (state) => {
-            state.tacticos = initialState.tacticos
-            state.tacticos_core = initialState.tacticos_core
+            state.objetivosTacticos = initialState.objetivosTacticos
         },
         clearCurrentTactico: (state) => {
             state.currentTactico = initialState.currentTactico
@@ -91,133 +86,27 @@ const tacticosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getTacticoFromAreaThunk.pending, (state) => {
+            .addCase(getTacticosThunk.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(getTacticoFromAreaThunk.fulfilled, (state, action) => {
+            .addCase(getTacticosThunk.fulfilled, (state, { payload }) => {
                 state.isLoading = false
-                state.tacticos = action.payload.tacticos
-                state.tacticos_core = action.payload.tacticos_core
+                state.objetivosTacticos = payload.objetivosTacticos
             })
-            .addCase(getTacticoFromAreaThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
+            .addCase(getTacticosThunk.rejected, (state) => {
+                state.isLoading = false,
+                state.infoMessage = 'Error al obtener los objetivos tácticos'
             })
             .addCase(getTacticoThunk.pending, (state) => {
                 state.isLoadingCurrent = true
             })
-            .addCase(getTacticoThunk.fulfilled, (state, action) => {
+            .addCase(getTacticoThunk.fulfilled, (state, { payload }) => {
                 state.isLoadingCurrent = false
-                state.currentTactico = action.payload
+                state.currentTactico = payload.objetivoTactico
             })
-            .addCase(getTacticoThunk.rejected, (state, action) => {
-                state.isLoadingCurrent = false
-                state.error = true
-            })
-            .addCase(updateTacticoThunk.pending, (state) => {
-                // state.isLoadingCurrent = true
-            })
-            .addCase(updateTacticoThunk.fulfilled, (state, action) => {
-                state.currentTactico = action.payload
-                                                
-                if(action.payload.estrategicoId){
-                    // si existe en el array de tacticos, lo actualiza
-                    const find = state.tacticos.find( tactico => tactico.id === action.payload.id )
-                    if(find){
-                        state.tacticos = state.tacticos.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
-                    }else{
-                        state.tacticos = [ ...state.tacticos, action.payload]
-                    }
-                    // si existe en el array de tacticos_core, lo elimina
-                    state.tacticos_core = state.tacticos_core.filter( objetivo => objetivo.id !== action.payload.id )
-                }else{
-                    const find = state.tacticos_core.find( tactico => tactico.id === action.payload.id )
-                    if(find){
-                        state.tacticos_core = state.tacticos_core.map( tactico =>  tactico.id === action.payload.id ? action.payload : tactico )
-                    }else{
-                        state.tacticos_core = [ ...state.tacticos_core, action.payload]
-                    }
-                    state.tacticos = state.tacticos.filter( objetivo => objetivo.id !== action.payload.id )
-                }            
-            })
-            .addCase(updateTacticoThunk.rejected, (state, action) => {
-                state.isLoadingCurrent = false
-                state.error = true
-            })
-            .addCase(createTacticoThunk.pending, (state) => {
-                
-            })
-            .addCase(createTacticoThunk.fulfilled, (state, action) => {
-        
-                if (action.payload.response.estrategicoId) {
-
-                    state.tacticos = [...state.tacticos, action.payload.response]
-                }else {
-                    state.tacticos_core = [...state.tacticos_core, action.payload.response]
-                }
-                state.tacticosGeneral = [...state.tacticosGeneral, action.payload.response]
-            })
-            .addCase(createTacticoThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
-            })
-            .addCase(getTacticosThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getTacticosThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.tacticosGeneral = action.payload
-            })
-            .addCase(deleteTacticoThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(deleteTacticoThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.tacticos = state.tacticos.filter( tactico => tactico.id !== action.payload.id )
-                state.tacticos_core = state.tacticos_core.filter( tactico => tactico.id !== action.payload.id )
-            })
-            .addCase(deleteTacticoThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
-            })
-
-            .addCase(updateQuartersThunk.pending, (state) => {
-                state.isLoadingQuarters = true
-            })
-            .addCase(updateQuartersThunk.fulfilled, (state, action) => {
-                state.isLoadingQuarters = false
-                state.currentTactico.trimestres = action.payload.trimestres
-                state.tacticos.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
-                state.tacticos_core.map( tactico => tactico.id === action.payload.id ? tactico.trimestres = action.payload.trimestres : tactico )
-            })
-            .addCase(updateQuartersThunk.rejected, (state, action) => {
-                state.isLoadingQuarters = false
-                state.error = true
-            })
-            .addCase(getTacticoFromEquiposThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getTacticoFromEquiposThunk.fulfilled, (state, action) => {
-
-                state.isLoading = false
-                state.tacticos = action.payload.tacticos
-                state.tacticos_core = action.payload.tacticos_core
-            })
-            .addCase(getTacticoFromEquiposThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
-            })
-
-            .addCase(getTacticoFromObjetivoIdThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getTacticoFromObjetivoIdThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.tacticosGeneral = action.payload
-            })
-            .addCase(getTacticoFromObjetivoIdThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = true
+            .addCase(getTacticoThunk.rejected, (state) => {
+                state.isLoadingCurrent = false,
+                state.infoMessage = 'Error al obtener el objetivo táctico'
             })
 
         }

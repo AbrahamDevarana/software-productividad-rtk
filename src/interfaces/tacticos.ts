@@ -21,16 +21,12 @@ export interface TacticoProps {
     propietario?: UsuarioProps
     propietarioId?: string
     comentarios: ComentarioProps[];
-    trimestres: TrimestreProps[];
 }
 
 export interface TacticosState {
-    tacticos: TacticoProps[];
-    tacticos_core: TacticoProps[];
-    tacticosGeneral: TacticoProps[];
+    objetivosTacticos: TacticoProps[];
     isLoading:    boolean;
     isLoadingCurrent: boolean;
-    isLoadingQuarters: boolean;
     error:        boolean;
     infoMessage:  string;
     currentTactico: TacticoProps;
