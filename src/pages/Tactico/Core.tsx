@@ -1,70 +1,94 @@
 
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
-import { EstrategicoProps } from '@/interfaces';
-import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-// import { getTacticoFromObjetivoIdThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { CoreProps, DepartamentoProps, TacticoProps } from '@/interfaces';
+import { getAreaThunk } from '@/redux/features/areas/areasThunks';
+import { createCoreThunk, getCoreThunk, getCoresThunk } from '@/redux/features/core/coreThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Divider, Spin, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
     slug?: string
-    filter?: any
-    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void
     setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
+const Core = ({slug, setShowDrawer}: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
-    const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
-    const { objetivosTacticos, isLoading } = useAppSelector(state => state.tacticos)
-
-    const [ activeEstrategico, setActiveEstrategico ] = useState<EstrategicoProps>()
-
+    const { objetivosCore, isLoading } = useAppSelector(state => state.core)
+    const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
+    const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         if(slug){
-            dispatch(getEstrategicosByAreaThunk({slug, year}))
+            dispatch(getAreaThunk(slug))
         }
-    }, [])
+    }, [year])
+
+    
+    useEffect(() => {
+        if(currentArea.departamentos?.length){
+            dispatch(getCoresThunk({year, departamentoId: currentArea.departamentos[0].id}))
+        }
+    }, [currentArea])
 
     useEffect(() => {
-        if(estrategicosTacticos?.length) {
-            handleGetTacticos(estrategicosTacticos?.[0])
-            setActiveEstrategico(estrategicosTacticos?.[0])
+        if(currentArea?.departamentos?.length){
+            handleGetDepartamentos(currentArea.departamentos[0])
+            setActiveTeam(currentArea.departamentos[0])
         }
-    }, [estrategicosTacticos])
+    }, [currentArea])
 
-    const handleGetTacticos = (objetivo: EstrategicoProps ) => {
-        // dispatch(getTacticoFromObjetivoIdThunk({id:undefined, year, slug}))
-        setActiveEstrategico(objetivo)
+    const handleGetDepartamentos = (departamento: DepartamentoProps) => {
+        dispatch(getCoresThunk({year, departamentoId: departamento.slug}))
+        setActiveTeam(departamento)
     }
-    
+
+    const activeDepartamento = useMemo(() => {
+        const current = activeTeam ? currentArea?.departamentos?.find(equipo => equipo.slug === activeTeam.slug) : null
+        return current
+    }, [activeTeam])
+
+    const handleCreateObjetivo = useCallback(() => {
+        slug && dispatch(createCoreThunk({ year, slug }))
+    }, [year])
+
+    const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {
+        dispatch(getCoreThunk(objetivo.id))        
+        setShowDrawer(true)
+    }
 
     return ( 
         <motion.div>
 
             <div className="flex gap-5 max-h-screen flex-row">
-                    <div className="flex flex-col gap-x-5 gap-y-5 max-w-[280px] w-full max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
+                <div className="flex flex-col gap-x-5 gap-y-5 md:max-w-[280px] w-full md:max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
-                        <div className="bg-white shadow-ext rounded-ext w-[275px] p-3">
-                            <p className='text-devarana-graph'>
-                                El objetivo de esta sección es mantener una operación eficiente, por lo que los objetivos tácticos que se creen en esta sección deben estar enfocados en mantener la operación de la empresa.
-                            </p>
-                            
-                        </div>
-                    </div>    
+                    <div className="bg-white shadow-ext rounded-ext md:w-[275px] w-full p-3">
+                            {
+                                currentArea.departamentos?.map(equipo => (
+                                    <div key={equipo.slug} 
+                                        onClick={() => handleGetDepartamentos(equipo)} 
+                                        className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer`}
+                                        style={{
+                                            backgroundColor: activeTeam?.slug === equipo.slug ? 'rgb(229, 231, 235)' : '',
+                                        }}
+                                    >
+                                            <p className="font-medium text-devarana-graph"> {equipo.nombre} </p>
+                                        </div>
+                                ))
+                            }
+                    </div>
+                </div>       
                     <div className="w-full flex flex-col gap-y-5 align-middle">
                         {
-                            !isLoadingEstrategicosByArea && 
-                            <Box className="flex" style={{
-                                    backgroundColor: activeEstrategico?.perspectivas?.color ,
+                            <Box className="flex flex-col md:flex-row" style={{
+                                backgroundColor: activeDepartamento?.color,
                             }}>
                                 <div>
                                     <h1 className="text-white font-medium">Objetivos Tácticos Core</h1>
@@ -83,7 +107,7 @@ const Core = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos tacticos={objetivosTacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
+                                    <TablaTacticos objetivos={objetivosCore} handleCreateObjetivo={ handleCreateObjetivo }  isLoading={isLoading} handleShowObjetivo={handleShowObjetivo}/>
                             </Box>
                         </div>
                     </div>

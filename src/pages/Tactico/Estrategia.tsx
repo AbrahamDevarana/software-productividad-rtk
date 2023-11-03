@@ -1,25 +1,21 @@
 
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
-import { EstrategicoProps } from '@/interfaces';
+import { CoreProps, EstrategicoProps, TacticoProps } from '@/interfaces';
 import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk';
-// import { getTacticoFromObjetivoIdThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { createTacticoThunk, getTacticoThunk, getTacticosByEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Divider, Spin, Tooltip } from 'antd';
+import { Divider, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
     slug?: string
-    filter?: any
-    handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, estrategico: boolean) => void
     setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
+const Estrategia = ({ slug, setShowDrawer }: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
@@ -36,34 +32,42 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
     }, [])
 
     const orderedEstrategicos = useMemo(() => {
-        if (estrategicosTacticos?.length) {
-            // CD1, CD3, CD4, etc. Ordenar por el dígito y ignorar las letras con regex.
-            const regex = /\D/g; // \D coincide con cualquier carácter que no sea un dígito.
-            const clonedArray = [...(estrategicosTacticos || [])]; // Clonar el array original para evitar mutaciones.
-    
-            const ordered = clonedArray.sort((a, b) => {
-                const aNumber = Number(a.codigo.replace(regex, ''));
-                const bNumber = Number(b.codigo.replace(regex, ''));
+        if (estrategicosTacticos.length > 0) {
+            const regex = /\D/g;
+            const sortedEstrategicos = estrategicosTacticos.slice().sort((a, b) => {
+                const aNumber = parseInt(a.codigo.replace(regex, ''), 10) || 0;
+                const bNumber = parseInt(b.codigo.replace(regex, ''), 10) || 0;
                 return aNumber - bNumber;
             });
-    
-            return ordered;
+            return sortedEstrategicos;
         } else {
             return [];
         }
+    }, [estrategicosTacticos]);
+    
+    useEffect(() => {
+        if(orderedEstrategicos.length > 0 ) {
+            const initialEstrategico = orderedEstrategicos[0];
+            handleGetTacticos(initialEstrategico)            
+            setActiveEstrategico(initialEstrategico)
+        }
     }, [estrategicosTacticos])
 
-    useEffect(() => {
-        if(orderedEstrategicos?.length) {
-            handleGetTacticos(orderedEstrategicos?.[0])
-            setActiveEstrategico(orderedEstrategicos?.[0])
-        }
-    }, [orderedEstrategicos])
-
-    const handleGetTacticos = (objetivo: EstrategicoProps ) => {
-        dispatch(getTacticosThunk({ estrategicoId: objetivo.id, year }))
+    const handleGetTacticos = (objetivo: EstrategicoProps ) => {        
         setActiveEstrategico(objetivo)
-    }    
+        dispatch(getTacticosByEstrategiaThunk({ estrategicoId: objetivo.id, year}))
+    }
+
+    
+
+    const handleCreateTactico = useCallback(() => {        
+        slug && activeEstrategico && dispatch(createTacticoThunk({ year, estrategicoId: activeEstrategico.id, slug}))
+    }, [activeEstrategico])
+
+    const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {
+        dispatch(getTacticoThunk(objetivo.id))        
+        setShowDrawer(true)
+    }
 
 
     return ( 
@@ -118,7 +122,7 @@ const Estrategia = ({slug, handleCreateTactico, setShowDrawer}: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos tacticos={objetivosTacticos} isEstrategico handleCreateTactico={ handleCreateTactico } setShowDrawer={setShowDrawer} isLoading={isLoading} />
+                                    <TablaTacticos objetivos={objetivosTacticos} handleCreateObjetivo={ handleCreateTactico } isLoading={isLoading} handleShowObjetivo={handleShowObjetivo} />
                             </Box>
                         </div>
                     </div>

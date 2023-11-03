@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client'
 import { ConfigProvider } from "antd";
 import es_ES from 'antd/es/locale/es_ES';
@@ -8,7 +9,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    // <React.StrictMode>
+    <React.StrictMode>
         <ConfigProvider locale={es_ES}>
             <BrowserRouter>
                 <DndProvider backend={HTML5Backend}>
@@ -16,5 +17,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
                 </DndProvider>
             </BrowserRouter>
         </ConfigProvider>
-    // </React.StrictMode>
+    </React.StrictMode>
 )

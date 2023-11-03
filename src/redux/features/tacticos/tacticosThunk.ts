@@ -10,17 +10,17 @@ interface Props {
     objetivoTactico: TacticoProps
 }
 
-export const getTacticosThunk = createAsyncThunk(
-    'tacticos/getTacticosThunk',
-    async ({estrategicoId, year}: {estrategicoId: string, year: number}, { rejectWithValue, getState }) => {
+export const getTacticosByEstrategiaThunk = createAsyncThunk(
+    'tacticos/getTacticosByEstrategiaThunk',
+    async ({estrategicoId, year, ...props}: {estrategicoId: string, year: number}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { estrategicoId, year }
+                params: { estrategicoId, year, ...props}
             }
             
-            const response = await clientAxios.get<Props>('/tacticos', config);        
+            const response = await clientAxios.get<Props>('/tacticos/byEstrategia', config);        
             return response.data
         }
         catch (error: any) {
@@ -28,6 +28,26 @@ export const getTacticosThunk = createAsyncThunk(
         }
     }
 )
+
+export const getTacticosByEquiposThunk = createAsyncThunk(
+    'tacticos/getTacticosByEquipos',
+    async ({departamentoId, year, ...props}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { departamentoId, year, ...props}
+            }
+            
+            const response = await clientAxios.get<Props>('/tacticos/byEquipo', config);        
+            return response.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 export const getTacticoThunk = createAsyncThunk(
     'tacticos/getTacticoThunk',
@@ -48,13 +68,13 @@ export const getTacticoThunk = createAsyncThunk(
 
 export const createTacticoThunk = createAsyncThunk(
     'tacticos/createTacticoThunk',
-    async ({slug, year}: {slug?: string, year: number}, { rejectWithValue, getState }) => {
+    async ({year, estrategicoId, slug}: { year: number, estrategicoId: string, slug: string }, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
             }
-            const params = {slug, year,  }
+            const params = { year, estrategicoId, slug }
 
             const response = await clientAxios.post<Props>('/tacticos', params, config);
             return { 
@@ -76,6 +96,7 @@ export const deleteTacticoThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
             const response = await clientAxios.delete<Props>(`/tacticos/${tacticosId}`, config);
+            
             return response.data
         }
         catch (error: any) {
@@ -100,44 +121,6 @@ export const updateTacticoThunk = createAsyncThunk(
         }
     }
 )
-
-
-// export const getTacticoFromEquiposThunk = createAsyncThunk(
-//     'tacticos/getTacticoFromEquiposThunk',
-//     async ({slug, year, filter}: {slug: string, year:number, filter: object}, { rejectWithValue, getState }) => {
-
-//         try {
-//             const { accessToken } = (getState() as RootState).auth
-//             const config = {
-//                 headers: { "accessToken": `${accessToken}` },
-//                 params: { ...filter }
-//             }
-//             const response = await clientAxios.get<Props>(`/tacticos/equipo?slug=${slug}&year=${year}`, config);
-//             return response.data.objetivosTacticos
-//         }
-//         catch (error: any) {
-//             return rejectWithValue(error.response.data)
-//         }
-//     }
-// )
-
-// export const getTacticoFromObjetivoIdThunk = createAsyncThunk(
-//     'tacticos/getTacticoFromObjetivoIdThunk',
-//     async ({id, year, slug}: {id: string | undefined, year: number, slug?: string}, { rejectWithValue, getState }) => {
-//         try {
-//             const { accessToken } = (getState() as RootState).auth
-//             const config = {
-//                 headers: { "accessToken": `${accessToken}` },
-//                 params: { year, id, slug}
-//             }
-//             const response = await clientAxios.get(`/tacticos/objetivo/${id}`, config);            
-//             return response.data.objetivosTacticos
-//         }
-//         catch (error: any) {
-//             return rejectWithValue(error.response.data)
-//         }
-//     }
-// )
 
 
 export const clearTacticosThunk = () => {

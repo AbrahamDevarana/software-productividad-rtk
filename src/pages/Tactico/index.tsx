@@ -10,7 +10,7 @@ import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
 import Estrategia from './Estrategia';
 import Core from './Core';
-import { setCurrentConfig } from '@/helpers';
+
 
 export const Tactico: React.FC = () => {
 
@@ -26,7 +26,7 @@ export const Tactico: React.FC = () => {
     const [filter, setFilter] = useState({})
 
     const handleCreateTactico = (e: React.MouseEvent<HTMLButtonElement>) => {
-        dispatch(createTacticoThunk({slug, year: 2023}))
+        // dispatch(createTacticoThunk({ year}))
     }
 
     const handleCloseDrawer = () => {
@@ -97,13 +97,13 @@ export const Tactico: React.FC = () => {
 
             {
                 // segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
-                segmented === 'listado' && (<Estrategia handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} setShowDrawer={setShowDrawer} />)
+                segmented === 'listado' && (<Estrategia slug={slug} setShowDrawer={setShowDrawer} />)
             }
             {
-                segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
+                segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} slug={slug} setShowDrawer={setShowDrawer} />)
             }
             {
-                segmented === 'core' && ( <Core handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} setShowDrawer={setShowDrawer} />)
+                segmented === 'core' && ( <Core slug={slug} setShowDrawer={setShowDrawer} />)
             }
             
 

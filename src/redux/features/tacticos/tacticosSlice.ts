@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -86,14 +86,14 @@ const tacticosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getTacticosThunk.pending, (state) => {
+            .addCase(getTacticosByEstrategiaThunk.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(getTacticosThunk.fulfilled, (state, { payload }) => {
+            .addCase(getTacticosByEstrategiaThunk.fulfilled, (state, { payload }) => {
                 state.isLoading = false
                 state.objetivosTacticos = payload.objetivosTacticos
             })
-            .addCase(getTacticosThunk.rejected, (state) => {
+            .addCase(getTacticosByEstrategiaThunk.rejected, (state) => {
                 state.isLoading = false,
                 state.infoMessage = 'Error al obtener los objetivos tácticos'
             })
@@ -107,6 +107,58 @@ const tacticosSlice = createSlice({
             .addCase(getTacticoThunk.rejected, (state) => {
                 state.isLoadingCurrent = false,
                 state.infoMessage = 'Error al obtener el objetivo táctico'
+            })
+            .addCase(updateTacticoThunk.pending, (state) => {
+                
+            })
+            .addCase(updateTacticoThunk.fulfilled, (state, { payload }) => {
+                state.currentTactico = payload.objetivoTactico
+
+                const findObjetivoTactico = state.objetivosTacticos.find((tactico) => tactico.estrategicoId === payload.objetivoTactico.estrategicoId)
+
+                if(findObjetivoTactico) {
+                    state.objetivosTacticos = state.objetivosTacticos.map((tactico) => {
+                        if (tactico.id === payload.objetivoTactico.id) {
+                            return payload.objetivoTactico
+                        }
+                        return tactico
+                    })
+                }else {
+                    // filter
+                    state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== payload.objetivoTactico.id)
+                }
+
+                
+            })
+            .addCase(updateTacticoThunk.rejected, (state) => {
+                state.infoMessage = 'Error al actualizar el objetivo táctico'
+            })
+            .addCase(createTacticoThunk.pending, (state) => {   
+            })
+            .addCase(createTacticoThunk.fulfilled, (state, { payload }) => {
+                state.objetivosTacticos = [...state.objetivosTacticos, payload.response.objetivoTactico]
+            })
+            .addCase(createTacticoThunk.rejected, (state) => {
+                state.infoMessage = 'Error al crear el objetivo táctico'
+            })
+            .addCase(deleteTacticoThunk.pending, (state) => {
+            })
+            .addCase(deleteTacticoThunk.fulfilled, (state, { payload }) => {
+                state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== payload.objetivoTactico.id)
+            })
+            .addCase(deleteTacticoThunk.rejected, (state) => {
+                state.infoMessage = 'Error al eliminar el objetivo táctico'
+            })
+            .addCase(getTacticosByEquiposThunk.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getTacticosByEquiposThunk.fulfilled, (state, { payload }) => {
+                state.isLoading = false
+                state.objetivosTacticos = payload.objetivosTacticos
+            })
+            .addCase(getTacticosByEquiposThunk.rejected, (state) => {
+                state.isLoading = false,
+                state.infoMessage = 'Error al obtener los objetivos tácticos'
             })
 
         }

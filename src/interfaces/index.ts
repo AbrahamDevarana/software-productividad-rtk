@@ -10,6 +10,7 @@ export * from "./svg";
 export * from "./perspectiva";
 export * from "./estrategicos";
 export * from "./tacticos";
+export * from "./core";
 export * from "./areas";
 export * from "./operativos";
 export * from "./resultadoClave";

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import {  TacticoProps } from '@/interfaces'
-import { getTacticosThunk } from '@/redux/features/tacticos/tacticosThunk'
+import {  } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton, Tooltip } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
@@ -29,19 +29,19 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
-    const { tacticosGeneral } = useAppSelector(state => state.tacticos)
+    const { objetivosTacticos } = useAppSelector(state => state.tacticos)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { userAuth } = useAppSelector(state => state.auth)
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
 
-    const [filteredObjetivosTacticos, setFilteredObjetivosTacticos] = useState<TacticoProps[]>(tacticosGeneral)
+    const [filteredObjetivosTacticos, setFilteredObjetivosTacticos] = useState<TacticoProps[]>(objetivosTacticos)
     const [filteredEstrategicos, setFilteredEstrategicos] = useState(estrategicos)
 
 
     useEffect(() => {
         dispatch(getPerspectivasThunk({ year }))
         dispatch(getEstrategicosThunk({ year }))
-        dispatch(getTacticosThunk({ year }))
+        // dispatch(getTacticosThunk({ year }))
         dispatch(getUsuariosThunk({}))
     }, [])
 
@@ -70,8 +70,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     const { statusObjetivo } = useOperativo({objetivo: currentOperativo})
 
     useEffect(() => {
-        setFilteredObjetivosTacticos(tacticosGeneral)
-  }, [tacticosGeneral])
+        setFilteredObjetivosTacticos(objetivosTacticos)
+  }, [objetivosTacticos])
 
     const propietarioItem = currentOperativo.operativosResponsable?.find(item => item.scoreCard.propietario === true);
     const propietario = propietarioItem?.id || userAuth.id;
@@ -92,7 +92,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
             handleClear()
         } else {
             setFilteredEstrategicos(estrategicos.filter((estrategico) => estrategico.perspectivaId === value))
-            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategico?.perspectivaId === value))
+            setFilteredObjetivosTacticos(objetivosTacticos.filter((tactico) => tactico.estrategico?.perspectivaId === value))
 
             
         }
@@ -106,12 +106,12 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         if( value === null ) {
             handleClear()
         }else {
-            setFilteredObjetivosTacticos(tacticosGeneral.filter((tactico) => tactico.estrategicoId === value))
+            setFilteredObjetivosTacticos(objetivosTacticos.filter((tactico) => tactico.estrategicoId === value))
         }
     }
 
     const handleClear = () => {
-        setFilteredObjetivosTacticos(tacticosGeneral)
+        setFilteredObjetivosTacticos(objetivosTacticos)
     }
 
     const handleDeleteObjetivo = () => {

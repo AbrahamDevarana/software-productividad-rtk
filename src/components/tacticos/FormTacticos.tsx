@@ -29,6 +29,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
     const { currentTactico, isLoadingCurrent} = useAppSelector(state => state.tacticos)
+    const { currentCore, isLoadingCurrent: isLoadingCurrentCore} = useAppSelector(state => state.core)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
@@ -38,6 +39,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
+    const [ suggest, setSuggest ] = useState<number>(25)
 
 
     const [progreso, setProgreso] = useState<number>(0)
@@ -58,7 +60,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         if(currentTactico.id === '') return
         setSelectedPerspectiva(currentTactico.estrategico?.perspectivaId)
     }, [currentTactico])
-    
     
     const handleOnSubmit = () => {        
         if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
@@ -82,7 +83,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     
         dispatch(updateTacticoThunk(query))
     }
-    
 
     const optEstrategicos = useMemo(() => {
 
@@ -102,6 +102,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const handleChangeTipoEstrategia = (e: RadioChangeEvent) => {
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
+
         setIsEstrategico(e.target.value)
         form.setFieldsValue({estrategicoId: undefined})
         setSelectedPerspectiva(undefined)
@@ -110,7 +111,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             handleOnSubmit()
         }
     }
-
 
     useEffect(() => {
         if(!currentTactico.id) return
@@ -127,11 +127,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const handleChangeProgreso = (value: number) => {
         
         if(currentTactico.id && currentTactico.progreso !== value){
-
-         
             const updateTactico = {
                 ...currentTactico,
-                responables: currentTactico.responsables?.map(responsable => responsable.id),
+                ...form.getFieldsValue(),
                 progreso: value,
                 year,
                 slug
@@ -144,6 +142,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         setStatusTactico(value); 
         const updateTactico = {
             ...currentTactico,
+            ...form.getFieldsValue(),
             status: value,
             year,
             slug
@@ -235,6 +234,18 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         return <Skeleton active paragraph={{ rows: 20 }} />
     }
     
+
+    // Simulate async funcion that changes setSuggest yo 50 after 1 second
+
+  
+    const marks = {
+        [suggest]: {
+            style: {
+                color: getColor(currentTactico.status).color,
+            },
+            label: <strong>{suggest}%</strong>,
+        }
+    };
     
 
     return (
@@ -305,7 +316,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     backgroundImage: `linear-gradient(to top, ${getColor(currentTactico.status).lowColor}, ${getColor(currentTactico.status).color})`
                                 }}> { currentTactico.progreso }% </p>
                                 <Slider
-
+                                    // marks={marks}
                                     className='drop-shadow progressStyle w-full'
                                     min={0}
                                     max={100}
