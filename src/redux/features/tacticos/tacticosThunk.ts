@@ -2,12 +2,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '@/redux/store';
 import { clearCurrentTactico, clearTacticos } from './tacticosSlice';
-import { TacticoProps } from '@/interfaces';
+import { CoreProps, TacticoProps } from '@/interfaces';
 import { clientAxios } from '@/config/axios';
 
 interface Props {
     objetivosTacticos: TacticoProps[]
     objetivoTactico: TacticoProps
+    objetivosCore: CoreProps[]
+    objetivoCore: CoreProps
 }
 
 export const getTacticosByEstrategiaThunk = createAsyncThunk(
@@ -31,12 +33,12 @@ export const getTacticosByEstrategiaThunk = createAsyncThunk(
 
 export const getTacticosByEquiposThunk = createAsyncThunk(
     'tacticos/getTacticosByEquipos',
-    async ({departamentoId, year, ...props}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
+    async ({departamentoId, year}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { departamentoId, year, ...props}
+                params: { departamentoId, year}
             }
             
             const response = await clientAxios.get<Props>('/tacticos/byEquipo', config);        
@@ -48,6 +50,26 @@ export const getTacticosByEquiposThunk = createAsyncThunk(
     }
 )
 
+export const getTacticosByEquipoCoreThunk = createAsyncThunk(
+    'tacticos/getTacticosByEquipoCore',
+    async ({departamentoId, year}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { departamentoId, year}
+            }
+            
+            const response = await clientAxios.get<Props>('/tacticos/byEquipoCore', config);   
+            console.log(response.data.objetivosCore);
+            
+            return response.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 export const getTacticoThunk = createAsyncThunk(
     'tacticos/getTacticoThunk',
@@ -68,7 +90,7 @@ export const getTacticoThunk = createAsyncThunk(
 
 export const createTacticoThunk = createAsyncThunk(
     'tacticos/createTacticoThunk',
-    async ({year, estrategicoId, slug}: { year: number, estrategicoId: string, slug: string }, { rejectWithValue, getState }) => {
+    async ({year, estrategicoId, slug}: { year: number, estrategicoId?: string, slug: string }, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
@@ -77,9 +99,7 @@ export const createTacticoThunk = createAsyncThunk(
             const params = { year, estrategicoId, slug }
 
             const response = await clientAxios.post<Props>('/tacticos', params, config);
-            return { 
-                response: response.data,
-            }
+            return response.data
         }
         catch (error: any) {
             return rejectWithValue(error.response.data)

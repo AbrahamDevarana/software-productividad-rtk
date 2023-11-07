@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoFromAreaThunk, getTacticoFromEstrategiaThunk, getTacticoThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
     objetivosTacticos: [],
+    objetivosCore: [],
     isLoading: false,
+    isLoadingCore: false,
     isLoadingCurrent: false,
+    isLoadingCurrentCore: false,
     infoMessage: '',
     error: false,
     currentTactico: {
@@ -19,11 +22,12 @@ const initialState: TacticosState = {
         status: 'SIN_INICIAR',
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        tipoObjetivo: 0,
+        tipoObjetivo: 'estrategico',
         responsables: [],
         areas: [],
         propietarioId: '',
         estrategicoId: '',
+        departamentoId: 0,
         propietario: {
             id: '',
             nombre: '',
@@ -70,7 +74,7 @@ const initialState: TacticosState = {
         },
         comentarios: [],
         
-    }
+    },
 }
 
 const tacticosSlice = createSlice({
@@ -112,22 +116,36 @@ const tacticosSlice = createSlice({
                 
             })
             .addCase(updateTacticoThunk.fulfilled, (state, { payload }) => {
+
+                const { objetivoTactico } = payload
                 state.currentTactico = payload.objetivoTactico
 
-                const findObjetivoTactico = state.objetivosTacticos.find((tactico) => tactico.estrategicoId === payload.objetivoTactico.estrategicoId)
+                const findObjetivoTactico = state.objetivosTacticos.find((tactico) => tactico.id === objetivoTactico.id)
+                const findObjetivoCore = state.objetivosCore.find((core) => core.id === objetivoTactico.id)
 
+
+                
                 if(findObjetivoTactico) {
                     state.objetivosTacticos = state.objetivosTacticos.map((tactico) => {
-                        if (tactico.id === payload.objetivoTactico.id) {
-                            return payload.objetivoTactico
+                        if (tactico.id === objetivoTactico.id) {
+                            return objetivoTactico
                         }
                         return tactico
                     })
                 }else {
-                    // filter
-                    state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== payload.objetivoTactico.id)
+                    state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== objetivoTactico.id)
                 }
 
+                if(findObjetivoCore){
+                    state.objetivosCore = state.objetivosCore.map((core) => {
+                        if (core.id === objetivoTactico.id) {
+                            return objetivoTactico
+                        }
+                        return core
+                    })
+                }else {
+                    state.objetivosCore = state.objetivosCore.filter((core) => core.id !== objetivoTactico.id)
+                }
                 
             })
             .addCase(updateTacticoThunk.rejected, (state) => {
@@ -136,7 +154,11 @@ const tacticosSlice = createSlice({
             .addCase(createTacticoThunk.pending, (state) => {   
             })
             .addCase(createTacticoThunk.fulfilled, (state, { payload }) => {
-                state.objetivosTacticos = [...state.objetivosTacticos, payload.response.objetivoTactico]
+
+                const { objetivoTactico } = payload
+
+                if(objetivoTactico.tipoObjetivo === 'estrategico') state.objetivosTacticos = [...state.objetivosTacticos, objetivoTactico]
+                if(objetivoTactico.tipoObjetivo === 'core') state.objetivosCore = [...state.objetivosCore, objetivoTactico]
             })
             .addCase(createTacticoThunk.rejected, (state) => {
                 state.infoMessage = 'Error al crear el objetivo táctico'
@@ -145,6 +167,7 @@ const tacticosSlice = createSlice({
             })
             .addCase(deleteTacticoThunk.fulfilled, (state, { payload }) => {
                 state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== payload.objetivoTactico.id)
+                state.objetivosCore = state.objetivosCore.filter((core) => core.id !== payload.objetivoTactico.id)
             })
             .addCase(deleteTacticoThunk.rejected, (state) => {
                 state.infoMessage = 'Error al eliminar el objetivo táctico'
@@ -161,7 +184,21 @@ const tacticosSlice = createSlice({
                 state.infoMessage = 'Error al obtener los objetivos tácticos'
             })
 
-        }
+
+            // Core
+
+            .addCase(getTacticosByEquipoCoreThunk.pending, (state) => {
+                state.isLoadingCore = true
+            })
+            .addCase(getTacticosByEquipoCoreThunk.fulfilled, (state, { payload }) => {
+                state.isLoadingCore = false
+                state.objetivosCore = payload.objetivosCore
+            })
+            .addCase(getTacticosByEquipoCoreThunk.rejected, (state) => {
+                state.isLoadingCore = false,
+                state.infoMessage = 'Error al obtener los objetivos core'
+            })
+    }
 })
 
 export const {

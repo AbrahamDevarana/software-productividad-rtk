@@ -1,5 +1,5 @@
 import { UsuarioProps,  } from "./usuario";
-import { ComentarioProps, EstrategicoProps, TrimestreProps } from "./";
+import { ComentarioProps, CoreProps, EstrategicoProps, TrimestreProps } from "./";
 import { AreaProps } from '@/interfaces';
 import { statusType } from "@/types";
 
@@ -13,7 +13,7 @@ export interface TacticoProps {
     fechaInicio:  Date;
     fechaFin:     Date;
     status:       statusType;
-    tipoObjetivo: number;
+    tipoObjetivo: 'estrategico' | 'core' ;
     responsables:  UsuarioProps[];
     areas: AreaProps[]
     estrategico: EstrategicoProps;
@@ -21,15 +21,17 @@ export interface TacticoProps {
     propietario: UsuarioProps
     propietarioId?: string
     comentarios: ComentarioProps[];
+    departamentoId: number;
 }
 
 export interface TacticosState {
     objetivosTacticos: TacticoProps[];
+    objetivosCore: CoreProps[];
     isLoading:    boolean;
+    isLoadingCore: boolean;
     isLoadingCurrent: boolean;
+    isLoadingCurrentCore: boolean;
     error:        boolean;
     infoMessage:  string;
     currentTactico: TacticoProps;
-    
-    
 }

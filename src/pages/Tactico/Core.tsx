@@ -3,7 +3,8 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { CoreProps, DepartamentoProps, TacticoProps } from '@/interfaces';
 import { getAreaThunk } from '@/redux/features/areas/areasThunks';
-import { createCoreThunk, getCoreThunk, getCoresThunk } from '@/redux/features/core/coreThunk';
+import { createCoreThunk, getCoreThunk } from '@/redux/features/core/coreThunk';
+import { createTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Tooltip } from 'antd';
 import { motion } from 'framer-motion';
@@ -19,8 +20,8 @@ interface Props {
 const Core = ({slug, setShowDrawer}: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
-    const { objetivosCore, isLoading } = useAppSelector(state => state.core)
-    const { currentArea, isLoadingCurrent:isLoadingArea } = useAppSelector(state => state.areas)
+    const { objetivosCore, isLoading, isLoadingCore } = useAppSelector(state => state.tacticos)
+    const { currentArea } = useAppSelector(state => state.areas)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
     const dispatch = useAppDispatch()
 
@@ -33,7 +34,7 @@ const Core = ({slug, setShowDrawer}: Props) => {
     
     useEffect(() => {
         if(currentArea.departamentos?.length){
-            dispatch(getCoresThunk({year, departamentoId: currentArea.departamentos[0].id}))
+            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id}))
         }
     }, [currentArea])
 
@@ -45,7 +46,7 @@ const Core = ({slug, setShowDrawer}: Props) => {
     }, [currentArea])
 
     const handleGetDepartamentos = (departamento: DepartamentoProps) => {
-        dispatch(getCoresThunk({year, departamentoId: departamento.slug}))
+        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug}))
         setActiveTeam(departamento)
     }
 
@@ -55,11 +56,11 @@ const Core = ({slug, setShowDrawer}: Props) => {
     }, [activeTeam])
 
     const handleCreateObjetivo = useCallback(() => {
-        slug && dispatch(createCoreThunk({ year, slug }))
+        slug && dispatch(createTacticoThunk({ year, slug }))
     }, [year])
 
     const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getCoreThunk(objetivo.id))        
+        dispatch(getTacticoThunk(objetivo.id))        
         setShowDrawer(true)
     }
 
@@ -107,7 +108,7 @@ const Core = ({slug, setShowDrawer}: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos objetivos={objetivosCore} handleCreateObjetivo={ handleCreateObjetivo }  isLoading={isLoading} handleShowObjetivo={handleShowObjetivo}/>
+                                    <TablaTacticos objetivos={objetivosCore} handleCreateObjetivo={ handleCreateObjetivo }  isLoading={isLoading || isLoadingCore} handleShowObjetivo={handleShowObjetivo}/>
                             </Box>
                         </div>
                     </div>

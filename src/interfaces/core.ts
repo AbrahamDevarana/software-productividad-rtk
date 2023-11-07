@@ -13,11 +13,12 @@ export interface CoreProps {
     fechaInicio:  Date;
     fechaFin:     Date;
     status:       statusType;
-    tipoObjetivo: number;
+    tipoObjetivo: 'estrategico' | 'core' ;
     responsables:  UsuarioProps[];
     areas: AreaProps[]
     propietario: UsuarioProps
     propietarioId?: string
+    departamentoId: number;
     comentarios: ComentarioProps[];
 }
 

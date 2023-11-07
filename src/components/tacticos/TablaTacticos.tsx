@@ -216,20 +216,20 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
     return (
         <>
             <Table
-                columns={columns}
-                dataSource={orderedObjetivos}
-                loading={isLoading}
+                columns={ columns }
+                dataSource={ orderedObjetivos }
+                loading={ isLoading }
                 scroll={{ x: 800 }}
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 rowKey={(record) => record.id}
-                onRow={(record, rowIndex) => {
+                onRow={(record) => {
                     return {
-                        onClick: event => {
+                        onClick: () => {
                             hasGroupPermission(['ver tacticos'], permisos) && (
                                 handleShowObjetivo(record)
                             )
-                        }
+                        },
                     }}
                 }
                 pagination={false}

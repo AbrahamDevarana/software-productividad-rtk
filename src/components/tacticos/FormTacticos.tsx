@@ -5,7 +5,7 @@ import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { deleteTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -29,7 +29,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
     const { currentTactico, isLoadingCurrent} = useAppSelector(state => state.tacticos)
-    const { currentCore, isLoadingCurrent: isLoadingCurrentCore} = useAppSelector(state => state.core)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
@@ -103,13 +102,22 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
 
-        setIsEstrategico(e.target.value)
-        form.setFieldsValue({estrategicoId: undefined})
-        setSelectedPerspectiva(undefined)
-
-        if(e.target.value === false){
-            handleOnSubmit()
+        if(!e.target.value){
+            confirm({
+                title: (<p className='text-devarana-graph'>¿Estas seguro de cambiar el tipo de objetivo?</p>),
+                content: (<p className='text-devarana-graph'>Al cambiar el tipo de objetivo se perderá la relación con el objetivo estratégico</p>),
+                okText: 'Si',
+                okType: 'danger',
+                cancelText: 'No',
+                async onOk() {
+                    setIsEstrategico(e.target.value)
+                    setSelectedPerspectiva(undefined)
+                }
+            });
+        }else{
+            setIsEstrategico(e.target.value)
         }
+
     }
 
     useEffect(() => {
@@ -154,6 +162,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const handleSelectPerspectiva = (value: string) => {
         form.setFieldsValue({estrategicoId: undefined})
         setSelectedPerspectiva(value)
+    }
+
+    const handleChangePerspectiva = () => {
+        message.success('Perspectiva actualizada')
     }
     
     useEffect(() => {
@@ -398,7 +410,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         }
                         allowClear
                         showSearch
-                        onChange={handleOnSubmit}
+                        onChange={handleChangePerspectiva}
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                         options={optEstrategicos}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}

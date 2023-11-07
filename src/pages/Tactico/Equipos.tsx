@@ -1,4 +1,4 @@
-import { clearTacticosThunk, getTacticoThunk, getTacticosByEquiposThunk } from "@/redux/features/tacticos/tacticosThunk"
+import { clearTacticosThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk } from "@/redux/features/tacticos/tacticosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useMemo, useState } from "react"
 import { Box } from "@/components/ui"
@@ -9,7 +9,6 @@ import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/areas/area
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
-import { getCoreThunk, getCoresThunk } from "@/redux/features/core/coreThunk";
 import { CoreProps, DepartamentoProps, TacticoProps } from "@/interfaces";
 
 interface Props {
@@ -23,8 +22,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
     const dispatch = useAppDispatch()
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { currentArea, isLoadingCurrent: isLoadingArea } = useAppSelector(state => state.areas)
-    const { objetivosTacticos, isLoading} = useAppSelector(state => state.tacticos)
-    const { objetivosCore } = useAppSelector(state => state.core)
+    const { objetivosTacticos, isLoading, objetivosCore} = useAppSelector(state => state.tacticos)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
 
     
@@ -49,7 +47,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
 
     useEffect(() => {
         if(currentArea.departamentos?.length){
-            dispatch(getCoresThunk({year, departamentoId: currentArea.departamentos[0].id}))
+            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id}))
         }
     }, [currentArea])
 
@@ -61,7 +59,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
 
     const handleGetDepartamentos = (departamento: DepartamentoProps) => {
         dispatch(getTacticosByEquiposThunk({year, departamentoId: departamento.slug}))
-        dispatch(getCoresThunk({year, departamentoId: departamento.slug}))
+        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug}))
         setActiveTeam(departamento)
     }
 
@@ -77,7 +75,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
         setShowDrawer(true)
     }
     const handleShowObjetivoC = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getCoreThunk(objetivo.id))        
+        dispatch(getTacticoThunk(objetivo.id))        
         setShowDrawer(true)
     }
 

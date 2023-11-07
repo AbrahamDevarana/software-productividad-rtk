@@ -18,6 +18,7 @@ export const Tactico: React.FC = () => {
 
     const dispatch = useAppDispatch()
     const {currentTactico} = useAppSelector(state => state.tacticos)
+    const {currentCore} = useAppSelector(state => state.core)
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const { year } = useAppSelector(state => state.global.currentConfig)
@@ -116,7 +117,7 @@ export const Tactico: React.FC = () => {
             >   
 
                 {
-                    currentTactico && <FormTactico handleCloseDrawer={handleCloseDrawer} year={year} slug={slug}/>
+                    (currentTactico.id !== '' || currentCore.id !== '') && <FormTactico handleCloseDrawer={handleCloseDrawer} year={year} slug={slug}/>
                 }
 
             </Drawer>
