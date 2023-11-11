@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { deleteTacticoThunk, updateTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -17,6 +17,7 @@ import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
 import { DefaultOptionType } from 'antd/es/select';
+import { BsFillCalendarFill } from 'react-icons/bs';
 
 interface FormTacticoProps {
     handleCloseDrawer: () => void
@@ -38,7 +39,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
-    const [ suggest, setSuggest ] = useState<number>(25)
+    const [ suggest, setSuggest ] = useState<number>(99)
+    const [ isAutomatico, setIsAutomatico ] = useState<boolean>(false)
 
 
     const [progreso, setProgreso] = useState<number>(0)
@@ -98,7 +100,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     }, [selectedPerspectiva, isLoadingEstrategico])
    
-    const handleChangeTipoEstrategia = (e: RadioChangeEvent) => {
+    const handleChangeTipoEstrategia =  async (e: RadioChangeEvent) => {
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
 
@@ -112,6 +114,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 async onOk() {
                     setIsEstrategico(e.target.value)
                     setSelectedPerspectiva(undefined)
+                    await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'core' })).unwrap().then(() => {
+                        message.success('Tipo de objetivo cambiado')
+                    })
                 }
             });
         }else{
@@ -164,8 +169,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         setSelectedPerspectiva(value)
     }
 
-    const handleChangePerspectiva = () => {
-        message.success('Perspectiva actualizada')
+    const handleChangePerspectiva = async (e: string) => {
+        await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'estrategico', estrategicoId: e })).unwrap().then(() => {
+            message.success('Tipo de objetivo cambiado')
+        })
     }
     
     useEffect(() => {
@@ -254,8 +261,18 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         [suggest]: {
             style: {
                 color: getColor(currentTactico.status).color,
+                opacity: !isAutomatico ? 1 : .3,
             },
-            label: <strong>{suggest}%</strong>,
+            // label: <strong>Avance de objetivos operativos {suggest}%</strong>,
+            label: (
+                <Tooltip title="Avance de objetivos operativos">
+                    <p>
+                        {suggest} %
+                    </p>
+                    
+                </Tooltip>
+            )
+                
         }
     };
     
@@ -312,12 +329,25 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         <Form.Item
                         >
                             <div className='flex justify-between items-center'>
+                                <div className='flex gap-10'>
                                 <p className='text-devarana-graph font-medium'>Progreso</p>
+                               <div className='flex gap-2'>
+                                    <Switch 
+                                            defaultChecked = {isAutomatico}
+                                            title='Automatico'
+                                            onClick={(value) => {
+                                                setIsAutomatico(!value)
+                                            }}
+                                    />
+                                    <p> { !isAutomatico ? 'Automatico' : 'Manual' } </p>
+                               </div>
+                                </div>
                                 <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                         <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
                                             <TabStatus status={statusTactico} />
                                         </button>
                                 </Dropdown>
+
                             </div>
                             <div className='inline-flex w-full'>
                                 <p className='text-3xl font-bold pr-2' style={{ 
@@ -328,7 +358,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     backgroundImage: `linear-gradient(to top, ${getColor(currentTactico.status).lowColor}, ${getColor(currentTactico.status).color})`
                                 }}> { currentTactico.progreso }% </p>
                                 <Slider
-                                    // marks={marks}
+                                    marks={marks}
                                     className='drop-shadow progressStyle w-full'
                                     min={0}
                                     max={100}
@@ -360,13 +390,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 </div>
             
                 <div className='pb-5 col-span-12'>
-                    <label className='block pb-3'>Tipo de Objetivo Táctico</label>
+                    <label className='block pb-3'>Contribuye a: </label>
                     <Radio.Group
                         value={ isEstrategico ? true : false}
                         onChange={handleChangeTipoEstrategia}
                     >
-                        <Radio value={true}>Táctico</Radio>
-                        <Radio value={false}>Core</Radio>
+                        <Radio value={true}>Estrategia</Radio>
+                        <Radio value={false}>Operación</Radio>
                     </Radio.Group>
 
                 </div>
@@ -374,6 +404,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
                     <>
                     
+                    <label className='block pb-3'>Perspectiva: </label>
                     <div className='flex flex-wrap gap-3 col-span-12'>
                         {
                             perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
@@ -390,14 +421,14 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                     style={{
                                         backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
                                     }}
-                                > <span className='drop-shadow'>{ perspectiva.nombre }</span>
+                                > <span className='drop-shadow  text-xs'>{ perspectiva.nombre }</span>
                                 </button>
                             ))
                         }
                     </div>
 
                 <Form.Item
-                    label="Objetivo estratégico"
+                    label="Objetivo Estratégico"
                     name="estrategicoId"
                     className='col-span-12 pt-4'
                     rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
@@ -432,6 +463,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                             picker='quarter'
                             className='w-full'
                             onChange={handleOnSubmit}
+                            suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
                         />
 
                 </Form.Item>
@@ -439,7 +471,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <Divider className='col-span-12'/>
 
                 <Form.Item
-                    label="Propietario"
+                    label="Responsable"
                     name="propietarioId"
                     className='col-span-6'
                 >

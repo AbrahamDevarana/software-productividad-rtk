@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
@@ -27,11 +27,10 @@ interface Props {
 
 export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
-    const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+    const dispatch = useAppDispatch()    
     const { currentEstrategico, isLoadingCurrent } = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
-    const {permisos} = useAppSelector(state => state.auth)
+    const { permisos, userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
@@ -42,6 +41,12 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const [form] = Form.useForm();
 
     
+    
+    
+    const canEdit = useMemo(() => {
+        return hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && currentEstrategico.propietario?.id === userAuth?.id
+    }, [permisos])
+
     
     const inputRef = useRef<any>(null)
 
@@ -199,7 +204,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                 disabled={
-                    hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) ? false : true
+                    canEdit
                 }
             >
         
@@ -306,13 +311,15 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
                 </Form.Item>
                 <Form.Item
-                    label="Fecha"
+                    label="Duración"
                     className='col-span-12'
                     name={'rangeDate'}
                 >
                     <DatePicker.RangePicker
                         format={"YYYY"}
-                        className='w-full'
+                        style={{
+                            width: '150px'
+                        }}
                         picker='year'
                         clearIcon={false}
                         ref={inputRef}
@@ -322,7 +329,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Propietario"
+                    label="Responsable"
                     className='col-span-6'
                     name='propietarioId'
                 >

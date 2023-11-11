@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk } from './tacticosThunk';
+import { createTacticoThunk, deleteTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk, updateTacticoTypeThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -182,6 +182,29 @@ const tacticosSlice = createSlice({
             .addCase(getTacticosByEquiposThunk.rejected, (state) => {
                 state.isLoading = false,
                 state.infoMessage = 'Error al obtener los objetivos tácticos'
+            })
+
+            .addCase(updateTacticoTypeThunk.pending, (state) => {
+            })
+            .addCase(updateTacticoTypeThunk.fulfilled, (state, { payload }) => {
+                const { objetivoTactico } = payload
+                state.currentTactico = payload.objetivoTactico
+
+                if(objetivoTactico.tipoObjetivo === 'estrategico') {
+
+                    const sameTactico = state.objetivosTacticos.find((tactico) => tactico.estrategicoId === objetivoTactico.estrategicoId)
+
+                    if (sameTactico){
+                        state.objetivosTacticos = [...state.objetivosTacticos, objetivoTactico]
+                    }
+                    state.objetivosCore = state.objetivosCore.filter((core) => core.id !== objetivoTactico.id)
+                }
+
+                if(objetivoTactico.tipoObjetivo === 'core') {
+                    state.objetivosCore = [...state.objetivosCore, objetivoTactico]
+                    state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== objetivoTactico.id)
+                }
+            
             })
 
 

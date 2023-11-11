@@ -19,7 +19,7 @@ export const Tactico: React.FC = () => {
     const dispatch = useAppDispatch()
     const {currentTactico} = useAppSelector(state => state.tacticos)
     const {currentCore} = useAppSelector(state => state.core)
-    const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
+    const [segmented, setSegmented] = useState<React.SetStateAction<any>>('equipos')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const { year } = useAppSelector(state => state.global.currentConfig)
 
@@ -39,12 +39,12 @@ export const Tactico: React.FC = () => {
     return (
         <>
             <div className='flex w-full items-center pb-5'>
-                <div className='max-w-lg w-full'>
+                <div className='max-w-3xl w-full'>
                     <Segmented block
                         options={[
+                            {label: 'Tácticos por Departamento', value: 'equipos'},
                             {label: 'Tácticos Estrategicos', value: 'listado'},
                             {label: 'Tácticos Core', value: 'core'},
-                            {label: 'Tácticos por Equipos', value: 'equipos'},
                         ]}
                         value={segmented}
                         onChange={setSegmented}
@@ -114,6 +114,7 @@ export const Tactico: React.FC = () => {
                 destroyOnClose={true}
                 onClose={() => handleCloseDrawer()}
                 closable={false}
+                className='rounded-l-ext'
             >   
 
                 {

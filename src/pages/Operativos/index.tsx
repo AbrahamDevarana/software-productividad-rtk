@@ -39,26 +39,25 @@ export const Objetivos : React.FC = () => {
 
     const { rendimiento } = perfil
 
+
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
-            await dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id}))
-            await dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter}))
-            await dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id }))
-            await dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id}))
-            await dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
-            await dispatch(getEvaluacionResultadosThunk({usuarioId: id || userAuth.id, year, quarter }))
-            await dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter }))
-            await dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id}))
-            await dispatch(getRankingsThunk({year, quarter}))
+            await Promise.all([
+                dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id})),
+                dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter})),
+                dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id })),
+                dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id})),
+                dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id})),
+                dispatch(getEvaluacionResultadosThunk({usuarioId: id || userAuth.id, year, quarter })),
+                dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter })),
+                dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id})),
+                dispatch(getRankingsThunk({year, quarter})),
+            ])
             setGettingProfile(false)
         }
-        fetchData()
 
-        // return () => {
-        //     dispatch(clearOperativosThunk())
-        //     dispatch(clearProfileThunk())
-        // }
+        (id || userAuth) && fetchData()
     }, [userAuth, id, year, quarter])
     
 
@@ -83,36 +82,6 @@ export const Objetivos : React.FC = () => {
 
     return (
         <>
-            {/* <div className="flex lg:flex-nowrap flex-wrap gap-5">
-                <Box className='lg:w-[20%] sm:w-[45%] w-full px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
-                </Box>
-                <Box className='lg:w-[20%] sm:w-[45%] w-full'>
-                    <CardAvance operativos={operativos} />
-                </Box>
-                <Box className='lg:w-[35%] sm:w-[49%] w-full flex justify-center'>
-                    <CardDesempeno />
-                </Box>
-                <div className='lg:w-[25%] sm:w-[49%] w-full relative'>
-                    <Swiper
-                        effect={'cards'}
-                        grabCursor={true}
-                        modules={[EffectCards, FreeMode]}
-                        className='mySwiper h-[100%] px-5'
-                        loop={true}
-                        
-                        
-                    >
-                        <SwiperSlide className='rounded-ext'>
-                            <CardEquipo title="Mi Equipo" equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
-                        </SwiperSlide>
-                        <SwiperSlide className='rounded-ext'>
-                            <CardEquipo title="Colaboradores de objetivos" equipo={perfil.colaboradores} color='secondary'/>
-                        </SwiperSlide>
-
-                    </Swiper>
-                </div>
-            </div> */}
             <div className="grid 2xl:grid-cols-11 lg:grid-cols-12 md:grid-cols-6 grid-cols-12 gap-5">
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full px-5 text-devarana-graph flex flex-col'>
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />

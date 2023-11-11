@@ -143,6 +143,25 @@ export const updateTacticoThunk = createAsyncThunk(
 )
 
 
+export const updateTacticoTypeThunk = createAsyncThunk(
+    'tacticos/updateTacticoTypeThunk',
+    async ({tacticoId, type, estrategicoId}: {tacticoId: string, type: string, estrategicoId?: string}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const params = { tacticoId, type, estrategicoId }
+            const response = await clientAxios.put<Props>(`/tacticos/changeType`, params, config);
+            return response.data
+        }
+        catch (error: any) {            
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+
 export const clearTacticosThunk = () => {
     return async ( dispatch : AppDispatch) => {
         dispatch( clearTacticos() )        
