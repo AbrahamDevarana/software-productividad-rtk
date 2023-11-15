@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TacticosState } from '@/interfaces';
-import { createTacticoThunk, deleteTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk, updateTacticoTypeThunk } from './tacticosThunk';
+import { changeTypeProgressThunk, createTacticoThunk, deleteTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk, getTacticosByEstrategiaThunk, updateTacticoThunk, updateTacticoTypeThunk } from './tacticosThunk';
 
 
 const initialState: TacticosState = {
@@ -10,6 +10,7 @@ const initialState: TacticosState = {
     isLoadingCore: false,
     isLoadingCurrent: false,
     isLoadingCurrentCore: false,
+    isLoadingProgress: false,
     infoMessage: '',
     error: false,
     currentTactico: {
@@ -22,7 +23,8 @@ const initialState: TacticosState = {
         status: 'SIN_INICIAR',
         fechaInicio: new Date(),
         fechaFin: new Date(),
-        tipoObjetivo: 'estrategico',
+        tipoObjetivo: 'ESTRATEGICO',
+        tipoProgreso: 'MANUAL',
         responsables: [],
         areas: [],
         propietarioId: '',
@@ -73,7 +75,7 @@ const initialState: TacticosState = {
             responsables: [],
         },
         comentarios: [],
-        
+        suggest: 0,
     },
 }
 
@@ -157,8 +159,8 @@ const tacticosSlice = createSlice({
 
                 const { objetivoTactico } = payload
 
-                if(objetivoTactico.tipoObjetivo === 'estrategico') state.objetivosTacticos = [...state.objetivosTacticos, objetivoTactico]
-                if(objetivoTactico.tipoObjetivo === 'core') state.objetivosCore = [...state.objetivosCore, objetivoTactico]
+                if(objetivoTactico.tipoObjetivo === 'ESTRATEGICO') state.objetivosTacticos = [...state.objetivosTacticos, objetivoTactico]
+                if(objetivoTactico.tipoObjetivo === 'CORE') state.objetivosCore = [...state.objetivosCore, objetivoTactico]
             })
             .addCase(createTacticoThunk.rejected, (state) => {
                 state.infoMessage = 'Error al crear el objetivo táctico'
@@ -190,7 +192,7 @@ const tacticosSlice = createSlice({
                 const { objetivoTactico } = payload
                 state.currentTactico = payload.objetivoTactico
 
-                if(objetivoTactico.tipoObjetivo === 'estrategico') {
+                if(objetivoTactico.tipoObjetivo === 'ESTRATEGICO') {
 
                     const sameTactico = state.objetivosTacticos.find((tactico) => tactico.estrategicoId === objetivoTactico.estrategicoId)
 
@@ -200,11 +202,47 @@ const tacticosSlice = createSlice({
                     state.objetivosCore = state.objetivosCore.filter((core) => core.id !== objetivoTactico.id)
                 }
 
-                if(objetivoTactico.tipoObjetivo === 'core') {
+                if(objetivoTactico.tipoObjetivo === 'CORE') {
                     state.objetivosCore = [...state.objetivosCore, objetivoTactico]
                     state.objetivosTacticos = state.objetivosTacticos.filter((tactico) => tactico.id !== objetivoTactico.id)
                 }
             
+            })
+
+            .addCase(updateTacticoTypeThunk.rejected, (state) => {
+                state.infoMessage = 'Error al actualizar el tipo de objetivo'
+            })
+
+            .addCase(changeTypeProgressThunk.pending, (state) => {
+                state.isLoadingProgress = true
+            })
+            .addCase(changeTypeProgressThunk.fulfilled, (state, { payload }) => {
+                const { objetivoTactico } = payload
+                state.currentTactico = payload.objetivoTactico
+
+                if(objetivoTactico.tipoObjetivo === 'ESTRATEGICO') {
+                    state.objetivosTacticos = state.objetivosTacticos.map((tactico) => {
+                        if (tactico.id === objetivoTactico.id) {
+                            return objetivoTactico
+                        }
+                        return tactico
+                    })
+                }
+
+                if(objetivoTactico.tipoObjetivo === 'CORE') {
+                    state.objetivosCore = state.objetivosCore.map((core) => {
+                        if (core.id === objetivoTactico.id) {
+                            return objetivoTactico
+                        }
+                        return core
+                    })
+                }
+                state.isLoadingProgress = false
+            
+            })
+            .addCase(changeTypeProgressThunk.rejected, (state) => {
+                state.infoMessage = 'Error al actualizar el tipo de progreso'
+                state.isLoadingProgress = false
             })
 
 

@@ -13,7 +13,8 @@ export interface TacticoProps {
     fechaInicio:  Date;
     fechaFin:     Date;
     status:       statusType;
-    tipoObjetivo: 'estrategico' | 'core' ;
+    tipoObjetivo: 'ESTRATEGICO' | 'CORE' ;
+    tipoProgreso: 'MANUAL' | 'PROMEDIO'
     responsables:  UsuarioProps[];
     areas: AreaProps[]
     estrategico: EstrategicoProps;
@@ -22,6 +23,7 @@ export interface TacticoProps {
     propietarioId?: string
     comentarios: ComentarioProps[];
     departamentoId: number;
+    suggest: number;
 }
 
 export interface TacticosState {
@@ -31,6 +33,7 @@ export interface TacticosState {
     isLoadingCore: boolean;
     isLoadingCurrent: boolean;
     isLoadingCurrentCore: boolean;
+    isLoadingProgress: boolean;
     error:        boolean;
     infoMessage:  string;
     currentTactico: TacticoProps;

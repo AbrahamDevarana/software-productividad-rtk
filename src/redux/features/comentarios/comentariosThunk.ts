@@ -31,10 +31,7 @@ export const createComentarioThunk = createAsyncThunk(
                 mensaje,
                 comentableType,
                 comentableId
-            }, config);
-
-            console.log(response.data.comentario);
-            
+            }, config);            
             return response.data.comentario
         }
 

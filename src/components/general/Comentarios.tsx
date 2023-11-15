@@ -12,16 +12,15 @@ import { createComentarioThunk, getComentariosThunk } from '@/redux/features/com
 interface Props {
     comentableType: string
     comentableId: string | number
-    setComentariosCount: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const Comentarios = ({comentableType, comentableId, setComentariosCount}:Props) => {
+export const Comentarios = ({comentableType, comentableId}:Props) => {
 
     const dispatch = useAppDispatch()
 
     const { userAuth } = useAppSelector(state => state.auth)
     const { comentarios, isLoading } = useAppSelector(state => state.comentarios)
-    const [comentario , setComentario] = useState('')
+    const [ comentario , setComentario] = useState('')
     
 
 
@@ -36,13 +35,11 @@ export const Comentarios = ({comentableType, comentableId, setComentariosCount}:
                 comentableId
             }))
             setComentario('')
-            setComentariosCount(comentarios.length + 1)
         }
     }
 
     const handleDeleteComentario = async (id: number) => {
         // await dispatch(deleteComentarioThunk(id))
-        setComentariosCount(comentarios.length - 1)
     }
 
     const handleChange = (e: any) => {
@@ -84,9 +81,9 @@ export const Comentarios = ({comentableType, comentableId, setComentariosCount}:
             }
 
             {/* Crear nuevos comentarios  */}
-            <div className='flex gap-3 py-1 '>
+            <div className='flex gap-5 '>
                 <Avatar shape='circle' size={'large'} src={<Image src={getStorageUrl(userAuth.foto)} preview={false} fallback={getBrokenUser()} /> } />
-                <input type="text" className='bg-gray-100 rounded-full w-full px-2 py-2' placeholder='Escribe un comentario... ' onChange={handleChange} value={comentario}/>
+                <input type="text" className='bg-gray-100 rounded-full flex-1 px-2 py-2' placeholder='Escribe un comentario... ' onChange={handleChange} value={comentario}/>
                 <button disabled={ comentario.trim().length === 0} className='disabled:opacity-10 bg-gradient-to-t from-primary to-primary-light shadow-sm rounded-full h-8 w-9 flex justify-center items-center hover:opacity-80' onClick={createComentario}>
                     <BsSendFill className='text-white text-xs fill-white' /> 
                 </button>

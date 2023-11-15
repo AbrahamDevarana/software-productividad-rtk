@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { changeTypeProgressThunk, deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -29,7 +29,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
-    const { currentTactico, isLoadingCurrent} = useAppSelector(state => state.tacticos)
+    const { currentTactico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.tacticos)
+    const { comentarios } = useAppSelector(state => state.comentarios)
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
@@ -38,9 +39,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ isEstrategico, setIsEstrategico] = useState(false)
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
-    const [ comentariosCount , setComentariosCount ] = useState<number>(0)
     const [ suggest, setSuggest ] = useState<number>(99)
-    const [ isAutomatico, setIsAutomatico ] = useState<boolean>(false)
 
 
     const [progreso, setProgreso] = useState<number>(0)
@@ -114,7 +113,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 async onOk() {
                     setIsEstrategico(e.target.value)
                     setSelectedPerspectiva(undefined)
-                    await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'core' })).unwrap().then(() => {
+                    await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'CORE' })).unwrap().then(() => {
                         message.success('Tipo de objetivo cambiado')
                     })
                 }
@@ -132,7 +131,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             setIsEstrategico(true)
         }
         
-        setStatusTactico(currentTactico.status); 
+        setStatusTactico(currentTactico.status);
         setProgreso(currentTactico.progreso)
 
     }, [currentTactico])
@@ -143,6 +142,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             const updateTactico = {
                 ...currentTactico,
                 ...form.getFieldsValue(),
+                tipoProgreso: 'MANUAL',
                 progreso: value,
                 year,
                 slug
@@ -170,15 +170,15 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     }
 
     const handleChangePerspectiva = async (e: string) => {
-        await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'estrategico', estrategicoId: e })).unwrap().then(() => {
+        await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'ESTRATEGICO', estrategicoId: e })).unwrap().then(() => {
             message.success('Tipo de objetivo cambiado')
         })
     }
     
-    useEffect(() => {
-        setComentariosCount(currentTactico.comentarios?.length)
-    }, [currentTactico.comentarios])
 
+    const comentariosCount = useMemo(() => {
+        return comentarios.length || 0
+    }, [comentarios])
 
     const items: MenuProps['items'] = [
         {
@@ -230,7 +230,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     </div>
                 </div>
             ),
-            children: ( <Comentarios setComentariosCount={setComentariosCount} comentableType='TACTICO' comentableId={currentTactico.id}/> )
+            children: ( <Comentarios comentableType='TACTICO' comentableId={currentTactico.id}/> )
         }
     ]
 
@@ -250,32 +250,37 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
 
     if ( isLoadingCurrent || isLoadingEstrategico ){
-        return <Skeleton active paragraph={{ rows: 20 }} />
+        return <div className='flex justify-center items-center h-full'> <Spin size='large' /> </div>
     }
     
 
-    // Simulate async funcion that changes setSuggest yo 50 after 1 second
-
+    const handleSetTipo = (type: boolean) => {        
+        dispatch(changeTypeProgressThunk({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
+            message.success('Tipo de progreso cambiado')
+        })
+        
+    }
   
+    console.log(currentTactico.suggest);
+    
     const marks = {
-        [suggest]: {
+        [currentTactico.suggest]: {
             style: {
                 color: getColor(currentTactico.status).color,
-                opacity: !isAutomatico ? 1 : .3,
+                opacity: currentTactico.tipoProgreso === 'PROMEDIO' ? 1 : .3,
             },
-            // label: <strong>Avance de objetivos operativos {suggest}%</strong>,
             label: (
                 <Tooltip title="Avance de objetivos operativos">
-                    <p>
-                        {suggest} %
+                    <p onClick={ () => handleSetTipo(true) } className='cursor-pointer'>
+                        {currentTactico.suggest}%
                     </p>
                     
                 </Tooltip>
-            )
+            ),
                 
         }
     };
-    
+
 
     return (
         <>
@@ -295,6 +300,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     fechaFin: dayjs(currentTactico.fechaFin),
                     responsables: currentTactico.responsables?.map(responsable => responsable.id),
                     proyeccion: [dayjs(currentTactico.fechaInicio), dayjs(currentTactico.fechaFin)],
+                    tipoProgreso: currentTactico.tipoProgreso,
                 }}
             >
                 <Form.Item
@@ -331,15 +337,15 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                             <div className='flex justify-between items-center'>
                                 <div className='flex gap-10'>
                                 <p className='text-devarana-graph font-medium'>Progreso</p>
-                               <div className='flex gap-2'>
-                                    <Switch 
-                                            defaultChecked = {isAutomatico}
-                                            title='Automatico'
-                                            onClick={(value) => {
-                                                setIsAutomatico(!value)
-                                            }}
+                               <div className='flex gap-2 items-center'>
+                                    <Switch size='small'
+                                            className='disabled:cursor-wait'
+                                            checked = {currentTactico.tipoProgreso === 'PROMEDIO' ? true : false}
+                                            title='Automatico'     
+                                            disabled={isLoadingProgress}                                       
+                                            onClick={handleSetTipo}
                                     />
-                                    <p> { !isAutomatico ? 'Automatico' : 'Manual' } </p>
+                                    <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
                                </div>
                                 </div>
                                 <Dropdown menu={{items}} overlayClassName='bg-transparent'>

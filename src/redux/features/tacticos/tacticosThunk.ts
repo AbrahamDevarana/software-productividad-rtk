@@ -79,7 +79,9 @@ export const getTacticoThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const response = await clientAxios.get<Props>(`/tacticos/${tacticosId}`, config);
+            const response = await clientAxios.get<Props>(`/tacticos/${tacticosId}`, config);  
+            console.log(response.data);
+                      
             return response.data
         }
         catch (error: any) {
@@ -160,6 +162,26 @@ export const updateTacticoTypeThunk = createAsyncThunk(
         }
     }
 )
+
+
+export const changeTypeProgressThunk = createAsyncThunk(
+    'tacticos/changeTypeProgressThunk',
+    async ({tacticoId, type}: {tacticoId: string, type: string}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth
+            const config = {
+                headers: { "accessToken": `${accessToken}` }
+            }
+            const params = { tacticoId, type }
+            const response = await clientAxios.put<Props>(`/tacticos/changeTypeProgress`, params, config);
+            return response.data
+        }
+        catch (error: any) {            
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 
 
 export const clearTacticosThunk = () => {
