@@ -5,7 +5,7 @@ import { CoreProps, EstrategicoProps, TacticoProps } from '@/interfaces';
 import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { createTacticoThunk, getTacticoThunk, getTacticosByEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Divider, Tooltip } from 'antd';
+import { Checkbox, Divider, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
@@ -20,7 +20,7 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
     const { objetivosTacticos, isLoading } = useAppSelector(state => state.tacticos)
-
+    const [ showOnlyMe, setShowOnlyMe ] = useState(false)
     const [ activeEstrategico, setActiveEstrategico ] = useState<EstrategicoProps>()
 
     const dispatch = useAppDispatch()
@@ -55,10 +55,13 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
 
     const handleGetTacticos = (objetivo: EstrategicoProps ) => {        
         setActiveEstrategico(objetivo)
-        dispatch(getTacticosByEstrategiaThunk({ estrategicoId: objetivo.id, year}))
+        dispatch(getTacticosByEstrategiaThunk({ estrategicoId: objetivo.id, year, showOnlyMe}))
     }
 
-    
+    const handleGetOnlyMe = (value : boolean) => {
+        setShowOnlyMe(value)
+        activeEstrategico && dispatch(getTacticosByEstrategiaThunk({ estrategicoId: activeEstrategico.id, year, showOnlyMe: value}))
+    }
 
     const handleCreateTactico = useCallback(() => {        
         slug && activeEstrategico && dispatch(createTacticoThunk({ year, estrategicoId: activeEstrategico.id, slug}))
@@ -72,7 +75,6 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
 
     return ( 
         <motion.div>
-
             <div className="flex gap-5 max-h-screen flex-row md:flex-nowrap flex-wrap">
                     <div className="flex flex-col gap-x-5 gap-y-5 md:max-w-[280px] w-full md:max-h-[calc(100vh-170px)] hover:overflow-y-auto overflow-y-hidden">
 
@@ -108,6 +110,16 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
                                 <div>
                                     <h1 className="text-white font-medium">{activeEstrategico?.nombre}</h1>
                                     <p className="text-white text-opacity-80 drop-shadow">{activeEstrategico?.perspectivas.nombre}</p>
+                                </div>
+                                <div className='ml-auto'>
+                                    <Checkbox
+                                        checked={showOnlyMe}
+                                        onChange={(e) => handleGetOnlyMe(e.target.checked)}
+                                        className='text-white'
+                                    >
+                                        <p className='text-white'>Solo mis objetivos {showOnlyMe} </p>
+                                    </Checkbox>
+
                                 </div>
                             </Box>
                         }

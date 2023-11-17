@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useMemo, useState } from "react"
 import { Box } from "@/components/ui"
 import { motion } from 'framer-motion';
-import { Avatar, Image, Tooltip } from "antd"
+import { Avatar, Checkbox, Image, Tooltip } from "antd"
 import { FaQuestionCircle } from "react-icons/fa"
 import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/areas/areasThunks"
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
@@ -24,7 +24,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
     const { currentArea, isLoadingCurrent: isLoadingArea } = useAppSelector(state => state.areas)
     const { objetivosTacticos, isLoading, objetivosCore} = useAppSelector(state => state.tacticos)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
-
+    const [showOnlyMe, setShowOnlyMe] = useState(false)
     
     useEffect(() => {
         if(slug){
@@ -41,13 +41,13 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
 
     useEffect(() => {
         if(currentArea.departamentos?.length){
-            dispatch(getTacticosByEquiposThunk({year, departamentoId: currentArea.departamentos[0].id}))
+            dispatch(getTacticosByEquiposThunk({year, departamentoId: currentArea.departamentos[0].id, showOnlyMe}))
         }
     }, [currentArea])
 
     useEffect(() => {
         if(currentArea.departamentos?.length){
-            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id}))
+            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id, showOnlyMe}))
         }
     }, [currentArea])
 
@@ -58,8 +58,8 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
     }, [currentArea])
 
     const handleGetDepartamentos = (departamento: DepartamentoProps) => {
-        dispatch(getTacticosByEquiposThunk({year, departamentoId: departamento.slug}))
-        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug}))
+        dispatch(getTacticosByEquiposThunk({year, departamentoId: departamento.slug, showOnlyMe}))
+        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug, showOnlyMe}))
         setActiveTeam(departamento)
     }
 
@@ -77,6 +77,12 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
     const handleShowObjetivoC = (objetivo: TacticoProps | CoreProps) => {
         dispatch(getTacticoThunk(objetivo.id))        
         setShowDrawer(true)
+    }
+
+    const handleGetOnlyMe = (value : boolean) => {
+        setShowOnlyMe(value)
+        activeTeam && dispatch(getTacticosByEquiposThunk({year, departamentoId: activeTeam.slug, showOnlyMe: value}))
+        activeTeam && dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: activeTeam.slug, showOnlyMe: value}))
     }
 
 
@@ -134,6 +140,16 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                                     </div>
                                 )
                             }
+                        </div>
+                        <div className='ml-auto'>
+                            <Checkbox
+                                checked={showOnlyMe}
+                                onChange={(e) => handleGetOnlyMe(e.target.checked)}
+                                className='text-white'
+                            >
+                                <p className='text-white'>Solo mis objetivos {showOnlyMe} </p>
+                            </Checkbox>
+
                         </div>
                     </Box>
                     <Box>

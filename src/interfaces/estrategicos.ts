@@ -10,6 +10,7 @@ export interface EstrategicosState {
     isLoading:    boolean;
     isLoadingCurrent: boolean;
     isLoadingEstrategicosByArea: boolean;
+    isLoadingProgress: boolean;
     error:        boolean;
     infoMessage:  string;
     currentEstrategico: EstrategicoProps;
@@ -32,6 +33,8 @@ export interface EstrategicoProps {
     propietarioId?: string
     propietario?: UsuarioProps;
     comentarios: ComentarioProps[];
+    suggest: number;
+    tipoProgreso: 'MANUAL' | 'PROMEDIO'
 }
 
 

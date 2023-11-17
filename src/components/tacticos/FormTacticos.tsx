@@ -261,7 +261,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         
     }
   
-    console.log(currentTactico.suggest);
     
     const marks = {
         [currentTactico.suggest]: {
@@ -337,7 +336,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                             <div className='flex justify-between items-center'>
                                 <div className='flex gap-10'>
                                 <p className='text-devarana-graph font-medium'>Progreso</p>
-                               <div className='flex gap-2 items-center'>
+                                <div className='flex gap-2 items-center'>
                                     <Switch size='small'
                                             className='disabled:cursor-wait'
                                             checked = {currentTactico.tipoProgreso === 'PROMEDIO' ? true : false}
@@ -346,8 +345,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                             onClick={handleSetTipo}
                                     />
                                     <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
-                               </div>
                                 </div>
+                            </div>
                                 <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                         <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
                                             <TabStatus status={statusTactico} />

@@ -7,6 +7,7 @@ const initialState: EstrategicosState = {
     estrategicosTacticos: [],
     isLoading: false,
     isLoadingCurrent: false,
+    isLoadingProgress: false,
     isLoadingEstrategicosByArea: false,
     infoMessage: '',
     error: false,
@@ -21,6 +22,8 @@ const initialState: EstrategicosState = {
         status: 'SIN_INICIAR',
         indicador: '',
         perspectivaId: '',
+        suggest: 0,
+        tipoProgreso: 'PROMEDIO',
         perspectivas: {
                 id: '',
                 nombre: '',

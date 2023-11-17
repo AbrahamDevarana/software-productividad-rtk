@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps } from 'antd';
+import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, message, Tooltip, Switch } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
@@ -28,7 +28,7 @@ interface Props {
 export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     const dispatch = useAppDispatch()    
-    const { currentEstrategico, isLoadingCurrent } = useAppSelector(state => state.estrategicos)
+    const { currentEstrategico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { permisos, userAuth } = useAppSelector(state => state.auth)
     const { usuarios } = useAppSelector(state => state.usuarios)
@@ -166,7 +166,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     </div>
                 </div>
             ),
-            children: ( <Comentarios setComentariosCount={setComentariosCount} comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
+            children: ( <Comentarios comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
         }
     ]
 
@@ -184,6 +184,31 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             }
         });
     }
+
+    const handleSetTipo = (type: boolean) => {        
+        // dispatch(changeTypeProgressThunk({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
+        //     message.success('Tipo de progreso cambiado')
+        // })
+    }
+  
+    
+    const marks = {
+        [currentEstrategico.suggest]: {
+            style: {
+                color: getColor(currentEstrategico.status).color,
+                opacity: currentEstrategico.tipoProgreso === 'PROMEDIO' ? 1 : .3,
+            },
+            label: (
+                <Tooltip title="Avance de objetivos operativos">
+                    <p onClick={ () => handleSetTipo(true) } className='cursor-pointer'>
+                        {currentEstrategico.suggest}%
+                    </p>
+                    
+                </Tooltip>
+            ),
+                
+        }
+    };
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
     
@@ -241,7 +266,19 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     >
 
                         <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Progreso</p>
+                            <div className='flex gap-x-2'>
+                                <p className='text-devarana-graph font-medium'>Progreso</p>
+                                <div className='flex gap-2 items-center'>
+                                    <Switch size='small'
+                                        className='disabled:cursor-wait'
+                                        checked = {currentEstrategico.tipoProgreso === 'PROMEDIO' ? true : false}
+                                        title='Automatico'     
+                                        disabled={isLoadingProgress}                                       
+                                        onClick={handleSetTipo}
+                                />
+                            </div>
+                            <p className='text-devarana-graph'> { currentEstrategico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                            </div>
                             <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                     <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
                                         <TabStatus status={statusEstrategico} />
@@ -261,6 +298,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                 min={0}
                                 value={progreso}
                                 max={100}
+                                marks={marks}
                                 onChange={ (value ) => {
                                     hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) &&
                                     setProgreso(value)

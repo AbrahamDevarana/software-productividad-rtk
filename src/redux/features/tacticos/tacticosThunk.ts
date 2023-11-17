@@ -14,12 +14,12 @@ interface Props {
 
 export const getTacticosByEstrategiaThunk = createAsyncThunk(
     'tacticos/getTacticosByEstrategiaThunk',
-    async ({estrategicoId, year, ...props}: {estrategicoId: string, year: number}, { rejectWithValue, getState }) => {
+    async ({estrategicoId, year, showOnlyMe, ...props}: {estrategicoId: string, year: number, showOnlyMe: boolean}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { estrategicoId, year, ...props}
+                params: { estrategicoId, year, showOnlyMe, ...props}
             }
             
             const response = await clientAxios.get<Props>('/tacticos/byEstrategia', config);        
@@ -33,12 +33,12 @@ export const getTacticosByEstrategiaThunk = createAsyncThunk(
 
 export const getTacticosByEquiposThunk = createAsyncThunk(
     'tacticos/getTacticosByEquipos',
-    async ({departamentoId, year}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
+    async ({departamentoId, year, showOnlyMe}: {departamentoId: number | string, year: number, showOnlyMe: boolean}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { departamentoId, year}
+                params: { departamentoId, year, showOnlyMe}
             }
             
             const response = await clientAxios.get<Props>('/tacticos/byEquipo', config);        
@@ -52,17 +52,15 @@ export const getTacticosByEquiposThunk = createAsyncThunk(
 
 export const getTacticosByEquipoCoreThunk = createAsyncThunk(
     'tacticos/getTacticosByEquipoCore',
-    async ({departamentoId, year}: {departamentoId: number | string, year: number}, { rejectWithValue, getState }) => {
+    async ({departamentoId, year, showOnlyMe}: {departamentoId: number | string, year: number, showOnlyMe: boolean}, { rejectWithValue, getState }) => {
         try {
             const { accessToken } = (getState() as RootState).auth
             const config = {
                 headers: { "accessToken": `${accessToken}` },
-                params: { departamentoId, year}
+                params: { departamentoId, year, showOnlyMe}
             }
             
-            const response = await clientAxios.get<Props>('/tacticos/byEquipoCore', config);   
-            console.log(response.data.objetivosCore);
-            
+            const response = await clientAxios.get<Props>('/tacticos/byEquipoCore', config);
             return response.data
         }
         catch (error: any) {
