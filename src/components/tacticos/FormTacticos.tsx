@@ -303,7 +303,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 }}
             >
                 <Form.Item
-                    label="Objetivo"
+                    label="Objetivo:"
                     className='col-span-10'
                     name='nombre'
                 >
@@ -316,7 +316,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Clave"
+                    label="Clave:"
                     className='col-span-2'
                     name="codigo" 
                 >
@@ -333,29 +333,30 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     <Divider className='my-3' />
                         <Form.Item
                         >
-                            <div className='flex justify-between items-center'>
-                                <div className='flex gap-10'>
-                                <p className='text-devarana-graph font-medium'>Progreso</p>
-                                <div className='flex gap-2 items-center'>
-                                    <Switch size='small'
+                            <div className='flex gap-10 justify-between'>
+                                <p className='text-devarana-graph font-medium'>Progreso:</p>
+                                <div className='ml-auto flex gap-x-5'>
+                                    <div className='flex gap-2 items-center ml-auto'>
+                                        <Switch 
+                                            size='small'
                                             className='disabled:cursor-wait'
                                             checked = {currentTactico.tipoProgreso === 'PROMEDIO' ? true : false}
                                             title='Automatico'     
                                             disabled={isLoadingProgress}                                       
                                             onClick={handleSetTipo}
-                                    />
-                                    <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                                            
+                                        />
+                                        <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                                    </div>
+                                    <Dropdown menu={{items}} overlayClassName='bg-transparent'>
+                                            <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
+                                                <TabStatus status={statusTactico} />
+                                            </button>
+                                    </Dropdown>
                                 </div>
                             </div>
-                                <Dropdown menu={{items}} overlayClassName='bg-transparent'>
-                                        <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
-                                            <TabStatus status={statusTactico} />
-                                        </button>
-                                </Dropdown>
-
-                            </div>
                             <div className='inline-flex w-full'>
-                                <p className='text-3xl font-bold pr-2' style={{ 
+                                <p className='text-3xl font-bold pr-4' style={{ 
                                     color: getColor(currentTactico.status).color,
                                     backgroundClip: 'text',
                                     WebkitBackgroundClip: 'text',

@@ -19,6 +19,7 @@ export interface PerspectivaProps {
     status: statusType;
     icono?: IconName; 
     fechaInicio?: Date;
+    propietarioId?: string;
     fechaFin?: Date;
     clave?: string;
     objetivosEstrategicos: EstrategicoProps[];

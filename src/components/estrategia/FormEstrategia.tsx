@@ -87,6 +87,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
             const updateEstrategico = {
                 ...currentEstrategico,
+                rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
                 progreso: value
             }
             dispatch(updateEstrategicoThunk(updateEstrategico));  

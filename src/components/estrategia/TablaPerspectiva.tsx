@@ -22,6 +22,7 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
     const { color } = perspectiva
     const dispatch = useAppDispatch()   
     const [ showEdit, setShowEdit ] = useState<boolean>(false);
+    const { userAuth } = useAppSelector(state => state.auth)
     const { permisos } = useAppSelector(state => state.auth)
     const { isLoading } = useAppSelector(state => state.perspectivas)
 
@@ -32,6 +33,7 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
                     title: () => ( 
                     <div className='flex gap-3 items-center relative'>
                         <p className='tableTitlePrincipal'>Objetivo</p>
+                        {/* { hasGroupPermission(['crear estrategias'], permisos) && userAuth?.id === perspectiva.propietarioId && */}
                         { hasGroupPermission(['crear estrategias'], permisos) &&
                             <button 
                                 onClick={(e) => handleCreateEstrategia(e)} 
