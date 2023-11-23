@@ -22,6 +22,8 @@ import { OperativoView } from '@/pages/Operativos/OperativoView';
 import { Actividades } from '@/pages/Actividades';
 import { Comite } from '@/pages/Comite';
 import { Gestion } from '@/pages/Gestion';
+import { Roles } from '@/pages/admin/Roles/Roles';
+import { Permisos } from '@/pages/admin/Roles/Permisos';
 
 
 interface Props {
@@ -163,6 +165,19 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         path: '/proyectos/:id',
         layout: LayoutApp,
         component: ProyectoView
+    },
+    {
+        title: "Roles",
+        path: '/admin/roles',
+        layout: LayoutApp,
+        component: Roles
+    },
+    {
+        title: "Permisos",
+        path: '/admin/permisos',
+        layout: LayoutApp,
+        component: Permisos
+    
     },
     {
         title: "Error",

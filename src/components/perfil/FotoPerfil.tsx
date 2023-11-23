@@ -21,6 +21,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
+    const [error, setError] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
 
@@ -38,6 +39,17 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
             setFileList(newFileList);
         },
         beforeUpload: (file) => {
+            setError(false);
+            if(file.size > 2097152){ 
+                messageApi.error('El tamaño de la imagen no debe ser mayor a 2MB')
+                setError(true);
+
+                setTimeout(() => {
+                    setError(false);
+                }, 2000);
+                return false;
+            }
+
             setFileList([...fileList, file]);
             getBase64(file, (result) => {
                 setPreviewImage(result as string);
@@ -46,7 +58,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
         },
         itemRender:() => null,
         maxCount: 1,
-        fileList,        
+        fileList,
     };
 
     const handleUpload = async () => {
@@ -57,13 +69,14 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
 
         setUploading(true);
         
-        await dispatch(uploadProfilePictureThunk({profile: formData, usuarioId: usuarioActivo.id}))
-
-        setUploading(false);
-        setFileList([]);
-
-        messageApi.success('Foto de perfil actualizada correctamente');
-        
+        await dispatch(uploadProfilePictureThunk({profile: formData, usuarioId: usuarioActivo.id})).unwrap().then(() => {
+            setUploading(false);
+            setFileList([]);
+            messageApi.success('Foto de perfil actualizada correctamente');
+        }).catch(() => {
+            setUploading(false);
+            messageApi.error('Ocurrió un error al actualizar la foto de perfil');
+        })        
     }
 
     useEffect(() => {
@@ -84,7 +97,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
                 <Image
                     src={fileList.length > 0 ? previewImage : usuarioActivo.foto !== '' ? getStorageUrl(usuarioActivo.foto) : getBrokenUser()}
                     alt={usuarioActivo.nombre}
-                    className='w-full rounded-full'
+                    className={`w-full rounded-full ${error ? 'filter blur-sm grayscale' : ''}`}
                     width={200}
                     height={200}
                     fallback={getBrokenUser()}
@@ -101,6 +114,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
                         <Upload
                             name='banner'
                             {...props}
+
                         >
                             <Button classColor='default' classType='icon' width={40} > <FaUpload /> </Button>
                         </Upload>

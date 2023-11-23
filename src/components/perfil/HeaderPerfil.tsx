@@ -4,10 +4,10 @@ import { PerfilProps } from "@/interfaces";
 import { FaCog, FaEye } from "react-icons/fa";
 import { getStorageUrl } from "@/helpers";
 import { useMemo, useState } from "react";
-import { Galeria } from "../ui/Galeria";
+import { GaleriaPerfil } from "./Galeria";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { getGaleriaDevaranaThunk } from "@/redux/features/galeria/galeriaThunk";
+import { getGaleriaDevaranaThunk, getGaleriaUsuarioThunk } from "@/redux/features/galeria/galeriaThunk";
 import { updatePortraitThunk, updateProfileConfigThunk } from "@/redux/features/perfil/perfilThunk";
 
 interface HeaderProps {
@@ -24,8 +24,6 @@ interface PictureProps {
 
 const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, visitante = false}) => {
 
-
-    const {  galeriaDevarana, isLoading: isLoadingGaleria } = useAppSelector(state => state.galeria)
     const { isLoadingConfiguration } = useAppSelector(state => state.profile)
 
     const [panel, setPanel] = useState(false)
@@ -59,8 +57,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     }, [visitante])
         
 
-    const handlePanel = async () => {
-        await dispatch(getGaleriaDevaranaThunk({}))
+    const handlePanel = () => {
         setPanel(!panel)
     }
 
@@ -153,7 +150,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 open={panel}
                 width={ window.innerWidth < 768 ? '100%' : 600 }
             >
-                <Galeria galeria={galeriaDevarana} picture={picture} isLoading={isLoadingGaleria} setPicture={setPicture} handleGallery={handleGallery} />
+                <GaleriaPerfil picture={picture} setPicture={setPicture} handleGallery={handleGallery} />
             </Drawer>
         </> 
     );

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { FaBuilding, FaSitemap, FaUsers } from 'react-icons/fa';
+import { FaBuilding, FaSitemap, FaUserShield, FaUsers, FaUserLock, FaCogs} from 'react-icons/fa';
 import { hasGroupPermission, hasPermission } from '@/helpers/hasPermission';
 import { useAppSelector } from '@/redux/hooks';
 
@@ -40,8 +40,24 @@ export const Admin = ({handleBar}:AdminProps) => {
         { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
         <NavLink to={'/admin/gestion'} onClick={handleBar}>
             <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
-                <FaUsers />
+                <FaCogs />
                 <span>Gestion</span>
+            </div>
+        </NavLink>
+        }
+        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        <NavLink to={'/admin/roles'} onClick={handleBar}>
+            <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
+                <FaUserShield />
+                <span>Roles</span>
+            </div>
+        </NavLink>
+        }
+        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        <NavLink to={'/admin/permisos'} onClick={handleBar}>
+            <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
+                <FaUserLock />
+                <span>Permisos</span>
             </div>
         </NavLink>
         }

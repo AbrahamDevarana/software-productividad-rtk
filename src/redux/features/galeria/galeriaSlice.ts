@@ -1,10 +1,11 @@
-import { GaleriaDevaranaProps, GaleriaDevaranaState} from "@/interfaces"
+import { GaleriaProps, GaleriaDevaranaState} from "@/interfaces"
 import { createSlice } from '@reduxjs/toolkit'
-import { getGaleriaDevaranaThunk } from "./galeriaThunk"
+import { getGaleriaDevaranaThunk, getGaleriaUsuarioThunk } from "./galeriaThunk"
 
 
 const initialState: GaleriaDevaranaState = {
     galeriaDevarana: [],
+    galeriaUsuarios: [],
     isLoading: false,
     error: false,
     infoMessage: '',
@@ -28,6 +29,17 @@ const galeriaSlice = createSlice({
             state.galeriaDevarana = payload
         })
         .addCase(getGaleriaDevaranaThunk.rejected, (state, { payload }) => {
+            state.isLoading = false
+            state.error = true
+        })
+        .addCase(getGaleriaUsuarioThunk.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(getGaleriaUsuarioThunk.fulfilled, (state, { payload }) => {
+            state.isLoading = false
+            state.galeriaUsuarios = payload
+        })
+        .addCase(getGaleriaUsuarioThunk.rejected, (state, { payload }) => {
             state.isLoading = false
             state.error = true
         })

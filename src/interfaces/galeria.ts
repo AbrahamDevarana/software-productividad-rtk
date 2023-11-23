@@ -1,6 +1,6 @@
 import { InitialState } from "./slice";
 
-export interface GaleriaDevaranaProps{
+export interface GaleriaProps{
     id: number;
     type: string;
     url: string;
@@ -8,6 +8,7 @@ export interface GaleriaDevaranaProps{
 
 
 export interface GaleriaDevaranaState extends InitialState {
-    galeriaDevarana: GaleriaDevaranaProps[];
+    galeriaDevarana: GaleriaProps[];
+    galeriaUsuarios: GaleriaProps[];
 
 }

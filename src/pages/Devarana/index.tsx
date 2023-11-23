@@ -7,7 +7,7 @@ import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { FaLeaf, FaMedal } from 'react-icons/fa';
 import { PiFlowerLotusDuotone } from 'react-icons/pi';
 import { RiMentalHealthLine } from 'react-icons/ri';
-import { Avatar, Image } from 'antd';
+import { Avatar, Collapse, Image } from 'antd';
 import { Adn, Amor, Apasionados, Extraordinario, Incluyentes, Innovacion, Triunfador } from '@/components/svg/devarana';
 import { getStorageUrl } from '@/helpers';
 
@@ -119,7 +119,101 @@ export const Devarana: React.FC = () => {
                     Valores
                 </p>
                 <p className='pb-2 text-[16px] font-medium text-devarana-graph'>¿Cómo lo hacemos?</p>
-                <div className='flex gap-x-6 items-center py-3'>
+                <Collapse 
+                    ghost
+                    defaultActiveKey={['extraordinario']}
+                    accordion
+                    expandIconPosition='right'
+                    items={[
+                        {
+                        key: 'extraordinario',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>LO EXTRAORDINARIO ES PRIMERO</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center py-3'>
+                            <Extraordinario className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>La atención en los detalles, nuestro servicio legendario y esfuerzo por la satisfacción total, son parte de nuestra esencia.</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'apasionados',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>SOMOS APASIONADOS</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center pb-3'>
+                            <Apasionados className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>Buscamos nuestra esencia para dedicarnos a lo que amamos y hacer nuestro trabajo siempre con pasión. ¡Nos levantamos cada día con entusiasmo para enfrentar los retos que encontramos en nuestro camino!</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'adn',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>LA EXCELENCIA ESTÁ EN NUESTRO ADN</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center py-3'>
+                            <Adn className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>Buscamos la excelencia en todo lo que hacemos y damos todos los días lo mejor de nosotros mismos para vivir plenamente y sentirnos felices.</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'incluyentes',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>SOMOS INCLUYENTES</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center pb-3'>
+                            <Incluyentes className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>Vamos más allá de la tolerancia y hacemos siempre un esfuerzo por incluir a todos. El respeto a la diversidad nos hace una empresa incluyente.</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'innovacion',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>LA INNOVACIÓN NOS DISTINGUE</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center py-3'>
+                            <Innovacion className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>¡Creemos firmemente en la constante innovación! Nos ilusionan los retos y buscamos siempre estar a la vanguardia.</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'amor',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>INSPIRAMOS CON AMOR</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center pb-3'>
+                            <Amor className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>El amor verdadero es preeminente en esta vida y nos motiva a hacer el bien en todo lo que emprendemos. Con nuestras acciones tratamos de hacer de este mundo un lugar mejor.</p>
+                            </div>
+                            </div>
+                        )
+                        },
+                        {
+                        key: 'triunfador',
+                        label: (<h3 className='text-base font-bold text-devarana-pink font-mulish'>ESPÍRITU TRIUNFADOR</h3>),
+                        children: (
+                            <div className='flex gap-x-6 items-center py-3'>
+                            <Triunfador className='fill-devarana-pink text-3xl' />
+                            <div>
+                                <p className='text-[15px] font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
+                            </div>
+                            </div>
+                        )
+                        }
+                    ]}
+                />
+
+
+                {/* <div className='flex gap-x-6 items-center py-3'>
                     <Extraordinario className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>LO EXTRAORDINARIO ES PRIMERO</h3>
@@ -133,7 +227,6 @@ export const Devarana: React.FC = () => {
                     </div>
                     <Apasionados className='fill-devarana-pink text-3xl' />
                 </div>
-               
                 <div className='flex gap-x-6 items-center py-3'>
                     <Adn className='fill-devarana-pink text-3xl' />
                     <div>
@@ -148,7 +241,6 @@ export const Devarana: React.FC = () => {
                     </div>
                     <Incluyentes className='fill-devarana-pink text-3xl' />
                 </div>
-               
                 <div className='flex gap-x-6 items-center py-3'>
                     <Innovacion className='fill-devarana-pink text-3xl' />
                     <div>
@@ -163,14 +255,13 @@ export const Devarana: React.FC = () => {
                     </div>
                     <Amor className='fill-devarana-pink text-3xl' />
                 </div>
-               
                 <div className='flex gap-x-6 items-center py-3'>
                     <Triunfador className='fill-devarana-pink text-3xl' />
                     <div>
                         <h3 className='text-base font-medium text-devarana-pink'>ESPÍRITU TRIUNFADOR</h3>
                         <p className='text-[15px] font-light text-devarana-graph'>¡Somos optimistas, nos enfocamos en lo positivo y ante cualquier situación nos acompaña nuestro espíritu triunfador!</p>
                     </div>
-                </div>
+                </div> */}
             </Box>
             <Box className="col-span-12 md:col-span-6">
                 <p className='text-devarana-dark-graph text-xl font-bold pb-5'>

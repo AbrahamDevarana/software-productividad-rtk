@@ -4,7 +4,7 @@ import "@/assets/scss/menu.scss"
 import { optionalContent } from '@/interfaces';
 import { useAppSelector } from '@/redux/hooks';
 import { RootState } from '@/redux/store';
-import { FaBrain, FaCheckSquare, FaCog, FaCrosshairs, FaLayerGroup, FaPeopleCarry, FaPuzzlePiece, FaRocket} from 'react-icons/fa';
+import { FaBrain, FaCheckSquare, FaCog, FaCrosshairs, FaLayerGroup, FaPuzzlePiece, FaRocket} from 'react-icons/fa';
 import { Avatar, Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
@@ -74,11 +74,6 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                         <FaLayerGroup className="mx-auto text-xl" />
                         <span className="text-xs text-center font-light block">Comités</span>
                     </NavLink>
-                    {/* Chat button */}
-                    {/* <div className='nav-link cursor-pointer text-center' onClick={() => handleOptBar('chat')}>
-                        <FaComment className="mx-auto text-xl" />
-                        <span className="text-xs text-center font-light block">Chat</span>
-                    </div> */}
 
                         {
                             hasGroupPermission(['editar areas', 'editar departamentos', 'editar usuarios', 'crear usuarios', 'crear departamentos', 'crear areas'], permisos) &&
