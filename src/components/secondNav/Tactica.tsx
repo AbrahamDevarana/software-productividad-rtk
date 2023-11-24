@@ -34,6 +34,7 @@ export const Tactica: React.FC<TacticaProps> = ({handleBar}) => {
                 }} key={area.id}>
                     <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
                         <FaBuilding />
+                        {/* <Image src={getStorageUrl(area.perspectivas?.icono)} width={30} height={30} preview={false} /> */}
                         <span>{area.nombre}</span>
                     </div>
                 </NavLink>
