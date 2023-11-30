@@ -58,9 +58,8 @@ export const Objetivos = ({objetivo, visitante, usuarioActivo}: Props) => {
 					format={() => <CountUp style={{
 						fontSize: '10px',
 						fontWeight: 'bold',
-						// color: fixedProgresoReal > 85 ? '#848891' : '#fff'
-					}}  end={fixedProgresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}
-					
+						color: fixedProgresoReal > 85 ? '#848891' : '#fff'
+					}}  end={fixedProgresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}					
 				/>
 
 				<Avatar.Group maxCount={3} className='flex justify-center pb-5' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>

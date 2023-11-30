@@ -235,7 +235,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             >
         
                 <Form.Item
-                    label="Objetivo"
+                    label="Objetivo: "
                     className='col-span-10'
                     name={'nombre'}
                 >
@@ -248,7 +248,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Código"
+                    label="Código: "
                     className='col-span-2'
                     name={'codigo'}
                 >
@@ -268,7 +268,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
                         <div className='flex justify-between items-center'>
                             <div className='flex gap-x-2'>
-                                <p className='text-devarana-graph font-medium'>Progreso</p>
+                                <p className='text-devarana-graph font-medium'>Progreso: </p>
                                 <div className='flex gap-2 items-center'>
                                     <Switch size='small'
                                         className='disabled:cursor-wait'
@@ -326,7 +326,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     <Divider className='my-3' />
                 </Space>
                 <Form.Item
-                    label="Perspectiva"
+                    label="Perspectiva: "
                     className='col-span-12 mt-5'
                 >
                     <div className='flex flex-wrap gap-3'>
@@ -350,7 +350,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
                 </Form.Item>
                 <Form.Item
-                    label="Duración"
+                    label="Duración: "
                     className='col-span-12'
                     name={'rangeDate'}
                 >
@@ -368,7 +368,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Responsable"
+                    label="Responsable:"
                     className='col-span-6'
                     name='propietarioId'
                 >
@@ -394,7 +394,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Co-Responsables"
+                    label="Co-Responsables:"
                     className='col-span-6'
                     name='responsables'
                 >
@@ -427,7 +427,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     name="descripcion"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Meta</p>                            
+                            <p className='text-devarana-graph font-medium'>Meta:</p>                            
                     </div>
                     {
                         viewMeta 
@@ -454,7 +454,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     name="indicador"
                 >
                     <div className='flex justify-between items-center'>
-                        <p className='text-devarana-graph font-medium'>Indicador</p>
+                        <p className='text-devarana-graph font-medium'>Indicador:</p>
                     </div>
                     {
                         viewIndicador 

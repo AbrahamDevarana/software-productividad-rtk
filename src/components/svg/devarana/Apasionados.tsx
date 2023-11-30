@@ -2,8 +2,8 @@ import { SVGElement } from "@/interfaces";
 
 export const Apasionados = ({className}:SVGElement) => (
   <svg
-    width={97}
-    height={96}
+    width={57}
+    height={36}
     viewBox="0 0 57 56"
     xmlns="http://www.w3.org/2000/svg"
     className={className}

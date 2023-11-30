@@ -4,6 +4,7 @@ import { uploadImageProvider, deleteImageProvider } from './usuariosProvider';
 import { checkingUsuarios, setUsuariosError, cleanCurrentUsuario, clearUsuarios } from './usuariosSlice';
 import { clientAxios } from '@/config/axios';
 import { UsuarioProps } from '@/interfaces';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 
 export const getUsuariosThunk = createAsyncThunk(
@@ -141,3 +142,48 @@ export const clearUsuariosThunk = () => {
         dispatch(clearUsuarios())
     }
 }
+
+
+
+// RK Query
+
+
+interface UsuariosParams {
+    filtros?: any;
+    search?: string;
+}
+
+interface IUsuariosResponse {
+    rows: UsuarioProps[];
+}
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_URL,
+    prepareHeaders: (headers, { getState }) => {
+        const accessToken = localStorage.getItem('accessToken');
+        if( accessToken ) headers.set('accessToken', `${accessToken}`);  
+        return headers;
+    }
+
+});
+
+export const userApi =  createApi({
+   
+    reducerPath: 'usuariosApi',
+    baseQuery,
+    endpoints: (builder) => ({
+        getUsuarios: builder.query({
+            query: ({filtros, search}: UsuariosParams) => ({
+                url: `/usuarios`,
+                method: 'GET',
+                params: {
+                    ...filtros,
+                    search
+                }
+            }),
+            transformResponse: (response: { usuarios: IUsuariosResponse } ) => response.usuarios.rows
+        })
+    })
+  })
+
+  export const { useGetUsuariosQuery } = userApi;

@@ -1,4 +1,4 @@
-import { DatePicker, Dropdown, Space } from "antd";
+import { DatePicker, Dropdown, Select, Space } from "antd";
 import type { MenuProps } from 'antd';
 import { LayoutNavbarProps } from "@/interfaces"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -9,12 +9,16 @@ import MyBreadcrumb from "../ui/Breadcrumb";
 import dayjs from "dayjs";
 import { changeConfigThunk } from "@/redux/features/global/globalThunk";
 import { BsFillCalendarFill } from "react-icons/bs";
+import { useEffect } from "react";
+import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
+import { Link } from "react-router-dom";
+import { DefaultOptionType } from "antd/es/select";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
-
-    const { userAuth } = useAppSelector(state => state.auth)
 	const { currentConfig: {quarter, year, currentDate}, periodControls: {prePeriodDefinitionDays} } = useAppSelector(state => state.global)
 
+	const { data, isLoading } = useGetUsuariosQuery({})
+	
     const dispatch = useAppDispatch()
 
     const menu: MenuProps['items'] = [
@@ -28,70 +32,12 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
             },
 	]
 
-    const notificaciones: MenuProps['items'] = [
-            {
-              key: '1',
-              label: (
-                <span>
-                  Se te ha designado una nueva <a className='font-bold'>tarea</a>
-                </span>
-              ),
-            },
-            {
-              key: '2',
-              label: (
-                <span>
-                  Tu <a className='font-bold'> tarea </a> esta por vencer
-                </span>
-              ),
-            },
-            {
-              key: '3',
-              label: (
-                <span>
-                    <a className='font-bold'>Fátima Ortiz</a> te ha asignado nueva <a className='font-bold'>tarea</a>
-                </span>
-              ),
-            },
-            {
-              key: '4',
-              label: (
-                <span>
-                  Se te ha designado una nueva<a className='font-bold'>tarea</a>
-                </span>
-              ),
-            },
-	]
-
-    const showDrawer = () => {
-        setSettingVisible(true);
-    };
-
 	const handleChangeDate = (date: any, dateString: string) => {
 		dispatch(changeConfigThunk({year: date.year(), quarter: date.quarter()}))
 	}
 
-	// obtener el path
-	// si la currentRoute incluye /objetivos, entonces retornar false 
-	// si la currentRoute incluye = /estrategia, entonces retornar true
-
-	const isGlobal = () => {
-		const currentRoute = window.location.pathname;
-
-		const urls = ['/perfil', '/objetivos'];
-
-		if(urls.includes(currentRoute)) {
-			return false;
-		} else {
-			return true;
-		}
-		
-	}
-
-
 
 	return (
-		// glassmorphism
 		<div className="relative w-full">
 			<div className={`h-16 px-5 rounded-ext mb-4   backdrop-blur-sm border-white border-opacity-25 fixed z-50 left-28 right-8 transition-all duration-200 ease-in-out ${navbarClass}`}>
 				<div className="flex h-full items-center">
@@ -99,6 +45,27 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 						<MyBreadcrumb />
 					</div>
 					<div className="sm:ml-auto flex items-center gap-x-5">
+
+						<Select
+							className='w-44'
+							options={data?.map( (item, index) => (	
+								{
+									label: (
+										<Link key={index} to={`/perfil/${item.slug}`}>
+											<p className="text-devarana-graph">{item.nombre} {item.apellidoPaterno}</p>
+										</Link>
+									),
+									value: item.id,
+									dataName: `${item.nombre} ${item.apellidoPaterno}`
+								}
+							))}
+							showArrow={false}
+							size='small'
+							showSearch
+							placeholder='Buscar'
+							loading={isLoading}
+							filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+						/>
 
 						<DatePicker 
 							onChange={handleChangeDate} 

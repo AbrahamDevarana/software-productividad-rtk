@@ -11,13 +11,16 @@ import dayjs from "dayjs";
 import { Tooltip } from "antd";
 import { Proximamente } from '@/components/ui';
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useObjetivo } from "@/hooks/useObjetivos";
 import { Objetivos } from "@/components/perfil/Objetivos";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/pagination';
 import { FreeMode, Mousewheel, Navigation, Pagination } from "swiper";
 import { useOtherObjetivo } from "@/hooks/useOthersObjetivos";
+import { getHistorialRendimientoThunk } from "@/redux/features/perfil/perfilThunk";
+import { useEffect } from "react";
+import CountUp from 'react-countup';
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -28,6 +31,10 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
 
     const { operativos } = useAppSelector(state => state.operativos)
     const { ponderacionObjetivos } = useOtherObjetivo({operativos, usuarioId:usuarioActivo.id})
+    const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
+    const { currentConfig: {year}} = useAppSelector(state => state.global)
+
+
 
     return ( 
     <>
@@ -39,7 +46,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Avance Trimestral</p>
-                        <p className="font-light text-devarana-graph">{ ponderacionObjetivos.toFixed(2) } %</p>
+                        <p className="font-light text-devarana-graph">{ <CountUp end={rendimiento?.resultadoFinal || 0} duration={2} decimals={2} /> }%</p>
                     </div>
                 </div>
             </Box>
@@ -50,7 +57,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Objetivos</p>
-                        <p className="font-light text-devarana-graph"> {operativos.length } </p>
+                        <p className="font-light text-devarana-graph"> <CountUp end={ponderacionObjetivos} duration={2} decimals={2} />%</p>
                     </div>
                 </div>
             </Box>
@@ -61,7 +68,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                         <div className="text-right sm:py-0">
                             <p className="text-devarana-dark-graph font-medium text-lg">Proyectos</p>
-                            <p className="font-light text-devarana-graph">{ usuarioActivo.proyectos.length }</p>
+                            <p className="font-light text-devarana-graph"> <CountUp end={usuarioActivo.proyectos.length} duration={2} decimals={0} /> </p>
                         </div>
                 </div>
             </Box>

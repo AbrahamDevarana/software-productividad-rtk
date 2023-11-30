@@ -140,7 +140,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                 
 
                 <Form.Item
-                    label="Objetivo"
+                    label="Objetivo:"
                     name="nombre"
                     className='col-span-12'
                     rules={[{ required: true, message: 'Por favor ingresa el nombre del objetivo' }]}
@@ -150,7 +150,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                 </Form.Item>
                
                 <Form.Item
-                    label="Fecha Inicio"
+                    label="Fecha Inicio:"
                     className='col-span-6'
                     name="fechaInicio"
                     rules={[{ required: true, message: 'Por favor ingresa la fecha del objetivo' }]}
@@ -163,7 +163,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    label="Fecha Fin"
+                    label="Fecha Fin:"
                     className='col-span-6'
                     name="fechaFin"
                     rules={[{ required: true, message: 'Por favor ingresa la fecha del objetivo' }]}
@@ -176,7 +176,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     />
                 </Form.Item>
                 <Form.Item
-                        label="Propietario"
+                        label="Propietario:"
                         className='col-span-6'
                         name='propietarioId'
                         rules={[{ required: true, message: 'Por favor selecciona al propietario' }]}
@@ -207,7 +207,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     </Form.Item>
                 <Form.Item
                     className='col-span-6'
-                    label="Co-Responsables"
+                    label="Co-Responsables:"
                     name="operativosResponsable"
                     // shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
                     >
@@ -235,7 +235,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Meta"
+                    label="Meta:"
                     name="meta"
                     className='col-span-12'
                     rules={[{ required: true, message: 'Por favor ingresa la meta del objetivo' }]}
@@ -243,7 +243,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     <TextArea name="meta" className='bg-[#F9F9F7]' bordered={false}/>
                 </Form.Item>
                 <Form.Item
-                    label="Indicador"
+                    label="Indicador:"
                     name="indicador"
                     className='col-span-12'
                 >

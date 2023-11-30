@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearProfileThunk, getProfileThunk } from "@/redux/features/perfil/perfilThunk";
+import { clearProfileThunk, getProfileThunk, getRendimientoThunk } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";
@@ -19,15 +19,18 @@ const Perfil: React.FC = () => {
     const { perfil, isLoading } = useAppSelector(state => state.profile)
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
+
+    const usuarioId = id || userAuth?.id    
+
     const [ visitante, setVisitante ] = useState(false)
     useEffect(() => {
         if(id){
             setVisitante(true)
-            dispatch(getProfileThunk({userId: id, year, quarter}))
+            dispatch(getProfileThunk({usuarioId, year, quarter}))
         }else{
             setVisitante(false)
             if(userAuth){   
-                dispatch(getProfileThunk({userId: userAuth.id, year, quarter}))
+                dispatch(getProfileThunk({usuarioId, year, quarter}))
             }
         }
         
@@ -38,12 +41,15 @@ const Perfil: React.FC = () => {
     
 
     useEffect( () => {
-        dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id}))
+        dispatch(getOperativosThunk({year, quarter, usuarioId}))
         return () => {
             dispatch(clearOperativosThunk())
         }
     }, [id, year, quarter])  
     
+    useEffect(() => {
+        dispatch(getRendimientoThunk({year, quarter, usuarioId}))
+    }, [year, usuarioId])
 
     
     if(isLoading) return <Loading />

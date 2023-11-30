@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./features/auth/authThunks";
+import { userApi } from "./features/usuarios/usuariosThunks";
 
 import authSlice from "./features/auth/authSlice";
 import globalSlice from "./features/global/globalSlice";
@@ -27,7 +28,7 @@ import gestionSlice from "./features/gestion/gestionSlice";
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
-        
+        [userApi.reducerPath]: userApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -54,7 +55,8 @@ export const store = configureStore({
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })
-        .concat(authApi.middleware),
+        .concat(authApi.middleware)
+        .concat(userApi.middleware),
     devTools: true
 });
 

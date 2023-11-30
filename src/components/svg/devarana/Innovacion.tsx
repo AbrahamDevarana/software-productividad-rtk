@@ -3,7 +3,7 @@ import { SVGElement } from "@/interfaces";
 export const Innovacion = ({className}:SVGElement) => (
   <svg
     width={57}
-    height={56}
+    height={36}
     viewBox="0 0 57 56"
     xmlns="http://www.w3.org/2000/svg"
     className={className}

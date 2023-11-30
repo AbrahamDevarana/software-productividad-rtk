@@ -3,7 +3,7 @@ import { SVGElement } from "@/interfaces";
 export const Triunfador = ({className}:SVGElement) => (
   <svg
     width={57}
-    height={56}
+    height={36}
     viewBox="0 0 57 56"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

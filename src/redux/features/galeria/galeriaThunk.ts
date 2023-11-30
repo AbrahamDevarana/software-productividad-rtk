@@ -8,6 +8,7 @@ import { clientAxios } from '@/config/axios';
 interface Props {
     galeria_devarana: GaleriaProps[]
     galeria_usuarios: GaleriaProps[]
+    imagen: GaleriaProps
 }
 
 export const getGaleriaDevaranaThunk = createAsyncThunk(    
@@ -58,6 +59,23 @@ export const uploadGaleriaUsuarioThunk = createAsyncThunk(
             }
             const response = await clientAxios.post<Props>('/galeria/usuario', formData, config);
             return response.data.galeria_usuarios
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const deleteGaleriaUsuarioThunk = createAsyncThunk(
+    'galeria/deleteGaleriaUsuario',
+    async ({ id }: {id: number}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+            }
+            const response = await clientAxios.delete<Props>(`/galeria/usuario/${id}`, config);
+            return response.data.imagen
         }
         catch (error: any) {
             return rejectWithValue(error.response.data)

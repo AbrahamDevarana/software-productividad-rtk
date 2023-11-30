@@ -6,9 +6,7 @@ import { getStorageUrl } from "@/helpers";
 import { useMemo, useState } from "react";
 import { GaleriaPerfil } from "./Galeria";
 import getBrokenUser from "@/helpers/getBrokenUser";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { getGaleriaDevaranaThunk, getGaleriaUsuarioThunk } from "@/redux/features/galeria/galeriaThunk";
-import { updatePortraitThunk, updateProfileConfigThunk } from "@/redux/features/perfil/perfilThunk";
+import { useAppSelector } from "@/redux/hooks";
 
 interface HeaderProps {
     usuarioActivo: PerfilProps;
@@ -27,8 +25,6 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
     const { isLoadingConfiguration } = useAppSelector(state => state.profile)
 
     const [panel, setPanel] = useState(false)
-    const [picture, setPicture] = useState(usuarioActivo.configuracion?.portadaPerfil)
-    const dispatch = useAppDispatch();
 
     const options = [
         {
@@ -61,11 +57,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
         setPanel(!panel)
     }
 
-    const handleGallery = () => {
-        dispatch(updatePortraitThunk({ id:usuarioActivo.id,  portadaPerfil: picture }))
-        
-    }
-
+    
     return ( 
         <>
 
@@ -92,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                                         width: '100%',
                                         height: '350px'
                                     }}
-                                /> 
+                                />
                             }
                             
                         </div>
@@ -150,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 open={panel}
                 width={ window.innerWidth < 768 ? '100%' : 600 }
             >
-                <GaleriaPerfil picture={picture} setPicture={setPicture} handleGallery={handleGallery} />
+                <GaleriaPerfil usuarioActivo={usuarioActivo} />
             </Drawer>
         </> 
     );

@@ -45,7 +45,7 @@ export const Objetivos : React.FC = () => {
         const fetchData = async () => {
             await Promise.all([
                 dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id})),
-                dispatch(getProfileThunk({userId: id || userAuth?.id, year, quarter})),
+                dispatch(getProfileThunk({usuarioId: id || userAuth?.id, year, quarter})),
                 dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id })),
                 dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id})),
                 dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id})),

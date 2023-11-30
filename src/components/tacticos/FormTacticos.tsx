@@ -434,7 +434,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     </div>
 
                 <Form.Item
-                    label="Objetivo Estratégico"
+                    label="Objetivo Estratégico:"
                     name="estrategicoId"
                     className='col-span-12 pt-4'
                     rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
@@ -460,7 +460,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <Divider className='col-span-12'/>
 
                 <Form.Item
-                    label="Proyección"
+                    label="Proyección:"
                     name="proyeccion"
                     className='col-span-12'
                 >
@@ -477,7 +477,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <Divider className='col-span-12'/>
 
                 <Form.Item
-                    label="Responsable"
+                    label="Responsable:"
                     name="propietarioId"
                     className='col-span-6'
                 >
@@ -505,7 +505,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label="Co-Responsables"
+                    label="Co-Responsables:"
                     name="responsables"
                     className='col-span-6'
                 >
@@ -539,7 +539,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     name="meta"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Meta</p>  
+                            <p className='text-devarana-graph font-medium'>Meta:</p>  
                     </div>
                     {
                         viewMeta 
@@ -563,7 +563,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     name="indicador"
                 >
                     <div className='flex justify-between items-center'>
-                            <p className='text-devarana-graph font-medium'>Indicador</p>
+                            <p className='text-devarana-graph font-medium'>Indicador:</p>
                     </div>
                     {
                         viewIndicador 

@@ -23,7 +23,7 @@ interface Respuesta {
 
 export const getProfileThunk = createAsyncThunk(
     'profile/getProfile',
-    async ({userId, year, quarter}:{userId: string, year: number, quarter: number}, {rejectWithValue, getState}) => {
+    async ({usuarioId, year, quarter}:{usuarioId: string, year: number, quarter: number}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -33,7 +33,7 @@ export const getProfileThunk = createAsyncThunk(
                     quarter
                 }
             }
-            const response = await clientAxios.get<Props>(`/perfiles/${userId}`, config);
+            const response = await clientAxios.get<Props>(`/perfiles/${usuarioId}`, config);
                     
             return response.data.usuario
         }
