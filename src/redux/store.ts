@@ -24,11 +24,14 @@ import galeriaSlice from "./features/galeria/galeriaSlice";
 import rankingsSlice from "./features/ranking/rankingSlice";
 import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 import gestionSlice from "./features/gestion/gestionSlice";
+import rolesSlice from "./features/roles/rolesSlice";
+import { rolesApi } from "./features/roles/rolesThunk";
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
+        [rolesApi.reducerPath]: rolesApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -50,13 +53,14 @@ export const store = configureStore({
         galeria: galeriaSlice,
         rankings: rankingsSlice,
         evaluaciones: evaluacionsSlice,
-        gestion: gestionSlice
-
+        gestion: gestionSlice,
+        roles: rolesSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })
         .concat(authApi.middleware)
-        .concat(userApi.middleware),
+        .concat(userApi.middleware)
+        .concat(rolesApi.middleware),
     devTools: true
 });
 

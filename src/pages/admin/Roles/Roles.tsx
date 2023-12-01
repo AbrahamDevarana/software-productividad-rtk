@@ -1,44 +1,17 @@
 import { Box, Button } from '@/components/ui'
+import { RoleProps } from '@/interfaces/rol'
+import { useGetRolesQuery } from '@/redux/features/roles/rolesThunk'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { FloatButton, Input, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa'
 
 export const Roles = () => {
 
 	const [filtros, setFiltros] = useState<any>()
 
-	const roles = [ 
-		{
-			id: 1,
-			nombre: 'Administrador',
-			descripcion: 'crear usuarios',
-		},
-		{
-			id: 2,
-			nombre: 'Coordinador',
-			descripcion: 'editar usuarios',
-		},
-		{
-			id: 3,
-			nombre: 'Gerente',
-			descripcion: 'eliminar usuarios',
-		},
-		{
-			id: 4,
-			nombre: 'Capital Humano',
-			descripcion: 'ver usuarios',
-		},
-		{
-			id: 5,
-			nombre: 'Director',
-			descripcion: 'ver usuarios',
-		}
-
-	
-	]
-
-	const columns:ColumnsType<any> = [
+	const columns:ColumnsType<RoleProps> = [
 		{
 			title: () => ( <p className='tableTitlePrincipal'>Nombre</p>),
 			key: "nombre",
@@ -79,7 +52,18 @@ export const Roles = () => {
             ),
         },
 	]
+	const { data, isLoading } = useGetRolesQuery(filtros)
 
+
+	const roles = useMemo(() => {
+		if (!data) return []
+		if (!filtros?.nombre) return data
+		const regex = new RegExp(filtros.nombre, 'i')
+		return data.filter((rol) => regex.test(rol.nombre) || regex.test(rol.descripcion))		
+	}, [data, filtros])
+
+
+	
 	return (
 		<>
 			<Box className="overflow-auto animate__animated animate__fadeIn animate__faster">
@@ -104,6 +88,7 @@ export const Roles = () => {
 				</div>
 				<Table 
 					columns={columns}
+					loading={isLoading}
 					dataSource={roles}
 					rowKey={(record) => record.id}
 					pagination={false}

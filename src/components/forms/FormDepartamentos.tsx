@@ -22,10 +22,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     const { usuarios } = useAppSelector(state => state.usuarios)
     const { areas } = useAppSelector(state => state.areas)
     const [ color, setColor ] = useState<string>('#000000')
-
-   console.log(usuarios);
-    
-
+   
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
 
