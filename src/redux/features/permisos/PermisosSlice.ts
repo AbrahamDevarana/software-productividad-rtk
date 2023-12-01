@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PermisosState } from '@/interfaces';
-import { getPermisosThunk } from './PermisosThunk';
 
 
 const initialState:PermisosState = {
@@ -17,17 +16,17 @@ const permisosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getPermisosThunk.pending, (state) => {
-                state.isLoadingPermisos = true
-            })
-            .addCase(getPermisosThunk.fulfilled, (state, { payload }) => {
-                state.isLoadingPermisos = false
-                state.permisos = payload
-            })
-            .addCase(getPermisosThunk.rejected, (state, { payload }) => {
-                state.isLoadingPermisos = false
-                state.error = true
-            })
+            // .addCase(getPermisosThunk.pending, (state) => {
+            //     state.isLoadingPermisos = true
+            // })
+            // .addCase(getPermisosThunk.fulfilled, (state, { payload }) => {
+            //     state.isLoadingPermisos = false
+            //     state.permisos = payload
+            // })
+            // .addCase(getPermisosThunk.rejected, (state, { payload }) => {
+            //     state.isLoadingPermisos = false
+            //     state.error = true
+            // })
     }
 })
 

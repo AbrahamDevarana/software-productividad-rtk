@@ -11,26 +11,6 @@ interface Props {
     role: RoleProps
 }
 
-// export const getRolesThunk = createAsyncThunk(
-//     "roles/getRoles",
-//     async (filtros: any, { rejectWithValue, getState }) => {
-//         try {
-//             const { accessToken } = (getState() as RootState).auth;
-//             const config = {
-//                 headers: { "accessToken": `${accessToken}` },
-//                 params: filtros
-//             }
-//             const response = await clientAxios.get<Props>(`/roles`, config);
-//             return response.data
-//         }
-//         catch (error: any) {
-//             return rejectWithValue(error.response.data)
-//         }
-//     }
-// )
-
-
-
 const baseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers, { getState }) => {
@@ -40,122 +20,48 @@ const baseQuery = fetchBaseQuery({
     }
 });
 
-interface RolesParams {
-    filtros?: any
-    search?: string
-}
-
-interface IRolesResponse {
-    roles: RoleProps[]
-}
-
-
 export const rolesApi = createApi({
     reducerPath: 'rolesApi',
     baseQuery: baseQuery,
+    tagTypes: ['Roles'],
     endpoints: (builder) => ({
         getRoles: builder.query({
             query: (filtros: any) => ({
                 url: `/roles`,
                 params: filtros
             }),
-            transformResponse: (response: { roles: RoleProps[] }) => response.roles
+            transformResponse: (response: { roles: RoleProps[] }) => response.roles,
+            providesTags: ['Roles']
         }),
         getRol: builder.query({
-            query: (rolId: string) => `/roles/${rolId}`
+            query: (rolId: number) => `/roles/${rolId}`,
+            transformResponse: (response: { role: RoleProps }) => response.role
         }),
         createRol: builder.mutation({
-            query: (rol: RoleProps) => ({
+            query: (role: RoleProps) => ({
                 url: `/roles`,
                 method: 'POST',
-                body: rol
-            })
+                body: role
+            }),
+            invalidatesTags: ['Roles'],
         }),
         updateRol: builder.mutation({
-            query: ({id, ...rol}: RoleProps) => ({
+            query: ({id, ...role}: RoleProps) => ({
                 url: `/roles/${id}`,
                 method: 'PUT',
-                body: rol
-            })
+                body: role
+            }),
+            invalidatesTags: ['Roles']
         }),
         deleteRol: builder.mutation({
-            query: (rolId: string) => ({
+            query: (rolId: number) => ({
                 url: `/roles/${rolId}`,
                 method: 'DELETE'
-            })
+            }),
+            invalidatesTags: ['Roles']
         })
     })
 })
 
 export const { useGetRolesQuery, useGetRolQuery, useCreateRolMutation, useUpdateRolMutation, useDeleteRolMutation } = rolesApi;
    
-
-export const getRolThunk = createAsyncThunk(
-    "roles/getRol",
-    async (rolId: string, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.get(`/roles/${rolId}`, config);
-            return response.data
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const createRolThunk = createAsyncThunk(
-    "roles/createRol",
-    async (rol: any, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.post(`/roles`, rol, config);
-            return response.data
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const updateRolThunk = createAsyncThunk(
-    "roles/updateRol",
-    async (rol: any, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.put(`/roles/${rol.id}`, rol, config);
-            return response.data
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const deleteRolThunk = createAsyncThunk(
-    "roles/deleteRol",
-    async (rolId: string, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.delete(`/roles/${rolId}`, config);
-            return response.data
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-

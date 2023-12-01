@@ -26,12 +26,14 @@ import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 import gestionSlice from "./features/gestion/gestionSlice";
 import rolesSlice from "./features/roles/rolesSlice";
 import { rolesApi } from "./features/roles/rolesThunk";
+import { permisosApi } from "./features/permisos/PermisosThunk";
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [rolesApi.reducerPath]: rolesApi.reducer,
+        [permisosApi.reducerPath]: permisosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -54,14 +56,15 @@ export const store = configureStore({
         rankings: rankingsSlice,
         evaluaciones: evaluacionsSlice,
         gestion: gestionSlice,
-        roles: rolesSlice
+        // roles: rolesSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })
         .concat(authApi.middleware)
         .concat(userApi.middleware)
-        .concat(rolesApi.middleware),
-    devTools: true
+        .concat(rolesApi.middleware)
+        .concat(permisosApi.middleware),
+        devTools: true
 });
 
 export type AppDispatch = typeof store.dispatch;
