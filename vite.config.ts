@@ -42,10 +42,7 @@ export default defineConfig({
                 "axios": ["axios"],
                 "framer-motion": ["framer-motion"],
                 "react-quill": ["react-quill"],
-                "react-dnd": ["react-dnd"],
-                "react-dnd-html5-backend": ["react-dnd-html5-backend"],
                 "swiper": ["swiper"],
-                "react-draggable": ["react-draggable"],
                 "react-dropzone": ["react-dropzone"],
                 "react-countup": ["react-countup"],
                 "react-chartjs-2": ["react-chartjs-2"],
@@ -53,7 +50,9 @@ export default defineConfig({
                 "chart.js": ["chart.js"],
                 "react-gauge-chart": ["react-gauge-chart"],
                 "react-simple-star-rating": ["react-simple-star-rating"],
-                "chartjs-plugin-datalabels": ["chartjs-plugin-datalabels"]
+                "chartjs-plugin-datalabels": ["chartjs-plugin-datalabels"],
+                "@dnd-kit/core": ["@dnd-kit/core"],
+                "@dnd-kit/sortable": ["@dnd-kit/sortable"],
             },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {

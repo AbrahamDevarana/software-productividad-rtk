@@ -5,7 +5,7 @@ import { Button } from '../ui'
 import { FaSave } from 'react-icons/fa'
 import { useGetPermisosQuery } from '@/redux/features/permisos/PermisosThunk'
 
-export const FormRoles = ({roleId}: { roleId: number}) => {
+export const FormRoles = ({roleId, handleClose}: { roleId: number, handleClose: () => void}) => {
 
     const [form] = Form.useForm()
     const { data: role, isLoading, isFetching } = useGetRolQuery(roleId)
@@ -20,31 +20,33 @@ export const FormRoles = ({roleId}: { roleId: number}) => {
     const handleSubmit = async () => {
         const query = form.getFieldsValue()
         if(roleId){
-            await updateRol({id: roleId, ...query}).then(() => {                
+            try{
+                await updateRol({id: roleId, ...query}).unwrap()
                 message.success('Rol actualizado correctamente')
-            }).catch(() => {
+                handleClose()
+            }catch(e){
                 message.error('Ocurrió un error al actualizar el rol')
-            })
+            }
         }else{
-            await createRol(query).then(() => {
+            try{
+                await createRol(query).unwrap()
                 message.success('Rol creado correctamente')
-            }).catch(() => {
+                handleClose()
+            }catch(e){
                 message.error('Ocurrió un error al crear el rol')
-            })
+            }
         }
     }
-
-    console.log(permisos);
-    
-
-
 
     return (
         <>
             <Form
                 layout='vertical'
                 form = {form}
-                initialValues={initialValues}
+                initialValues={{
+                    ...initialValues,
+                    permisos: role?.permisos?.map((permiso) => permiso.id)
+                }}
                 onFinish={handleSubmit}
             >
 
@@ -75,7 +77,7 @@ export const FormRoles = ({roleId}: { roleId: number}) => {
                 >
                     <Checkbox.Group>
                         {permisos?.map((permiso) => (
-                            <Checkbox key={permiso.id} value={permiso.id}>{permiso.nombre}</Checkbox>
+                            <Checkbox key={permiso.id} value={permiso.id} >{permiso.nombre}</Checkbox>
                         ))}
                     </Checkbox.Group>
                 </Form.Item>

@@ -3,6 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
 import { EvaluacionResultadosProps, SinglePerfilProps } from "@/interfaces";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from "@/config/baseQuery";
 
 
 interface Props {
@@ -116,3 +118,44 @@ export const postEvaluacionThunk = createAsyncThunk(
         }
     }
 )
+
+
+
+
+// RTK Query
+
+export const gestionApi = createApi({
+    reducerPath: 'gestionApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Gestion'],
+    endpoints: (builder) => ({
+       getEvaluacionCompentencias: builder.query<any, { year:number, quarter:number}>({
+            query: ({year, quarter}) => ({
+                url: ``,
+                params: { year, quarter },
+            }),
+            providesTags: ['Gestion'],
+            transformResponse: (response: any) => {
+                return response
+            },
+        }),
+        getEvaluacionUsuarios: builder.query<any, { usuarioId: string, year:number, quarter:number}>({
+            query: ({year, quarter, usuarioId}) => ({
+                url: ``,
+                params: { year, quarter },
+            }),
+            providesTags: ['Gestion'],
+            transformResponse: (response: any) => {
+                return response
+            },
+        }),
+        putAsignacionEvaluacion: builder.mutation<any, { usuarioId: string, year:number, quarter:number, type: string}>({
+            query: ({year, quarter, usuarioId, type}) => ({
+                url: ``,
+                method: 'PUT',
+                params: { year, quarter },
+            }),
+            invalidatesTags: ['Gestion'],
+        }),
+    }),
+})

@@ -37,7 +37,7 @@ export const Admin = ({handleBar}:AdminProps) => {
             </div>
         </NavLink>
         }
-        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        { hasGroupPermission(['ver gestion', 'editar gestion'], permisos) && 
         <NavLink to={'/admin/gestion'} onClick={handleBar}>
             <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
                 <FaCogs />
@@ -45,7 +45,7 @@ export const Admin = ({handleBar}:AdminProps) => {
             </div>
         </NavLink>
         }
-        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        { hasGroupPermission(['crear roles', 'editar roles', 'eliminar roles'], permisos) && 
         <NavLink to={'/admin/roles'} onClick={handleBar}>
             <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
                 <FaUserShield />
@@ -53,7 +53,7 @@ export const Admin = ({handleBar}:AdminProps) => {
             </div>
         </NavLink>
         }
-        { hasGroupPermission(['crear usuarios', 'editar usuarios', 'eliminar usuarios'], permisos) && 
+        { hasGroupPermission(['crear permisos', 'editar permisos', 'eliminar permisos'], permisos) && 
         <NavLink to={'/admin/permisos'} onClick={handleBar}>
             <div className="text-white p-2 nav-link rounded flex content-center items-center gap-2">
                 <FaUserLock />

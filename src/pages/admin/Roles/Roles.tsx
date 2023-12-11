@@ -1,11 +1,10 @@
 import { FormRoles } from '@/components/forms/FormRoles'
 import { Box, Button } from '@/components/ui'
 import { RoleProps } from '@/interfaces/rol'
-import { useDeleteRolMutation, useGetRolQuery, useGetRolesQuery } from '@/redux/features/roles/rolesThunk'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { useDeleteRolMutation, useGetRolesQuery } from '@/redux/features/roles/rolesThunk'
 import { FloatButton, Input, Modal, Table, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa'
 
 export const Roles = () => {
@@ -128,7 +127,6 @@ export const Roles = () => {
 					loading={isLoading}
 					dataSource={roles}
 					rowKey={(record) => record.id}
-					pagination={false}
 				/>
 			</Box>
 
@@ -140,7 +138,10 @@ export const Roles = () => {
 				width={700}
 				footer={null}
 			>
-				<FormRoles roleId={roleId}/>
+				<FormRoles 
+					roleId={roleId}
+					handleClose={handleClose}
+				/>
 			</Modal>
 		</>
 	)

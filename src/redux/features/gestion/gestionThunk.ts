@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from '@/config/axios'
-import { GestionState } from '@/interfaces'
+import { GestionObjetivo, GestionState } from '@/interfaces'
 
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from "@/config/baseQuery";
 
 
 
@@ -21,9 +23,7 @@ export const obtenerUsuariosThunk = createAsyncThunk(
                     status
                 }
             }
-            const response = await clientAxios.get<GestionState>(`/reportes/usuarios`, config);
-            console.log(response.data);
-            
+            const response = await clientAxios.get<GestionState>(`/reportes/usuarios`, config);            
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -68,3 +68,39 @@ export const generarReporteRendimientoThunk = createAsyncThunk(
         }
     }
 )
+
+
+
+export const gestionApi = createApi({
+    reducerPath: 'gestionApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Gestion'],
+    endpoints: (builder) => ({
+        getGestionObjetivos: builder.query({
+            query: ({year, quarter}:{year:number, quarter:number}) => ({
+                url: `/gestion-objetivos`,
+                params: { year, quarter },
+            }),
+            transformResponse: (response: { gestionObjetivo: GestionObjetivo }) => response.gestionObjetivo,
+            providesTags: ['Gestion'],
+            transformErrorResponse: (error) => {
+                console.log('Error al obtener la gestion de objetivos', error)
+                return error
+            }
+        }),
+        updateGestionObjetivos: builder.mutation({
+            query: ({ gestionObjetivo }:{ gestionObjetivo : GestionObjetivo }) => ({
+                url: `/gestion-objetivos/${gestionObjetivo.id}`,
+                method: 'PUT',
+                body: gestionObjetivo
+            }),
+            invalidatesTags: ['Gestion'],
+            transformErrorResponse: (error) => {
+                console.log('Error al actualizar la gestion de objetivos', error)
+                return error
+            }
+        })
+    })
+})
+
+export const { useGetGestionObjetivosQuery, useUpdateGestionObjetivosMutation } = gestionApi;

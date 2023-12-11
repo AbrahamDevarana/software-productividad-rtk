@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '@/redux/store';
 import { clientAxios } from '@/config/axios';
 import { PermisoProps } from '@/interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from '@/config/baseQuery';
 
 
 
@@ -34,14 +35,7 @@ export const getPermisosThunk = createAsyncThunk(
 )
 
 
-const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-        const accessToken = localStorage.getItem('accessToken');
-        if( accessToken ) headers.set('accessToken', `${accessToken}`);  
-        return headers;
-    }
-});
+
 
 export const permisosApi = createApi({
     reducerPath: 'permisosApi',
@@ -58,7 +52,8 @@ export const permisosApi = createApi({
         }),
         getPermiso: builder.query({
             query: (permisoId: number) => `/permisos/${permisoId}`,
-            transformResponse: (response: { permiso: PermisoProps }) => response.permiso
+            transformResponse: (response: { permiso: PermisoProps }) => response.permiso,
+            providesTags: ['Permisos']
         }),
         createPermiso: builder.mutation({
             query: (permiso: PermisoProps) => ({
@@ -66,6 +61,7 @@ export const permisosApi = createApi({
                 method: 'POST',
                 body: permiso
             }),
+            transformResponse: (response: { permiso: PermisoProps }) => response.permiso,
             invalidatesTags: ['Permisos'],
         }),
         updatePermiso: builder.mutation({
@@ -74,6 +70,7 @@ export const permisosApi = createApi({
                 method: 'PUT',
                 body: permiso
             }),
+            transformResponse: (response: { permiso: PermisoProps }) => response.permiso,
             invalidatesTags: ['Permisos']
         }),
         deletePermiso: builder.mutation({
@@ -81,6 +78,7 @@ export const permisosApi = createApi({
                 url: `/permisos/${permisoId}`,
                 method: 'DELETE'
             }),
+            transformResponse: (response: { permiso: PermisoProps }) => response.permiso,
             invalidatesTags: ['Permisos']
         })
     })

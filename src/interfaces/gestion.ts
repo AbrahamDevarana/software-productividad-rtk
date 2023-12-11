@@ -15,6 +15,24 @@ export interface UsuarioGestion extends SinglePerfilProps {
 
 }
 
+export interface GestionObjetivo {
+    id: number
+    year: number
+    quarter: number
+    periodoDefinicionInicio: string
+    periodoDefinicionFin: string
+    ejecucionInicio: string
+    ejecucionFin: string
+    revisionIntermediaInicio: string
+    revisionIntermediaFin: string
+    cierreObjetivosInicio: string
+    cierreObjetivosFin: string
+    cierreEvaluacionCompetenciasInicio: string
+    cierreEvaluacionCompetenciasFin: string
+
+
+}
+
 
 export interface GestionState extends InitialState{
     isLoadingUsuarios: boolean

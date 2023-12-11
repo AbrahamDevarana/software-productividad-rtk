@@ -1,5 +1,3 @@
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useAppSelector } from '@/redux/hooks';
 import { Box } from '../ui';
 import { statusTypes } from '@/types';

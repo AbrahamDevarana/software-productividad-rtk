@@ -1,24 +1,12 @@
-
-import { AppDispatch, RootState } from "@/redux/store";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { clientAxios } from "@/config/axios";
-import { RoleProps } from "@/interfaces/rol";
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from "@/config/baseQuery";
+import { RoleProps, RoleWithPermisosProps } from "@/interfaces/rol";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 
 interface Props {
     roles: RoleProps[]
-    role: RoleProps
+    role: RoleWithPermisosProps
 }
-
-const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-        const accessToken = localStorage.getItem('accessToken');
-        if( accessToken ) headers.set('accessToken', `${accessToken}`);  
-        return headers;
-    }
-});
 
 export const rolesApi = createApi({
     reducerPath: 'rolesApi',
@@ -35,22 +23,25 @@ export const rolesApi = createApi({
         }),
         getRol: builder.query({
             query: (rolId: number) => `/roles/${rolId}`,
-            transformResponse: (response: { role: RoleProps }) => response.role
+            transformResponse: (response: { role: RoleWithPermisosProps }) => response.role,
+            providesTags: ['Roles']
         }),
         createRol: builder.mutation({
-            query: (role: RoleProps) => ({
+            query: (role: RoleWithPermisosProps) => ({
                 url: `/roles`,
                 method: 'POST',
                 body: role
             }),
+            transformResponse: (response: { role: RoleWithPermisosProps }) => response.role,
             invalidatesTags: ['Roles'],
         }),
-        updateRol: builder.mutation({
-            query: ({id, ...role}: RoleProps) => ({
+        updateRol: builder.mutation <RoleWithPermisosProps, Partial<RoleWithPermisosProps> & Pick<RoleWithPermisosProps, 'id'>> ({
+            query: ({id, ...role}: RoleWithPermisosProps) => ({
                 url: `/roles/${id}`,
                 method: 'PUT',
                 body: role
             }),
+            transformResponse: (response: { role: RoleWithPermisosProps }) => response.role,
             invalidatesTags: ['Roles']
         }),
         deleteRol: builder.mutation({
@@ -58,6 +49,7 @@ export const rolesApi = createApi({
                 url: `/roles/${rolId}`,
                 method: 'DELETE'
             }),
+            transformResponse: (response: { role: RoleWithPermisosProps }) => response.role,
             invalidatesTags: ['Roles']
         })
     })

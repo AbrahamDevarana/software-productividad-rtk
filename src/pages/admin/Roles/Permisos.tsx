@@ -1,35 +1,18 @@
+import { FormPermisos } from '@/components/forms/FormPermisos'
 import { Box, Button } from '@/components/ui'
-import { FloatButton, Input, Table } from 'antd'
+import { useGetPermisosQuery } from '@/redux/features/permisos/PermisosThunk'
+import { FloatButton, Input, Modal, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa'
 
 export const Permisos = () => {
 
 	const [filtros, setFiltros] = useState<any>()
+	const [visible, setFormVisible] = useState<boolean>(false)
+	const [permisoId, setPermisoId] = useState<number>(0)
 
-	const permisos = [ 
-		{
-			id: 1,
-			nombre: 'Crear',
-			permisos: 'crear usuarios',
-		},
-		{
-			id: 2,
-			nombre: 'Editar',
-			permisos: 'editar usuarios',
-		},
-		{
-			id: 3,
-			nombre: 'Eliminar',
-			permisos: 'eliminar usuarios',
-		},
-		{
-			id: 4,
-			nombre: 'Ver',
-			permisos: 'ver usuarios',
-		}
-	]
+	const confirm = Modal.confirm
 
 	const columns:ColumnsType<any> = [
 		{
@@ -55,7 +38,7 @@ export const Permisos = () => {
                         classColor='info'
                         width={'auto'}
                         onClick={() => {
-                            // handleEdit(record.id)
+                            handleEdit(record.id)
                         } }
                     >
                         <FaPen />
@@ -64,7 +47,7 @@ export const Permisos = () => {
                         classType='regular'
                         classColor='error'
                         width={'auto'}
-                        // onClick={() => showDeleteConfirm(record.id) }
+                        onClick={() => handleDelete(record.id)}
                     >
                         <FaTrash />
                     </Button>
@@ -72,6 +55,42 @@ export const Permisos = () => {
             ),
         },
 	]
+
+	const { data, isLoading, isFetching } = useGetPermisosQuery(filtros)
+
+	const permisos = useMemo(() => {
+		if (!data) return []
+		if (!filtros?.nombre) return data
+		const regex = new RegExp(filtros.nombre, 'iu')
+		return data.filter((permiso) => regex.test(permiso.nombre) || regex.test(permiso.permisos))		
+	}, [data, filtros])
+
+	const handleEdit = (id: number) => {
+		setPermisoId(id)
+		setFormVisible(true)
+	}
+
+	const handleClose = () => {
+		setFormVisible(false)
+		setPermisoId(0)
+	}
+
+	const handleDelete = async (id: number) => {
+		confirm({
+			title: '¿Está seguro de eliminar este registro?',
+			content: 'Esta acción no se puede deshacer',
+			okText: 'Eliminar',
+			okType: 'danger',
+			cancelText: 'Cancelar',
+			onOk: async () => {
+				// await deleteRol(id)
+				// await refetch()
+			},
+			onCancel() {
+				console.log('Cancel')
+			},
+		})
+	}
 
 	return (
 		<>
@@ -92,17 +111,30 @@ export const Permisos = () => {
 
 					shape="circle"
 					icon={<FaPlus />}
-					// onClick={(() => handleModal(true))}
+					onClick={() => setFormVisible(true)}
 				/>
 				</div>
 				<Table 
 					columns={columns}
 					dataSource={permisos}
 					rowKey={(record) => record.id}
-					pagination={false}
+					loading={isLoading || isFetching}
 				/>
-
 			</Box>
+
+			<Modal	
+				open={visible}
+				title={permisoId ? <p className="text-devarana-graph">Editar permiso</p> : <p className="text-devarana-graph">Nuevo permiso</p>}
+				onCancel={handleClose}
+				footer={null}
+				width={700}
+				destroyOnClose={true}
+				>
+				<FormPermisos
+					permisoId={permisoId}
+					handleClose={handleClose}
+				/>
+			</Modal>
 			
 		</>
 	)

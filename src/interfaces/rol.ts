@@ -1,3 +1,4 @@
+import { PermisoProps } from "./permisos";
 import { InitialState } from "./slice";
 
 
@@ -9,8 +10,16 @@ export interface RoleProps {
     status:      number;
 }
 
+export interface RoleWithPermisosProps {
+    id:          number;
+    nombre:      string;
+    descripcion: string;
+    status:      number;
+    permisos:    PermisoProps[];
+}
+
 export interface RolesState extends InitialState {
     roles: RoleProps[];
-    currentRole: RoleProps;
+    currentRole: RoleWithPermisosProps;
     isLoadingCurrentRole: boolean;
 }

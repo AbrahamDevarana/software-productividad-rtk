@@ -8,7 +8,8 @@ const initialState: RolesState = {
         id: 0,
         nombre: '',
         status: 0,
-        descripcion: ''
+        descripcion: '',
+        permisos: []
     },
     error: false,
     infoMessage: '',
@@ -23,18 +24,15 @@ const rolesSlice = createSlice({
     name: 'rolesSlice',
     initialState,
     reducers: {
-        clearCurrentRole: (state) => {
-            state.currentRole = initialState.currentRole
-        }
+
     },
     extraReducers: (builder) => {
         builder
-      
     }
 })
 
 
-export const { clearCurrentRole } = rolesSlice.actions
+export const {  } = rolesSlice.actions
 export default rolesSlice.reducer
 
 

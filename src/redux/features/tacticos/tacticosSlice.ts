@@ -73,6 +73,8 @@ const initialState: TacticosState = {
                 objetivosEstrategicos: [],
             },
             responsables: [],
+            suggest: 0,
+            tipoProgreso: 'MANUAL',
         },
         comentarios: [],
         suggest: 0,
