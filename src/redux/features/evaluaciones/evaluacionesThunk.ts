@@ -2,7 +2,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
-import { EvaluacionResultadosProps, SinglePerfilProps } from "@/interfaces";
+import { EvaluacionResultadosProps, SinglePerfilProps, UsuarioProps } from "@/interfaces";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { baseQuery } from "@/config/baseQuery";
 
@@ -124,22 +124,42 @@ export const postEvaluacionThunk = createAsyncThunk(
 
 // RTK Query
 
-export const gestionApi = createApi({
-    reducerPath: 'gestionApi',
+interface EvaluacionEvalado {
+    evaluacionId: number,
+    evaluadorId: number,
+    evaluadoId: number,
+    evaluador: UsuarioProps
+    status: boolean
+}
+
+interface EvaluacionUsuarioProps extends UsuarioProps {
+    evaluacionesEvaluado: EvaluacionEvalado[]
+    evaluacion: {
+        id: number,
+        nombre: string
+    }
+}
+
+
+
+
+
+export const evaluacionApi = createApi({
+    reducerPath: 'evaluacionApi',
     baseQuery: baseQuery,
     tagTypes: ['Gestion'],
     endpoints: (builder) => ({
-       getEvaluacionCompentencias: builder.query<any, { year:number, quarter:number}>({
-            query: ({year, quarter}) => ({
-                url: ``,
+        getEvaluacionUsuarios: builder.query({
+            query: ({year, quarter}: {year:number, quarter:number}) => ({
+                url: `evaluacion/competencias`,
                 params: { year, quarter },
             }),
             providesTags: ['Gestion'],
-            transformResponse: (response: any) => {
-                return response
-            },
+            transformResponse: (response: {usuarios : EvaluacionUsuarioProps[]}) => {
+                return response.usuarios
+            }
         }),
-        getEvaluacionUsuarios: builder.query<any, { usuarioId: string, year:number, quarter:number}>({
+        getEvaluacionUsuario: builder.query<any, { usuarioId: string, year:number, quarter:number}>({
             query: ({year, quarter, usuarioId}) => ({
                 url: ``,
                 params: { year, quarter },
@@ -159,3 +179,6 @@ export const gestionApi = createApi({
         }),
     }),
 })
+
+
+export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, usePutAsignacionEvaluacionMutation } = evaluacionApi;

@@ -28,6 +28,7 @@ import rolesSlice from "./features/roles/rolesSlice";
 import { rolesApi } from "./features/roles/rolesThunk";
 import { permisosApi } from "./features/permisos/PermisosThunk";
 import { gestionApi } from "./features/gestion/gestionThunk";
+import { evaluacionApi } from "./features/evaluaciones/evaluacionesThunk";
 
 export const store = configureStore({
     reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
         [rolesApi.reducerPath]: rolesApi.reducer,
         [permisosApi.reducerPath]: permisosApi.reducer,
         [gestionApi.reducerPath]: gestionApi.reducer,
+        [evaluacionApi.reducerPath]: evaluacionApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -65,7 +67,8 @@ export const store = configureStore({
         .concat(userApi.middleware)
         .concat(rolesApi.middleware)
         .concat(permisosApi.middleware)
-        .concat(gestionApi.middleware),
+        .concat(gestionApi.middleware)
+        .concat(evaluacionApi.middleware),
         devTools: true
 });
 
