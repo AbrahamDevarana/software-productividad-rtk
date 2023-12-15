@@ -93,7 +93,7 @@ export const Competencias = () => {
             title: () => ( <p className='tableTitlePrincipal'>Evaluación Lider</p>),
             key: "nombre",
 			render: (text, record, index) => (
-                <div className='flex justify-end'>
+                <div className='flex items-center '>
                     <Avatar.Group maxCount={3} key={index} className='z-50'
                         maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
                     >
@@ -117,7 +117,7 @@ export const Competencias = () => {
             title: () => ( <p className='tableTitlePrincipal'>Evaluación Colaborador</p>),
             key: "nombre",
 			render: (text, record, index) => ( 
-            <div className='flex justify-end'>
+            <div className='flex items-center '>
                 <Avatar.Group maxCount={3} className='z-50'
                     maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
                 >
@@ -141,7 +141,7 @@ export const Competencias = () => {
             title: () => ( <p className='tableTitlePrincipal'>Evaluación Lider-Colaborador</p>),
             key: "nombre",
 			render: (text, record, index) => ( 
-                <div className='flex justify-end'>
+                <div className='flex items-center '>
                     <Avatar.Group maxCount={3} key={index} className='z-50'
                         maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
                     >
@@ -163,7 +163,7 @@ export const Competencias = () => {
             title: () => ( <p className='tableTitlePrincipal'>Evaluación Propia</p>),
             key: "nombre",
 			render: (text, record, index) => ( 
-                <div className='flex justify-end'>
+                <div className='flex items-center '>
                     <Avatar.Group maxCount={3} key={index} className='z-50'
                         maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
                     >
@@ -213,7 +213,7 @@ export const Competencias = () => {
 
     return (
         <>
-            <div className="flex justify-end gap-5 pb-5">
+            <div className="flex items-center  gap-5 pb-5">
                 <Input
                     placeholder="Buscar"
                     className="max-w-xs w-full"
