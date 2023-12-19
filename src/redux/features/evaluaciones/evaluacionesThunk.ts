@@ -159,21 +159,29 @@ export const evaluacionApi = createApi({
                 return response.usuarios
             }
         }),
-        getEvaluacionUsuario: builder.query<any, { usuarioId: string, year:number, quarter:number}>({
-            query: ({year, quarter, usuarioId}) => ({
-                url: ``,
+        getEvaluacionUsuario: builder.query({
+            query: ({year, quarter, usuarioId}: {year:number, quarter:number, usuarioId:string}) => ({
+                url: `evaluacion/competencias/${usuarioId}`,
                 params: { year, quarter },
             }),
             providesTags: ['Gestion'],
-            transformResponse: (response: any) => {
-                return response
-            },
+            transformResponse: (response: {usuario : EvaluacionUsuarioProps}) => {
+                return response.usuario
+            }
         }),
-        putAsignacionEvaluacion: builder.mutation<any, { usuarioId: string, year:number, quarter:number, type: string}>({
-            query: ({year, quarter, usuarioId, type}) => ({
-                url: ``,
-                method: 'PUT',
-                params: { year, quarter },
+        createAsignacionEvaluacion: builder.mutation<any, { tipoEvaluacionId: number, evaluadorId: string, evaluadoId: string, year:number, quarter:number }>({
+            query: (body) => ({
+                url: `evaluacion/competencias`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Gestion'],
+        }),
+        deleteAsignacionEvaluacion: builder.mutation<any, { tipoEvaluacionId: number, evaluadorId: string, evaluadoId: string, year:number, quarter:number }>({
+            query: (body) => ({
+                url: `evaluacion/competencias`,
+                method: 'DELETE',
+                body
             }),
             invalidatesTags: ['Gestion'],
         }),
@@ -181,4 +189,4 @@ export const evaluacionApi = createApi({
 })
 
 
-export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, usePutAsignacionEvaluacionMutation } = evaluacionApi;
+export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation,  } = evaluacionApi;

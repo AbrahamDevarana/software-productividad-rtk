@@ -39,18 +39,18 @@ export const Gestion = () => {
 				onChange={setActiveTab}
 			/>
 
-			<>
+			<div className="py-5">
 			
-			{
-				activeTab === 'objetivos' && ( <Usuarios /> )
-			}
-			{
-				activeTab === 'periodos' && ( <Objetivos /> ) 
-			}
-			{
-				activeTab === 'competencias' && ( <Competencias /> )
-			}
-			</>
+				{
+					activeTab === 'objetivos' && ( <Usuarios /> )
+				}
+				{
+					activeTab === 'periodos' && ( <Objetivos /> ) 
+				}
+				{
+					activeTab === 'competencias' && ( <Competencias /> )
+				}
+			</div>
 		</>
 
 	)
