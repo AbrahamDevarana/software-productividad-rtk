@@ -130,28 +130,6 @@ export const Competencias = () => {
 			ellipsis: true
         },
         {
-            title: () => ( <p className='tableTitlePrincipal'>Evaluación Lider-Colaborador</p>),
-            key: "nombre",
-			render: (text, record, index) => ( 
-                <div className='flex items-center '>
-                    <Avatar.Group maxCount={3} key={index} className='z-50'
-                        maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
-                    >
-                            {record.evaluacionLiderColaborador?.map((evaluacion:any) => (
-                                <Avatar
-                                    key={evaluacion.id}
-                                    src={<Image src={`${getStorageUrl(evaluacion.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                                    className=''
-                                >
-                                    {evaluacion.iniciales}
-                                </Avatar>
-                            ))}
-                    </Avatar.Group>
-                </div>
-            ),
-			ellipsis: true
-        },
-        {
             title: () => ( <p className='tableTitlePrincipal'>Evaluación Propia</p>),
             key: "nombre",
 			render: (text, record, index) => ( 
@@ -201,7 +179,7 @@ export const Competencias = () => {
 
     
     
-    if (isLoading && isFetching) return < Loading />
+    if ( isLoading ) return < Loading />
 
     return (
         <>
