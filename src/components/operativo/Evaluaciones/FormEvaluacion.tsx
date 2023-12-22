@@ -52,7 +52,12 @@ const FormEvaluacion = ({perfil}: Props) => {
         return activeEvaluate === evaluacionLider?.id
     }, [activeEvaluate, evaluacionLider])
 
-
+    if(!evaluacionPropia?.id && !evaluacionLider?.id && evaluacionColaborador?.length === 0) return ( 
+        <div className="text-center py-5 px-2">
+            <p className="text-2xl text-devarana-graph">Parece que no tienes evaluaciones disponibles.</p>
+            <p className="text-devarana-graph">Consulta a Capital Humano.</p>
+        </div>
+    )
 
     return (
     <>

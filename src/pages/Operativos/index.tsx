@@ -3,13 +3,12 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { clearProfileThunk, getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
+import { getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
 import Loading from '@/components/antd/Loading';
-import dayjs from 'dayjs';
 import { FaPlus } from 'react-icons/fa';
 
 // Import Swiper styles
@@ -20,6 +19,8 @@ import { EffectCards, FreeMode } from 'swiper';
 import { SinglePerfilProps } from '@/interfaces';
 import { getRankingsThunk } from '@/redux/features/ranking/rankingThunk';
 import { getEvaluacionResultadosThunk, getUsuariosAEvaluarThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
+import { useGetGestionObjetivosQuery } from '@/redux/features/gestion/gestionThunk';
+import { calcularEtapaActual } from '@/helpers/getEtapa';
 
 export const Objetivos : React.FC = () => {
 
@@ -34,9 +35,13 @@ export const Objetivos : React.FC = () => {
     const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
     const { currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ gettingProfile, setGettingProfile ] = useState(false)
-     
-    const {id} = useParams<{id: string}>()
 
+
+    const { data: periodos, isLoading: isLoadingRules } = useGetGestionObjetivosQuery({year, quarter})
+    
+    const etapa = calcularEtapaActual(periodos)
+
+    const {id} = useParams<{id: string}>()
     const { rendimiento } = perfil
 
 
@@ -44,21 +49,21 @@ export const Objetivos : React.FC = () => {
         setGettingProfile(true)
         const fetchData = async () => {
             await Promise.all([
-                dispatch(getRendimientoThunk({year, quarter, usuarioId: id || userAuth?.id})),
-                dispatch(getProfileThunk({usuarioId: id || userAuth?.id, year, quarter})),
-                dispatch(getEquipoThunk({ usuarioId: id || userAuth?.id })),
-                dispatch(getColaboradoresThunk({year, quarter, usuarioId: id || userAuth?.id})),
-                dispatch(getOperativosThunk({year, quarter, usuarioId: id || userAuth?.id})),
-                dispatch(getEvaluacionResultadosThunk({usuarioId: id || userAuth.id, year, quarter })),
-                dispatch(getUsuariosAEvaluarThunk({usuarioId: id || userAuth.id, year, quarter })),
-                dispatch(getHistorialRendimientoThunk({year, usuarioId: id || userAuth?.id})),
+                dispatch(getRendimientoThunk({year, quarter, usuarioId: userAuth?.id})),
+                dispatch(getProfileThunk({usuarioId: userAuth?.id, year, quarter})),
+                dispatch(getEquipoThunk({ usuarioId: userAuth?.id })),
+                dispatch(getColaboradoresThunk({year, quarter, usuarioId: userAuth?.id})),
+                dispatch(getOperativosThunk({year, quarter, usuarioId: userAuth?.id})),
+                dispatch(getEvaluacionResultadosThunk({usuarioId: userAuth.id, year, quarter })),
+                dispatch(getUsuariosAEvaluarThunk({usuarioId: userAuth.id, year, quarter })),
+                dispatch(getHistorialRendimientoThunk({year, usuarioId: userAuth?.id})),
                 dispatch(getRankingsThunk({year, quarter})),
             ])
             setGettingProfile(false)
         }
 
-        (id || userAuth) && fetchData()
-    }, [userAuth, id, year, quarter])
+        (userAuth) && fetchData()
+    }, [userAuth, year, quarter])
     
 
     const handleCancelForm = () => {
@@ -69,7 +74,7 @@ export const Objetivos : React.FC = () => {
 
     const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
 
-    if(gettingProfile) return <Loading dynamic={true}/>
+    if(isLoadingRules || gettingProfile) return <Loading dynamic={true}/>
 
     const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
         setActiveUsuarioReview(usuario)
@@ -84,10 +89,10 @@ export const Objetivos : React.FC = () => {
         <>
             <div className="grid 2xl:grid-cols-11 lg:grid-cols-12 md:grid-cols-6 grid-cols-12 gap-5">
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} />
+                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa}/>
                 </Box>
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full'>
-                    <CardAvance operativos={operativos} />
+                    <CardAvance operativos={operativos} periodos={periodos} />
                 </Box>
                 <Box className='2xl:col-span-4 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full flex justify-center'>
                     <CardDesempeno />

@@ -11,17 +11,20 @@ import GaugeChart from 'react-gauge-chart'
 import 'swiper/css';
 import 'swiper/css/navigation';
 import dayjs from 'dayjs'
+import { verificarPeriodo } from '@/helpers/getValidEtapa';
+import useCalculoBono from '@/hooks/useBono';
 
 interface Props {
     operativos: OperativoProps[]
+    periodos: any
 }
-export const CardAvance = ( { operativos }: Props ) => {
+export const CardAvance = ( { operativos, periodos }: Props ) => {
 
     const { periodControls: { preEvaluationDays, postClosureDays}, currentConfig: { currentDate, quarter, year } } = useAppSelector(state => state.global)
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
     const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
-    const { evaluacionLider, evaluacionPropia, evaluacionColaborador,isLoading, resultados } = useAppSelector(state => state.evaluaciones)
+    const { resultados } = useAppSelector(state => state.evaluaciones)
 
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
 
@@ -32,77 +35,20 @@ export const CardAvance = ( { operativos }: Props ) => {
     const handleCancelEvaluacion = () => {
 		setEvaluacionVisible(false)
 	}
-
-    const isOpen = useMemo(() => {
-        const today = dayjs()
-        // Obtener ultimo mes del quarter
-        const month = quarter * 3        
-        //  Obtener el ultimo dia del quarter
-        const lastDay = dayjs(`${year}-${month}-01`).endOf('quarter')
-        // Obtener la fecha de inicio de evaluacion
-        const preEvaluationDate = lastDay.subtract(preEvaluationDays, 'day')
-        // Obtener la fecha de cierre de evaluacion
-        const postClosureDate = lastDay.add(postClosureDays, 'day')
-        // si está entree el rango de fechas devolver false
-        if (today.isBetween(preEvaluationDate, postClosureDate)) {
-            if(!isLoading){
-                if(evaluacionLider && evaluacionPropia){
-                    if(evaluacionLider.id !== '' && evaluacionPropia.id !== ''){
-                        if(rendimiento.status === 'ABIERTO'){
-                            return false
-                        }else{
-                            return true
-                        }
-                    }else{
-                        return true
-                    }
-                }else{
-                    return true
-                }
-            }
-        } else {
-            return true
-        }
+    const isOpen = verificarPeriodo({tipoPeriodo: 'EVALUACION', etapa: periodos})
+    
 
 
-    }, [currentDate, postClosureDays, preEvaluationDays, evaluacionLider, evaluacionPropia])
+   
 
     const calculoAvance = useMemo(() => {
-        
         const {resultadoCompetencias, resultadoObjetivos}  = rendimiento     
         const total = resultadoCompetencias + resultadoObjetivos
         return total
     }, [ponderacionObjetivos, resultados])
 
-    
+    const calculoBono = useCalculoBono(calculoAvance)
 
-    const calculoBono = useMemo(() => {
-        const rangos: { [key: number]: number } = {
-            0: 0,
-            85: 0,
-            86: 75,
-            88: 80,
-            90: 85,
-            92: 90,
-            94: 95,
-            96: 100,
-            98: 105,
-            100: 110,
-        };
-
-        let puntuacion = 0;
-        for (let rango in rangos) {
-            if (calculoAvance >= parseInt(rango)) {                
-                puntuacion = rangos[rango];
-            } else {
-                break;
-            }
-        }
-
-        return puntuacion;
-    }, [calculoAvance]);
-    
-    
     
 
 return (
@@ -166,7 +112,9 @@ return (
                 </div>
                 <div className='flex justify-center pb-5 pt-2 w-full'>
                     <button 
-                        className='border border-secondary px-2 py-1 text-secondary text-xs rounded-ext font-light disabled:opacity-50 disabled:cursor-not-allowed disabled:border-devarana-graph disabled:text-devarana-graph' 
+                        className='border border-secondary px-2 py-1 text-secondary text-xs rounded-ext font-light disabled:opacity-50 disabled:cursor-not-allowed disabled:border-devarana-graph disabled:text-devarana-graph
+                        shadow
+                        ' 
                         onClick={handleEvaluation}
                         disabled={ isOpen }
                     >Realizar Evaluación</button>

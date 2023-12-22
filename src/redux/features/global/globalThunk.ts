@@ -3,7 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '@/redux/store';
 import { clientAxios } from '@/config/axios';
 import { cambiarConfig } from './globalSlice';
-
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from '@/config/baseQuery';
 
 
 
@@ -11,38 +12,23 @@ export const changeConfigThunk = ({quarter, year}: { quarter:number, year:number
     dispatch(cambiarConfig({quarter, year}))
 }
 
-export const getObjetivosConfigThunk = createAsyncThunk(
-    'global/getObjetivosConfig',
-    async ( { quarter, year } : {quarter: number, year: number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: { quarter, year }
-            }
 
-            const response = await clientAxios.get(`/global/objetivos`, config);
-            return response.data.config
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
+export const globalApi = createApi({    
+    reducerPath: 'globalApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Global'],
+    endpoints: (builder) => ({
+        getGlobalsConfig: builder.query({
+            query: (filtros: any) => ({
+                url: `/global`,
+                params: filtros
+            }),
+            transformResponse: (response: any) => response.config,
+            providesTags: ['Global']
+        }),
+    })
+})
 
-export const getGlobalsConfigThunk = createAsyncThunk(
-    'global/getGlobalsConfig',
-    async ( { quarter, year } : {quarter: number, year: number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: { quarter, year }
-            }
-
-            const response = await clientAxios.get(`/global`, config);
-            return response.data.config
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
+export const { 
+    useGetGlobalsConfigQuery,
+ } = globalApi;

@@ -1,18 +1,14 @@
 import { DatePicker } from 'antd'
-import React, { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import MixedChart from '../complexUI/MixedChart'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { useAppSelector } from '@/redux/hooks'
 import dayjs from 'dayjs'
 import { BsFillCalendarFill } from 'react-icons/bs'
 
 export const CardDesempeno = () => {
 
-    const { userAuth } = useAppSelector(state => state.auth)
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     const { perfil: {historialRendimiento} } = useAppSelector(state => state.profile)
-
-    const dispatch = useAppDispatch()
-
 
     const historial = useMemo(() => {
     //    Si el historial de rendimiento no existe, retornar un arreglo de 4 ceros
@@ -21,8 +17,9 @@ export const CardDesempeno = () => {
         // Deberá considerar los 4 quarter del año y retornar un arreglo de 4 elementos si uno no lo encuentra devolver 0 
         const historial = [0, 0, 0, 0]
         historialRendimiento.forEach((item) => {
-            historial[item.quarter - 1] = item.resultadoFinal
+            historial[item.quarter - 1] = Number((item.resultadoFinal).toFixed(2))
         })
+        
         return historial
         
     }, [historialRendimiento])

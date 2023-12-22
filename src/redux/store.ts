@@ -29,10 +29,12 @@ import { rolesApi } from "./features/roles/rolesThunk";
 import { permisosApi } from "./features/permisos/PermisosThunk";
 import { gestionApi } from "./features/gestion/gestionThunk";
 import { evaluacionApi } from "./features/evaluaciones/evaluacionesThunk";
+import { globalApi } from "./features/global/globalThunk";
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
+        [globalApi.reducerPath]: globalApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [rolesApi.reducerPath]: rolesApi.reducer,
         [permisosApi.reducerPath]: permisosApi.reducer,
@@ -64,6 +66,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: false })
         .concat(authApi.middleware)
+        .concat(globalApi.middleware)
         .concat(userApi.middleware)
         .concat(rolesApi.middleware)
         .concat(permisosApi.middleware)
