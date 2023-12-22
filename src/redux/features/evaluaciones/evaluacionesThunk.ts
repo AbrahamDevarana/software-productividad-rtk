@@ -185,8 +185,16 @@ export const evaluacionApi = createApi({
             }),
             invalidatesTags: ['Gestion'],
         }),
+        generateAsignacionesEvaluacion: builder.mutation<any, { year: number, quarter: number }>({
+            query: (body) => ({
+                url: `evaluacion/competencias/generate`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Gestion'],
+        }),
     }),
 })
 
 
-export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation,  } = evaluacionApi;
+export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGenerateAsignacionesEvaluacionMutation } = evaluacionApi;

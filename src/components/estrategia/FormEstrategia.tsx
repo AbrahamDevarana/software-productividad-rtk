@@ -356,9 +356,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 >
                     <DatePicker.RangePicker
                         format={"YYYY"}
-                        style={{
-                            width: '150px'
-                        }}
+                        className='w-1/2'
+                        
                         picker='year'
                         clearIcon={false}
                         ref={inputRef}
