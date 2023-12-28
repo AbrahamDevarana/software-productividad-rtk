@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, message, Tooltip, Switch } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import { changeTypeProgressEstrategicoThunk, deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import dayjs from 'dayjs';
 import { PerspectivaProps } from '@/interfaces';
@@ -88,6 +88,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             const updateEstrategico = {
                 ...currentEstrategico,
                 rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
+                tipoProgreso: 'MANUAL',
                 progreso: value
             }
             dispatch(updateEstrategicoThunk(updateEstrategico));  
@@ -186,10 +187,10 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         });
     }
 
-    const handleSetTipo = (type: boolean) => {        
-        // dispatch(changeTypeProgressThunk({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
-        //     message.success('Tipo de progreso cambiado')
-        // })
+    const handleSetTipo = (type: boolean) => {      
+        dispatch(changeTypeProgressEstrategicoThunk({ estrategicoId: currentEstrategico.id, typeProgress: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
+            message.success('Tipo de progreso cambiado')
+        })
     }
   
     
@@ -212,6 +213,9 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     };
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
+
+    console.log(currentEstrategico);
+    
     
     return (
         <>
@@ -267,24 +271,29 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     >
 
                         <div className='flex justify-between items-center'>
+                            <p className='text-devarana-graph font-medium'>Progreso: </p>
                             <div className='flex gap-x-2'>
-                                <p className='text-devarana-graph font-medium'>Progreso: </p>
-                                <div className='flex gap-2 items-center'>
-                                    <Switch size='small'
-                                        className='disabled:cursor-wait'
-                                        checked = {currentEstrategico.tipoProgreso === 'PROMEDIO' ? true : false}
-                                        title='Automatico'     
-                                        disabled={isLoadingProgress}                                       
-                                        onClick={handleSetTipo}
-                                />
+                                <div className='ml-auto flex gap-x-5'>
+                                    <div className='flex gap-2 items-center ml-auto'>
+                                        <Switch size='small'
+                                            className='disabled:cursor-wait'
+                                            checked = {currentEstrategico.tipoProgreso === 'PROMEDIO' ? true : false}
+                                            title='Automatico'     
+                                            disabled={isLoadingProgress}                                       
+                                            onClick={handleSetTipo}
+                                            style={{
+                                                backgroundColor: currentEstrategico.tipoProgreso === 'PROMEDIO' ? '#656A76' : '#A6AFC3',
+                                            }}
+                                        />
+                                        <p className='text-devarana-graph'> { currentEstrategico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                                    </div>
+                                    <Dropdown menu={{items}} overlayClassName='bg-transparent'>
+                                            <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
+                                                <TabStatus status={statusEstrategico} />
+                                            </button>
+                                    </Dropdown>
+                                </div>
                             </div>
-                            <p className='text-devarana-graph'> { currentEstrategico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
-                            </div>
-                            <Dropdown menu={{items}} overlayClassName='bg-transparent'>
-                                    <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
-                                        <TabStatus status={statusEstrategico} />
-                                    </button>
-                            </Dropdown>
                         </div>
                         <div className='inline-flex w-full'>
                             <p className='text-3xl font-bold pr-2' style={{ 

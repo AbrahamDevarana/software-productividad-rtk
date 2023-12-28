@@ -1,17 +1,15 @@
 import { getColor, getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { OperativoProps, SinglePerfilProps } from '@/interfaces'
-import { objetivosTypes, statusType, statusTypes } from '@/types'
+import { objetivosTypes } from '@/types'
 import { Avatar, Image, Modal, Progress, Spin, Switch, Tooltip } from 'antd'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ObjetivoPreview from './ObjetivoPreview'
 import { FaEye } from 'react-icons/fa'
-import { useOperativo } from '@/hooks/useOperativo'
 import { useAppDispatch } from '@/redux/hooks'
 import { cierreObjetivoLiderThunk } from '@/redux/features/operativo/operativosThunk'
 import { useOthersOperativo } from '@/hooks/useOthersOperativo'
-import { ProgressBar } from '@/components/complexUI/ProgressDoughtnut'
 import CountUp from 'react-countup';
 
 interface Props {
@@ -120,6 +118,7 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) =
                                    </>
                                 )
                             }
+                            
                             </div>
                         </div>
                             <div className='flex justify-center gap-x-10'>  
@@ -131,15 +130,25 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) =
                                     )
                             }
                             {
-                                isLeader && (
+                                isLeader && (  statusObjetivo === 'APROBADO' || statusObjetivo === 'PENDIENTE_APROBACION') && (
+
                                 <Switch
                                     onChange={ aprovacionObjetivo }
-                                    disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' )}
+                                    disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' && statusObjetivo !== 'PENDIENTE_AUTORIZAR')}
                                     defaultChecked={ statusObjetivo === 'APROBADO' }
-                                    />
+                                />
                                 )
-                            }
-                            
+                            }    
+                            {
+                                isLeader && (statusObjetivo === 'ABIERTO' || statusObjetivo === 'PENDIENTE_AUTORIZAR') && (
+                                
+                                <Switch
+                                    onChange={ aprovacionObjetivo }
+                                    disabled={ isUpdating || (  statusObjetivo !== 'ABIERTO' && statusObjetivo !== 'PENDIENTE_AUTORIZAR')}
+                                    defaultChecked={ statusObjetivo === 'ABIERTO' }
+                                />
+                                )
+                            }                        
                         </div> 
                 </div>
 

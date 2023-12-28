@@ -21,6 +21,8 @@ export const uploadUrl = Object.freeze({
 
 
 export const objetivosTypes = {
+    NUEVO: 'Nuevo', // Cuando se crea un objetivo
+    PENDIENTE_AUTORIZAR: 'Pendiente de Autorizar', // Cuando se crea un objetivo y se envia a autorizar
     ABIERTO: 'Abierto', // Cuando se crea un objetivo dentro del periodo
     PENDIENTE_APROBACION: 'Pendiente de Aprobación', // Cuando se crea un objetivo y se envia a aprobacion
     APROBADO: 'Aprobado', // Cuando se aprueba un objetivo

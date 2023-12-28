@@ -39,9 +39,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ isEstrategico, setIsEstrategico] = useState(false)
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
-    const [ suggest, setSuggest ] = useState<number>(99)
-
-
     const [progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
 
@@ -344,7 +341,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                             title='Automatico'     
                                             disabled={isLoadingProgress}                                       
                                             onClick={handleSetTipo}
-                                            
+                                            style={{
+                                                backgroundColor: currentTactico.tipoProgreso === 'PROMEDIO' ? '#656A76' : '#A6AFC3',
+                                            }}
                                         />
                                         <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
                                     </div>

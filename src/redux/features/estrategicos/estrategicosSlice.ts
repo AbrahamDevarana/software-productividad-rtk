@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { EstrategicosState } from '@/interfaces';
-import { createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosByAreaThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
+import { changeTypeProgressEstrategicoThunk, createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosByAreaThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
 
 const initialState: EstrategicosState = {
     estrategicos: [],
@@ -148,6 +148,19 @@ const estrategicosSlice = createSlice({
                 state.isLoadingEstrategicosByArea = false
                 state.error = true
             })
+
+            .addCase(changeTypeProgressEstrategicoThunk.pending, (state) => {
+            })
+            .addCase(changeTypeProgressEstrategicoThunk.fulfilled, (state, {payload}) => {
+                const { objetivoEstrategico} = payload
+
+                console.log('payload', payload);
+                
+                state.currentEstrategico.progreso = objetivoEstrategico.progreso
+                state.currentEstrategico.tipoProgreso = objetivoEstrategico.tipoProgreso
+                state.currentEstrategico.suggest = objetivoEstrategico.suggest
+            })
+
     }
 })
 

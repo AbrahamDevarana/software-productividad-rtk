@@ -11,7 +11,7 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
 
 
     switch (status) {
-        case 'ABIERTO':
+        case 'NUEVO':
         case 'SIN_INICIAR':
             color = `rgba(101, 106, 118, ${opacity})`;
             lowColor = `rgba(132, 136, 145, ${opacity})`;
@@ -23,12 +23,14 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             break;
         
         case 'EN_PROCESO':
+        case 'ABIERTO':
             color = `rgba(64, 143, 227, ${opacity})`;
             lowColor = `rgba(9, 103, 201, ${opacity})`;
             break;
         
         case 'FINALIZADO':
         case 'APROBADO':
+        
             color = `rgba(117, 221, 123, ${opacity})`;
             lowColor = `rgba(17, 195, 28, ${opacity})`;
             break;
@@ -39,6 +41,7 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             lowColor = `rgba(203, 0, 7, ${opacity})`;
             break;
         case 'PENDIENTE_APROBACION':
+        case 'PENDIENTE_AUTORIZAR':
         case 'RETRASADO':
             color = `rgba(238, 152, 25, ${opacity})`;
             lowColor = `rgba(243, 184, 96, ${opacity})`;

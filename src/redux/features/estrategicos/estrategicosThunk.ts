@@ -10,12 +10,6 @@ import { clientAxios } from '@/config/axios';
 interface Props {
     objetivoEstrategico: EstrategicoProps
     objetivosEstrategicos: EstrategicoProps[]
-    // objetivosEstrategicos: {
-    //     rows: EstrategicoProps[]
-    //     totalItem: number
-    //     totalPages: number
-    //     currentPage: number
-    // }
 }
 
 export const getEstrategicosThunk = createAsyncThunk(
@@ -128,6 +122,26 @@ export const getEstrategicosByAreaThunk = createAsyncThunk(
     }
 )
 
+
+export const changeTypeProgressEstrategicoThunk = createAsyncThunk(
+    'estrategicos/changeTypeProgressEstrategico',
+    async ({estrategicoId, typeProgress}: {estrategicoId: string, typeProgress: string}, { rejectWithValue, getState }) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: { typeProgress }
+            }
+            const params = { estrategicoId, typeProgress }
+            
+            const response = await clientAxios.put(`/estrategicos/changeTypeProgress`, params, config);            
+            return response.data
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 
 export const clearEstrategicosThunk = () => {

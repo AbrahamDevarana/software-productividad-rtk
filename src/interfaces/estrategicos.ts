@@ -25,6 +25,7 @@ export interface EstrategicoProps {
     fechaInicio: Date;
     fechaFin: Date;
     status: statusType;
+    tipoProgreso: 'MANUAL' | 'PROMEDIO'
     indicador: string;
     perspectivaId: string;
     perspectivas: PerspectivaProps;
@@ -34,7 +35,6 @@ export interface EstrategicoProps {
     propietario?: UsuarioProps;
     comentarios: ComentarioProps[];
     suggest: number;
-    tipoProgreso: 'MANUAL' | 'PROMEDIO'
 }
 
 

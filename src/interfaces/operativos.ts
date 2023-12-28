@@ -25,7 +25,7 @@ export interface OperativoProps {
     operativosResponsable: CustomUsuarioProps[];
     propietarioId:   string;
     resultadosClave: ResultadoClaveProps[];
-    status:          'ABIERTO' | 'POR_APROBAR' | 'CERRADO';
+    status:          'NUEVO' | 'POR_AUTORIZAR' | 'ABIERTO' | 'POR_APROBAR' | 'CERRADO';
     year:            number;
     quarter:         number;
 }

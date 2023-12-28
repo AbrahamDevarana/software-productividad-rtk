@@ -94,7 +94,7 @@
 	return (
 		<div>
 			<div className='text-center font-mulish pb-5'>
-				<h1 className='text-2xl text-devarana-dark-graph'>Total</h1>
+				<h1 className='text-2xl text-devarana-dark-graph'>Ponderación de Objetivos</h1>
 				<p className='text-devarana-graph'>{total} / 100 %</p>
 			</div>
 			<div className='rounded-ext border mb-5'>
@@ -118,7 +118,12 @@
 						max={100}
 						value={ponderacion.progresoAsignado}
 						onChange={e => handleChange(ponderacion.objetivoId, Number(e.target.value))}
-						disabled={isActive(ponderacion.objetivoId) === 'CERRADO'}
+						disabled={
+							isActive(ponderacion.objetivoId) === 'CERRADO' ||
+							isActive(ponderacion.objetivoId) === 'PENDIENTE_APROBACION' ||
+							isActive(ponderacion.objetivoId) === 'PENDIENTE_AUTORIZAR' ||
+							isActive(ponderacion.objetivoId) === 'ABIERTO'
+						}
 					/>
 					</div>
 				</div>

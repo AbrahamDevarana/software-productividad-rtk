@@ -98,6 +98,9 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
       
     };
 
+    console.log('statusObjetivo', objetivo);
+    
+
     return (
         <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
             {
@@ -160,11 +163,40 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                 )
                             }
                             {
-                               ( usuarioPropietaro?.id === userAuth?.id ) && (
+                                ( usuarioPropietaro?.id === userAuth?.id ) &&
+                                ( objetivo.status === 'ABIERTO' || objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR')
+                                && (
+                                        <Tooltip
+                                            title={
+                                                ( objetivo.status === 'CERRADO' ) ? 'El objetivo ya se encuentra cerrado' : 
+                                                ( objetivo.status === 'POR_APROBAR' ) ? 'El objetivo ya se encuentra en proceso de aprobación' : 'Enviar a aprobación'
+                                            }
+                                        >
+                                            <Space>
+                                                <Switch
+                                                    
+                                                    size='small'
+                                                    checked={
+                                                        ( objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR' ) ? true : false
+                                                    } 
+                                                    disabled={ (objetivo.status === 'CERRADO' ) ? true : false }
+                                                    onChange={ showConfirm }
+                                                    style={{
+                                                        backgroundColor: ( objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR' ) ? '#656A76' : '#A6AFC3',
+                                                    }}
+                                                />
+                                                <span className='text-devarana-graph'> Cierre </span>
+                                            </Space>
+                                        </Tooltip>
+                                )
+                            }
+                            {
+                                ( usuarioPropietaro?.id === userAuth?.id ) &&
+                                ( objetivo.status === 'POR_AUTORIZAR' || objetivo.status === 'NUEVO' ) && 
+                                (
                                     <Tooltip
                                         title={
-                                            ( objetivo.status === 'CERRADO' ) ? 'El objetivo ya se encuentra cerrado' : 
-                                            ( objetivo.status === 'POR_APROBAR' ) ? 'El objetivo ya se encuentra en proceso de aprobación' : 'Enviar a aprobación'
+                                            ( objetivo.status === 'POR_AUTORIZAR' ) ? 'El objetivo ya se encuentra en proceso de aprobación' : 'Enviar a aprobación'
                                         }
                                     >
                                         <Space>
@@ -172,15 +204,18 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                                 
                                                 size='small'
                                                 checked={
-                                                    ( objetivo.status === 'CERRADO' || objetivo.status === 'POR_APROBAR' ) ? true : false
+                                                    ( objetivo.status === 'POR_AUTORIZAR' ) ? true : false
                                                 } 
-                                                disabled={ (objetivo.status === 'CERRADO' ) ? true : false }
                                                 onChange={ showConfirm }
+                                                style={{
+                                                    backgroundColor: ( objetivo.status === 'POR_AUTORIZAR' ) ? '#656A76' : '#A6AFC3',
+                                                }}
                                             />
-                                            <span className='text-devarana-graph'> Cierre </span>
+                                            <span className='text-devarana-graph'> Abrir </span>
                                         </Space>
                                     </Tooltip>
                                 )
+                                
                             }
                             </div>
                         </div>
