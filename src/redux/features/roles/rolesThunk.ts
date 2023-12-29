@@ -1,6 +1,6 @@
 import { baseQuery } from "@/config/baseQuery";
-import { RoleProps, RoleWithPermisosProps } from "@/interfaces/rol";
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { RoleProps, RoleWithPermisosProps } from "@/interfaces/rol";
 
 
 interface Props {

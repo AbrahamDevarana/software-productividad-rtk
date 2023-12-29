@@ -5,6 +5,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+
+
 interface Props {
     perspectivas: PerspectivaProps[]
     perspectiva: PerspectivaProps
@@ -113,3 +117,58 @@ export const clearCurrentPerspectivaThunk = () => {
         dispatch( clearCurrentPerspectiva() )        
     }   
 }
+
+
+
+// Path: src/redux/features/perspectivas/perspectivasSlice.ts
+
+
+export const perspectivasApi = createApi({
+    reducerPath: 'perspectivasApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Perspectivas'],
+    endpoints: (builder) => ({
+        getPerspectivas: builder.query({
+            query: (filtros: any) => ({
+                url: `/perspectivas`,
+                params: filtros
+            }),
+            transformResponse: (response: { perspectivas: PerspectivaProps[] }) => response.perspectivas,
+            providesTags: ['Perspectivas']
+        }),
+        getPerspectiva: builder.query({
+            query: (perspectivaId: number) => `/perspectivas/${perspectivaId}`,
+            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+            providesTags: ['Perspectivas']
+        }),
+        createPerspectiva: builder.mutation({
+            query: (perspectiva: PerspectivaProps) => ({
+                url: `/perspectivas`,
+                method: 'POST',
+                body: perspectiva
+            }),
+            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+            invalidatesTags: ['Perspectivas'],
+        }),
+        updatePerspectiva: builder.mutation <PerspectivaProps, Partial<PerspectivaProps> & Pick<PerspectivaProps, 'id'>> ({
+            query: ({id, ...perspectiva}: PerspectivaProps) => ({
+                url: `/perspectivas/${id}`,
+                method: 'PUT',
+                body: perspectiva
+            }),
+            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+            invalidatesTags: ['Perspectivas']
+        }),
+        deletePerspectiva: builder.mutation({
+            query: (perspectivaId: number) => ({
+                url: `/perspectivas/${perspectivaId}`,
+                method: 'DELETE'
+            }),
+            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+            invalidatesTags: ['Perspectivas']
+        })
+    })
+})
+
+export const { useGetPerspectivasQuery, useGetPerspectivaQuery, useCreatePerspectivaMutation, useUpdatePerspectivaMutation, useDeletePerspectivaMutation } = perspectivasApi;
+

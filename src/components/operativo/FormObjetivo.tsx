@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import {  TacticoProps } from '@/interfaces'
-import {  } from '@/redux/features/tacticos/tacticosThunk'
+import { useGetTacticosQuery } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton, Tooltip } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
-import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks'
+import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
 import { Button, Proximamente } from '../ui'
 import { useSelectUser } from '@/hooks/useSelectUser'
 import { BsFillCalendarFill } from 'react-icons/bs'
-import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk'
+import { getPerspectivasThunk, useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk'
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk'
 import { DefaultOptionType } from 'antd/es/select'
 import { useOperativo } from '@/hooks/useOperativo'
@@ -27,21 +27,21 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
-    const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { estrategicos } = useAppSelector(state => state.estrategicos)
     const { objetivosTacticos } = useAppSelector(state => state.tacticos)
-    const { usuarios } = useAppSelector(state => state.usuarios)
     const { userAuth } = useAppSelector(state => state.auth)
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
 
     const [filteredObjetivosTacticos, setFilteredObjetivosTacticos] = useState<TacticoProps[]>(objetivosTacticos)
     const [filteredEstrategicos, setFilteredEstrategicos] = useState(estrategicos)
 
+    const { data: perspectivas } = useGetPerspectivasQuery({ year })
+    const { data: usuarios} = useGetUsuariosQuery({})
+
 
     useEffect(() => {
         dispatch(getPerspectivasThunk({ year }))
         dispatch(getEstrategicosThunk({ year }))
-        // dispatch(getTacticosThunk({ year }))
         dispatch(getUsuariosThunk({}))
     }, [])
 
@@ -84,20 +84,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     
 
     const handlePerspectivaChange = (value: string) => {
-        form.setFieldValue('estrategicoId', null)
-        form.setFieldValue('tacticoId', null)
-
-
-        if( value === null ) {
-            handleClear()
-        } else {
-            setFilteredEstrategicos(estrategicos.filter((estrategico) => estrategico.perspectivaId === value))
-            setFilteredObjetivosTacticos(objetivosTacticos.filter((tactico) => tactico.estrategico?.perspectivaId === value))
-
-            
-        }
-
-       
+        const { data } = useGetTacticosQuery({ year, quarter })
+        
     }
 
     const handleEstrategico = (value: string) => {
@@ -180,7 +168,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         className='col-span-6'
                         name='propietarioId'
                         rules={[{ required: true, message: 'Por favor selecciona al propietario' }]}
-                        // shouldUpdate = {(prevValues, curValues) => prevValues.propietarioId !== curValues.propietarioId}
+                        tooltip='El propietario es el responsable de la ejecución del objetivo'
                     >
                         <Select
                             style={{ width: '100%' }}
@@ -198,7 +186,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                             filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                         >
                             {
-                                usuarios.map(usuario => (
+                                usuarios?.map(usuario => (
                                     <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                                 ))
 
@@ -209,7 +197,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     className='col-span-6'
                     label="Co-Responsables:"
                     name="operativosResponsable"
-                    // shouldUpdate = {(prevValues, curValues) => prevValues.operativosResponsable !== curValues.operativosResponsable}
+                    tooltip='Los co-responsables son los colaboradores que apoyan al propietario en la ejecución del objetivo'
                     >
                     <Select
                         mode="multiple"
@@ -226,7 +214,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {                            
-                            usuarios.map(usuario => (
+                            usuarios?.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                             ))
                           
@@ -260,10 +248,11 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                 </Form.Item>
 
-                {/* <Form.Item
+                 <Form.Item
                     className='col-span-6'
                     label="Perspectiva"
                     name="perspectivaId"
+                    tooltip='La perspectiva es el área de la empresa a la que contribuye el objetivo'
                 >
                    
                    <Select
@@ -273,7 +262,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                         onClear={handleClear}
                         allowClear
                         options={
-                            perspectivas.map((perspectiva) => ({
+                            perspectivas?.map((perspectiva) => ({
                                 label: (
                                 <Tooltip title={perspectiva.nombre}>
                                     <p className='text-devarana-graph'>{perspectiva.nombre}</p>
@@ -285,6 +274,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     />
                 </Form.Item>
 
+                {/*
                 <Form.Item
                     className='col-span-6'
                     label="Objetivo Estrategico"

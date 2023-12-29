@@ -1,9 +1,8 @@
 import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { unwrapResult } from '@reduxjs/toolkit';
 import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Spin, Table, Tooltip, message } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
 import type { ColumnsType } from 'antd/es/table';
 import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "@/redux/features/tasks/tasksThunk";
@@ -19,6 +18,9 @@ import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
 import { PopoverPrioridad } from "./PopoverPrioridad";
 import { Prioridad, styles, taskStatusTypes } from "@/types";
 import { PopoverEstado } from "./PopoverEstado";
+import { TaskProgress } from "../tareas/TaskProgressBar";
+import { TaskCheckbox } from "../tareas/TaskCheckbox";
+
 
 interface Props {
     currentOperativo: OperativoProps,
@@ -32,10 +34,13 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
     const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
     const [messageApi, contextHolder] = message.useMessage();
+    const [progreso, setProgreso] = useState<number>(0)
+    
 
     const { year, quarter } = currentOperativo
     
 
+    
 
 
     useEffect(() => {
@@ -189,15 +194,22 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
             width: 120,
         },
         {
+            title: () => ( <p className='tableTitle text-right'>Avance</p>),
+            render: (text, record, index) => {
+                return (
+                    <div className="flex justify-end">
+                        <TaskProgress record={record} disabled={isClosed}/>
+                    </div>
+                )
+            },
+            width: 200,
+        },
+        {
             title: () => ( <p className='tableTitle text-right'>Completado</p>),
             render: (text, record, index) => {
                 return (
                     <div className="flex justify-end">
-                        <Checkbox
-                            disabled={isClosed}
-                            defaultChecked={record.status ===  'FINALIZADO' ? true : false} 
-                            onChange={(e) => handleUpdateStatus(record, e.target.checked ? 'FINALIZADO' : 'SIN_INICIAR')}
-                        />  
+                        <TaskCheckbox record={record} disabled={isClosed}/>  
                     </div>
                 )
             },
@@ -298,6 +310,7 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         </div>
     )
 
+
     //* FORM
 
 
@@ -308,6 +321,7 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
             messageApi.error('Hubo un error al eliminar la acción.')
         })
     }
+    
 
     const handleUpdateStatus = async (task: TaskProps, status: any) => {
         const query = {

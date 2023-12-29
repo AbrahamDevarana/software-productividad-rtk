@@ -8,6 +8,7 @@ export interface TaskProps {
     propietarioId: string;
     fechaFin:      string;
     taskeableId:    string;
+    progreso:      number;
     status:        'SIN_INICIAR' | 'EN_PROCESO' | 'FINALIZADO' | 'CANCELADO';
     propietario:   SinglePerfilProps;
 }

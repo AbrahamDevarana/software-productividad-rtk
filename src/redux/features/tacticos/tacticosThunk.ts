@@ -5,6 +5,12 @@ import { clearCurrentTactico, clearTacticos } from './tacticosSlice';
 import { CoreProps, TacticoProps } from '@/interfaces';
 import { clientAxios } from '@/config/axios';
 
+
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+
+
+
 interface Props {
     objetivosTacticos: TacticoProps[]
     objetivoTactico: TacticoProps
@@ -195,6 +201,98 @@ export const clearCurrentTacticoThunk = () => {
 }
 
 
+
+export const tacticosApi = createApi({
+    reducerPath: 'tacticosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Tacticos'],
+    endpoints: (builder) => ({
+        getTacticosByEstrategia: builder.query({
+            query: ({estrategicoId, year, showOnlyMe, ...props}: {estrategicoId: string, year: number, showOnlyMe: boolean}) => ({
+                url: `/tacticos/byEstrategia`,
+                params: { estrategicoId, year, showOnlyMe, ...props}
+            }),
+            transformResponse: (response: { objetivosTacticos: TacticoProps[] }) => response.objetivosTacticos,
+            providesTags: ['Tacticos']
+        }),
+        getTacticosByEquipos: builder.query({
+            query: ({departamentoId, year, showOnlyMe}: {departamentoId: number | string, year: number, showOnlyMe: boolean}) => ({
+                url: `/tacticos/byEquipo`,
+                params: { departamentoId, year, showOnlyMe}
+            }),
+            transformResponse: (response: { objetivosTacticos: TacticoProps[] }) => response.objetivosTacticos,
+            providesTags: ['Tacticos']
+        }),
+        getTacticosByEquipoCore: builder.query({
+            query: ({departamentoId, year, showOnlyMe}: {departamentoId: number | string, year: number, showOnlyMe: boolean}) => ({
+                url: `/tacticos/byEquipoCore`,
+                params: { departamentoId, year, showOnlyMe}
+            }),
+            transformResponse: (response: { objetivosTacticos: TacticoProps[] }) => response.objetivosTacticos,
+            providesTags: ['Tacticos']
+        }),
+        getTacticos: builder.query({
+            query: (filtros: any) => ({
+                url: `/tacticos`,
+                params: filtros
+            }),
+            transformResponse: (response: { objetivosTacticos: TacticoProps[] }) => response.objetivosTacticos,
+            providesTags: ['Tacticos']
+        }),
+        getTactico: builder.query({
+            query: (tacticosId: string) => `/tacticos/${tacticosId}`,
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            providesTags: ['Tacticos']
+        }),
+        createTactico: builder.mutation({
+            query: ({year, estrategicoId, slug}: { year: number, estrategicoId?: string, slug: string }) => ({
+                url: `/tacticos`,
+                method: 'POST',
+                body: { year, estrategicoId, slug }
+            }),
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            invalidatesTags: ['Tacticos'],
+        }),
+        deleteTactico: builder.mutation({
+            query: (tacticosId: string) => ({
+                url: `/tacticos/${tacticosId}`,
+                method: 'DELETE'
+            }),
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            invalidatesTags: ['Tacticos']
+        }),
+        updateTactico: builder.mutation <TacticoProps, Partial<TacticoProps> & Pick<TacticoProps, 'id'>> ({
+            query: ({id, ...tactico}: TacticoProps) => ({
+                url: `/tacticos/${id}`,
+                method: 'PUT',
+                body: tactico
+            }),
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            invalidatesTags: ['Tacticos']
+        }),
+        updateTacticoType: builder.mutation <TacticoProps, Partial<TacticoProps> & Pick<TacticoProps, 'id'>> ({
+            query: ({id, ...tactico}: TacticoProps) => ({
+                url: `/tacticos/${id}`,
+                method: 'PUT',
+                body: tactico
+            }),
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            invalidatesTags: ['Tacticos']
+        }),
+        changeTypeProgress: builder.mutation <TacticoProps, Partial<TacticoProps> & Pick<TacticoProps, 'id'>> ({
+            query: ({id, ...tactico}: TacticoProps) => ({
+                url: `/tacticos/${id}`,
+                method: 'PUT',
+                body: tactico
+            }),
+            transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
+            invalidatesTags: ['Tacticos']
+        }),
+    })
+
+})
+
+export const { useGetTacticosQuery } = tacticosApi;
 
 
 // TODO: No esta funcionando

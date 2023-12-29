@@ -1,10 +1,9 @@
 import  { useMemo } from 'react';
 import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm, message } from 'antd';
 import dayjs from 'dayjs';
-import { BsFillCalendarFill, BsThreeDots } from 'react-icons/bs';
+import { BsThreeDots } from 'react-icons/bs';
 import { deleteResultadoThunk, duplicateResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { useSelectUser } from '@/hooks/useSelectUser';
 import { OperativoProps, ResultadoClaveProps } from '@/interfaces';
 import { Link } from 'react-router-dom';
 import { getColor, getStorageUrl } from '@/helpers';
@@ -211,7 +210,8 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                         format={() => <CountUp style={{
                             fontSize: '10px',
                             fontWeight: 'bold',
-                        }}  className={`${resultado.progreso > 90? 'text-white' : 'text-devarana-graph' }`} end={resultado.progreso} duration={1} suffix='%' decimals={2} decimal='.' />}                                 
+                            color: '#fff'
+                        }} end={resultado.progreso} duration={1} suffix='%' decimals={2} decimal='.' />}                                 
                     />
                 </Popover>
             </div>
@@ -235,8 +235,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                     defaultValue={[dayjs(resultado.fechaInicio), dayjs(resultado.fechaFin)]}
                     disabledDate={disabledDate}
                     disabled={isClosed}
-                    
-
+                    clearIcon={null}
                 />
 
             </div>

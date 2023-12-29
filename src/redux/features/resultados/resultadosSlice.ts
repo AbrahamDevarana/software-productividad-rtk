@@ -144,7 +144,7 @@ const resultadoClaveSlice = createSlice({
                     resultadoClave.task = [...resultadoClave.task, payload]
                    
                     if( resultadoClave.tipoProgreso === 'acciones'){
-                        (resultadoClave.progreso = resultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / resultadoClave.task.length * 100).toFixed(2)
+                        (resultadoClave.progreso = resultadoClave.task.reduce((acc, task) => acc + task.progreso, 0) / resultadoClave.task.length).toFixed(2)
                     }
                 }
             })
@@ -162,7 +162,7 @@ const resultadoClaveSlice = createSlice({
 
                 if( updatedResultadoClave.tipoProgreso === 'acciones'){
                     const taskLength = updatedResultadoClave.task.filter(task => task.status !== 'CANCELADO').length
-                    updatedResultadoClave.progreso = (updatedResultadoClave.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / taskLength * 100)
+                    updatedResultadoClave.progreso = updatedResultadoClave.task.reduce((acc, task) => acc + task.progreso, 0) / taskLength
                 }
                 
                     

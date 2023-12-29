@@ -30,6 +30,8 @@ import { permisosApi } from "./features/permisos/PermisosThunk";
 import { gestionApi } from "./features/gestion/gestionThunk";
 import { evaluacionApi } from "./features/evaluaciones/evaluacionesThunk";
 import { globalApi } from "./features/global/globalThunk";
+import { perspectivasApi } from "./features/perspectivas/perspectivasThunk";
+import { tacticosApi } from "./features/tacticos/tacticosThunk";
 
 export const store = configureStore({
     reducer: {
@@ -40,6 +42,8 @@ export const store = configureStore({
         [permisosApi.reducerPath]: permisosApi.reducer,
         [gestionApi.reducerPath]: gestionApi.reducer,
         [evaluacionApi.reducerPath]: evaluacionApi.reducer,
+        [perspectivasApi.reducerPath]: perspectivasApi.reducer,
+        [tacticosApi.reducerPath]: tacticosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -71,8 +75,10 @@ export const store = configureStore({
         .concat(rolesApi.middleware)
         .concat(permisosApi.middleware)
         .concat(gestionApi.middleware)
-        .concat(evaluacionApi.middleware),
-        devTools: true
+        .concat(evaluacionApi.middleware)
+        .concat(perspectivasApi.middleware)
+        .concat(tacticosApi.middleware),
+        devTools: process.env.NODE_ENV === 'development',
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -97,10 +97,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
 
       
     };
-
-    console.log('statusObjetivo', objetivo);
     
-
     return (
         <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
             {
