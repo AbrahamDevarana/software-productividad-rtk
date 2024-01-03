@@ -70,7 +70,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
             })
         }else {
             confirm({
-                title: <p>¿ Confirmas que deseas abrir el objetivo ?</p>,
+                title: <p className='text-devarana-dark-graph'>¿ Confirmas que deseas abrir el objetivo ?</p>,
                 width: 600,
                 okButtonProps: {
                     danger: true
@@ -78,7 +78,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                 okText: 'Abrir',
                 cancelText: 'Volver',
                 content: 
-                <div>
+                <div className='text-devarana-graph'>
                     <p> 
                         Al habilitar esto los participantes no podrán realizar el cierre de ciclo
                     </p>
@@ -97,6 +97,68 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
 
       
     };
+
+    const showConfirmOpen = (checked: boolean) => {
+       if(checked){
+            confirm({
+                title: <p className='text-devarana-dark-graph'>¿ Confirmas que deseas enviar a aprobación el objetivo ?</p>,
+                width: 600,
+                okButtonProps: {
+                    danger: true
+                },
+                okText: 'Abrir',
+                cancelText: 'Volver',
+                content: 
+                <div className='text-devarana-graph'>
+                    <p className='text-devarana-graph'>
+                        Te sugerimos considerar los siguientes aspectos:
+                    </p>
+                    <ul style={{
+                            listStyle: 'disc',
+                            listStylePosition: 'inside',
+                        }}>
+                        <li>Al realizar esto no podrás modificarlo, sin la autorización de tu lider</li>
+                        <li>Una vez enviado a aprobación, el objetivo está listo para ser revisado y autorizado por tu líder.</li>
+                    </ul>
+                    
+                </div>,
+                async onOk() {
+                await dispatch(cerrarObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
+                        message.success('Objetivo abierto correctamente')
+                })
+                },
+                onCancel() {
+                    console.log('Cancel');  
+                },
+            })
+       }else{
+            confirm({
+                title: <p className='text-devarana-dark-graph'>¿ Confirmas que deseas abrir el objetivo ?</p>,
+                width: 600,
+                okButtonProps: {
+                    danger: true
+                },
+                okText: 'Abrir',
+                cancelText: 'Volver',
+                content: 
+                <div>
+                    <p> 
+                        Al hacer esto podrás modificarlo nuevamente
+                    </p>
+                    
+                </div>,
+                async onOk() {
+                await dispatch(cerrarObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
+                        message.success('Objetivo abierto correctamente')
+                })
+                },
+                onCancel() {
+                    console.log('Cancel');  
+                },
+            })
+       }
+    }
+
     
     return (
         <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
@@ -152,7 +214,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                     <span> Ver </span> 
                                 </Link>
                             {
-                                ( usuarioPropietaro?.id === userAuth?.id && objetivo.status === 'ABIERTO'  ) && (
+                                ( usuarioPropietaro?.id === userAuth?.id && objetivo.status === 'NUEVO'  ) && (
                                     <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
                                         <Icon iconName='faEdit'/>
                                         <span> Editar </span>
@@ -203,7 +265,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                                 checked={
                                                     ( objetivo.status === 'POR_AUTORIZAR' ) ? true : false
                                                 } 
-                                                onChange={ showConfirm }
+                                                onChange={ showConfirmOpen }
                                                 style={{
                                                     backgroundColor: ( objetivo.status === 'POR_AUTORIZAR' ) ? '#656A76' : '#A6AFC3',
                                                 }}
