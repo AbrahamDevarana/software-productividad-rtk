@@ -26,8 +26,8 @@ interface Props {
 
 
 export const FormEstrategia= ({handleCloseDrawer}:Props) => {
-
     const dispatch = useAppDispatch()    
+    const { currentConfig:{ year } } = useAppSelector(state => state.global)
     const { currentEstrategico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { permisos, userAuth } = useAppSelector(state => state.auth)
@@ -59,6 +59,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         const query =  {
             ...currentEstrategico,
             ...form.getFieldsValue(),
+            rangeDate: [dayjs(form.getFieldValue('fechaInicio')), dayjs(form.getFieldValue('fechaFin'))],
+            year: year,
         }
 
         delete query.status
@@ -89,7 +91,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 ...currentEstrategico,
                 rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
                 tipoProgreso: "MANUAL",
-                progreso: value
+                progreso: value,
+                year: year,
             }
             // @ts-ignore
             dispatch(updateEstrategicoThunk(updateEstrategico));  
@@ -100,7 +103,9 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         setStatusEstrategico(value); 
         const updateEstrategico = {
             ...currentEstrategico,
-            status: value
+            status: value,
+            rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
+            year: year,
         }
         
         dispatch(updateEstrategicoThunk(updateEstrategico));       
@@ -109,7 +114,9 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const handleChangePerspectiva = (value: string) => {
         const updateEstrategico = {
             ...currentEstrategico,
-            perspectivaId: value
+            perspectivaId: value,
+            year: year,
+            rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
         }
         dispatch(updateEstrategicoThunk(updateEstrategico));
     }
@@ -215,8 +222,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
-    console.log(currentEstrategico);
-    
     
     return (
         <>
