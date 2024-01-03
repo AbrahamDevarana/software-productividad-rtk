@@ -214,7 +214,7 @@ export const CardObjetivo: FC<Props> = ({objetivo, setFormVisible}) => {
                                     <span> Ver </span> 
                                 </Link>
                             {
-                                ( usuarioPropietaro?.id === userAuth?.id && objetivo.status === 'NUEVO'  ) && (
+                                ( usuarioPropietaro?.id === userAuth?.id && (objetivo.status === 'NUEVO' || objetivo.status === 'ABIERTO') ) && (
                                     <Space onClick={ () => handleEditObjetivo(objetivo.id) } className='cursor-pointer text-devarana-graph hover:opacity-80'  >
                                         <Icon iconName='faEdit'/>
                                         <span> Editar </span>
