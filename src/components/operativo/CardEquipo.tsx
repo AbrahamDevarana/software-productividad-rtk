@@ -36,9 +36,9 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
                     Ver perfil
                 </Link>
             {
-                usuario.leaderId !== userAuth?.id && (
-                    <></>
-                    // <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
+                usuario.leaderId === userAuth?.id && (
+                    // <></>
+                    <p className='text-devarana-blue font-medium cursor-pointer hover:bg-devarana-graph hover:bg-opacity-20 px-2 py-1 transition-all duration-100 ease-in-out rounded-ext' onClick={() => handleOpenAdmin(usuario)}>Evaluar</p>
                 )
             }
         </div>
