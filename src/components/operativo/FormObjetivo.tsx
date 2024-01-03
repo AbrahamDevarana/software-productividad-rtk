@@ -248,7 +248,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                 </Form.Item>
 
-                 <Form.Item
+                 {/* <Form.Item
                     className='col-span-6'
                     label="Perspectiva"
                     name="perspectivaId"
@@ -272,7 +272,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                             }))
                         }
                     />
-                </Form.Item>
+                </Form.Item> */}
 
                 {/*
                 <Form.Item
