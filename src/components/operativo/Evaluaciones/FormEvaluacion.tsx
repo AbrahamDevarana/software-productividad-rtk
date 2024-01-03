@@ -4,7 +4,7 @@ import { PerfilProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Avatar, Divider, Image, Input, Rate, Segmented, Skeleton, Space, Spin, Steps, Tooltip, message } from "antd";
 import { SegmentedValue } from "antd/es/segmented";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EncuestaPresentada } from "./EncuestaPresentada";
 import { EncuestaPreguntas } from "./EncuestaPreguntas";
 import { getEvaluacionThunk } from "@/redux/features/evaluaciones/evaluacionesThunk";
@@ -28,7 +28,7 @@ interface Respuesta {
 const FormEvaluacion = ({perfil}: Props) => {
 
     
-    const { isLoading, evaluacionLider, evaluacionPropia, evaluacionColaborador ,evaluacion } = useAppSelector(state => state.evaluaciones)
+    const { isLoading, evaluacionLider, evaluacionPropia, evaluacionColaborador, evaluacion } = useAppSelector(state => state.evaluaciones)
     const [fetching, setFetching] = useState(false);
     const { periodControls: nextPeriodAvailable, currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ activeEvaluate, setActiveEvaluate ] = useState<string | number>('')
@@ -52,12 +52,25 @@ const FormEvaluacion = ({perfil}: Props) => {
         return activeEvaluate === evaluacionLider?.id
     }, [activeEvaluate, evaluacionLider])
 
+
+    useEffect(() => {
+        const storedRespuestas = localStorage.getItem(`res-${activeEvaluate}`);
+        if (storedRespuestas) {
+            setRespuestas(JSON.parse(storedRespuestas));
+        }
+    }, [activeEvaluate]);
+
+    useEffect(() => {
+        localStorage.setItem(`res-${activeEvaluate}`, JSON.stringify(respuestas));
+    }, [respuestas, activeEvaluate]);
+
     if(!evaluacionPropia?.id && !evaluacionLider?.id && evaluacionColaborador?.length === 0) return ( 
         <div className="text-center py-5 px-2">
             <p className="text-2xl text-devarana-graph">Parece que no tienes evaluaciones disponibles.</p>
             <p className="text-devarana-graph">Consulta a Capital Humano.</p>
         </div>
     )
+    
 
     return (
     <>

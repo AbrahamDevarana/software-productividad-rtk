@@ -21,7 +21,7 @@ export const OperativoView = () => {
     const [value, setValue] = useState<SegmentTypes>('listado');
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
     const { resultadosClave } = useAppSelector(state => state.resultados)
-    const [isCreating , setIsCreating] = useState(false)
+    const [ isCreating , setIsCreating ] = useState(false)
 
     const options = [
         {

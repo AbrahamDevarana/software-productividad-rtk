@@ -5,6 +5,7 @@ export const calcularEtapaActual = (objeto: any) => {
       return {
         etapaActual: "Sin Iniciar",
         color: getColor('SIN_INICIAR').color,
+		isClosed: false
       }
     }
 
@@ -23,35 +24,43 @@ export const calcularEtapaActual = (objeto: any) => {
 
     let etapaActual = '';
     let color = getColor('SIN_INICIAR').color;
-
+	let isClosed = false;
+	
 
 	if (currentDate >= ejecucionInicio && currentDate <= ejecucionFin) {
 		etapaActual = "En Curso";
 		color = getColor('EN_PROCESO').color;
-		
-		if (currentDate >= periodoDefinicionInicio && currentDate <= periodoDefinicionFin) {
-			etapaActual = "Periodo de Definición";
-			color = getColor('EN_TIEMPO').color;
-		} else if (currentDate >= revisionIntermediaInicio && currentDate <= revisionIntermediaFin) {
-			etapaActual = "Revisión Intermedia";
-			color = getColor('EN_PROCESO').color;
-		} else if (currentDate >= cierreObjetivosInicio && currentDate <= cierreObjetivosFin) {
-			etapaActual = "Cierre de Período";
-			color = getColor('RETRASADO').color;
-		} else if (
-			currentDate >= cierreEvaluacionCompetenciasInicio &&
-			currentDate <= cierreEvaluacionCompetenciasFin
-		) {
-			etapaActual = "Cierre de Evaluación de Competencias";
-			color = getColor('RETRASADO').color;
-		}
+	}
+	// Si la fecha actual está entre el periodo de definición
+	if (currentDate >= periodoDefinicionInicio && currentDate <= periodoDefinicionFin) {
+		etapaActual = "Periodo de Definición";
+		color = getColor('EN_TIEMPO').color;
 
-    } else {
+	// Si la fecha actual está entre el periodo de ejecución
+	} else if (currentDate >= revisionIntermediaInicio && currentDate <= revisionIntermediaFin) {
+		etapaActual = "Revisión Intermedia";
+		color = getColor('EN_PROCESO').color;
+	
+	// Si la fecha actual está entre el periodo de cierre de objetivos
+	} else if (currentDate >= cierreObjetivosInicio && currentDate <= cierreObjetivosFin) {
+		etapaActual = "Cierre de Período";
+		color = getColor('RETRASADO').color;
+	} else if (
+		currentDate >= cierreEvaluacionCompetenciasInicio &&
+		currentDate <= cierreEvaluacionCompetenciasFin
+	) {
+		etapaActual = "Cierre de Evaluación de Competencias";
+		color = getColor('RETRASADO').color;
+
+	}
+
+    else if (currentDate > cierreEvaluacionCompetenciasFin || currentDate < periodoDefinicionInicio) {
 		etapaActual = "Período Cerrado";
 		color = getColor('FINALIZADO').color;
+		isClosed = true;
     }
   
 
-    return { etapaActual, color };
+    return { etapaActual, color, isClosed };
 
 };

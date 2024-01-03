@@ -91,6 +91,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 tipoProgreso: "MANUAL",
                 progreso: value
             }
+            // @ts-ignore
             dispatch(updateEstrategicoThunk(updateEstrategico));  
         }  
     }

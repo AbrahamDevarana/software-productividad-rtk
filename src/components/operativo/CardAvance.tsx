@@ -17,10 +17,14 @@ import useCalculoBono from '@/hooks/useBono';
 interface Props {
     operativos: OperativoProps[]
     periodos: any
+    etapa: {
+        etapaActual: string,
+        color: string,
+        isClosed: boolean
+    }
 }
 export const CardAvance = ( { operativos, periodos }: Props ) => {
 
-    const { periodControls: { preEvaluationDays, postClosureDays}, currentConfig: { currentDate, quarter, year } } = useAppSelector(state => state.global)
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
     const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
@@ -37,9 +41,6 @@ export const CardAvance = ( { operativos, periodos }: Props ) => {
 	}
     const isOpen = verificarPeriodo({tipoPeriodo: 'EVALUACION', etapa: periodos})
     
-
-
-   
 
     const calculoAvance = useMemo(() => {
         const {resultadoCompetencias, resultadoObjetivos}  = rendimiento     

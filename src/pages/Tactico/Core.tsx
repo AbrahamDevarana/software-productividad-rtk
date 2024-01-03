@@ -3,7 +3,6 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { CoreProps, DepartamentoProps, TacticoProps } from '@/interfaces';
 import { getAreaThunk } from '@/redux/features/areas/areasThunks';
-import { createCoreThunk, getCoreThunk } from '@/redux/features/core/coreThunk';
 import { createTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Checkbox, Tooltip } from 'antd';

@@ -114,12 +114,11 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
                 setCurrentStep(currentStep + 1);
             } else {
                 await dispatch(postEvaluacionThunk({respuestas, ...general})).unwrap().then(() => {
+                    localStorage.removeItem(`res-${activeEvaluate}`);
                     message.success('Evaluación enviada correctamente')
                 })
                 setActiveEvaluate('')
-            }
-
-         
+            }         
            
         };
         

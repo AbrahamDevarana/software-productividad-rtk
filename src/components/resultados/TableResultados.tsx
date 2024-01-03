@@ -1,76 +1,37 @@
-import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Spin, Table, Tooltip, message } from "antd";
-import Loading from "../antd/Loading";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
-import type { ColumnsType } from 'antd/es/table';
-import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "@/redux/features/tasks/tasksThunk";
-import { BiTrash } from "react-icons/bi";
-import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
+import { OperativoProps, ResultadoClaveProps, TaskProps } from '@/interfaces';
+import { Avatar, Collapse, Image, Input, Tooltip, Table, Form, DatePicker, Popover, Popconfirm, message } from 'antd';
+import { useMemo, useRef } from 'react'
+import ResultadoClaveForm from './FormResultado';
+import { ColumnsType } from 'antd/es/table';
+import { getColor, getStorageUrl } from '@/helpers';
+import { Link } from 'react-router-dom';
+import getBrokenUser from '@/helpers/getBrokenUser';
+import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from '@/redux/features/tasks/tasksThunk';
+import { useAppDispatch } from '@/redux/hooks';
 import dayjs from "dayjs";
-import EmptyResultado from "./EmptyResultado";
-import ResultadoClaveForm from "./FormResultado";
-import { Link } from "react-router-dom";
-import { getColor, getStorageUrl } from "@/helpers";
-import getBrokenUser from "@/helpers/getBrokenUser";
-import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
-import { PopoverPrioridad } from "./PopoverPrioridad";
-import { Prioridad, styles, taskStatusTypes } from "@/types";
-import { PopoverEstado } from "./PopoverEstado";
-import { TaskProgress } from "../tareas/TaskProgressBar";
-import { TaskCheckbox } from "../tareas/TaskCheckbox";
+import { BsFillCalendarFill, BsThreeDots } from 'react-icons/bs';
+import { PopoverPrioridad } from './PopoverPrioridad';
+import { Prioridad, styles, taskStatusTypes } from '@/types';
+import { PopoverEstado } from './PopoverEstado';
+import { TaskProgress } from '../tareas/TaskProgressBar';
+import { TaskCheckbox } from '../tareas/TaskCheckbox';
+import { BiTrash } from 'react-icons/bi';
 
 
-interface Props {
-    currentOperativo: OperativoProps,
-    isClosed: boolean
+interface TableResultadosProps {
+    resultadoClave: ResultadoClaveProps;
+    isClosed: boolean;
+    currentOperativo: OperativoProps;
+    isLoading: boolean;
 }
 
-export default function ListadoResultados({ currentOperativo, isClosed }: Props) {
-
-    const { Panel } = Collapse;
+export const TableResultados = ({currentOperativo, resultadoClave, isClosed, isLoading}: TableResultadosProps) => {
     const dispatch = useAppDispatch()
-    const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
-    const inputRef = useRef(null);
+    const { Panel } = Collapse;
+    const { year, quarter } = currentOperativo
     const [messageApi, contextHolder] = message.useMessage();
-    const [progreso, setProgreso] = useState<number>(0)
-    const { year, quarter, status } = currentOperativo
+    const inputRef = useRef(null);
 
-
-    useEffect(() => {
-        dispatch(getUsuariosThunk({}))
-    }, [])
-
-    const handleNuevoResultado = async () => {
-        await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
-            message.success('Resultado creado correctamente')
-            const element = document.getElementById(`resultado-${data.id}`)
-            element?.classList.add('ant-collapse-item-active')
-            element?.scrollIntoView({behavior: 'smooth'})
-        
-        }).catch((err) => {
-            message.error('Hubo un error al crear el resultado')
-        })
-    }
-
-    const handleOnUpdate = (e: any, record: TaskProps) => {
-        const query = {
-            ...record,
-            [e.target.name]: e.target.value,
-        }
-        
-        dispatch(updateTaskThunk(query))
-    }
-
-    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: TaskProps) => {
-        const query = {
-            ...record,
-            fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
-        }    
-        dispatch(updateTaskThunk(query))
-    }
-    
     const defaultColumns: ColumnsType<TaskProps> = [
         {
             title: () => ( <p className='tableTitlePrincipal'>Acciones</p>),
@@ -246,20 +207,36 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         }
     ]
 
-    useEffect(() => {
-        if (currentOperativo.id !== '') {
-            dispatch(getResultadosThunk(currentOperativo.id))
+    const handleOnUpdate = (e: any, record: TaskProps) => {
+        const query = {
+            ...record,
+            [e.target.name]: e.target.value,
         }
-    }, [currentOperativo])
-    
+        
+        dispatch(updateTaskThunk(query))
+    }
 
-    const activeKey = useMemo(() => {
-        if (resultadosClave.length > 0) {
-            return resultadosClave.map((resultado: ResultadoClaveProps, index) => index)
-        }
-        return []
-    }, [resultadosClave])
+    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: TaskProps) => {
+        const query = {
+            ...record,
+            fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
+        }    
+        dispatch(updateTaskThunk(query))
+    }
 
+    const handleDeleteTask = async (id: number) => {
+        await dispatch(deleteTaskThunk(id)).unwrap().then(() => {
+            messageApi.success('Acción eliminada.')
+        }).catch((err) => {
+            messageApi.error('Hubo un error al eliminar la acción.')
+        })
+    }
+
+    const genHeader = (resultado: any) => (
+        <div onClick={ event => event.stopPropagation() }>
+            <ResultadoClaveForm resultado={resultado} isClosed={isClosed} currentOperativo={currentOperativo}/>
+        </div>
+    )
 
     const footerComponent = (resultadoClave: ResultadoClaveProps) => {
 
@@ -299,114 +276,60 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         )
     }
 
-    const genHeader = (resultado: any) => (
-        <div onClick={ event => event.stopPropagation() }>
-            <ResultadoClaveForm resultado={resultado} isClosed={isClosed} currentOperativo={currentOperativo}/>
-        </div>
-    )
-
-    const handleDeleteTask = async (id: number) => {
-        await dispatch(deleteTaskThunk(id)).unwrap().then(() => {
-            messageApi.success('Acción eliminada.')
-        }).catch((err) => {
-            messageApi.error('Hubo un error al eliminar la acción.')
-        })
-    }
-    
-
-    const handleUpdateStatus = async (task: TaskProps, status: any) => {
-        const query = {
-            ...task,
-            status
-        }
-        dispatch(updateTaskThunk(query))
-    }
-
-    const sortedTasks = (resultado: ResultadoClaveProps) => {
+    const sortedTasks = useMemo(() => {
         // Función de comparación para ordenar las tareas
-           const compareTasks = (a:any, b:any) => {
-               // Coloca las tareas SIN_INICIAR primero
-               if (a.status === 'SIN_INICIAR' && b.status !== 'SIN_INICIAR') {
-               return -1;
-               }
-               if (a.status === 'EN_PROCESO' && b.status === 'EN_PROCESO') {
-                return b.progreso - a.progreso;
-              }
-               // Coloca las tareas FINALIZADAS al final
-               if (a.status === 'FINALIZADO' && b.status !== 'FINALIZADO') {
-                return 1;
-               }
-               if (a.status === 'CANCELADO' && b.status !== 'CANCELADO') {
-                return 1;
-              }
-               // Mantén el orden original en caso de que el estado sea el mismo
-               return 0;
-           };
-           // Copia el arreglo original para no modificar el estado directamente
-           const tasksCopy = [...resultado.task];
-           // Ordena el arreglo utilizando la función de comparación
-           tasksCopy.sort(compareTasks);
-           return tasksCopy;
-   }
-
-
-    if(isLoading) return ( <Loading /> )
-    if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
-
-    return (
-        <>
-
-            <Collapse 
-                defaultActiveKey={activeKey}
-                ghost
-            >
-
-                {
-                    resultadosClave.map((resultado: ResultadoClaveProps, index) => {
-
-                        const tasks = sortedTasks(resultado)
-                        return (
-                            <Panel
-                                key={index}
-                                header={genHeader(resultado) }
-                                className="customResultadosPanel"
-                                collapsible="icon"
-                                id={`resultado-${resultado.id}`}
-                                
-                            >
-                                
-                                <Table 
-                                    loading={isLoading}
-                                    scroll={{ x: 1000 }}
-                                    className="customTable"
-                                    pagination={false}
-                                    bordered={false}
-                                    columns={defaultColumns}
-                                    dataSource={tasks}
-                                    rowKey={record => record.id}
-                                    footer={() => (
-                                        isClosed ? null : footerComponent(resultado)
-                                    )}
-                                    rowClassName={ (record, index) => {
-                                        return 'group'
-                                    }}
-                                />
-                            </Panel>
-                        )
-                    })
-
-                }
-                
-
-            </Collapse>
-            {
-                contextHolder
-            }
-            {
-                isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
-            }
-        </>
-    )
-
+        const compareTasks = (a:any, b:any) => {
+          // Coloca las tareas SIN_INICIAR primero
+          if (a.status === 'SIN_INICIAR' && b.status !== 'SIN_INICIAR') {
+            return -1;
+          }
+          // Coloca las tareas FINALIZADAS al final
+          if (a.status === 'FINALIZADO' && b.status !== 'FINALIZADO') {
+            return 1;
+          }
+          // Mantén el orden original en caso de que el estado sea el mismo
+          return 0;
+        };
     
-};
+        // Copia el arreglo original para no modificar el estado directamente
+        const tasksCopy = [...resultadoClave.task];
+    
+        // Ordena el arreglo utilizando la función de comparación
+        tasksCopy.sort(compareTasks);
+    
+        return tasksCopy;
+    }, [resultadoClave.task]);
+      
+
+  return (
+    <>
+        {
+            contextHolder
+        }
+        <Panel
+            key={resultadoClave.id}
+            header={genHeader(resultadoClave) }
+            className="customResultadosPanel"
+            collapsible="icon"
+            id={`resultado-${resultadoClave.id}`}
+        >
+            <Table 
+                loading={isLoading}
+                scroll={{ x: 1000 }}
+                className="customTable"
+                pagination={false}
+                bordered={false}
+                columns={defaultColumns}
+                dataSource={sortedTasks}
+                rowKey={record => record.id}
+                footer={() => (
+                    isClosed ? null : footerComponent(resultadoClave)
+                )}
+                rowClassName={ (record, index) => {
+                    return 'group'
+                }}
+            />
+        </Panel>
+    </>
+  )
+}

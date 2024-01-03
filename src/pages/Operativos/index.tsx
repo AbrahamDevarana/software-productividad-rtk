@@ -92,7 +92,7 @@ export const Objetivos : React.FC = () => {
                     <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa}/>
                 </Box>
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full'>
-                    <CardAvance operativos={operativos} periodos={periodos} />
+                    <CardAvance operativos={operativos} periodos={periodos} etapa={etapa}/>
                 </Box>
                 <Box className='2xl:col-span-4 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full flex justify-center'>
                     <CardDesempeno />
@@ -172,7 +172,7 @@ export const Objetivos : React.FC = () => {
             </Drawer>
             
            {
-                rendimiento.status === 'ABIERTO' &&
+                rendimiento.status === 'ABIERTO' && !etapa.isClosed &&
                 (<FloatButton
                     shape="circle"
                     icon={<FaPlus />}

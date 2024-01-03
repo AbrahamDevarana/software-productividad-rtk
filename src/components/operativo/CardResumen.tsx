@@ -15,6 +15,7 @@ interface Props {
 	etapa: {
 		etapaActual: string,
 		color: string,
+		isClosed: boolean
 	}
 }
 
@@ -61,17 +62,17 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			</div>
 			<Divider className='my-3' dashed />
 			
-			<div className='flex justify-between items-center flex-wrap align-middle'>
+			<div className='flex justify-between items-center align-middle gap-x-5'>
 				<div
 					className='text-white py-0.5 px-2.5 rounded-ext'
 					style={{
 						backgroundColor: etapa.color,
 					}}
 				> 
-					<p className='text-xs drop-shadow'> { etapa.etapaActual } </p> 
+					<p className='text-xs drop-shadow text-center'> { etapa.etapaActual } </p> 
 				</div>
 				<button 
-				disabled={rendimiento.status === 'CERRADO'}
+				disabled={rendimiento.status === 'CERRADO'  || etapa.isClosed }
 				className='border border-devarana-dark-graph py-0.5 px-2.5 text-devarana-dark-graph shadow
 							text-xs rounded-ext font-light disabled:cursor-not-allowed hover:opacity-70 transition duration-100' 
 				onClick={ () => setPonderacionVisible(true)}>

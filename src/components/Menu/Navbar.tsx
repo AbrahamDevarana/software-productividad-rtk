@@ -7,7 +7,7 @@ import { logoutThunk } from "@/redux/features/auth/authThunks";
 import {FaSignOutAlt } from "react-icons/fa";
 import MyBreadcrumb from "../ui/Breadcrumb";
 import dayjs from "dayjs";
-import { changeConfigThunk } from "@/redux/features/global/globalThunk";
+import { changeConfigThunk, useGetGlobalsConfigQuery } from "@/redux/features/global/globalThunk";
 import { BsFillCalendarFill } from "react-icons/bs";
 import { useEffect } from "react";
 import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
@@ -15,9 +15,9 @@ import { Link } from "react-router-dom";
 import { DefaultOptionType } from "antd/es/select";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
-	const { currentConfig: {quarter, year, currentDate}, periodControls: {prePeriodDefinitionDays} } = useAppSelector(state => state.global)
 
-	const { data, isLoading } = useGetUsuariosQuery({})
+	const { currentConfig: {quarter, year, currentDate}, periodControls: {prePeriodDefinitionDays} } = useAppSelector(state => state.global)
+	const { data: usuarios, isLoading } = useGetUsuariosQuery({})
 	
     const dispatch = useAppDispatch()
 
@@ -48,7 +48,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
 						<Select
 							className='w-44'
-							options={data?.map( (item, index) => (	
+							options={usuarios?.map( (item, index) => (	
 								{
 									label: (
 										<Link key={index} to={`/perfil/${item.slug}`}>
@@ -93,9 +93,6 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
 								if(current < dayjs(currentDate)){
 									return current && current.year() < 2023;
-								}
-								if(current >= dayjs(currentDate).add(prePeriodDefinitionDays, 'day')){
-									return current && current.year() > year;
 								}
 								
 								return false;
