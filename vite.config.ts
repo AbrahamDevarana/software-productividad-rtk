@@ -29,31 +29,38 @@ export default defineConfig({
     build: {
         rollupOptions: { 
             treeshake: false,
-            manualChunks: {
-                "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
-                "react-dom": ["react-dom"],
-                "@fortawesome/fontawesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
-                "@fortawesome/free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
-                "@fortawesome/free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
-                "@fortawesome/react-fontawesome": ["@fortawesome/react-fontawesome"],
-                "react-icons": ["react-icons"],
-                "antd": ["antd"],
-                "antd-img-crop": ["antd-img-crop"],
-                "axios": ["axios"],
-                "framer-motion": ["framer-motion"],
-                "react-quill": ["react-quill"],
-                "swiper": ["swiper"],
-                "react-dropzone": ["react-dropzone"],
-                "react-countup": ["react-countup"],
-                "react-chartjs-2": ["react-chartjs-2"],
-                "dompurify": ["dompurify"],
-                "chart.js": ["chart.js"],
-                "react-gauge-chart": ["react-gauge-chart"],
-                "react-simple-star-rating": ["react-simple-star-rating"],
-                "chartjs-plugin-datalabels": ["chartjs-plugin-datalabels"],
-                "@dnd-kit/core": ["@dnd-kit/core"],
-                "@dnd-kit/sortable": ["@dnd-kit/sortable"],
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                    }
+                }
             },
+            // manualChunks: {
+            //     "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
+            //     "react-dom": ["react-dom"],
+            //     "@fortawesome/fontawesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
+            //     "@fortawesome/free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
+            //     "@fortawesome/free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
+            //     "@fortawesome/react-fontawesome": ["@fortawesome/react-fontawesome"],
+            //     "react-icons": ["react-icons"],
+            //     "antd": ["antd"],
+            //     "antd-img-crop": ["antd-img-crop"],
+            //     "axios": ["axios"],
+            //     "framer-motion": ["framer-motion"],
+            //     "react-quill": ["react-quill"],
+            //     "swiper": ["swiper"],
+            //     "react-dropzone": ["react-dropzone"],
+            //     "react-countup": ["react-countup"],
+            //     "react-chartjs-2": ["react-chartjs-2"],
+            //     "dompurify": ["dompurify"],
+            //     "chart.js": ["chart.js"],
+            //     "react-gauge-chart": ["react-gauge-chart"],
+            //     "react-simple-star-rating": ["react-simple-star-rating"],
+            //     "chartjs-plugin-datalabels": ["chartjs-plugin-datalabels"],
+            //     "@dnd-kit/core": ["@dnd-kit/core"],
+            //     "@dnd-kit/sortable": ["@dnd-kit/sortable"],
+            // },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
                   return
