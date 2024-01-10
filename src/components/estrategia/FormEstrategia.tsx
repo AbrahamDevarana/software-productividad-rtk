@@ -59,7 +59,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         const query =  {
             ...currentEstrategico,
             ...form.getFieldsValue(),
-            rangeDate: [dayjs(form.getFieldValue('fechaInicio')), dayjs(form.getFieldValue('fechaFin'))],
+            rangeDate: form.getFieldValue('rangeDate'),
             year: year,
         }
 
@@ -372,7 +372,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     <DatePicker.RangePicker
                         format={"YYYY"}
                         className='w-1/2'
-                        
                         picker='year'
                         clearIcon={false}
                         ref={inputRef}
