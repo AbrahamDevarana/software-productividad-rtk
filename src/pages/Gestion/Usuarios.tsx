@@ -45,7 +45,7 @@ export const Usuarios = () => {
 			title: () => ( <p className='tableTitle text-right'> Resultado Objetivos </p>),
 			key: 'resultadoObjetivos',
 			render: (text, record) => (
-				<p className='text-default text-right'> {record.rendimiento.resultadoObjetivos.toFixed(2)} % </p>
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoObjetivos * 100) / 100} % </p>
 			),
 			sorter: (a, b) => a.rendimiento.resultadoObjetivos - b.rendimiento.resultadoObjetivos,
 		},
@@ -53,7 +53,7 @@ export const Usuarios = () => {
 			title: () => ( <p className='tableTitle text-right'> Resultado Competencias </p>),
 			key: 'resultadoCompetencias',
 			render: (text, record) => (
-				<p className='text-default text-right'> {record.rendimiento.resultadoCompetencias.toFixed(2)} % </p>
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoCompetencias * 100) / 100} % </p>
 			),
 			sorter: (a, b) => a.rendimiento.resultadoCompetencias - b.rendimiento.resultadoCompetencias,
 		},
@@ -61,7 +61,7 @@ export const Usuarios = () => {
 			title: () => ( <p className='tableTitle text-right'> Resultado Final </p>),
 			key: 'resultadoFinal',
 			render: (text, record) => (
-				<p className='text-default text-right'> {record.rendimiento.resultadoFinal.toFixed(2)} % </p>
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoFinal * 100) / 100} % </p>
 			),
 			sorter: (a, b) => a.rendimiento.resultadoFinal - b.rendimiento.resultadoFinal,
 		},
@@ -109,9 +109,6 @@ export const Usuarios = () => {
     const handleGenerateReport = () => {
 		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status }))
 	}
-
-
-
 	
 	useEffect(() => {
 		const promise = dispatch(obtenerUsuariosThunk({ quarter, year, search, status}))
