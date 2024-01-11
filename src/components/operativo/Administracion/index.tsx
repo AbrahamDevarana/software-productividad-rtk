@@ -137,7 +137,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<h2 className='font-light text-lg text-white'>Objetivos: </h2>
 						<p className='text-xl text-white text-center'>
 							{
-								ponderacionObjetivos.toFixed(2) 
+								Math.trunc(ponderacionObjetivos * 100) / 100
 							} %
 						</p>
 						<p className='text-[9px] text-white mx-auto text-center leading-none'> Representa el 90%</p>
@@ -146,7 +146,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<h2 className='font-light text-lg text-white text-center'>Competencias Soft: </h2>
 						<p className='text-xl text-white text-center'>
 							{
-								ponderacionEvaluciones.toFixed(2)
+								Math.trunc(ponderacionEvaluciones * 100) / 100
 							} %
 						</p>
 						<p className='text-[9px] text-white mx-auto text-center leading-none'> Representa el 10%</p>
@@ -155,7 +155,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<h2 className='font-light text-lg text-white text-center'>Resultado Final: </h2>
 						<p className='text-xl text-white text-center'>
 							{
-								(promedioOjetivos + finalEvaluaciones).toFixed(2)
+								Math.trunc((promedioOjetivos + finalEvaluaciones) * 100) / 100
 							} %
 						</p>
 						<p className="invisible text-[9px] text-white mx-auto text-center leading-none">100%</p>

@@ -19,8 +19,9 @@ import 'swiper/css/pagination';
 import { FreeMode, Mousewheel, Navigation, Pagination } from "swiper";
 import { useOtherObjetivo } from "@/hooks/useOthersObjetivos";
 import { getHistorialRendimientoThunk } from "@/redux/features/perfil/perfilThunk";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import CountUp from 'react-countup';
+import { getOperativosUsuarioThunk } from "@/redux/features/operativo/operativosThunk";
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -30,11 +31,12 @@ interface Props {
 const Profile = ({usuarioActivo, visitante}: Props) => {
 
     const { operativos } = useAppSelector(state => state.operativos)
-    const { ponderacionObjetivos } = useOtherObjetivo({operativos, usuarioId:usuarioActivo.id})
-    const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
-    const { currentConfig: {year}} = useAppSelector(state => state.global)
+    const { perfil: { rendimiento }} = useAppSelector(state => state.profile)
 
 
+    const resultadoFinal = useMemo(() => {
+        return Math.trunc(rendimiento?.resultadoFinal * 100) / 100
+    }, [rendimiento?.resultadoFinal])
 
     return ( 
     <>
@@ -46,7 +48,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Avance Trimestral</p>
-                        <p className="font-light text-devarana-graph">{ <CountUp end={rendimiento?.resultadoFinal || 0} duration={2} decimals={2} /> }%</p>
+                        <p className="font-light text-devarana-graph">{ <CountUp end={resultadoFinal} duration={2} decimals={2} /> }%</p>
                     </div>
                 </div>
             </Box>
@@ -57,7 +59,7 @@ const Profile = ({usuarioActivo, visitante}: Props) => {
                     </Badge>
                     <div className="text-right sm:py-0">
                         <p className="text-devarana-dark-graph font-medium text-lg">Objetivos</p>
-                        <p className="font-light text-devarana-graph"> <CountUp end={ponderacionObjetivos} duration={2} decimals={2} />%</p>
+                        <p className="font-light text-devarana-graph"> <CountUp end={operativos.length} duration={2} decimals={0} /></p>
                     </div>
                 </div>
             </Box>
