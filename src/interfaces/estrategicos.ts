@@ -22,8 +22,7 @@ export interface EstrategicoProps {
     codigo: string;
     descripcion: string;
     progreso: number;
-    fechaInicio: Date;
-    fechaFin: Date;
+    year: number;
     status: statusType;
     tipoProgreso: 'MANUAL' | 'PROMEDIO'
     indicador: string;

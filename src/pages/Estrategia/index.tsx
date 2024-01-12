@@ -55,23 +55,6 @@ export const EstrategiaHome: React.FC = () => {
                 {
                     segment === 'Gantt' && <Proximamente size='default' avance={28} />
                 }
-            
-            {/* <FloatButton.Group
-                trigger='hover'
-                icon={<FaPlus />}
-            >
-                {
-                    perspectivas.map((perspectiva, index) => (
-                        <FloatButton
-                            key={index}
-                            tooltip={perspectiva.nombre}
-                            
-                            icon={<Image src={getStorageUrl(perspectiva.icono)} width={20} height={20} preview={false} />}
-                            onClick={() => console.log('click')}
-                        />  
-                    ))
-                }
-            </FloatButton.Group> */}
         </>
     )
 }

@@ -3,13 +3,11 @@ import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown,
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { changeTypeProgressEstrategicoThunk, deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
-import dayjs from 'dayjs';
 import { PerspectivaProps } from '@/interfaces';
-
+import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { TabStatus } from '../ui/TabStatus';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from '../Icon';
 import { statusType } from '@/types';
 import { getColor } from '@/helpers';
@@ -59,8 +57,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         const query =  {
             ...currentEstrategico,
             ...form.getFieldsValue(),
-            rangeDate: form.getFieldValue('rangeDate'),
-            year: year,
+            year: dayjs(form.getFieldValue('year')).year(),
         }
 
         delete query.status
@@ -89,10 +86,9 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
             const updateEstrategico = {
                 ...currentEstrategico,
-                rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
                 tipoProgreso: "MANUAL",
                 progreso: value,
-                year: year,
+                year: dayjs(form.getFieldValue('year')).year(),
             }
             // @ts-ignore
             dispatch(updateEstrategicoThunk(updateEstrategico));  
@@ -104,8 +100,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         const updateEstrategico = {
             ...currentEstrategico,
             status: value,
-            rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
-            year: year,
+            year: dayjs(form.getFieldValue('year')).year(),
         }
         
         dispatch(updateEstrategicoThunk(updateEstrategico));       
@@ -115,8 +110,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         const updateEstrategico = {
             ...currentEstrategico,
             perspectivaId: value,
-            year: year,
-            rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)],
+            year: dayjs(form.getFieldValue('year')).year(),
         }
         dispatch(updateEstrategicoThunk(updateEstrategico));
     }
@@ -222,6 +216,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
+    console.log('currentEstrategico', currentEstrategico);
+    
     
     return (
         <>
@@ -231,13 +227,10 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                 initialValues={{
                     ...currentEstrategico,
                     responsables: currentEstrategico.responsables.map(responsable => responsable.id),
-                    fechaInicio: dayjs(currentEstrategico.fechaInicio),
-                    fechaFin: dayjs(currentEstrategico.fechaFin),
                     propietarioId: currentEstrategico.propietario?.id,
-                    rangeDate: [dayjs(currentEstrategico.fechaInicio), dayjs(currentEstrategico.fechaFin)]
+                    year: dayjs(`${currentEstrategico.year}-01-01`)
                 }}
                 form={form}
-                
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                 disabled={
                     canEdit
@@ -365,19 +358,17 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
                 </Form.Item>
                 <Form.Item
-                    label="Duración: "
+                    label="Periodo: "
                     className='col-span-12'
-                    name={'rangeDate'}
+                    name='year'
                 >
-                    <DatePicker.RangePicker
-                        format={"YYYY"}
+                    <DatePicker
                         className='w-1/2'
                         picker='year'
                         clearIcon={false}
                         ref={inputRef}
                         suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
                         onChange={handleOnSubmit}
-                        
                     />
                 </Form.Item>
                 <Form.Item

@@ -95,18 +95,23 @@ const perspectivasSlice = createSlice({
         .addCase(updateEstrategicoThunk.fulfilled, (state, action) => {
             const perspectiva = state.perspectivas.find(perspectiva => perspectiva.id === action.payload.perspectivaId)
             const oldPerspectiva = state.perspectivas.find(perspectiva => perspectiva.objetivosEstrategicos?.find(estrategico => estrategico.id === action.payload.id))
-            
+         
             if (perspectiva && oldPerspectiva?.id !== perspectiva.id) {
                 perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos ? [...perspectiva.objetivosEstrategicos, action.payload] : [action.payload]
-
                 if ( oldPerspectiva ) {
                     oldPerspectiva.objetivosEstrategicos = oldPerspectiva.objetivosEstrategicos?.filter(estrategico => estrategico.id !== action.payload.id)
                 }
             }else{
                 if (perspectiva) {
                     perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos?.map(estrategico => estrategico.id === action.payload.id ? action.payload : estrategico)
+                    perspectiva.objetivosEstrategicos = perspectiva.objetivosEstrategicos?.filter(estrategico => estrategico.year !== action.payload.year)
                 }
+
+                
             }
+
+
+            
         })
         .addCase(createEstrategicoThunk.fulfilled, (state, action) => {
 
