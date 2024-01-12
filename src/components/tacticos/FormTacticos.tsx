@@ -60,11 +60,12 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     
     const handleOnSubmit = () => {        
         if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
-
-
-        if(form.getFieldsError().filter(({ errors }) => errors.length).length) return
-
         
+        if(form.getFieldsError().filter(({ errors }) => errors.length).length) {
+            return
+        }
+
+
         const query = {
             ...currentTactico,
             ...form.getFieldsValue(),
@@ -78,8 +79,12 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
         delete query.status
         delete query.progreso
-    
-        dispatch(updateTacticoThunk(query))
+
+        form.validateFields().then(() => {
+            dispatch(updateTacticoThunk(query))
+        }).catch((errorInfo) => {
+            return
+        })
     }
 
     const optEstrategicos = useMemo(() => {
@@ -297,7 +302,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     fechaInicio: dayjs(currentTactico.fechaInicio),
                     fechaFin: dayjs(currentTactico.fechaFin),
                     responsables: currentTactico.responsables?.map(responsable => responsable.id),
-                    proyeccion: [dayjs(currentTactico.fechaInicio), dayjs(currentTactico.fechaFin)],
+                    proyeccion: [dayjs(currentTactico.fechaInicio).add(6, 'hour'), dayjs(currentTactico.fechaFin).add(6, 'hour')],
                     proyeccionInicio: dayjs(currentTactico.fechaInicio),
                     proyeccionFin: dayjs(currentTactico.fechaFin),
                     tipoProgreso: currentTactico.tipoProgreso,
@@ -501,15 +506,14 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     label="Periodo Fin:"
                     name="proyeccionFin"
                     className='col-span-6'
-                    rules={
-                        // no puede ser menor que proyeccionInicio
-                        [{ validator: async (_, value) => {
+                    rules={[
+                        { validator: async (_, value) => {
                             if(value && value.isBefore(form.getFieldValue('proyeccionInicio'))){
-                                return Promise.reject(new Error('La fecha de fin no puede ser menor a la fecha de inicio'))
+                                return Promise.reject(new Error('El trimestre final no puede ser menor al trimestre inicial'))
                             }
                             return Promise.resolve()
-                        }}]
-                    }
+                        }},
+                    ]}
                 >
                 
                         <DatePicker
@@ -519,6 +523,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                 // no puede ser mayor ni menor al año actual
                                 return current.year() !== year
                             }}
+                            
                             onChange={handleOnSubmit}
                             suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
                         />

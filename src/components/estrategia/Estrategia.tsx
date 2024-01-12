@@ -1,10 +1,6 @@
 import { PerspectivaProps } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
-import { Drawer, FloatButton, Image } from 'antd';
-import { useState } from 'react'
-import { FormEstrategia } from './FormEstrategia'
-import { FaPlus } from 'react-icons/fa';
-import { Icon } from '../Icon'
+import { Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
 interface EstrategiaProps {
     perspectivas: PerspectivaProps[]

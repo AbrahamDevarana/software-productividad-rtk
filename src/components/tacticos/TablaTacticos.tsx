@@ -100,14 +100,15 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
                 render: (text, record, index) => {
     
                     // Obtener el trimestre inicial de fecha de inicio con dayjs
-                    const quarterInicial = dayjs(record.fechaInicio).quarter();
-                    const quarterFinal = dayjs(record.fechaFin).quarter();                
-    
+                    const quarterInicial = dayjs(record.fechaInicio).quarter()
+                    const quarterFinal = dayjs(record.fechaFin).quarter();    
+                    
+                        
                     return (
                         <div className='flex gap-x-1 justify-end'> 
                             {
-                                [0, 1, 2, 3].map((index) => {
-                                    const isQuarterInRange = index + 1 >= quarterInicial && index + 1 <= quarterFinal;
+                                [1, 2, 3, 4].map((index) => {
+                                    const isQuarterInRange = index + 0 >= quarterInicial && index + 0 <= quarterFinal;
                                     const colorStyle = isQuarterInRange ? 'rgb(64, 143, 227, .5)' : 'rgba(243, 244, 246, 1)';
                                     const textColor = isQuarterInRange ? '#FFFFFF' : '#6B7280';
     
@@ -120,7 +121,7 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
                                                 color: textColor
                                             }}
                                         >
-                                            Q{index + 1}
+                                            Q{index}
                                         </span>
                                     );
                                 })
