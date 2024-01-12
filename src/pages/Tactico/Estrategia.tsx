@@ -29,7 +29,7 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
         if(slug){
             dispatch(getEstrategicosByAreaThunk({slug, year}))
         }
-    }, [])
+    }, [year])
 
     const orderedEstrategicos = useMemo(() => {
         if (estrategicosTacticos.length > 0) {

@@ -5,7 +5,7 @@ import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { changeTypeProgressThunk, deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Skeleton, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -39,7 +39,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ isEstrategico, setIsEstrategico] = useState(false)
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
-    const [progreso, setProgreso] = useState<number>(0)
+    const [ progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
 
     const [form] = Form.useForm()
@@ -50,7 +50,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     useEffect(() => {
         dispatch(getUsuariosThunk({}))
         dispatch(getEstrategicosThunk({year}))
-        dispatch(getPerspectivasThunk({}))
+        dispatch(getPerspectivasThunk({year}))
     }, [])
     
     useEffect(() => {
@@ -68,6 +68,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         const query = {
             ...currentTactico,
             ...form.getFieldsValue(),
+            proyeccion: [form.getFieldValue('proyeccionInicio').format('YYYY-MM-DD'), form.getFieldValue('proyeccionFin').format('YYYY-MM-DD')],
             year,
             slug,
         }
@@ -276,6 +277,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 
         }
     };
+    
 
 
     return (
@@ -296,6 +298,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     fechaFin: dayjs(currentTactico.fechaFin),
                     responsables: currentTactico.responsables?.map(responsable => responsable.id),
                     proyeccion: [dayjs(currentTactico.fechaInicio), dayjs(currentTactico.fechaFin)],
+                    proyeccionInicio: dayjs(currentTactico.fechaInicio),
+                    proyeccionFin: dayjs(currentTactico.fechaFin),
                     tipoProgreso: currentTactico.tipoProgreso,
                 }}
             >
@@ -458,7 +462,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
                 <Divider className='col-span-12'/>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Proyección:"
                     name="proyeccion"
                     className='col-span-12'
@@ -467,6 +471,54 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         <DatePicker.RangePicker
                             picker='quarter'
                             className='w-full'
+                            mode={['quarter', 'quarter']}
+                            disabledDate={(current) => {
+                                return current.year() !== year
+                            }}
+                            onChange={handleOnSubmit}
+                            suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
+                        />
+                </Form.Item> */}
+
+                <Form.Item
+                    label="Periodo Inicio:"
+                    name="proyeccionInicio"
+                    className='col-span-6'
+                >
+                
+                        <DatePicker
+                            picker='quarter'
+                            className='w-full'
+                            disabledDate={(current) => {
+                                return current.year() !== year
+                            }}
+                            onChange={handleOnSubmit}
+                            suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
+                        />
+
+                </Form.Item>
+                <Form.Item
+                    label="Periodo Fin:"
+                    name="proyeccionFin"
+                    className='col-span-6'
+                    rules={
+                        // no puede ser menor que proyeccionInicio
+                        [{ validator: async (_, value) => {
+                            if(value && value.isBefore(form.getFieldValue('proyeccionInicio'))){
+                                return Promise.reject(new Error('La fecha de fin no puede ser menor a la fecha de inicio'))
+                            }
+                            return Promise.resolve()
+                        }}]
+                    }
+                >
+                
+                        <DatePicker
+                            picker='quarter'
+                            className='w-full'
+                            disabledDate={(current) => {
+                                // no puede ser mayor ni menor al año actual
+                                return current.year() !== year
+                            }}
                             onChange={handleOnSubmit}
                             suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
                         />
