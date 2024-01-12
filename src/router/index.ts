@@ -14,7 +14,7 @@ import { ErrorPage } from '@/pages/ErrorPage';
 import { EstrategiaHome } from '@/pages/Estrategia';
 import { Usuarios } from '@/pages/admin/Usuarios';
 import { Departamentos } from '@/pages/admin/Departamentos';
-import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
+// import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 import { Tactico } from '@/pages/Tactico';
 import { Proyectos } from '@/pages/Proyectos';
 import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
@@ -124,12 +124,7 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         layout: LayoutApp,
         component: EstrategiaHome
     },
-    {
-        title: "Objetivo Estrategico",
-        path: '/estrategia/:id',
-        layout: LayoutApp,
-        component: ObjEstrategico
-    },
+
     {
         title: "Tactico",
         path: '/tactica/:slug',
