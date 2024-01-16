@@ -5,7 +5,7 @@ import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
 import { changeTypeProgressThunk, deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin, TreeSelect } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -89,16 +89,26 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     const optEstrategicos = useMemo(() => {
 
-        // buscar estrategicos que sean de la perspectiva seleccionada
-        const estrategicosFiltrados = estrategicos.filter(estrategico => estrategico.perspectivaId === selectedPerspectiva)
-
-        return estrategicosFiltrados.map(estrategico => {
+   
+        return perspectivas.map(perspectiva => {
             return {
-                label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
-                value: estrategico.id,
-                dataName: estrategico.nombre
+                label: <p className={`text-devarana-graph`}>{perspectiva.nombre}</p>,
+                value: perspectiva.id,
+                dataName: perspectiva,
+                selectable: false,
+                children: perspectiva.objetivosEstrategicos.map(estrategico => {
+                    return {
+                        label: <p className='text-devarana-graph'>{estrategico.nombre}</p>,
+                        value: estrategico.id,
+                        dataName: estrategico.nombre,
+                    }
+                })
             }
         })
+
+
+
+
 
     }, [selectedPerspectiva, isLoadingEstrategico])
    
@@ -447,43 +457,28 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     className='col-span-12 pt-4'
                     rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
                 >
-                    <Select
+                    <TreeSelect
                         placeholder="Selecciona el objetivo estratégico"
                         
                         disabled={
                             hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true
                         }
-                        allowClear
                         showSearch
                         onChange={handleChangePerspectiva}
-                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                        options={optEstrategicos}
+                        // filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                        treeData={optEstrategicos}
+                        treeDefaultExpandedKeys={[selectedPerspectiva as string]}
+                        showCheckedStrategy={TreeSelect.SHOW_CHILD}
+                        multiple={false}
                         dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                        treeNodeFilterProp='dataName'
                     >
-                    </Select>
+                    </TreeSelect>
                 </Form.Item>
                     </>
                 )}
 
                 <Divider className='col-span-12'/>
-
-                {/* <Form.Item
-                    label="Proyección:"
-                    name="proyeccion"
-                    className='col-span-12'
-                >
-                
-                        <DatePicker.RangePicker
-                            picker='quarter'
-                            className='w-full'
-                            mode={['quarter', 'quarter']}
-                            disabledDate={(current) => {
-                                return current.year() !== year
-                            }}
-                            onChange={handleOnSubmit}
-                            suffixIcon={ <BsFillCalendarFill className='text-devarana-babyblue' /> }
-                        />
-                </Form.Item> */}
 
                 <Form.Item
                     label="Periodo Inicio:"
@@ -507,12 +502,15 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     name="proyeccionFin"
                     className='col-span-6'
                     rules={[
-                        { validator: async (_, value) => {
-                            if(value && value.isBefore(form.getFieldValue('proyeccionInicio'))){
-                                return Promise.reject(new Error('El trimestre final no puede ser menor al trimestre inicial'))
-                            }
-                            return Promise.resolve()
-                        }},
+                        {
+                            validator: async (_, value) => {
+                                // Puede ser el mismo trimestre pero no puede ser menor
+                                const inicio = form.getFieldValue('proyeccionInicio');
+                                if (value && dayjs(value).isBefore(dayjs(inicio), 'day')) {
+                                    return Promise.reject(new Error('La fecha de fin no puede ser menor a la de inicio'));
+                                }
+                            },
+                        },
                     ]}
                 >
                 
