@@ -2,13 +2,15 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression';
 import * as path from 'path';
+import { ViteMinifyPlugin } from 'vite-plugin-minify' 
 
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         react(),
-        viteCompression()
+        viteCompression(),
+        ViteMinifyPlugin({}),
     ],
     
     server: {
@@ -27,6 +29,8 @@ export default defineConfig({
         host: true,
     },
     build: {
+        minify: 'terser',
+        cssCodeSplit: true,
         rollupOptions: { 
             treeshake: false,
             manualChunks: {
@@ -54,6 +58,11 @@ export default defineConfig({
                 "@dnd-kit/core": ["@dnd-kit/core"],
                 "@dnd-kit/sortable": ["@dnd-kit/sortable"],
             },
+            output: {
+                entryFileNames: `assets/js/[name]-[hash].js`,
+                chunkFileNames: `assets/js/[name]-[hash].js`,
+                assetFileNames: `assets/[ext]/[name]-[hash].[ext]`,
+            },
             onwarn(warning, warn) {
                 if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
                   return
@@ -61,7 +70,7 @@ export default defineConfig({
                 warn(warning)
             }
         },
-        chunkSizeWarningLimit: 1500
+        chunkSizeWarningLimit: 1500,
     },
     resolve: {
         alias: [

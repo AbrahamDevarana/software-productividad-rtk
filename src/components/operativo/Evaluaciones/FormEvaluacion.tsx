@@ -122,16 +122,16 @@ const FormEvaluacion = ({perfil}: Props) => {
                     }
                     <Divider type="vertical" className="h-20"/>                
                     <div className="px-2">
-                        { evaluacionLider.id !== '' && (
+                        { evaluacionLider?.id !== '' && (
                             <div className="flex flex-col items-center">
                                 <h1 className="text-devarana-graph font-medium">Evaluación de Líder</h1>
-                                <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionLider.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionLider.id)}>
-                                    <Tooltip title={`${ evaluacionLider.nombre } ${evaluacionLider.apellidoPaterno}`}>
+                                <div className={`hover:bg-devarana-graph hover:bg-opacity-20 transition-all ease-in-out duration-300 text-center p-2 rounded-sm cursor-pointer ${activeEvaluate === evaluacionLider?.id? 'bg-devarana-graph bg-opacity-20' : ''}`} onClick={() => handleSelectUser(evaluacionLider.id)}>
+                                    <Tooltip title={`${ evaluacionLider?.nombre } ${evaluacionLider?.apellidoPaterno}`}>
                                         <Avatar 
-                                                src={<Image src={`${getStorageUrl(evaluacionLider.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                                                src={<Image src={`${getStorageUrl(evaluacionLider?.foto)}`} preview={false} fallback={getBrokenUser()} />}
                                                 className=''
                                             >
-                                            {evaluacionLider.iniciales}
+                                            {evaluacionLider?.iniciales}
                                         </Avatar>
                                     </Tooltip>
                                 </div>

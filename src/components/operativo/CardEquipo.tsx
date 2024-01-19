@@ -19,8 +19,6 @@ export const CardEquipo = ({ equipo, color, handleMiEquipo, title }: Props) => {
 
     const handleOpenAdmin = (usuario: SinglePerfilProps) => {
         if(usuario.leaderId === userAuth?.id){
-        // if(true){
-            // @ts-ignore
             handleMiEquipo && handleMiEquipo(usuario)
         }
     }

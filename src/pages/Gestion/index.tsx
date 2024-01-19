@@ -1,6 +1,6 @@
 import { Competencias } from "@/pages/Gestion/Competencias"
+import { Periodos } from "@/pages/Gestion/Periodos"
 import { Objetivos } from "@/pages/Gestion/Objetivos"
-import { Usuarios } from "@/pages/Gestion/Usuarios"
 import { Segmented } from "antd"
 import { SegmentedValue } from "antd/es/segmented"
 import { useState } from "react"
@@ -10,7 +10,7 @@ import { useState } from "react"
 export const Gestion = () => {
 
 
-	const [ activeTab, setActiveTab ] = useState<SegmentedValue>('competencias')
+	const [ activeTab, setActiveTab ] = useState<SegmentedValue>('objetivos')
 
 	const options = [
 		{
@@ -42,10 +42,10 @@ export const Gestion = () => {
 			<div className="py-5">
 			
 				{
-					activeTab === 'objetivos' && ( <Usuarios /> )
+					activeTab === 'objetivos' && ( <Objetivos /> )
 				}
 				{
-					activeTab === 'periodos' && ( <Objetivos /> ) 
+					activeTab === 'periodos' && ( <Periodos /> ) 
 				}
 				{
 					activeTab === 'competencias' && ( <Competencias /> )

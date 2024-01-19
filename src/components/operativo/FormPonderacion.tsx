@@ -14,6 +14,7 @@
 		objetivoId: string;
 		nombreObjetivo: string;
 		progresoAsignado: number;
+		propietario: boolean;
 	}
 
 	export const FormPonderacion = ({ operativos, handleCancelPonderacion}: Props) => {
@@ -33,6 +34,7 @@
 			objetivoId: objetivo.id,
 			nombreObjetivo: objetivo.nombre,
 			progresoAsignado: usuario.scoreCard.progresoAsignado,
+			propietario: usuario.scoreCard.propietario
 			});
 		}
 
@@ -89,13 +91,23 @@
 
 	}
 
-	
 
 	return (
 		<div>
 			<div className='text-center font-mulish pb-5'>
 				<h1 className='text-2xl text-devarana-dark-graph'>Ponderación de Objetivos</h1>
 				<p className='text-devarana-graph'>{total} / 100 %</p>
+			</div>
+			<div className='flex items-end gap-3'>
+				<div className='flex items-center gap-3'>
+					<div className='w-2 h-2 bg-primary'></div>
+					<p className='text-devarana-graph'> Objetivos Propios </p>
+				</div>
+				<div className='flex items-center gap-3'>
+					<div className='w-2 h-2 bg-secondary'></div>
+					<p className='text-devarana-graph'> Objetivos Compartidos </p>
+				</div>
+				
 			</div>
 			<div className='rounded-ext border mb-5'>
 				<div className='from-primary to-primary-light bg-gradient-to-tr grid grid-cols-12 rounded-t-ext p-2'>
@@ -108,8 +120,11 @@
 				</div>
 				{ponderaciones.map(ponderacion => (
 				<div key={ponderacion.objetivoId} className='grid grid-cols-12 p-2'>
-					<div className="col-span-10">
-					<p className='text-devarana-graph'>{ponderacion.nombreObjetivo}</p>
+					<div className="col-span-10 flex gap-3 items-center">
+						<div className={`w-1 h-full rounded-full  ${ ponderacion.propietario ? 'bg-primary' : 'bg-secondary'}`}>
+
+						</div>
+						<p className='text-devarana-graph'>{ponderacion.nombreObjetivo}</p>
 					</div>
 					<div className="col-span-2">
 					<Input
@@ -134,4 +149,6 @@
 			</div>
 		</div>
 	);
-	};
+};
+
+

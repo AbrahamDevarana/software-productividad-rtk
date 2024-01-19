@@ -23,14 +23,14 @@ export const getColor = (status: StatusTypes, opacity: number = 1) => {
             break;
         
         case 'EN_PROCESO':
-        case 'ABIERTO':
+        // case 'ABIERTO':
             color = `rgba(64, 143, 227, ${opacity})`;
             lowColor = `rgba(9, 103, 201, ${opacity})`;
             break;
         
         case 'FINALIZADO':
         case 'APROBADO':
-        
+        case 'ABIERTO':
             color = `rgba(117, 221, 123, ${opacity})`;
             lowColor = `rgba(17, 195, 28, ${opacity})`;
             break;

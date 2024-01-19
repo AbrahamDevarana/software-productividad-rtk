@@ -62,7 +62,7 @@ export const useObjetivo = ({operativos}:Props) => {
         const misObjetivos = useMemo(() => {
             // buscar al objetivo operativo.operativosResponsable. propietario true
             const objetivos = operativos.filter( operativo => operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === true))
-            objetivos.sort((a, b) => b.operativosResponsable[0].scoreCard.progresoAsignado - a.operativosResponsable[0].scoreCard.progresoAsignado)
+            objetivos.sort((a, b) => b.operativosResponsable[0].scoreCard.progresoAsignado - a.operativosResponsable[0].scoreCard.progresoAsignado)        
             return objetivos
         }, [operativos])
     

@@ -1,10 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
@@ -19,8 +18,11 @@ import { EffectCards, FreeMode } from 'swiper';
 import { SinglePerfilProps } from '@/interfaces';
 import { getRankingsThunk } from '@/redux/features/ranking/rankingThunk';
 import { getEvaluacionResultadosThunk, getUsuariosAEvaluarThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
-import { useGetGestionObjetivosQuery } from '@/redux/features/gestion/gestionThunk';
+import { useGetGestionPeriodosQuery } from '@/redux/features/gestion/gestionThunk';
 import { calcularEtapaActual } from '@/helpers/getEtapa';
+
+
+
 
 export const Objetivos : React.FC = () => {
 
@@ -37,11 +39,10 @@ export const Objetivos : React.FC = () => {
     const [ gettingProfile, setGettingProfile ] = useState(false)
 
 
-    const { data: periodos, isLoading: isLoadingRules } = useGetGestionObjetivosQuery({year, quarter})
+    const { data: periodos, isLoading: isLoadingRules } = useGetGestionPeriodosQuery({year, quarter})
     
-    const etapa = calcularEtapaActual(periodos)
+    const etapa = calcularEtapaActual({periodos, status: perfil.rendimiento.status})
 
-    const {id} = useParams<{id: string}>()
     const { rendimiento } = perfil
 
 
@@ -134,13 +135,13 @@ export const Objetivos : React.FC = () => {
                         </div>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} etapa={etapa}/>
                             ))
                         }
                         <h1 className='col-span-12 text-primary font-medium text-[16px]'>Objetivos Compartidos</h1>
                         {
                             objetivosCompartidos && objetivosCompartidos.length > 0 && objetivosCompartidos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} />
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} etapa={etapa} />
                             ))
                         }
                         </>
@@ -197,6 +198,24 @@ export const Objetivos : React.FC = () => {
                 destroyOnClose={true}
             >
                 <Administracion activeUsuario={activeUsuarioReview} isLeader={ true } />
+            </Modal>
+
+            <Modal
+                // open={true}
+                onCancel={() => {}}
+                footer={null}
+                width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
+                style={{
+                    top: 50,
+                    left: 35,
+                    bottom: 0,
+                    height: 'calc(100% - 150px)',
+                    overflowY: 'hidden',
+                    borderRadius: '10px'
+                }}
+                destroyOnClose={true}
+            >
+                <FormCopy objetivoId={'123123'} />
             </Modal>
         </>
     ) 

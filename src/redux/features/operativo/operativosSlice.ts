@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { cerrarObjetivoThunk, cierreCicloThunk, cierreObjetivoLiderThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { cambioEstatusObjetivoThunk, cierreCicloThunk, cierreObjetivoLiderThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -126,18 +126,27 @@ const operativoSlice = createSlice({
             state.error = true
         })
 
-        .addCase(cerrarObjetivoThunk.pending, (state) => {
+        .addCase(cambioEstatusObjetivoThunk.pending, (state) => {
         })
-        .addCase(cerrarObjetivoThunk.fulfilled, (state, { payload }) => {
-            const { status, id } = payload
+        .addCase(cambioEstatusObjetivoThunk.fulfilled, (state, { payload }) => {
+            const { status, id, operativosResponsable } = payload
             // encontrar objetivo y cambiar el status
-                const objetivo = state.operativos.find(operativo => operativo.id === id)
+                const objetivo = state.operativos.find(operativo => operativo.id === id)                
                 if (objetivo) {
                     objetivo.status = status
                     state.operativos = state.operativos.map(operativo => operativo.id === id ? objetivo : operativo)
+
+                    // const actualizar scoreCard de operativosResponsable
+                    objetivo.operativosResponsable.forEach((pivot) => {
+                        operativosResponsable.forEach((pivotResponse) => {
+                            if (pivot.id === pivotResponse.id) {
+                                pivot.scoreCard.status = pivotResponse.scoreCard.status
+                            }
+                        })
+                    })
                 }
         })
-        .addCase(cerrarObjetivoThunk.rejected, (state) => {
+        .addCase(cambioEstatusObjetivoThunk.rejected, (state) => {
         })
 
         .addCase(cierreObjetivoLiderThunk.pending, (state) => {
@@ -150,7 +159,6 @@ const operativoSlice = createSlice({
             const findObjetivoPersonal = state.operativos.find(operativo => operativo.id === objetivo.objetivoOperativoId)
 
             if (findObjetivo) {
-               
                findObjetivo.operativosResponsable.forEach((pivot) => {                
                      if (pivot.id === objetivo.usuarioId) {
                           pivot.scoreCard.status = objetivo.status
@@ -158,9 +166,14 @@ const operativoSlice = createSlice({
                 })
             }
 
-            if(findObjetivoPersonal){
-                
+            if(findObjetivoPersonal){   
                 findObjetivoPersonal.status = objetivoOperativo.status
+
+                findObjetivoPersonal.operativosResponsable.forEach((pivot) => {                
+                    if (pivot.id === objetivo.usuarioId) {
+                         pivot.scoreCard.status = objetivo.status
+                    }
+                })                
             }
         })
         .addCase(cierreObjetivoLiderThunk.rejected, (state) => {

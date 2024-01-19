@@ -1,5 +1,6 @@
 import { OperativoProps } from "@/interfaces"
 import { useAppSelector } from "@/redux/hooks"
+import { objetivosTypes } from "@/types"
 import { useMemo } from "react"
 
 interface Props {
@@ -9,8 +10,6 @@ interface Props {
 export const useOperativo = ({objetivo}: Props) => {
 
     const { userAuth } = useAppSelector(state => state.auth)
-
-    
 
     const { progresoAsignado, progresoReal } = objetivo.operativosResponsable.find(responsable => responsable?.id === userAuth?.id)?.scoreCard || { progresoAsignado: 0, progresoReal: 0 }
     const fixedProgresoReal = useMemo(() => Number(progresoReal.toFixed(2)), [progresoReal])
@@ -54,6 +53,10 @@ export const useOperativo = ({objetivo}: Props) => {
         return miScoreCard.status
     }, [objetivo])
 
+    const statusText = useMemo(() => {        
+        return objetivosTypes[statusObjetivo]
+    }, [statusObjetivo])
+
     const usuarioPropietaro = useMemo(() => {
         const usuario = objetivo.operativosResponsable.find(responsable => responsable.scoreCard.propietario === true)
         return usuario
@@ -87,6 +90,7 @@ export const useOperativo = ({objetivo}: Props) => {
         resultadoClaveDoneCount,
         orderedResponsables,
         statusObjetivo,
+        statusText,
         usuarioPropietaro,
         taskCount,
         taskCountDone

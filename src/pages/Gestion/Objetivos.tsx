@@ -1,202 +1,168 @@
-import { useAppSelector } from '@/redux/hooks'
-import { Box } from '../../components/ui'
-import { Calendar, DatePicker, Form } from 'antd'
-import dayjs from 'dayjs'
-import { useGetGestionObjetivosQuery, useUpdateGestionObjetivosMutation } from '@/redux/features/gestion/gestionThunk'
-import Loading from '../../components/antd/Loading'
-import { useEffect } from 'react'
-
+import { Input, Modal, Select, Table } from 'antd'
+import { useState } from 'react'
+import { Button } from '../../components/ui'
+import { Administracion } from '../../components/operativo'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { SinglePerfilProps, UsuarioGestion } from '@/interfaces'
+import { ColumnsType } from 'antd/es/table'
+import { generarReporteRendimientoThunk, useGetGestionObjetivosQuery } from '@/redux/features/gestion/gestionThunk'
+import { FaEye } from 'react-icons/fa'
+import { getColor } from '@/helpers'
+import { LuRefreshCw } from "react-icons/lu";
+import { periodoTypesGestion } from '@/types'
 
 export const Objetivos = () => {
 
+    const [search, setSearch] = useState('')
+	const [status, setStatus] = useState('')
+    const { isGeneratingReport } = useAppSelector(state => state.gestion)
     const { currentConfig: { quarter, year }} = useAppSelector(state => state.global)
-    const { RangePicker } = DatePicker
-    const { isLoading, isFetching, isSuccess , data: gestionObjetivo } = useGetGestionObjetivosQuery({quarter, year})
-    const [updateGestionObjetivos, {isLoading: isUpdating}] = useUpdateGestionObjetivosMutation()
+	const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
+	const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
+	
 
-    const [form] = Form.useForm();
+	const { data: usuarios, isLoading, refetch , isFetching } = useGetGestionObjetivosQuery({ quarter, year, search, status })
 
-    const calcularDuracion = (fechaInicio: string, fechaFin:string) => {
-        const inicio = dayjs(fechaInicio);
-        const fin = dayjs(fechaFin);
-      
-        const unidades = [
-          { unidad: 'mes', valor: fin.diff(inicio, 'month') },
-          { unidad: 'día', valor: fin.diff(inicio, 'day') },
-          { unidad: 'hora', valor: fin.diff(inicio, 'hour') }
-        ];
-      
-        const partesNoCero = unidades
-          .filter(({ valor }) => valor !== 0)
-          .map(({ valor, unidad }) => `${valor} ${unidad}${valor !== 1 ? 's' : ''}`);
-      
-        return {
-            partesNoCero,
-            días: fin.diff(inicio, 'day'),
-            horas: fin.diff(inicio, 'hour'),
-            minutos: fin.diff(inicio, 'minute'),
-            segundos: fin.diff(inicio, 'second')
-            };
-    };
+    const dispatch = useAppDispatch()
 
-    const handleSubmit = async () => {
-        const query = {
-            ...gestionObjetivo,
-            id: gestionObjetivo?.id || 0,
-            year: year,
-            quarter: quarter,
-            periodoDefinicionInicio: dayjs(form.getFieldValue('periodoDefinicion')[0]).format('YYYY-MM-DD'),
-            periodoDefinicionFin: dayjs(form.getFieldValue('periodoDefinicion')[1]).format('YYYY-MM-DD'),
-            ejecucionInicio: dayjs(form.getFieldValue('ejecucion')[0]).format('YYYY-MM-DD'),
-            ejecucionFin: dayjs(form.getFieldValue('ejecucion')[1]).format('YYYY-MM-DD'),
-            revisionIntermediaInicio: dayjs(form.getFieldValue('revisionIntermedia')[0]).format('YYYY-MM-DD'),
-            revisionIntermediaFin: dayjs(form.getFieldValue('revisionIntermedia')[1]).format('YYYY-MM-DD'),
-            cierreObjetivosInicio: dayjs(form.getFieldValue('cierreObjetivos')[0]).format('YYYY-MM-DD'),
-            cierreObjetivosFin: dayjs(form.getFieldValue('cierreObjetivos')[1]).format('YYYY-MM-DD'),
-            cierreEvaluacionCompetenciasInicio: dayjs(form.getFieldValue('cierreEvaluacionCompetencias')[0]).format('YYYY-MM-DD'),
-            cierreEvaluacionCompetenciasFin: dayjs(form.getFieldValue('cierreEvaluacionCompetencias')[1]).format('YYYY-MM-DD'),
-        }
+    const columns: ColumnsType<UsuarioGestion> = [
+		{
+			title: () => ( <p className='tableTitlePrincipal'>Nombre</p>),
+			key: 'name',
+			render: (text, record) => (
+				<p className='text-devarana-graph'>
+					{record.nombre} {record.apellidoPaterno}  {record.apellidoMaterno} 
+				</p>
+			)
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Resultado Objetivos </p>),
+			key: 'resultadoObjetivos',
+			render: (text, record) => (
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoObjetivos * 100) / 100} % </p>
+			),
+			sorter: (a, b) => a.rendimiento.resultadoObjetivos - b.rendimiento.resultadoObjetivos,
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Resultado Competencias </p>),
+			key: 'resultadoCompetencias',
+			render: (text, record) => (
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoCompetencias * 100) / 100} % </p>
+			),
+			sorter: (a, b) => a.rendimiento.resultadoCompetencias - b.rendimiento.resultadoCompetencias,
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Resultado Final </p>),
+			key: 'resultadoFinal',
+			render: (text, record) => (
+				<p className='text-default text-right'> {Math.trunc(record.rendimiento.resultadoFinal * 100) / 100} % </p>
+			),
+			sorter: (a, b) => a.rendimiento.resultadoFinal - b.rendimiento.resultadoFinal,
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Bono Obtenido </p>),
+			key: 'bonoObtenido',
+			render: (text, record) => (
+				<p className='text-default text-right'> {record.rendimiento.bono} % </p>
+			),
+			sorter: (a, b) => a.rendimiento.bono - b.rendimiento.bono,
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'> Estatus </p>),
+			key: 'status',
+			render: (text, record) => (
+				<p className='text-default text-right' style={{
+					color: getColor(record.rendimiento.status).color
+				}}> 
+					{ periodoTypesGestion[record.rendimiento.status] }
+				</p>
+			),
+			sorter: (a, b) => a.rendimiento.status.localeCompare(b.rendimiento.status),
+		},
+		{
+			title: () => ( <p className='tableTitle text-right'>  </p>),
+			key: '',
+			render: (text, record) => (
+				<button className='px-2 py-1 text-devarana-blue' onClick={ () => handleOpenAdminModal(record)}>
+					<FaEye />
+				</button>
+			)
+		}
+	]
 
-        await updateGestionObjetivos({gestionObjetivo: query}).unwrap()
+    const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
+        setActiveUsuarioReview(usuario)
+        setIsAdminModalVisible(true)
     }
 
-    useEffect(() => {
-        form.setFieldsValue({
-            periodoDefinicion: [dayjs(gestionObjetivo?.periodoDefinicionInicio), dayjs(gestionObjetivo?.periodoDefinicionFin)],
-            ejecucion: [dayjs(gestionObjetivo?.ejecucionInicio), dayjs(gestionObjetivo?.ejecucionFin)],
-            revisionIntermedia: [dayjs(gestionObjetivo?.revisionIntermediaInicio), dayjs(gestionObjetivo?.revisionIntermediaFin)],
-            cierreObjetivos: [dayjs(gestionObjetivo?.cierreObjetivosInicio), dayjs(gestionObjetivo?.cierreObjetivosFin)],
-            cierreEvaluacionCompetencias: [dayjs(gestionObjetivo?.cierreEvaluacionCompetenciasInicio), dayjs(gestionObjetivo?.cierreEvaluacionCompetenciasFin)],
-        })
-    }, [gestionObjetivo])
+    const handleCloseAdminModal = () => {
+        setIsAdminModalVisible(false)
+    }
 
-    if ( (isLoading || isFetching) && !isSuccess ) return <Loading />
+    const handleGenerateReport = () => {
+		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status }))
+	}
+	
+	
+
 
     return (
-        <>
-            <div className='grid grid-cols-12 gap-5 py-2'>
-                <Box className='col-span-8'>
-                    <h1> Configración de Periodos de Objetivos </h1>
-                    <p className='text-default'> Trimestre: {quarter} </p>
-                    <p className='text-default'> Año: {year} </p>
-                </Box>
-                <Box className='col-span-4'>
-                    <>
-                    </>
-                </Box>
-
-                {
-                    isSuccess && (
-                        <Form 
-                        className="grid grid-cols-12 gap-5 py-2 col-span-12"
-                        form={form}
-                        disabled={isUpdating}
-                        layout='vertical'
-                        initialValues={{
-                            periodoDefinicion: [dayjs(gestionObjetivo?.periodoDefinicionInicio), dayjs(gestionObjetivo?.periodoDefinicionFin)],
-                            ejecucion: [dayjs(gestionObjetivo?.ejecucionInicio), dayjs(gestionObjetivo?.ejecucionFin)],
-                            revisionIntermedia: [dayjs(gestionObjetivo?.revisionIntermediaInicio), dayjs(gestionObjetivo?.revisionIntermediaFin)],
-                            cierreObjetivos: [dayjs(gestionObjetivo?.cierreObjetivosInicio), dayjs(gestionObjetivo?.cierreObjetivosFin)],
-                            cierreEvaluacionCompetencias: [dayjs(gestionObjetivo?.cierreEvaluacionCompetenciasInicio), dayjs(gestionObjetivo?.cierreEvaluacionCompetenciasFin)],
-                        }}
-                        
-                    >
-                       
-                        <Box className='col-span-4'>
-                            <h2> Definición de Objetivos </h2>
-                            <div className='grid grid-cols-12 gap-5 items-center'>
-                                <div className='col-span-9'>
-                                    <Form.Item
-                                        label="Periodo"
-                                        name="periodoDefinicion"
-                                    >
-                                        <RangePicker onChange={handleSubmit} format={'DD MMMM YYYY'} className='w-full' />
-                                    </Form.Item>
-                                </div>
-                                <div className='col-span-3 items text-center'>
-                                    <p className='text-default'> Duración: </p>
-                                    <p className='text-default'> { calcularDuracion(gestionObjetivo!.periodoDefinicionInicio, gestionObjetivo!.periodoDefinicionFin).días} Días </p>
-                                </div>
-                            </div>
-                        </Box>
-    
-                        <Box className='col-span-4'>
-                            <h2> Ejecución de Objetivos </h2>
-                            <div className='grid grid-cols-12 gap-2 items-center'>
-                                <div className='col-span-9'>
-                                    <Form.Item
-                                        label="Periodo"
-                                        name="ejecucion"
-                                    >
-                                        <RangePicker onChange={handleSubmit} format={'DD MMMM YYYY'} className='w-full'/>
-                                    </Form.Item>
-                                </div>
-                                <div className='col-span-3 items text-center'>
-                                    <p className='text-default'> Duración: </p>
-                                    <p className='text-default'> { calcularDuracion(gestionObjetivo!.ejecucionInicio, gestionObjetivo!.ejecucionFin).días} Días </p>
-                                </div>
-                            </div>
-                        </Box>
-    
-                        <Box className='col-span-4'>
-                            <h2> Revisión Intermedia </h2>
-                            <div className='grid grid-cols-12 gap-2 items-center'>
-                                <div className='col-span-9'>
-                                     <Form.Item
-                                        label="Periodo"
-                                        name="revisionIntermedia"
-                                    >
-                                        <RangePicker onChange={handleSubmit} format={'DD MMMM YYYY'} className='w-full'/>
-                                    </Form.Item>
-                                </div>
-                                <div className='col-span-3 items text-center'>
-                                    <p className='text-default'> Duración: </p>
-                                    <p className='text-default'> { calcularDuracion(gestionObjetivo!.revisionIntermediaInicio, gestionObjetivo!.revisionIntermediaFin).días} Días </p>
-                                </div>
-                            </div>
-                        </Box>
-    
-                        <Box className='col-span-4'>
-                            <h2> Cierre de Objetivos </h2>
-                            <div className='grid grid-cols-12 gap-2 items-center'>
-                                <div className='col-span-9'>
-                                     <Form.Item
-                                        label="Periodo"
-                                        name="cierreObjetivos"
-                                    >
-                                        <RangePicker onChange={handleSubmit} format={'DD MMMM YYYY'} className='w-full'/>
-                                    </Form.Item>
-                                </div>
-                                <div className='col-span-3 items text-center'>
-                                    <p className='text-default'> Duración: </p>
-                                    <p className='text-default'> { calcularDuracion(gestionObjetivo!.cierreObjetivosInicio, gestionObjetivo!.cierreObjetivosFin).días} Días </p>
-                                </div>
-                            </div>
-                        </Box>
-    
-                        <Box className='col-span-4'>
-                            <h2> Cierre de Evaluación de Competencias </h2>
-                            <div className='grid grid-cols-12 gap-2 items-center'>
-                                <div className='col-span-9'>
-                                     <Form.Item
-                                        label="Periodo"
-                                        name="cierreEvaluacionCompetencias"
-                                    >
-                                        <RangePicker onChange={handleSubmit} format={'DD MMMM YYYY'} className='w-full'/>
-                                    </Form.Item>
-                                </div>
-                                <div className='col-span-3 items text-center'>
-                                    <p className='text-default'> Duración: </p>
-                                    <p className='text-default'> { calcularDuracion(gestionObjetivo!.cierreEvaluacionCompetenciasInicio, gestionObjetivo!.cierreEvaluacionCompetenciasFin).días} Días </p>
-                                </div>
-                            </div>
-                        </Box>
-                    </Form>
-                    )
-                }
-               
-
+            <>
+            <div className='flex gap-x-5 justify-end items-center py-2'>
+                <Select
+                    defaultValue=''
+                    onChange = {(e) => setStatus(e)}
+                    className='w-full text-devarana-graph'
+                    style={{ width: 250 }}
+                >
+                    <Select.Option value=''> <span className='text-devarana-graph'>Todos</span> </Select.Option>
+                    <Select.Option value='ABIERTO'> <span className='text-devarana-graph'>Abierto</span> </Select.Option>
+					<Select.Option value='PENDIENTE_AUTORIZAR'> <span className='text-devarana-graph'>En Aprobación</span> </Select.Option>
+					<Select.Option value='APROBADO'> <span className='text-devarana-graph'>Aprobado</span> </Select.Option>
+					<Select.Option value='PENDIENTE_APROBACION'> <span className='text-devarana-graph'>En Evaluación</span> </Select.Option>
+                    <Select.Option value='CERRADO'> <span className='text-devarana-graph'>Cerrado</span> </Select.Option>
+                </Select>
+                <Input
+                    style={{ width: 300 }}
+                    placeholder='Buscar'
+                    className='w-full'
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+                <Button classType='regular' classColor='primary' onClick={handleGenerateReport} disabled={isGeneratingReport} width={150}
+                >
+                    <p>Exportar</p>
+                </Button>
+				<Button classColor='dark' classType='regular' width={50} onClick={() => refetch()}>
+					<LuRefreshCw className='text-white text-2xl' />
+				</Button>
             </div>
-        </>
+            <Table
+                rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
+                rowKey={(record) => record.id}
+                loading={isLoading || isFetching}
+                columns={columns}
+                dataSource={ usuarios }
+				
+            >
+
+            </Table>
+            <Modal
+                    open={isAdminModalVisible}
+                    onCancel={handleCloseAdminModal}
+                    footer={null}
+                    width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
+                    style={{
+                        top: 50,
+                        left: 35,
+                        bottom: 0,
+                        height: 'calc(100% - 150px)',
+                        overflowY: 'hidden',
+                        borderRadius: '10px'
+                    }}
+                    destroyOnClose={true}
+                >
+                    <Administracion activeUsuario={activeUsuarioReview} isLeader={false}/>
+            </Modal>
+            </>
     )
 }

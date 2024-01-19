@@ -167,8 +167,8 @@ export const deleteOperativoThunk = createAsyncThunk(
 )
 
 
-export const cerrarObjetivoThunk = createAsyncThunk(
-    'operativos/cerrarObjetivo',
+export const cambioEstatusObjetivoThunk = createAsyncThunk(
+    'operativos/cambioEstatusObjetivo',
     async ({operativoId, checked} : { operativoId: string, checked: boolean }, {rejectWithValue, getState}) => {
         try {   
             const { accessToken } = (getState() as RootState).auth;
@@ -176,7 +176,6 @@ export const cerrarObjetivoThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
             const result = await clientAxios.post<CierreProps>(`/operativos/cierre`, {operativoId, checked} , config);
-            console.log(result.data.objetivo);
             
             return result.data.objetivo
         }
@@ -211,7 +210,7 @@ export const cierreObjetivoLiderThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-            const result = await clientAxios.post(`/operativos/cierre-objetivo-lider`, {usuarioId, objetivoId, checked}, config);                        ;
+            const result = await clientAxios.post(`/operativos/cierre-objetivo-lider`, {usuarioId, objetivoId, checked}, config);
             
             return result.data
         }

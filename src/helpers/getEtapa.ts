@@ -1,30 +1,44 @@
 import { getColor } from "./getColor";
 
-export const calcularEtapaActual = (objeto: any) => {
-    if (!objeto) {
+
+
+export const calcularEtapaActual = ({periodos, status}: any) => {
+	
+    if (!periodos) {
       return {
         etapaActual: "Sin Iniciar",
         color: getColor('SIN_INICIAR').color,
+		isCierreObjetivos: false,
 		isClosed: false
       }
     }
 
+	if (status === 'CERRADO') {
+		return {
+			etapaActual: "Período Cerrado",
+			color: getColor('FINALIZADO').color,
+			isCierreObjetivos: false,
+			isClosed: true
+		}
+	}
+
     
     const currentDate = new Date();
-    const periodoDefinicionInicio = new Date(objeto.periodoDefinicionInicio);
-    const periodoDefinicionFin = new Date(objeto.periodoDefinicionFin);
-    const ejecucionInicio = new Date(objeto.ejecucionInicio);
-    const ejecucionFin = new Date(objeto.ejecucionFin);
-    const revisionIntermediaInicio = new Date(objeto.revisionIntermediaInicio);
-    const revisionIntermediaFin = new Date(objeto.revisionIntermediaFin);
-    const cierreObjetivosInicio = new Date(objeto.cierreObjetivosInicio);
-    const cierreObjetivosFin = new Date(objeto.cierreObjetivosFin);
-    const cierreEvaluacionCompetenciasInicio = new Date(objeto.cierreEvaluacionCompetenciasInicio);
-    const cierreEvaluacionCompetenciasFin = new Date(objeto.cierreEvaluacionCompetenciasFin);
+    const periodoDefinicionInicio = new Date(periodos.periodoDefinicionInicio);
+    const periodoDefinicionFin = new Date(periodos.periodoDefinicionFin);
+    const ejecucionInicio = new Date(periodos.ejecucionInicio);
+    const ejecucionFin = new Date(periodos.ejecucionFin);
+    const revisionIntermediaInicio = new Date(periodos.revisionIntermediaInicio);
+    const revisionIntermediaFin = new Date(periodos.revisionIntermediaFin);
+    const cierreObjetivosInicio = new Date(periodos.cierreObjetivosInicio);
+    const cierreObjetivosFin = new Date(periodos.cierreObjetivosFin);
+    const cierreEvaluacionCompetenciasInicio = new Date(periodos.cierreEvaluacionCompetenciasInicio);
+    const cierreEvaluacionCompetenciasFin = new Date(periodos.cierreEvaluacionCompetenciasFin);
 
     let etapaActual = '';
     let color = getColor('SIN_INICIAR').color;
 	let isClosed = false;
+	let isCierreObjetivos = false;
 	
 
 	if (currentDate >= ejecucionInicio && currentDate <= ejecucionFin) {
@@ -45,6 +59,7 @@ export const calcularEtapaActual = (objeto: any) => {
 	} else if (currentDate >= cierreObjetivosInicio && currentDate <= cierreObjetivosFin) {
 		etapaActual = "Cierre de Período";
 		color = getColor('RETRASADO').color;
+		isCierreObjetivos = true;
 	} else if (
 		currentDate >= cierreEvaluacionCompetenciasInicio &&
 		currentDate <= cierreEvaluacionCompetenciasFin
@@ -61,6 +76,6 @@ export const calcularEtapaActual = (objeto: any) => {
     }
   
 
-    return { etapaActual, color, isClosed };
+    return { etapaActual, color, isClosed, isCierreObjetivos}
 
 };

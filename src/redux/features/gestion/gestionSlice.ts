@@ -1,6 +1,6 @@
 import { GestionState } from '@/interfaces'
 import { createSlice } from '@reduxjs/toolkit'
-import { generarReporteRendimientoThunk, obtenerUsuariosThunk } from './gestionThunk'
+import { generarReporteRendimientoThunk } from './gestionThunk'
 
 
 const initialState: GestionState = {
@@ -20,19 +20,6 @@ export const gestionSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(obtenerUsuariosThunk.pending, (state) => {
-            state.isLoadingUsuarios = true
-        })
-        .addCase(obtenerUsuariosThunk.fulfilled, (state, action) => {
-            state.isLoadingUsuarios = false
-            state.usuarios = action.payload.usuarios
-        })
-        .addCase(obtenerUsuariosThunk.rejected, (state, action) => {
-            state.isLoadingUsuarios = false
-            state.error = true
-            state.infoMessage = action.payload as string
-        })
-
         .addCase(generarReporteRendimientoThunk.pending, (state) => {
             state.isGeneratingReport = true
         })

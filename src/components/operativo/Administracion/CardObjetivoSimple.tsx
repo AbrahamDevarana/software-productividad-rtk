@@ -1,7 +1,7 @@
 import { getColor, getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { OperativoProps, SinglePerfilProps } from '@/interfaces'
-import { objetivosTypes } from '@/types'
+import { objetivosLiderTypes } from '@/types'
 import { Avatar, Image, Modal, Progress, Spin, Switch, Tooltip } from 'antd'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -110,11 +110,9 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) =
                                         borderRadius: '25%'
                                     }}  
                                     />
-                                    <p style={{
+                                    <p className='uppercase font-bold' style={{
                                         color: getColor(statusObjetivo).color,
-                                        fontWeight: 600
-    
-                                    }}> {objetivosTypes[statusObjetivo]}</p>
+                                    }}> {objetivosLiderTypes[statusObjetivo]}</p>
                                    </>
                                 )
                             }
@@ -132,21 +130,43 @@ export const CardObjetivoSimple = ({objetivo, activeUsuario, isLeader}: Props) =
                             {
                                 isLeader && (  statusObjetivo === 'APROBADO' || statusObjetivo === 'PENDIENTE_APROBACION') && (
 
-                                <Switch
-                                    onChange={ aprovacionObjetivo }
-                                    disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' && statusObjetivo !== 'PENDIENTE_AUTORIZAR')}
-                                    defaultChecked={ statusObjetivo === 'APROBADO' }
-                                />
+                                <div className='flex gap-x-3 items-center'>
+                                    <Switch
+                                        onChange={ aprovacionObjetivo }
+                                        disabled={ isUpdating || ( statusObjetivo !== 'APROBADO' && statusObjetivo !== 'PENDIENTE_APROBACION' && statusObjetivo !== 'PENDIENTE_AUTORIZAR')}
+                                        defaultChecked={ statusObjetivo === 'APROBADO' }
+                                        size='small'
+                                        style={{
+                                            backgroundColor: statusObjetivo === 'APROBADO' ? '#656A76' : '#A6AFC3',
+                                        }}
+                                    />
+                                    <span className='text-devarana-graph'>
+                                        {
+                                            statusObjetivo === 'APROBADO' ? 'Desautorizar' : 'Autorizar'
+                                        }
+                                </span>
+                                </div>
                                 )
                             }    
                             {
                                 isLeader && (statusObjetivo === 'ABIERTO' || statusObjetivo === 'PENDIENTE_AUTORIZAR') && (
                                 
+                                <div className='flex gap-x-3 items-center'>
                                 <Switch
                                     onChange={ aprovacionObjetivo }
                                     disabled={ isUpdating || (  statusObjetivo !== 'ABIERTO' && statusObjetivo !== 'PENDIENTE_AUTORIZAR')}
                                     defaultChecked={ statusObjetivo === 'ABIERTO' }
+                                    style={{
+                                        backgroundColor: statusObjetivo === 'ABIERTO' ? '#656A76' : '#A6AFC3',
+                                    }}
+                                    size='small'
                                 />
+                                <span className='text-devarana-graph'>
+                                    {
+                                        statusObjetivo === 'ABIERTO' ? 'Desaprobar' : 'Aprobar'
+                                    }
+                                </span>
+                                </div>
                                 )
                             }                        
                         </div> 

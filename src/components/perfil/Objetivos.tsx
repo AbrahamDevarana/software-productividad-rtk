@@ -1,15 +1,13 @@
-import React from 'react'
-import { Box, Button } from '../ui'
+import { Box } from '../ui'
 import { Link } from 'react-router-dom';
-import { useOperativo } from '@/hooks/useOperativo';
 import { Avatar, Image, Progress, Tooltip } from 'antd';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
-import { Icon } from '../Icon';
 import { useAppSelector } from '@/redux/hooks';
 import CountUp from 'react-countup';
 import { OperativoProps, SinglePerfilProps } from '@/interfaces';
 import { useOthersOperativo } from '@/hooks/useOthersOperativo';
+import { FaEye } from 'react-icons/fa';
 
 interface Props {
 	objetivo: OperativoProps;
@@ -21,7 +19,6 @@ export const Objetivos = ({objetivo, visitante, usuarioActivo}: Props) => {
 
 	const { currentConfig: {year, quarter}} = useAppSelector(state => state.global)
 	const { resultadoClaveDoneCount, progresoAsignado, firstColor, fixedProgresoReal, secondColor, orderedResponsables} = useOthersOperativo({objetivo, usuarioId: usuarioActivo.id})
-
   	return (
 		<Box className="w-[350px] flex-none" key={objetivo.id}>
 			<div className="p-5 shadow rounded-ext bg-gradient-to-tr from-dark to-dark-light flex gap-x-10 -mt-10">
@@ -55,10 +52,11 @@ export const Objetivos = ({objetivo, visitante, usuarioActivo}: Props) => {
 						'100%': secondColor,
 						direction: 'to top',
 					}}
+					trailColor={secondColor}
 					format={() => <CountUp style={{
 						fontSize: '10px',
 						fontWeight: 'bold',
-						color: fixedProgresoReal > 85 ? '#848891' : '#fff'
+						color: '#FFFFFF'
 					}}  end={fixedProgresoReal} duration={1} suffix='%' decimals={2} decimal='.' />}					
 				/>
 
@@ -80,8 +78,10 @@ export const Objetivos = ({objetivo, visitante, usuarioActivo}: Props) => {
 				<div className="flex gap-10 justify-center">
 					{ !visitante && 
 						<Link to={`/objetivo/${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'>
-							<Icon iconName='faEye'/>
-							<span> Ver </span> 
+							<div className='flex items-center gap-x-2'>
+								<FaEye />
+								<span> Ver </span> 
+							</div>
 						</Link>
 					}
 				</div>

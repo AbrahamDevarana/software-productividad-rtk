@@ -6,7 +6,6 @@ export const statusTypes = {
     CANCELADO: 'Cancelado',
     EN_PAUSA: 'En Pausa',
     RETRASADO: 'Retrasado',
-
     ABIERTO: 'Abierto',
     CERRADO: 'Cerrado',
 }
@@ -22,9 +21,22 @@ export const uploadUrl = Object.freeze({
 
 export const objetivosTypes = {
     NUEVO: 'Nuevo', // Cuando se crea un objetivo
-    PENDIENTE_AUTORIZAR: 'Pendiente de Autorizar', // Cuando se crea un objetivo y se envia a autorizar
-    ABIERTO: 'Abierto', // Cuando se crea un objetivo dentro del periodo
-    PENDIENTE_APROBACION: 'Pendiente de Aprobación', // Cuando se crea un objetivo y se envia a aprobacion
+    PENDIENTE_AUTORIZAR: 'En proceso de aprobación', // Cuando se crea un objetivo y se envia a autorizar
+    ABIERTO: 'En Ejecución', // Cuando se crea un objetivo dentro del periodo
+    PENDIENTE_APROBACION: 'En proceso de evaluación', // Cuando se crea un objetivo y se envia a aprobacion
+    APROBADO: 'Aprobado', // Cuando se aprueba un objetivo
+    SIN_APROBAR: 'Sin Aprobar', // Cuando se rechaza un objetivo
+    CANCELADO: 'Cancelado', // Cuando se cancela un objetivo
+    FINALIZADO: 'Finalizado', // Cuando se finaliza un objetivo
+    CERRADO: 'CERRADO'
+}
+
+export const objetivosLiderTypes = {
+
+    NUEVO: 'Nuevo', // Cuando se crea un objetivo
+    PENDIENTE_AUTORIZAR: 'Pendiente de Aprobación', // Cuando se crea un objetivo y se envia a autorizar
+    ABIERTO: 'En Ejecución', // Cuando se crea un objetivo dentro del periodo
+    PENDIENTE_APROBACION: 'Pendiente de Evaluación', // Cuando se crea un objetivo y se envia a aprobacion
     APROBADO: 'Aprobado', // Cuando se aprueba un objetivo
     SIN_APROBAR: 'Sin Aprobar', // Cuando se rechaza un objetivo
     CANCELADO: 'Cancelado', // Cuando se cancela un objetivo
@@ -65,3 +77,12 @@ export const styles: { [key in Prioridad]: string } = {
     [Prioridad.Normal]: 'rgba(64, 143, 227, 1)',
     [Prioridad.Alta]: 'rgba(236, 77, 73, 1)',
 };
+
+export const periodoTypesGestion = {
+    NUEVO: 'Nuevo',
+    PENDIENTE_AUTORIZAR: 'En Aprobación',
+    ABIERTO: 'En Ejecución',
+    PENDIENTE_APROBACION: 'En Evaluación',
+    APROBADO: 'Aprobado',
+    CERRADO: 'Cerrado'
+}
