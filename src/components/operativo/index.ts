@@ -7,3 +7,4 @@ export { CardObjetivo } from '@/components/operativo/CardObjetivo';
 export { CardRanking } from '@/components/operativo/CardRanking';
 export { FormPonderacion } from '@/components/operativo/FormPonderacion';
 export { Administracion } from '@/components/operativo/Administracion';
+export { FormCopy } from '@/components/operativo/FormCopy';
