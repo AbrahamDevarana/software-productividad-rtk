@@ -48,17 +48,31 @@ export default defineConfig({
                 entryFileNames: `assets/js/[name]-[hash].js`,
                 chunkFileNames: `assets/js/[name]-[hash].js`,
                 assetFileNames: `assets/[ext]/[name]-[hash].[ext]`,
-                manualChunks(id: string) {
-                    if (id.includes('node_modules')) {
-                        const moduleMatch = id.match(/node_modules\/([^/]+)(?:\/|$)/);
-                        if (moduleMatch) {
-                            const module = moduleMatch[1];
-                            if (!module.includes('react')) {
-                                return `vendor-${module}`;
-                            }
-                        }
-                    }
-                },
+                //  manualChunks: {
+                //     "smart-webcomponents-react/ganttchart": ["smart-webcomponents-react/ganttchart"],
+                //     "react-dom": ["react-dom"],
+                //     "@fortawesome/fontawesome-svg-core": ["@fortawesome/fontawesome-svg-core"],
+                //     "@fortawesome/free-regular-svg-icons": ["@fortawesome/free-regular-svg-icons"],
+                //     "@fortawesome/free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons"],
+                //     "@fortawesome/react-fontawesome": ["@fortawesome/react-fontawesome"],
+                //     "react-icons": ["react-icons"],
+                //     "antd": ["antd"],
+                //     "antd-img-crop": ["antd-img-crop"],
+                //     "axios": ["axios"],
+                //     "framer-motion": ["framer-motion"],
+                //     "react-quill": ["react-quill"],
+                //     "swiper": ["swiper"],
+                //     "react-dropzone": ["react-dropzone"],
+                //     "react-countup": ["react-countup"],
+                //     "react-chartjs-2": ["react-chartjs-2"],
+                //     "dompurify": ["dompurify"],
+                //     "chart.js": ["chart.js"],
+                //     "react-gauge-chart": ["react-gauge-chart"],
+                //     "react-simple-star-rating": ["react-simple-star-rating"],
+                //     "chartjs-plugin-datalabels": ["chartjs-plugin-datalabels"],
+                //     "@dnd-kit/core": ["@dnd-kit/core"],
+                //     "@dnd-kit/sortable": ["@dnd-kit/sortable"],
+                // },
                 compact: true,
                 minifyInternalExports: true,
 
