@@ -6,6 +6,7 @@ import { clientAxios } from '@/config/axios';
 import { UsuarioProps } from '@/interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
+import { baseQuery } from "@/config/baseQuery";
 
 export const getUsuariosThunk = createAsyncThunk(
     'usuarios/getUsuarios',
@@ -149,7 +150,7 @@ export const clearUsuariosThunk = () => {
 
 
 interface UsuariosParams {
-    filtros?: any;
+    status: status
     search?: string;
 }
 
@@ -157,33 +158,64 @@ interface IUsuariosResponse {
     rows: UsuarioProps[];
 }
 
-const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
-    prepareHeaders: (headers, { getState }) => {
-        const accessToken = localStorage.getItem('accessToken');
-        if( accessToken ) headers.set('accessToken', `${accessToken}`);  
-        return headers;
-    }
 
-});
+type status = 'ACTIVO' | 'INACTIVO' | 'ALL';
 
-export const userApi =  createApi({
+
+export const usuariosApi =  createApi({
    
     reducerPath: 'usuariosApi',
     baseQuery,
+    tagTypes: ['Usuarios'],
     endpoints: (builder) => ({
         getUsuarios: builder.query({
-            query: ({filtros, search}: UsuariosParams) => ({
+            query: ({status, search}: UsuariosParams) => ({
                 url: `/usuarios`,
                 method: 'GET',
                 params: {
-                    ...filtros,
+                    status,
                     search
-                }
+                },
+            }),
+            transformResponse: (response: { usuarios: IUsuariosResponse } ) => response.usuarios.rows,
+            providesTags: ['Usuarios']
+        }),
+        getUsuario: builder.query({
+            query: (usuarioId: string) => `/usuarios/${usuarioId}`,
+            transformResponse: (response: { usuario: UsuarioProps } ) => response.usuario
+        }),
+        createUsuario: builder.mutation({
+            query: (usuario: UsuarioProps) => ({
+                url: `/usuarios`,
+                method: 'POST',
+                body: usuario
+            }),
+            invalidatesTags: ['Usuarios'],
+        }),
+        updateUsuario: builder.mutation({
+            query: (usuario: UsuarioProps) => ({
+                url: `/usuarios/${usuario.id}`,
+                method: 'PUT',
+                body: usuario
+            }),
+            invalidatesTags: ['Usuarios'],
+        }),
+        deleteUsuario: builder.mutation({
+            query: (usuarioId: string) => ({
+                url: `/usuarios/${usuarioId}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Usuarios'],
+        }),
+        getResultados: builder.query({
+            query: (filtros: any) => ({
+                url: `/usuarios/resultados`,
+                method: 'GET',
+                params: filtros
             }),
             transformResponse: (response: { usuarios: IUsuariosResponse } ) => response.usuarios.rows
-        })
+        }),
     })
   })
 
-  export const { useGetUsuariosQuery } = userApi;
+  export const { useGetUsuariosQuery, useCreateUsuarioMutation, useDeleteUsuarioMutation, useGetResultadosQuery, useGetUsuarioQuery, useUpdateUsuarioMutation } = usuariosApi;

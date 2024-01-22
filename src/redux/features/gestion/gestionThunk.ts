@@ -3,7 +3,7 @@ import { RootState } from "@/redux/store";
 import { clientAxios } from '@/config/axios'
 import { GestionObjetivo, GestionState, UsuarioGestion } from '@/interfaces'
 
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 import { baseQuery } from "@/config/baseQuery";
 
 

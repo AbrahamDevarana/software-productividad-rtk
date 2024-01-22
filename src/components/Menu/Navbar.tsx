@@ -16,8 +16,8 @@ import { DefaultOptionType } from "antd/es/select";
 
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
-	const { currentConfig: {quarter, year, currentDate}, periodControls: {prePeriodDefinitionDays} } = useAppSelector(state => state.global)
-	const { data: usuarios, isLoading } = useGetUsuariosQuery({})
+	const { currentConfig: {quarter, year, currentDate} } = useAppSelector(state => state.global)
+	const { data: usuarios, isLoading } = useGetUsuariosQuery({status: 'ACTIVO'})
 	
     const dispatch = useAppDispatch()
 
@@ -47,7 +47,6 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 					<div className="sm:ml-auto flex items-center gap-x-5">
 
 						<Select
-							className='w-44'
 							options={usuarios?.map( (item, index) => (	
 								{
 									label: (
@@ -59,11 +58,12 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 									dataName: `${item.nombre} ${item.apellidoPaterno}`
 								}
 							))}
-							showArrow={false}
+							suffixIcon={false}
 							size='small'
 							showSearch
 							placeholder='Buscar'
 							loading={isLoading}
+							style={{ width: 200 }}
 							filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
 						/>
 

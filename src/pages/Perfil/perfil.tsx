@@ -11,17 +11,13 @@ import dayjs from "dayjs";
 import { Tooltip } from "antd";
 import { Proximamente } from '@/components/ui';
 import { AiFillFacebook, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useObjetivo } from "@/hooks/useObjetivos";
+import { useAppSelector } from "@/redux/hooks";
 import { Objetivos } from "@/components/perfil/Objetivos";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/pagination';
-import { FreeMode, Mousewheel, Navigation, Pagination } from "swiper";
-import { useOtherObjetivo } from "@/hooks/useOthersObjetivos";
-import { getHistorialRendimientoThunk } from "@/redux/features/perfil/perfilThunk";
-import { useEffect, useMemo } from "react";
+import { Mousewheel, Navigation } from "swiper";
+import { useMemo } from "react";
 import CountUp from 'react-countup';
-import { getOperativosUsuarioThunk } from "@/redux/features/operativo/operativosThunk";
 
 interface Props {
     usuarioActivo: PerfilProps

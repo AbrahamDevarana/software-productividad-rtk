@@ -2,7 +2,7 @@ import { Pagination, Table, Tooltip, Input, FloatButton, Modal, Avatar, Image } 
 import { Box, Button } from "@/components/ui"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { useEffect, useState } from "react"
-import { getUsuariosThunk, deleteUsuarioThunk, getUsuarioThunk, clearUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks"
+import {useGetUsuariosQuery, useDeleteUsuarioMutation, useGetUsuarioQuery } from "@/redux/features/usuarios/usuariosThunks"
 import { ColumnsType } from "antd/es/table"
 import { FormUsuarios } from './components/FormUsuarios';
 import dayjs from 'dayjs';
@@ -19,36 +19,15 @@ const initialValues = {
   page: 0,
 }
 
-interface DataType {
-  key: React.Key;
-  id: string;
-  nombre: string;
-  email: string;
-  fechaNacimiento: string;
-  fechaIngreso: string;
-  acciones: string;
-}
-
-
 export const Usuarios: React.FC = () => {
-    const [filtros, setFiltros] = useState<any>(initialValues)
 	const [formVisible, setFormVisible] = useState<boolean>(false)
-	const { usuarios, infoMessage, paginate, isLoading} = useAppSelector((state) => state.usuarios)
-    const dispatch = useAppDispatch()
+    const [deleteUsuario, {isLoading: isDeleting}] = useDeleteUsuarioMutation()
+    const [usuarioId, setUsuarioId] = useState<string>('')
+
     const { confirm } = Modal;
     const [search, setSearch] = useState('')
 
-
-    const { debouncedValue } = useDebounce(search, 500)
-
-    useEffect(() => {
-      dispatch(getUsuariosThunk({filtros, search}))
-	  return () => {
-		  dispatch(clearUsuariosThunk())
-	  }
-    }, [filtros, debouncedValue])
-
-
+    const { data: usuarios, isLoading, isFetching } = useGetUsuariosQuery({search, status: 'ALL'})    
 
     const showDeleteConfirm = (id: string) => {
         confirm({
@@ -58,8 +37,8 @@ export const Usuarios: React.FC = () => {
             okType: 'danger',
             cancelText: 'No',
             async onOk() {
-                await dispatch(deleteUsuarioThunk(id))
-                handleModal(false)
+                await deleteUsuario(id)
+                
             }
         });
     }
@@ -111,6 +90,13 @@ export const Usuarios: React.FC = () => {
             render: (text, record, index) => ( <p className="text-devarana-graph"> {record.fechaIngreso? `${dayjs(record.fechaIngreso, 'YYYY-MM-DD').locale('es').format('D MMMM YYYY')}` : 'No especificado'} </p>),
 			ellipsis: true
 		},
+        {
+            title: () => ( <p className='tableTitle'>Status</p>),
+            key: "status",
+            render: (text, record, index) => ( <div className={`h-5 w-5 ${record.status === 'ACTIVO' ? 'bg-green-400' : 'bg-red-400'} rounded-full`}></div>),
+            ellipsis: true,
+            width: 100
+        },
 		{
             title: () => ( <p className='tableTitle'>Acciones</p>),
             key: "acciones",
@@ -142,15 +128,13 @@ export const Usuarios: React.FC = () => {
     ]
    
 	const handleEdit = (id: any) => {
-        dispatch(getUsuarioThunk(id))
+        setUsuarioId(id)
         setFormVisible(true)
     }
 
-    
     const handleModal = (status : boolean) => {
         setFormVisible(status)
     }
-
 
     return (
         <>
@@ -173,28 +157,14 @@ export const Usuarios: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={usuarios}
-                loading={isLoading}
+                loading={isLoading || isFetching || isDeleting}
                 rowKey={(record) => record.id}
-                // pagination={false}
                 className="customTable"
-                // rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
             >
             </Table>
-            {/* <Pagination
-                    className="flex justify-end mt-5"
-                    current={paginate.currentPage + 1}
-                    total={paginate.totalItem}
-                    pageSize={filtros.size}
-                    onChange={(page, pageSize) => {
-                        setFiltros({
-                            page: page - 1,
-                            size: pageSize
-                        })
-                    }}
-
-            /> */}
+          
             </Box>
-            <FormUsuarios visible={formVisible} handleModal={handleModal}/>
+            <FormUsuarios usuarioId={usuarioId} visible={formVisible} handleModal={handleModal}/>
         </>
 
         

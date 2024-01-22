@@ -1,31 +1,25 @@
-import { Alert, Divider, Form, Input, DatePicker } from 'antd'
+import { Divider, Form, Input, DatePicker, message } from 'antd'
 import { Button } from "@/components/ui"
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import dayjs from 'dayjs';
-import { updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
-import { UsuarioProps } from '@/interfaces';
+import { useUpdateUsuarioMutation } from '@/redux/features/usuarios/usuariosThunks';
 
 
+export const Personal: React.FC<any> = ({currentUsuario, handleCancel}) => {
 
-export const Personal: React.FC<any> = ({handleSteps, handleCancel}) => {
-
-    const dispatch = useAppDispatch();
+    const [updateUser, {isLoading: isUpdating}] = useUpdateUsuarioMutation()
     const [form] = Form.useForm();
-    const { currentUsuario } = useAppSelector((state: any) => state.usuarios)
-
     const handleOnSubmit = () => {      
-        
 
-        // format fechas con dayjs
         const query = {
             ...currentUsuario,
             ...form.getFieldsValue(),
         }
 
-        console.log(query);
         
-
-        dispatch(updateUsuarioThunk(query))
+        updateUser(query).unwrap().then(() => {
+            message.success('Usuario Actualizado Correctamente.')
+        })
+        
         handleCancel()
     }
    
@@ -112,7 +106,7 @@ export const Personal: React.FC<any> = ({handleSteps, handleCancel}) => {
                     </Form.Item>
                 </div>
                 <div className="flex justify-end mt-2">
-                    <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
+                    <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2" disabled={isUpdating}> { currentUsuario.id ? 'Actualizar' : 'Crear' } </Button>
                 </div>
             </Form>
 

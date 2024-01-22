@@ -36,7 +36,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     const [filteredEstrategicos, setFilteredEstrategicos] = useState(estrategicos)
 
     const { data: perspectivas } = useGetPerspectivasQuery({ year })
-    const { data: usuarios} = useGetUsuariosQuery({})
+    const { data: usuarios} = useGetUsuariosQuery({status:'ACTIVO'})
 
 
     useEffect(() => {

@@ -1,26 +1,23 @@
-import { Select, Form, Input, Space, Skeleton } from 'antd';
+import { Select, Form, Input, Space, Skeleton, message } from 'antd';
 import { Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useMemo, useState } from 'react';
 import { getAreasThunk } from '@/redux/features/areas/areasThunks';
 import { useAppDispatch } from '@/redux/hooks';
 import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
-import { updateUsuarioThunk } from '@/redux/features/usuarios/usuariosThunks';
+import { useUpdateUsuarioMutation } from '@/redux/features/usuarios/usuariosThunks';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaArrowRight, FaSave } from 'react-icons/fa';
 
-export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
+export const Profesional: React.FC<any> = ({handleSteps, handleCancel, currentUsuario}) => {
 
     const dispatch = useAppDispatch();
-    const { currentUsuario, isLoadingCurrentUsuario  } = useAppSelector(state => state.usuarios)
     const { areas, isLoading:isLoadingArea } = useAppSelector(state => state.areas)
     const { departamentos, lideres } = useAppSelector(state => state.departamentos)
     const [selectedArea, setSelectedArea] = useState<number | undefined>(undefined)
+    const [updateUser, {isLoading: isUpdating}] = useUpdateUsuarioMutation()
 
     const [form] = Form.useForm();
-
-    console.log(lideres);
-    
 
     const { spanUsuario } = useSelectUser(lideres as any)
     
@@ -65,7 +62,9 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
             ...form.getFieldsValue(),
             id: currentUsuario.id
         }
-        dispatch(updateUsuarioThunk(query))              
+        updateUser(query).unwrap().then(() => {
+            message.success('Usuario Actualizado Correctamente.')
+        })
         handleCancel()
     }
 
@@ -81,7 +80,7 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
 
     if(currentUsuario.id === '') return null;
 
-    if (isLoadingArea  || isLoadingCurrentUsuario) return <Skeleton active paragraph={{ rows: 4 }} />
+    if (isLoadingArea ) return <Skeleton active paragraph={{ rows: 4 }} />
   
 
     return (
@@ -163,7 +162,7 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel}) => {
 
                     </Form.Item>                                
                     <div className="flex justify-end mt-2 gap-x-2">
-                        <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> <FaSave /> </Button>
+                        <Button disabled={isUpdating} classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2"> <FaSave /> </Button>
                         <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={() => handleSteps(2)} className="mr-2"> <FaArrowRight /> </Button>
                     </div>
             </Form>

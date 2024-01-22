@@ -2,8 +2,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
-import { PerfilProps } from "@/interfaces";
+import { PerfilProps, Rendimiento, SinglePerfilProps } from "@/interfaces";
 import { clearProfile } from "./perfilSlice";
+
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from "@/config/baseQuery";
+
 
 
 interface Props {
@@ -104,46 +108,6 @@ export const updateProfileConfigThunk = createAsyncThunk(
 )
 
 
-export const getEquipoThunk = createAsyncThunk(
-    'profile/getEquipo',
-    async ({usuarioId}: {usuarioId:string}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-            }
-            const response = await clientAxios.get(`/perfiles/get-equipo/${usuarioId}`, config);
-            
-            return response.data.equipo
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const getColaboradoresThunk = createAsyncThunk(
-    'profile/getColaboradores',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter
-                }
-            }
-            const response = await clientAxios.get(`/perfiles/get-colaboradores/${usuarioId}`, config);
-            return response.data.colaboradores
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
- 
-
-
-
 export const updatePortraitThunk = createAsyncThunk(
     'profile/updatePortrait',
     async ({id, portadaPerfil}: {id:string, portadaPerfil:string}, {rejectWithValue, getState}) => {
@@ -181,25 +145,6 @@ export const getRendimientoThunk = createAsyncThunk(
     }
 )
 
-export const getHistorialRendimientoThunk = createAsyncThunk(
-    'profile/getHistorialRendimiento',
-    async ({usuarioId, year}:{usuarioId: string, year: number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year
-                }
-            }
-            const response = await clientAxios.get(`/rendimiento/historial/${usuarioId}`, config);
-            return response.data
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
 
 export const clearProfileThunk = () => {
     return (dispatch: any) => {
@@ -208,40 +153,45 @@ export const clearProfileThunk = () => {
 }
 
 
-// export const postSolicitarEvaluacionThunk = createAsyncThunk(
-//     'profile/postSolicitarEvaluacion',
-//     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-//         try {
-//             const { accessToken } = (getState() as RootState).auth;
-//             const config = {
-//                 headers: { "accessToken": `${accessToken}` }
-//             }
-//             const response = await clientAxios.post(`/evaluacion/asignar`, {year, quarter, usuarioId}, config);
-//             console.log(response.data);
-            
-//             return response.data
-//         } catch (error: any) {
-//             return rejectWithValue(error.response.data)
-//         }
-//     }
-// )
+export const perfilApi = createApi({
+    reducerPath: 'perfilApi',
+    baseQuery,
+    tagTypes: ['Perfil', 'Equipo'],
+    endpoints: (builder) => ({
+        getHistorial: builder.query({
+            query: ({usuarioId, year}:{usuarioId: string, year: number}) => ({
+                url: `/rendimiento/historial/${usuarioId}`,
+                params: { year },
+            }),
+            providesTags: ['Perfil'],
+            transformResponse: (response: {rendimientos: Rendimiento[]}) => response.rendimientos
+        }),
+        getEquipo: builder.query({
+            query: ({usuarioId}:{usuarioId: string}) => `/perfiles/get-equipo/${usuarioId}`,
+            providesTags: ['Equipo'],
+            transformResponse: (response: {equipo: SinglePerfilProps[]}) => response.equipo
+        }),
+        getColaboradores: builder.query({
+            query: ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}) => ({
+                url: `/perfiles/get-colaboradores/${usuarioId}`,
+                params: { year, quarter },
+            }),
+            providesTags: ['Equipo'],
+            transformResponse: (response: {colaboradores: SinglePerfilProps[]}) => response.colaboradores
+        }),
+    }),
+})
 
-// export const getEvaluacionesRealizadasThunk = createAsyncThunk(
-//     'profile/getEvaluacionesRealizadas',
-//     async ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}, {rejectWithValue, getState}) => {
-//         try {
-//             const { accessToken } = (getState() as RootState).auth;
-//             const config = {
-//                 headers: { "accessToken": `${accessToken}` },
-//                 params: {
-//                     year,
-//                     quarter
-//                 }
-//             }
-//             const response = await clientAxios.get(`/evaluacion/realizadas/${usuarioId}`, config);
-//             return response.data
-//         } catch (error: any) {
-//             return rejectWithValue(error.response.data)
-//         }
-//     }
-// )
+export const {
+    // useGetProfileQuery,
+    // useUpdateProfileMutation,
+    // useUploadProfilePictureMutation,
+    // useUpdateProfileConfigMutation,
+    // useUpdatePortraitMutation,
+    // useGetRendimientoQuery,
+    useGetColaboradoresQuery,
+    useGetEquipoQuery,
+    useGetHistorialQuery
+} = perfilApi;
+
+

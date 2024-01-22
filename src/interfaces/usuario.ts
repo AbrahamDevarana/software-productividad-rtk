@@ -35,7 +35,7 @@ export interface UsuarioProps {
     iniciales: string;
     email: string;
     password?: string;
-    status?: boolean;
+    status?: 'ACTIVO' | 'INACTIVO';
     fechaNacimiento?: Date | string;
     fechaIngreso?: Date | string;
     telefono?: number;

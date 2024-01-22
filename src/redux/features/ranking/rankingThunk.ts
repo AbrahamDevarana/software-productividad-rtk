@@ -1,27 +1,24 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from '@/redux/store';
-import { clientAxios } from '@/config/axios';
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { baseQuery } from "@/config/baseQuery";
+import { Ranking } from '@/interfaces';
 
 
-export const getRankingsThunk = createAsyncThunk(
-    'ranking/getRankingsThunk',
-    async ({year, quarter}: {year: number, quarter: number}, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
+export const rankingApi =  createApi({
+    reducerPath: 'rankingApi',
+    baseQuery: baseQuery,
+    endpoints: (builder) => ({
+        getRankings: builder.query({
+            query: ({year, quarter}: {year: number, quarter: number}) => ({
+                url: `/rendimiento/ranking`,
+                method: 'GET',
                 params: {
                     year,
                     quarter
                 }
-            }
-            const response = await clientAxios.get('/rendimiento/ranking', config);
-            return response.data.rankingUsuarios
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
+            }),
+            transformResponse: (response: {rankingUsuarios: Ranking[]}) => response.rankingUsuarios
+        })
+    })
+})
 
-    
+export const { useGetRankingsQuery } = rankingApi;

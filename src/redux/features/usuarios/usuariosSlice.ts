@@ -24,7 +24,7 @@ const initialState: UsuariosState = {
         foto: '',
         email: '',
         password: '',
-        status: false,
+        status: 'ACTIVO',
         fechaNacimiento: new Date(),
         fechaIngreso: new Date(),
         telefono: 1234567890,

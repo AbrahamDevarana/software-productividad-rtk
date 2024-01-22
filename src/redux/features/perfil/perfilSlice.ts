@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getColaboradoresThunk, getEquipoThunk, getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk, getHistorialRendimientoThunk } from './perfilThunk';
+import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk } from './perfilThunk';
 import { postEvaluacionThunk } from '../evaluaciones/evaluacionesThunk';
 
 
@@ -159,29 +159,6 @@ const profileSlice = createSlice({
                 state.isLoading = false
                 state.error = action.error.message
             })
-            .addCase(getEquipoThunk.pending, (state) => {
-                // state.isLoading = true
-            })
-            .addCase(getEquipoThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.perfil.equipo = action.payload
-            })
-            .addCase(getEquipoThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = action.error.message
-            })
-            .addCase(getColaboradoresThunk.pending, (state) => {
-                // state.isLoading = true
-            })
-            .addCase(getColaboradoresThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.perfil.colaboradores = action.payload
-            })
-            .addCase(getColaboradoresThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = action.error.message
-            })
-
             .addCase(updatePortraitThunk.pending, (state) => {
                 state.isLoadingConfiguration = true
             })
@@ -202,18 +179,6 @@ const profileSlice = createSlice({
                 state.perfil.rendimiento = action.payload.rendimiento
             })
             .addCase(getRendimientoThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = action.error.message
-            })
-
-            .addCase(getHistorialRendimientoThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getHistorialRendimientoThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.perfil.historialRendimiento = action.payload.rendimientos
-            })
-            .addCase(getHistorialRendimientoThunk.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.error.message
             })

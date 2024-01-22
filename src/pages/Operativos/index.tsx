@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
+import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
+import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -16,7 +16,6 @@ import 'swiper/css/effect-cards';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, FreeMode } from 'swiper';
 import { SinglePerfilProps } from '@/interfaces';
-import { getRankingsThunk } from '@/redux/features/ranking/rankingThunk';
 import { getEvaluacionResultadosThunk, getUsuariosAEvaluarThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
 import { useGetGestionPeriodosQuery } from '@/redux/features/gestion/gestionThunk';
 import { calcularEtapaActual } from '@/helpers/getEtapa';
@@ -45,20 +44,19 @@ export const Objetivos : React.FC = () => {
 
     const { rendimiento } = perfil
 
-
+    
+    const {data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
+    const {data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
+    
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
             await Promise.all([
                 dispatch(getRendimientoThunk({year, quarter, usuarioId: userAuth?.id})),
                 dispatch(getProfileThunk({usuarioId: userAuth?.id, year, quarter})),
-                dispatch(getEquipoThunk({ usuarioId: userAuth?.id })),
-                dispatch(getColaboradoresThunk({year, quarter, usuarioId: userAuth?.id})),
                 dispatch(getOperativosThunk({year, quarter, usuarioId: userAuth?.id})),
                 dispatch(getEvaluacionResultadosThunk({usuarioId: userAuth.id, year, quarter })),
                 dispatch(getUsuariosAEvaluarThunk({usuarioId: userAuth.id, year, quarter })),
-                dispatch(getHistorialRendimientoThunk({year, usuarioId: userAuth?.id})),
-                dispatch(getRankingsThunk({year, quarter})),
             ])
             setGettingProfile(false)
         }
@@ -109,10 +107,10 @@ export const Objetivos : React.FC = () => {
                         
                     >
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo title="Mi Equipo" equipo={perfil.equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
+                            <CardEquipo title="Mi Equipo" equipo={equipo} color='primary' handleMiEquipo={handleOpenAdminModal} />
                         </SwiperSlide>
                         <SwiperSlide className='rounded-ext'>
-                            <CardEquipo title="Colaboradores de Objetivos" equipo={perfil.colaboradores} color='secondary'/>
+                            <CardEquipo title="Colaboradores de Objetivos" equipo={colaboradores} color='secondary'/>
                         </SwiperSlide>
 
                     </Swiper>

@@ -1,7 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authApi } from "./features/auth/authThunks";
-import { userApi } from "./features/usuarios/usuariosThunks";
-
 import authSlice from "./features/auth/authSlice";
 import globalSlice from "./features/global/globalSlice";
 import profileSlice from "./features/perfil/perfilSlice";
@@ -20,10 +18,8 @@ import tareasSlice from "./features/tareas/tareasSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
 import comentariosSlice from "./features/comentarios/comentariosSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
-import rankingsSlice from "./features/ranking/rankingSlice";
 import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 import gestionSlice from "./features/gestion/gestionSlice";
-import rolesSlice from "./features/roles/rolesSlice";
 import { rolesApi } from "./features/roles/rolesThunk";
 import { permisosApi } from "./features/permisos/PermisosThunk";
 import { gestionApi } from "./features/gestion/gestionThunk";
@@ -31,18 +27,23 @@ import { evaluacionApi } from "./features/evaluaciones/evaluacionesThunk";
 import { globalApi } from "./features/global/globalThunk";
 import { perspectivasApi } from "./features/perspectivas/perspectivasThunk";
 import { tacticosApi } from "./features/tacticos/tacticosThunk";
+import { usuariosApi } from "./features/usuarios/usuariosThunks";
+import { rankingApi } from "./features/ranking/rankingThunk";
+import { perfilApi } from "./features/perfil/perfilThunk";
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
         [globalApi.reducerPath]: globalApi.reducer,
-        [userApi.reducerPath]: userApi.reducer,
+        [usuariosApi.reducerPath]: usuariosApi.reducer,
         [rolesApi.reducerPath]: rolesApi.reducer,
         [permisosApi.reducerPath]: permisosApi.reducer,
         [gestionApi.reducerPath]: gestionApi.reducer,
         [evaluacionApi.reducerPath]: evaluacionApi.reducer,
         [perspectivasApi.reducerPath]: perspectivasApi.reducer,
         [tacticosApi.reducerPath]: tacticosApi.reducer,
+        [rankingApi.reducerPath]: rankingApi.reducer,
+        [perfilApi.reducerPath]: perfilApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -61,7 +62,6 @@ export const store = configureStore({
         acciones: accionesSlice,
         comentarios: comentariosSlice,
         galeria: galeriaSlice,
-        rankings: rankingsSlice,
         evaluaciones: evaluacionsSlice,
         gestion: gestionSlice,
     },
@@ -69,13 +69,15 @@ export const store = configureStore({
         getDefaultMiddleware({ serializableCheck: false })
         .concat(authApi.middleware)
         .concat(globalApi.middleware)
-        .concat(userApi.middleware)
+        .concat(usuariosApi.middleware)
         .concat(rolesApi.middleware)
         .concat(permisosApi.middleware)
         .concat(gestionApi.middleware)
         .concat(evaluacionApi.middleware)
         .concat(perspectivasApi.middleware)
-        .concat(tacticosApi.middleware),
+        .concat(rankingApi.middleware)
+        .concat(tacticosApi.middleware)
+        .concat(perfilApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

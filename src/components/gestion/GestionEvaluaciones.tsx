@@ -10,7 +10,7 @@ import { DefaultOptionType } from 'antd/es/select'
 
 export const GestionEvaluaciones = ({usuarioId}: {usuarioId:string}) => {
 	const { currentConfig: { quarter, year } } = useAppSelector((state) => state.global)
-	const { data: usuarios, isFetching: isFetchingUsuarios, isLoading: isLoadingUsuarios } = useGetUsuariosQuery({})
+	const { data: usuarios, isFetching: isFetchingUsuarios, isLoading: isLoadingUsuarios } = useGetUsuariosQuery({status: 'ALL'})
 	const { data, isError, isFetching, isLoading, isUninitialized } = useGetEvaluacionUsuarioQuery({usuarioId, year, quarter})
 
 	const [ deleteAsignacionEvaluacion, { isLoading: isDeleting } ] = useDeleteAsignacionEvaluacionMutation()

@@ -95,7 +95,11 @@ return (
             <div className='flex-1 flex flex-col'>
                 <div className='px-5 flex-1 flex flex-col items-center'>
                         <p className='text-center'>Logro Objetivos</p>
-                        <Progress percent={ponderacionObjetivos} format={percent =><p className='text-devarana-graph'>{percent?.toFixed(2)}%</p>}
+                        <Progress percent={ponderacionObjetivos} format={percent => 
+                        <p className='text-devarana-graph'>{
+                            Math.trunc(percent as number * 100) / 100  
+                        }%
+                        </p>}
                         strokeColor={{
                             '0%': 'rgba(9, 103, 201, 1)',
                             '100%': 'rgba(9, 103, 201, .5)',

@@ -37,6 +37,6 @@ export const gestionSlice = createSlice({
 })
 
 
-export const {  } = gestionSlice.actions
+export const { } = gestionSlice.actions
 
 export default gestionSlice.reducer
