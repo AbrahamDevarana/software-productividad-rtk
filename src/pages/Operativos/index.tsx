@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, clearOperativosThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getColaboradoresThunk, getEquipoThunk, getHistorialRendimientoThunk, getProfileThunk, getRendimientoThunk } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
@@ -215,7 +215,7 @@ export const Objetivos : React.FC = () => {
                 }}
                 destroyOnClose={true}
             >
-                <FormCopy objetivoId={'123123'} />
+                {/* <FormCopy objetivoId={'123123'} /> */}
             </Modal>
         </>
     ) 
