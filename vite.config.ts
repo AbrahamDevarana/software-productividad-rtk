@@ -40,6 +40,7 @@ export default defineConfig({
                 drop_debugger: true
             }
         },
+
         cssCodeSplit: true,
         rollupOptions: { 
             treeshake: true,
@@ -50,9 +51,11 @@ export default defineConfig({
                 manualChunks(id: string) {
                     if (id.includes('node_modules')) {
                         const moduleMatch = id.match(/node_modules\/([^/]+)(?:\/|$)/);
-                            if (moduleMatch) {
+                        if (moduleMatch) {
                             const module = moduleMatch[1];
-                            return `vendor-${module}`;
+                            if (!module.includes('react')) {
+                                return `vendor-${module}`;
+                            }
                         }
                     }
                 },
