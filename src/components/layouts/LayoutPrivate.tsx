@@ -6,14 +6,10 @@ import { Navbar } from "../Menu/Navbar";
 import { Sidebar } from "../Menu/Sidebar";
 import { SecondNav } from '../Menu/SecondNav';
 import { useSocket } from "@/hooks/useSocket";
-import { connectSocketThunk, disconnectSocketThunk } from '@/redux/features/socket/socketThunk';
 import { optionalContent } from "@/interfaces";
 import { motion } from 'framer-motion';
 import { useAuth } from "@/hooks/useAuth";
-import { Drawer } from "antd";
 import { getPermisosThunk } from "@/redux/features/permisos/PermisosThunk";
-import { changeConfigThunk } from "@/redux/features/global/globalThunk";
-import dayjs from "dayjs";
 
 interface LayoutAppProps{
     children: React.ReactNode | React.ReactNode[];
@@ -91,16 +87,7 @@ export default function LayoutApp({ children }: LayoutAppProps) {
                     </div>
                 </div>
             </div>
-        </div>
-
-        <Drawer title="Configuración" placement="right" onClose={onClose} open={settingVisible} contentWrapperStyle={{ width: '300px' }}
-        >
-            <div className="flex">
-                {/* <input type="checkbox" className="ml-2" onChange={setTheme} defaultChecked={localStorage.getItem('theme') == "dark" ? true : false} /> */}
-            </div>
-        </Drawer>
-
-        
+        </div>      
         </>
     )
 };

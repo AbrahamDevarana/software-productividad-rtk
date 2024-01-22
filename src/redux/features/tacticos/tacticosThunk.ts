@@ -84,8 +84,7 @@ export const getTacticoThunk = createAsyncThunk(
                 headers: { "accessToken": `${accessToken}` }
             }
             const response = await clientAxios.get<Props>(`/tacticos/${tacticosId}`, config);  
-            console.log(response.data);
-                      
+                    
             return response.data
         }
         catch (error: any) {
