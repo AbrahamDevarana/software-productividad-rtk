@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, message, Tooltip, Switch } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { changeTypeProgressEstrategicoThunk, deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
+import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { PerspectivaProps } from '@/interfaces';
 import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
@@ -29,7 +29,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
     const { currentEstrategico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.estrategicos)
     const { perspectivas } = useAppSelector(state => state.perspectivas)
     const { permisos, userAuth } = useAppSelector(state => state.auth)
-    const { usuarios } = useAppSelector(state => state.usuarios)
     const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
@@ -38,7 +37,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     const [form] = Form.useForm();
 
-    
+    const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})    
     
     
     const canEdit = useMemo(() => {
@@ -216,9 +215,6 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
     if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
 
-    console.log('currentEstrategico', currentEstrategico);
-    
-    
     return (
         <>
 
@@ -391,7 +387,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
-                            usuarios.map(usuario => (
+                            usuarios?.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                             ))
                         }
@@ -420,7 +416,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
-                            usuarios.map(usuario => (
+                            usuarios?.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                             )).filter( usuario => usuario.key !== form.getFieldValue('propietarioId') )
                         }

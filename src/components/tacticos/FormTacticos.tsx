@@ -1,8 +1,7 @@
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
-import { getEstrategicosThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { changeTypeProgressThunk, deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
 import { PerspectivaProps, UsuarioProps } from '@/interfaces';
 import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin, TreeSelect } from 'antd';
@@ -12,7 +11,7 @@ import { hasGroupPermission } from '@/helpers/hasPermission';
 import { TabStatus } from '../ui/TabStatus';
 import { getColor } from '@/helpers';
 import { statusType } from '@/types';
-import { getPerspectivasThunk } from '@/redux/features/perspectivas/perspectivasThunk';
+import { getPerspectivasThunk, useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
 import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
@@ -31,9 +30,6 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const  dispatch = useAppDispatch()
     const { currentTactico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.tacticos)
     const { comentarios } = useAppSelector(state => state.comentarios)
-    const { usuarios } = useAppSelector(state => state.usuarios)
-    const { perspectivas } = useAppSelector(state => state.perspectivas)
-    const { estrategicos, isLoading:isLoadingEstrategico } = useAppSelector(state => state.estrategicos)
     const { permisos} = useAppSelector(state => state.auth)
     const [ selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
     const [ isEstrategico, setIsEstrategico] = useState(false)
@@ -41,18 +37,14 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
-
     const [form] = Form.useForm()
     const { confirm } = Modal;
 
+    const {data: perspectivas, isLoading, isFetching} = useGetPerspectivasQuery({year})
+    const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
+
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
-    useEffect(() => {
-        dispatch(getUsuariosThunk({}))
-        dispatch(getEstrategicosThunk({year}))
-        dispatch(getPerspectivasThunk({year}))
-    }, [])
-    
     useEffect(() => {
         if(currentTactico.id === '') return
         setSelectedPerspectiva(currentTactico.estrategico?.perspectivaId)
@@ -89,7 +81,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     const optEstrategicos = useMemo(() => {
 
-   
+        if(!perspectivas) return []
+
         return perspectivas.map(perspectiva => {
             return {
                 label: <p className={`text-devarana-graph`}>{perspectiva.nombre}</p>,
@@ -105,12 +98,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 })
             }
         })
-
-
-
-
-
-    }, [selectedPerspectiva, isLoadingEstrategico])
+    }, [selectedPerspectiva, isLoading, isFetching])
    
     const handleChangeTipoEstrategia =  async (e: RadioChangeEvent) => {
 
@@ -262,7 +250,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     }
 
 
-    if ( isLoadingCurrent || isLoadingEstrategico ){
+    if ( isLoadingCurrent || isLoading || isFetching){
         return <div className='flex justify-center items-center h-full'> <Spin size='large' /> </div>
     }
     
@@ -551,7 +539,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         
                     >
                         {
-                            usuarios.map((usuario: UsuarioProps) => (
+                            usuarios?.map((usuario: UsuarioProps) => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} 
                                 > { spanUsuario(usuario) } </Select.Option>
                             ))
@@ -579,7 +567,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
-                            usuarios.map((usuario: UsuarioProps) => (
+                            usuarios?.map((usuario: UsuarioProps) => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{
                                     spanUsuario(usuario)}
                                 </Select.Option>

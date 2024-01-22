@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { EstrategicosState } from '@/interfaces';
-import { changeTypeProgressEstrategicoThunk, createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosByAreaThunk, getEstrategicosThunk, updateEstrategicoThunk } from './estrategicosThunk';
+import { changeTypeProgressEstrategicoThunk, createEstrategicoThunk, deleteEstrategicoThunk, getEstrategicoThunk, getEstrategicosByAreaThunk, updateEstrategicoThunk } from './estrategicosThunk';
 
 const initialState: EstrategicosState = {
     estrategicos: [],
@@ -73,18 +73,6 @@ const estrategicosSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getEstrategicosThunk.pending, (state) => {
-                state.isLoading = true
-                state.error = false
-            })
-            .addCase(getEstrategicosThunk.fulfilled, (state, action) => {       
-                state.isLoading = false,
-                state.estrategicos = action.payload
-            })
-            .addCase(getEstrategicosThunk.rejected, (state) => {
-                state.isLoading = false
-                state.error = true
-            })
             .addCase(getEstrategicoThunk.pending, (state) => {
                 state.isLoadingCurrent = true
                 state.error = false
@@ -152,8 +140,6 @@ const estrategicosSlice = createSlice({
             })
             .addCase(changeTypeProgressEstrategicoThunk.fulfilled, (state, {payload}) => {
                 const { objetivoEstrategico} = payload
-
-                console.log('payload', payload);
                 
                 state.currentEstrategico.progreso = objetivoEstrategico.progreso
                 state.currentEstrategico.tipoProgreso = objetivoEstrategico.tipoProgreso

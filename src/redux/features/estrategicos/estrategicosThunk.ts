@@ -5,6 +5,8 @@ import { EstrategicoProps } from '@/interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 
 interface Props {
@@ -12,23 +14,23 @@ interface Props {
     objetivosEstrategicos: EstrategicoProps[]
 }
 
-export const getEstrategicosThunk = createAsyncThunk(
-    'estrategicos/getEstrategicos',
-    async (filtros: any, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: filtros
-            }
-            const response = await clientAxios.get('/estrategicos', config);
-            return response.data.objetivosEstrategicos
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
+// export const getEstrategicosThunk = createAsyncThunk(
+//     'estrategicos/getEstrategicos',
+//     async (filtros: any, { rejectWithValue, getState }) => {
+//         try {
+//             const { accessToken } = (getState() as RootState).auth;
+//             const config = {
+//                 headers: { "accessToken": `${accessToken}` },
+//                 params: filtros
+//             }
+//             const response = await clientAxios.get('/estrategicos', config);
+//             return response.data.objetivosEstrategicos
+//         }
+//         catch (error: any) {
+//             return rejectWithValue(error.response.data)
+//         }
+//     }
+// )
 
 
 export const getEstrategicoThunk = createAsyncThunk(
@@ -157,3 +159,24 @@ export const clearCurrentEstrategicoThunk = () => {
         dispatch( clearCurrentEstrategico() )        
     }   
 }
+
+
+
+export const estategicosApi = createApi({
+    reducerPath: 'estategicosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Estrategia'],
+    endpoints: (builder) => ({
+        getEstrategicos: builder.query({
+            query: (filtros) => ({
+                url: `/estrategicos`,
+                params: filtros
+            }),
+            providesTags: ['Estrategia'],
+            transformResponse: (response: {objetivosEstrategicos: EstrategicoProps[]}) => response.objetivosEstrategicos 
+
+        }),
+    })
+})
+
+export const { useGetEstrategicosQuery } = estategicosApi;
