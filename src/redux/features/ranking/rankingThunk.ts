@@ -16,7 +16,8 @@ export const rankingApi =  createApi({
                     quarter
                 }
             }),
-            transformResponse: (response: {rankingUsuarios: Ranking[]}) => response.rankingUsuarios
+            transformResponse: (response: {rankingUsuarios: Ranking[], rankingCompetencias: Ranking[]}) => response,
+            transformErrorResponse: (response) => response
         })
     })
 })

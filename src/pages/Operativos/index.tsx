@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
 import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery } from '@/redux/features/perfil/perfilThunk';
-import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking } from '@/components/operativo';
+import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
@@ -36,6 +36,9 @@ export const Objetivos : React.FC = () => {
     const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
     const { currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const [ gettingProfile, setGettingProfile ] = useState(false)
+
+    const [objetivoId, setObjetivoId] = useState<string>('')
+    const [visibleFormCopy, setVisibleFormCopy] = useState<boolean>(false)
 
 
     const { data: periodos, isLoading: isLoadingRules } = useGetGestionPeriodosQuery({year, quarter})
@@ -82,6 +85,16 @@ export const Objetivos : React.FC = () => {
 
     const handleCloseAdminModal = () => {
         setIsAdminModalVisible(false)
+    }
+
+    const handleCopyObjetivo = (objetivoId: string) => {
+        setObjetivoId(objetivoId)
+        setVisibleFormCopy(true)
+    }
+
+    const handleCancelCopy = () => {
+        setObjetivoId('')
+        setVisibleFormCopy(false)
     }
 
     return (
@@ -133,7 +146,7 @@ export const Objetivos : React.FC = () => {
                         </div>
                         {
                             misObjetivos && misObjetivos.length > 0 && misObjetivos.map((operativo, index) => (
-                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} etapa={etapa}/>
+                                <CardObjetivo objetivo={operativo} key={index} setFormVisible={setFormVisible} etapa={etapa} handleCopyObjetivo={handleCopyObjetivo}/>
                             ))
                         }
                         <h1 className='col-span-12 text-primary font-medium text-[16px]'>Objetivos Compartidos</h1>
@@ -199,21 +212,17 @@ export const Objetivos : React.FC = () => {
             </Modal>
 
             <Modal
-                // open={true}
-                onCancel={() => {}}
+                open={visibleFormCopy}
+                onCancel={handleCancelCopy}
                 footer={null}
-                width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
+                width={window.innerWidth > 1200 ? 'calc(70% - 80px)' : '100%' }
                 style={{
-                    top: 50,
-                    left: 35,
-                    bottom: 0,
-                    height: 'calc(100% - 150px)',
-                    overflowY: 'hidden',
-                    borderRadius: '10px'
+                    
+                    
                 }}
                 destroyOnClose={true}
             >
-                {/* <FormCopy objetivoId={'123123'} /> */}
+                <FormCopy objetivoId={objetivoId} />
             </Modal>
         </>
     ) 

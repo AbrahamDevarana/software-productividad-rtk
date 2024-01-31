@@ -535,3 +535,14 @@ textarea.ant-input-borderless[disabled]{
         }
     }
 }
+
+.tree-transfer .ant-transfer-operation .ant-btn.ant-btn-primary{
+    background-color: #0967C9;
+    color: white;
+    font-family:'Roboto', sans-serif;
+
+    &:disabled{
+        background-color: rgb(9, 103, 201, .5);
+        color: white;
+    }
+}

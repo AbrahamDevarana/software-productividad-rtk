@@ -52,3 +52,19 @@ export interface EvaluacionRespuestaProps {
     evaluacionPreguntaId: number;
     evaluacionUsuarioId:  number;
 }
+
+
+export interface ResultadosEvaluacionProsp {
+    categoria: string;
+    resultado: Resultado;
+}
+
+export interface Resultado {
+    promedio:   string;
+    respuestas: Respuestas;
+}
+
+export interface Respuestas {
+    usuario: string[];
+    otras:   string[];
+}

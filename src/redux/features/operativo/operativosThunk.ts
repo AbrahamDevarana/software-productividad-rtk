@@ -5,6 +5,10 @@ import { clearObjetivo, clearObjetivos } from './operativosSlice';
 import { OperativoProps } from '@/interfaces';
 
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+
+
 interface Props {
     operativos: OperativoProps[]
     operativo: OperativoProps
@@ -228,3 +232,29 @@ export const clearOperativosThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearObjetivos())
 }
 
+
+
+
+export const operativosApi = createApi({
+    reducerPath: 'operativosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Operativos'],
+    endpoints: (builder) => ({
+        getOperativo: builder.query({
+            query: ({objetivoId}: {objetivoId: string}) => `/operativos/${objetivoId}`,
+            providesTags: ['Operativos'],
+            transformResponse: (response: { operativo: OperativoProps }) => response.operativo
+        }),
+        copyOperativo: builder.mutation({
+            query: (params) => ({
+                url: `/operativos/copy`,
+                method: 'POST',
+                body: params
+            }),
+            invalidatesTags: ['Operativos'],
+            transformResponse: (response: { operativo: OperativoProps }) => response.operativo
+        }),
+    })
+})
+
+export const { useGetOperativoQuery, useCopyOperativoMutation } = operativosApi;

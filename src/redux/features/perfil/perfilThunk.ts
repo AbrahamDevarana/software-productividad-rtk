@@ -159,7 +159,7 @@ export const perfilApi = createApi({
     tagTypes: ['Perfil', 'Equipo'],
     endpoints: (builder) => ({
         getHistorial: builder.query({
-            query: ({usuarioId, year}:{usuarioId: string, year: number}) => ({
+            query: ({usuarioId, year}:{usuarioId: string, year?: number}) => ({
                 url: `/rendimiento/historial/${usuarioId}`,
                 params: { year },
             }),
@@ -179,6 +179,18 @@ export const perfilApi = createApi({
             providesTags: ['Equipo'],
             transformResponse: (response: {colaboradores: SinglePerfilProps[]}) => response.colaboradores
         }),
+        getRendimiento: builder.query({
+            query: ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}) => ({
+                url: `/rendimiento/avance/${usuarioId}`,
+                params: { year, quarter },
+            }),
+            providesTags: ['Perfil'],
+            transformResponse: (response: {rendimiento: Rendimiento}) => response.rendimiento,
+            transformErrorResponse : (error: any) => {
+                console.log(error);
+                return error
+            }
+        }),
     }),
 })
 
@@ -188,7 +200,7 @@ export const {
     // useUploadProfilePictureMutation,
     // useUpdateProfileConfigMutation,
     // useUpdatePortraitMutation,
-    // useGetRendimientoQuery,
+    useGetRendimientoQuery,
     useGetColaboradoresQuery,
     useGetEquipoQuery,
     useGetHistorialQuery

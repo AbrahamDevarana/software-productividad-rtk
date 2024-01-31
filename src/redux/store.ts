@@ -31,6 +31,7 @@ import { usuariosApi } from "./features/usuarios/usuariosThunks";
 import { rankingApi } from "./features/ranking/rankingThunk";
 import { perfilApi } from "./features/perfil/perfilThunk";
 import { estategicosApi } from "./features/estrategicos/estrategicosThunk";
+import { operativosApi } from "./features/operativo/operativosThunk";
 
 export const store = configureStore({
     reducer: {
@@ -46,6 +47,7 @@ export const store = configureStore({
         [rankingApi.reducerPath]: rankingApi.reducer,
         [perfilApi.reducerPath]: perfilApi.reducer,
         [estategicosApi.reducerPath]: estategicosApi.reducer,
+        [operativosApi.reducerPath]: operativosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -80,6 +82,7 @@ export const store = configureStore({
         .concat(rankingApi.middleware)
         .concat(tacticosApi.middleware)
         .concat(perfilApi.middleware)
+        .concat(operativosApi.middleware)
         .concat(estategicosApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });

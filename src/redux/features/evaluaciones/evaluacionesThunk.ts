@@ -2,7 +2,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
-import { EvaluacionResultadosProps, SinglePerfilProps, UsuarioProps } from "@/interfaces";
+import { EvaluacionResultadosProps, ResultadosEvaluacionProsp, SinglePerfilProps, UsuarioProps } from "@/interfaces";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { baseQuery } from "@/config/baseQuery";
 
@@ -147,7 +147,7 @@ interface EvaluacionUsuarioProps extends UsuarioProps {
 export const evaluacionApi = createApi({
     reducerPath: 'evaluacionApi',
     baseQuery: baseQuery,
-    tagTypes: ['Gestion'],
+    tagTypes: ['Gestion', 'Resultados', 'Categorias'],
     endpoints: (builder) => ({
         getEvaluacionUsuarios: builder.query({
             query: ({year, quarter}: {year:number, quarter:number}) => ({
@@ -193,8 +193,26 @@ export const evaluacionApi = createApi({
             }),
             invalidatesTags: ['Gestion'],
         }),
+        getCategoriasResultados: builder.query({
+            query: ({year, quarter, usuarioId}: {year:number, quarter:number, usuarioId: string}) => ({
+                url: `evaluacion/competencias/categorias`,
+                params: { year, quarter, usuarioId },
+            }),
+            providesTags: ['Categorias'],
+            transformResponse: (response: { categorias: any[] }) => response.categorias,
+            transformErrorResponse: (response: any) => response
+        }),
+        getEvaluacionResultadosCategoria: builder.query({
+            query: ({year, quarter, usuarioId, categoriaId}: {year:number, quarter:number, usuarioId:string, categoriaId:number}) => ({
+                url: `evaluacion/competencias/resultados`,
+                params: { year, quarter, usuarioId, categoriaId },
+            }),
+            providesTags: ['Resultados'],
+            transformResponse: (response: { evaluacion: ResultadosEvaluacionProsp }) => response.evaluacion,
+            transformErrorResponse: (response: any) => response
+        }),
     }),
 })
 
 
-export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGenerateAsignacionesEvaluacionMutation } = evaluacionApi;
+export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGenerateAsignacionesEvaluacionMutation, useGetEvaluacionResultadosCategoriaQuery, useGetCategoriasResultadosQuery } = evaluacionApi;

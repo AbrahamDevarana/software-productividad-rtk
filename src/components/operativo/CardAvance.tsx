@@ -1,7 +1,7 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
 import { Divider, Modal, Progress, Tooltip } from 'antd'
 import { OperativoProps } from '@/interfaces'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { useAppSelector } from '@/redux/hooks'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import { useMemo, useState } from 'react'
@@ -10,9 +10,11 @@ import { Rating } from 'react-simple-star-rating'
 import GaugeChart from 'react-gauge-chart'
 import 'swiper/css';
 import 'swiper/css/navigation';
-import dayjs from 'dayjs'
+import { IoIosEye } from "react-icons/io";
+
 import { verificarPeriodo } from '@/helpers/getValidEtapa';
 import useCalculoBono from '@/hooks/useBono';
+import { ResultadosCompetencias } from './ResultadosCompetencias';
 
 interface Props {
     operativos: OperativoProps[]
@@ -27,8 +29,9 @@ export const CardAvance = ( { operativos, periodos }: Props ) => {
 
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
-    const {perfil: { rendimiento }} = useAppSelector(state => state.profile)
+    const { perfil: { rendimiento }} = useAppSelector(state => state.profile)
     const { resultados } = useAppSelector(state => state.evaluaciones)
+    const [ isModalVisible, setIsModalVisible ] = useState(false)
 
     const [ isEvaluacionVisible, setEvaluacionVisible ] = useState(false)
 
@@ -50,6 +53,7 @@ export const CardAvance = ( { operativos, periodos }: Props ) => {
 
     const calculoBono = useCalculoBono(calculoAvance)
 
+    console.log(resultados);
     
 
 return (
@@ -108,7 +112,14 @@ return (
                 </div>
                 <Divider className='my-3'/>
                 <div className='flex-1 flex flex-col items-center'>
-                    <p>Competencias</p>
+                    <div className='flex items-center gap-x-2 pb-2'>
+                        <p>Competencias</p>
+                        <Tooltip title={resultados === 0 ? 'No hay resultados' : 'Ver resultados'}>
+                            <button onClick={() => setIsModalVisible(true)} disabled={resultados === 0 }>
+                                <IoIosEye size={20}/>
+                            </button>
+                        </Tooltip>
+                    </div>
                     <Tooltip title={resultados} >
                         <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}
                             fillColor='rgba(9, 103, 201, 1)'
@@ -117,9 +128,7 @@ return (
                 </div>
                 <div className='flex justify-center pb-5 pt-2 w-full'>
                     <button 
-                        className='border border-secondary px-2 py-1 text-secondary text-xs rounded-ext font-light disabled:opacity-50 disabled:cursor-not-allowed disabled:border-devarana-graph disabled:text-devarana-graph
-                        shadow
-                        ' 
+                        className='border border-secondary px-2 py-1 text-secondary text-xs rounded-ext font-light disabled:opacity-50 disabled:cursor-not-allowed disabled:border-devarana-graph disabled:text-devarana-graph shadow' 
                         onClick={handleEvaluation}
                         disabled={ isOpen }
                     >Realizar Evaluación</button>
@@ -136,6 +145,19 @@ return (
             onCancel={handleCancelEvaluacion}
         >
             <FormEvaluacion perfil={perfil}  />
+        </Modal>
+
+
+        <Modal
+            title={<p className='text-devarana-dark-graph font-bold'>Mis Evaluaciones de Competencias</p>}
+            open={isModalVisible}
+            footer={null}
+            width={1000}
+            destroyOnClose={true}
+            onCancel={() => setIsModalVisible(false)}
+            
+        >
+            <ResultadosCompetencias usuarioId={perfil.id} />
         </Modal>
         
     </>

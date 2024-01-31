@@ -22,6 +22,7 @@ export const Competencias = () => {
     const [ filtros, setFiltros ] = useState<any>()
     const [ selected, setSelected ] = useState<any>()
 
+    const { confirm } = Modal
 
     const filteredUsuarios = useMemo(() => {
 
@@ -271,16 +272,29 @@ export const Competencias = () => {
         setFormVisible(true)
     }
 
+    
+
     const handleGenerate = () => {
-        generateAsignacionesEvaluacion({year, quarter}).
-        unwrap().
-        then((args) => {
-            message.success('Evaluaciones generadas correctamente')
-        }).
-        catch((err: any) => {
-            console.log('error', err)
-            message.error('Ocurrió un error al generar las evaluaciones')
-        })
+        confirm({
+            title: 'Generar evaluaciones',
+            content: '¿Está seguro que desea generar las evaluaciones?',
+            okText: 'Generar',
+            okType: 'danger',
+            onOk() {
+                generateAsignacionesEvaluacion({year, quarter}).
+                unwrap().
+                then((args) => {
+                    message.success('Evaluaciones generadas correctamente')
+                }).
+                catch((err: any) => {
+                    console.log('error', err)
+                    message.error('Ocurrió un error al generar las evaluaciones')
+                })
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
 
         

@@ -101,11 +101,17 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             const { comentarios } = respuestas[currentStep];
 
             if (rate === 0) {
+                message.error('Debes seleccionar una calificación');
                 return;
             }
 
             if (!comentarios && comentarios.trim() === '') {
                 message.error('Debes agregar un comentario');
+                return;
+            }
+
+            if (comentarios.trim().length < 50) {
+                message.error('El comentario debe ser más largo');
                 return;
             }
         
@@ -153,7 +159,19 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
                     <TextArea
                         onChange={(e) => handleComentariosChange(e.target.value)}
                         value={respuestas[currentStep]?.comentarios || ''}
+                        className={
+                            !respuestas[currentStep]?.comentarios ||
+                            respuestas[currentStep]?.comentarios.trim().length === 0 ? '' :
+                            respuestas[currentStep]?.comentarios.trim().length < 50 ? 'border-red-500' : 'border-green-500'
+                        }
+                        rows={5}
                     />
+                    <>
+                        {
+                            !respuestas[currentStep]?.comentarios ? <p className='text-red-500 text-[10px] text-right'>Campo requerido</p> :
+                            respuestas[currentStep]?.comentarios.trim().length < 50 ? <p className='text-red-500 text-[10px] text-right'>Demasiado corto</p> : <p className='text-green-700 text-[10px] text-right'>Comentario válido</p>
+                        }
+                    </>
                 </div>
             </div>
 

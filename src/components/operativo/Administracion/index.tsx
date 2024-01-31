@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Avatar, Divider, Image, Modal, Spin, Tooltip } from 'antd'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { SinglePerfilProps } from '@/interfaces'
@@ -12,6 +12,9 @@ import { Rating } from 'react-simple-star-rating'
 import { useOtherObjetivo } from '@/hooks/useOthersObjetivos'
 import { usePonderaciones } from '@/hooks/usePonderaciones'
 import {getMesFin, getMesInicio} from '@/helpers'
+import { ResultadosCompetencias } from '../ResultadosCompetencias'
+import { IoIosEye } from 'react-icons/io'
+import useCalculoBono from '@/hooks/useBono'
 
 interface Props {
 	activeUsuario: SinglePerfilProps
@@ -24,6 +27,9 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 
 	const { operativosUsuario, isLoadingOperativosUsuario, isClosingCicle } = useAppSelector(state => state.operativos)
 	const { evaluacionResultados, evaluacionResultadosColaboradores } = useAppSelector(state => state.evaluaciones)
+	const [ isModalVisible, setIsModalVisible ] = useState(false)
+	
+	
 
 	const dispatch = useAppDispatch()
 
@@ -78,9 +84,10 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 			onCancel() {
 				console.log('Cancel');
 			},
-		});
-
+		})
 	}
+
+	const calculoBono = useCalculoBono(promedioOjetivos + finalEvaluaciones)
 
 
 	const orderedObjetivos = useMemo(() => {
@@ -111,7 +118,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 	if(isLoadingOperativosUsuario) return (<div className='h-96 flex items-center justify-center'> <Spin /> </div>)
 
 	return (
-		<div className="overflow-y-auto"
+		<div className="overflow-y-auto mt-5"
 			style={{
 				height: 'calc(100vh - 200px)'
 			}}
@@ -132,7 +139,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<p className='text-white'>{activeUsuario.email}</p>
 					</div>
 				</div>
-				<div className='flex items-center gap-x-3'>
+				<div className='flex items-center gap-x-4'>
 					<div>
 						<h2 className='font-light text-lg text-white'>Objetivos: </h2>
 						<p className='text-xl text-white text-center'>
@@ -156,6 +163,15 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<p className='text-xl text-white text-center'>
 							{
 								Math.trunc((promedioOjetivos + finalEvaluaciones) * 100) / 100
+							} %
+						</p>
+						<p className="invisible text-[9px] text-white mx-auto text-center leading-none">100%</p>
+					</div>
+					<div>
+						<h2 className='font-light text-lg text-white text-center'>Bono: </h2>
+						<p className='text-xl text-white text-center'>
+							{
+								calculoBono
 							} %
 						</p>
 						<p className="invisible text-[9px] text-white mx-auto text-center leading-none">100%</p>
@@ -187,10 +203,13 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 						<div className='w-full'>
 							<div className='overflow-y-auto pb-10'>
 								
-								<div className='text-center pb-5'>
+								<div className='text-center pb-5 flex items-center justify-center gap-5'>
 									<Tooltip title={promedioEvaluaciones} >
 										<Rating initialValue={Number(promedioEvaluaciones)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
 									</Tooltip>
+									<button onClick={() => setIsModalVisible(true)}>
+										<IoIosEye className='text-devarana-dark-graph hover:text-devarana-graph transition-all duration-300' size={20} />
+									</button>
 								</div>
 								{
 									resultadoMisEvaluaciones.length > 0 &&  resultadoMisEvaluados.length > 0 && (
@@ -252,6 +271,17 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 					</div>
 				</div>
 			</div>
+			<Modal
+				title={<p className='text-devarana-dark-graph font-bold'>Resultados Competencias</p>}
+				open={isModalVisible}
+				footer={null}
+				width={1000}
+				destroyOnClose={true}
+				onCancel={() => setIsModalVisible(false)}
+				
+			>
+				<ResultadosCompetencias  usuarioId={activeUsuario.id} />
+			</Modal>
 		</div>
 	)
 }

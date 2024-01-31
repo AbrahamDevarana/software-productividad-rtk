@@ -9,6 +9,7 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 import { useOperativo } from '@/hooks/useOperativo';
 import { FaEdit, FaEye } from 'react-icons/fa';
+import { IoCopyOutline } from 'react-icons/io5';
 
 
 interface Props {
@@ -20,9 +21,10 @@ interface Props {
         isClosed: boolean,
         isCierreObjetivos: boolean,
     }
+    handleCopyObjetivo?: (objetivoId: string) => void
 }
 
-export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
+export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetivo }:Props) => {
 
     const { confirm } = Modal;
     const { userAuth } = useAppSelector(state => state.auth)
@@ -172,14 +174,20 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
        }
     }
 
-
-    
-    
-
     
     return (
-        <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext' key={objetivo.id} >
-
+        <div className='xl:col-span-4 lg:col-span-6 col-span-12 group shadow-ext bg-white rounded-ext relative overflow-hidden group' key={objetivo.id} >
+            {/* {
+                handleCopyObjetivo &&  (
+                    <Tooltip title="Copiar Objetivo">
+                        <button
+                            onClick={() => handleCopyObjetivo(objetivo.id)} 
+                            className='absolute bg-dark-light top-0 right-0 pr-1 pt-1 pl-3 pb-3 border rounded-bl-full rounded-tr-ext translate-x-full group-hover:translate-x-0 transition-all duration-300'>
+                            <IoCopyOutline size={14} color='white' />
+                        </button>
+                    </Tooltip>
+                )
+            } */}
             <div className='p-5'>
                 <div className='w-full flex justify-around text-devarana-graph text-center'>  
                     <div>
@@ -192,7 +200,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
                     </div>
                     <div>
                         <p> Ponderacion </p>
-                        <p className={`text-center text-devarana-graph ${usuarioPropietaro?.id === userAuth?.id ? 'text-primary' : 'text-secondary'}`}>
+                        <p className={`text-center font-medium text-devarana-graph ${usuarioPropietaro?.id === userAuth?.id ? 'text-primary' : 'text-secondary'}`}>
                             { progresoAsignado.toFixed(2) }%
                         </p>
                     </div>
@@ -200,17 +208,24 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
                 <Divider />
 
                 {/*  ( usuarioPropietaro?.id === userAuth?.id ) */}
-                <p className={`text-center text-devarana-graph font-medium text-lg ${usuarioPropietaro?.id === userAuth?.id ? 'text-primary' : 'text-secondary'}`}>
-                    {objetivo.nombre}
-                </p>
+                <div className='max-h-14 overflow-y-auto'>
+                    <Tooltip title={objetivo.nombre } placement='top'>
+                        <p className={`text-center text-devarana-graph font-medium text-lg line-clamp-2 ${usuarioPropietaro?.id === userAuth?.id ? 'text-primary' : 'text-secondary'}`}>
+                            {objetivo.nombre}
+                        </p>
+                    </Tooltip>
+                </div>
                 <ProgressBar maxValue={fixedProgresoReal} firstColor={firstColor} secondColor={secondColor}  /> 
-                <p className={`text-center uppercase font-bold pb-2`}
-                    style={{
-                        color: getColor(statusObjetivo).color
-                    }}
-                > 
-                   { statusText }
-                </p>
+                <div className='flex items-center justify-center gap-x-2 pb-2'>
+                    <div className='h-2 w-2 rounded-sm' style={{backgroundColor: getColor(statusObjetivo).color}} />
+                    <p className={`text-center font-bold`}
+                        style={{
+                            color: getColor(statusObjetivo).color
+                        }}
+                    > 
+                    { statusText }
+                    </p>
+                </div>
                 <Avatar.Group maxCount={3} className='flex justify-center' maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}>
                     {
                         
@@ -229,7 +244,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
 
 
                 <div>
-                    <div className='flex py-5 gap-10 justify-center'>
+                    <div className='flex py-5 gap-5 items-center justify-center'>
                         <Link to={`/objetivo/${objetivo.id}`} className='text-devarana-graph hover:opacity-80 hover:text-devarana-graph'
                             state={{
                                 year,
@@ -305,7 +320,6 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa }:Props) => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
