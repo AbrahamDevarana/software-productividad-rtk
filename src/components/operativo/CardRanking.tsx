@@ -11,10 +11,7 @@ export const CardRanking = () => {
     const {data, isError} = useGetRankingsQuery({year, quarter})
 
     const [ranking , setRanking] = useState<string | number>('ranking')
-
-    console.log(data?.rankingUsuarios, isError, 'data');
     
-
     isError && message.error( {
         content: 'Error al cargar el ranking',
         key: 'ranking',

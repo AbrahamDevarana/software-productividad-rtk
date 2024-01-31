@@ -53,8 +53,6 @@ export const CardAvance = ( { operativos, periodos }: Props ) => {
 
     const calculoBono = useCalculoBono(calculoAvance)
 
-    console.log(resultados);
-    
 
 return (
     <>
