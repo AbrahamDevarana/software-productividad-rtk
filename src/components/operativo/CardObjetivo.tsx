@@ -208,7 +208,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                 <Divider />
 
                 {/*  ( usuarioPropietaro?.id === userAuth?.id ) */}
-                <div className='max-h-14 overflow-y-auto'>
+                <div className='max-h-14 h-14 overflow-y-auto flex items-center justify-center'>
                     <Tooltip title={objetivo.nombre } placement='top'>
                         <p className={`text-center text-devarana-graph font-medium text-lg line-clamp-2 ${usuarioPropietaro?.id === userAuth?.id ? 'text-primary' : 'text-secondary'}`}>
                             {objetivo.nombre}
