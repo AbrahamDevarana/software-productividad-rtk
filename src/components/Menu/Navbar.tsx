@@ -14,6 +14,8 @@ import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
 import { Link } from "react-router-dom";
 import { DefaultOptionType } from "antd/es/select";
 
+import type {Dayjs} from 'dayjs';
+
 export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 
 	const { currentConfig: {quarter, year, currentDate} } = useAppSelector(state => state.global)
@@ -32,7 +34,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
             },
 	]
 
-	const handleChangeDate = (date: any, dateString: string) => {
+	const handleChangeDate = (date: Dayjs, dateString: string | string[]) => {
 		dispatch(changeConfigThunk({year: date.year(), quarter: date.quarter()}))
 	}
 
@@ -68,7 +70,7 @@ export const Navbar = ({setSettingVisible, navbarClass}:LayoutNavbarProps) => {
 						/>
 
 						<DatePicker 
-							onChange={handleChangeDate} 
+							onChange={handleChangeDate}
 							value={ dayjs().quarter(quarter).year(year) } 
 							format={'Q° [Trimestre] YYYY'} 
 							picker='quarter' 
