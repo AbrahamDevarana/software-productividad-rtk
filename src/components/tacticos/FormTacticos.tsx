@@ -1,9 +1,9 @@
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
-import { changeTypeProgressThunk, deleteTacticoThunk, updateTacticoThunk, updateTacticoTypeThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { PerspectivaProps, UsuarioProps } from '@/interfaces';
+import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
+import { useUpdateTypeProgressMutation, useGetTacticoQuery, useUpdateTacticoMutation, useUpdateTypMutation, useDeleteTacticoMutation } from '@/redux/features/tacticos/tacticosThunk';
+import { CoreProps, PerspectivaProps, TacticoProps, UsuarioProps } from '@/interfaces';
 import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin, TreeSelect } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -11,7 +11,7 @@ import { hasGroupPermission } from '@/helpers/hasPermission';
 import { TabStatus } from '../ui/TabStatus';
 import { getColor } from '@/helpers';
 import { statusType } from '@/types';
-import { getPerspectivasThunk, useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
+import { useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
 import ReactQuill from 'react-quill';
 import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
@@ -22,67 +22,49 @@ interface FormTacticoProps {
     handleCloseDrawer: () => void
     year: number
     slug?: string
+    activeTactico: TacticoProps | CoreProps
 }
 
-export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year, slug}) => {
+export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year, slug, activeTactico}) => {
 
     const inputRef = useRef<any>(null)
     const  dispatch = useAppDispatch()
-    const { currentTactico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.tacticos)
     const { comentarios } = useAppSelector(state => state.comentarios)
     const { permisos} = useAppSelector(state => state.auth)
-    const [ selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
+
+    const [updateTypeProgressMutation, { isLoading: isUpdatingTypeProgress }] = useUpdateTypeProgressMutation()
+    const [updateTacticoMutation, { isLoading: isUpdatingTactico }] = useUpdateTacticoMutation()
+    const [updateTypeMutation, {isLoading: isUpdatingType}] =  useUpdateTypMutation()
+    const [deleteTacticoMutation, {isLoading: isDeleting}] = useDeleteTacticoMutation()
+
+
     const [ isEstrategico, setIsEstrategico] = useState(false)
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ progreso, setProgreso] = useState<number>(0)
     const [ statusTactico, setStatusTactico] = useState<statusType>('SIN_INICIAR');
+    const { data: currentTactico, isLoading, isFetching} = useGetTacticoQuery({tacticoId: activeTactico.id})
+    const [ selectedPerspectiva, setSelectedPerspectiva] = useState<string>()
+    
     const [form] = Form.useForm()
     const { confirm } = Modal;
 
-    const {data: perspectivas, isLoading, isFetching} = useGetPerspectivasQuery({year})
+    const {data: perspectivas, isLoading: isLoadingPerspectiva, isFetching: isFetchingPerspectiva} = useGetPerspectivasQuery({year})
     const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
 
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
+
+   
     useEffect(() => {
-        if(currentTactico.id === '') return
-        setSelectedPerspectiva(currentTactico.estrategico?.perspectivaId)
-    }, [currentTactico])
-    
-    const handleOnSubmit = () => {        
-        if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
-        
-        if(form.getFieldsError().filter(({ errors }) => errors.length).length) {
-            return
+        if(currentTactico && currentTactico.id){
+            setSelectedPerspectiva(currentTactico.estrategico?.perspectivaId)
         }
+    }, [currentTactico?.id])
 
-
-        const query = {
-            ...currentTactico,
-            ...form.getFieldsValue(),
-            proyeccion: [dayjs(form.getFieldValue('proyeccionInicio')), dayjs(form.getFieldValue('proyeccionFin'))],
-            year,
-            slug,
-        }
-        if(!isEstrategico){
-            query.estrategicoId = null
-        }
-
-        delete query.status
-        delete query.progreso
-
-        form.validateFields().then(() => {
-            dispatch(updateTacticoThunk(query))
-        }).catch((errorInfo) => {
-            return
-        })
-    }
 
     const optEstrategicos = useMemo(() => {
-
-        if(!perspectivas) return []
-
+        if (!perspectivas || isLoadingPerspectiva || isFetchingPerspectiva) return [];
         return perspectivas.map(perspectiva => {
             return {
                 label: <p className={`text-devarana-graph`}>{perspectiva.nombre}</p>,
@@ -98,8 +80,49 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 })
             }
         })
-    }, [selectedPerspectiva, isLoading, isFetching])
-   
+    }, [perspectivas, isLoadingPerspectiva, isFetchingPerspectiva])
+
+   useEffect(() => {
+        if (!currentTactico || !currentTactico.id) return;
+ 
+        if(currentTactico.estrategicoId){
+             setIsEstrategico(true)
+         }
+         
+         setStatusTactico(currentTactico.status);
+         setProgreso(currentTactico.progreso)
+ 
+    }, [currentTactico])
+ 
+
+    const handleOnSubmit = () => {        
+            if(hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true) return
+            
+            if(form.getFieldsError().filter(({ errors }) => errors.length).length) {
+                return
+            }
+            const query = {
+                ...currentTactico,
+                ...form.getFieldsValue(),
+                proyeccion: [dayjs(form.getFieldValue('proyeccionInicio')), dayjs(form.getFieldValue('proyeccionFin'))],
+                year,
+                slug,
+            }
+            if(!isEstrategico){
+                query.estrategicoId = null
+            }
+    
+            delete query.status
+            delete query.progreso
+    
+            form.validateFields().then(() => {
+                updateTacticoMutation(query)
+            }).catch((errorInfo) => {
+                return
+            })
+    }
+
+    // TODO update mutation
     const handleChangeTipoEstrategia =  async (e: RadioChangeEvent) => {
 
         if(!hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos)) return
@@ -114,8 +137,8 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 async onOk() {
                     setIsEstrategico(e.target.value)
                     setSelectedPerspectiva(undefined)
-                    await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'CORE' })).unwrap().then(() => {
-                        message.success('Tipo de objetivo cambiado')
+                    currentTactico && updateTypeMutation({ tacticoId: currentTactico.id, type: 'CORE' }).unwrap().then((res) => {
+                        message.success('Objetivo operativo actualizado')
                     })
                 }
             });
@@ -125,31 +148,24 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
 
     }
 
-    useEffect(() => {
-        if(!currentTactico.id) return
-
-        if(currentTactico.estrategicoId){
-            setIsEstrategico(true)
-        }
-        
-        setStatusTactico(currentTactico.status);
-        setProgreso(currentTactico.progreso)
-
-    }, [currentTactico])
-
     const handleChangeProgreso = (value: number) => {
         
-        if(currentTactico.id && currentTactico.progreso !== value){
+        if(currentTactico && currentTactico.id && currentTactico.progreso !== value){
             const updateTactico = {
                 ...currentTactico,
                 ...form.getFieldsValue(),
                 tipoProgreso: 'MANUAL',
+                proyeccion: [dayjs(form.getFieldValue('proyeccionInicio')), dayjs(form.getFieldValue('proyeccionFin'))],
                 progreso: value,
                 year,
                 slug
             }
-            dispatch(updateTacticoThunk(updateTactico));  
+            updateTacticoMutation(updateTactico)
         }  
+    }
+
+    if(!currentTactico || isLoading ){
+        return <div className='flex justify-center items-center h-full'> <Spin size='large' /> </div>
     }
 
     const handleChangeStatus = (value: statusType) => {  
@@ -157,12 +173,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         const updateTactico = {
             ...currentTactico,
             ...form.getFieldsValue(),
+            proyeccion: [dayjs(form.getFieldValue('proyeccionInicio')), dayjs(form.getFieldValue('proyeccionFin'))],
             status: value,
             year,
             slug
         }
         
-        dispatch(updateTacticoThunk(updateTactico));       
+        updateTacticoMutation(updateTactico) 
     }
 
     const handleSelectPerspectiva = (value: string) => {
@@ -171,15 +188,10 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     }
 
     const handleChangePerspectiva = async (e: string) => {
-        await dispatch(updateTacticoTypeThunk({ tacticoId: currentTactico.id, type: 'ESTRATEGICO', estrategicoId: e })).unwrap().then(() => {
-            message.success('Tipo de objetivo cambiado')
+       currentTactico && updateTypeMutation({ tacticoId: currentTactico.id, type: 'ESTRATEGICO', estrategicoId: e }).unwrap().then((res) => {
+            message.success('Objetivo estratégico actualizado')
         })
     }
-    
-
-    const comentariosCount = useMemo(() => {
-        return comentarios.length || 0
-    }, [comentarios])
 
     const items: MenuProps['items'] = [
         {
@@ -227,7 +239,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <div className='flex gap-2 items-center justify-center'>
                     <p> Comentarios </p>
                     <div className='bg-gradient-to-t h-4 w-4 from-primary to-primary-light text-white rounded-full text-[11px] shadow-sm flex  items-center justify-center'>
-                        {comentariosCount} 
+                        {comentarios.length} 
                     </div>
                 </div>
             ),
@@ -243,20 +255,16 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
             okType: 'danger',
             cancelText: 'No',
             async onOk() {
-                await dispatch(deleteTacticoThunk(currentTactico.id))
-                handleCloseDrawer()
+                deleteTacticoMutation({tacticoId: currentTactico.id}).unwrap().then((res) => {
+                    handleCloseDrawer()
+                })
             }
         });
     }
 
-
-    if ( isLoadingCurrent || isLoading || isFetching){
-        return <div className='flex justify-center items-center h-full'> <Spin size='large' /> </div>
-    }
-    
-
     const handleSetTipo = (type: boolean) => {        
-        dispatch(changeTypeProgressThunk({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
+
+        updateTypeProgressMutation({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' }).unwrap().then((res) => {            
             message.success('Tipo de progreso cambiado')
         })
         
@@ -316,7 +324,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         ref={inputRef}
                         onPressEnter={ (e) => e.currentTarget.blur() }
                         onBlur={handleOnSubmit}
-                        bordered={false}
+                        variant='borderless'
                     />
                 </Form.Item>
                 <Form.Item
@@ -329,7 +337,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         ref={inputRef}
                         onPressEnter={ (e) => e.currentTarget.blur() }
                         onBlur={handleOnSubmit}
-                        bordered={false}
+                        variant='borderless'
                     />
                 </Form.Item>
 
@@ -341,18 +349,19 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                 <p className='text-devarana-graph font-medium'>Progreso:</p>
                                 <div className='ml-auto flex gap-x-5'>
                                     <div className='flex gap-2 items-center ml-auto'>
+                                        <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
                                         <Switch 
                                             size='small'
                                             className='disabled:cursor-wait'
                                             checked = {currentTactico.tipoProgreso === 'PROMEDIO' ? true : false}
-                                            title='Automatico'     
-                                            disabled={isLoadingProgress}                                       
+                                            title='Automatico'                                    
                                             onClick={handleSetTipo}
                                             style={{
                                                 backgroundColor: currentTactico.tipoProgreso === 'PROMEDIO' ? '#656A76' : '#A6AFC3',
                                             }}
+                                            loading={isUpdatingTypeProgress}
                                         />
-                                        <p className='text-devarana-graph'> { currentTactico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                                        
                                     </div>
                                     <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                             <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
@@ -379,21 +388,26 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                         hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) &&
                                         setProgreso(value)
                                     }}
-                                    onAfterChange={ (value ) => {
+                                    onChangeComplete={ (value ) => {
                                         hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) && handleChangeProgreso(value)
                                         setProgreso(value)
                                     } }
-                                    trackStyle={{
-                                        backgroundColor: getColor(currentTactico.status).color,
-                                        borderRadius: 10,
+                                    styles={{
+                                        rail: {
+                                            backgroundColor: getColor(currentTactico.status, .3).color,
+                                            borderRadius: 10,
+                                        },
+                                        track: {
+                                            backgroundColor: getColor(currentTactico.status).color,
+                                            borderRadius: 10,
+                                        },
+                                        handle: {
+                                            borderColor: getColor(currentTactico.status).color,
+                                        },
+                                        tracks: {
+                                            backgroundColor: getColor(currentTactico.status).color,
+                                        },
 
-                                    }}
-                                    railStyle={{
-                                        backgroundColor: getColor(currentTactico.status, .3).color,
-                                        borderRadius: 10,
-                                    }}
-                                    handleStyle={{
-                                        borderColor: getColor(currentTactico.status).color,
                                     }}
                                 />
                             </div>
@@ -529,7 +543,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         tagRender={tagRender}
                         onChange={handleOnSubmit}
                         size='large'
-                        bordered = {false}
+                        variant='borderless'
                         showSearch
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
@@ -556,7 +570,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         placeholder="Selecciona los responsables"                      
                         allowClear
                         mode="multiple"
-                        bordered = {false}
+                        variant='borderless'
                         tagRender={tagRender}
                         maxLength={3}
                         onChange={handleOnSubmit}

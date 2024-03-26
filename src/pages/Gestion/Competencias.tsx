@@ -287,12 +287,11 @@ export const Competencias = () => {
                     message.success('Evaluaciones generadas correctamente')
                 }).
                 catch((err: any) => {
-                    console.log('error', err)
                     message.error('Ocurrió un error al generar las evaluaciones')
                 })
             },
             onCancel() {
-                console.log('Cancel');
+                
             },
         });
     }

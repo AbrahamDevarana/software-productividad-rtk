@@ -8,7 +8,8 @@ import { FaBrain, FaCheckSquare, FaCog, FaCrosshairs, FaLayerGroup, FaPuzzlePiec
 import { Avatar, Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
-import { hasGroupPermission, hasPermission } from '@/helpers/hasPermission';
+import { hasGroupPermission } from '@/helpers/hasPermission';
+import bizneo from '@/assets/img/logos/b-icon.png';
 
 
 interface LayoutSidebarProps {
@@ -43,9 +44,15 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                     </NavLink>
 
                     <NavLink to={'/somos-devarana'} className={`link nav-link text-center`}>
-                        {/* <Icon iconName="faDove" className="mx-auto text-xl" /> */}
                         <SvgIsotipo className={`h-6 w-full block svg-icon`} />
                         <span className="text-xs text-center font-light block">Devarana</span>
+                    </NavLink>
+                    <NavLink target='_blank' to={'https://devarana.bizneohr.com/'} className={`link nav-link text-center`}>
+                        <Image 
+                            src={bizneo}
+                            width={25}
+                            preview={false} className="mx-auto" />
+                        <span className="text-xs text-center font-light block">Bizneo</span>
                     </NavLink>
                     <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
                     <NavLink to={'/estrategia'} className={`link nav-link text-center`}>

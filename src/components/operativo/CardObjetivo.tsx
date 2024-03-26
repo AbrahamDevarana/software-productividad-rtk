@@ -70,7 +70,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                    })
                 },
                 onCancel() {
-                    console.log('Cancel');  
+                    
                 },
             })
         }else {
@@ -100,7 +100,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                    })
                 },
                 onCancel() {
-                    console.log('Cancel');  
+
                 },
             })
         }

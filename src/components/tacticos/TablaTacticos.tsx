@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import {Avatar, Image, Pagination, Progress, Table, Tooltip} from 'antd';
+import {Avatar, Image, Progress, Table, Tooltip} from 'antd';
 import { TacticoProps } from '@/interfaces/tacticos';
 import { getColor, getStatus, getStorageUrl } from '@/helpers';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { getTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { useAppSelector } from '@/redux/hooks';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 import dayjs from 'dayjs';
@@ -13,13 +12,14 @@ import { CoreProps } from '@/interfaces';
 
 
 interface TablaTacticosProps {
-    objetivos: TacticoProps[] | CoreProps[]
+    objetivos: TacticoProps[] | CoreProps[] | []
     handleCreateObjetivo: () => void
     handleShowObjetivo: (objetivo: TacticoProps | CoreProps) => void
     isLoading?: boolean
+    isFetching?: boolean
 }
 
-export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjetivo, isLoading}: TablaTacticosProps) => {
+export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjetivo, isLoading, isFetching}: TablaTacticosProps) => {
 
     const { permisos } = useAppSelector(state => state.auth)
     const [ fullContent, setFullContent ] = useState<boolean>(false)
@@ -80,7 +80,8 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
                 render: (text, record, index) => (
                     <div className='pl-5'>
                         <Progress 
-                        className='drop-shadow progressStyle' percent={record.progreso} strokeWidth={20} 
+                        className='drop-shadow progressStyle' percent={record.progreso} 
+                        size={['100%', 20]}
                         strokeColor={{
                             from: getColor(record.status).color || '#108ee9',
                             to: getColor(record.status).lowColor || '#87d068',
@@ -219,7 +220,7 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
             <Table
                 columns={ columns }
                 dataSource={ orderedObjetivos }
-                loading={ isLoading }
+                loading={ isLoading || isFetching}
                 scroll={{ x: 800 }}
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
@@ -235,7 +236,7 @@ export const TablaTacticos = ({objetivos, handleCreateObjetivo, handleShowObjeti
                 }
                 pagination={false}
 
-                footer={() => objetivos.length > 5 && (
+                footer={() => objetivos?.length > 5 && (
                     <div className='flex justify-end'>
                         <button onClick={() =>  setFullContent(!fullContent) }><span className='text-devarana-graph text-sm'> Ver { fullContent ? 'menos' : 'más'}</span></button>
                     </div>

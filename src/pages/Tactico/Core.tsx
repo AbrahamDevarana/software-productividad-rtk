@@ -1,29 +1,38 @@
 
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
-import { CoreProps, DepartamentoProps, TacticoProps } from '@/interfaces';
+import { useSelectUser } from '@/hooks/useSelectUser';
+import { CoreProps, DepartamentoProps, TacticoProps, UsuarioProps } from '@/interfaces';
 import { getAreaThunk } from '@/redux/features/areas/areasThunks';
-import { createTacticoThunk, getTacticoThunk, getTacticosByEquipoCoreThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { useCreateTacticoMutation, useGetTacticosByEquipoCoreQuery } from '@/redux/features/tacticos/tacticosThunk';
+import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
+
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Checkbox, Tooltip } from 'antd';
+import { Checkbox, Modal, Select, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
 
 interface Props {
     slug?: string
     setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>
+    setActiveTactico: React.Dispatch<React.SetStateAction<TacticoProps | CoreProps | undefined>>
 }
 
 
-const Core = ({slug, setShowDrawer}: Props) => {
+const Core = ({slug, setShowDrawer, setActiveTactico}: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
-    const { objetivosCore, isLoading, isLoadingCore } = useAppSelector(state => state.tacticos)
+    const { data: usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
     const { currentArea } = useAppSelector(state => state.areas)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
     const [showOnlyMe, setShowOnlyMe] = useState(false)
+    const { data: objetivosCore, isLoading } = useGetTacticosByEquipoCoreQuery({year, departamentoId: activeTeam?.slug, showOnlyMe}, {skip: !activeTeam, refetchOnMountOrArgChange: true})
+    const [createTacticoMutation, {isError, isSuccess}] = useCreateTacticoMutation()    
+    const {confirm} = Modal
     const dispatch = useAppDispatch()
+    const usuarioRef = useRef('');
+    const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
     useEffect(() => {
         if(slug){
@@ -31,12 +40,6 @@ const Core = ({slug, setShowDrawer}: Props) => {
         }
     }, [year])
 
-    
-    useEffect(() => {
-        if(currentArea.departamentos?.length){
-            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id, showOnlyMe}))
-        }
-    }, [currentArea])
 
     useEffect(() => {
         if(currentArea?.departamentos?.length){
@@ -46,7 +49,6 @@ const Core = ({slug, setShowDrawer}: Props) => {
     }, [currentArea])
 
     const handleGetDepartamentos = (departamento: DepartamentoProps) => {
-        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug, showOnlyMe}))
         setActiveTeam(departamento)
     }
 
@@ -55,18 +57,60 @@ const Core = ({slug, setShowDrawer}: Props) => {
         return current
     }, [activeTeam])
 
-    const handleCreateObjetivo = useCallback(() => {
-        slug && dispatch(createTacticoThunk({ year, slug }))
-    }, [year])
+    const handleCreateObjetivoCore = () => {
+        usuarioRef.current = usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id.toString() || ''
+
+        confirm({
+            maskClosable: true,
+            closable: true,
+            width: window.innerWidth > 768 ? '70%' : 500,
+            title: 'Crear objetivo',
+            content: (
+            <div>
+                <Select
+                    style={{ width: '100%' }}
+                    placeholder="Selecciona al propietario"
+                    tagRender={tagRender}
+                    size='large'
+                    showSearch
+                    maxTagPlaceholder={(omittedValues) => (
+                        <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                    )}
+                    defaultValue={
+                        usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id
+                    }
+                    onChange={(value) => usuarioRef.current = value.toString()}
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                    
+                >
+                    {
+                        usuarios?.map((usuario: UsuarioProps) => (
+                            <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} 
+                            > { spanUsuario(usuario) } </Select.Option>
+                        ))
+                    }
+                </Select>
+            </div>),
+            okText: 'Crear',
+            okButtonProps: { type: 'default', className: 'text-primary-light' },
+            cancelText: 'Cancelar',
+            async onOk() {
+                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current})
+            },
+            onCancel() {
+               
+            },
+        });
+    }
 
     const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getTacticoThunk(objetivo.id))        
+        setActiveTactico(objetivo)   
         setShowDrawer(true)
     }
 
     const handleGetOnlyMe = (value : boolean) => {
         setShowOnlyMe(value)
-        activeTeam && dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: activeTeam.slug, showOnlyMe: value}))
     }
 
     return ( 
@@ -123,7 +167,7 @@ const Core = ({slug, setShowDrawer}: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos objetivos={objetivosCore} handleCreateObjetivo={ handleCreateObjetivo }  isLoading={isLoading || isLoadingCore} handleShowObjetivo={handleShowObjetivo}/>
+                                    <TablaTacticos objetivos={objetivosCore || []} handleCreateObjetivo={ handleCreateObjetivoCore }  isLoading={isLoading} handleShowObjetivo={handleShowObjetivo}/>
                             </Box>
                         </div>
                     </div>

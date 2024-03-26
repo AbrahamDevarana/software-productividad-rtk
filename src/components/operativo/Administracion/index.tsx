@@ -82,7 +82,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 				dispatch(cierreCicloThunk({usuarioId: activeUsuario.id, year, quarter, objetivosId}))
 			},
 			onCancel() {
-				console.log('Cancel');
+				
 			},
 		})
 	}

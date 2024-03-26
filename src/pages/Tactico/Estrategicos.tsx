@@ -3,7 +3,7 @@ import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { CoreProps, EstrategicoProps, TacticoProps } from '@/interfaces';
 import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { createTacticoThunk, getTacticoThunk, getTacticosByEstrategiaThunk } from '@/redux/features/tacticos/tacticosThunk';
+import { useCreateTacticoMutation, useGetTacticosByEquipoCoreQuery, useGetTacticosByEstrategiaQuery } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Checkbox, Divider, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
@@ -13,16 +13,21 @@ import { FaQuestionCircle } from 'react-icons/fa';
 interface Props {
     slug?: string
     setShowDrawer: React.Dispatch<React.SetStateAction<boolean>>
+    setActiveTactico: React.Dispatch<React.SetStateAction<TacticoProps | CoreProps | undefined>>
 }
 
-const Estrategia = ({ slug, setShowDrawer }: Props) => {
+const Estrategia = ({ slug, setShowDrawer, setActiveTactico }: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
     const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
-    const { objetivosTacticos, isLoading } = useAppSelector(state => state.tacticos)
     const [ showOnlyMe, setShowOnlyMe ] = useState(false)
     const [ activeEstrategico, setActiveEstrategico ] = useState<EstrategicoProps>()
+    const { data: objetivosTacticos, isLoading: isLoadingTacticos, isFetching: isFetchingTacticos } = useGetTacticosByEstrategiaQuery({estrategicoId: activeEstrategico?.id, year, showOnlyMe},
+        { skip: !activeEstrategico, refetchOnMountOrArgChange: true }
+    )
 
+    const [createTacticoMutation, {}] = useCreateTacticoMutation()
+    
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -55,20 +60,18 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
 
     const handleGetTacticos = (objetivo: EstrategicoProps ) => {        
         setActiveEstrategico(objetivo)
-        dispatch(getTacticosByEstrategiaThunk({ estrategicoId: objetivo.id, year, showOnlyMe}))
     }
 
     const handleGetOnlyMe = (value : boolean) => {
         setShowOnlyMe(value)
-        activeEstrategico && dispatch(getTacticosByEstrategiaThunk({ estrategicoId: activeEstrategico.id, year, showOnlyMe: value}))
     }
 
     const handleCreateTactico = useCallback(() => {        
-        slug && activeEstrategico && dispatch(createTacticoThunk({ year, estrategicoId: activeEstrategico.id, slug}))
+        createTacticoMutation({year, estrategicoId: activeEstrategico?.id, slug})
     }, [activeEstrategico])
 
-    const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getTacticoThunk(objetivo.id))        
+    const handleShowObjetivo = (objetivo: TacticoProps | CoreProps) => {  
+        setActiveTactico(objetivo)
         setShowDrawer(true)
     }
 
@@ -134,7 +137,7 @@ const Estrategia = ({ slug, setShowDrawer }: Props) => {
                                         <FaQuestionCircle className='text-primary-light'/>
                                     </Tooltip>
                                 </div>
-                                    <TablaTacticos objetivos={objetivosTacticos} handleCreateObjetivo={ handleCreateTactico } isLoading={isLoading} handleShowObjetivo={handleShowObjetivo} />
+                                    <TablaTacticos objetivos={objetivosTacticos || [] } handleCreateObjetivo={ handleCreateTactico } isLoading={isLoadingTacticos} isFetching={isFetchingTacticos} handleShowObjetivo={handleShowObjetivo} />
                             </Box>
                         </div>
                     </div>

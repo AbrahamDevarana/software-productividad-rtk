@@ -116,8 +116,6 @@ export const updatePortraitThunk = createAsyncThunk(
             const response = await clientAxios.put(`/perfiles/portrait/${id}`, {portadaPerfil}, {
                 headers: { "accessToken": `${accessToken}` }
             });
-
-            console.log(response.data);
             
             return response.data
         } catch (error: any) {
@@ -187,7 +185,6 @@ export const perfilApi = createApi({
             providesTags: ['Perfil'],
             transformResponse: (response: {rendimiento: Rendimiento}) => response.rendimiento,
             transformErrorResponse : (error: any) => {
-                console.log(error);
                 return error
             }
         }),

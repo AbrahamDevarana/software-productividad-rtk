@@ -64,8 +64,6 @@ export const updateAccionThunk = createAsyncThunk(
             const config = {
                 headers: { "accessToken": `${accessToken}` }
             }
-
-            console.log(accion);
             
 
             const response = await clientAxios.put<Props>(`/acciones/${accion.id}`, accion, config);

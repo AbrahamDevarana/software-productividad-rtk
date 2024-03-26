@@ -4,6 +4,9 @@ import { AreaProps } from '@/interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+
 interface Props {
     area: AreaProps
     areas: {
@@ -115,3 +118,30 @@ export const clearCurrentAreaThunk = () => {
         dispatch( clearCurrentArea() )
     }
 }
+
+
+
+export const areasApi = createApi({
+    reducerPath: 'areasApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Area'],
+    endpoints: (builder) => ({
+        getAreas: builder.query<Props, any>({
+            query: (filtros) => ({
+                url: `/areas`,
+                params: filtros
+            }),
+
+        }),
+        getArea: builder.query({
+            query: ({areaSlug} : { areaSlug?:string}) => ({
+                url: `/areas/${areaSlug}`
+            }),
+            transformResponse: (response: { area: AreaProps }, meta, arg) => response.area,
+        }),
+        
+       
+    }),
+})
+
+export const { useGetAreasQuery, useGetAreaQuery } = areasApi;

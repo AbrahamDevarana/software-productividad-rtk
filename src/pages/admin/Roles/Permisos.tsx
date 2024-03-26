@@ -87,7 +87,6 @@ export const Permisos = () => {
 				// await refetch()
 			},
 			onCancel() {
-				console.log('Cancel')
 			},
 		})
 	}

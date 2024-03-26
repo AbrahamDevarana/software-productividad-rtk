@@ -1,23 +1,21 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { clearCurrentTacticoThunk, createTacticoThunk } from '@/redux/features/tacticos/tacticosThunk';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useState } from 'react';
+import { useAppSelector } from '@/redux/hooks';
 import { Drawer, Input, Segmented, Select } from 'antd';
 import { FormTactico } from '@/components/tacticos/FormTacticos';
 import Equipos from './Equipos';
 import { Button } from '@/components/ui';
 import { FaBrush } from 'react-icons/fa';
 import { statusTypes } from '@/types';
-import Estrategia from './Estrategia';
+import Estrategia from './Estrategicos';
 import Core from './Core';
+import { CoreProps, TacticoProps } from '@/interfaces';
 
 
 export const Tactico: React.FC = () => {
 
     const {slug} = useParams<{slug:string}>()
-
-    const dispatch = useAppDispatch()
-    const {currentTactico} = useAppSelector(state => state.tacticos)
+    const [activeTactico, setActiveTactico] = useState<TacticoProps | CoreProps>()
     
     const [segmented, setSegmented] = useState<React.SetStateAction<any>>('equipos')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
@@ -32,7 +30,6 @@ export const Tactico: React.FC = () => {
 
     const handleCloseDrawer = () => {
         setShowDrawer(false)
-        dispatch(clearCurrentTacticoThunk())
     }
     
 
@@ -97,14 +94,13 @@ export const Tactico: React.FC = () => {
             </div>
 
             {
-                // segmented === 'listado' && (<ListadoTacticos handleCreateTactico={handleCreateTactico} filter={filter} slug={slug} year={year} setShowDrawer={setShowDrawer} />)
-                segmented === 'listado' && (<Estrategia slug={slug} setShowDrawer={setShowDrawer} />)
+                segmented === 'listado' && (<Estrategia slug={slug} setShowDrawer={setShowDrawer} setActiveTactico={setActiveTactico }/>)
             }
             {
-                segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} slug={slug} setShowDrawer={setShowDrawer} />)
+                segmented === 'equipos' && (<Equipos handleCreateTactico={handleCreateTactico} slug={slug} setShowDrawer={setShowDrawer} setActiveTactico={setActiveTactico }/>)
             }
             {
-                segmented === 'core' && ( <Core slug={slug} setShowDrawer={setShowDrawer} />)
+                segmented === 'core' && ( <Core slug={slug} setShowDrawer={setShowDrawer} setActiveTactico={setActiveTactico }/>)
             }
             
 
@@ -118,7 +114,7 @@ export const Tactico: React.FC = () => {
             >   
 
                 {
-                    (currentTactico.id !== '' ) && <FormTactico handleCloseDrawer={handleCloseDrawer} year={year} slug={slug}/>
+                    activeTactico && <FormTactico handleCloseDrawer={handleCloseDrawer} year={year} slug={slug} activeTactico={activeTactico}/>
                 }
 
             </Drawer>

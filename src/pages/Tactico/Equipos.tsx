@@ -1,65 +1,55 @@
-import { clearTacticosThunk, getTacticoThunk, getTacticosByEquipoCoreThunk, getTacticosByEquiposThunk } from "@/redux/features/tacticos/tacticosThunk"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { useEffect, useMemo, useState } from "react"
+import { useGetTacticosByEquiposQuery,  useGetTacticosByEquipoCoreQuery, useCreateTacticoMutation} from "@/redux/features/tacticos/tacticosThunk"
+import { useAppSelector } from "@/redux/hooks"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Box } from "@/components/ui"
 import { motion } from 'framer-motion';
-import { Avatar, Checkbox, Image, Tooltip } from "antd"
+import { Avatar, Checkbox, Image, Modal, Select, Tooltip, TreeSelect } from "antd"
 import { FaQuestionCircle } from "react-icons/fa"
-import { clearCurrentAreaThunk, getAreaThunk } from "@/redux/features/areas/areasThunks"
+import { useGetAreaQuery } from "@/redux/features/areas/areasThunks"
 import { TablaTacticos } from "@/components/tacticos/TablaTacticos"
 import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
-import { CoreProps, DepartamentoProps, TacticoProps } from "@/interfaces";
+import { CoreProps, DepartamentoProps, TacticoProps, UsuarioProps } from "@/interfaces";
+import { Spinner } from "@/components/antd/Spinner";
+import { useGetPerspectivasQuery } from "@/redux/features/perspectivas/perspectivasThunk";
+import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
+import { useSelectUser } from "@/hooks/useSelectUser";
 
 interface Props {
     slug?: string
     handleCreateTactico: (e: React.MouseEvent<HTMLButtonElement>, isEstrategico: boolean) => void;
     setShowDrawer: (showDrawer: boolean) => void;
+    setActiveTactico: (tactico: TacticoProps | CoreProps | undefined) => void;
 }
 
-const Equipos = ({ slug, setShowDrawer }:Props) => {
+const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
     
-    const dispatch = useAppDispatch()
+    const {userAuth} = useAppSelector(state => state.auth)
     const { year } = useAppSelector(state => state.global.currentConfig)
-    const { currentArea, isLoadingCurrent: isLoadingArea } = useAppSelector(state => state.areas)
-    const { objetivosTacticos, isLoading, objetivosCore} = useAppSelector(state => state.tacticos)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
-    const [showOnlyMe, setShowOnlyMe] = useState(false)
+    const [ showOnlyMe, setShowOnlyMe ] = useState(false)
+    const newTacticoRef = useRef('');
+    const usuarioRef = useRef('');
     
-    useEffect(() => {
-        if(slug){
-            dispatch(getAreaThunk(slug))
-        }
+    const { data: usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
+    const { data: currentArea, isLoading: isLoadingArea, status: statusArea } = useGetAreaQuery({areaSlug: slug}, {skip: !slug })
+    const { data: objetivosTacticos, isLoading, isFetching } = useGetTacticosByEquiposQuery({year, departamentoId: activeTeam?.slug, showOnlyMe: showOnlyMe}, {skip: !activeTeam, refetchOnMountOrArgChange: true})
+    const { data: objetivosCore, isLoading: isLoadingCore, isFetching: isFetchingCore } = useGetTacticosByEquipoCoreQuery({year, departamentoId: activeTeam?.slug, showOnlyMe: showOnlyMe}, {skip: !activeTeam, refetchOnMountOrArgChange: true})
+    const { data: perspectivas, isLoading: isLoadingPerspectiva, isFetching: isFetchingPerspectiva} = useGetPerspectivasQuery({year})
+    const [createTacticoMutation, {}] = useCreateTacticoMutation()
+    const {confirm} = Modal;
 
-        return () => { 
-            dispatch(clearTacticosThunk())
-            dispatch(clearCurrentAreaThunk())
-         }
-    }, [slug, year])
-
-    
+    const { tagRender, spanUsuario } = useSelectUser(usuarios)
 
     useEffect(() => {
-        if(currentArea.departamentos?.length){
-            dispatch(getTacticosByEquiposThunk({year, departamentoId: currentArea.departamentos[0].id, showOnlyMe}))
-        }
-    }, [currentArea])
-
-    useEffect(() => {
-        if(currentArea.departamentos?.length){
-            dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: currentArea.departamentos[0].id, showOnlyMe}))
-        }
-    }, [currentArea])
-
-    useEffect(() => {
-        if(currentArea?.departamentos?.length){
-            setActiveTeam(currentArea.departamentos[0])
+        if(statusArea === 'fulfilled' && currentArea){
+            if(currentArea.departamentos?.length){
+                setActiveTeam(currentArea.departamentos[0])
+            }
         }
     }, [currentArea])
 
     const handleGetDepartamentos = (departamento: DepartamentoProps) => {
-        dispatch(getTacticosByEquiposThunk({year, departamentoId: departamento.slug, showOnlyMe}))
-        dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: departamento.slug, showOnlyMe}))
         setActiveTeam(departamento)
     }
 
@@ -68,21 +58,146 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
         return current
     }, [activeTeam])
 
-    const handleCreateObjetivo = () => {}
+    const optEstrategicos = useMemo(() => {
+        if (!perspectivas || isLoadingPerspectiva || isFetchingPerspectiva) return [];
+        return perspectivas.map(perspectiva => {
+            return {
+                key: perspectiva.id,
+                label: (
+                    <div style={{ padding: 5, display: 'flex', alignItems: 'center', gap: 5, backgroundColor: perspectiva.color, color: 'white' }} >
+                        <p className={`text-white w-full`} >{perspectiva.nombre}</p>
+                    </div>
+                ),
+                treeIcon: false,
+                value: perspectiva.id,
+                dataName: perspectiva,
+                selectable: false,
+                children: perspectiva.objetivosEstrategicos.map(estrategico => {
+                    return {
+                        label: <p className='text-devarana-graph'><span style={{ color: perspectiva.color }}>{estrategico.codigo}</span> | <Tooltip title={estrategico.nombre}></Tooltip> {estrategico.nombre}</p>,
+                        value: estrategico.id,
+                        dataName: estrategico.nombre,
+                        isLeaf: true,
+                    }
+                })
+            }
+        }) // .filter(e  => e.dataName.id === currentArea?.perspectivas?.id)
+    }, [perspectivas, isLoadingPerspectiva, isFetchingPerspectiva])
+
+    const handleCreateObjetivo = () => {        
+        usuarioRef.current = usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id.toString() || ''
+        confirm({
+            maskClosable: true,
+            closable: true,
+            width: window.innerWidth > 768 ? '70%' : 500,
+            title: 'Crear objetivo',
+            content: (
+            <div>
+                <TreeSelect
+                    treeExpandAction='click'
+                    placeholder="Selecciona el objetivo estratégico"
+                    showSearch
+                    treeDefaultExpandedKeys={optEstrategicos.map(e => e.dataName.id === currentArea?.perspectivas?.id ? e.key : '')}
+                    treeData={optEstrategicos}
+                    showCheckedStrategy={TreeSelect.SHOW_CHILD}
+                    multiple={false}
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                    className='w-full'
+                    treeNodeFilterProp='dataName'
+                    style={{ width: '100%' }}
+                    onSelect={(value) => newTacticoRef.current = value.toString()}
+                />
+               <Select
+                    style={{ width: '100%' }}
+                    className="mt-3"
+                    placeholder="Selecciona al propietario"
+                    tagRender={tagRender}
+                    size='large'
+                    showSearch
+                    defaultValue={usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id}
+                    onChange={(value) => usuarioRef.current = value.toString()}
+                    maxTagPlaceholder={(omittedValues) => (
+                        <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                    )}
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                    
+                >
+                    {
+                        usuarios?.map((usuario: UsuarioProps) => (
+                            <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} 
+                            > { spanUsuario(usuario) } </Select.Option>
+                        ))
+                    }
+                </Select>
+            </div>),
+            okText: 'Crear',
+            okButtonProps: { type: 'default', className: 'text-primary-light' },
+            cancelText: 'Cancelar',
+            async onOk() {
+                newTacticoRef.current !== '' && createTacticoMutation({year, estrategicoId: newTacticoRef.current, slug, propietarioId: usuarioRef.current})
+            },
+            onCancel() {
+               
+            },
+        });
+    }
+
+    const handleCreateObjetivoCore = () => {
+        usuarioRef.current = usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id.toString() || ''
+        confirm({
+            maskClosable: true,
+            closable: true,
+            width: window.innerWidth > 768 ? '70%' : 500,
+            title: 'Crear objetivo',
+            content: (
+            <div>
+                <Select
+                    style={{ width: '100%' }}
+                    placeholder="Selecciona al propietario"
+                    tagRender={tagRender}
+                    size='large'
+                    showSearch
+                    maxTagPlaceholder={(omittedValues) => (
+                        <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                    )}
+                    defaultValue={usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id}
+                    onChange={(value) => usuarioRef.current = value.toString()}
+                    // @ts-ignore
+                    filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                    
+                >
+                    {
+                        usuarios?.map((usuario: UsuarioProps) => (
+                            <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} 
+                            > { spanUsuario(usuario) } </Select.Option>
+                        ))
+                    }
+                </Select>
+            </div>),
+            okText: 'Crear',
+            okButtonProps: { type: 'default', className: 'text-primary-light' },
+            cancelText: 'Cancelar',
+            async onOk() {
+                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current})
+            },
+            onCancel() {
+               
+            },
+        });
+    }
 
     const handleShowObjetivoT = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getTacticoThunk(objetivo.id))        
+        setActiveTactico(objetivo)  
         setShowDrawer(true)
     }
     const handleShowObjetivoC = (objetivo: TacticoProps | CoreProps) => {
-        dispatch(getTacticoThunk(objetivo.id))        
+        setActiveTactico(objetivo)      
         setShowDrawer(true)
     }
 
     const handleGetOnlyMe = (value : boolean) => {
         setShowOnlyMe(value)
-        activeTeam && dispatch(getTacticosByEquiposThunk({year, departamentoId: activeTeam.slug, showOnlyMe: value}))
-        activeTeam && dispatch(getTacticosByEquipoCoreThunk({year, departamentoId: activeTeam.slug, showOnlyMe: value}))
     }
 
 
@@ -96,7 +211,8 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
 
                     <div className="bg-white shadow-ext rounded-ext md:w-[275px] w-full p-3">
                             {
-                                currentArea.departamentos?.map(equipo => (
+                                currentArea && !isLoadingArea 
+                                ? currentArea.departamentos?.map(equipo => (
                                     <div key={equipo.slug} 
                                         onClick={() => handleGetDepartamentos(equipo)} 
                                         className={`p-2 hover:bg-gray-200 transition duration-300 ease-in-out  first:rounded-t-ext last:rounded-b-ext cursor-pointer`}
@@ -107,6 +223,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                                             <p className="font-medium text-devarana-graph"> {equipo.nombre} </p>
                                         </div>
                                 ))
+                                : <div className="h-32 flex justify-center"> <Spinner /> </div>
                             }
                     </div>
                 </div>    
@@ -116,12 +233,12 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                     }}>
                         <div>
                             <h1 className="text-white font-medium md:text-left text-center">{activeDepartamento?.nombre}</h1>
-                            <p className="text-white text-opacity-80 drop-shadow md:text-left text-center">{currentArea.nombre}</p>
+                            <p className="text-white text-opacity-80 drop-shadow md:text-left text-center">{currentArea?.nombre}</p>
                         </div>
 
                         <div className="mx-5 px-5 md:border-r-0 md:border-t-0 md:border-b-0 md:border-white md:border items-center flex">
                             {
-                                currentArea.leader && activeDepartamento && (
+                                currentArea && currentArea.leader && activeDepartamento && (
                                     <div className="flex items-center gap-x-2 align-middle">
                                         <Avatar 
                                                 src={<Image src={`${getStorageUrl(activeDepartamento?.leader?.foto)}`} preview={false} fallback={getBrokenUser()} />}
@@ -132,9 +249,8 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                                             ( 
                                             <div className="">
                                                 <p className="text-white">{activeDepartamento.leader.nombre} {activeDepartamento.leader?.apellidoPaterno} {activeDepartamento?.leader?.apellidoMaterno}
-                                                <p className="text-sm text-opacity-80 text-white drop-shadow">Lider de seguimiento</p>
                                                 </p>
-                                            
+                                                <p className="text-sm text-opacity-80 text-white drop-shadow">Lider de seguimiento</p>
                                             </div>)
                                         }
                                     </div>
@@ -162,7 +278,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                                 <FaQuestionCircle className='text-primary-light'/>
                             </Tooltip>
                         </div>
-                            <TablaTacticos objetivos={objetivosTacticos} handleCreateObjetivo={ handleCreateObjetivo } isLoading={isLoading} handleShowObjetivo={handleShowObjetivoT}/>
+                            <TablaTacticos objetivos={objetivosTacticos || []} handleCreateObjetivo={ handleCreateObjetivo } isLoading={isLoading} isFetching={isFetching} handleShowObjetivo={handleShowObjetivoT}/>
                     </Box>
                     <Box>
                         <div className="flex items-center gap-x-2">
@@ -176,7 +292,7 @@ const Equipos = ({ slug, setShowDrawer }:Props) => {
                                 </Tooltip>
                             </Tooltip>
                         </div>
-                            <TablaTacticos objetivos={objetivosCore} handleCreateObjetivo={ handleCreateObjetivo } isLoading={isLoading} handleShowObjetivo={handleShowObjetivoC}/>
+                            <TablaTacticos objetivos={objetivosCore || []} handleCreateObjetivo={ handleCreateObjetivoCore } isLoading={isLoadingCore} isFetching={isFetchingCore} handleShowObjetivo={handleShowObjetivoC}/>
                     </Box>
                     
                     
