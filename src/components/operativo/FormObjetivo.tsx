@@ -1,7 +1,7 @@
 import {  useState } from 'react'
 import { useGetTacticosQuery } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { DatePicker, Divider, Form, Input, Popconfirm, Select, Skeleton, Tooltip } from 'antd'
+import { DatePicker, Divider, Form, Input, Popconfirm, Segmented, Select, Skeleton, Tooltip } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
@@ -13,6 +13,7 @@ import { useGetEstrategicosQuery } from '@/redux/features/estrategicos/estrategi
 import { DefaultOptionType } from 'antd/es/select'
 import { useOperativo } from '@/hooks/useOperativo'
 import { FaTrash } from 'react-icons/fa'
+import { PerspectivaProps } from '@/interfaces';
 
 interface Props {
     handleCancel: () => void
@@ -29,11 +30,9 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     const { userAuth } = useAppSelector(state => state.auth)
     const [selectedPerspectiva, setSelectedPerspectiva] = useState<string | undefined>(undefined)
     const [selectedEstrategico, setSelectedEstrategico] = useState<string | undefined>(undefined)
-
-    const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
-
-    const { data: perspectivas } = useGetPerspectivasQuery({ year })
     const { data: usuarios} = useGetUsuariosQuery({status:'ACTIVO'})
+    const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
+    const { data: perspectivas } = useGetPerspectivasQuery({ year })
     const { data: objetivosEstrategicos } = useGetEstrategicosQuery({ year, quarter, perspectivaId: selectedPerspectiva}, {
         skip: !selectedPerspectiva,
     })
@@ -41,6 +40,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         skip: !selectedEstrategico,
     })
     const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
+
+    const [contribuye, setContribuye] = useState<string | number>('estrategico')
 
     const handleOnSubmit = async () => {
 
@@ -226,91 +227,107 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                 <Divider className='col-span-12' />
 
-               <div className='col-span-12'>
-                    <p className='text-devarana-graph font-medium pb-5'>Contribuye a:</p>
-                    <Proximamente avance={95}  />
-               </div>
+                <div className='col-span-12'>
+                        <p className='text-devarana-graph font-medium pb-5'>Contribuye a:</p>
+                        <Proximamente avance={99}  />
+                </div>
 
-                 {/* <Form.Item
-                    className='col-span-6'
-                    label="Perspectiva"
-                    name="perspectivaId"
-                    tooltip='La perspectiva es el área de la empresa a la que contribuye el objetivo'
-                >
-                   
-                   <Select
-                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                        showSearch
-                        onChange={handlePerspectivaChange}
-                        onClear={handleClear}
-                        allowClear
-                        options={
-                            perspectivas?.map((perspectiva) => ({
-                                label: (
-                                <Tooltip title={perspectiva.nombre}>
-                                    <p className='text-devarana-graph'>{perspectiva.nombre}</p>
-                                </Tooltip>),
-                                value: perspectiva.id,
-                                dataName: perspectiva.nombre
-                            }))
-                        }
-                    />
-                </Form.Item>
 
-                
-                <Form.Item
-                    className='col-span-6'
-                    label="Objetivo Estrategico"
-                    name="estrategicoId"
-                >
-                    <Select 
-                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                        showSearch
-                        onChange={handleEstrategico}
-                        onClear={handleClear}
-                        allowClear
-                        disabled={!selectedPerspectiva}
-                        options={
-                            objetivosEstrategicos?.map((estrategico) => ({
-                                label: (
-                                <Tooltip title={estrategico.nombre}>
-                                    <p className='text-devarana-graph'>{estrategico.nombre}</p>
-                                </Tooltip>),
-                                value: estrategico.id,
-                                dataName: estrategico.nombre
-                            }))
+
+                {/* <Segmented className='col-span-12' block options={[{
+                    label: 'Objetivo Táctico Estratégico',
+                    value: 'estrategico',
+                }, {
+                    label: 'Objetivo Táctico Core',
+                    value: ' core',
+                }]} value={contribuye} onChange={(value) => setContribuye(value)} />
+
+
+                {
+                    contribuye === 'estrategico' && (
+                    <>
+                    <label className='block pb-3'>Perspectiva: </label>
+                    <div className='flex flex-wrap gap-3 col-span-12'>
+                        {
+                            perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
+                                <button
+                                    type='button'
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        handlePerspectivaChange(perspectiva.id)
+                                    }}
+                                    key={perspectiva.id} 
+                                    className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
+                                    style={{
+                                        backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
+                                    }}
+                                > <span className='drop-shadow  text-xs'>{ perspectiva.nombre }</span>
+                                </button>
+                            ))
                         }
+                    </div>
                        
-                    />
-                </Form.Item>
+                        <Form.Item
+                            className='col-span-6'
+                            label="Objetivo Estrategico"
+                            name="estrategicoId"
+                        >
+                            <Select 
+                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                showSearch
+                                onChange={handleEstrategico}
+                                onClear={handleClear}
+                                allowClear
+                                disabled={!selectedPerspectiva}
+                                options={
+                                    objetivosEstrategicos?.map((estrategico) => ({
+                                        label: (
+                                        <Tooltip title={estrategico.nombre}>
+                                            <p className='text-devarana-graph'>{estrategico.nombre}</p>
+                                        </Tooltip>),
+                                        value: estrategico.id,
+                                        dataName: estrategico.nombre
+                                    }))
+                                }
+                            
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            className='col-span-6'
+                            label="Objetivo Tactico"
+                            name="tacticoId"
+                            required    
+                        >
+                            <Select
+                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                showSearch
+                                allowClear
+                                onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
+                                disabled={!selectedEstrategico}
+                                options={
+                                    objetivosTacticos?.map((tactico) => ({
+                                        label: (
+                                        <Tooltip title={tactico.nombre}>
+                                            <p className='text-devarana-graph'>{tactico.nombre}</p>
+                                        </Tooltip>),
+                                        value: tactico.id,
+                                        dataName: tactico.nombre
+                                    }))
+                                }
+                            />
 
-                                
-                <Form.Item
-                    className='col-span-6'
-                    label="Objetivo Tactico"
-                    name="tacticoId"
-                >
-                    <Select
-                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                        showSearch
-                        allowClear
-                        onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
-                        disabled={!selectedEstrategico}
-                        options={
-                            objetivosTacticos?.map((tactico) => ({
-                                label: (
-                                <Tooltip title={tactico.nombre}>
-                                    <p className='text-devarana-graph'>{tactico.nombre}</p>
-                                </Tooltip>),
-                                value: tactico.id,
-                                dataName: tactico.nombre
-                            }))
-                        }
-                    />
-
-                    
-                </Form.Item> */}
-                
+                            
+                        </Form.Item>
+                    </>
+                    )
+                }    
+                {
+                    contribuye === 'core' && (
+                        <>
+                        </>
+                    )
+                } */}
                 <div className='flex col-span-12 justify-end'>
                     <Button 
                         classColor='primary' 
