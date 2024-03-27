@@ -12,6 +12,7 @@ import { FaArrowRight, FaSave } from 'react-icons/fa';
 export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
     const [createUser, {isLoading: isCreating}] = useCreateUsuarioMutation()
     const [updateUser, {isLoading: isUpdating}] = useUpdateUsuarioMutation()
+    
 
     const [form] = Form.useForm();
     const {fileList, preview, previewOpen ,handleOnChange, handleOnRemove, handlePreview, setPreviewOpen, handleReset} = useUploadAvatar({currentUsuario})
@@ -48,7 +49,7 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
             form={form}
         >
             <div className="grid grid-cols-4 gap-x-4">
-                <div className={`${currentUsuario.id !== ''? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
+                <div className={`${!currentUsuario? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
                     <div className='block'>
                     <ImgCrop 
                         quality={.5}
@@ -82,7 +83,7 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
                     </div>
                 </div>
 
-                <div className={`${currentUsuario.id !== ''? 'col-span-3': 'col-span-4'} grid grid-cols-2 gap-10`}>
+                <div className={`${!currentUsuario ? 'col-span-3': 'col-span-4'} grid grid-cols-2 gap-10`}>
                     <Form.Item
                         label="Nombre"
                         required
@@ -139,7 +140,7 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
             </div>
             <div className="flex justify-end mt-2 gap-x-2">
                 <Button classColor="primary" classType='regular' width={'auto'} type="submit" className="mr-2" disabled={isCreating || isUpdating}> <FaSave /> </Button>
-                <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={nextStep} className="mr-2" disabled={currentUsuario.id === ''}>
+                <Button classColor="dark" classType='regular' width={'auto'} type="button" onClick={nextStep} className="mr-2" disabled={!currentUsuario}>
                     <FaArrowRight /> 
                 </Button>
             </div>

@@ -18,6 +18,9 @@ interface Props {
 
 export const FormUsuarios = ({visible, handleModal, usuarioId}: Props) => {
 
+    console.log(usuarioId);
+    
+
     const {data: currentUsuario, error, isLoading, isFetching} = useGetUsuarioQuery(usuarioId)    
 
     const [ current, setCurrent] = useState<number>(0);
@@ -50,8 +53,8 @@ export const FormUsuarios = ({visible, handleModal, usuarioId}: Props) => {
                         <Box className="-my-16 bg-gradient-to-tr from-[#1a73e8] to-[#49a3f1]">
                             <Steps current={current} progressDot={true} size="small" onChange={ (current) => setCurrent(current) }  >
                                 <Step title="General" onStepClick={setCurrent} />
-                                <Step title="Profesional" onStepClick={setCurrent} disabled={ currentUsuario?.id === ''} />
-                                <Step title="Personal" onStepClick={setCurrent} disabled={ currentUsuario?.id === ''} />
+                                <Step title="Profesional" onStepClick={setCurrent} disabled={ !currentUsuario } />
+                                <Step title="Personal" onStepClick={setCurrent} disabled={ !currentUsuario } />
                             </Steps>
                         </Box>
 
