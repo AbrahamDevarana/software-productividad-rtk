@@ -21,9 +21,9 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
         const query = {
             ...currentUsuario,
             ...form.getFieldsValue(),
-            id: currentUsuario.id,
+            id: currentUsuario?.id,
         }
-        if(currentUsuario.id) {
+        if(currentUsuario && currentUsuario.id) {
             await updateUser(query).unwrap().then(() => {
                 message.success('Usuario Actualizado Correctamente.')
             })
@@ -49,7 +49,7 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
             form={form}
         >
             <div className="grid grid-cols-4 gap-x-4">
-                <div className={`${!currentUsuario? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
+                <div className={`${currentUsuario? 'col-span-1 flex': 'col-span-0 hidden'}  items-center justify-center`}>
                     <div className='block'>
                     <ImgCrop 
                         quality={.5}
@@ -83,7 +83,7 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
                     </div>
                 </div>
 
-                <div className={`${!currentUsuario ? 'col-span-3': 'col-span-4'} grid grid-cols-2 gap-10`}>
+                <div className={`${currentUsuario ? 'col-span-3': 'col-span-4'} grid grid-cols-2 gap-10`}>
                     <Form.Item
                         label="Nombre"
                         required

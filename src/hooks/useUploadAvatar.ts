@@ -1,5 +1,4 @@
 import { getBase64, getStorageUrl } from "@/helpers";
-import { UsuarioProps } from "@/interfaces";
 import { deleteProfilePhotoThunk } from "@/redux/features/usuarios/usuariosThunks";
 import { useAppDispatch } from "@/redux/hooks";
 import { UploadFile, UploadProps } from "antd";
@@ -43,7 +42,7 @@ export const useUploadAvatar = ({currentUsuario}: Props) => {
 
 
     useEffect(() => {
-        if(currentUsuario.id && currentUsuario.foto) {
+        if(currentUsuario && currentUsuario.foto) {
             setFileList([{
                 uid: currentUsuario.id,
                 name: currentUsuario.nombre,

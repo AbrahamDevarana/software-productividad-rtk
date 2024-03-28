@@ -18,8 +18,6 @@ interface Props {
 
 export const FormUsuarios = ({visible, handleModal, usuarioId}: Props) => {
 
-    console.log(usuarioId);
-    
 
     const {data: currentUsuario, error, isLoading, isFetching} = useGetUsuarioQuery(usuarioId)    
 
