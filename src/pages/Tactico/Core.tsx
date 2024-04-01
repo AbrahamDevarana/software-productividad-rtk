@@ -96,7 +96,7 @@ const Core = ({slug, setShowDrawer, setActiveTactico}: Props) => {
             okButtonProps: { type: 'default', className: 'text-primary-light' },
             cancelText: 'Cancelar',
             async onOk() {
-                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current})
+                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current, departamentoId: activeDepartamento?.id})
             },
             onCancel() {
                

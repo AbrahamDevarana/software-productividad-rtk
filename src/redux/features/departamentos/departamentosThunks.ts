@@ -4,6 +4,8 @@ import { clearDepartamentos, clearCurrentDepartamento, clearLideres } from './de
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 
 interface Props {
@@ -159,3 +161,23 @@ export const clearLideresThunk = () => {
         dispatch( clearLideres() )
     }
 }
+
+
+
+export const departamentosApi = createApi({
+    reducerPath: 'departamentosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Departamentos'],
+    endpoints: (builder) => ({
+        getDepartamentos: builder.query<Props, {areaId: number}>({
+            query: (filtros) => ({
+                url: `/departamentos`,
+                params: filtros
+            }),
+            providesTags: ['Departamentos']
+        }),
+    })
+})
+
+
+export const { useGetDepartamentosQuery } = departamentosApi;

@@ -1,7 +1,7 @@
-import {  useState } from 'react'
-import { useGetTacticosQuery } from '@/redux/features/tacticos/tacticosThunk'
+import {  useEffect, useState } from 'react'
+import { useGetTacticosByEquipoCoreQuery, useGetTacticosQuery } from '@/redux/features/tacticos/tacticosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { DatePicker, Divider, Form, Input, Popconfirm, Segmented, Select, Skeleton, Tooltip } from 'antd'
+import { DatePicker, Divider, Form, Input, Popconfirm, Segmented, Select, Skeleton, Spin, Tooltip } from 'antd'
 import dayjs, {Dayjs} from 'dayjs';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks'
 import { createOperativoThunk, deleteOperativoThunk, updateOperativoThunk } from '@/redux/features/operativo/operativosThunk'
@@ -13,7 +13,9 @@ import { useGetEstrategicosQuery } from '@/redux/features/estrategicos/estrategi
 import { DefaultOptionType } from 'antd/es/select'
 import { useOperativo } from '@/hooks/useOperativo'
 import { FaTrash } from 'react-icons/fa'
-import { PerspectivaProps } from '@/interfaces';
+import { AreaProps, PerspectivaProps } from '@/interfaces';
+import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
+import { useGetDepartamentosQuery } from '@/redux/features/departamentos/departamentosThunks';
 
 interface Props {
     handleCancel: () => void
@@ -22,26 +24,53 @@ interface Props {
 
 export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
-    const { TextArea } = Input;
-
-    const [form] = Form.useForm();
-    const dispatch = useAppDispatch()
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
     const { userAuth } = useAppSelector(state => state.auth)
+
+    const { TextArea } = Input;
+    const [form] = Form.useForm();
+    const dispatch = useAppDispatch()
+
+    const { data: usuarios} = useGetUsuariosQuery({status:'ACTIVO'})
+    const { data: perspectivas } = useGetPerspectivasQuery({ year })
+    
+    const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
     const [selectedPerspectiva, setSelectedPerspectiva] = useState<string | undefined>(undefined)
     const [selectedEstrategico, setSelectedEstrategico] = useState<string | undefined>(undefined)
-    const { data: usuarios} = useGetUsuariosQuery({status:'ACTIVO'})
-    const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
-    const { data: perspectivas } = useGetPerspectivasQuery({ year })
-    const { data: objetivosEstrategicos } = useGetEstrategicosQuery({ year, quarter, perspectivaId: selectedPerspectiva}, {
-        skip: !selectedPerspectiva,
-    })
-    const { data: objetivosTacticos} = useGetTacticosQuery({ year, quarter, estrategicoId: selectedEstrategico}, {
-        skip: !selectedEstrategico,
-    })
+    const [selectedArea, setSelectedArea] = useState<number>(0)
+    const [selectedEquipo, setSelectedEquipo] = useState< number >(0)
+
+    const { data: areas } = useGetAreasQuery({ year, quarter })
+    const { data: departamentos } = useGetDepartamentosQuery({ areaId: selectedArea }, { skip: !selectedArea }) 
+    
+
+    const { data: objetivosEstrategicos } = useGetEstrategicosQuery({ year, quarter, perspectivaId: selectedPerspectiva}, { skip: !selectedPerspectiva })
+    const { data: objetivosTacticos} = useGetTacticosQuery({ year, quarter, estrategicoId: selectedEstrategico}, { skip: !selectedEstrategico })    
+    const {data: objetivosCore} = useGetTacticosByEquipoCoreQuery({ year, departamentoId: selectedEquipo, showOnlyMe: false}, { skip: !selectedEquipo  })
+
+
     const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
 
     const [contribuye, setContribuye] = useState<string | number>('estrategico')
+    
+    useEffect(() => {
+        reloadProps()
+    }, [currentOperativo.tacticoOperativo])
+
+    const reloadProps = () => {
+        if(currentOperativo && currentOperativo.tacticoOperativo?.tipoObjetivo === 'ESTRATEGICO'){
+            setContribuye('estrategico')
+            setSelectedEstrategico(currentOperativo.tacticoOperativo.estrategicoId)
+            setSelectedPerspectiva(currentOperativo.tacticoOperativo.estrategico.perspectivaId)
+        }else {
+            setSelectedPerspectiva(undefined)
+            setSelectedArea(currentOperativo.tacticoOperativo?.departamentos?.areaId || 0)
+            setSelectedEquipo(currentOperativo.tacticoOperativo?.departamentoId || 0)        
+            setContribuye('core')    
+        }
+    }
+
+        
 
     const handleOnSubmit = async () => {
 
@@ -51,7 +80,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
             quarter, year
         }
         
-
         if(currentOperativo.id === ''){
             await dispatch(createOperativoThunk(query))
         }else{
@@ -59,8 +87,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         }
 
         setPonderacionVisible(true)
-
-        // handleCancel()
     }
 
     const { statusObjetivo } = useOperativo({objetivo: currentOperativo})
@@ -76,6 +102,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
     const handlePerspectivaChange = (value: string) => {
         setSelectedPerspectiva(value)
+        setSelectedEstrategico(undefined)
         form.setFieldValue('estrategicoId', null)
         form.setFieldValue('tacticoId', null)
     }
@@ -85,8 +112,14 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         setSelectedEstrategico(value)
     }
 
-    const handleClear = () => {
-        
+    const handleChangeArea = (value: number) => {
+        form.setFieldValue('departamentoId', null)
+        setSelectedEquipo(0)
+        setSelectedArea(value)
+
+    }
+    const handleChangeEquipo = (value: number) => {
+        setSelectedEquipo(value)
     }
 
     const handleDeleteObjetivo = () => {
@@ -94,8 +127,20 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         handleCancel()
     }
 
+    const handleClean = () => {
+        setSelectedPerspectiva(undefined)
+        setSelectedEstrategico(undefined)
+        setSelectedArea(0)
+        setSelectedEquipo(0)
+        form.setFieldValue('estrategicoId', null)
+        form.setFieldValue('tacticoId', null)
+        form.setFieldValue('departamentoId', null)
+    }
 
-    
+    if(!currentOperativo || isLoadingObjetivo ){
+        return <div className='flex justify-center items-center h-full'> <Spin size='large' /> </div>
+    }
+
     return (
         <>
             <Form 
@@ -109,6 +154,10 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                     progresoAsignado: currentOperativo.operativosResponsable.find((item) => item.id === userAuth.id)?.scoreCard.progresoAsignado,
                     fechaInicio: currentOperativo.id === '' ? dayjs().quarter(quarter).startOf('quarter') : dayjs(currentOperativo.fechaInicio),
                     fechaFin: currentOperativo.id === '' ? dayjs().quarter(quarter).endOf('quarter') : dayjs(currentOperativo.fechaFin),
+                    estrategicoId: currentOperativo.tacticoOperativo?.estrategicoId,
+                    tacticoId: currentOperativo.tacticoId,
+                    perpectivaId: currentOperativo.tacticoOperativo?.estrategico?.perspectivaId,
+                    departamentoId: currentOperativo.tacticoOperativo?.departamentoId,
                 }}
                 form={form}
             >
@@ -226,108 +275,182 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                 </Form.Item>
 
                 <Divider className='col-span-12' />
-
-                <div className='col-span-12'>
-                        <p className='text-devarana-graph font-medium pb-5'>Contribuye a:</p>
-                        <Proximamente avance={99}  />
-                </div>
-
-
-
-                {/* <Segmented className='col-span-12' block options={[{
-                    label: 'Objetivo Táctico Estratégico',
-                    value: 'estrategico',
-                }, {
-                    label: 'Objetivo Táctico Core',
-                    value: ' core',
-                }]} value={contribuye} onChange={(value) => setContribuye(value)} />
-
-
                 {
-                    contribuye === 'estrategico' && (
-                    <>
-                    <label className='block pb-3'>Perspectiva: </label>
-                    <div className='flex flex-wrap gap-3 col-span-12'>
+                    (year >= 2024 && quarter < 2) 
+                    ? (
+                        <div className='col-span-12'>
+                            <p className='text-devarana-graph font-medium pb-5'>Contribuye a:</p>
+                            <Proximamente avance={99}  text='Comenzará' />
+                        </div>
+                    ) 
+                    : 
+                    (
+                    <> 
+                        <Segmented className='col-span-12 mb-3' block options={[{
+                            label: 'Objetivo Táctico Estratégico',
+                            value: 'estrategico',
+                        }, 
+                        // {
+                        //     label: 'Objetivo Táctico Core',
+                        //     value: 'core',
+                        // }
+                        ]} value={contribuye} onChange={(value) => {setContribuye(value)}} />
+
+
                         {
-                            perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
-                                <button
-                                    type='button'
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        handlePerspectivaChange(perspectiva.id)
-                                    }}
-                                    key={perspectiva.id} 
-                                    className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
-                                    style={{
-                                        backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
-                                    }}
-                                > <span className='drop-shadow  text-xs'>{ perspectiva.nombre }</span>
-                                </button>
-                            ))
-                        }
-                    </div>
-                       
-                        <Form.Item
-                            className='col-span-6'
-                            label="Objetivo Estrategico"
-                            name="estrategicoId"
-                        >
-                            <Select 
-                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                                showSearch
-                                onChange={handleEstrategico}
-                                onClear={handleClear}
-                                allowClear
-                                disabled={!selectedPerspectiva}
-                                options={
-                                    objetivosEstrategicos?.map((estrategico) => ({
-                                        label: (
-                                        <Tooltip title={estrategico.nombre}>
-                                            <p className='text-devarana-graph'>{estrategico.nombre}</p>
-                                        </Tooltip>),
-                                        value: estrategico.id,
-                                        dataName: estrategico.nombre
-                                    }))
+                            contribuye === 'estrategico' && (
+                            <>
+                            <label className='block pb-3'>Perspectiva: </label>
+                                <div className='flex flex-wrap gap-3 col-span-12 pb-3'>
+                                {
+                                    perspectivas && perspectivas?.map((perspectiva: PerspectivaProps) => (
+                                        <button
+                                            type='button'
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                handlePerspectivaChange(perspectiva.id)
+                                            }}
+                                            key={perspectiva.id} 
+                                            className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
+                                            style={{
+                                                backgroundColor: selectedPerspectiva === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
+                                            }}
+                                        > <span className='drop-shadow  text-xs'>{ perspectiva.nombre }</span>
+                                        </button>
+                                    ))
                                 }
+                            </div>
                             
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            className='col-span-6'
-                            label="Objetivo Tactico"
-                            name="tacticoId"
-                            required    
-                        >
-                            <Select
-                                filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                                showSearch
-                                allowClear
-                                onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
-                                disabled={!selectedEstrategico}
-                                options={
-                                    objetivosTacticos?.map((tactico) => ({
-                                        label: (
-                                        <Tooltip title={tactico.nombre}>
-                                            <p className='text-devarana-graph'>{tactico.nombre}</p>
-                                        </Tooltip>),
-                                        value: tactico.id,
-                                        dataName: tactico.nombre
-                                    }))
-                                }
-                            />
+                                <Form.Item
+                                    className='col-span-12'
+                                    label="Objetivo Estrategico"
+                                    name="estrategicoId"
+                                >
+                                    <Select 
+                                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                        showSearch
+                                        onChange={handleEstrategico}
+                                        allowClear
+                                        disabled={!selectedPerspectiva}
+                                        options={
+                                            objetivosEstrategicos?.map((estrategico) => ({
+                                                label: (
+                                                <Tooltip title={estrategico.nombre}>
+                                                    <p className='text-devarana-graph'>{estrategico.nombre}</p>
+                                                </Tooltip>),
+                                                value: estrategico.id,
+                                                dataName: estrategico.nombre
+                                            }))
+                                        }
+                                    
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className='col-span-12'
+                                    label="Objetivo Tactico"
+                                    name="tacticoId"
+                                >
+                                    <Select
+                                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                        showSearch
+                                        allowClear
+                                        onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
+                                        disabled={!selectedEstrategico}
+                                        options={
+                                            objetivosTacticos?.map((tactico) => ({
+                                                label: (
+                                                <Tooltip title={tactico.nombre}>
+                                                    <p className='text-devarana-graph'>{tactico.nombre}</p>
+                                                </Tooltip>),
+                                                value: tactico.id,
+                                                dataName: tactico.nombre
+                                            }))
+                                        }
+                                    />
 
-                            
-                        </Form.Item>
+                                    
+                                </Form.Item>
+                            </>
+                            )
+                        }    
+                        {
+                            contribuye === 'core' && (
+                                <>
+                                <label className='block pb-3'>Áreas: </label>
+                                    <div className='flex flex-wrap gap-3 col-span-12 pb-3'>
+                                    {
+                                        areas?.areas && areas?.areas.rows.map((area: AreaProps) => (
+                                            <button
+                                                type='button'
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    handleChangeArea(area.id)
+                                                }}
+                                                key={area.id} 
+                                                className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
+                                                style={{
+                                                    backgroundColor: selectedArea === area.id? area.perspectivas?.color: 'rgba(101,106,118, .5)',
+                                                }}
+                                            > <span className='drop-shadow  text-xs'>{ area.nombre }</span>
+                                            </button>
+                                        ))
+                                    }
+                                </div>
+                                <Form.Item
+                                    className='col-span-12'
+                                    label="Departamento"
+                                    name="departamentoId"
+                                >
+                                    <Select 
+                                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                        showSearch
+                                        value={selectedEquipo}
+                                        onChange={handleChangeEquipo}
+                                        allowClear
+                                        disabled={!selectedArea}
+                                        options={
+                                            departamentos?.departamentos.rows.map((departamentos) => ({
+                                                label: (
+                                                <Tooltip title={departamentos.nombre}>
+                                                    <p className='text-devarana-graph'>{departamentos.nombre}</p>
+                                                </Tooltip>),
+                                                value: departamentos.id,
+                                                dataName: departamentos.nombre
+                                            }))
+                                        }
+                                    
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    className='col-span-12'
+                                    label="Objetivo Core"
+                                    name="tacticoId"
+                                >
+                                    <Select
+                                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                                        showSearch
+                                        allowClear
+                                        onChange={ (value) => { form.setFieldValue('tacticoId', value)}}
+                                        disabled={!selectedEquipo}
+                                        options={
+                                            objetivosCore?.map((tactico) => ({
+                                                label: (
+                                                <Tooltip title={tactico.nombre}>
+                                                    <p className='text-devarana-graph'>{tactico.nombre}</p>
+                                                </Tooltip>),
+                                                value: tactico.id,
+                                                dataName: tactico.nombre
+                                            }))
+                                        }
+                                    />
+                                </Form.Item>
+                                </>
+                            )
+                        }
                     </>
-                    )
-                }    
-                {
-                    contribuye === 'core' && (
-                        <>
-                        </>
-                    )
-                } */}
+                )}
                 <div className='flex col-span-12 justify-end'>
                     <Button 
                         classColor='primary' 

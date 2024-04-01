@@ -1,5 +1,5 @@
 import { objetivosType } from "@/types";
-import { InitialState, Paginate, ResultadoClaveProps, UsuarioProps } from ".";
+import { InitialState, Paginate, ResultadoClaveProps, TacticoProps, UsuarioProps } from ".";
 
 
 export interface CustomUsuarioProps extends UsuarioProps {
@@ -28,6 +28,7 @@ export interface OperativoProps {
     status:          'NUEVO' | 'POR_AUTORIZAR' | 'ABIERTO' | 'POR_APROBAR' | 'CERRADO';
     year:            number;
     quarter:         number;
+    tacticoOperativo?: TacticoProps
 }
 
 

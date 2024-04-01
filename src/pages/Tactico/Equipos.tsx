@@ -23,8 +23,7 @@ interface Props {
 }
 
 const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
-    
-    const {userAuth} = useAppSelector(state => state.auth)
+
     const { year } = useAppSelector(state => state.global.currentConfig)
     const [ activeTeam, setActiveTeam ] = useState<DepartamentoProps>()
     const [ showOnlyMe, setShowOnlyMe ] = useState(false)
@@ -135,7 +134,7 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
             okButtonProps: { type: 'default', className: 'text-primary-light' },
             cancelText: 'Cancelar',
             async onOk() {
-                newTacticoRef.current !== '' && createTacticoMutation({year, estrategicoId: newTacticoRef.current, slug, propietarioId: usuarioRef.current})
+                newTacticoRef.current !== '' && createTacticoMutation({year, estrategicoId: newTacticoRef.current, slug, propietarioId: usuarioRef.current, departamentoId: activeDepartamento?.id})
             },
             onCancel() {
                
@@ -179,7 +178,7 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
             okButtonProps: { type: 'default', className: 'text-primary-light' },
             cancelText: 'Cancelar',
             async onOk() {
-                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current})
+                usuarioRef.current !== '' && createTacticoMutation({year, slug, propietarioId: usuarioRef.current, departamentoId: activeDepartamento?.id})
             },
             onCancel() {
                
@@ -199,6 +198,7 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
     const handleGetOnlyMe = (value : boolean) => {
         setShowOnlyMe(value)
     }
+
 
 
     return ( 

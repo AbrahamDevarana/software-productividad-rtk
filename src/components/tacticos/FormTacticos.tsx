@@ -1,9 +1,9 @@
 
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { useUpdateTypeProgressMutation, useGetTacticoQuery, useUpdateTacticoMutation, useUpdateTypMutation, useDeleteTacticoMutation } from '@/redux/features/tacticos/tacticosThunk';
-import { CoreProps, PerspectivaProps, TacticoProps, UsuarioProps } from '@/interfaces';
+import { AreaProps, CoreProps, PerspectivaProps, TacticoProps, UsuarioProps } from '@/interfaces';
 import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin, TreeSelect } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -17,6 +17,8 @@ import { Comentarios } from '../general/Comentarios';
 import { Icon } from '../Icon';
 import { DefaultOptionType } from 'antd/es/select';
 import { BsFillCalendarFill } from 'react-icons/bs';
+import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
+import { useGetDepartamentosQuery } from '@/redux/features/departamentos/departamentosThunks';
 
 interface FormTacticoProps {
     handleCloseDrawer: () => void
@@ -28,7 +30,9 @@ interface FormTacticoProps {
 export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year, slug, activeTactico}) => {
 
     const inputRef = useRef<any>(null)
-    const  dispatch = useAppDispatch()
+    const [selectedArea, setSelectedArea] = useState<number>(0)
+    const [selectedEquipo, setSelectedEquipo] = useState<number | string>()
+
     const { comentarios } = useAppSelector(state => state.comentarios)
     const { permisos} = useAppSelector(state => state.auth)
 
@@ -36,6 +40,9 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [updateTacticoMutation, { isLoading: isUpdatingTactico }] = useUpdateTacticoMutation()
     const [updateTypeMutation, {isLoading: isUpdatingType}] =  useUpdateTypMutation()
     const [deleteTacticoMutation, {isLoading: isDeleting}] = useDeleteTacticoMutation()
+
+    const { data: areas } = useGetAreasQuery({ year })
+    const { data: departamentos } = useGetDepartamentosQuery({ areaId: selectedArea }, { skip: !selectedArea }) 
 
 
     const [ isEstrategico, setIsEstrategico] = useState(false)
@@ -53,8 +60,16 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
 
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
+    
 
-
+    useEffect(() => {
+        if(currentTactico && currentTactico.departamentos?.areaId){
+            setSelectedArea(currentTactico.departamentos?.areaId)
+            if(currentTactico.departamentos?.id){
+                setSelectedEquipo(currentTactico.departamentos?.id)
+            }
+        }
+    }, [currentTactico])
    
     useEffect(() => {
         if(currentTactico && currentTactico.id){
@@ -193,6 +208,11 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         })
     }
 
+    const handleChangeArea = (value: number) => {
+        setSelectedArea(value)
+        form.setFieldsValue({departamentoId: undefined})
+    }
+
     const items: MenuProps['items'] = [
         {
           key: '1',
@@ -288,7 +308,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 
         }
     };
-    
+
 
 
     return (
@@ -312,6 +332,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                     proyeccionInicio: dayjs(currentTactico.fechaInicio),
                     proyeccionFin: dayjs(currentTactico.fechaFin),
                     tipoProgreso: currentTactico.tipoProgreso,
+                    departamentoId: currentTactico.departamentoId,
                 }}
             >
                 <Form.Item
@@ -453,32 +474,86 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         }
                     </div>
 
-                <Form.Item
-                    label="Objetivo Estratégico:"
-                    name="estrategicoId"
-                    className='col-span-12 pt-4'
-                    rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
-                >
-                    <TreeSelect
-                        placeholder="Selecciona el objetivo estratégico"
-                        
-                        disabled={
-                            hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true
-                        }
-                        showSearch
-                        onChange={handleChangePerspectiva}
-                        // filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
-                        treeData={optEstrategicos}
-                        treeDefaultExpandedKeys={[selectedPerspectiva as string]}
-                        showCheckedStrategy={TreeSelect.SHOW_CHILD}
-                        multiple={false}
-                        dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                        treeNodeFilterProp='dataName'
+                    <Form.Item
+                        label="Objetivo Estratégico:"
+                        name="estrategicoId"
+                        className='col-span-12 pt-4'
+                        rules={[{ required: true, message: 'Selecciona el objetivo estratégico' }]}
                     >
-                    </TreeSelect>
-                </Form.Item>
+                        <TreeSelect
+                            placeholder="Selecciona el objetivo estratégico"
+                            
+                            disabled={
+                                hasGroupPermission(['crear tacticos', 'editar tacticos', 'eliminar tacticos'], permisos) ? false : true
+                            }
+                            showSearch
+                            onChange={handleChangePerspectiva}
+                            // filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                            treeData={optEstrategicos}
+                            treeDefaultExpandedKeys={[selectedPerspectiva as string]}
+                            showCheckedStrategy={TreeSelect.SHOW_CHILD}
+                            multiple={false}
+                            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                            treeNodeFilterProp='dataName'
+                        >
+                        </TreeSelect>
+                    </Form.Item>
                     </>
                 )}
+
+                {
+                    (!isEstrategico) && (
+                        <>
+                        <label className='block pb-3'>Áreas: </label>
+                           <div className='flex flex-wrap gap-3 col-span-12 pb-3'>
+                           {
+                               areas?.areas && areas.areas.rows.map((area: AreaProps) => (
+                                   <button
+                                       type='button'
+                                       onClick={(e) => {
+                                           e.preventDefault()
+                                           e.stopPropagation()
+                                           handleChangeArea(area.id)
+                                       }}
+                                       key={area.id} 
+                                       className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
+                                       style={{
+                                           backgroundColor: selectedArea === area.id? area.perspectivas?.color: 'rgba(101,106,118, .5)',
+                                       }}
+                                   > <span className='drop-shadow  text-xs'>{ area.nombre }</span>
+                                   </button>
+                               ))
+                           }
+                       </div>
+                       <Form.Item
+                           className='col-span-12'
+                           label="Departamento"
+                           name="departamentoId"
+                           required
+                       >
+                           <Select 
+                               filterOption={(input, option) => (option as DefaultOptionType)?.dataName?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                               showSearch
+                               value={selectedEquipo}
+                                onChange={handleOnSubmit}
+                               allowClear
+                               disabled={!selectedArea}
+                               options={
+                                   departamentos?.departamentos.rows.map((departamentos) => ({
+                                       label: (
+                                       <Tooltip title={departamentos.nombre}>
+                                           <p className='text-devarana-graph'>{departamentos.nombre}</p>
+                                       </Tooltip>),
+                                       value: departamentos.id,
+                                       dataName: departamentos.nombre
+                                   }))
+                               }
+                           
+                           />
+                       </Form.Item>
+                       </>
+                    )
+                }
 
                 <Divider className='col-span-12'/>
 

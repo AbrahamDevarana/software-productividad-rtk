@@ -62,11 +62,11 @@ export const tacticosApi = createApi({
             transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
             invalidatesTags: ['Tacticos']
         }),
-        createTactico: builder.mutation <TacticoProps, {year: number, estrategicoId?: string, slug?: string, propietarioId?: string}> ({
-            query: ({year, estrategicoId, slug, propietarioId}) => ({
+        createTactico: builder.mutation <TacticoProps, {year: number, estrategicoId?: string, slug?: string, propietarioId?: string, departamentoId?: number}> ({
+            query: ({year, estrategicoId, slug, propietarioId, departamentoId}) => ({
                 url: `/tacticos`,
                 method: 'POST',
-                body: { year, estrategicoId, slug, propietarioId }
+                body: { year, estrategicoId, slug, propietarioId, departamentoId}
             }),
             transformResponse: (response: { objetivoTactico: TacticoProps }) => response.objetivoTactico,
             invalidatesTags: ['Tacticos'],
