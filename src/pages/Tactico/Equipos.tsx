@@ -89,9 +89,12 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
             maskClosable: true,
             closable: true,
             width: window.innerWidth > 768 ? '70%' : 500,
-            title: 'Crear objetivo',
+            title: <p className="text-devarana-graph font-medium text-xl">Crear objetivo Táctico Estratégico</p>,
             content: (
             <div>
+                <p className="mt-3 text-devarana-graph">
+                    Objetivo Estratégico Relacionado
+                </p>
                 <TreeSelect
                     treeExpandAction='click'
                     placeholder="Selecciona el objetivo estratégico"
@@ -101,18 +104,21 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
                     showCheckedStrategy={TreeSelect.SHOW_CHILD}
                     multiple={false}
                     dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    className='w-full'
+                    className='w-full mb-3'
                     treeNodeFilterProp='dataName'
                     style={{ width: '100%' }}
                     onSelect={(value) => newTacticoRef.current = value.toString()}
                 />
+                <p className="text-devarana-graph">
+                    Selecciona al lider del objetivo
+                </p>
                <Select
                     style={{ width: '100%' }}
-                    className="mt-3"
-                    placeholder="Selecciona al propietario"
+                    placeholder="Selecciona al lider del objetivo"
                     tagRender={tagRender}
                     size='large'
                     showSearch
+                    variant="borderless"
                     defaultValue={usuarios?.find(usuario => usuario.departamentoId === activeDepartamento?.id)?.id}
                     onChange={(value) => usuarioRef.current = value.toString()}
                     maxTagPlaceholder={(omittedValues) => (
@@ -148,14 +154,18 @@ const Equipos = ({ slug, setShowDrawer, setActiveTactico }:Props) => {
             maskClosable: true,
             closable: true,
             width: window.innerWidth > 768 ? '70%' : 500,
-            title: 'Crear objetivo',
+            title: <p className="text-devarana-graph font-medium text-xl">Crear Objetivo Táctico Core</p>,
             content: (
             <div>
+                <p className="text-devarana-graph mt-3">
+                    Selecciona al lider del objetivo
+                </p>
                 <Select
                     style={{ width: '100%' }}
-                    placeholder="Selecciona al propietario"
+                    placeholder="Selecciona al lider del objetivo"
                     tagRender={tagRender}
                     size='large'
+                    variant="borderless"
                     showSearch
                     maxTagPlaceholder={(omittedValues) => (
                         <span className='text-devarana-graph'>+{omittedValues.length}</span>

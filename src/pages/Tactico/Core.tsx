@@ -64,9 +64,12 @@ const Core = ({slug, setShowDrawer, setActiveTactico}: Props) => {
             maskClosable: true,
             closable: true,
             width: window.innerWidth > 768 ? '70%' : 500,
-            title: 'Crear objetivo',
+            title: <p className="text-devarana-graph font-medium text-xl">Crear Objetivo Táctico Core</p>,
             content: (
             <div>
+                <p className="text-devarana-graph mt-3">
+                    Selecciona al lider del objetivo
+                </p>
                 <Select
                     style={{ width: '100%' }}
                     placeholder="Selecciona al propietario"

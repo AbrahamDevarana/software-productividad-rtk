@@ -58,9 +58,9 @@ export const Proyectos = () => {
     }, [socket])
 
 
-    return (
-        <Proximamente avance={28} />
-      )
+    // return (
+    //     <Proximamente avance={28} />
+    //   )
     
     return (
         <>
@@ -86,6 +86,7 @@ export const Proyectos = () => {
               
             </div>
              <Box className='md:col-span-3 col-span-12 row-span-3'>
+                <>  </>
             </Box>
         </div>
 

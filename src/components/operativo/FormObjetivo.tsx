@@ -73,7 +73,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
         
 
     const handleOnSubmit = async () => {
-
         const query =  {
             ...currentOperativo,
             ...form.getFieldsValue(),
@@ -101,10 +100,19 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
     
 
     const handlePerspectivaChange = (value: string) => {
-        setSelectedPerspectiva(value)
-        setSelectedEstrategico(undefined)
-        form.setFieldValue('estrategicoId', null)
-        form.setFieldValue('tacticoId', null)
+
+        if(selectedPerspectiva !== value){
+            form.setFieldValue('tacticoId', null)
+            setSelectedPerspectiva(value)
+            setSelectedEstrategico(undefined)
+            form.setFieldValue('estrategicoId', null)
+        }else{
+            form.setFieldValue('tacticoId', null)
+            setSelectedEstrategico(undefined)
+            setSelectedPerspectiva(undefined)
+            form.setFieldValue('estrategicoId', null)
+
+        }
     }
 
     const handleEstrategico = (value: string) => {
@@ -290,11 +298,11 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                             label: 'Objetivo Táctico Estratégico',
                             value: 'estrategico',
                         }, 
-                        // {
-                        //     label: 'Objetivo Táctico Core',
-                        //     value: 'core',
-                        // }
-                        ]} value={contribuye} onChange={(value) => {setContribuye(value)}} />
+                        {
+                            label: 'Objetivo Táctico Core',
+                            value: 'core',
+                        }
+                        ]} value={contribuye} onChange={(value) => {setContribuye(value); handleClean() } } />
 
 
                         {
