@@ -165,7 +165,7 @@ const resultadoClaveSlice = createSlice({
                     updatedResultadoClave.progreso = updatedResultadoClave.task.reduce((acc, task) => acc + task.progreso, 0) / taskLength
                 }
                 
-                    
+   
                 }
 
             })
@@ -175,12 +175,23 @@ const resultadoClaveSlice = createSlice({
             .addCase(deleteTaskThunk.pending, (state) => {
                 state.error = false
             })
-            .addCase(deleteTaskThunk.fulfilled, (state, { payload }) => {
+            .addCase(deleteTaskThunk.fulfilled, (state, { payload }) => {                
                 const deletedTask = state.resultadosClave.find(resultado => resultado.id === payload.taskeableId)
+                
 
-                if(deletedTask){
+                if(deletedTask){          
                     deletedTask.task = deletedTask.task.filter(task => task.id !== payload.id)
-                    deletedTask.progreso = (deletedTask.task.reduce((acc, task) => acc + (task.status === 'FINALIZADO' ? 1 : 0), 0) / deletedTask.task.length * 100)
+                    const tasksInProgressOrFinished = deletedTask.task.filter(task => task.status === 'EN_PROCESO' || task.status === 'FINALIZADO' || task.status === 'SIN_INICIAR')
+                      
+                      const totalTasks = tasksInProgressOrFinished.length;
+                      
+                      if (totalTasks > 0) {
+                        const sumProgress = tasksInProgressOrFinished.reduce((acc, task) => acc + task.progreso, 0);
+                        deletedTask.progreso = sumProgress / totalTasks;
+                      } else {
+                        // Si no hay tareas en "EN PROCESO" o "FINALIZADO", el progreso es 0
+                        deletedTask.progreso = 0;
+                      }
                 }
             })
 

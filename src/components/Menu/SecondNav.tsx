@@ -19,7 +19,7 @@ export const SecondNav = ({optBarVisible, setOptBarVisible, optionalContent}:Opt
     }
 
     const handleSelectIcon = (icon: IconDefinition) => {
-        console.log(icon.iconName);
+
     }
 
     return (
