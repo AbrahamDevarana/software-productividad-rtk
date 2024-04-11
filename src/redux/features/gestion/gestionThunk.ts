@@ -12,7 +12,7 @@ import { baseQuery } from "@/config/baseQuery";
     
 export const generarReporteRendimientoThunk = createAsyncThunk(
     'gestion/generarReporteRendimiento',
-    async ({year, quarter, search, status}:{year:number, quarter:number, search: string, status: string}, {rejectWithValue, getState}) => {
+    async ({year, quarter, search, status, statusUsuario = 'ALL'}:{year:number, quarter:number, search: string, status: string, statusUsuario?: string}, {rejectWithValue, getState}) => {
         try {
             const { accessToken } = (getState() as RootState).auth;
             const config = {
@@ -23,7 +23,8 @@ export const generarReporteRendimientoThunk = createAsyncThunk(
                     year,
                     quarter,
                     search,
-                    status
+                    status,
+                    statusUsuario
                 }
             }
             await clientAxios.get(`/reportes/usuarios/generar`, {...config, responseType: 'blob'}).then( (response) => {
@@ -79,9 +80,9 @@ export const gestionApi = createApi({
             }
         }),
         getGestionObjetivos: builder.query({
-            query: ({year, quarter, search, status}:{year:number, quarter:number, search: string, status: string}) => ({
+            query: ({year, quarter, search, status, statusUsuario}:{year:number, quarter:number, search: string, status: string, statusUsuario: string}) => ({
                 url: `/reportes/usuarios`,
-                params: { year, quarter, search, status },
+                params: { year, quarter, search, status, statusUsuario },
             }),
             transformResponse: (response: { usuarios: UsuarioGestion[] }) => response.usuarios,
             providesTags: ['GestionObjetivos'],

@@ -15,13 +15,14 @@ export const Objetivos = () => {
 
     const [search, setSearch] = useState('')
 	const [status, setStatus] = useState('')
+    const [statusUsuario, setStatusUsuario] = useState('ACTIVO')
     const { isGeneratingReport } = useAppSelector(state => state.gestion)
     const { currentConfig: { quarter, year }} = useAppSelector(state => state.global)
 	const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ activeUsuarioReview, setActiveUsuarioReview ] = useState<any>(null)
 	
 
-	const { data: usuarios, isLoading, refetch , isFetching } = useGetGestionObjetivosQuery({ quarter, year, search, status })
+	const { data: usuarios, isLoading, refetch , isFetching } = useGetGestionObjetivosQuery({ quarter, year, search, status, statusUsuario })
 
     const dispatch = useAppDispatch()
 
@@ -100,34 +101,55 @@ export const Objetivos = () => {
     }
 
     const handleGenerateReport = () => {
-		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status }))
+		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status, statusUsuario }))
 	}
-	
 	
 
 
     return (
             <>
             <div className='flex gap-x-5 justify-end items-center py-2'>
+                <div className='flex flex-col align-middle'>
+                    <p className='text-xs text-devarana-graph px-1'> Usuarios: </p>
+                    <Select
+                        id='statusUsuario'
+                        defaultValue='ACTIVO'
+                        onChange = {(e) => setStatusUsuario(e)}
+                        className='w-full text-devarana-graph'
+                        style={{ width: 250 }}
+                    >
+                        <Select.Option value=''> <span className='text-devarana-graph'>Todos</span> </Select.Option>
+                        <Select.Option value='ACTIVO'> <span className='text-devarana-graph'>Activos</span> </Select.Option>
+                        <Select.Option value='INACTIVO'> <span className='text-devarana-graph'>Inactivos</span> </Select.Option>
+                    </Select>
+                </div>
+               <div className='flex flex-col align-middle'>
+                <p className='text-xs text-devarana-graph px-1'> Estatus: </p>
                 <Select
-                    defaultValue=''
-                    onChange = {(e) => setStatus(e)}
-                    className='w-full text-devarana-graph'
-                    style={{ width: 250 }}
-                >
-                    <Select.Option value=''> <span className='text-devarana-graph'>Todos</span> </Select.Option>
-                    <Select.Option value='ABIERTO'> <span className='text-devarana-graph'>Abierto</span> </Select.Option>
-					<Select.Option value='PENDIENTE_AUTORIZAR'> <span className='text-devarana-graph'>En Aprobación</span> </Select.Option>
-					<Select.Option value='APROBADO'> <span className='text-devarana-graph'>Aprobado</span> </Select.Option>
-					<Select.Option value='PENDIENTE_APROBACION'> <span className='text-devarana-graph'>En Evaluación</span> </Select.Option>
-                    <Select.Option value='CERRADO'> <span className='text-devarana-graph'>Cerrado</span> </Select.Option>
-                </Select>
-                <Input
-                    style={{ width: 300 }}
-                    placeholder='Buscar'
-                    className='w-full'
-                    onChange={(e) => setSearch(e.target.value)}
-                />
+                        defaultValue=''
+                        onChange = {(e) => setStatus(e)}
+                        className='w-full text-devarana-graph'
+                        style={{ width: 250 }}
+                    >
+                        <Select.Option value=''> <span className='text-devarana-graph'>Todos</span> </Select.Option>
+                        <Select.Option value='NUEVO'> <span className='text-devarana-graph'>Nuevo</span> </Select.Option>
+                        <Select.Option value='ABIERTO'> <span className='text-devarana-graph'>En Ejecución</span> </Select.Option>
+                        <Select.Option value='PENDIENTE_AUTORIZAR'> <span className='text-devarana-graph'>En Aprobación</span> </Select.Option>
+                        <Select.Option value='APROBADO'> <span className='text-devarana-graph'>Aprobado</span> </Select.Option>
+                        <Select.Option value='PENDIENTE_APROBACION'> <span className='text-devarana-graph'>En Evaluación</span> </Select.Option>
+                        <Select.Option value='CERRADO'> <span className='text-devarana-graph'>Cerrado</span> </Select.Option>
+                    </Select>
+                </div>
+                <div className='flex flex-col align-middle'>
+                    <p className='text-xs text-devarana-graph px-1'> Buscar: </p>
+                    <Input
+                        style={{ width: 300 }}
+                        placeholder='Ingresa el nombre del usuario'
+                        className='w-full'
+                        allowClear  
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
                 <Button classType='regular' classColor='primary' onClick={handleGenerateReport} disabled={isGeneratingReport} width={150}
                 >
                     <p>Exportar</p>
