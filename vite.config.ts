@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression';
 import * as path from 'path';
 import { ViteMinifyPlugin } from 'vite-plugin-minify'
+import {VitePWA} from 'vite-plugin-pwa'
 
 import { splitVendorChunkPlugin } from 'vite'
 
@@ -15,6 +16,47 @@ export default defineConfig({
         viteCompression(),
         splitVendorChunkPlugin(), 
         ViteMinifyPlugin({}),
+        VitePWA({
+            registerType: 'autoUpdate',
+            injectRegister: 'auto',
+            workbox: {
+                // api y login no se cachean
+                navigateFallbackDenylist: [ new RegExp('^/api'), new RegExp('^/login')],
+                runtimeCaching: [
+                    {
+                        urlPattern: new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
+                        handler: 'CacheFirst',
+                        options: {
+                            cacheName: 'google-fonts',
+                            expiration: {
+                                maxEntries: 20,
+                                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+                            }
+                        }
+                    },
+                ]
+            },
+            manifest: {
+                name: 'DevaranApp',
+                short_name: 'DevaranApp',
+                theme_color: '#fff',
+                icons: [
+                    {
+                        src: '/img/favicon/icon-192x192.png',
+                        sizes: '192x192',
+                        type: 'image/png',
+                    },
+                    {
+                        src: '/img/favicon/icon-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                    },
+                ],
+                start_url: '/',
+                display: 'standalone',
+                background_color: '#ffffff',
+            }
+        })
     ],
     
     server: {
