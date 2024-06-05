@@ -24,7 +24,7 @@ module.exports = {
             'devarana-pearl' : '#f9f9f7',
             'devarana-graph' : '#848891',
             'devarana-dark-graph' : '#656A76',
-            'devarana-pollito' : '#ffdea4',
+            'devarana-pollito' : '#71727c',
             'devarana-salmon' : '#fabcab',
 
             'primary': '#0967C9',

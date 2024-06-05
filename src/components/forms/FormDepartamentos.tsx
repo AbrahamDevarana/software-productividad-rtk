@@ -1,13 +1,14 @@
 import { Button } from '@/components/ui'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
-import { getAreasThunk } from '@/redux/features/areas/areasThunks';
-import { useEffect, useMemo, useState } from 'react';
+import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
+import { useEffect, useState } from 'react';
 import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
 import { Select, Input, Form, Skeleton, ColorPicker, Space } from 'antd'
 import { DefaultOptionType } from 'antd/es/select';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaSave } from 'react-icons/fa';
+
 
 
 interface Props {
@@ -20,16 +21,12 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     
     const { currentDepartamento, isLoadingCurrent } = useAppSelector(state => state.departamentos)
     const { usuarios } = useAppSelector(state => state.usuarios)
-    const { areas } = useAppSelector(state => state.areas)
     const [ color, setColor ] = useState<string>('#000000')
-   
+
+    const { data, isLoading, isError } = useGetAreasQuery({})
+    
     const [form] = Form.useForm()
     const { spanUsuario } = useSelectUser(usuarios)
-
-    useEffect(() => {
-        dispatch(getAreasThunk({}))
-        return () => {dispatch( clearCurrentDepartamentoThunk() )}
-    }, [])
         
 
     useEffect(() => {   
@@ -57,6 +54,9 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
         }
         handleCancel()
     } 
+    useEffect(() => {
+        return () => {dispatch( clearCurrentDepartamentoThunk() )}
+    }, [])
 
     const handleCancel = () => {
         handleClose()
@@ -113,10 +113,11 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                                 showSearch
                                 placeholder="Selecciona una opción"
                                 allowClear
+                                loading={isLoading}
                                 filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                             >
                                 {
-                                    areas.map((area) => (
+                                    data?.areas.rows.map((area) => (
                                         <Select.Option key={area.id} value={area.id} dataName={area.nombre} >
                                             <p className='text-devarana-graph'> {area.nombre} </p>
                                         </Select.Option>

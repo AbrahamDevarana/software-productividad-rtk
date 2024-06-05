@@ -9,13 +9,17 @@ import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 interface Props {
     area: AreaProps
-    areas: {
-        rows: AreaProps[]
-        totalItem: number
-        totalPages: number
-        currentPage: number
-    }
+    areas: AreasData
 }
+
+interface AreasData {
+    rows: AreaProps[];
+    totalItem: number;
+    totalPages: number;
+    currentPage: number;
+  }
+
+
 
 
 
@@ -133,6 +137,7 @@ export const areasApi = createApi({
             }),
 
         }),
+        
         getArea: builder.query({
             query: ({areaSlug} : { areaSlug?:string}) => ({
                 url: `/areas/${areaSlug}`

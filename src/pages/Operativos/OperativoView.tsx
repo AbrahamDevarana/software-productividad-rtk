@@ -8,7 +8,7 @@ import { useOperativo } from "@/hooks/useOperativo"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
 import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, FloatButton, Image, Segmented, Tooltip } from "antd"
+import { Avatar, FloatButton, Image, Input, Segmented, Select, Tooltip } from "antd"
 import { useEffect, useMemo, useState } from "react"
 import { Link, useParams,  } from "react-router-dom"
 
@@ -85,6 +85,11 @@ export const OperativoView = () => {
                         <h1 className="text-2xl">
                             { currentOperativo.nombre }
                         </h1>
+                        <p className="text-devarana-graph text-xs line-clamp-3">
+                            {
+                                currentOperativo.meta
+                            }
+                        </p>
                     </div>
 
                     <div className="ml-auto flex items-center align-middle flex-col">
@@ -112,12 +117,13 @@ export const OperativoView = () => {
 
                     </div>
                 </div>
-                <Segmented
-                    className='my-4'
-                    options={options}
-                    value={value}
-                    onChange={(value) => setValue(value as SegmentTypes)}
-                />
+                    <Segmented
+                        className='my-4'
+                        options={options}
+                        value={value}
+                        onChange={(value) => setValue(value as SegmentTypes)}
+                    />
+
 
                 {
                     currentOperativo && (

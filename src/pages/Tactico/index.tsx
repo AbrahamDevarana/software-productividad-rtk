@@ -17,7 +17,7 @@ export const Tactico: React.FC = () => {
     const {slug} = useParams<{slug:string}>()
     const [activeTactico, setActiveTactico] = useState<TacticoProps | CoreProps>()
     
-    const [segmented, setSegmented] = useState<React.SetStateAction<any>>('equipos')
+    const [segmented, setSegmented] = useState<React.SetStateAction<any>>('listado')
     const [showDrawer, setShowDrawer] = useState<boolean>(false)
     const { year } = useAppSelector(state => state.global.currentConfig)
 
@@ -39,7 +39,7 @@ export const Tactico: React.FC = () => {
                 <div className='max-w-3xl w-full'>
                     <Segmented block
                         options={[
-                            {label: 'Tácticos por Departamento', value: 'equipos'},
+                            // {label: 'Tácticos por Departamento', value: 'equipos'},
                             {label: 'Tácticos Estrategicos', value: 'listado'},
                             {label: 'Tácticos Core', value: 'core'},
                         ]}

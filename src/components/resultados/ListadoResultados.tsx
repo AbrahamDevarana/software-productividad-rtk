@@ -1,6 +1,6 @@
 import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Spin, Table, Tooltip, message } from "antd";
+import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Select, Spin, Table, Tooltip, message } from "antd";
 import Loading from "../antd/Loading";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
@@ -34,7 +34,8 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
     const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
     const inputRef = useRef(null);
     const [messageApi, contextHolder] = message.useMessage();
-    const [progreso, setProgreso] = useState<number>(0)
+    const [ sort, setSort ] = useState<string>('default')
+    const [ filter, setFilter ] = useState<string>('')
     const { year, quarter, status } = currentOperativo
 
 
@@ -349,12 +350,48 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
            return tasksCopy;
    }
 
+   const normalizeString = (str: string) => {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    };
+
+    const filteredAndSortedResultados = useMemo(() => {
+        let resultados = [...resultadosClave];
+
+        if (filter) {
+            const normalizedSearchTerm = normalizeString(filter.toLowerCase());
+            resultados = resultados.filter(resultado =>
+                normalizeString(resultado.nombre.toLowerCase()).includes(normalizedSearchTerm)
+            );
+        }
+
+        if (sort) {
+            resultados.sort((a, b) => {
+                if (sort === 'alphabetic-asc') {
+                    return a.nombre.localeCompare(b.nombre);
+                }else if (sort === 'alphabetic-desc') {
+                    return b.nombre.localeCompare(a.nombre);
+                }
+                return 0;
+            });
+        }
+
+        return resultados;
+    }, [resultadosClave, filter, sort]);
 
     if(isLoading) return ( <Loading /> )
     if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
 
     return (
         <>
+            <div className="flex gap-x-5 max-w-5xl w-full ml-auto justify-end">
+                <Select placeholder="Ordenar por" className="w-[200px] text-devarana-graph" onChange={(value) => setSort(value)} value={sort}>
+                    <Select.Option value="default"> <p className="text-devarana-graph"> Sin Ordenar </p></Select.Option>
+                    <Select.Option value="alphabetic-asc"> <p className="text-devarana-graph"> Nombre: Ascendente </p></Select.Option>
+                    <Select.Option value="alphabetic-desc"> <p className="text-devarana-graph"> Nombre: Descendente </p></Select.Option>
+                </Select>
+                <Input allowClear placeholder="Buscar Resultado Clave"   className="w-[300px]" onChange={(e) => setFilter(e.target.value)}
+                />
+            </div>
 
             <Collapse 
                 defaultActiveKey={activeKey}
@@ -362,17 +399,16 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
             >
 
                 {
-                    resultadosClave.map((resultado: ResultadoClaveProps, index) => {
+                    filteredAndSortedResultados.map((resultado: ResultadoClaveProps, index) => {
 
                         const tasks = sortedTasks(resultado)
                         return (
                             <Panel
-                                key={index}
+                                key={resultado.id}
                                 header={genHeader(resultado) }
                                 className="customResultadosPanel"
                                 collapsible="icon"
                                 id={`resultado-${resultado.id}`}
-                                
                             >
                                 
                                 <Table 

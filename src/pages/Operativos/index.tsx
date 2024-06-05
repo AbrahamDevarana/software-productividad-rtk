@@ -184,7 +184,7 @@ export const Objetivos : React.FC = () => {
             </Drawer>
             
            {
-                rendimiento.status !== 'ABIERTO' && !etapa.isClosed &&
+                !etapa.isClosed &&
                 (<FloatButton
                     shape="circle"
                     icon={<FaPlus />}

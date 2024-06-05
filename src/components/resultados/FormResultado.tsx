@@ -1,6 +1,6 @@
-import  { useMemo } from 'react';
+import  { useMemo, useRef, useState } from 'react';
 import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm, message } from 'antd';
-import dayjs from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import { BsThreeDots } from 'react-icons/bs';
 import { deleteResultadoThunk, duplicateResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -11,6 +11,7 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { BiTrash } from 'react-icons/bi';
 import { FaCopy } from 'react-icons/fa';
 import CountUp from 'react-countup';
+
 
 interface Props {
     resultado: ResultadoClaveProps
@@ -116,11 +117,13 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
         dispatch(updateResultadoThunk(query))
     }
 
-    const handleUpdateDate = (fechaFin: any) => {
+    const handleUpdateDate = (date: any, dateString: any) => {
         const query = {
             ...resultado,
-            fechaFin: dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00')
+            fechaInicio: dayjs(dateString[0], 'DD-MM-YYYY').format('YYYY-MM-DD'),
+            fechaFin: dayjs(dateString[1], 'DD-MM-YYYY').format('YYYY-MM-DD')
         }
+
         dispatch(updateResultadoThunk(query))
     }
 
@@ -160,6 +163,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             element?.scrollIntoView({behavior: 'smooth'})
         })
     }
+
 
     return (
         <>
@@ -216,27 +220,28 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                 </Popover>
             </div>
             <div className='flex flex-col items-center'>
-                <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Fecha Fin</p>
-                {/* <DatePicker
-                    format={"DD-MM-YYYY"}
-                    defaultValue={ dayjs(resultado.fechaFin)  }
-                    placeholder={ `${dayjs(resultado.fechaFin)}`}
-                    showToday
-                    disabledDate={disabledDate}
-                    clearIcon={null}
-                    bordered={false}
-                    suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    onChange={(date, dateString) => handleUpdateDate(dateString)}
-                    className='w-[130px]'
-                    disabled={isClosed}
-                /> */}
-                <RangePicker
-                    format={'D [días]'}
-                    defaultValue={[dayjs(resultado.fechaInicio), dayjs(resultado.fechaFin)]}
-                    disabledDate={disabledDate}
-                    disabled={isClosed}
-                    clearIcon={null}
-                />
+                <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Fecha</p>
+                <div className='relative flex gap-x-2'>
+                    <RangePicker
+
+                        defaultValue={[dayjs(resultado.fechaInicio), dayjs(resultado.fechaFin)]}
+                        disabledDate={disabledDate}
+                        disabled={isClosed}
+                        onChange={handleUpdateDate}
+                        allowClear={false}
+                        className='w-[220px] text-center text-devarana-graph cursor-pointer bg-white border rounded font-roboto font-light'
+                        format={`DD-MM-YYYY`}
+                    />
+                    {
+                        // day counter
+                        dayjs(resultado.fechaFin).diff(dayjs(resultado.fechaInicio), 'day') > 0 && (
+                            <div className='flex items-center gap-x-1'>
+                                <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>{dayjs(resultado.fechaFin).diff(dayjs(resultado.fechaInicio), 'day')}</p>
+                                <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Días</p>
+                            </div>
+                        )
+                    }
+                </div>
 
             </div>
             <div className='flex flex-col items-center'>
