@@ -14,44 +14,6 @@ interface Props {
     perspectiva: PerspectivaProps
 }
 
-
-
-export const getPerspectivasThunk = createAsyncThunk(
-    'perspectivas/getPerspectivas',
-    async (filtros: any, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: filtros
-            }
-            const response = await clientAxios.get<Props>('/perspectivas', config);
-            return response.data.perspectivas
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-    }
-})
-
-
-export const getPerspectivaThunk = createAsyncThunk(
-    'perspectivas/getPerspectiva',
-    async (perspectivaId: number, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.get<Props>(`/perspectivas/${perspectivaId}`, config);
-            return response.data.perspectiva
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-
 export const createPerspectivaThunk = createAsyncThunk(
     'perspectivas/createPerspectiva',
     async (perspectiva: PerspectivaProps, { rejectWithValue, getState }) => {
@@ -128,47 +90,48 @@ export const perspectivasApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Perspectivas'],
     endpoints: (builder) => ({
-        getPerspectivas: builder.query({
-            query: (filtros: any) => ({
+        getPerspectivas: builder.query<PerspectivaProps[], any>({
+            query: (filtros) => ({
                 url: `/perspectivas`,
                 params: filtros
             }),
             transformResponse: (response: { perspectivas: PerspectivaProps[] }) => response.perspectivas,
-            providesTags: ['Perspectivas']
+            providesTags: (result) => result  ? [...result.map(({ id }) => ({ type: 'Perspectivas' as const, id })), { type: 'Perspectivas', id: 'LIST' }]
+            : [{ type: 'Perspectivas', id: 'LIST' }],
         }),
         getPerspectiva: builder.query({
             query: (perspectivaId: number) => `/perspectivas/${perspectivaId}`,
             transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
-            providesTags: ['Perspectivas']
+            providesTags: (result, error, id) => [{ type: 'Perspectivas', id }],
         }),
-        createPerspectiva: builder.mutation({
-            query: (perspectiva: PerspectivaProps) => ({
-                url: `/perspectivas`,
-                method: 'POST',
-                body: perspectiva
-            }),
-            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
-            invalidatesTags: ['Perspectivas'],
-        }),
-        updatePerspectiva: builder.mutation <PerspectivaProps, Partial<PerspectivaProps> & Pick<PerspectivaProps, 'id'>> ({
-            query: ({id, ...perspectiva}: PerspectivaProps) => ({
-                url: `/perspectivas/${id}`,
-                method: 'PUT',
-                body: perspectiva
-            }),
-            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
-            invalidatesTags: ['Perspectivas']
-        }),
-        deletePerspectiva: builder.mutation({
-            query: (perspectivaId: number) => ({
-                url: `/perspectivas/${perspectivaId}`,
-                method: 'DELETE'
-            }),
-            transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
-            invalidatesTags: ['Perspectivas']
-        })
+        // createPerspectiva: builder.mutation({
+        //     query: (perspectiva: PerspectivaProps) => ({
+        //         url: `/perspectivas`,
+        //         method: 'POST',
+        //         body: perspectiva
+        //     }),
+        //     transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+        //     invalidatesTags: ['Perspectivas'],
+        // }),
+        // updatePerspectiva: builder.mutation <PerspectivaProps, Partial<PerspectivaProps> & Pick<PerspectivaProps, 'id'>> ({
+        //     query: ({id, ...perspectiva}: PerspectivaProps) => ({
+        //         url: `/perspectivas/${id}`,
+        //         method: 'PUT',
+        //         body: perspectiva
+        //     }),
+        //     transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+        //     invalidatesTags: ['Perspectivas']
+        // }),
+        // deletePerspectiva: builder.mutation({
+        //     query: (perspectivaId: number) => ({
+        //         url: `/perspectivas/${perspectivaId}`,
+        //         method: 'DELETE'
+        //     }),
+        //     transformResponse: (response: { perspectiva: PerspectivaProps }) => response.perspectiva,
+        //     invalidatesTags: ['Perspectivas']
+        // })
     })
 })
 
-export const { useGetPerspectivasQuery, useGetPerspectivaQuery, useCreatePerspectivaMutation, useUpdatePerspectivaMutation, useDeletePerspectivaMutation } = perspectivasApi;
+export const { useGetPerspectivasQuery, useGetPerspectivaQuery } = perspectivasApi;
 

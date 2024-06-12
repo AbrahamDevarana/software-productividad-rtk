@@ -8,7 +8,6 @@ import areasSlice from './features/areas/areasSlice';
 import usuariosSlice from './features/usuarios/usuariosSlice';
 import departamentosSlice from "./features/departamentos/departamentosSlice";
 import perspectivasSlice from "./features/perspectivas/perspectivasSlice";
-import estrategicosSlice from "./features/estrategicos/estrategicosSlice";
 import tacticosSlice from "./features/tacticos/tacticosSlice";
 import operativosSlice from "./features/operativo/operativosSlice";
 import resultadosSlice from "./features/resultados/resultadosSlice";
@@ -60,7 +59,6 @@ export const store = configureStore({
         usuarios: usuariosSlice,
         departamentos: departamentosSlice,
         perspectivas: perspectivasSlice,
-        estrategicos: estrategicosSlice,
         tacticos: tacticosSlice,
         operativos: operativosSlice,
         resultados: resultadosSlice,

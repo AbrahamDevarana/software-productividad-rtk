@@ -2,8 +2,8 @@
 import { TablaTacticos } from '@/components/tacticos/TablaTacticos';
 import { Box } from '@/components/ui';
 import { CoreProps, EstrategicoProps, TacticoProps } from '@/interfaces';
-import { getEstrategicosByAreaThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { useCreateTacticoMutation, useGetTacticosByEquipoCoreQuery, useGetTacticosByEstrategiaQuery } from '@/redux/features/tacticos/tacticosThunk';
+import { useGetEstrategicosByAreaQuery } from '@/redux/features/estrategicos/estrategicosThunk';
+import { useCreateTacticoMutation, useGetTacticosByEstrategiaQuery } from '@/redux/features/tacticos/tacticosThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Checkbox, Divider, Tooltip } from 'antd';
 import { motion } from 'framer-motion';
@@ -19,25 +19,19 @@ interface Props {
 const Estrategia = ({ slug, setShowDrawer, setActiveTactico }: Props) => {
 
     const { year } = useAppSelector(state => state.global.currentConfig)
-    const { estrategicosTacticos, isLoadingEstrategicosByArea } = useAppSelector(state => state.estrategicos)
     const [ showOnlyMe, setShowOnlyMe ] = useState(false)
     const [ activeEstrategico, setActiveEstrategico ] = useState<EstrategicoProps>()
     const { data: objetivosTacticos, isLoading: isLoadingTacticos, isFetching: isFetchingTacticos } = useGetTacticosByEstrategiaQuery({estrategicoId: activeEstrategico?.id, year, showOnlyMe},
         { skip: !activeEstrategico, refetchOnMountOrArgChange: true }
     )
+    const {data: estrategicosTacticos, isLoading: isLoadingEstrategicosByArea} = useGetEstrategicosByAreaQuery({slug, year},
+        { skip: !slug, refetchOnMountOrArgChange: true }
+    )
 
     const [createTacticoMutation, {}] = useCreateTacticoMutation()
-    
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        if(slug){
-            dispatch(getEstrategicosByAreaThunk({slug, year}))
-        }
-    }, [year])
 
     const orderedEstrategicos = useMemo(() => {
-        if (estrategicosTacticos.length > 0) {
+        if (estrategicosTacticos && estrategicosTacticos.length > 0) {
             const regex = /\D/g;
             const sortedEstrategicos = estrategicosTacticos.slice().sort((a, b) => {
                 const aNumber = parseInt(a.codigo.replace(regex, ''), 10) || 0;

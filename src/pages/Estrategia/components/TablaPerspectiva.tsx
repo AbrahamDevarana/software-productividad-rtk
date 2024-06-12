@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Avatar, Drawer, Image, Progress, Table, Tooltip } from 'antd';
+import { Avatar, Drawer, Image, message, Progress, Skeleton, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
-import { FormEstrategia } from './FormEstrategia';
+import { FormEstrategia } from './';
 import {  getColor, getStatus, getStorageUrl } from '@/helpers';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearCurrentEstrategicoThunk, createEstrategicoThunk, getEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
+import { useAppSelector } from '@/redux/hooks';
+import { useCreateEstrategicoMutation, useGetEstrategicosQuery } from '@/redux/features/estrategicos/estrategicosThunk';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -20,13 +20,12 @@ interface TablaEstrategiaProps{
 export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => {
 
     const { color } = perspectiva
-    const dispatch = useAppDispatch()   
-    const [ showEdit, setShowEdit ] = useState<boolean>(false);
-    const { userAuth } = useAppSelector(state => state.auth)
     const { permisos } = useAppSelector(state => state.auth)
-    const { isLoading } = useAppSelector(state => state.perspectivas)
+    const { data: objetivosEstrategicos, isLoading: isLoadingObjetivos} = useGetEstrategicosQuery({ perspectivaId: perspectiva.id, year })
 
-
+    const [ createEstrategicoMutation, { data, isLoading: isCreating }] = useCreateEstrategicoMutation()
+    const [selectedRow, setSelectedRow] = useState<string>('')
+    
     const columns: ColumnsType<EstrategicoProps> = useMemo(() => 
             [
                 {
@@ -37,7 +36,8 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
                         { hasGroupPermission(['crear estrategias'], permisos) &&
                             <button 
                                 onClick={(e) => handleCreateEstrategia(e)} 
-                                className={`z-50 p-1 text-white rounded-full`}
+                                className={`z-50 p-1 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed`}
+                                disabled={isCreating}
                                 style={{
                                     backgroundColor: color,
                                 }}
@@ -136,37 +136,41 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
     const [showDrawer, setShowDrawer] = useState<boolean>(false);
 
     const handleShowEstrategia = (id: string) => {
-        dispatch(getEstrategicoThunk(id))
+        setSelectedRow(id)
         setShowDrawer(true)
     }
 
     const handleCreateEstrategia = async (e: HTMLButtonElement | any) => {
         e.stopPropagation()
         e.preventDefault()
-    
-        await dispatch(createEstrategicoThunk({
+
+        
+        createEstrategicoMutation({
             perspectivaId: perspectiva.id,
             year
-        }))
+
+        }).unwrap().then(() => {
+            message.success('Estrategia creada correctamente')
+        }).catch(() => {
+            message.error('Error al crear la estrategia')
+        })
     }
 
     const handleCloseDrawer = () => {
         setShowDrawer(false)
-        setShowEdit(false)
-        dispatch(clearCurrentEstrategicoThunk())
     }
 
     // Ordenarlos por el codigo tienen algo así A1 A2 A3 B1 B2 B3
     const objetivosOrdenados =  useMemo(() => {
       
-        if(!perspectiva.objetivosEstrategicos) return []
-        return perspectiva.objetivosEstrategicos.map( item => item).sort((a, b) => {            
+        if(!objetivosEstrategicos) return []
+        return objetivosEstrategicos.map( item => item).sort((a, b) => {            
             const aNumero = extraerNumero(a.codigo)
             const bNumero = extraerNumero(b.codigo)
             return aNumero - bNumero
         })
 
-    }, [perspectiva.objetivosEstrategicos])
+    }, [objetivosEstrategicos])
     
     
 
@@ -176,7 +180,7 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
                 className='w-full customTable' 
                 rowClassName={() => 'cursor-pointer hover:bg-gray-50 transition duration-200'}
                 columns={columns}
-                loading={isLoading}
+                loading={isLoadingObjetivos}
                 dataSource={objetivosOrdenados}
                 rowKey={(record) => record.id}
                 scroll={{ x: 1000 }}
@@ -204,7 +208,7 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
             >
 
                 {
-                    <FormEstrategia handleCloseDrawer={handleCloseDrawer} /> 
+                    <FormEstrategia handleCloseDrawer={handleCloseDrawer} estrategicoId={selectedRow} /> 
                 }
             </Drawer>
         </>

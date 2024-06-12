@@ -1,60 +1,64 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, message, Tooltip, Switch } from 'antd';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { changeTypeProgressEstrategicoThunk, deleteEstrategicoThunk, updateEstrategicoThunk } from '@/redux/features/estrategicos/estrategicosThunk';
-import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
+import { useAppSelector } from '@/redux/hooks';
+import { useChangeTypeProgressEstrategicoMutation, useDeleteEstrategicoMutation, useGetEstrategicoQuery, useUpdateEstrategicoMutation } from '@/redux/features/estrategicos/estrategicosThunk';
+import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { PerspectivaProps } from '@/interfaces';
 import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { TabStatus } from '../ui/TabStatus';
-import { Icon } from '../Icon';
+import { TabStatus } from '@/components/ui/TabStatus';
+import { Icon } from '@/components/Icon';
 import { statusType } from '@/types';
 import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { Comentarios } from '../general/Comentarios';
+import { Comentarios } from '@/components/general/Comentarios';
 import { hasGroupPermission } from '@/helpers/hasPermission';
+import { useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
 
 
 
 interface Props {
     handleCloseDrawer: () => void;
+    estrategicoId?: string;
 }
 
 
-export const FormEstrategia= ({handleCloseDrawer}:Props) => {
-    const dispatch = useAppDispatch()    
-    const { currentConfig:{ year } } = useAppSelector(state => state.global)
-    const { currentEstrategico, isLoadingCurrent, isLoadingProgress} = useAppSelector(state => state.estrategicos)
-    const { perspectivas } = useAppSelector(state => state.perspectivas)
+export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
+
     const { permisos, userAuth } = useAppSelector(state => state.auth)
-    const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(currentEstrategico.status);
+    
+    const { currentConfig:{ year } } = useAppSelector(state => state.global)
+    const { data: perspectivas } = useGetPerspectivasQuery({year})
+    const {  data: objetivosEstrategico, isLoading} = useGetEstrategicoQuery(estrategicoId as string, {
+        skip: estrategicoId === undefined
+    })
+    
+    const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
+    const [ updateEstrategicoMutation, { isLoading: isUpdating } ] = useUpdateEstrategicoMutation()
+    const [ changeTypeProgressEstrategicoMutation,{ isLoading: isChangingTypeProgress }] = useChangeTypeProgressEstrategicoMutation()
+    const [ deleteEstrategicoMutation, { isLoading: isDeleting }] = useDeleteEstrategicoMutation()
+
+    const [ statusEstrategico, setStatusEstrategico] = useState<statusType>(objetivosEstrategico?.status || 'SIN_INICIAR')
     const [ viewMeta, setViewMeta] = useState<boolean>(false);
     const [ viewIndicador, setViewIndicador] = useState<boolean>(false);
     const [ comentariosCount , setComentariosCount ] = useState<number>(0)
     const [progreso, setProgreso] = useState<number>(0)
-
     const [form] = Form.useForm();
-
-    const {data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})    
-    
+    const inputRef = useRef<any>(null)
+    const { confirm } = Modal;
     
     const canEdit = useMemo(() => {
-        return hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && currentEstrategico.propietario?.id === userAuth?.id
-    }, [permisos])
-
+        return hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && objetivosEstrategico?.propietario?.id === userAuth?.id
+    }, [permisos, objetivosEstrategico])
     
-    const inputRef = useRef<any>(null)
-
-    const { confirm } = Modal;
-
     const { tagRender, spanUsuario } = useSelectUser(usuarios)
-    
+
 
     const handleOnSubmit = () => {
         const query =  {
-            ...currentEstrategico,
+            ...objetivosEstrategico,
             ...form.getFieldsValue(),
             year: dayjs(form.getFieldValue('year')).year(),
         }
@@ -63,61 +67,67 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         delete query.progreso
         
         if(query.id){            
-            dispatch(updateEstrategicoThunk(query))
+            updateEstrategicoMutation(query).unwrap().then(() => {
+                message.success('Estrategia actualizada')
+            })
         }
     }
 
     useEffect(() => {
-        dispatch(getUsuariosThunk({})) 
-    }, [])
+        if(objetivosEstrategico){
+            setStatusEstrategico(objetivosEstrategico.status)
+            setProgreso(objetivosEstrategico.progreso)
+        }
+    }, [objetivosEstrategico])
 
     useEffect(() => {
-        if(currentEstrategico.id !== ''){
-            setStatusEstrategico(currentEstrategico.status)
-            setProgreso(currentEstrategico.progreso)
-        }
-    }, [currentEstrategico])
+        objetivosEstrategico && setComentariosCount(objetivosEstrategico?.comentarios?.length)
+    }, [objetivosEstrategico])
 
-
+    if(!objetivosEstrategico) return <Skeleton paragraph={ { rows: 20 } } />
+    
     const handleChangeProgreso = (value: number) => {
         
-        if(currentEstrategico.id && currentEstrategico.progreso !== value){
+        if(objetivosEstrategico.id && objetivosEstrategico.progreso !== value){
 
             const updateEstrategico = {
-                ...currentEstrategico,
+                ...objetivosEstrategico,
                 tipoProgreso: "MANUAL",
                 progreso: value,
                 year: dayjs(form.getFieldValue('year')).year(),
             }
             // @ts-ignore
-            dispatch(updateEstrategicoThunk(updateEstrategico));  
+            updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
+                message.success('Progreso actualizado')
+            })
         }  
     }
 
     const handleChangeStatus = (value: statusType) => {  
         setStatusEstrategico(value); 
         const updateEstrategico = {
-            ...currentEstrategico,
+            ...objetivosEstrategico,
             status: value,
             year: dayjs(form.getFieldValue('year')).year(),
         }
         
-        dispatch(updateEstrategicoThunk(updateEstrategico));       
+        updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
+            message.success('Estatus actualizado')
+        })   
     }
 
     const handleChangePerspectiva = (value: string) => {
         const updateEstrategico = {
-            ...currentEstrategico,
+            ...objetivosEstrategico,
             perspectivaId: value,
             year: dayjs(form.getFieldValue('year')).year(),
         }
-        dispatch(updateEstrategicoThunk(updateEstrategico));
+
+        updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
+            message.success('Perspectiva actualizada')
+        })
     }
 
-    useEffect(() => {
-        setComentariosCount(currentEstrategico.comentarios?.length)
-    }, [currentEstrategico.comentarios])
-    
 
     const items: MenuProps['items'] = [
         {
@@ -169,10 +179,9 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                     </div>
                 </div>
             ),
-            children: ( <Comentarios comentableType='ESTRATEGICO' comentableId={currentEstrategico.id}/> )
+            children: ( <Comentarios comentableType='ESTRATEGICO' comentableId={objetivosEstrategico.id}/> )
         }
     ]
-
 
     const showDeleteConfirm = () => {
         confirm({
@@ -182,29 +191,33 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             okType: 'danger',
             cancelText: 'No',
             async onOk() {
-                await dispatch(deleteEstrategicoThunk(currentEstrategico.id))
-                handleCloseDrawer()
+                deleteEstrategicoMutation(objetivosEstrategico.id).unwrap().then(() => {
+                    message.success('Estrategia eliminada')
+                    handleCloseDrawer()
+                })
             }
         });
     }
 
     const handleSetTipo = (type: boolean) => {      
-        dispatch(changeTypeProgressEstrategicoThunk({ estrategicoId: currentEstrategico.id, typeProgress: type ? 'PROMEDIO' : 'MANUAL' })).unwrap().then(() => {
-            message.success('Tipo de progreso cambiado')
+        const typeProgress = type ? 'PROMEDIO' : 'MANUAL'
+
+        changeTypeProgressEstrategicoMutation({estrategicoId: objetivosEstrategico.id, typeProgress}).unwrap().then(() => {
+            message.success('Tipo de progreso actualizado')
         })
     }
   
     
     const marks = {
-        [currentEstrategico.suggest]: {
+        [objetivosEstrategico.suggest]: {
             style: {
-                color: getColor(currentEstrategico.status).color,
-                opacity: currentEstrategico.tipoProgreso === 'PROMEDIO' ? 1 : .3,
+                color: getColor(objetivosEstrategico.status).color,
+                opacity: objetivosEstrategico.tipoProgreso === 'PROMEDIO' ? 1 : .3,
             },
             label: (
                 <Tooltip title="Avance de objetivos operativos">
                     <p onClick={ () => handleSetTipo(true) } className='cursor-pointer'>
-                        {currentEstrategico.suggest}%
+                        {objetivosEstrategico.suggest}%
                     </p>
                     
                 </Tooltip>
@@ -213,7 +226,8 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
         }
     };
 
-    if(isLoadingCurrent) return <Skeleton paragraph={ { rows: 20 } } />
+    if(isLoading) return <Skeleton paragraph={ { rows: 20 } } />
+    
 
     return (
         <>
@@ -221,15 +235,15 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
             <Form
                 layout='vertical'
                 initialValues={{
-                    ...currentEstrategico,
-                    responsables: currentEstrategico.responsables.map(responsable => responsable.id),
-                    propietarioId: currentEstrategico.propietario?.id,
-                    year: dayjs(`${currentEstrategico.year}-01-01`)
+                    ...objetivosEstrategico,
+                    responsables: objetivosEstrategico.responsables.map(responsable => responsable.id),
+                    propietarioId: objetivosEstrategico.propietario?.id,
+                    year: dayjs(`${objetivosEstrategico.year}-01-01`)
                 }}
                 form={form}
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                 disabled={
-                    canEdit
+                    canEdit || isUpdating
                 }
             >
         
@@ -272,15 +286,15 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                     <div className='flex gap-2 items-center ml-auto'>
                                         <Switch size='small'
                                             className='disabled:cursor-wait'
-                                            checked = {currentEstrategico.tipoProgreso === 'PROMEDIO' ? true : false}
+                                            checked = {objetivosEstrategico.tipoProgreso === 'PROMEDIO' ? true : false}
                                             title='Automatico'     
-                                            disabled={isLoadingProgress}                                       
+                                            disabled={isUpdating}                                       
                                             onClick={handleSetTipo}
                                             style={{
-                                                backgroundColor: currentEstrategico.tipoProgreso === 'PROMEDIO' ? '#656A76' : '#A6AFC3',
+                                                backgroundColor: objetivosEstrategico.tipoProgreso === 'PROMEDIO' ? '#656A76' : '#A6AFC3',
                                             }}
                                         />
-                                        <p className='text-devarana-graph'> { currentEstrategico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
+                                        <p className='text-devarana-graph'> { objetivosEstrategico.tipoProgreso === 'PROMEDIO' ? 'Automático' : 'Manual' } </p>
                                     </div>
                                     <Dropdown menu={{items}} overlayClassName='bg-transparent'>
                                             <button type='button' className='flex items-center gap-2' onClick={ (e) => e.preventDefault() }>
@@ -292,12 +306,12 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                         </div>
                         <div className='inline-flex w-full'>
                             <p className='text-3xl font-bold pr-2' style={{ 
-                                color: getColor(currentEstrategico.status).color,
+                                color: getColor(objetivosEstrategico.status).color,
                                 backgroundClip: 'text',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
-                                backgroundImage: `linear-gradient(to top, ${getColor(currentEstrategico.status).lowColor}, ${getColor(currentEstrategico.status).color})`
-                            }}> { currentEstrategico.progreso }% </p>
+                                backgroundImage: `linear-gradient(to top, ${getColor(objetivosEstrategico.status).lowColor}, ${getColor(objetivosEstrategico.status).color})`
+                            }}> { objetivosEstrategico.progreso }% </p>
                             <Slider
                                 className='drop-shadow progressStyle w-full'
                                 min={0}
@@ -313,16 +327,16 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                                     setProgreso(value)
                                 } }
                                 trackStyle={{
-                                    backgroundColor: getColor(currentEstrategico.status).color,
+                                    backgroundColor: getColor(objetivosEstrategico.status).color,
                                     borderRadius: 10,
 
                                 }}
                                 railStyle={{
-                                    backgroundColor: getColor(currentEstrategico.status, .3).color,
+                                    backgroundColor: getColor(objetivosEstrategico.status, .3).color,
                                     borderRadius: 10,
                                 }}
                                 handleStyle={{
-                                    borderColor: getColor(currentEstrategico.status).color,
+                                    borderColor: getColor(objetivosEstrategico.status).color,
                                 }}
                             />
                         </div>
@@ -338,13 +352,14 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
                             perspectivas && perspectivas.map((perspectiva: PerspectivaProps) => (
                                 <button 
                                     type='button'
+                                    disabled={isUpdating}
                                     onClick={() => {
                                         hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) && handleChangePerspectiva(perspectiva.id)
                                     }}
                                     key={perspectiva.id} 
-                                    className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105`}
+                                    className={`rounded-ext px-2 py-1 text-white font-bold transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed`}
                                     style={{
-                                        backgroundColor: currentEstrategico.perspectivaId === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
+                                        backgroundColor: objetivosEstrategico.perspectivaId === perspectiva.id? perspectiva.color: 'rgba(101,106,118, .5)',
                                     }}
                                 > <span className='drop-shadow text-xs'>{ perspectiva.nombre }</span>
                                 </button>
@@ -492,7 +507,7 @@ export const FormEstrategia= ({handleCloseDrawer}:Props) => {
 
             {
                 hasGroupPermission(['crear estrategias', 'editar estrategias', 'eliminar perspectivas'], permisos) ?
-                <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 hover:opacity-80' icon={<Icon iconName='faTrash' className='text-white text-sm'/> } /> 
+                <Button onClick={showDeleteConfirm} className='bg-gradient-to-t from-dark to-dark-light rounded-full text-white border-none absolute -left-4 top-20 group transition-all duration-200 ease-in-out hover:scale-110 z-50' icon={<Icon iconName='faTrash' className='text-white group-hover:text-error-light  text-sm'/> } /> 
                 : null
             }
 

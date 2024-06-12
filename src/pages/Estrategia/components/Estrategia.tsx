@@ -2,8 +2,9 @@ import { PerspectivaProps } from '@/interfaces'
 import { TablaEstrategia } from './TablaPerspectiva'
 import { Image } from 'antd';
 import { getStorageUrl } from '@/helpers';
+
 interface EstrategiaProps {
-    perspectivas: PerspectivaProps[]
+    perspectivas?: PerspectivaProps[]
     year: number
 }
 
@@ -13,8 +14,6 @@ export const Estrategia = ({perspectivas, year}: EstrategiaProps) => {
         <>
             {
                 perspectivas && perspectivas.map((perspectiva: PerspectivaProps, index: number) => (
-                    
-                
                 <div key={index} className='rounded-l-ext flex flex-row pb-10'>
                     <p></p>
                     <div className='flex rounded-l-ext shadow'>
