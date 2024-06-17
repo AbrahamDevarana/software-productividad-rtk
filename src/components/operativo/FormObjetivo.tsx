@@ -78,6 +78,8 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
             ...form.getFieldsValue(),
             quarter, year
         }
+
+        delete query.resultadosClave        
         
         if(currentOperativo.id === ''){
             await dispatch(createOperativoThunk(query))
