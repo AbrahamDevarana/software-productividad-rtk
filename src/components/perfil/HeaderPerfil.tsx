@@ -99,29 +99,34 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                 </div>
             </div>
             <div className="w-full px-4 z-20 relative">
-                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-center lg:h-20 items-center z-50" >
-                    <div className="justify-center align-middle flex items-center">
-                        <Avatar 
-                            className="w-16 h-16" 
-                            src={
-                                <Image src={`${getStorageUrl(usuarioActivo.foto)}`} 
-                                fallback={getBrokenUser()}
-                                preview={{
-                                    mask: <FaEye className="text-white text-xs"/>
-                                }}
-                            />} 
-                        />
+                <Box className="w-full -mt-8 flex flex-row mb-5 flex-wrap gap-y-5 py-2 px-5 mr-5 justify-between lg:h-20 items-center z-50" >
+                    <div className="flex items-center">
+                        <div className="justify-center align-middle flex items-center">
+                            <Avatar 
+                                className="w-16 h-16" 
+                                src={
+                                    <Image src={`${getStorageUrl(usuarioActivo.foto)}`} 
+                                    fallback={getBrokenUser()}
+                                    preview={{
+                                        mask: <FaEye className="text-white text-xs"/>
+                                    }}
+                                />} 
+                            />
+                        </div>
+                        <div className="my-auto px-5 text-center md:text-left">
+                            <p className="text-devarana-dark-graph lg:text-lg font-bold">{`
+                                ${usuarioActivo.nombre ? usuarioActivo.nombre : ''}
+                                ${usuarioActivo.apellidoPaterno ? usuarioActivo.apellidoPaterno : ''}
+                                ${usuarioActivo.apellidoMaterno ? usuarioActivo.apellidoMaterno : ''}
+                            `}</p>
+                            <p className="lg:text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
+                        </div>
                     </div>
-                    <div className="my-auto px-5 text-center md:text-left">
-                        <p className="text-devarana-dark-graph lg:text-lg font-bold">{`
-                            ${usuarioActivo.nombre ? usuarioActivo.nombre : ''}
-                            ${usuarioActivo.apellidoPaterno ? usuarioActivo.apellidoPaterno : ''}
-                            ${usuarioActivo.apellidoMaterno ? usuarioActivo.apellidoMaterno : ''}
-                        `}</p>
-                        <p className="lg:text-sm font-light text-devarana-graph"> { usuarioActivo.puesto }</p>
-                    </div>
-                    
-                        <div className="bg-devarana-background my-auto flex max-w-[400px] w-full ml-auto rounded relative z-0">
+                    <div className="flex gap-5 items-center">
+                        <div className="px-5">
+                            <p className="text-devarana-graph block"> { usuarioActivo.creditos?.saldo || 0.00 } </p>
+                        </div>
+                        <div className="bg-devarana-background my-auto flex w-[500px] ml-auto rounded relative z-0">
                             <Segmented
                                 block={true}
                                 options={options2}
@@ -130,6 +135,7 @@ const Header: React.FC<HeaderProps> = ({ usuarioActivo, segment, setSegment, vis
                                 onChange={setSegment}
                             />
                         </div>
+                    </div>
                 </Box>
             </div>
 

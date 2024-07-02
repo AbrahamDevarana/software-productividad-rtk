@@ -46,7 +46,10 @@ export interface SinglePerfilProps {
     email:                string;
     foto:                 string;
     leaderId?:              string;
-    slug:                 string; 
+    slug:                 string;
+    creditos:             {
+        saldo: number;
+    }
 }
 
 
