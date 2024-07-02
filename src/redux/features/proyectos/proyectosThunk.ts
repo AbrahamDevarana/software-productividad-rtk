@@ -4,6 +4,9 @@ import { clearProyecto, clearProyectos, getCreatedProyecto, getUpdatedProyecto }
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { clientAxios } from '@/config/axios';
 
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
+
 
 export const getProyectosThunk = createAsyncThunk(
     'proyectos/getProyectos',
@@ -91,7 +94,6 @@ export const deleteProyectoThunk = createAsyncThunk(
     }
 )
 
-
 export const getCreatedProyectoThunk = (proyecto: ProyectosProps) => async ( dispatch: AppDispatch ) => {
     dispatch(getCreatedProyecto(proyecto))
 }
@@ -100,9 +102,6 @@ export const getUpdatedProyectoThunk = (proyecto: ProyectosProps) => async ( dis
     dispatch(getUpdatedProyecto(proyecto))
 }
 
-
-
-
 export const clearProyectoThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearProyecto())
 }
@@ -110,4 +109,14 @@ export const clearProyectoThunk = () => async (dispatch: AppDispatch) => {
 export const clearProyectosThunk = () => async (dispatch: AppDispatch) => {
     dispatch(clearProyectos())
 }
+
+export const proyectosApi = createApi({
+    reducerPath: 'proyectosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Proyecto'],
+    endpoints: (builder) => ({
+    })
+})
+
+export const {} = proyectosApi
 

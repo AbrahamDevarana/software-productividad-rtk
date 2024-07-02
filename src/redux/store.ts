@@ -33,6 +33,7 @@ import { estategicosApi } from "./features/estrategicos/estrategicosThunk";
 import { operativosApi } from "./features/operativo/operativosThunk";
 import { areasApi } from "./features/areas/areasThunks";
 import { departamentosApi } from "./features/departamentos/departamentosThunks";
+import { proyectosApi } from "./features/proyectos/proyectosThunk";
 
 export const store = configureStore({
     reducer: {
@@ -51,6 +52,7 @@ export const store = configureStore({
         [operativosApi.reducerPath]: operativosApi.reducer,
         [areasApi.reducerPath]: areasApi.reducer,
         [departamentosApi.reducerPath]: departamentosApi.reducer,
+        [proyectosApi.reducerPath]: proyectosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
