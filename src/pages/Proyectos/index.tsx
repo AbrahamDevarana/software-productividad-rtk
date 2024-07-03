@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { FormProyecto } from "@/components/proyectos/FormProyecto"
-import { Box, Proximamente } from "@/components/ui"
-import { clearProyectoThunk, deleteProyectoThunk, getCreatedProyectoThunk, getProyectoThunk, getProyectosThunk, getUpdatedProyectoThunk,  } from "@/redux/features/proyectos/proyectosThunk"
+import { FormProyecto } from "@/pages/Proyectos/components/FormProyecto"
+import { Box } from "@/components/ui"
+import { useDeleteProyectoMutation, useGetProyectoQuery, useGetProyectosQuery,  } from "@/redux/features/proyectos/proyectosThunk"
 import { FaPlus } from "react-icons/fa"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { FloatButton, Modal } from "antd"
-import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks"
-import { ProyectoCard } from "@/components/proyectos/ProyectoCard"
+import { useAppSelector } from "@/redux/hooks"
+import { FloatButton, message, Modal } from "antd"
+import { ProyectoCard } from "@/pages/Proyectos/components/ProyectoCard"
 
 export const Proyectos = () => {
 
-    const dispatch = useAppDispatch()
-    const { proyectos, currentProyecto, isLoading, isLoadingProyecto  } = useAppSelector(state => state.proyectos)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
+    const [ selectedProyect, setSelectedProyect ] = useState('' as string)
     const { socket } = useAppSelector(state => state.socket)
+
+    const { data: proyectos, isLoading } = useGetProyectosQuery({})
+    const { data: proyecto, isLoading: isLoadingProyecto } = useGetProyectoQuery( {proyectoId:selectedProyect}, { skip: !selectedProyect} )
+    const [ deleteProyecto, { isLoading: isLoadingProyectoDelete } ] =  useDeleteProyectoMutation()
+    
 
     const navigate = useNavigate()
 
-    useEffect(() => {
-        dispatch(getProyectosThunk({}))
-        dispatch(getUsuariosThunk({}))
-    }, [])
-
     const handleCancel = () => {
         setIsModalVisible(false)
-        dispatch(clearProyectoThunk())
     }
 
     const handleView = (proyectoId: string) => {
@@ -33,29 +30,33 @@ export const Proyectos = () => {
     }
 
     const handleEdit = (proyectoId: string) => {
-        dispatch(getProyectoThunk(proyectoId))
+        setSelectedProyect(proyectoId)
         setIsModalVisible(true)
     }
 
-    const handleDelete = (proyectoId: string) => {
-        dispatch(deleteProyectoThunk(proyectoId))
+    const handleDelete = async (proyectoId: string) => {
+        deleteProyecto({ proyectoId }).unwrap().then(() => {
+            message.success('Proyecto eliminado correctamente')
+        }).catch(() => {
+            message.error('Error al eliminar el proyecto')
+        })
         setIsModalVisible(true)
     }
 
-    useEffect(() => {
-        socket?.on('proyecto:updated', (proyecto) => {            
-            dispatch(getUpdatedProyectoThunk(proyecto))
-        })
+    // useEffect(() => {
+    //     socket?.on('proyecto:updated', (proyecto) => {            
+    //         dispatch(getUpdatedProyectoThunk(proyecto))
+    //     })
 
-        socket?.on('proyecto:created', (proyecto) => {
-            dispatch(getCreatedProyectoThunk(proyecto))
-        })
+    //     socket?.on('proyecto:created', (proyecto) => {
+    //         dispatch(getCreatedProyectoThunk(proyecto))
+    //     })
 
-        return () => {
-            socket?.off('proyecto:updated')
-            socket?.off('proyecto:created')
-        }
-    }, [socket])
+    //     return () => {
+    //         socket?.off('proyecto:updated')
+    //         socket?.off('proyecto:created')
+    //     }
+    // }, [socket])
 
 
     // return (
@@ -68,7 +69,7 @@ export const Proyectos = () => {
             <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-10' >
                 {   isLoading 
                     ?   <div className="col-span-12">  </div>
-                    :   proyectos.length > 0 
+                    :   proyectos && proyectos.length > 0 
                     ?   proyectos.map((proyecto, index) => (
                             <ProyectoCard proyecto={proyecto}
                             key={index}
@@ -98,7 +99,7 @@ export const Proyectos = () => {
             closable={false}
             destroyOnClose={true}
         >
-            <FormProyecto currentProyecto={currentProyecto}  handleCancel={handleCancel} isLoadingProyecto={isLoadingProyecto} />
+            { proyecto && <FormProyecto currentProyecto={proyecto}  handleCancel={handleCancel} isLoadingProyecto={isLoadingProyecto} /> } 
         </Modal>
 
     <FloatButton

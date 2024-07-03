@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { ProyectosProps } from '@/interfaces'
-import { createProyectoThunk, updateProyectoThunk } from '@/redux/features/proyectos/proyectosThunk';
+import { createProyectoThunk, updateProyectoThunk, useCreateProyectoMutation, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
 import dayjs from 'dayjs';
-import { DatePicker, Form, Image, Input, Select, Skeleton, Upload, UploadFile } from 'antd'
+import { DatePicker, Form, Image, Input, message, Select, Skeleton, Upload, UploadFile } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { RcFile, UploadProps } from 'antd/es/upload';
 import { getStorageUrl } from '@/helpers';
 import { FaTrash, FaUpload } from 'react-icons/fa';
-import { Button } from '../ui';
-import Loading from '../antd/Loading';
+import { Button } from '../../../components/ui';
+import Loading from '../../../components/antd/Loading';
+import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 
 interface FormProyectoProps {
     currentProyecto: ProyectosProps
@@ -21,11 +22,14 @@ const fallbackImage = `${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner
 
 export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}: FormProyectoProps) => { 
 
-    const { usuarios } = useAppSelector(state => state.usuarios)
+    const {data : usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
     const { isUpdating } = useAppSelector(state => state.proyectos)
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
+
+    const [ updateProyecto, { isLoading: isUpdatingProyecto } ] = useUpdateProyectoMutation()
+    const [ createProyecto, { isLoading: isCreatingProyecto } ] = useCreateProyectoMutation()
 
     const { TextArea } = Input;
 
@@ -51,10 +55,18 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
         });        
 
         if(currentProyecto.id !== '') {
-            await dispatch(updateProyectoThunk({proyecto: formData, proyectoId:currentProyecto.id}))
+            updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}).unwrap().then(() => {
+                message.success('Proyecto actualizado correctamente')
+            }).catch(() => {
+                message.error('Error al actualizar el proyecto')
+            })
         }
         else {
-            await dispatch(createProyectoThunk(formData))
+            createProyecto(formData).unwrap().then(() => {
+                message.success('Proyecto creado correctamente')
+            }).catch(() => {
+                message.error('Error al crear el proyecto')
+            })
         }
         handleCancel()
     }
@@ -151,19 +163,27 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
                 <TextArea rows={5} />
             </Form.Item>
             <Form.Item label="Participantes" name="participantes" className='col-span-12'>
-                <Select mode='multiple' placeholder='Selecciona Participantes' bordered={false}
-                        onChange={(value) => setSelectedUsers(value)} value={selectedUsers}
-                        tagRender={tagRender} maxTagCount={3} style={{ width: '100%' }}
+                <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Selecciona los responsables"                      
+                        allowClear
+                        bordered = {false}
+                        tagRender={tagRender}
+                        onChange={(value) => setSelectedUsers(value)} 
+                        value={selectedUsers}
+                        maxLength={3}
+                        showSearch
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
-                            usuarios.map((usuario) => (
-                                <Select.Option key={usuario.id} value={usuario.id}>
-                                    { spanUsuario(usuario) }
-                                </Select.Option>
-                            ))
+                            usuarios?.map(usuario => (
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
+                            )).filter( usuario => usuario.key !== form.getFieldValue('propietarioId') )
                         }
                     </Select>
             </Form.Item>

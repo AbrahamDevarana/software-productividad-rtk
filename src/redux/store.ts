@@ -89,7 +89,8 @@ export const store = configureStore({
         .concat(operativosApi.middleware)
         .concat(estategicosApi.middleware)
         .concat(departamentosApi.middleware)
-        .concat(areasApi.middleware),
+        .concat(areasApi.middleware)
+        .concat(proyectosApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

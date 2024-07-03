@@ -115,8 +115,52 @@ export const proyectosApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Proyecto'],
     endpoints: (builder) => ({
+        getProyectos: builder.query<ProyectosProps[], any>({
+            query: (filtros) => ({
+                url: '/proyectos',
+                method: 'GET',
+                params: filtros
+            }),
+            providesTags: ['Proyecto'],
+            transformResponse: (response: {proyectos: ProyectosProps[]}) => response.proyectos
+        }),
+        getProyecto: builder.query<ProyectosProps, {proyectoId?: string}>({
+            query: ({proyectoId}) => `/proyectos/${proyectoId}`,
+            providesTags: ['Proyecto'],
+            transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto
+        }),
+        createProyecto: builder.mutation<ProyectosProps, FormData>({
+            query: (proyecto) => ({
+                url: '/proyectos',
+                method: 'POST',
+                body: proyecto,
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }),
+            invalidatesTags: ['Proyecto'],
+            transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto,
+        }),
+        updateProyecto: builder.mutation<ProyectosProps, { proyectoId: string, proyecto: FormData }>({
+            query: ({ proyectoId, proyecto }) => ({
+                url: `/proyectos/${proyectoId}`,
+                method: 'PUT',
+                body: proyecto,
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }),
+            invalidatesTags: ['Proyecto']
+        }),
+        deleteProyecto: builder.mutation<ProyectosProps, { proyectoId: string}> ({
+            query: ({proyectoId}) => ({
+                url: `/proyectos/${proyectoId}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Proyecto']
+        })
     })
 })
 
-export const {} = proyectosApi
+export const {useCreateProyectoMutation, useDeleteProyectoMutation, useGetProyectoQuery, useGetProyectosQuery, useUpdateProyectoMutation} = proyectosApi
 

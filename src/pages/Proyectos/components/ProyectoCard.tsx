@@ -1,10 +1,11 @@
 import dayjs from 'dayjs'
-import { Box } from '../ui'
+import { Box } from '../../../components/ui'
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'
 import { Avatar, Image, Tooltip } from 'antd'
 import { ProyectosProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
+import getBrokenUser from '@/helpers/getBrokenUser'
 
 interface Props {
 	proyecto: ProyectosProps
@@ -57,20 +58,21 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 			<hr className="flex-shrink-0 border-t border-r border-l border-transparent bg-transparent h-[0.0625rem] my-5 opacity-25 bg-gradient-to-r from-transparent via-slate-400 to-transparent" />
 
 			<div className="flex justify-between items-center">
-				<Avatar.Group maxCount={3} size={"small"}>
-					{
-						usuariosProyecto.map((usuario, index) => (
-							<Tooltip key={index} title={`${usuario.nombre} ${usuario.apellidoPaterno}`}>
-								<Avatar src={`${import.meta.env.VITE_STORAGE_URL}${usuario.foto}`}>
-									{usuario.iniciales}
-								</Avatar>
-							</Tooltip>
-
-						))
-					}
-				</Avatar.Group>
+                <Avatar.Group maxCount={3} className='z-50'
+                        maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
+                    >
+                    {
+                        usuariosProyecto?.map((participante, index) => (
+                            <Tooltip key={index} title={`${participante.nombre + ' ' + participante.apellidoPaterno}`} placement='top'>
+                                <Avatar src={<Image src={`${getStorageUrl(participante.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                    {participante.iniciales}
+                                </Avatar>
+                            </Tooltip>
+                        ))
+                    }
+                </Avatar.Group>
 				<div className="text-center">
-					<p className="text-devarana-graph font-light text-xs">{ dayjs(fechaFin).format('DD MMM') }</p>
+					<p className="text-devarana-graph font-light text-xs"> Creado : { dayjs(fechaInicio).format('DD MMM') }</p>
 				</div>
 			</div>
 

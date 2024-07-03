@@ -1,23 +1,28 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
-import { clearProyectoThunk, getProyectoThunk } from '@/redux/features/proyectos/proyectosThunk'
+import { clearProyectoThunk, getProyectoThunk, useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import {  Drawer, Segmented } from 'antd';
+import {  Drawer } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
-import { ListadoProyectos } from '@/components/proyectos/ListadoProyectos';
+import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTareas } from '../../components/tareas/FormTareas';
 import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
-import { useSelectUser } from '@/hooks/useSelectUser';
 import { Icon } from '@/components/Icon';
-import { KanbanProyecto } from '@/components/proyectos/KanbanProyecto';
+import { KanbanProyecto } from '@/pages/Proyectos/components/KanbanProyecto';
 import { getUpdatedHitoThunk } from '@/redux/features/hitos/hitosThunk';
 import { getUpdatedTareaThunk } from '@/redux/features/tareas/tareasThunk';
+import { Link } from 'react-router-dom';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
-    const { currentProyecto, isLoadingProyecto } = useAppSelector(state => state.proyectos)
+
+    const dispatch = useAppDispatch()
+    const { id } = useParams<{ id: string }>()
+
+
+    const { data: proyecto } = useGetProyectoQuery({proyectoId: id}, { skip: !id})
     const { socket } = useAppSelector(state => state.socket)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
@@ -42,9 +47,7 @@ export const ProyectoView = () => {
         }
     ]
     
-    const dispatch = useAppDispatch()
-    const { id } = useParams<{ id: string }>()
-    
+ 
     useEffect(() => {
         if(id) {
             dispatch(getProyectoThunk(id))
@@ -56,97 +59,96 @@ export const ProyectoView = () => {
     
     const handleClose = () => {
         setVisible(false)
-        dispatch(clearCurrentTarea())
     }
     
     
     
     const usuarios =  useMemo(() => {
-        return currentProyecto.usuariosProyecto
-    }, [currentProyecto])
+        return proyecto?.usuariosProyecto
+    }, [proyecto])
     
-    const {selectedUsers, setSelectedUsers, spanUsuario, tagRender} = useSelectUser(usuarios)
 
+    // useEffect(() => {        
+    //     socket?.on('hitos:updated', (hito) => {                       
+    //         dispatch(getUpdatedHitoThunk(hito))
+    //     })
 
-    useEffect(() => {        
-        socket?.on('hitos:updated', (hito) => {                       
-            dispatch(getUpdatedHitoThunk(hito))
-        })
+    //     socket?.on('tareas:updated', (tarea) => {          
+    //         dispatch(getUpdatedTareaThunk(tarea))
+    //     })
 
-        socket?.on('tareas:updated', (tarea) => {          
-            dispatch(getUpdatedTareaThunk(tarea))
-        })
-
-        return () => {
-            socket?.off('hitos:updated')
-        }
-    }, [socket])
+    //     return () => {
+    //         socket?.off('hitos:updated')
+    //     }
+    // }, [socket])
     
     return (
-        <div className='min-h-[500px]'>
-            <p className='text-xs text-devarana-graph text-opacity-50'>Proyecto:</p>
-            <h1>{ currentProyecto.titulo }</h1>
-                <Segmented
-                    className='my-4'
-                    options={options}
-                    value={value}
-                    onChange={(value) => setValue(value as SegmentTypes)}
-                />
-                {/* <>
-                    <p>Filtrar Por: </p>
-                    <div className='flex gap-x-5'>
-                        <UserDropDown searchFunc={ getUsuariosThunk } data={usuarios}  />
-                        <Input placeholder='Buscar' className='w-60' />
+       <>
+            <div className="mb-2">
+                <Link to='/proyectos' className='text-devarana-midnight text-sm'> <Icon iconName='faArrowLeft' /> Regresar </Link>
+            </div>
+            <div className='min-h-[500px]'>
+                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
+                        <div>
+                            <p className="text-base text-devarana-graph text-opacity-50"> Objetivo </p>
+                            <h1 className="text-2xl">
+                                { proyecto?.titulo }
+                            </h1>
+                            <p className="text-devarana-graph text-xs line-clamp-3">
+                                {
+                                    proyecto?.descripcion
+                                }
+                            </p>
+                        </div>
                     </div>
-                </> */}
 
-            {
-                currentProyecto && (
-                    <>
-                        {
-                            value === 'listado' && (
-                                <div>
-                                    <ListadoProyectos 
+                {
+                    proyecto && (
+                        <>
+                            {
+                                value === 'listado' && (
+                                    <div>
+                                        <ListadoProyectos 
+                                            visible={visible} 
+                                            setVisible={setVisible} 
+                                            currentProyecto={proyecto} 
+                                        />
+                                    </div>
+                                )
+                            }
+                            {
+                                value === 'gantt' && (
+                                    <Gantt 
                                         visible={visible} 
                                         setVisible={setVisible} 
-                                        currentProyecto={currentProyecto} 
+                                        currentProyecto={proyecto}
                                     />
-                                </div>
-                            )
-                        }
-                        {
-                            value === 'gantt' && (
-                                <Gantt 
-                                    visible={visible} 
-                                    setVisible={setVisible} 
-                                    currentProyecto={currentProyecto}
-                                />
-                            )
-                        }
-                        {
-                            value === 'kanban' && (
-                                <p>
-                                    <KanbanProyecto />
-                                </p>
-                            )
-                        }
-                    </>
-                )
-            }
-           
+                                )
+                            }
+                            {
+                                value === 'kanban' && (
+                                    <p>
+                                        <KanbanProyecto />
+                                    </p>
+                                )
+                            }
+                        </>
+                    )
+                }
             
+                
 
-            <Drawer
-                open={visible}
-                onClose={handleClose}
-                destroyOnClose={true}
-                placement='right'
-                width={600}
-            >
-                <FormTareas />
-            </Drawer>
-        </div>
-
+                <Drawer
+                    open={visible}
+                    onClose={handleClose}
+                    destroyOnClose={true}
+                    placement='right'
+                    width={600}
+                >
+                    <FormTareas />
+                </Drawer>
+            </div>
+       </>
 
     )
 }

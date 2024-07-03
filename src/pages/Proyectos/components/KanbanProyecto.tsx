@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/redux/hooks';
-import { Box } from '../ui';
+import { Box } from '../../../components/ui';
 import { statusTypes } from '@/types';
 
 

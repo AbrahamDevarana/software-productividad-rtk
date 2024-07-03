@@ -5,10 +5,11 @@ import { createHitoThunk, getHitosThunk, updateHitoThunk } from '@/redux/feature
 import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
 import dayjs from 'dayjs';
 import { FaPlus } from 'react-icons/fa'
-import { Avatar, Collapse, Form, Input, Progress, Table, Tooltip, } from 'antd'
+import { Avatar, Collapse, FloatButton, Form, Input, Progress, Table, Tooltip, } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
 import { getColor, getStatus } from '@/helpers'
-import Loading from '../antd/Loading'
+import Loading from '../../../components/antd/Loading'
+import { Icon } from '../../../components/Icon'
 
 
 
@@ -235,13 +236,12 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
             }
         </Collapse>
 
-        <button 
-            className='border border-devarana-graph border-opacity-20 px-4 py-2 font-medium text-sm items-center flex gap-x-2
-            rounded-ext hover:bg-devarana-graph hover:bg-opacity-20 text-devarana-graph'
+
+        <FloatButton
             onClick={handleCreateHito}
-        > 
-            <FaPlus className='font-light' /> Agregar Nuevo Hito
-        </button>
+            icon={<Icon iconName='faPlus' />}
+            type="primary"
+        />
         </>
     )
 }
