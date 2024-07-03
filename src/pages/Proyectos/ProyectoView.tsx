@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useParams } from 'react-router'
-import { clearProyectoThunk, getProyectoThunk, useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
+import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import {  Drawer } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTareas } from '../../components/tareas/FormTareas';
-import { clearCurrentTarea } from '@/redux/features/tareas/tareasSlice';
 import { Icon } from '@/components/Icon';
 import { KanbanProyecto } from '@/pages/Proyectos/components/KanbanProyecto';
-import { getUpdatedHitoThunk } from '@/redux/features/hitos/hitosThunk';
-import { getUpdatedTareaThunk } from '@/redux/features/tareas/tareasThunk';
 import { Link } from 'react-router-dom';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
@@ -47,16 +44,7 @@ export const ProyectoView = () => {
         }
     ]
     
- 
-    useEffect(() => {
-        if(id) {
-            dispatch(getProyectoThunk(id))
-        }
-        return () => {
-            dispatch(clearProyectoThunk())
-        }
-    }, [id])
-    
+
     const handleClose = () => {
         setVisible(false)
     }
@@ -90,11 +78,11 @@ export const ProyectoView = () => {
             <div className='min-h-[500px]'>
                 <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
                         <div>
-                            <p className="text-base text-devarana-graph text-opacity-50"> Objetivo </p>
+                            <p className="text-base text-devarana-graph text-opacity-50"> Proyecto </p>
                             <h1 className="text-2xl">
                                 { proyecto?.titulo }
                             </h1>
-                            <p className="text-devarana-graph text-xs line-clamp-3">
+                            <p className="text-devarana-graph text-xs line-clamp-3 pt-2">
                                 {
                                     proyecto?.descripcion
                                 }

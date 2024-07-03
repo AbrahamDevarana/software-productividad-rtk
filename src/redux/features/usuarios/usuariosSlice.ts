@@ -58,7 +58,10 @@ const initialState: UsuariosState = {
                 foto: '',
                 iniciales: '',
                 nombreCorto: '',
-                slug: ''
+                slug: '',
+                creditos: {
+                    saldo: 0
+                }
             },
         }
     }

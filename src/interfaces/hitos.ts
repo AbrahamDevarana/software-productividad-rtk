@@ -1,6 +1,7 @@
 import { statusType } from "@/types";
 import { InitialState } from "./slice";
 import { TareasProps } from "./tareas";
+import { TaskProps } from "./tasks";
 
 
 export interface HitosProps {
@@ -11,7 +12,10 @@ export interface HitosProps {
     fechaFin: Date;
     status: statusType;
     proyectoId: string;
-    tareas: TareasProps[];
+    color: string;
+    progreso: number;
+    task: TaskProps[];
+    createdAt?: Date;
 }
 
 

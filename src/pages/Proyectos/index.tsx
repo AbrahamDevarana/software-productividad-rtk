@@ -102,11 +102,11 @@ export const Proyectos = () => {
             { proyecto && <FormProyecto currentProyecto={proyecto}  handleCancel={handleCancel} isLoadingProyecto={isLoadingProyecto} /> } 
         </Modal>
 
-    <FloatButton
-        shape="circle"
-        icon={<FaPlus />}
-        onClick={() => setIsModalVisible(true)}
-    />
+        <FloatButton
+            shape="circle"
+            icon={<FaPlus />}
+            onClick={() => setIsModalVisible(true)}
+        />
     </>
     )
 }

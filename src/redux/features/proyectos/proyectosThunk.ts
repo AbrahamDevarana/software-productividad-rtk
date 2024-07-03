@@ -134,9 +134,6 @@ export const proyectosApi = createApi({
                 url: '/proyectos',
                 method: 'POST',
                 body: proyecto,
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
             }),
             invalidatesTags: ['Proyecto'],
             transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto,
@@ -146,9 +143,6 @@ export const proyectosApi = createApi({
                 url: `/proyectos/${proyectoId}`,
                 method: 'PUT',
                 body: proyecto,
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
             }),
             invalidatesTags: ['Proyecto']
         }),

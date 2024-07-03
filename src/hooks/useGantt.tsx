@@ -66,11 +66,11 @@ export const useGantt = ({hitos, currentProyecto}: Props) => {
 				expanded: true,
 				dateStart: dayjs(hito.fechaInicio).add(6, 'hour').format('YYYY-MM-DD'),
 				dateEnd: dayjs(hito.fechaFin).add(6, 'hour').format('YYYY-MM-DD'),
-				tasks: hito.tareas?.map((hito) => {
+				tasks: hito.task?.map((hito) => {
 					return {
 						hito,
 						label: hito.nombre,
-						dateStart: dayjs(hito.fechaInicio).add(6, 'hour').format('YYYY-MM-DD'),
+						dateStart: dayjs(hito.createdAt).add(6, 'hour').format('YYYY-MM-DD'),
 						dateEnd: dayjs(hito.fechaFin).add(6, 'hour').format('YYYY-MM-DD'),
 						type: 'task',
 						class: 'task',

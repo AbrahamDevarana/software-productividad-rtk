@@ -47,7 +47,7 @@ export interface SinglePerfilProps {
     foto:                 string;
     leaderId?:              string;
     slug:                 string;
-    creditos:             {
+    creditos?:             {
         saldo: number;
     }
 }

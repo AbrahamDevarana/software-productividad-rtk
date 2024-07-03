@@ -12,8 +12,6 @@ import tacticosSlice from "./features/tacticos/tacticosSlice";
 import operativosSlice from "./features/operativo/operativosSlice";
 import resultadosSlice from "./features/resultados/resultadosSlice";
 import proyectosSlice from "./features/proyectos/proyectosSlice";
-import hitosSlice from "./features/hitos/hitosSlice";
-import tareasSlice from "./features/tareas/tareasSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
 import comentariosSlice from "./features/comentarios/comentariosSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
@@ -34,6 +32,8 @@ import { operativosApi } from "./features/operativo/operativosThunk";
 import { areasApi } from "./features/areas/areasThunks";
 import { departamentosApi } from "./features/departamentos/departamentosThunks";
 import { proyectosApi } from "./features/proyectos/proyectosThunk";
+import { hitosApi } from "./features/hitos/hitosThunk";
+import { taskApi } from "./features/tasks/tasksThunk";
 
 export const store = configureStore({
     reducer: {
@@ -53,6 +53,8 @@ export const store = configureStore({
         [areasApi.reducerPath]: areasApi.reducer,
         [departamentosApi.reducerPath]: departamentosApi.reducer,
         [proyectosApi.reducerPath]: proyectosApi.reducer,
+        [hitosApi.reducerPath]: hitosApi.reducer,
+        [taskApi.reducerPath]: taskApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -65,8 +67,6 @@ export const store = configureStore({
         operativos: operativosSlice,
         resultados: resultadosSlice,
         proyectos: proyectosSlice,
-        hitos: hitosSlice,
-        tareas: tareasSlice,
         acciones: accionesSlice,
         comentarios: comentariosSlice,
         galeria: galeriaSlice,
@@ -90,7 +90,9 @@ export const store = configureStore({
         .concat(estategicosApi.middleware)
         .concat(departamentosApi.middleware)
         .concat(areasApi.middleware)
-        .concat(proyectosApi.middleware),
+        .concat(proyectosApi.middleware)
+        .concat(hitosApi.middleware)
+        .concat(taskApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

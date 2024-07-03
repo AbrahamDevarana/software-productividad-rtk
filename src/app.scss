@@ -358,19 +358,29 @@ input:not(.rs-input), textarea {
     .ant-table {
         border-radius: 10px;
 
-        .ant-table-thead tr th{
-            padding: 16px 16px!important;
-        }
+        
 
-        .ant-table-tbody .ant-table-cell {
-            padding: 10px 16px!important;
-        }
 
         .ant-table-footer{
             background: transparent!important;
             padding: 10px 16px!important;
         }
         
+    }
+}
+
+.customSmallTable {
+    .ant-table {
+        border-radius: 10px;
+
+        .ant-table-thead tr th{
+            padding: 16px 16px!important;
+        }
+
+
+        .ant-table-tbody .ant-table-cell {
+            padding: 1px 16px!important;
+        }
     }
 }
 

@@ -1,17 +1,10 @@
-import React, { useEffect, useMemo } from 'react'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { createTareaThunk, getTareaThunk } from '@/redux/features/tareas/tareasThunk'
-import { createHitoThunk, getHitosThunk, updateHitoThunk } from '@/redux/features/hitos/hitosThunk'
-import { TareasProps, HitosProps, ProyectosProps, UsuarioProps } from '@/interfaces'
-import dayjs from 'dayjs';
-import { FaPlus } from 'react-icons/fa'
-import { Avatar, Collapse, FloatButton, Form, Input, Progress, Table, Tooltip, } from 'antd'
-import type { ColumnsType } from 'antd/es/table';
-import { getColor, getStatus } from '@/helpers'
-import Loading from '../../../components/antd/Loading'
-import { Icon } from '../../../components/Icon'
-
-
+import React, { useMemo } from 'react'
+import { useCreateHitoMutation, useDeleteHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
+import { HitosProps, ProyectosProps } from '@/interfaces'
+import { Collapse, ColorPicker, FloatButton, Form, Input, message, Popconfirm } from 'antd'
+import Loading from '@/components/antd/Loading'
+import { Icon } from '@/components/Icon'
+import { TablaTask } from './TablaTask'
 
 interface TableProyectosProps {
     currentProyecto: ProyectosProps
@@ -20,97 +13,21 @@ interface TableProyectosProps {
 }
 
 
+
+
 export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
-
-    const { hitos, currentHito, isLoading} = useAppSelector(state => state.hitos)
+    
+    
+    
+    const [ createHito, { isLoading: isCreatingHito, error: createHitoError }] = useCreateHitoMutation()
+    const [ updateHito, { isLoading: isUpdatingHito, error: updateHitoError }] = useUpdateHitoMutation()
+    const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()
         
-    const dispatch = useAppDispatch()
+    const { data: hitos, isLoading} = useGetHitosQuery({proyectoId: currentProyecto.id})
     const { Panel } = Collapse;
-   
-
-    const defaultColumns:ColumnsType<any> = [
-        {
-            title: 'Actividad',
-            dataIndex: 'nombre',
-            key: 'nombre',
-            render: (text, record, index) => ({
-                children: <div className='flex'> 
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
-                    <p className='text-devarana-graph'>{record.nombre}</p>
-                </div>,
-            }),
-
-            
-            width: '30%'
-        },
-        {
-            title: 'Fecha de Cierre',
-            dataIndex: 'fechaFin',
-            key: 'fecha',
-            render: (fechaFin: string | Date | null) => (
-                <div className='w-full text-devarana-graph'>
-                    { 
-                        fechaFin 
-                        ? <span className='text-devarana-graph font-light'>{dayjs(fechaFin).format('DD MMM YY')} </span> 
-                        : <span className='text-devarana-graph font-light'>No Asignado</span> 
-                    }
-                </div>
-            ),
-            width: '20%'
-        },
-        {
-            title: 'Responsables',
-            key: 'usuariosTarea',
-            render: (text: any, record: TareasProps ) => (
-                <div className='w-full text-devarana-graph'>
-                    <Avatar.Group maxCount={3}>
-                        <Tooltip title={record.propietario.nombre + ' ' + record.propietario.apellidoPaterno} key={record.propietario.id} className='relative'>
-                            <Avatar
-                                src={import.meta.env.VITE_STORAGE_URL + record.propietario.foto}
-                            >
-                                {record.propietario.iniciales}
-                            </Avatar>
-                        </Tooltip>
-
-                        {record.usuariosTarea.map((usuario: UsuarioProps) => (
-                            <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno} key={usuario.id} className='relative'>
-                                <Avatar
-                                    src={import.meta.env.VITE_STORAGE_URL + usuario.foto}
-                                >
-                                    {usuario.iniciales}
-                                </Avatar>
-                            </Tooltip>
-
-                        ))}
-                    </Avatar.Group>
-                </div>
-            ),
-            width: '20%',
-        },  
-        {
-            title: 'Estatus',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status) => (
-                <div className='w-full' style={{
-                    color: getColor(status).color,
-                }}>
-                    { getStatus(status) }
-                </div>
-            ),
-            width: '10%'
-        },
-
-    ]
-
-    useEffect(() => {        
-        if(currentProyecto.id !== ''){
-            dispatch(getHitosThunk(currentProyecto.id))
-        }
-    }, [currentProyecto])
 
 
-    const handleChangeHito = (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
+    const handleChangeHito = async (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => {
 
         const { value } = e.target as HTMLInputElement
 
@@ -123,114 +40,151 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
             titulo: value
         }
 
-        dispatch(updateHitoThunk(query))
+        await updateHito(query).unwrap().then(() => {
+            message.success('Hito Actualizado')
+        }).catch((error) => {
+            message.error('Error al actualizar el hito')
+        })
     };
 
-    const handleCreateHito = () => {    
+    const handleCreateHito = async () => {
         const query = {
             proyectoId: currentProyecto.id,
         }
-        dispatch(createHitoThunk(query))
+        await createHito(query).unwrap().then(() => {
+            message.success('Hito Creado')
+        }).catch((error) => {
+            message.error('Error al crear el hito')
+        })
+
     };
-
-    const handleView = (record:TareasProps) => {
-        dispatch(getTareaThunk(record.id))
-        setVisible(true)
-    }
-
     
-    const FooterComp = (hito:HitosProps) => {
 
-        const handleCreateTask = (hito: HitosProps) => {
-        
-        const query = {
-                ...form.getFieldsValue(),
-                hitoId: hito.id,
-            }
-            dispatch(createTareaThunk(query))
-            form.resetFields()
-        }
-        const [form] = Form.useForm();
-        return (
-            <Form initialValues={{
-                ...hito,
-                nombre: ''
-            }}
-            form={form}
-            onBlur={ e => handleCreateTask(hito)}
-            > 
-                <Form.Item name='nombre' className='mb-0'>
-                    <Input placeholder='Agregar Nuevo Elemento' onPressEnter={
-                        (e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            e.currentTarget.blur()
-                        }
-                    } className='w-60'/> 
-                </Form.Item>
-            </Form>
-        )
+    // const handleView = (record:TareasProps) => {
+    //     dispatch(getTareaThunk(record.id))
+    //     setVisible(true)
+    // }
+
+    const handleDeleteHito = async (hito: HitosProps) => {
+        await deleteHito({hitoId: hito.id, proyectoId: currentProyecto.id}).unwrap().then(() => {
+            message.success('Hito Eliminado')
+        }).catch((error) => {
+            message.error('Error al eliminar el hito')
+        })
     }
+    
+   
 
     const activeHitos = useMemo(() => {
+        if (!hitos) return []
         return hitos.map((hito: HitosProps) => hito.id)
     }, [hitos])
 
+    const handleChangeColor = (hito: HitosProps, color: string) => {
+      
+        const query = {
+            ...hito,
+            color: color
+        }
 
+
+        
+
+        updateHito(query).unwrap().then(() => {
+            message.success('Color Actualizado')
+        }).catch((error) => {
+            message.error('Error al actualizar el color')
+        })
+    }
+
+    const genHeader = (hito: HitosProps) => (
+            <div className='flex items-center justify-between'>
+                <Form 
+                    layout='vertical'
+                    className='w-[350px]'
+                    onClick={ e => e.stopPropagation()}
+                >
+                    <Form.Item
+                        name='titulo'
+                        className='mb-0'
+                        >
+                        <Input
+                            style={{
+                                color: hito.color
+                            }}
+                            className="rs-input border-none bg-transparent hover:bg-white hover:drop-shadow-sm font-medium text-lg disabled:bg-transparent"
+                            onBlur={ e => handleChangeHito(hito, e) } 
+                            defaultValue={hito.titulo}
+                            name='titulo'
+                            onPressEnter={ (e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    e.currentTarget.blur()
+                                }
+                            }
+                        />
+                    </Form.Item>
+                </Form>
+                
+                
+                <div className='flex gap-10'>
+                    {/* <div className='flex flex-col items-start'>
+                        <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Progreso</p>
+                        <Progress
+                            style={{
+                                width: '150px',
+                            }}
+                            className='drop-shadow progressStyle' strokeWidth={15} percent={Number(hito.progreso?.toFixed(2))}
+                            strokeColor={{
+                                '0%': getColor(hito.progreso === 0 ? 'SIN_INICIAR' : hito.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').lowColor,
+                                '100%': getColor(hito.progreso === 0 ? 'SIN_INICIAR' : hito.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').color,
+                                direction: 'to top',
+                            }}
+                            trailColor={ getColor(hito.progreso === 0 ? 'SIN_INICIAR' : hito.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO', .5).color}      
+                            format={() => <CountUp style={{
+                                fontSize: '10px',
+                                fontWeight: 'bold',
+                                color: '#fff'
+                            }} end={hito.progreso} duration={1} suffix='%' decimals={2} decimal='.' />}                                 
+                        />
+                    </div> */}
+                    <div className='flex flex-col items-center'>
+                        <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Color</p>
+                        <ColorPicker onChange={(color) => handleChangeColor(hito, color.toHexString())} defaultValue={hito.color} />
+                    </div>
+                    <div className='flex items-center justify-start flex-col'>
+                        <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Acciones</p>
+                        <Popconfirm 
+                            title="¿Estás seguro de eliminar este Hito?"
+                            onConfirm={ () => handleDeleteHito(hito)}
+                            okText="Si"
+                            cancelText="No"
+                        >
+                            <button className='text-devarana-midnight'>
+                                <Icon iconName='faTrash' className='text-lg pt-1'/>
+                            </button>
+                        </Popconfirm>
+                    </div>
+                </div>
+            </div>
+    )
 
     if(isLoading) return ( <Loading /> )
     return (
         <>
         <Collapse
-            collapsible='header' 
             defaultActiveKey={activeHitos}
             ghost
         >
             {
-                hitos.map((hito: HitosProps, index: number) => (
+                hitos && hitos.map((hito: HitosProps, index: number) => (
                     <Panel 
-                        className=''
-                        header={
-                            <Form 
-                                onClick={ e => e.stopPropagation()}
-                            >
-                                <Form.Item
-                                    name='titulo'
-                                    className='mb-0'
-                                    >
-                                    <Input
-                                        onBlur={ e => handleChangeHito(hito, e) } 
-                                        defaultValue={hito.titulo}
-                                        name='titulo'
-                                        onPressEnter={ (e) => {
-                                                e.preventDefault()
-                                                e.stopPropagation()
-                                                e.currentTarget.blur()
-                                            }
-                                        }
-                                        className='customInput'
-                                    />
-                                </Form.Item>
-                            </Form>
-                        } key={hito.id}>
-                        <Table
-                            loading={isLoading}
-                            className='customTable'
-                            scroll={{ x: 1000 }}
-                            bordered={false}
-                            pagination={false}
-                            columns={defaultColumns}
-                            dataSource={hito.tareas}
-                            footer={ () => FooterComp(hito) }
-                            rowKey={(record: any) => record.id}
-                            onRow={(record: any, index: any) => {
-                                return {
-                                    onClick: () => {
-                                        handleView(record)
-                                    }
-                                }
-                            }}
-                        />
+                        className="customResultadosPanel"
+                        key={hito.id}
+                        collapsible='icon'
+                        id={`hitos-${hito.id}`}
+                        header={genHeader(hito)}>
+                        <TablaTask hito={hito} />
                     </Panel>
                 )) 
             }
