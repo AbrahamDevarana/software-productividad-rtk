@@ -104,7 +104,7 @@ export const ProyectoView = () => {
                                     </div>
                                 )
                             }
-                            {
+                            {/* {
                                 value === 'gantt' && (
                                     <Gantt 
                                         visible={visible} 
@@ -119,7 +119,7 @@ export const ProyectoView = () => {
                                         <KanbanProyecto />
                                     </p>
                                 )
-                            }
+                            } */}
                         </>
                     )
                 }
