@@ -21,7 +21,7 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
     
 
 	return (
-		<Box className="lg:col-span-3 md:col-span-6 col-span-12">
+		<Box className="2xl:col-span-3 lg:col-span-4 md:col-span-6 col-span-12">
 			<div className="relative group z-0 pt-8">
 				<Image className="shadow-card-picture max-h-[150px] object-fill z-30 rounded-ext group-hover:-translate-y-12 transition-all duration-500 ease-out" preview={false} 
 					src={getStorageUrl(imagen)} 

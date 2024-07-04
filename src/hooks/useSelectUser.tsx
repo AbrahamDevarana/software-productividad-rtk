@@ -2,10 +2,11 @@ import { getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { UsuarioProps } from "@/interfaces";
 import { Avatar, Image, Tooltip } from "antd";
+import { AvatarSize } from "antd/es/avatar/AvatarContext";
 import { useEffect, useState } from "react";
 
 
-export const useSelectUser = (usuarios?:UsuarioProps[]) => {
+export const useSelectUser = (usuarios?:UsuarioProps[], size?: AvatarSize) => {
 
     const [ selectedUsers, setSelectedUsers ] = useState<any[]>([]);
 
@@ -28,7 +29,7 @@ export const useSelectUser = (usuarios?:UsuarioProps[]) => {
                     style={{
                         marginRight: -5
                     }}
-                    size={'large'}
+                    size={size ? size : 'large'}
                 >
                     {usuario?.iniciales}
                 </Avatar>
@@ -39,10 +40,10 @@ export const useSelectUser = (usuarios?:UsuarioProps[]) => {
 
     const spanUsuario = (usuario: UsuarioProps) => (
 
-        <div className='flex items-center gap-x-2 h-full'>
+        <div className='flex items-center gap-x-2'>
             <Avatar
                 src={<Image src={`${getStorageUrl(usuario?.foto)}`} preview={false} fallback={getBrokenUser()} />}
-                size={'large'}
+                size={size ? size : 'large'}
             >
                 {usuario.iniciales}
             </Avatar>

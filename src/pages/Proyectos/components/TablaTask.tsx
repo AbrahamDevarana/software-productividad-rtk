@@ -3,10 +3,13 @@ import { PopoverEstado } from "@/components/resultados/PopoverEstado";
 import { PopoverStatus } from "@/components/tasks/PopoverStatus";
 import { getColor, getStatus, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
+import { useSelectUser } from "@/hooks/useSelectUser";
 import { HitosProps, TaskProps } from "@/interfaces";
 import { useCreateTaskMutation, useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "@/redux/features/tasks/tasksThunk";
+import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
 import { taskStatusTypes } from "@/types";
-import { Avatar, DatePicker, Form, Image, Input, message, Popconfirm, Popover, Table, Tooltip } from "antd"
+import { Avatar, DatePicker, Form, Image, Input, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
+import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
@@ -27,6 +30,10 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
     const popoverRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [visiblePopoverId, setVisiblePopoverId] = useState<number | null>(null);
+
+    const { data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
+
+    const { tagRender, spanUsuario } = useSelectUser(usuarios, 'default')
 
     const {data: tasks, isLoading} = useGetTasksQuery({taskeableId: hito.id}, {skip: !hito.id})
     const [ createTask, { isLoading: isCreatingTask, error: createTaskError } ] = useCreateTaskMutation()
@@ -122,13 +129,25 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             key: 'usuariosTarea',
             render: (text, record, index) => (
                 <div className='w-full text-devarana-graph flex justify-end'>
-                    <Avatar.Group maxCount={3}>
-                        <Tooltip title={record.propietario?.nombre + ' ' + record.propietario?.apellidoPaterno} key={record.propietario?.id} className='relative'>
-                             <Avatar key={record.id} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                {record.propietario?.iniciales} 
-                            </Avatar>
-                        </Tooltip>
-                    </Avatar.Group>
+                    <Select
+                        style={{ height: '100%' }}
+                        placeholder="Selecciona al propietario"
+                        tagRender={tagRender}
+                        showSearch
+                        variant="borderless"
+                        maxTagPlaceholder={(omittedValues) => (
+                            <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                        )}
+                        dropdownStyle={{width: '300px'}}
+                        // @ts-ignore
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                    >
+                        {
+                            usuarios?.map(usuario => (
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
+                            ))
+                        }
+                    </Select>
                 </div>
             ),
             width: 150,
@@ -138,16 +157,32 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             key: 'usuariosTarea',
             render: (text, record, index) => (
                 <div className='w-full text-devarana-graph flex justify-end'>
-                    {/* <Avatar.Group maxCount={3}>
-                        <Tooltip title={record.propietario?.nombre + ' ' + record.propietario?.apellidoPaterno} key={record.propietario?.id} className='relative'>
-                             <Avatar key={record.id} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                {record.propietario?.iniciales} 
-                            </Avatar>
-                        </Tooltip>
-                    </Avatar.Group> */}
+                    
+                    <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Selecciona los co responsables"                      
+                        allowClear
+                        variant="borderless"
+                        tagRender={tagRender}
+                        maxTagCount={3}
+                        showSearch
+                        maxTagPlaceholder={(omittedValues) => (
+                            <span className='text-devarana-graph bg-deva'>+{omittedValues.length}</span>
+                        )}
+                        // @ts-ignore
+                        dropdownStyle={{width: '300px'}}
+                        filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
+                    >
+                        {
+                            usuarios?.map(usuario => (
+                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
+                            )).filter( usuario => usuario.key !== record.propietario?.id)
+                        }
+                    </Select>
                 </div>
             ),
-            width: 150,
+            width: 200,
         },  
         {
             title: () => ( <p className='tableTitle text-right'>Estatus</p>),
@@ -164,18 +199,20 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     }
                     trigger={'click'}
                 >
-                        <div className="flex items-center justify-end gap-2 py-1 cursor-pointer">
+                        <div className="flex items-center justify-end gap-2 py-1 cursor-pointer"
+                            style={{
+                                background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
+                            }}
+                        >
                             <div className={`shadow`}
                                 style={{
                                     width: '6px',
                                     height: '6px',
                                     borderRadius: '25%',
-                                    backgroundImage: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
+                                    background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
                                 }}
                             >  </div>
-                            <p className='text-right py-1' style={{
-                                color: getColor(record.status).color
-                            }}>  { taskStatusTypes[record.status] } </p>
+                            <p className='text-right py-1 text-white'>  { taskStatusTypes[record.status] } </p>
                         </div>  
 
                 </Popover>

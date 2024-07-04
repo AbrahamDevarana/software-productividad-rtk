@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import {  Avatar, Drawer, Image, Tooltip } from 'antd';
+import {  Avatar, Drawer, Image, Skeleton, Tooltip } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTask } from '../../components/tareas/FormTask';
@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { TaskProps } from '@/interfaces';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
+import { Spinner } from '@/components/antd/Spinner';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -22,7 +23,7 @@ export const ProyectoView = () => {
     const { id } = useParams<{ id: string }>()
 
 
-    const { data: proyecto } = useGetProyectoQuery({proyectoId: id}, { skip: !id})
+    const { data: proyecto, isLoading } = useGetProyectoQuery({proyectoId: id}, { skip: !id})
     const { socket } = useAppSelector(state => state.socket)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
@@ -74,24 +75,33 @@ export const ProyectoView = () => {
     //     }
     // }, [socket])
     
+
+   
+
     return (
        <>
             <div className="mb-2">
                 <Link to='/proyectos' className='text-devarana-midnight text-sm'> <Icon iconName='faArrowLeft' /> Regresar </Link>
             </div>
             <div className='min-h-[500px]'>
-                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext bg-devarana-blue flex-row gap-x-10">
-                    <div>
-                        <p className="text-base text-white text-opacity-50"> Proyecto </p>
-                        <h1 className="text-2xl text-white">
-                            { proyecto?.titulo }
-                        </h1>
-                        <p className="text-white text-xs line-clamp-3 pt-2">
-                            {
-                                proyecto?.descripcion
-                            }
-                        </p>
-                    </div>
+                <div className="flex w-full items-center px-5 py-5 relative border justify-between rounded-ext shadow-ext bg-devarana-blue flex-row gap-x-10">
+                    {
+                        isLoading ? (
+                            <Skeleton active paragraph={{ rows: 3 }} avatar={{ size: 100}}  />
+                        ) : (
+                            <div>
+                                <p className="text-base text-white text-opacity-50"> Proyecto </p>
+                                <h1 className="text-2xl text-white">
+                                    { proyecto?.titulo }
+                                </h1>
+                                <p className="text-white text-xs line-clamp-3 pt-2">
+                                    {
+                                        proyecto?.descripcion
+                                    }
+                                </p>
+                            </div>
+                        )
+                    }
                     {
                         proyecto && proyecto.usuariosProyecto && (
                             <div className="mt-auto">
