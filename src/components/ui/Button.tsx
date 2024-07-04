@@ -11,17 +11,18 @@ interface ButtonProps {
     width?: number | '100%' | 'auto';
     disabled?: boolean;
     form?: 'square' | 'circle'
+    size?: 'sm' | 'md' | 'lg'
 }
 
  
 
-export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%', disabled, form = 'square' }: ButtonProps) => {
+export const Button = ({ children, onClick, type = "button", classType, classColor, width = '100%', disabled, form = 'square', size = 'md' }: ButtonProps) => {
 
 
     return (
         <button
             type={type}
-            className={`customButton customButton__${classType} customButton__${classType}-${classColor} disabled:opacity-50 disabled:cursor-not-allowed text-center ${ form === 'circle' ? 'rounded-full' : ''}`}
+            className={`customButton customButton__${classType} customButton__${size} customButton__${classType}-${classColor} disabled:opacity-50 disabled:cursor-not-allowed text-center ${ form === 'circle' ? 'rounded-full' : ''}`}
             onClick={onClick}
             style={{
                 width: width

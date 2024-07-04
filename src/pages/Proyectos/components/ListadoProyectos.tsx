@@ -92,6 +92,7 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
                     className='w-[350px]'
                     onClick={ e => e.stopPropagation()}
                 >
+                    <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Sección</p>
                     <Form.Item
                         name='titulo'
                         className='mb-0'

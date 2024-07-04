@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import {  Drawer } from 'antd';
+import {  Avatar, Drawer, Image, Tooltip } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTask } from '../../components/tareas/FormTask';
@@ -10,6 +10,8 @@ import { Icon } from '@/components/Icon';
 import { KanbanProyecto } from '@/pages/Proyectos/components/KanbanProyecto';
 import { Link } from 'react-router-dom';
 import { TaskProps } from '@/interfaces';
+import { getStorageUrl } from '@/helpers';
+import getBrokenUser from '@/helpers/getBrokenUser';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -78,19 +80,36 @@ export const ProyectoView = () => {
                 <Link to='/proyectos' className='text-devarana-midnight text-sm'> <Icon iconName='faArrowLeft' /> Regresar </Link>
             </div>
             <div className='min-h-[500px]'>
-                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
-                        <div>
-                            <p className="text-base text-devarana-graph text-opacity-50"> Proyecto </p>
-                            <h1 className="text-2xl">
-                                { proyecto?.titulo }
-                            </h1>
-                            <p className="text-devarana-graph text-xs line-clamp-3 pt-2">
-                                {
-                                    proyecto?.descripcion
-                                }
-                            </p>
-                        </div>
+                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext bg-devarana-blue flex-row gap-x-10">
+                    <div>
+                        <p className="text-base text-white text-opacity-50"> Proyecto </p>
+                        <h1 className="text-2xl text-white">
+                            { proyecto?.titulo }
+                        </h1>
+                        <p className="text-white text-xs line-clamp-3 pt-2">
+                            {
+                                proyecto?.descripcion
+                            }
+                        </p>
                     </div>
+                    {
+                        proyecto && proyecto.usuariosProyecto && (
+                            <div className="mt-auto">
+                                <Avatar.Group maxCount={5}>
+                                    {
+                                        proyecto.usuariosProyecto.map((usuario) => (
+                                            <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno} key={usuario.id} className='relative'>
+                                                <Avatar key={usuario.id} src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} /> } className='border-none'>
+                                                    {usuario.iniciales} 
+                                                </Avatar>
+                                            </Tooltip>
+                                        ))
+                                    }
+                                </Avatar.Group>
+                            </div>
+                        )
+                    }
+                </div>
 
                 {
                     proyecto && (

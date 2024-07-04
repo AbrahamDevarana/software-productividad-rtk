@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Box } from '../../../components/ui'
+import { Box, Button } from '../../../components/ui'
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'
 import { Avatar, Image, Popconfirm, Tooltip } from 'antd'
 import { ProyectosProps } from '@/interfaces'
@@ -21,30 +21,30 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
     
 
 	return (
-		<Box className="lg:col-span-4 md:col-span-6 col-span-12">
-			<div className="relative group z-0">
-				<Image className="shadow-card-picture max-h-[150px] z-30 rounded-ext group-hover:-translate-y-8 transition-all duration-500 ease-out" preview={false} 
+		<Box className="lg:col-span-3 md:col-span-6 col-span-12">
+			<div className="relative group z-0 pt-8">
+				<Image className="shadow-card-picture max-h-[150px] object-fill z-30 rounded-ext group-hover:-translate-y-12 transition-all duration-500 ease-out" preview={false} 
 					src={getStorageUrl(imagen)} 
 					fallback={`${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner.png`}
 					wrapperStyle={{ width: '100%', height: '150px', objectFit: 'cover', objectPosition: 'center'}}
 					/>
 				<div className="flex absolute left-0 right-0 bottom-4 justify-center gap-x-5 -z-10 group-hover:z-10">
-					<Tooltip title="Ver" placement='bottom'>
-						<FaEye className="text-devarana-graph cursor-pointer" onClick={ () => handleView(id)}/>
-					</Tooltip>
+						<Button className='text-xs' size='sm' classType='regular' classColor='primary' width={100}  onClick={ () => handleView(id)} >
+                            Ver Proyecto
+                        </Button>
 					{
 						userAuth.id === proyecto.propietarioId ?
-						<Tooltip title="Editar" placement='bottom'>
-						<FaEdit className="text-devarana-graph cursor-pointer" onClick={ () => handleEdit(proyecto)}/>
-						</Tooltip>
+                        <Button className='text-xs' size='sm' classType='icon' classColor='dark' width={100} onClick={ () => handleEdit(proyecto)} >
+                            Editar
+                        </Button>
 						: null
 					}
 					{
 						userAuth.id === proyecto.propietarioId ?
-                        <Popconfirm title="¿Estás seguro de eliminar este proyecto?" onConfirm={() => handleDelete(id)} okText="Si" cancelText="No">
-                            <Tooltip title="Eliminar" placement='bottom'>
-                                <FaTrash className="text-devarana-graph cursor-pointer"/>
-                            </Tooltip>
+                        <Popconfirm title="¿Estás seguro de eliminar este proyecto?" onConfirm={() => handleDelete(id)} okText="Si" cancelText="No" okButtonProps={{className: 'text-white bg-error-light'}} cancelButtonProps={{className: 'text-devarana-dark-graph'}}>
+                            <Button className='text-xs' size='sm' classType='icon' classColor='error' width={100} >
+                                Eliminar
+                            </Button>
                         </Popconfirm>
                         : null
 					}
@@ -53,12 +53,12 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 				</div>
 			</div>
 
-			<div className="pb-5 pt-3" style={{height: '150px', overflowY: 'auto'}}>
-				<h1 className="text-devarana-dark-graph text-center text-xl font-normal">{titulo}</h1>
+			<div className="pb-5 pt-5" style={{height: '150px', overflowY: 'auto'}}>
+				<h1 className="text-devarana-dark-graph text-xl font-bold">{titulo}</h1>
 				<p className="text-devarana-graph font-light pt-5">{descripcion}</p>
 			</div>
 
-			<hr className="flex-shrink-0 border-t border-r border-l border-transparent bg-transparent h-[0.0625rem] my-5 opacity-25 bg-gradient-to-r from-transparent via-slate-400 to-transparent" />
+			<hr className="flex-shrink-0 border-t border-r border-l border-transparent bg-transparent h-[0.0625rem] my-5 opacity-25 bg-gradient-to-r from-transparent via-slate-400 to-transparent "  />
 
 			<div className="flex justify-between items-center">
                 <Avatar.Group maxCount={3} className='z-50'

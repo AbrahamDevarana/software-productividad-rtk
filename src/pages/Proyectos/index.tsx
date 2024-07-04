@@ -67,7 +67,7 @@ export const Proyectos = () => {
     return (
         <>
         <div className='grid grid-cols-12 md:gap-x-10 gap-y-4'>
-            <div className='md:col-span-9 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-10' >
+            <div className='md:col-span-12 col-span-12 py-5 grid grid-cols-12 md:gap-x-5 gap-y-10' >
                 {   isLoading 
                     ?   <div className="col-span-12">  </div>
                     :   proyectos && proyectos.length > 0 
@@ -87,9 +87,6 @@ export const Proyectos = () => {
                 }        
               
             </div>
-             <Box className='md:col-span-3 col-span-12 row-span-3'>
-                <>  </>
-            </Box>
         </div>
 
         <Modal

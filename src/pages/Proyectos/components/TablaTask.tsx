@@ -102,7 +102,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 </div>
                 </div>
             ),
-            width: 100
+            width: 150,
         },
         {
             title: () => ( <p className='tableTitlePrincipal'>Actividad</p>),
@@ -113,7 +113,8 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
                 />
             ),
-            width: '60%'
+            width: '50%',
+            ellipsis: true
         },
         
         {
@@ -130,7 +131,23 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     </Avatar.Group>
                 </div>
             ),
-            width: 100,
+            width: 150,
+        },  
+        {
+            title: () => ( <p className='tableTitle text-right'>Co Responsable</p>),
+            key: 'usuariosTarea',
+            render: (text, record, index) => (
+                <div className='w-full text-devarana-graph flex justify-end'>
+                    {/* <Avatar.Group maxCount={3}>
+                        <Tooltip title={record.propietario?.nombre + ' ' + record.propietario?.apellidoPaterno} key={record.propietario?.id} className='relative'>
+                             <Avatar key={record.id} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                {record.propietario?.iniciales} 
+                            </Avatar>
+                        </Tooltip>
+                    </Avatar.Group> */}
+                </div>
+            ),
+            width: 150,
         },  
         {
             title: () => ( <p className='tableTitle text-right'>Estatus</p>),
@@ -163,10 +180,10 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
                 </Popover>
             ),
-            width: 120
+            width: 150
         },
         {
-            title: () => ( <p className='tableTitle text-right'>Fecha Cierre</p>),
+            title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),
             dataIndex: 'fechaFin',
             key: 'fecha',
             render: (text, record, index) => {
@@ -185,7 +202,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 />
                 )
             },
-            width: 170
+            width: 200
         },
         {
             title: () => ( <p className='tableTitle text-right'>Acciones</p>),
@@ -208,6 +225,8 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                                             okText="Si"
                                             placement="topLeft"
                                             cancelText="No"
+                                            okButtonProps={{className: 'text-white bg-error-light'}} 
+                                            cancelButtonProps={{className: 'text-devarana-dark-graph'}}
                                         >
                                             <button className='text-devarana-graph'>
                                                 <Icon iconName='faTrash' className='text-lg pt-1'/>
@@ -221,7 +240,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     </Popover>
                 )
             },
-            width: 50,
+            width: 100,
         }
     ]
 
