@@ -7,15 +7,16 @@ import { FaPlus } from "react-icons/fa"
 import { useAppSelector } from "@/redux/hooks"
 import { FloatButton, message, Modal } from "antd"
 import { ProyectoCard } from "@/pages/Proyectos/components/ProyectoCard"
+import { ProyectosProps } from "@/interfaces"
 
 export const Proyectos = () => {
 
     const [ isModalVisible, setIsModalVisible ] = useState(false)
-    const [ selectedProyect, setSelectedProyect ] = useState('' as string)
+    const [ selectedProyect, setSelectedProyect ] = useState<ProyectosProps | null>(null)
     const { socket } = useAppSelector(state => state.socket)
 
     const { data: proyectos, isLoading } = useGetProyectosQuery({})
-    const { data: proyecto, isLoading: isLoadingProyecto } = useGetProyectoQuery( {proyectoId:selectedProyect}, { skip: !selectedProyect} )
+
     const [ deleteProyecto, { isLoading: isLoadingProyectoDelete } ] =  useDeleteProyectoMutation()
     
 
@@ -23,14 +24,15 @@ export const Proyectos = () => {
 
     const handleCancel = () => {
         setIsModalVisible(false)
+        setSelectedProyect(null)
     }
 
     const handleView = (proyectoId: string) => {
         navigate(`/proyectos/${proyectoId}`)
     }
 
-    const handleEdit = (proyectoId: string) => {
-        setSelectedProyect(proyectoId)
+    const handleEdit = (proyecto : ProyectosProps) => {
+        setSelectedProyect(proyecto)
         setIsModalVisible(true)
     }
 
@@ -40,7 +42,6 @@ export const Proyectos = () => {
         }).catch(() => {
             message.error('Error al eliminar el proyecto')
         })
-        setIsModalVisible(true)
     }
 
     // useEffect(() => {
@@ -93,13 +94,13 @@ export const Proyectos = () => {
 
         <Modal
             open={isModalVisible}
-            footer={null}
             onCancel={handleCancel}
             width={800}
+            footer={null}
             closable={false}
             destroyOnClose={true}
         >
-            { proyecto && <FormProyecto currentProyecto={proyecto}  handleCancel={handleCancel} isLoadingProyecto={isLoadingProyecto} /> } 
+            <FormProyecto currentProyecto={selectedProyect}  handleCancel={handleCancel} /> 
         </Modal>
 
         <FloatButton

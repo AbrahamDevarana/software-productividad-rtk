@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { Box } from '../../../components/ui'
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'
-import { Avatar, Image, Tooltip } from 'antd'
+import { Avatar, Image, Popconfirm, Tooltip } from 'antd'
 import { ProyectosProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
@@ -10,13 +10,13 @@ import getBrokenUser from '@/helpers/getBrokenUser'
 interface Props {
 	proyecto: ProyectosProps
 	handleView: (proyectoId: string) => void
-	handleEdit: (proyectoId: string) => void
+	handleEdit: (proyecto: ProyectosProps) => void
 	handleDelete : (proyectoId: string) => void
 }
 
 export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }: Props) => {
 
-	const { titulo, descripcion, imagen, fechaFin, fechaInicio, icono, participantes, propietarioId, propietario, usuariosProyecto, id } = proyecto
+	const { titulo, descripcion, imagen, fechaInicio, propietario, usuariosProyecto, id } = proyecto
 	const { userAuth } = useAppSelector(state => state.auth)
     
 
@@ -35,16 +35,18 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 					{
 						userAuth.id === proyecto.propietarioId ?
 						<Tooltip title="Editar" placement='bottom'>
-						<FaEdit className="text-devarana-graph cursor-pointer" onClick={ () => handleEdit(id)}/>
+						<FaEdit className="text-devarana-graph cursor-pointer" onClick={ () => handleEdit(proyecto)}/>
 						</Tooltip>
 						: null
 					}
 					{
 						userAuth.id === proyecto.propietarioId ?
-						<Tooltip title="Eliminar" placement='bottom'>
-							<FaTrash className="text-devarana-graph cursor-pointer" onClick={ () => handleDelete(id)}/>
-						</Tooltip>
-						: null
+                        <Popconfirm title="¿Estás seguro de eliminar este proyecto?" onConfirm={() => handleDelete(id)} okText="Si" cancelText="No">
+                            <Tooltip title="Eliminar" placement='bottom'>
+                                <FaTrash className="text-devarana-graph cursor-pointer"/>
+                            </Tooltip>
+                        </Popconfirm>
+                        : null
 					}
 					
 

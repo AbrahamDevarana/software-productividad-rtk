@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { ProyectosProps } from '@/interfaces'
-import { useCreateProyectoMutation, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
+import { useCreateProyectoMutation, useGetProyectoQuery, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
 import dayjs from 'dayjs';
 import { DatePicker, Form, Image, Input, message, Select, Skeleton, Upload, UploadFile } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -13,17 +13,17 @@ import Loading from '../../../components/antd/Loading';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 
 interface FormProyectoProps {
-    currentProyecto: ProyectosProps
+    currentProyecto?: ProyectosProps | null
     handleCancel: () => void
-    isLoadingProyecto: boolean
 }
 
 const fallbackImage = `${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner.png`
 
-export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}: FormProyectoProps) => { 
+export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps) => { 
+
+    const { data: proyecto, isLoading: isLoadingProyecto } = useGetProyectoQuery( {proyectoId: currentProyecto?.id}, { skip: !currentProyecto} )
 
     const {data : usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
-    const { isUpdating } = useAppSelector(state => state.proyectos)
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
@@ -34,7 +34,11 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
     const { TextArea } = Input;
 
     const [form] = Form.useForm();
-    const dispatch = useAppDispatch()
+
+
+    useEffect(() => {
+        if(!currentProyecto) {form.resetFields()}
+    }, [currentProyecto])
 
     const handleSubmit = async () => {
 
@@ -54,7 +58,7 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
             formData.append(key, query[key]);
         });        
 
-        if(currentProyecto.id !== '') {
+        if(currentProyecto) {
             updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}).unwrap().then(() => {
                 message.success('Proyecto actualizado correctamente')
             }).catch(() => {
@@ -108,28 +112,20 @@ export const FormProyecto = ({currentProyecto, handleCancel, isLoadingProyecto}:
             className='grid grid-cols-12 gap-x-10'
             layout='vertical'
             initialValues={{
-                titulo: currentProyecto.titulo,
-                descripcion: currentProyecto.descripcion,
-                fechaInicio: dayjs(currentProyecto.fechaInicio).add(6, 'hour'),
-                fechaFin: dayjs(currentProyecto.fechaFin).add(6, 'hour'),
-                participantes: currentProyecto.usuariosProyecto.map((usuario) => usuario.id)
+                titulo: proyecto?.titulo,
+                descripcion: proyecto?.descripcion,
+                fechaInicio: dayjs(proyecto?.fechaInicio).add(6, 'hour'),
+                fechaFin: dayjs(proyecto?.fechaFin).add(6, 'hour'),
+                participantes: proyecto?.usuariosProyecto.map((usuario) => usuario.id)
             }}
         >
-            {
-                isUpdating && (
-                //   mask
-                    <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-20 flex items-center justify-center z-50'>
-                        <Loading />
-                    </div>
-                )
-            }
             <p className='text-devarana-graph col-span-12'>Banner {fileList.length > 0 ? '(Vista Previa)' : '(Original)'} </p>
             <div className='col-span-6 col-start-4'>
                 <div className='relative group min-h-[150px]'>
                     {
                         <Image
-                            src={fileList.length > 0 ? previewImage : currentProyecto.imagen !== '' ? getStorageUrl(currentProyecto.imagen) : fallbackImage}
-                            alt={currentProyecto.titulo}
+                            src={fileList.length > 0 ? previewImage : currentProyecto?.imagen !== '' ? getStorageUrl(currentProyecto?.imagen) : fallbackImage}
+                            alt={currentProyecto?.titulo}
                             className='w-full object-contain rounded-ext'
                             height={150}
                             fallback={fallbackImage}

@@ -182,7 +182,7 @@ export const FormCopy = ({ objetivoId }: Props) => {
 							setTargetNodes(checkedNodes);
 							
 						} else {
-							handleRemove(moveKeys);	
+							// handleRemove(moveKeys);	
 						}
 					}}
 					locale={{

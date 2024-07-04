@@ -27,6 +27,8 @@ interface Props {
     isClosed: boolean
 }
 
+const taskeableType = "RESULTADO_CLAVE"
+
 export default function ListadoResultados({ currentOperativo, isClosed }: Props) {
 
     const { Panel } = Collapse;
@@ -268,7 +270,8 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         const handleCreateTask = () => {
             const query = {
                 ...form.getFieldsValue(),
-                taskeableId: resultadoClave.id
+                taskeableId: resultadoClave.id,
+                taskeableType
             }
             dispatch(createTaskThunk(query))
             form.resetFields()
