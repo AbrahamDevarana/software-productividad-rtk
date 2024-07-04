@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import {  Drawer } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
-import { FormTareas } from '../../components/tareas/FormTareas';
+import { FormTask } from '../../components/tareas/FormTask';
 import { Icon } from '@/components/Icon';
 import { KanbanProyecto } from '@/pages/Proyectos/components/KanbanProyecto';
 import { Link } from 'react-router-dom';
+import { TaskProps } from '@/interfaces';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -23,6 +24,7 @@ export const ProyectoView = () => {
     const { socket } = useAppSelector(state => state.socket)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
+    const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
 
     
     
@@ -46,7 +48,7 @@ export const ProyectoView = () => {
     
 
     const handleClose = () => {
-        setVisible(false)
+        setSelectedTask(null)
     }
     
     
@@ -97,8 +99,8 @@ export const ProyectoView = () => {
                                 value === 'listado' && (
                                     <div>
                                         <ListadoProyectos 
-                                            visible={visible} 
-                                            setVisible={setVisible} 
+                                            setSelectedTask={setSelectedTask}
+                                            selectedTask={selectedTask}
                                             currentProyecto={proyecto} 
                                         />
                                     </div>
@@ -127,13 +129,20 @@ export const ProyectoView = () => {
                 
 
                 <Drawer
-                    open={visible}
+                    open={selectedTask !== null}
                     onClose={handleClose}
                     destroyOnClose={true}
                     placement='right'
                     width={600}
                 >
-                    <FormTareas />
+                    {
+                        selectedTask && (
+                            <FormTask 
+                               selectedTask={selectedTask}
+                               handleClose={handleClose}
+                            />
+                        )
+                    }
                 </Drawer>
             </div>
        </>

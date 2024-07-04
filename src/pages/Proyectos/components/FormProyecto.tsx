@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { ProyectosProps } from '@/interfaces'
-import { createProyectoThunk, updateProyectoThunk, useCreateProyectoMutation, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
+import { useCreateProyectoMutation, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
 import dayjs from 'dayjs';
 import { DatePicker, Form, Image, Input, message, Select, Skeleton, Upload, UploadFile } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';

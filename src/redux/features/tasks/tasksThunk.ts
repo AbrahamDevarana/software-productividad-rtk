@@ -70,7 +70,7 @@ export const taskApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Task'],
     endpoints: (builder) => ({
-        getTask : builder.query<TaskProps, {taskId?: string}>({
+        getTask : builder.query<TaskProps, {taskId?: number}>({
             query: ({taskId}) => `tasks/${taskId}`,
             providesTags: ['Task'],
             transformResponse: (response: {task: TaskProps}) => response.task
@@ -90,6 +90,25 @@ export const taskApi = createApi({
                 method: 'PUT',
                 body: patch
             }),
+            onQueryStarted: async ({id, ...patch}, { dispatch, queryFulfilled }) => {
+                const patchResult = dispatch(
+                    taskApi.util.updateQueryData('getTasks', {taskeableId: patch.taskeableId!}, (draft) => {
+
+                        const index = draft.findIndex(task => task.id === id);
+
+                        console.log('index', index);
+                        
+                        if (index !== -1) {
+                            Object.assign(draft[index], patch);
+                        }
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch (error) {
+                    patchResult.undo()
+            }
+        }
         }),
         createTask: builder.mutation<TaskProps, any>({
             query: (task) => ({
@@ -130,11 +149,26 @@ export const taskApi = createApi({
             }
             
         }),
-        deleteTask: builder.mutation<void, number>({
-            query: (taskId) => ({
+        deleteTask: builder.mutation<string, {taskId: number, hitoId: string}>({
+            query: ({taskId}) => ({
                 url: `tasks/${taskId}`,
                 method: 'DELETE'
             }),
+            onQueryStarted: async ({taskId, hitoId}, { dispatch, queryFulfilled }) => {
+                const patchResult = dispatch(
+                    taskApi.util.updateQueryData('getTasks', {taskeableId: hitoId}, (draft) => {
+                        const index = draft.findIndex(task => task.id === taskId);
+                        if (index !== -1) {
+                            draft.splice(index, 1)
+                        }
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch (error) {
+                    patchResult.undo()
+                }
+            }
         }),
     })
 })

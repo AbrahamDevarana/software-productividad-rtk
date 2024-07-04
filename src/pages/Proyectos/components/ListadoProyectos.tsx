@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useCreateHitoMutation, useDeleteHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
-import { HitosProps, ProyectosProps } from '@/interfaces'
+import { HitosProps, ProyectosProps, TaskProps } from '@/interfaces'
 import { Collapse, ColorPicker, FloatButton, Form, Input, message, Popconfirm } from 'antd'
 import Loading from '@/components/antd/Loading'
 import { Icon } from '@/components/Icon'
@@ -8,21 +8,17 @@ import { TablaTask } from './TablaTask'
 
 interface TableProyectosProps {
     currentProyecto: ProyectosProps
-    visible: boolean 
-    setVisible: (visible: boolean) => void
+    setSelectedTask: (task: TaskProps) => void
+    selectedTask: TaskProps | null
 }
 
 
-
-
-export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TableProyectosProps) => {
-    
-    
-    
+export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask}: TableProyectosProps) => {
+        
     const [ createHito, { isLoading: isCreatingHito, error: createHitoError }] = useCreateHitoMutation()
     const [ updateHito, { isLoading: isUpdatingHito, error: updateHitoError }] = useUpdateHitoMutation()
     const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()
-        
+    
     const { data: hitos, isLoading} = useGetHitosQuery({proyectoId: currentProyecto.id})
     const { Panel } = Collapse;
 
@@ -58,12 +54,6 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
         })
 
     };
-    
-
-    // const handleView = (record:TareasProps) => {
-    //     dispatch(getTareaThunk(record.id))
-    //     setVisible(true)
-    // }
 
     const handleDeleteHito = async (hito: HitosProps) => {
         await deleteHito({hitoId: hito.id, proyectoId: currentProyecto.id}).unwrap().then(() => {
@@ -73,8 +63,6 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
         })
     }
     
-   
-
     const activeHitos = useMemo(() => {
         if (!hitos) return []
         return hitos.map((hito: HitosProps) => hito.id)
@@ -184,7 +172,7 @@ export const ListadoProyectos = ({currentProyecto, visible, setVisible}: TablePr
                         collapsible='icon'
                         id={`hitos-${hito.id}`}
                         header={genHeader(hito)}>
-                        <TablaTask hito={hito} />
+                        <TablaTask hito={hito} selectedTask={selectedTask} setSelectedTask={setSelectedTask}/>
                     </Panel>
                 )) 
             }

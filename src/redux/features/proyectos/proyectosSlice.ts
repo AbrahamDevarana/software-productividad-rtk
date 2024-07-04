@@ -1,6 +1,6 @@
 import {  createSlice } from '@reduxjs/toolkit';
 import {  ProyectosState } from '@/interfaces';
-import { createProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk, updateProyectoThunk } from './proyectosThunk';
+// import { createProyectoThunk, deleteProyectoThunk, getProyectoThunk, getProyectosThunk, updateProyectoThunk } from './proyectosThunk';
 
 const initialState: ProyectosState = {
     proyectos: [],
@@ -43,71 +43,71 @@ const proyectosSlice = createSlice({
             state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
         }
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(getProyectosThunk.pending, (state) => {
-                state.isLoading = true
-        })
-            .addCase(getProyectosThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.proyectos = action.payload
-        })
-            .addCase(getProyectosThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.infoMessage = action.payload as string
-                state.error = true
-        })
-            .addCase(getProyectoThunk.pending, (state) => {
-                state.isLoadingProyecto = true
-        })
-            .addCase(getProyectoThunk.fulfilled, (state, action) => {
-                state.isLoadingProyecto = false
-                state.currentProyecto = action.payload
-        })
-            .addCase(getProyectoThunk.rejected, (state, action) => {
-                state.isLoadingProyecto = false
-                state.infoMessage = action.payload as string
-                state.errorProyecto = true
-        })
-            .addCase(createProyectoThunk.pending, (state) => {
-                state.isUpdating = true
-        })
-            .addCase(createProyectoThunk.fulfilled, (state, action) => {
-                state.isUpdating = false
-                state.proyectos.push(action.payload)
-        })
-            .addCase(createProyectoThunk.rejected, (state, action) => {
-                state.isUpdating = false
-                state.infoMessage = action.payload as string
-                state.error = true
-        })
-            .addCase(updateProyectoThunk.pending, (state) => {
-                state.isUpdating = true
-        })
-            .addCase(updateProyectoThunk.fulfilled, (state, action) => {
-                state.isUpdating = false
-                state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
-        })
-            .addCase(updateProyectoThunk.rejected, (state, action) => {
-                state.isUpdating = false
-                state.infoMessage = action.payload as string
-                state.errorProyecto = true
-        })
-            .addCase(deleteProyectoThunk.pending, (state) => {
-                state.isLoadingProyecto = true
-        })
-            .addCase(deleteProyectoThunk.fulfilled, (state, action) => {
-                state.isLoadingProyecto = false
-                state.proyectos = state.proyectos.filter(proyecto => proyecto.id !== action.payload.id)
-        })
-            .addCase(deleteProyectoThunk.rejected, (state, action) => {
-                state.isLoadingProyecto = false
-                state.infoMessage = action.payload as string
-                state.errorProyecto = true
-        })
+    // extraReducers: (builder) => {
+    //     builder
+    //         .addCase(getProyectosThunk.pending, (state) => {
+    //             state.isLoading = true
+    //     })
+    //         .addCase(getProyectosThunk.fulfilled, (state, action) => {
+    //             state.isLoading = false
+    //             state.proyectos = action.payload
+    //     })
+    //         .addCase(getProyectosThunk.rejected, (state, action) => {
+    //             state.isLoading = false
+    //             state.infoMessage = action.payload as string
+    //             state.error = true
+    //     })
+    //         .addCase(getProyectoThunk.pending, (state) => {
+    //             state.isLoadingProyecto = true
+    //     })
+    //         .addCase(getProyectoThunk.fulfilled, (state, action) => {
+    //             state.isLoadingProyecto = false
+    //             state.currentProyecto = action.payload
+    //     })
+    //         .addCase(getProyectoThunk.rejected, (state, action) => {
+    //             state.isLoadingProyecto = false
+    //             state.infoMessage = action.payload as string
+    //             state.errorProyecto = true
+    //     })
+    //         .addCase(createProyectoThunk.pending, (state) => {
+    //             state.isUpdating = true
+    //     })
+    //         .addCase(createProyectoThunk.fulfilled, (state, action) => {
+    //             state.isUpdating = false
+    //             state.proyectos.push(action.payload)
+    //     })
+    //         .addCase(createProyectoThunk.rejected, (state, action) => {
+    //             state.isUpdating = false
+    //             state.infoMessage = action.payload as string
+    //             state.error = true
+    //     })
+    //         .addCase(updateProyectoThunk.pending, (state) => {
+    //             state.isUpdating = true
+    //     })
+    //         .addCase(updateProyectoThunk.fulfilled, (state, action) => {
+    //             state.isUpdating = false
+    //             state.proyectos = state.proyectos.map(proyecto => proyecto.id === action.payload.id ? action.payload : proyecto)
+    //     })
+    //         .addCase(updateProyectoThunk.rejected, (state, action) => {
+    //             state.isUpdating = false
+    //             state.infoMessage = action.payload as string
+    //             state.errorProyecto = true
+    //     })
+    //         .addCase(deleteProyectoThunk.pending, (state) => {
+    //             state.isLoadingProyecto = true
+    //     })
+    //         .addCase(deleteProyectoThunk.fulfilled, (state, action) => {
+    //             state.isLoadingProyecto = false
+    //             state.proyectos = state.proyectos.filter(proyecto => proyecto.id !== action.payload.id)
+    //     })
+    //         .addCase(deleteProyectoThunk.rejected, (state, action) => {
+    //             state.isLoadingProyecto = false
+    //             state.infoMessage = action.payload as string
+    //             state.errorProyecto = true
+    //     })
 
 
-    }
+    // }
             
 })
 

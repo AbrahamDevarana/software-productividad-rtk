@@ -16,8 +16,9 @@ interface Props {
 
 export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }: Props) => {
 
-	const { titulo, descripcion, imagen, fechaFin, fechaInicio, icono, participantes, propietarioId, proyectosHito, status, usuariosProyecto, id } = proyecto
+	const { titulo, descripcion, imagen, fechaFin, fechaInicio, icono, participantes, propietarioId, propietario, usuariosProyecto, id } = proyecto
 	const { userAuth } = useAppSelector(state => state.auth)
+    
 
 	return (
 		<Box className="lg:col-span-4 md:col-span-6 col-span-12">
@@ -61,6 +62,15 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
                 <Avatar.Group maxCount={3} className='z-50'
                         maxStyle={{ marginTop: 'auto', marginBottom: 'auto', alignItems: 'center', color: '#FFFFFF', display: 'flex', backgroundColor: '#408FE3', height: '20px', width: '20px', border: 'none' }}
                     >
+                    {
+                        propietario && (
+                            <Tooltip title={`${propietario.nombre + ' ' + propietario.apellidoPaterno}`} placement='top'>
+                                <Avatar src={<Image src={`${getStorageUrl(propietario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                                    {propietario.iniciales}
+                                </Avatar>
+                            </Tooltip>
+                        )
+                    }
                     {
                         usuariosProyecto?.map((participante, index) => (
                             <Tooltip key={index} title={`${participante.nombre + ' ' + participante.apellidoPaterno}`} placement='top'>
