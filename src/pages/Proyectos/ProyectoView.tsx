@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import {  Avatar, Drawer, Image, Skeleton, Tooltip } from 'antd';
+import {  Avatar, Badge, Drawer, Image, Skeleton, Tooltip } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTask } from '../../components/tareas/FormTask';
@@ -13,6 +13,8 @@ import { TaskProps } from '@/interfaces';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { Spinner } from '@/components/antd/Spinner';
+import { FaRegNoteSticky } from "react-icons/fa6";
+import { Minutas } from './components/Minutas';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -27,6 +29,7 @@ export const ProyectoView = () => {
     const { socket } = useAppSelector(state => state.socket)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
+    const [minutasVisible, setMinutasVisible] = useState<boolean>(false)
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
 
     
@@ -104,8 +107,20 @@ export const ProyectoView = () => {
                     }
                     {
                         proyecto && proyecto.usuariosProyecto && (
-                            <div className="mt-auto">
-                                <Avatar.Group maxCount={5}>
+                            <div className="flex flex-col justify-between items-center gap-5">
+                                <button className='justify-start' onClick={() => setMinutasVisible(true)}>
+                                    <Badge count={3} showZero
+                                    styles={{
+                                        indicator: {
+                                            scale: '.8',
+                                            backgroundColor: '#2E3136',
+                                        }
+                                    }}>
+                                        <FaRegNoteSticky color='white' size={25}/>
+                                    </Badge>
+
+                                </button>
+                                <Avatar.Group maxCount={5} className='m-auto'>
                                     {
                                         proyecto.usuariosProyecto.map((usuario) => (
                                             <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno} key={usuario.id} className='relative'>
@@ -172,6 +187,17 @@ export const ProyectoView = () => {
                             />
                         )
                     }
+                </Drawer>
+
+                <Drawer
+                    open={minutasVisible}
+                    onClose={() => setMinutasVisible(false)}
+                    destroyOnClose={true}
+                    placement='right'
+                    width={'80%'}
+                    title={ <p className='text-center uppercase text-lg'> Minutas </p> }
+                >
+                    <Minutas />
                 </Drawer>
             </div>
        </>

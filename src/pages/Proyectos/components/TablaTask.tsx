@@ -195,29 +195,21 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     open={visiblePopoverId === record.id}
                     onOpenChange={ (newVisible) => handleVisibleChange(newVisible, record.id)}
                     content= {
-                        <PopoverStatus current={record} handleUpdateStatus={handleUpdateStatus} />
+                        <PopoverStatus current={record} handleUpdateStatus={handleUpdateStatus} type="proyecto" />
                     }
                     trigger={'click'}
                 >
-                        <div className="flex items-center justify-end gap-2 py-1 cursor-pointer"
+                        <div className="flex items-center justify-center gap-2 py-1 cursor-pointer"
                             style={{
                                 background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
                             }}
                         >
-                            <div className={`shadow`}
-                                style={{
-                                    width: '6px',
-                                    height: '6px',
-                                    borderRadius: '25%',
-                                    background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
-                                }}
-                            >  </div>
-                            <p className='text-right py-1 text-white'>  { taskStatusTypes[record.status] } </p>
+                            <p className='text-center py-1 text-white'>  { taskStatusTypes[record.status] } </p>
                         </div>  
 
                 </Popover>
             ),
-            width: 150
+            width: 170
         },
         {
             title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),

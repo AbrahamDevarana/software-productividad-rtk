@@ -135,8 +135,8 @@
 						onChange={e => handleChange(ponderacion.objetivoId, Number(e.target.value))}
 						disabled={
 							isActive(ponderacion.objetivoId) === 'CERRADO' 
-							|| isActive(ponderacion.objetivoId) === 'PENDIENTE_APROBACION' 
-							|| isActive(ponderacion.objetivoId) === 'PENDIENTE_AUTORIZAR' 
+							// || isActive(ponderacion.objetivoId) === 'PENDIENTE_APROBACION' 
+							// || isActive(ponderacion.objetivoId) === 'PENDIENTE_AUTORIZAR' 
 							// || isActive(ponderacion.objetivoId) === 'ABIERTO'
 						}
 					/>

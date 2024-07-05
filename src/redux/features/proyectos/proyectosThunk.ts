@@ -29,6 +29,26 @@ export const proyectosApi = createApi({
             }),
             invalidatesTags: ['Proyecto'],
             transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto,
+            // onQueryStarted: async ({...proyecto}, {dispatch, queryFulfilled}) => {
+
+            //     const plainProyecto: Partial<ProyectosProps> = {};
+            //     for (const [key, value] of proyecto.entries()) {
+            //         plainProyecto[key as keyof ProyectosProps] = value as any;
+            //     }
+
+            //     const temporaryId = 'temporary-id-' + Math.random().toString(36).substr(2, 9);
+            //     const patchResult = dispatch(
+            //         proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
+            //             draft.push({...plainProyecto, id: temporaryId} as ProyectosProps)
+            //         })
+            //     )
+
+            //     try {
+            //         await queryFulfilled
+            //     } catch (error) {
+            //         patchResult.undo()
+            //     }
+            // }
         }),
         updateProyecto: builder.mutation<ProyectosProps, { proyectoId: string, proyecto: FormData }>({
             query: ({ proyectoId, proyecto }) => ({
@@ -59,7 +79,22 @@ export const proyectosApi = createApi({
                 url: `/proyectos/${proyectoId}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: ['Proyecto']
+            invalidatesTags: ['Proyecto'],
+            onQueryStarted: async ({proyectoId}, {dispatch, queryFulfilled}) => {
+                const patchResult = dispatch(
+                    proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
+                        const index = draft.findIndex(proyecto => proyecto.id === proyectoId);
+                        if (index !== -1) {
+                            draft.splice(index, 1);
+                        }
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch (error) {
+                    patchResult.undo()
+                }
+            }
         })
     })
 })

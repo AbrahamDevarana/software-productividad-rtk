@@ -102,6 +102,7 @@ export const Proyectos = () => {
 
         <FloatButton
             shape="circle"
+            type="primary"
             icon={<FaPlus />}
             onClick={() => setIsModalVisible(true)}
         />

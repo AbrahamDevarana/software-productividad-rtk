@@ -58,7 +58,7 @@ export const hitosApi = createApi({
                     hitosApi.util.updateQueryData('getHitos', {proyectoId: hito.proyectoId}, (draft) => {
                         const defaultProps = {
                             id: temporaryId,
-                            titulo: 'Nuevo Hito...',
+                            titulo: 'Nueva Sección...',
                             color: '#656A76',
                         }
                         

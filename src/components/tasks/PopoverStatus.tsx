@@ -6,9 +6,10 @@ interface Props {
     current: TaskProps
     handleUpdateStatus: (query: TaskProps) => void
     isClosed?: boolean
+    type?: 'objetivo' | 'proyecto'
 }
 
-export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false}: Props) => {
+export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false, type = 'objetivo' }: Props) => {
 
 
     const statusKeys: TaskStatusType[] = Object.keys(taskStatusTypes) as TaskStatusType[];
@@ -21,7 +22,7 @@ export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false}: 
         handleUpdateStatus(query)
     }
 
-    return (
+    if (type === 'objetivo') return (
         <div>
             {statusKeys.map((status, index) => (
                 <div className={`flex items-center gap-2 py-1 cursor-pointer ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} onClick={() => {
@@ -42,4 +43,23 @@ export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false}: 
             ))}
         </div>
     )
+
+    if(type = 'proyecto') return (
+        <div>
+            {statusKeys.map((status, index) => (
+                <div className={`flex items-center gap-2 my-2 px-2 py-1 cursor-pointer hover:opacity-70 ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} 
+                    style={{
+                        background: `linear-gradient(to right, ${getColor(status).lowColor}, ${getColor(status).color})`,
+                    }}
+                onClick={() => {
+                    !isClosed && handleChangeStatus(status) 
+                }}>
+                    
+                    <p className='px-1 py-1 w-full text-white'>  { taskStatusTypes[status] } </p>
+                </div> 
+            ))}
+        </div>
+    )
+
+    return null
 }
