@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
@@ -15,7 +15,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { MdFormatAlignCenter, MdFormatAlignJustify, MdFormatAlignLeft, MdFormatAlignRight } from "react-icons/md";
 import Underline from "@tiptap/extension-underline";
 import { IoIosLink } from "react-icons/io";
-import { FormInstance, Input } from "antd";
+import { Input } from "antd";
 
 
 interface Props {

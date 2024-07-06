@@ -58,13 +58,13 @@ export const FormTask = ({selectedTask, handleClose}: Props) => {
 
     return (
         <>
-            <p className='text-xs text-gray-400 text-right'>Fecha de creación: {dayjs(task.createdAt).format('D MMMM YY')}</p>
+            <p className='text-xs text-gray-400 text-right'>Fecha de creación: {dayjs(task.created).format('D MMMM YY')}</p>
             <Form
                 layout='vertical'
                 className='w-full grid grid-cols-12 md:gap-x-5 editableForm'
                 initialValues={{
                     nombre: task.nombre,
-                    fechaInicio: dayjs(task.createdAt).add(6, 'hour'),
+                    fechaInicio: dayjs(task.created).add(6, 'hour'),
                     fechaFin: dayjs(task.fechaFin).add(6, 'hour'),
                     descripcion: task.descripcion,
                 }}

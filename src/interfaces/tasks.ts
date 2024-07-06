@@ -11,6 +11,7 @@ export interface TaskProps {
     taskeableId:    string;
     progreso:      number;
     status:        'SIN_INICIAR' | 'EN_PROCESO' | 'FINALIZADO' | 'CANCELADO';
-    createdAt?:     string;
+    coResponsables: SinglePerfilProps[];
+    created?:     string;
     propietario:   SinglePerfilProps;
 }

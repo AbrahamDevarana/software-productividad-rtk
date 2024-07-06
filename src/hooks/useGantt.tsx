@@ -70,7 +70,7 @@ export const useGantt = ({hitos, currentProyecto}: Props) => {
 					return {
 						hito,
 						label: hito.nombre,
-						dateStart: dayjs(hito.createdAt).add(6, 'hour').format('YYYY-MM-DD'),
+						dateStart: dayjs(hito.created).add(6, 'hour').format('YYYY-MM-DD'),
 						dateEnd: dayjs(hito.fechaFin).add(6, 'hour').format('YYYY-MM-DD'),
 						type: 'task',
 						class: 'task',
