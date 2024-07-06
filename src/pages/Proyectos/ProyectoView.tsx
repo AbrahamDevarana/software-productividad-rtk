@@ -33,6 +33,8 @@ export const ProyectoView = () => {
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
 
     
+
+    
     
     const options = [
         {
