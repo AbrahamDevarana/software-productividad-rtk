@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "build-light": "NODE_OPTIONS=--max_old_space_size=1024 tsc && vite build",
     "preview": "vite preview",
-    "serve": "tsc && vite build && serve -s dist -p 5173",
+    "serve": "tsc && vite build && npx serve -s dist -p 5173",
     "buildtw": "npx tailwindcss -o build.css --minify"
   },
   "dependencies": {

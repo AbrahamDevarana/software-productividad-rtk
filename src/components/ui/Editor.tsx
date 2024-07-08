@@ -1,17 +1,15 @@
-'use client'
-
 import { useCallback } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 import Color from "@tiptap/extension-color";
-import { BsBlockquoteLeft, BsImage, BsType, BsTypeBold, BsTypeH1, BsTypeH2, BsTypeH3, BsTypeH4, BsTypeItalic } from "react-icons/bs";
+import { BsBlockquoteLeft, BsType, BsTypeBold, BsTypeH1, BsTypeH2, BsTypeH3, BsTypeH4, BsTypeItalic } from "react-icons/bs";
 import { MdFormatListBulleted, MdOutlineFormatUnderlined, MdOutlineRedo, MdOutlineUndo } from "react-icons/md";
 import { GoListOrdered } from "react-icons/go";
-import Link from "@tiptap/extension-link";
 import { RxTransparencyGrid } from "react-icons/rx";
-import TextAlign from "@tiptap/extension-text-align";
 import { MdFormatAlignCenter, MdFormatAlignJustify, MdFormatAlignLeft, MdFormatAlignRight } from "react-icons/md";
 import Underline from "@tiptap/extension-underline";
 import { IoIosLink } from "react-icons/io";

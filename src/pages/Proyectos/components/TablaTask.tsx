@@ -139,15 +139,14 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
     }
 
     const projectUsers = useMemo(() => {
-        // filtrar a usuarios con los usuarios del proyecto
+        // filtrar a usuarios con los usuarios del proyecto y al propietario
         if(!usuarios || !proyecto) return []
-        return usuarios.filter( usuario => proyecto.usuariosProyecto.map( usuario => usuario.id).includes(usuario.id))
+        return [...usuarios.filter( usuario => proyecto.usuariosProyecto.map( usuario => usuario.id).includes(usuario.id)), proyecto?.propietario]
     }, [usuarios, proyecto])
-
 
     const defaultColumns:ColumnsType<TaskProps> = [
         {
-            title: () => ( <p className='tableTitle text-center'>Creación</p>),
+            title: () => ( <p className='tableTitle text-center'>Creación1</p>),
             dataIndex: 'created',
             key: 'created',
             fixed: 'left',
@@ -220,7 +219,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     </Select>
                 </div>
             ),
-            width: 180,
+            width: 200,
         },  
         {
             title: () => ( <p className='tableTitle text-right'>Co Responsable</p>),
