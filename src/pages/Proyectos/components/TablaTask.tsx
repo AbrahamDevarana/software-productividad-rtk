@@ -49,8 +49,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
     const handleUpdateTask = async (e: React.FocusEvent<HTMLInputElement, Element>, task: TaskProps) => {
         if(e.target.value === task.nombre) return
         if(e.target.value === '') return e.currentTarget.focus()
-        if(!e.target.value) return e.currentTarget.focus
-
+        if(!e.target.value) return e.currentTarget.focus        
 
         const query = {
             ...task,
@@ -180,13 +179,15 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             key: 'nombre',
             fixed: 'left',
             render: (text, record, index) => (
-                <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)}
-                    onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
-                />
+                <Tooltip title={record.nombre} >
+                    <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)}
+                        onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
+                    />
+                </Tooltip>
             ),
             ellipsis: {
                 showTitle: false,
-            }
+            },
         },
         
         {
@@ -256,7 +257,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     </Select>
                 </div>
             ),
-            width: 200,
+            width: 180,
         },  
         {
             title: () => ( <p className='tableTitle text-right'>Estatus</p>),
@@ -283,7 +284,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
                 </Popover>
             ),
-            width: 170
+            width: 150
         },
         {
             title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),
@@ -305,7 +306,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 />
                 )
             },
-            width: 200
+            width: 170
         },
         {
             title: () => ( <p className='tableTitle text-right'>Acciones</p>),
