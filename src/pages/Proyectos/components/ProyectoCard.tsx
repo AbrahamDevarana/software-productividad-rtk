@@ -18,7 +18,6 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 
 	const { titulo, descripcion, imagen, fechaInicio, propietario, usuariosProyecto, id } = proyecto
 	const { userAuth } = useAppSelector(state => state.auth)
-    
 
 	return (
 		<Box className="2xl:col-span-3 lg:col-span-4 md:col-span-6 col-span-12">
@@ -33,11 +32,9 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
                             Ver Proyecto
                         </Button>
 					{
-						userAuth.id === proyecto.propietarioId ?
                         <Button className='text-xs' size='sm' classType='icon' classColor='dark' width={100} onClick={ () => handleEdit(proyecto)} >
                             Editar
                         </Button>
-						: null
 					}
 					{
 						userAuth.id === proyecto.propietarioId ?

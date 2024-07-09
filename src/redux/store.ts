@@ -34,6 +34,8 @@ import { proyectosApi } from "./features/proyectos/proyectosThunk";
 import { hitosApi } from "./features/hitos/hitosThunk";
 import { taskApi } from "./features/tasks/tasksThunk";
 
+import { minutasApi } from "./features/minutas/minutasApi";
+
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
@@ -54,6 +56,7 @@ export const store = configureStore({
         [proyectosApi.reducerPath]: proyectosApi.reducer,
         [hitosApi.reducerPath]: hitosApi.reducer,
         [taskApi.reducerPath]: taskApi.reducer,
+        [minutasApi.reducerPath]: minutasApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -90,7 +93,8 @@ export const store = configureStore({
         .concat(areasApi.middleware)
         .concat(proyectosApi.middleware)
         .concat(hitosApi.middleware)
-        .concat(taskApi.middleware),
+        .concat(taskApi.middleware)
+        .concat(minutasApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

@@ -14,7 +14,7 @@ interface TableProyectosProps {
 
 
 export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask}: TableProyectosProps) => {
-        
+    
     const [ createHito, { isLoading: isCreatingHito, error: createHitoError }] = useCreateHitoMutation()
     const [ updateHito, { isLoading: isUpdatingHito, error: updateHitoError }] = useUpdateHitoMutation()
     const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()

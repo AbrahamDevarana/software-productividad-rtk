@@ -30,3 +30,4 @@ export * from "./tasks";
 export * from "./rendimiento";
 export * from "./ranking";
 export * from "./gestion";
+export * from "./minutas";

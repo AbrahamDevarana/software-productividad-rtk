@@ -13,17 +13,17 @@ import { RxTransparencyGrid } from "react-icons/rx";
 import { MdFormatAlignCenter, MdFormatAlignJustify, MdFormatAlignLeft, MdFormatAlignRight } from "react-icons/md";
 import Underline from "@tiptap/extension-underline";
 import { IoIosLink } from "react-icons/io";
-import { Input } from "antd";
+import { Form, Input } from "antd";
+import dompurify from 'dompurify';
 
 
 interface Props {
     setFieldValue: (field: string, value: any) => void;
     getFieldValue: (field: string) => any;
     resetFields: () => void;
-    submit: () => void;
 }
 
-export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Props ) => {
+export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
 
     const editor = useEditor({ 
         extensions: [
@@ -95,12 +95,13 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
             },
         },
         onUpdate: ({ editor, transaction }) => {
-           setFieldValue('content', editor.getHTML());
-           submit();
+            const purified = dompurify.sanitize(editor.getHTML());
+            setFieldValue('content', purified);
         },
         onCreate: ({ editor }) => {
             if (editor) {
                 resetFields();
+                getFieldValue('content') && editor.commands.setContent(getFieldValue('content'));
             }
         }
     });
@@ -125,7 +126,9 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
   return (
     <>
     
-    <Input type="hidden" id="content" name="content" />
+    <Form.Item name="content">
+        <Input type="hidden" id="content" name="content" />
+    </Form.Item>
     {
             editor && (
                 <div className="">
@@ -326,8 +329,8 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
                                         type="button"
                                     >
                                         <span 
-                                            className="w-6 h-5 bg-royal-pink inline-block"
-                                            onClick={() => editor.chain().focus().setColor('#d64767').run()}
+                                            className="w-6 h-5 bg-devarana-blue inline-block"
+                                            onClick={() => editor.chain().focus().setColor('#56739B').run()}
                                         ></span>
                                     </button>
                                     <button
@@ -335,8 +338,8 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
                                         type="button"
                                     >
                                         <span 
-                                            className="w-6 h-5 bg-royal-blue inline-block"
-                                            onClick={() => editor.chain().focus().setColor('#56739B').run()}
+                                            className="w-6 h-5 bg-devarana-pink inline-block"
+                                            onClick={() => editor.chain().focus().setColor('#d64767').run()}
                                         ></span>
                                     </button>
                                     <button
@@ -344,8 +347,8 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
                                         type="button"
                                     >
                                         <span 
-                                            className="w-6 h-5 bg-royal-midnight inline-block"
-                                            onClick={() => editor.chain().focus().setColor('#242a38').run()}
+                                            className="w-6 h-5 bg-devarana-hazelnut inline-block"
+                                            onClick={() => editor.chain().focus().setColor('#eadfd4').run()}
                                         ></span>
                                     </button>
                                     <button
@@ -353,8 +356,8 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
                                         type="button"
                                     >
                                         <span 
-                                            className="w-6 h-5 bg-royal-graph inline-block"
-                                            onClick={() => editor.chain().focus().setColor('#656a76').run()}
+                                            className="w-6 h-5 bg-devarana-graph inline-block"
+                                            onClick={() => editor.chain().focus().setColor('#848891').run()}
                                         ></span>
                                     </button>
                                     <button 
@@ -374,23 +377,9 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields, submit}: Prop
                                 
                                 <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div>
 
-                            </div>
-
-                            <EditorContent editor={editor} />
-                    </div>
-                    {/* <div className="min-h-60 py-5">
-                        <h2 className="block text-gray-700 text-sm font-bold mb-2">Previsualización</h2>
-                        <hr  className="py-5"/>
-                        <div className="rich-text" dangerouslySetInnerHTML={{ __html: content }} />
-                    </div>
-                   {
-                    process.env.DEV &&
-                    <div className="min-h-60 py-5">
-                        <h2 className="block text-gray-700 text-sm font-bold mb-2">Previsualización Code</h2>
-                        <div>
-                            {content}
                         </div>
-                    </div>} */}
+                        <EditorContent editor={editor} className="text-devarana-graph"/>
+                    </div>
                 </div>
                 )
            }

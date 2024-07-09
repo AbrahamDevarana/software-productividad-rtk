@@ -124,6 +124,15 @@ export const ProyectoView = () => {
                                 </button>
                                 <Avatar.Group maxCount={5} className='m-auto'>
                                     {
+                                        proyecto.propietario && (
+                                            <Tooltip title={proyecto.propietario.nombre + ' ' + proyecto.propietario.apellidoPaterno}>
+                                                <Avatar src={<Image src={`${getStorageUrl(proyecto.propietario.foto)}`} preview={false} fallback={getBrokenUser()} />} className='border-none'>
+                                                    {proyecto.propietario.iniciales}
+                                                </Avatar>
+                                            </Tooltip>
+                                        )
+                                    }
+                                    {
                                         proyecto.usuariosProyecto.map((usuario) => (
                                             <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno} key={usuario.id} className='relative'>
                                                 <Avatar key={usuario.id} src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} /> } className='border-none'>
@@ -199,7 +208,11 @@ export const ProyectoView = () => {
                     width={'80%'}
                     title={ <p className='text-center uppercase text-lg'> Minutas </p> }
                 >
-                    <Minutas />
+                    {
+                        proyecto && (
+                            <Minutas proyectoId={proyecto.id} />
+                        )
+                    }
                 </Drawer>
             </div>
        </>
