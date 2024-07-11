@@ -454,6 +454,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         {usuario.nombre} {usuario.apellidoPaterno} 
                     </p>
                 </div>,
+            dataName: usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno
         }))
       }, [usuarios])
 
