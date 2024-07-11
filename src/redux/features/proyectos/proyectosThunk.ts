@@ -21,7 +21,7 @@ export const proyectosApi = createApi({
             providesTags: ['Proyecto'],
             transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto
         }),
-        createProyecto: builder.mutation<ProyectosProps, FormData>({
+        createProyecto: builder.mutation<Partial<ProyectosProps>, FormData>({
             query: (proyecto) => ({
                 url: '/proyectos',
                 method: 'POST',
@@ -29,26 +29,37 @@ export const proyectosApi = createApi({
             }),
             invalidatesTags: ['Proyecto'],
             transformResponse: (response: {proyecto: ProyectosProps}) => response.proyecto,
-            // onQueryStarted: async ({...proyecto}, {dispatch, queryFulfilled}) => {
+            onQueryStarted: async (proyecto, {dispatch, queryFulfilled}) => {
 
-            //     const plainProyecto: Partial<ProyectosProps> = {};
-            //     for (const [key, value] of proyecto.entries()) {
-            //         plainProyecto[key as keyof ProyectosProps] = value as any;
-            //     }
+            const temporaryId = 'temporary-id-' + Math.random().toString(36).substr(2, 9);
 
-            //     const temporaryId = 'temporary-id-' + Math.random().toString(36).substr(2, 9);
-            //     const patchResult = dispatch(
-            //         proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
-            //             draft.push({...plainProyecto, id: temporaryId} as ProyectosProps)
-            //         })
-            //     )
+            // to object of entries
+            
+            const entries = Object.fromEntries(proyecto.entries())      
 
-            //     try {
-            //         await queryFulfilled
-            //     } catch (error) {
-            //         patchResult.undo()
-            //     }
-            // }
+            const patchResult = dispatch(
+                proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
+                    draft.push({ 
+                        id: temporaryId,
+                       ...entries
+                    } as ProyectosProps)
+                })
+            )
+
+            try {
+                const {data: proyecto} = await queryFulfilled
+
+                dispatch (
+                    proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
+                        const index = draft.findIndex( proyecto => proyecto.id === temporaryId )
+                        if( index !== -1){
+                            draft[index] = proyecto as ProyectosProps
+                        }
+                    })
+                )
+            } catch (error) {
+                patchResult.undo()
+            }}
         }),
         updateProyecto: builder.mutation<ProyectosProps, { proyectoId: string, proyecto: FormData }>({
             query: ({ proyectoId, proyecto }) => ({

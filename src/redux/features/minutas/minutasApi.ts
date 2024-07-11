@@ -28,24 +28,37 @@ export const minutasApi = createApi({
                 method: 'POST',
                 body
             }),
+            transformResponse: (response: {minuta: MinutasProps}) => response.minuta,
             onQueryStarted: async (body, {dispatch, queryFulfilled}) => {
                 const temporaryId = 'temporary-id-' + Math.random().toString(36).substr(2, 9);
                 const patchResult = dispatch(
                     minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {
-                        draft.push({...body, id: temporaryId, updatedAt: new Date().toString(), titulo: 'Cargando...', descripcion: 'Cargando...', fecha: new Date(), authorId: 'Cargando...', minuteableType: 'PROYECTO', minuteableId: 'Cargando...'})
+                        const defaultProps = {
+                            id: temporaryId,
+                            minuteableType: 'PROYECTO',
+                            minuteableId: body.minuteableId,
+                        } as MinutasProps
+
+                        draft.push({...defaultProps, ...body})
                     })
                 )
 
                 try {
                     const {data : minuta} = await queryFulfilled;
                     dispatch(
-                        minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {
+                        minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {                            
+
                             const index = draft.findIndex(minuta => minuta.id === temporaryId);
                             if (index !== -1) {
-                                Object.assign(draft[index], minuta);
+                                draft[index] = minuta
                             }
                         })
                     )
+
+                    dispatch(
+                        minutasApi.util.updateQueryData('getMinuta', {id: minuta.id}, () => minuta )
+                    )
+
                 } catch (error) {
                     patchResult.undo()
                 }
@@ -67,22 +80,30 @@ export const minutasApi = createApi({
                         }
                     })
                 )
+
+                const patchResult2 = dispatch(
+                    minutasApi.util.updateQueryData('getMinuta', {id}, (draft) => {
+                        Object.assign(draft, body)
+                    })
+                )
+
                 try {
                     await queryFulfilled
                 } catch (error) {
                     patchResult.undo()
+                    patchResult2.undo()
                 }
 
             }
         }),
-        deleteMinuta: builder.mutation<void, {id: string}>({
-            query: ({id}) => ({
+        deleteMinuta: builder.mutation<void, {minuta: MinutasProps}>({
+            query: ( {minuta: {id}}) => ({
                 url: `minutas/${id}`,
                 method: 'DELETE'
             }),
-            onQueryStarted: async ({id}, {dispatch, queryFulfilled}) => {
+            onQueryStarted: async ({minuta: {id, minuteableId}}, {dispatch, queryFulfilled}) => {
                 const patchResult = dispatch(
-                    minutasApi.util.updateQueryData('getMinutas', {proyectoId: id}, (draft) => {
+                    minutasApi.util.updateQueryData('getMinutas', {proyectoId: minuteableId}, (draft) => {
                         const index = draft.findIndex(minuta => minuta.id === id);
                         if (index !== -1) {
                             draft.splice(index, 1);

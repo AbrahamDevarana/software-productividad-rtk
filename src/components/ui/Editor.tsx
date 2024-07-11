@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
@@ -25,7 +25,7 @@ interface Props {
 
 export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
 
-    const editor = useEditor({ 
+    const editor = useEditor({
         extensions: [
             Underline.configure({
                 HTMLAttributes: {
@@ -57,6 +57,9 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
             StarterKit.configure({
                 heading: {
                     levels: [2, 3, 4, 5],
+                    HTMLAttributes: {
+                        class: 'text-2xl font-bold',
+                    }
                 },
                 paragraph: {
 
@@ -88,13 +91,15 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
 
             }),
         ],
-        content: getFieldValue('content'),
         editorProps: {
             attributes: {
-                class: 'p-5 min-h-[200px] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text',
+                class: 'p-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text min-h-[300px] max-h-[400px] overflow-y-auto',
             },
+            
         },
         onUpdate: ({ editor, transaction }) => {
+            console.log('editor updated');
+            
             const purified = dompurify.sanitize(editor.getHTML());
             setFieldValue('content', purified);
         },
@@ -126,7 +131,7 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
   return (
     <>
     
-    <Form.Item name="content">
+    <Form.Item name="content" className="hidden">
         <Input type="hidden" id="content" name="content" />
     </Form.Item>
     {
@@ -135,35 +140,14 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
                     <div className="border">
                         <div className="flex flex-wrap gap-5 px-2 border items-center py-1  bg-white sticky top-0 z-50">
                                 <button 
-                                    title="Heading 1"
+                                    title="Titulo 1"
                                     type="button"
                                     onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} 
                                     className={`text-gray-500 px-2 py-1 rounded-md ${ editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''}`}
                                     disabled={!editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
                                 ><BsTypeH1 /></button>
                                 <button 
-                                    title="Heading 2"
-                                    type="button"
-                                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} 
-                                    className={`text-gray-500 px-2 py-1 rounded-md ${ editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''}`}
-                                    disabled={!editor.can().chain().focus().toggleHeading({ level: 3 }).run()}
-                                ><BsTypeH2 /></button>
-                                <button 
-                                    title="Heading 3"
-                                    type="button"
-                                    onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()} 
-                                    className={`text-gray-500 px-2 py-1 rounded-md ${ editor.isActive('heading', { level: 4 }) ? 'bg-gray-200' : ''}`}
-                                    disabled={!editor.can().chain().focus().toggleHeading({ level: 4 }).run()}
-                                ><BsTypeH3 /></button>
-                                <button 
-                                    title="Heading 4"
-                                    type="button"
-                                    onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()} 
-                                    className={`text-gray-500 px-2 py-1 rounded-md ${ editor.isActive('heading', { level: 5 }) ? 'bg-gray-200' : ''}`}
-                                    disabled={!editor.can().chain().focus().toggleHeading({ level: 5 }).run()}
-                                ><BsTypeH4 /></button>
-                                <button 
-                                    title="Paragraph"
+                                    title="Parrafo"
                                     type="button"
                                     onClick={() => editor.chain().focus().setParagraph().run()}
                                     className={`text-gray-500 px-2 py-1 rounded-md ${ editor.isActive('paragraph') ? 'bg-gray-200' : ''}`}
@@ -286,7 +270,7 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
                                     disabled={!editor.can().chain().focus().redo().run()}
                                 ><MdOutlineRedo /></button>
 
-                                <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div>
+                                {/* <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div> */}
 
                                 {/* Add Image */}
 

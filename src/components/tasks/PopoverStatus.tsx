@@ -25,7 +25,7 @@ export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false, t
     if (type === 'objetivo') return (
         <div>
             {statusKeys.map((status, index) => (
-                <div className={`flex items-center gap-2 py-1 cursor-pointer ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} onClick={() => {
+                <div className={`flex items-center gap-2 px-2 cursor-pointer ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} onClick={() => {
                     !isClosed && handleChangeStatus(status)
                 }}>
                     <div className={`shadow`}
@@ -47,7 +47,7 @@ export const PopoverStatus = ({ current, handleUpdateStatus, isClosed = false, t
     if(type = 'proyecto') return (
         <div>
             {statusKeys.map((status, index) => (
-                <div className={`flex items-center gap-2 my-2 px-2 py-1 cursor-pointer hover:opacity-70 ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} 
+                <div className={`flex items-center gap-2 my-2 px-2  cursor-pointer hover:opacity-70 ${ isClosed ? 'cursor-not-allowed': ''}`} key={index} 
                     style={{
                         background: `linear-gradient(to right, ${getColor(status).lowColor}, ${getColor(status).color})`,
                     }}

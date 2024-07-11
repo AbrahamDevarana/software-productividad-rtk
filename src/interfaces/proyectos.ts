@@ -1,18 +1,17 @@
 import { statusType } from "@/types";
-import { HitosProps, InitialState, Paginate, UsuarioProps } from ".";
+import { HitosProps, InitialState, Paginate, SinglePerfilProps, UsuarioProps } from ".";
 
 
 export interface ProyectosProps {
     id: string;
     titulo: string;
     descripcion: string;
-    icono: string;
-    imagen: string;
-    participantes: UsuarioProps[];
-    propietario: UsuarioProps;
+    icono?: string;
+    imagen?: string;
+    participantes: SinglePerfilProps[];
+    propietario: SinglePerfilProps;
     propietarioId: string;
-    usuariosProyecto: UsuarioProps[];
-    proyectosHito: HitosProps[];
+    usuariosProyecto: SinglePerfilProps[];
     fechaInicio: Date;
     fechaFin: Date;
     status: statusType;

@@ -116,7 +116,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                 descripcion: proyecto?.descripcion,
                 fechaInicio: dayjs(proyecto?.fechaInicio).add(6, 'hour'),
                 fechaFin: dayjs(proyecto?.fechaFin).add(6, 'hour'),
-                participantes: proyecto?.usuariosProyecto.map((usuario) => usuario.id)
+                participantes: proyecto?.usuariosProyecto.map((usuario) => usuario.id) || [],
             }}
         >
             <p className='text-devarana-graph col-span-12'>Banner {fileList.length > 0 ? '(Vista Previa)' : '(Original)'} </p>

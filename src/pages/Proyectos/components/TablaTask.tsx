@@ -14,8 +14,10 @@ import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
+import { BiEdit, BiTrash } from "react-icons/bi";
+import { BsChatDots, BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
 import { FaEdit, FaPlus, FaTrash, FaUser } from "react-icons/fa";
+import { PiChatCircleDotsLight } from "react-icons/pi";
 import { RiUserAddFill } from "react-icons/ri";
 
 interface TablaHitosProps {
@@ -57,9 +59,9 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         }
 
         updateTask(query).unwrap().then(() => {
-            message.success('Tarea Actualizada')
+            message.success('Actividad Actualizada')
         }).catch((error) => {
-            message.error('Error al actualizar la tarea')
+            message.error('Error al actualizar actividad')
         })
     }
 
@@ -102,9 +104,9 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
     const handleDeleteTask = async (task: TaskProps, ) => {
         await deleteTask({taskId: task.id, hitoId: hito.id}).unwrap().then(() => {
-            message.success('Tarea Eliminada')
+            message.success('Actividad Eliminada')
         }).catch((error) => {
-            message.error('Error al eliminar la tarea')
+            message.error('Error al eliminar la actividad')
         })
     }
 
@@ -138,18 +140,11 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             })
     }
 
-    const projectUsers = useMemo(() => {
-        // filtrar a usuarios con los usuarios del proyecto y al propietario
-        if(!usuarios || !proyecto) return []
-        return [...usuarios.filter( usuario => proyecto.usuariosProyecto.map( usuario => usuario.id).includes(usuario.id)), proyecto?.propietario]
-    }, [usuarios, proyecto])
-
     const defaultColumns:ColumnsType<TaskProps> = [
         {
-            title: () => ( <p className='tableTitle text-center'>Creación1</p>),
+            title: () => ( <p className='tableTitle text-center'>Creación</p>),
             dataIndex: 'created',
             key: 'created',
-            fixed: 'left',
             render: (text, record, index) => (
                 <div className="flex">
                 <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
@@ -157,7 +152,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     {/* { <span className='text-devarana-graph font-light'>{dayjs(record.created).format('DD MMM YY')} </span>  } */}
                     <DatePicker
                         className='w-full'
-                        format={"DD-MM-YYYY"}
+                        format={"DD-MMM-YYYY"}
                         defaultValue={ dayjs(record.created)  }
                         showNow
                         onChange={(date, dateString) => handleUpdateCreatedDate(null, dateString, record)}
@@ -173,16 +168,20 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             width: 170,
         },
         {
-            title: () => ( <p className='tableTitlePrincipal'>Actividad</p>),
+            title: () => ( <p className='tableTitle'>Actividad</p>),
             dataIndex: 'nombre',
             key: 'nombre',
-            fixed: 'left',
             render: (text, record, index) => (
-                <Tooltip title={record.nombre} >
-                    <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)}
-                        onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
-                    />
-                </Tooltip>
+                <div className="flex items-center gap-2">
+                    <Tooltip title={record.nombre} >
+                        <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)}
+                            onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
+                        />
+                    </Tooltip>
+                    <button>
+                        <PiChatCircleDotsLight size={22} />
+                    </button>
+                </div>
             ),
             ellipsis: {
                 showTitle: false,
@@ -196,30 +195,24 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 <div className='w-full text-devarana-graph flex justify-end'>
                     <Select
                         style={{ height: '100%' }}
-                        placeholder={
-                                <Avatar className="mx-auto flex" style={{backgroundColor: '#56739B', color: 'white'}} size={30} icon={<RiUserAddFill />} />
-                        }
-                        tagRender={tagRender}
                         showSearch
                         onChange={(value) => handleUpdateOwner(value, record)}
                         defaultValue={record.propietario?.id}
                         variant="borderless"
-                        maxTagPlaceholder={(omittedValues) => (
-                            <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                        options={usuariosRender}
+                        optionRender={(option) => (
+                            <div className='flex items-center gap-2'>
+                              {option.data.item}
+                            </div>
                         )}
                         dropdownStyle={{width: '280px'}}
                         // @ts-ignore
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
-                        {
-                            projectUsers?.map(usuario => (
-                                <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
-                            ))
-                        }
                     </Select>
                 </div>
             ),
-            width: 200,
+            width: 120,
         },  
         {
             title: () => ( <p className='tableTitle text-right'>Co Responsable</p>),
@@ -248,7 +241,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                         {
-                            projectUsers?.map(usuario => (
+                            usuarios?.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                             ))
                             // .filter( usuario => usuario.key !== record.propietario?.id)
@@ -273,17 +266,17 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     }
                     trigger={'click'}
                 >
-                        <div className="flex items-center justify-center gap-2 py-1 cursor-pointer"
+                        <div className="flex items-center justify-center gap-2 my-1 py-0 cursor-pointer"
                             style={{
                                 background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
                             }}
                         >
-                            <p className='text-center py-1 text-white'>  { taskStatusTypes[record.status] } </p>
+                            <p className='text-center py-0 text-white'>  { taskStatusTypes[record.status] } </p>
                         </div>  
 
                 </Popover>
             ),
-            width: 150
+            width: 140
         },
         {
             title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),
@@ -293,7 +286,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 return (
                     <DatePicker
                     className='w-full' 
-                    format={"DD-MM-YYYY"}
+                    format={"DD-MMM-YYYY"}
                     defaultValue={ dayjs(record.fechaFin)  }
                     showNow
                     allowClear={false}
@@ -309,7 +302,6 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         },
         {
             title: () => ( <p className='tableTitle text-right'>Acciones</p>),
-            fixed: 'right',
             render: (text, record, index) => {
                 return (
                     <Popover
@@ -320,27 +312,29 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         content={
                             <>
                                 <div className="flex gap-5">
-                                    <button onClick={ () => setSelectedTask(record) } className='flex items-center gap-2'>
-                                        <FaEdit className='text-devarana-graph text-xl' />
-                                    </button>
+                                    {/* <button onClick={ () => setSelectedTask(record) } className='flex items-center gap-2'>
+                                        <BiEdit className='text-default text-xl' />
+                                    </button> */}
                                     <Popconfirm 
-                                            title="¿Estás seguro de eliminar este task?"
-                                            onConfirm={ () => handleDeleteTask(record) }
-                                            okText="Si"
-                                            placement="topLeft"
-                                            cancelText="No"
-                                            okButtonProps={{className: 'text-white bg-error-light'}} 
-                                            cancelButtonProps={{className: 'text-devarana-dark-graph'}}
-                                        >
-                                            <button className='text-devarana-graph'>
-                                                <Icon iconName='faTrash' className='text-lg pt-1'/>
-                                            </button>
+                                        title="¿Estás seguro de eliminar esta actividad?"
+                                        onConfirm={ () => handleDeleteTask(record) }
+                                        okText="Si"
+                                        placement="topLeft"
+                                        cancelText="No"
+                                        okButtonProps={{
+                                            className: 'rounded-full mr-2 bg-primary'
+                                        }}
+                                        cancelButtonProps={{
+                                            className: 'rounded-full mr-2 bg-error-light text-white'
+                                        }}
+                                    >
+                                        <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
                                     </Popconfirm>
                                 </div>
                             </>
                         }
                     >
-                            <BsThreeDots className='text-devarana-graph text-xl ml-auto' />
+                        <BsThreeDots className='text-devarana-babyblue text-xl cursor-pointer ml-auto' />
                     </Popover>
                 )
             },
@@ -351,6 +345,8 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
     const FooterComp = (hito:HitosProps) => {
 
         const handleCreateTask = async (hito: HitosProps) => {
+
+        if(!form.getFieldValue('nombre')) return
         
         const query = {
                 ...form.getFieldsValue(),
@@ -359,10 +355,10 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             }
 
             createTask(query).unwrap().then(() => {
-                message.success('Tarea Creada')
+                message.success('Actividad Creada')
                 form.resetFields()
             }).catch((error) => {
-                message.error('Error al crear la tarea')
+                message.error('Error al crear la actividad')
             })
            
         }
@@ -392,26 +388,26 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
     const items: MenuProps['items'] = [
         {
-          label: '1st menu item',
+          label: 'Copiar',
           key: '1',
         },
         {
-          label: '2nd menu item',
+          label: 'Ocultar',
           key: '2',
         },
         {
-          label: '3rd menu item',
+          label: 'Eliminar',
           key: '3',
         },
-      ];
+    ];
 
-        
     const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>, record: any) => {
         event.preventDefault();
         setSelectedRecord(record);
         setContextMenuPosition({ x: event.clientX, y: event.clientY });
         setContextMenuVisible(true);
     };
+
     const handleMenuClick = (e: any) => {
         console.log('Selected record:', selectedRecord);
         console.log('Menu item clicked:', e.key);
@@ -420,7 +416,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
     const handleClickOutside = () => {
         setContextMenuVisible(false);
-      };
+    };
     
       useEffect(() => {
         const handleDocumentClick = (event: MouseEvent) => {
@@ -436,6 +432,30 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         };
       }, [contextMenuVisible]);
 
+
+      const usuariosRender = useMemo(() => {
+
+        if(!usuarios) return []
+
+        return usuarios.map(usuario => ({
+            value: usuario.id,
+            label: <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}>
+                       <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                    </Tooltip>,
+            key: usuario.id,
+            item: <div className='flex items-center gap-2'>
+                    <Avatar
+                        src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />}
+                        size='large'
+                    >
+                        {usuario.iniciales}
+                    </Avatar>
+                    <p className='font-light text-devarana-graph'>
+                        {usuario.nombre} {usuario.apellidoPaterno} 
+                    </p>
+                </div>,
+        }))
+      }, [usuarios])
 
     return (
         <div onClick={handleClickOutside}>
