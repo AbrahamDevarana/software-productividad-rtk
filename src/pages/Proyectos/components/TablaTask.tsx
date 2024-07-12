@@ -102,6 +102,18 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         })
     }
 
+    const handleUpdateTaskPriority = (value: any, task: TaskProps) => {
+        const query = {
+            ...task,
+            prioridad: value
+        }
+        updateTask(query).unwrap().then(() => {
+            message.success('Prioridad Actualizada')
+        }).catch((error) => {
+            message.error('Error al actualizar la prioridad')
+        })
+    }
+
     const handleDeleteTask = async (task: TaskProps, ) => {
         await deleteTask({taskId: task.id, hitoId: hito.id}).unwrap().then(() => {
             message.success('Actividad Eliminada')
@@ -187,7 +199,6 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 showTitle: false,
             },
         },
-        
         {
             title: () => ( <p className='tableTitle text-right'>Responsable</p>),
             key: 'usuariosTarea',
@@ -199,7 +210,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         onChange={(value) => handleUpdateOwner(value, record)}
                         defaultValue={record.propietario?.id}
                         variant="borderless"
-                        options={usuariosRender}
+                        options={userItems}
                         optionRender={(option) => (
                             <div className='flex items-center gap-2'>
                               {option.data.item}
@@ -256,27 +267,32 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             dataIndex: 'status',
             key: 'status',
             render: (text, record, index) => (
-               <Popover
-                    key={record.status}
-                    title={ <p className='text-center text-devarana-graph'>Estatus</p> }
-                    open={visiblePopoverId === record.id}
-                    onOpenChange={ (newVisible) => handleVisibleChange(newVisible, record.id)}
-                    content= {
-                        <PopoverStatus current={record} handleUpdateStatus={handleUpdateStatus} type="proyecto" />
-                    }
-                    trigger={'click'}
-                >
-                        <div className="flex items-center justify-center gap-2 my-1 py-0 cursor-pointer"
-                            style={{
-                                background: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
-                            }}
-                        >
-                            <p className='text-center py-0 text-white'>  { taskStatusTypes[record.status] } </p>
-                        </div>  
-
-                </Popover>
+                 <Select
+                    className='w-[150px] flex items-end justify-end cursor-pointer'
+                    defaultValue={record.status}
+                    onChange={(value) => handleUpdateStatus({ ...record, status: value })}
+                    variant="borderless"
+                    options={statusItems}
+                    suffixIcon={false}
+                />
             ),
             width: 140
+        },
+        {
+            title: () => ( <p className='tableTitle text-right'>Prioridad</p>),
+            dataIndex: 'prioridad',
+            key: 'prioridad',
+            render: (text, record, index) => (
+                <Select
+                    className='w-[150px] flex items-end justify-end cursor-pointer'
+                    defaultValue={record.prioridad}
+                    onChange={(value) => handleUpdateTaskPriority(value, record)}
+                    variant="borderless"
+                    options={priorityItems}
+                    suffixIcon={false}
+                />
+            ),
+            width: 150
         },
         {
             title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),
@@ -433,7 +449,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
       }, [contextMenuVisible]);
 
 
-      const usuariosRender = useMemo(() => {
+      const userItems = useMemo(() => {
 
         if(!usuarios) return []
 
@@ -458,6 +474,83 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         }))
       }, [usuarios])
 
+
+        const priorityItems = [
+                {
+                    label: (
+                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
+                            <p className="text-white">Baja</p>
+                        </div>),
+                    value: 'BAJA'
+                },
+                {
+                    label: (
+                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
+                            <p className="text-white">Media</p>
+                        </div>),
+                    value: 'MEDIA'
+                },
+                {
+                    label: (
+                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
+                            <p className="text-white">Alta</p>
+                        </div>),
+                    value: 'ALTA'
+                },
+                {
+                    label: (
+                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
+                            <p className="text-white">Crítica</p>
+                        </div>),
+                    value: 'CRÍTICA'
+                }
+        ]
+        const statusItems = [
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-devarana-dark-graph to-devarana-graph text-center">
+                        <p className="text-white">Sin Iniciar</p>
+                    </div>),
+                value: 'SIN_INICIAR'
+            },
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-primary to-primary-light text-center">
+                        <p className="text-white">En Proceso</p>
+                    </div>),
+                value: 'EN_PROCESO'
+            },
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
+                        <p className="text-white">Finalizado</p>
+                    </div>),
+                value: 'FINALIZADO'
+            },
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
+                        <p className="text-white">Cancelado</p>
+                    </div>),
+                value: 'CANCELADO'
+            },
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
+                        <p className="text-white">Detenido</p>
+                    </div>),
+                value: 'DETENIDO'
+            },
+            {
+                label: (
+                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
+                        <p className="text-white">Retrasado</p>
+                    </div>),
+                value: 'RETRASADO'
+            }
+        ]
+        
+        
     return (
         <div onClick={handleClickOutside}>
             <Table
@@ -473,7 +566,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 rowKey={(record: any) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
-                        onContextMenu: (event) => handleContextMenu(event, record),
+                        // onContextMenu: (event) => handleContextMenu(event, record),
                     }
                 }}
             />

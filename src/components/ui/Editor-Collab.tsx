@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
@@ -15,18 +15,76 @@ import Underline from "@tiptap/extension-underline";
 import { IoIosLink } from "react-icons/io";
 import { Form, Input } from "antd";
 import dompurify from 'dompurify';
+import Collaboration from '@tiptap/extension-collaboration'
+import * as Y from 'yjs'
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import { TiptapCollabProvider } from "@hocuspocus/provider";
+import { useSelector } from "react-redux";
+import { useAppSelector } from "@/redux/hooks";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
 
 interface Props {
-    setFieldValue: (field: string, value: any) => void;
-    getFieldValue: (field: string) => any;
-    resetFields: () => void;
+    provider: TiptapCollabProvider,
+    minutaId?: string
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
 }
 
-export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
+const doc = new Y.Doc()
+
+const colors = [
+    '#958DF1',
+    '#F98181',
+    '#FBBC88',
+    '#FAF594',
+    '#70CFF8',
+    '#94FADB',
+    '#B9F18D',
+    '#C3E2C2',
+    '#EAECCC',
+    '#AFC8AD',
+    '#EEC759',
+    '#9BB8CD',
+    '#FF90BC',
+    '#FFC0D9',
+    '#DC8686',
+    '#7ED7C1',
+    '#F3EEEA',
+    '#89B9AD',
+    '#D0BFFF',
+    '#FFF8C9',
+    '#CBFFA9',
+    '#9BABB8',
+    '#E3F4F4',
+  ]
+
+
+export const Editor = ({provider, setFieldValue, minutaId}: Props ) => {
+
+    const {nombre, apellidoPaterno} = useAppSelector(state => state.auth.userAuth)
+    const [status, setStatus] = useState('loading')
+
+    const getRandomElement = (list:string[]) => list[Math.floor(Math.random() * list.length)]
+
+    const [currentUser, setCurrentUser] = useState({
+        name: `${nombre} ${apellidoPaterno}`,
+        color: getRandomElement(colors),
+    })
+
 
     const editor = useEditor({
         extensions: [
+            Document,
+            Paragraph,
+            Text,
+            Collaboration.configure({
+                document: provider.document,
+            }),
+            CollaborationCursor.configure({
+                provider,
+            }),
             Underline.configure({
                 HTMLAttributes: {
                     class: 'underline',
@@ -84,10 +142,7 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
                         class: 'border-l-4 border-gray-300 pl-2',
                     },
                 },
-                history: {
-                    depth: 100,
-                    newGroupDelay: 300,
-                }
+                history: false
 
             }),
         ],
@@ -97,42 +152,37 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
             },
             
         },
-        onUpdate: ({ editor, transaction }) => {
-            console.log('editor updated');
-            
+        onUpdate: ({ editor, transaction }) => {                        
             const purified = dompurify.sanitize(editor.getHTML());
             setFieldValue('content', purified);
         },
-        onCreate: ({ editor }) => {
-            if (editor) {
-                resetFields();
-                getFieldValue('content') && editor.commands.setContent(getFieldValue('content'));
-            }
+    }, [provider]);
+
+    useEffect(() => {
+        // Update status changes
+        const statusHandler = (event:any) => {
+          setStatus(event.status)
         }
-    });
-
-    const addImage = useCallback(() => {
-        const url = window.prompt('URL');
-        if (url) {
-            editor?.chain().focus().setImage({ src: url }).run();
+        provider.on('status', statusHandler)
+    
+        return () => {
+          provider.off('status', statusHandler)
         }
-    }, [editor]);
+      }, [provider])
 
+    useEffect(() => {
+        if(editor && currentUser) {
+            localStorage.setItem('tiptap-user', JSON.stringify(currentUser))
+            // editor.chain().focus().updateUser(currentUser).run()
+        }
+    }, [editor, currentUser])
 
-    // useEffect(() => {
-    //     if (editor) {
-    //         editor.commands.setContent(getFieldValue('content'));
-    //     }
-    // }, [editor, getFieldValue('content')]);
-    
-
-    
 
   return (
     <>
     
     <Form.Item name="content" className="hidden">
-        <Input type="hidden" id="content" name="content" />
+        <Input type="hidden" id="content" name="content" onChange={(e) => setFieldValue('content', e.target.value)} />
     </Form.Item>
     {
             editor && (
@@ -251,25 +301,6 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
 
                                 <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div>  
 
-                                {/* Undo */}
-                                <button 
-                                    title="Undo"
-                                    type="button"
-                                    onClick={() => editor.chain().focus().undo().run()}
-                                    className={`text-gray-500 px-2 py-1 rounded-md`}
-                                    disabled={!editor.can().chain().focus().undo().run()}
-                                ><MdOutlineUndo /></button>
-
-                                {/* Redo */}
-
-                                <button 
-                                    title="Redo"
-                                    type="button"
-                                    onClick={() => editor.chain().focus().redo().run()}
-                                    className={`text-gray-500 px-2 py-1 rounded-md`}
-                                    disabled={!editor.can().chain().focus().redo().run()}
-                                ><MdOutlineRedo /></button>
-
                                 {/* <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div> */}
 
                                 {/* Add Image */}
@@ -362,7 +393,21 @@ export const Editor = ({setFieldValue, getFieldValue, resetFields}: Props ) => {
                                 <div className="border-l-2 border-gray-300 border h-10 border-r-0"></div>
 
                         </div>
-                        <EditorContent editor={editor} className="text-devarana-graph"/>
+                        <EditorContent key={minutaId} editor={editor} className="text-devarana-graph"/>
+                            <div className="collab-status-group" data-state={status === 'connected' ? 'online' : 'offline'}>
+                           <div className="flex items-center justify-between px-5 py-1">
+                                <label
+                                    className="text-xs text-default"
+                                >
+                                    {status === 'connected'
+                                        ? `${editor.storage.collaborationCursor.users.length} usuario${
+                                        editor.storage.collaborationCursor.users.length === 1 ? '' : 's'
+                                        } online`
+                                        : 'offline'}
+                                    </label>
+                                <p className="text-dark text-xs"> ✎ {currentUser.name}</p>
+                           </div>
+                        </div>
                     </div>
                 </div>
                 )

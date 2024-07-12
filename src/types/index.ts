@@ -44,11 +44,14 @@ export const objetivosLiderTypes = {
     CERRADO: 'CERRADO'
 }
 
+// status: 'SIN_INICIAR' | 'EN_PROCESO' | 'FINALIZADO' | 'CANCELADO' | 'DETENIDO' | 'RETRASADO';
 export const taskStatusTypes = {
     SIN_INICIAR: 'Sin Iniciar',
     EN_PROCESO: 'En Proceso',
     FINALIZADO: 'Finalizada',
     CANCELADO: 'Cancelada',
+    DETENIDO: 'Detenida',
+    RETRASADO: 'Retrasada',
 }
 
 export type TaskStatusType = keyof typeof taskStatusTypes
@@ -86,3 +89,7 @@ export const periodoTypesGestion = {
     APROBADO: 'Aprobado',
     CERRADO: 'Cerrado'
 }
+
+
+
+// Nuevos tipos de Estatus y Prioridades

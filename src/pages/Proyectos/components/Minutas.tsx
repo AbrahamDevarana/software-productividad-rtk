@@ -1,5 +1,5 @@
 import { Editor } from '@/components/ui'
-import { useCreateMinutaMutation, useDeleteMinutaMutation, useGetMinutaQuery, useGetMinutasQuery, useUpdateMinutaMutation } from '@/redux/features/minutas/minutasApi'
+import { useCreateMinutaMutation, useDeleteMinutaMutation, useGetMinutaQuery, useGetMinutasQuery, useLazyGetMinutaQuery, useUpdateMinutaMutation } from '@/redux/features/minutas/minutasApi'
 import { Input, Form, message, Popconfirm } from 'antd'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
@@ -7,6 +7,7 @@ import { MinutasProps } from '@/interfaces'
 import { Spinner } from '@/components/antd/Spinner'
 import { FaTrash } from 'react-icons/fa'
 import { IoClose, IoCreate } from 'react-icons/io5'
+import { TiptapCollabProvider } from '@hocuspocus/provider'
 
 interface Props {
     proyectoId: string
@@ -21,7 +22,7 @@ export const Minutas = ({proyectoId}: Props) => {
     const [showForm, setShowForm] = useState<boolean>(false)
 
     const {data: minutas, isLoading} = useGetMinutasQuery({proyectoId})   
-    const {data: minuta, isLoading: isMinutaLoading } = useGetMinutaQuery({id: selectedMinuta?.id}, { skip: !selectedMinuta })
+    const [ getMinuta, {data: minuta, isLoading:isMinutaLoading}] = useLazyGetMinutaQuery()
     const [ createMinuta, {isLoading: isCreating, isSuccess: isCreated} ] = useCreateMinutaMutation() 
     const [ updateMinuta, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateMinutaMutation()
     const [ deleteMinuta, {isLoading: isDeleting, isSuccess: isDeleted}] = useDeleteMinutaMutation()
@@ -32,13 +33,7 @@ export const Minutas = ({proyectoId}: Props) => {
 
 
     const handleOnUpdate = () => {
-        if (!getFieldValue('title') || !getFieldValue('content')) {
-            return message.error('Por favor, rellene todos los campos')
-        }
-
-        if(!selectedMinuta) return
-        
-
+        if(!minuta) return
        let query = {
             minuteableId: proyectoId,
             titulo: getFieldValue('title'),
@@ -47,8 +42,8 @@ export const Minutas = ({proyectoId}: Props) => {
             minuteableType: 'PROYECTO' as minuteableType,
        }
 
-        updateMinuta({...query, id: selectedMinuta.id}).unwrap().then(() => (
-            message.success('Minuta actualizada')
+        updateMinuta({...query, id: minuta.id}).unwrap().then(() => (
+            <></>
         )).catch(() => (
             message.error('Error al actualizar minuta')
         ))
@@ -56,7 +51,7 @@ export const Minutas = ({proyectoId}: Props) => {
     }
 
     const handleSelectMinuta = (minuta: MinutasProps) => {
-        setSelectedMinuta(minuta)
+        getMinuta({id: minuta.id})
         setShowForm(true)
     }
 
@@ -76,8 +71,6 @@ export const Minutas = ({proyectoId}: Props) => {
             minuteableId: proyectoId,
             minuteableType: 'PROYECTO' as minuteableType,
         }).unwrap().then((data) => {
-            console.log(data);
-            
             message.success('Minuta creada')
             setSelectedMinuta(data)
             setShowForm(true)
@@ -89,12 +82,12 @@ export const Minutas = ({proyectoId}: Props) => {
     
 
     const searchedMinuta = useMemo(() => {
-        if (!search) return minutas
-
-        // use regex to search for the search term in the title or description of the minuta even its not the exact word and has accents or special characters
+        if (!minutas) return []
+        const sortedData = [...minutas].sort((a, b) => dayjs(b.updatedAt).valueOf() - dayjs(a.updatedAt).valueOf());
+        if (!search) return sortedData
         const regex = new RegExp(search.replace(/[^a-zA-Z0-9]/g, ''), 'i')
-        return minutas?.filter(minuta => regex.test(minuta.titulo) || regex.test(minuta.descripcion))
-
+        const filtered =  sortedData?.filter(minuta => regex.test(minuta.titulo) || regex.test(minuta.descripcion))
+        return filtered
     }, [search, minutas])
     
     const convertToPlainText = (html: string) => {
@@ -105,6 +98,24 @@ export const Minutas = ({proyectoId}: Props) => {
         html = html.replace(/<[^>]*>/g, "");
         return html.replace(/\\'[0-9a-zA-Z]{2}/g, "").trim();
     }
+
+
+    const provider = useMemo(() => {
+
+        if (!minuta) return null
+        
+        return new TiptapCollabProvider({
+            name: `minuta-${minuta?.id}`,
+            appId: import.meta.env.VITE_TIP_TAP_APP_ID, // Your app ID
+            token: import.meta.env.VITE_TIP_TAP_APP_TOKEN, // Your app token
+        })
+    }, [minuta])
+
+    const isDisabled = useMemo(() => {
+    
+        if(getFieldValue('content') === minuta?.descripcion && getFieldValue('title') === minuta?.titulo) return true
+        return false
+    }, [getFieldValue('content'), getFieldValue('title')])
 
     return (
         <div className='grid grid-cols-12 gap-10'>
@@ -119,7 +130,7 @@ export const Minutas = ({proyectoId}: Props) => {
                         searchedMinuta?.map((minuta, key) => (
                             <div key={key} 
                                 onClick={() => handleSelectMinuta(minuta)}
-                                className={`border border-devarana-graph border-opacity-40 rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
+                                className={`border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
                                 <h3 className='text-bold text-sm'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
                                 <p className='line-clamp-3 text-devarana-graph text-xs'>
                                     {convertToPlainText(minuta.descripcion).slice(0, 50)}...
@@ -156,7 +167,7 @@ export const Minutas = ({proyectoId}: Props) => {
                         <Form
                             form={form}
                             key={minuta?.id}
-                            initialValues={{ content: minuta?.descripcion, title: minuta?.titulo}}
+                            initialValues={{ content: minuta?.descripcion, title: minuta?.titulo, id: minuta?.id}}
                             onFinish={handleOnUpdate}
                         >
                             <Form.Item name='title'>
@@ -166,8 +177,8 @@ export const Minutas = ({proyectoId}: Props) => {
                                 </div>
                             </Form.Item>
 
-                            <Editor setFieldValue={setFieldValue} getFieldValue={getFieldValue} resetFields={resetFields} />
-                            <button type='submit' className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md'>Guardar</button>
+                            { provider && (<Editor provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} />)}
+                            <button  disabled={isDisabled} type='submit' className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'>Guardar</button>
                         </Form>
                     </div>
                     : (

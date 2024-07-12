@@ -81,17 +81,17 @@ export const minutasApi = createApi({
                     })
                 )
 
-                const patchResult2 = dispatch(
-                    minutasApi.util.updateQueryData('getMinuta', {id}, (draft) => {
-                        Object.assign(draft, body)
-                    })
-                )
+                // const patchResult2 = dispatch(
+                //     minutasApi.util.updateQueryData('getMinuta', {id}, (draft) => {
+                //         Object.assign(draft, body)
+                //     })
+                // )
 
                 try {
                     await queryFulfilled
                 } catch (error) {
                     patchResult.undo()
-                    patchResult2.undo()
+                    // patchResult2.undo()
                 }
 
             }
@@ -123,6 +123,7 @@ export const minutasApi = createApi({
 export const {
     useGetMinutasQuery,
     useGetMinutaQuery,
+    useLazyGetMinutaQuery,
     useCreateMinutaMutation,
     useUpdateMinutaMutation,
     useDeleteMinutaMutation
