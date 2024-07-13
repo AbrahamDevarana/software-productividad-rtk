@@ -73,6 +73,81 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         }    
         dispatch(updateTaskThunk(query))
     }
+
+    const priorityItems = [
+        {
+            label: (
+                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
+                    <p className="text-white">Baja</p>
+                </div>),
+            value: 'BAJA'
+        },
+        {
+            label: (
+                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
+                    <p className="text-white">Media</p>
+                </div>),
+            value: 'MEDIA'
+        },
+        {
+            label: (
+                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
+                    <p className="text-white">Alta</p>
+                </div>),
+            value: 'ALTA'
+        },
+        {
+            label: (
+                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
+                    <p className="text-white">Crítica</p>
+                </div>),
+            value: 'CRÍTICA'
+        }
+]
+const statusItems = [
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-devarana-dark-graph to-devarana-graph text-center">
+                <p className="text-white">Sin Iniciar</p>
+            </div>),
+        value: 'SIN_INICIAR'
+    },
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-primary to-primary-light text-center">
+                <p className="text-white">En Proceso</p>
+            </div>),
+        value: 'EN_PROCESO'
+    },
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
+                <p className="text-white">Finalizado</p>
+            </div>),
+        value: 'FINALIZADO'
+    },
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
+                <p className="text-white">Cancelado</p>
+            </div>),
+        value: 'CANCELADO'
+    },
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
+                <p className="text-white">Detenido</p>
+            </div>),
+        value: 'DETENIDO'
+    },
+    {
+        label: (
+            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
+                <p className="text-white">Retrasado</p>
+            </div>),
+        value: 'RETRASADO'
+    }
+]
     
     const defaultColumns: ColumnsType<TaskProps> = [
         {
@@ -141,55 +216,33 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
             title: () => ( <p className='tableTitle text-right'>Prioridad</p>),
             render: (text, record, index) => {
                 return ( 
-                    <Popover
-                        title={ <p className='text-center text-devarana-graph'>Prioridad</p> }
-                        trigger={"click"}
-                        content={
-                            <PopoverPrioridad current={record} dispatchFunction={updateTaskThunk} isClosed={isClosed}/>
-                        }
-                    >
-                            <div
-                                className="flex items-center justify-center py-1 rounded-sm cursor-pointer text-white font-medium drop-shadow-sm"
-                                style={{
-                                    backgroundColor: styles[record.prioridad as Prioridad]
-                                }}
-                            >
-                                { record.prioridad }
-                            </div>
-                    </Popover>
+                    <Select
+                        className='w-[150px] flex items-end justify-end cursor-pointer'
+                        defaultValue={record.prioridad}
+                        onChange={(value) => handleOnUpdate({target: {name: 'prioridad', value}}, record)}
+                        variant="borderless"
+                        options={priorityItems}
+                        suffixIcon={false}
+                    />
             ) 
             },
-            width: 120,
+            width: 150,
         },
         {
             title: () => ( <p className='tableTitle text-right'>Estatus</p>),
             render: (text, record, index) => {
                 return ( 
-                    <Popover
-                        title={ <p className='text-center text-devarana-graph'>Estatus</p> }
-                        content= {
-                            <PopoverEstado current={record} dispatchFunction={updateTaskThunk} isClosed={isClosed}/>
-                        }
-                        trigger={'click'}
-                    >
-                            <div className="flex items-center justify-end gap-2 py-1 cursor-pointer">
-                                <div className={`shadow`}
-                                    style={{
-                                        width: '6px',
-                                        height: '6px',
-                                        borderRadius: '25%',
-                                        backgroundImage: `linear-gradient(to right, ${getColor(record.status).lowColor}, ${getColor(record.status).color})`,
-                                    }}
-                                >  </div>
-                                <p className='text-right py-1' style={{
-                                    color: getColor(record.status).color
-                                }}>  { taskStatusTypes[record.status] } </p>
-                            </div>  
-
-                    </Popover>
+                    <Select
+                        className='w-[150px] flex items-end justify-end cursor-pointer'
+                        defaultValue={record.status}
+                        onChange={(value) => handleUpdateStatus(record, value)}
+                        variant="borderless"
+                        options={statusItems}
+                        suffixIcon={false}
+                    />
                 ) 
             },
-            width: 120,
+            width: 150,
         },
         {
             title: () => ( <p className='tableTitle text-right'>Avance</p>),
