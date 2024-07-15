@@ -1,7 +1,9 @@
 import { MinutasProps } from '@/interfaces';
 import { baseQuery } from "@/config/baseQuery";
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import AbortController from "abort-controller"
 
+const abortControllers = new Map<string, AbortController>()
 
 export const minutasApi = createApi({
     reducerPath: 'minutasApi',
@@ -65,12 +67,24 @@ export const minutasApi = createApi({
             }
             
         }),
-        updateMinuta: builder.mutation<MinutasProps, Partial<MinutasProps>>({
-            query: ({id, ...body}) => ({
-                url: `minutas/${id}`,
-                method: 'PUT',
-                body
-            }),
+        updateMinuta: builder.mutation<MinutasProps, Partial<MinutasProps> & { id: string }>({
+            query: ({id, ...body}) => {
+
+                const controller = new AbortController()
+                const signal = controller.signal
+
+                // // Cancel the request if the user navigates away
+                // if(id && abortControllers.has(id)) {
+                //     abortControllers.get(id)!.abort()
+                // }
+                // abortControllers.set(id!, controller)
+
+                return {
+                    url: `minutas/${id}`,
+                    method: 'PUT',
+                    body
+                }
+            },
             onQueryStarted: async ({id, ...body}, {dispatch, queryFulfilled}) => {
                 const patchResult = dispatch(
                     minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {
@@ -80,21 +94,14 @@ export const minutasApi = createApi({
                         }
                     })
                 )
-
-                // const patchResult2 = dispatch(
-                //     minutasApi.util.updateQueryData('getMinuta', {id}, (draft) => {
-                //         Object.assign(draft, body)
-                //     })
-                // )
-
                 try {
                     await queryFulfilled
                 } catch (error) {
                     patchResult.undo()
-                    // patchResult2.undo()
+                } finally {
+                    // abortControllers.delete(id!)
                 }
-
-            }
+            },
         }),
         deleteMinuta: builder.mutation<void, {minuta: MinutasProps}>({
             query: ( {minuta: {id}}) => ({

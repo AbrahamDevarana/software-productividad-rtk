@@ -8,6 +8,9 @@ import { Spinner } from '@/components/antd/Spinner'
 import { FaTrash } from 'react-icons/fa'
 import { IoClose, IoCreate } from 'react-icons/io5'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
+import * as Y from 'yjs'
+import { useGetTipTapTokenQuery } from '@/redux/features/tiptap/tiptapApi'
+import { useAppSelector } from '@/redux/hooks'
 
 interface Props {
     proyectoId: string
@@ -15,8 +18,15 @@ interface Props {
 
 type minuteableType = "PROYECTO" | "OBJETIVO_OPERATIVO" | undefined;
 
+const doc = new Y.Doc()
+const data = {}
+
+
+
 export const Minutas = ({proyectoId}: Props) => {
 
+    const {nombre, apellidoPaterno, id} = useAppSelector(state => state.auth.userAuth)
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [selectedMinuta, setSelectedMinuta] = useState<MinutasProps | null>(null)
     const [search, setSearch] = useState<string>('')
     const [showForm, setShowForm] = useState<boolean>(false)
@@ -26,27 +36,43 @@ export const Minutas = ({proyectoId}: Props) => {
     const [ createMinuta, {isLoading: isCreating, isSuccess: isCreated} ] = useCreateMinutaMutation() 
     const [ updateMinuta, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateMinutaMutation()
     const [ deleteMinuta, {isLoading: isDeleting, isSuccess: isDeleted}] = useDeleteMinutaMutation()
-
-
+    const { data: token} = useGetTipTapTokenQuery({})
     const [form] = Form.useForm();
     const {setFieldValue, getFieldValue, resetFields, submit} = form
 
 
+
+    const debounce = (func: any, wait: number) => {
+        let timeout: any;
+        return function executedFunction(...args: any) {
+            setStatus('loading')
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
     const handleOnUpdate = () => {
         if(!minuta) return
-       let query = {
-            minuteableId: proyectoId,
-            titulo: getFieldValue('title'),
-            descripcion: getFieldValue('content'),
-            fecha: new Date(),
-            minuteableType: 'PROYECTO' as minuteableType,
-       }
+        let query = {
+                minuteableId: proyectoId,
+                titulo: getFieldValue('title'),
+                descripcion: getFieldValue('content'),
+                fecha: new Date(),
+                minuteableType: 'PROYECTO' as minuteableType,
+        }
 
         updateMinuta({...query, id: minuta.id}).unwrap().then(() => (
-            <></>
-        )).catch(() => (
+            setStatus('success')
+        )).catch(() => {
+            setStatus('error'),
             message.error('Error al actualizar minuta')
-        ))
+        }).finally(() => {
+            setStatus('idle')
+        })
        
     }
 
@@ -56,8 +82,9 @@ export const Minutas = ({proyectoId}: Props) => {
     }
 
     const handleOnDelete = async () => {
-        if (!selectedMinuta) return
-        await deleteMinuta({minuta: selectedMinuta}).unwrap().then(() => {
+        if (!minuta) return
+        
+        await deleteMinuta({minuta}).unwrap().then(() => {
             message.success('Minuta eliminada')
             setSelectedMinuta(null)
             setShowForm(false)
@@ -102,20 +129,27 @@ export const Minutas = ({proyectoId}: Props) => {
 
     const provider = useMemo(() => {
 
-        if (!minuta) return null
+        if (!minuta || !token) return null
         
         return new TiptapCollabProvider({
-            name: `minuta-${minuta?.id}`,
+            name: `minuta-${import.meta.env.VITE_TIP_TAP_ENV}-${minuta?.id}`,
             appId: import.meta.env.VITE_TIP_TAP_APP_ID, // Your app ID
-            token: import.meta.env.VITE_TIP_TAP_APP_TOKEN, // Your app token
+            token: token, // Your app token
+            document: doc
         })
     }, [minuta])
 
-    const isDisabled = useMemo(() => {
-    
-        if(getFieldValue('content') === minuta?.descripcion && getFieldValue('title') === minuta?.titulo) return true
-        return false
-    }, [getFieldValue('content'), getFieldValue('title')])
+    provider?.setAwarenessField('user', {
+        name: `${nombre} ${apellidoPaterno}`,
+        id: id
+    })
+
+
+    const getMinutaContent = ( content: string) => {
+        setFieldValue('content', content)
+        submit()
+    }
+
 
     return (
         <div className='grid grid-cols-12 gap-10'>
@@ -168,17 +202,25 @@ export const Minutas = ({proyectoId}: Props) => {
                             form={form}
                             key={minuta?.id}
                             initialValues={{ content: minuta?.descripcion, title: minuta?.titulo, id: minuta?.id}}
-                            onFinish={handleOnUpdate}
+                            onFinish={
+                                debounce(handleOnUpdate, 500)
+                            }
+                            layout='vertical'
                         >
-                            <Form.Item name='title'>
-                                <label className='text-sm'>Título</label>
+                            <Form.Item name='title' label ="Título">
                                 <div className='flex gap-x-3'>
-                                    <Input name='title' id='title' placeholder='Título' defaultValue={minuta?.titulo} onChange={(e) => setFieldValue('title', e.target.value)} />
+                                    <Input name='title' id='title' placeholder='Título' defaultValue={minuta?.titulo} onChange={(e) => {
+                                        setFieldValue('title', e.target.value)
+                                        submit()
+                                    }
+                                    } />
                                 </div>
                             </Form.Item>
+                            <Form.Item name="content" className="hidden" label="Contenido">
+                                <Input id="content" name="content" type='hidden' placeholder="Contenido" defaultValue={minuta?.descripcion} onChange={(e) => setFieldValue('content', e.target.value)} />
+                            </Form.Item>
 
-                            { provider && (<Editor provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} />)}
-                            <button  disabled={isDisabled} type='submit' className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'>Guardar</button>
+                            { provider && (<Editor provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} getMinutaContent={getMinutaContent} status = {status} />)}
                         </Form>
                     </div>
                     : (
@@ -186,7 +228,7 @@ export const Minutas = ({proyectoId}: Props) => {
                             <h1 className='text-devarana-graph text-lg'>Puedes crear una minuta nueva o seleccionar una ya existente</h1>
                             
                             <button
-                                disabled={isCreating}
+                                disabled={isCreating || isUpdating}
                                 onClick={handleOnCreate}
                                 className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'
                             >Crear nueva minuta</button>

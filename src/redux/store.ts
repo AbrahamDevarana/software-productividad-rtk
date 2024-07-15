@@ -33,7 +33,7 @@ import { departamentosApi } from "./features/departamentos/departamentosThunks";
 import { proyectosApi } from "./features/proyectos/proyectosThunk";
 import { hitosApi } from "./features/hitos/hitosThunk";
 import { taskApi } from "./features/tasks/tasksThunk";
-
+import { tiptapApi } from "./features/tiptap/tiptapApi";
 import { minutasApi } from "./features/minutas/minutasApi";
 
 export const store = configureStore({
@@ -57,6 +57,7 @@ export const store = configureStore({
         [hitosApi.reducerPath]: hitosApi.reducer,
         [taskApi.reducerPath]: taskApi.reducer,
         [minutasApi.reducerPath]: minutasApi.reducer,
+        [tiptapApi.reducerPath]: tiptapApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -94,7 +95,8 @@ export const store = configureStore({
         .concat(proyectosApi.middleware)
         .concat(hitosApi.middleware)
         .concat(taskApi.middleware)
-        .concat(minutasApi.middleware),
+        .concat(minutasApi.middleware)
+        .concat(tiptapApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

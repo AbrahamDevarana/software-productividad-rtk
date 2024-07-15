@@ -16,12 +16,10 @@ import { IoIosLink } from "react-icons/io";
 import { Form, Input } from "antd";
 import dompurify from 'dompurify';
 import Collaboration from '@tiptap/extension-collaboration'
-import * as Y from 'yjs'
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import { TiptapCollabProvider } from "@hocuspocus/provider";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 
@@ -30,9 +28,9 @@ interface Props {
     provider: TiptapCollabProvider,
     minutaId?: string
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+    getMinutaContent?: (content: string) => void
+    status: string
 }
-
-const doc = new Y.Doc()
 
 const colors = [
     '#958DF1',
@@ -58,10 +56,10 @@ const colors = [
     '#CBFFA9',
     '#9BABB8',
     '#E3F4F4',
-  ]
+]
 
 
-export const Editor = ({provider, setFieldValue, minutaId}: Props ) => {
+export const Editor = ({provider, setFieldValue, minutaId, getMinutaContent, status: minutaStatus}: Props ) => {
 
     const {nombre, apellidoPaterno} = useAppSelector(state => state.auth.userAuth)
     const [status, setStatus] = useState('loading')
@@ -148,13 +146,13 @@ export const Editor = ({provider, setFieldValue, minutaId}: Props ) => {
         ],
         editorProps: {
             attributes: {
-                class: 'p-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text min-h-[300px] max-h-[400px] overflow-y-auto',
+                class: 'p-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text overflow-y-auto h-[calc(100vh-300px)]',
             },
-            
         },
         onUpdate: ({ editor, transaction }) => {                        
             const purified = dompurify.sanitize(editor.getHTML());
             setFieldValue('content', purified);
+            getMinutaContent && getMinutaContent(purified)
         },
     }, [provider]);
 
@@ -181,9 +179,6 @@ export const Editor = ({provider, setFieldValue, minutaId}: Props ) => {
   return (
     <>
     
-    <Form.Item name="content" className="hidden">
-        <Input type="hidden" id="content" name="content" onChange={(e) => setFieldValue('content', e.target.value)} />
-    </Form.Item>
     {
             editor && (
                 <div className="">
@@ -405,7 +400,16 @@ export const Editor = ({provider, setFieldValue, minutaId}: Props ) => {
                                         } online`
                                         : 'offline'}
                                     </label>
-                                <p className="text-dark text-xs"> ✎ {currentUser.name}</p>
+                                <div className="text-dark text-xs flex items-center gap-2">
+                                    <span>
+                                        {
+                                            minutaStatus === 'idle' ? <div className="w-2 h-2 rounded-full bg-default"></div>
+                                            : minutaStatus === 'loading' ? <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                            : minutaStatus === 'success' ? <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                            : <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                        }
+                                    </span>
+                                    {currentUser.name}</div>
                            </div>
                         </div>
                     </div>

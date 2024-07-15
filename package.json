@@ -34,6 +34,7 @@
     "@tiptap/pm": "^2.4.0",
     "@tiptap/react": "^2.4.0",
     "@tiptap/starter-kit": "^2.4.0",
+    "abort-controller": "^3.0.0",
     "antd": "^5.15.4",
     "antd-img-crop": "^4.12.2",
     "axios": "^1.1.3",
