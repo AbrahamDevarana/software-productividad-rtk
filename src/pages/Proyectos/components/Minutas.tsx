@@ -1,5 +1,5 @@
 import { Editor } from '@/components/ui'
-import { useCreateMinutaMutation, useDeleteMinutaMutation, useGetMinutaQuery, useGetMinutasQuery, useLazyGetMinutaQuery, useUpdateMinutaMutation } from '@/redux/features/minutas/minutasApi'
+import { useCreateMinutaMutation, useDeleteMinutaMutation, useGetMinutasQuery, useLazyGetMinutaQuery, useUpdateMinutaMutation } from '@/redux/features/minutas/minutasApi'
 import { Input, Form, message, Popconfirm } from 'antd'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
@@ -135,7 +135,7 @@ export const Minutas = ({proyectoId}: Props) => {
             name: `minuta-${import.meta.env.VITE_TIP_TAP_ENV}-${minuta?.id}`,
             appId: import.meta.env.VITE_TIP_TAP_APP_ID, // Your app ID
             token: token, // Your app token
-            document: doc
+            // document: doc
         })
     }, [minuta])
 
@@ -147,7 +147,6 @@ export const Minutas = ({proyectoId}: Props) => {
 
     const getMinutaContent = ( content: string) => {
         setFieldValue('content', content)
-        submit()
     }
 
 
@@ -162,16 +161,17 @@ export const Minutas = ({proyectoId}: Props) => {
                     {
                         isLoading ? <div className='flex h-full w-full items-center align-middle justify-center'> <Spinner/> </div> :
                         searchedMinuta?.map((minuta, key) => (
-                            <div key={key} 
+                            <button key={key} 
+                                disabled={isUpdating}
                                 onClick={() => handleSelectMinuta(minuta)}
-                                className={`border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
+                                className={`border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
                                 <h3 className='text-bold text-sm'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
                                 <p className='line-clamp-3 text-devarana-graph text-xs'>
                                     {convertToPlainText(minuta.descripcion).slice(0, 50)}...
                                 </p>
                                 {/* humanize */}
                                 <p className='text-right text-xs py-1 opacity-25'>{ dayjs(minuta.fecha).fromNow() }</p>
-                            </div>
+                            </button>
                         ))
                     }
                 </div>
@@ -203,7 +203,7 @@ export const Minutas = ({proyectoId}: Props) => {
                             key={minuta?.id}
                             initialValues={{ content: minuta?.descripcion, title: minuta?.titulo, id: minuta?.id}}
                             onFinish={
-                                debounce(handleOnUpdate, 500)
+                                handleOnUpdate
                             }
                             layout='vertical'
                         >
@@ -211,9 +211,7 @@ export const Minutas = ({proyectoId}: Props) => {
                                 <div className='flex gap-x-3'>
                                     <Input name='title' id='title' placeholder='Título' defaultValue={minuta?.titulo} onChange={(e) => {
                                         setFieldValue('title', e.target.value)
-                                        submit()
-                                    }
-                                    } />
+                                    }} />
                                 </div>
                             </Form.Item>
                             <Form.Item name="content" className="hidden" label="Contenido">
@@ -221,6 +219,7 @@ export const Minutas = ({proyectoId}: Props) => {
                             </Form.Item>
 
                             { provider && (<Editor provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} getMinutaContent={getMinutaContent} status = {status} />)}
+                            <button type='submit' className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'>Guardar</button>
                         </Form>
                     </div>
                     : (

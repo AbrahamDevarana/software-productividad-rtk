@@ -146,15 +146,15 @@ export const Editor = ({provider, setFieldValue, minutaId, getMinutaContent, sta
         ],
         editorProps: {
             attributes: {
-                class: 'p-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text overflow-y-auto h-[calc(100vh-300px)]',
+                class: 'p-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rich-text overflow-y-auto h-[calc(100vh-400px)]',
             },
         },
-        onUpdate: ({ editor, transaction }) => {                        
+        onUpdate: ({ editor, transaction }) => {         
             const purified = dompurify.sanitize(editor.getHTML());
             setFieldValue('content', purified);
             getMinutaContent && getMinutaContent(purified)
         },
-    }, [provider]);
+    });
 
     useEffect(() => {
         // Update status changes
