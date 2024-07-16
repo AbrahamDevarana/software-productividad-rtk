@@ -1,18 +1,25 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useCreateHitoMutation, useDeleteHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
 import { HitosProps, ProyectosProps, TaskProps } from '@/interfaces'
-import { Collapse, ColorPicker, FloatButton, Form, Input, message, Popconfirm, Popover, Tooltip } from 'antd'
+import { Checkbox, Collapse, ColorPicker, FloatButton, Form, Input, message, Popconfirm, Popover, Select, Tooltip } from 'antd'
 import Loading from '@/components/antd/Loading'
 import { Icon } from '@/components/Icon'
 import { TablaTask } from './TablaTask'
 import { BsThreeDots } from 'react-icons/bs'
 import { BiTrash } from 'react-icons/bi'
 import { FaCopy } from 'react-icons/fa'
+import { priorityItems } from '@/components/tasks'
 
 interface TableProyectosProps {
     currentProyecto: ProyectosProps
     setSelectedTask: (task: TaskProps) => void
     selectedTask: TaskProps | null
+}
+
+interface Options {
+    responsables: string[];
+    estatus: string[];
+    prioridad: string[];
 }
 
 
@@ -21,6 +28,17 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
     const [ createHito, { isLoading: isCreatingHito, error: createHitoError }] = useCreateHitoMutation()
     const [ updateHito, { isLoading: isUpdatingHito, error: updateHitoError }] = useUpdateHitoMutation()
     const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()
+
+    // Filtros
+    const [activeAll, setActiveAll] = useState<boolean>(true)
+    const [search, setSearch] = useState<string>('')
+    const [options, setOptions] = useState<Options>({
+        responsables: [],
+        estatus: [],
+        prioridad: [],
+
+    })
+
     
     const { data: hitos, isLoading} = useGetHitosQuery({proyectoId: currentProyecto.id})
     const { Panel } = Collapse;
@@ -70,11 +88,6 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
         })
     }
     
-    const activeHitos = useMemo(() => {
-        if (!hitos) return []
-        return hitos.map((hito: HitosProps) => hito.id)
-    }, [hitos])
-
     const handleChangeColor = (hito: HitosProps, color: string) => {
       
         const query = {
@@ -158,22 +171,65 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
             </div>
     )
 
+    const activeHitos = useMemo(() => {
+        if (!hitos) return []
+
+        if(activeAll) return hitos.map((hito: HitosProps) => hito.id)
+        else return []
+
+    }, [hitos, activeAll])
+
+    const searchHitos = useMemo(() => {
+        if(!hitos) return []
+
+        if(search === '') return hitos
+        // con regex que incluya mayusculas y minusculas, acentos y ñ
+        const regex = new RegExp(search, 'i')
+        return hitos.filter((hito: HitosProps) => regex.test(hito.titulo))
+        
+    }, [hitos, search])
+
     if(isLoading) return ( <Loading /> )
+        
     return (
         <>
+        <div className='flex gap-x-5 gap-y-1 items-center justify-end flex-wrap'>
+            <div style={{width: 180}}>
+                <Checkbox checked={activeAll} onChange={e => setActiveAll(e.target.checked)}>{ activeAll ? 'Ocultar' : 'Mostrar' } Secciones</Checkbox>
+            </div>
+            <Input placeholder='Buscar Sección' style={{width: 280}} onChange={e => setSearch(e.target.value)} />
+            {/* <div style={{width: 280}}>
+                <Select
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto', width: 150}}
+                    style={{width: '100%'}}
+                    mode='multiple'
+                    maxTagCount={2}
+                    placeholder='Filtrar por Prioridad'
+                    className='w-full items-end justify-end cursor-pointer'
+                    options={priorityItems}
+                    suffixIcon={false}
+                    maxTagPlaceholder={(omittedValues) => (
+                        <span className='text-devarana-graph'>+{omittedValues.length}</span>
+                    )}
+                />
+
+            </div>
+            <Select placeholder='Filtrar por Estado'  style={{width: 280}}/>
+            <Select placeholder='Filtrar por Responsable' style={{width: 280}} /> */}
+        </div>
         <Collapse
-            defaultActiveKey={activeHitos}
+            activeKey={activeHitos}
             ghost
         >
             {
-                hitos && hitos.map((hito: HitosProps, index: number) => (
+                searchHitos && searchHitos.map((hito: HitosProps, index: number) => (
                     <Panel 
                         className="customResultadosPanel"
                         key={hito.id}
                         collapsible='icon'
                         id={`hitos-${hito.id}`}
                         header={genHeader(hito)}>
-                        <TablaTask hito={hito} selectedTask={selectedTask} setSelectedTask={setSelectedTask}/>
+                        <TablaTask hito={hito} selectedTask={selectedTask} setSelectedTask={setSelectedTask} options={options} />
                     </Panel>
                 )) 
             }

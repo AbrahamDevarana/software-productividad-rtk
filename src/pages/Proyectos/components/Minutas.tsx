@@ -8,7 +8,6 @@ import { Spinner } from '@/components/antd/Spinner'
 import { FaTrash } from 'react-icons/fa'
 import { IoClose, IoCreate } from 'react-icons/io5'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
-import * as Y from 'yjs'
 import { useGetTipTapTokenQuery } from '@/redux/features/tiptap/tiptapApi'
 import { useAppSelector } from '@/redux/hooks'
 
@@ -17,11 +16,6 @@ interface Props {
 }
 
 type minuteableType = "PROYECTO" | "OBJETIVO_OPERATIVO" | undefined;
-
-const doc = new Y.Doc()
-const data = {}
-
-
 
 export const Minutas = ({proyectoId}: Props) => {
 
@@ -39,21 +33,6 @@ export const Minutas = ({proyectoId}: Props) => {
     const { data: token} = useGetTipTapTokenQuery({})
     const [form] = Form.useForm();
     const {setFieldValue, getFieldValue, resetFields, submit} = form
-
-
-
-    const debounce = (func: any, wait: number) => {
-        let timeout: any;
-        return function executedFunction(...args: any) {
-            setStatus('loading')
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
 
     const handleOnUpdate = () => {
         if(!minuta) return
@@ -165,8 +144,8 @@ export const Minutas = ({proyectoId}: Props) => {
                                 disabled={isUpdating}
                                 onClick={() => handleSelectMinuta(minuta)}
                                 className={`border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
-                                <h3 className='text-bold text-sm'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
-                                <p className='line-clamp-3 text-devarana-graph text-xs'>
+                                <h3 className='text-bold text-sm text-left'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
+                                <p className='line-clamp-3 text-devarana-graph text-xs text-left'>
                                     {convertToPlainText(minuta.descripcion).slice(0, 50)}...
                                 </p>
                                 {/* humanize */}

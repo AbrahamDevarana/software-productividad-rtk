@@ -1,5 +1,6 @@
 import { Icon } from "@/components/Icon";
 import { PopoverEstado } from "@/components/resultados/PopoverEstado";
+import { priorityItems, statusItems } from "@/components/tasks";
 import { PopoverStatus } from "@/components/tasks/PopoverStatus";
 import { getColor, getStatus, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
@@ -9,14 +10,14 @@ import { useGetProyectoQuery } from "@/redux/features/proyectos/proyectosThunk";
 import { useCreateTaskMutation, useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "@/redux/features/tasks/tasksThunk";
 import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
 import { taskStatusTypes } from "@/types";
-import { Avatar, DatePicker, Dropdown, Form, Image, Input, Menu, MenuProps, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
+import { Avatar, Checkbox, DatePicker, Divider, Dropdown, Form, Image, Input, Menu, MenuProps, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { BsChatDots, BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
-import { FaEdit, FaPlus, FaTrash, FaUser } from "react-icons/fa";
+import { FaEdit, FaEye, FaPlus, FaTrash, FaUser } from "react-icons/fa";
 import { PiChatCircleDotsLight } from "react-icons/pi";
 import { RiUserAddFill } from "react-icons/ri";
 
@@ -24,14 +25,21 @@ interface TablaHitosProps {
     hito: HitosProps;
     setSelectedTask: (task: TaskProps) => void
     selectedTask: TaskProps | null
+    options: Options
+}
+interface Options {
+    responsables: string[];
+    estatus: string[];
+    prioridad: string[];
 }
 
 const taskeableType = "HITO"
 
-export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosProps) => {
+export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: TablaHitosProps) => {
 
     const inputRef = useRef(null);
     const [open, setOpen] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [visiblePopoverId, setVisiblePopoverId] = useState<number | null>(null);
 
     const { data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
@@ -46,7 +54,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
 
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
-    const [selectedRecord, setSelectedRecord] = useState(null);
+    const [selectedRecord, setSelectedRecord] = useState<TaskProps | null>(null);
 
     const handleUpdateTask = async (e: React.FocusEvent<HTMLInputElement, Element>, task: TaskProps) => {
         if(e.target.value === task.nombre) return
@@ -122,7 +130,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         })
     }
 
-    const handleUpdateDate = (e: any, dateString: string | string[], task: TaskProps) => {
+    const handleUpdateDate = (e: any, dateString: dayjs.Dayjs, task: TaskProps) => {
             
         if(Array.isArray(dateString)) return
 
@@ -130,6 +138,11 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             ...task,
             fechaFin: dateString ? dayjs(dateString, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : task.fechaFin
         }
+
+        console.log(query.fechaFin);
+        
+
+        
         updateTask(query).unwrap().then(() => {
             message.success('Fecha Actualizada')
         }).catch((error) => {
@@ -137,7 +150,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         })
     }
 
-    const handleUpdateCreatedDate = (e: any, dateString: string | string[], task: TaskProps) => {
+    const handleUpdateCreatedDate = (e: any, dateString: dayjs.Dayjs, task: TaskProps) => {
                 
             if(Array.isArray(dateString)) return
     
@@ -152,6 +165,42 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
             })
     }
 
+    const handleOcultar = (task: TaskProps) => {
+        const query = {
+            ...task,
+            visible: !task.visible
+        }
+        updateTask(query).unwrap().then(() => {
+            message.success('Visibilidad Actualizada')
+        }).catch((error) => {
+            message.error('Error al actualizar la visibilidad')
+        })
+    }
+
+    const PopoverContent = ({ task, text, }: { task: TaskProps, text:string }) => {
+        return (
+            <Popconfirm 
+                title="¿Estás seguro de eliminar esta actividad?"
+                onConfirm={ () => handleDeleteTask(task) }
+                okText="Si"
+                placement="topLeft"
+                cancelText="No"
+                className="flex items-center gap-2 group"
+                okButtonProps={{
+                    className: 'rounded-full mr-2 bg-primary'
+                }}
+                cancelButtonProps={{
+                    className: 'rounded-full mr-2 bg-error-light text-white'
+                }}
+            >
+            <BiTrash className='text-default text-right group-hover:text-error-light cursor-pointer' /> 
+            {
+                text && <p className='text-default text-right group-hover:text-error-light cursor-pointer'>{text}</p>
+            }
+        </Popconfirm>
+        )
+    }
+    
     const defaultColumns:ColumnsType<TaskProps> = [
         {
             title: () => ( <p className='tableTitle text-center'>Creación</p>),
@@ -167,7 +216,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         format={"DD-MMM-YYYY"}
                         defaultValue={ dayjs(record.created)  }
                         showNow
-                        onChange={(date, dateString) => handleUpdateCreatedDate(null, dateString, record)}
+                        onChange={(date, dateString) => handleUpdateCreatedDate(null, date, record)}
                         allowClear={false}
                         placeholder="Fecha Creación"
                         variant="borderless"
@@ -310,7 +359,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                     placeholder="Fecha Fin"
                     name="fechaFin"
                     suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
+                    onChange={(date, dateString) => handleUpdateDate(null, date, record)}
                 />
                 )
             },
@@ -328,24 +377,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                         content={
                             <>
                                 <div className="flex gap-5">
-                                    {/* <button onClick={ () => setSelectedTask(record) } className='flex items-center gap-2'>
-                                        <BiEdit className='text-default text-xl' />
-                                    </button> */}
-                                    <Popconfirm 
-                                        title="¿Estás seguro de eliminar esta actividad?"
-                                        onConfirm={ () => handleDeleteTask(record) }
-                                        okText="Si"
-                                        placement="topLeft"
-                                        cancelText="No"
-                                        okButtonProps={{
-                                            className: 'rounded-full mr-2 bg-primary'
-                                        }}
-                                        cancelButtonProps={{
-                                            className: 'rounded-full mr-2 bg-error-light text-white'
-                                        }}
-                                    >
-                                        <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                                    </Popconfirm>
+                                   
                                 </div>
                             </>
                         }
@@ -382,81 +414,92 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
         const [form] = Form.useForm();
 
         return (
-            <Form initialValues={{
-                ...hito,
-                nombre: ''
-            }}
-            form={form}
-            onBlur={ e => handleCreateTask(hito)}
-            > 
-                <Form.Item name='nombre' className='mb-0'>
-                    <Input placeholder='Agregar Nueva Actividad' onPressEnter={
-                        (e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            e.currentTarget.blur()
-                        }
-                    } className='w-60'/> 
-                </Form.Item>
-            </Form>
+           <div className="flex items-center flex-1 justify-between">
+                <div className="w-full">
+                    <Form initialValues={{
+                        ...hito,
+                        nombre: ''
+                    }}
+                    form={form}
+                    onBlur={ e => handleCreateTask(hito)}
+                    > 
+                        <Form.Item name='nombre' className='mb-0'>
+                            <Input placeholder='Agregar Nueva Actividad' onPressEnter={
+                                (e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    e.currentTarget.blur()
+                                }
+                            } className='w-3/4'/> 
+                        </Form.Item>
+                    </Form>
+                </div>
+                <div className="w-full text-right">
+                    <Checkbox
+                        onChange={(e) => setVisible(e.target.checked)}
+                    > Mostrar Actividades Ocultas</Checkbox>
+                </div>
+            </div>
         )
     }
 
     const items: MenuProps['items'] = [
         {
-          label: 'Copiar',
-          key: '1',
+            label: (
+                <div className="flex items-center gap-2 group">
+                    <FaEye className='text-default cursor-pointer group-hover:text-primary' />
+                    <p className="text-default cursor-pointer group-hover:text-primary"> {selectedRecord?.visible ? 'Ocultar' : 'Mostrar'} </p>
+                </div>
+            ),
+            key: '2',
+            onClick: () => {
+                selectedRecord && handleOcultar(selectedRecord)
+            }
         },
         {
-          label: 'Ocultar',
-          key: '2',
+            key: 'divider',
+            label: <hr  />,
         },
         {
-          label: 'Eliminar',
+          label: PopoverContent({ task: selectedRecord!, text: 'Eliminar' }),
+          className: 'text-error-light',
           key: '3',
+            onClick: () => {
+                selectedRecord && handleDeleteTask(selectedRecord)
+            }
         },
+        // Divider
+      
+        
     ];
-
-    const handleContextMenu = (event: React.MouseEvent<HTMLDivElement>, record: any) => {
-        event.preventDefault();
-        setSelectedRecord(record);
-        setContextMenuPosition({ x: event.clientX, y: event.clientY });
-        setContextMenuVisible(true);
-    };
-
-    const handleMenuClick = (e: any) => {
-        console.log('Selected record:', selectedRecord);
-        console.log('Menu item clicked:', e.key);
-        setContextMenuVisible(false);
-    };
 
     const handleClickOutside = () => {
         setContextMenuVisible(false);
     };
     
-      useEffect(() => {
+    useEffect(() => {
         const handleDocumentClick = (event: MouseEvent) => {
-          if (contextMenuVisible) {
+        if (contextMenuVisible) {
             setContextMenuVisible(false);
-          }
+        }
         };
     
         document.addEventListener('click', handleDocumentClick);
     
         return () => {
-          document.removeEventListener('click', handleDocumentClick);
+        document.removeEventListener('click', handleDocumentClick);
         };
-      }, [contextMenuVisible]);
+    }, [contextMenuVisible]);
 
 
-      const userItems = useMemo(() => {
+    const userItems = useMemo(() => {
 
         if(!usuarios) return []
 
         return usuarios.map(usuario => ({
             value: usuario.id,
             label: <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}>
-                       <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                    <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} />
                     </Tooltip>,
             key: usuario.id,
             item: <div className='flex items-center gap-2'>
@@ -472,83 +515,26 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 </div>,
             dataName: usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno
         }))
-      }, [usuarios])
+    }, [usuarios])
 
+  
 
-        const priorityItems = [
-                {
-                    label: (
-                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
-                            <p className="text-white">Baja</p>
-                        </div>),
-                    value: 'BAJA'
-                },
-                {
-                    label: (
-                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
-                            <p className="text-white">Media</p>
-                        </div>),
-                    value: 'MEDIA'
-                },
-                {
-                    label: (
-                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
-                            <p className="text-white">Alta</p>
-                        </div>),
-                    value: 'ALTA'
-                },
-                {
-                    label: (
-                        <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
-                            <p className="text-white">Crítica</p>
-                        </div>),
-                    value: 'CRÍTICA'
-                }
-        ]
-        const statusItems = [
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-devarana-dark-graph to-devarana-graph text-center">
-                        <p className="text-white">Sin Iniciar</p>
-                    </div>),
-                value: 'SIN_INICIAR'
-            },
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-primary to-primary-light text-center">
-                        <p className="text-white">En Proceso</p>
-                    </div>),
-                value: 'EN_PROCESO'
-            },
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
-                        <p className="text-white">Finalizado</p>
-                    </div>),
-                value: 'FINALIZADO'
-            },
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
-                        <p className="text-white">Cancelado</p>
-                    </div>),
-                value: 'CANCELADO'
-            },
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
-                        <p className="text-white">Detenido</p>
-                    </div>),
-                value: 'DETENIDO'
-            },
-            {
-                label: (
-                    <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
-                        <p className="text-white">Retrasado</p>
-                    </div>),
-                value: 'RETRASADO'
-            }
-        ]
+    const renderedTask = useMemo(() => {
+        
+        const {} = options
+        
+        if(!tasks) return []
+
+        const tasksCopy = [...tasks]
+
+        const orderedTasks = tasksCopy.sort((a, b) => {
+            if(a.status === 'FINALIZADO') return 1
+            if(b.status === 'FINALIZADO') return -1
+            return 0
+        })
+                
+        return orderedTasks.filter(task => task.visible || visible)
+    }, [tasks, visible])
         
         
     return (
@@ -561,25 +547,32 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask }: TablaHitosPro
                 size="small"
                 pagination={false}
                 columns={defaultColumns}
-                dataSource={tasks}
+                dataSource={renderedTask}
                 footer={ () => FooterComp(hito) }
                 rowKey={(record: any) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
-                        // onContextMenu: (event) => handleContextMenu(event, record),
+                        onContextMenu: (event) => {
+                            event.preventDefault();
+                            setSelectedRecord(record);
+                            setContextMenuPosition({ x: event.clientX, y: event.clientY });
+                            setContextMenuVisible(true);
+                        }
                     }
                 }}
             />
             {contextMenuVisible && (
-                <Dropdown menu={{items}} trigger={['contextMenu']} open={contextMenuVisible}  onOpenChange={(flag) => setContextMenuVisible(flag)}>
-                <div
-                   style={{
-                    position: 'absolute',
-                    top: contextMenuPosition.y,
-                    left: contextMenuPosition.x,
-                    zIndex: 1000,
-                   }}
-                />
+                <Dropdown menu={{items}} className="relative" trigger={['contextMenu']} open={contextMenuVisible}  onOpenChange={(flag) => setContextMenuVisible(flag)}
+                    overlayStyle={{ position: 'absolute', top: contextMenuPosition.y, left: contextMenuPosition.x, width: '200px' }}
+                >
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: contextMenuPosition.y,
+                            left: contextMenuPosition.x,
+                            zIndex: 1000,
+                        }}
+                    />
                 </Dropdown>
             )}
        </div>

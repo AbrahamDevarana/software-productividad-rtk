@@ -34,7 +34,7 @@ export const ProyectoView = () => {
     const [minutasVisible, setMinutasVisible] = useState<boolean>(false)
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
         
-    const options = [
+    const projectViewsOptions = [
         {
             label: 'Listado',
             value: 'listado',
@@ -139,7 +139,7 @@ export const ProyectoView = () => {
                 </div>
 
                 <Segmented
-                    options={options}
+                    options={projectViewsOptions}
                     value={value}
                     onChange={(value) => setValue(value as SegmentTypes)}
                     className='mt-5'
@@ -154,7 +154,7 @@ export const ProyectoView = () => {
                                         <ListadoProyectos 
                                             setSelectedTask={setSelectedTask}
                                             selectedTask={selectedTask}
-                                            currentProyecto={proyecto} 
+                                            currentProyecto={proyecto}
                                         />
                                     </div>
                                 )

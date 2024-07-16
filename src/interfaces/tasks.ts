@@ -12,6 +12,7 @@ export interface TaskProps {
     progreso:      number;
     status:        'SIN_INICIAR' | 'EN_PROCESO' | 'FINALIZADO' | 'CANCELADO' | 'DETENIDO' | 'RETRASADO';
     coResponsables: SinglePerfilProps[];
+    visible?:      boolean;
     created?:     string;
     propietario:   SinglePerfilProps;
 }
