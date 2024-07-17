@@ -1,30 +1,26 @@
-import { Icon } from "@/components/Icon";
-import { PopoverEstado } from "@/components/resultados/PopoverEstado";
+
 import { priorityItems, statusItems } from "@/components/tasks";
-import { PopoverStatus } from "@/components/tasks/PopoverStatus";
-import { getColor, getStatus, getStorageUrl } from "@/helpers";
+import { getColor, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useSelectUser } from "@/hooks/useSelectUser";
 import { HitosProps, TaskProps } from "@/interfaces";
 import { useGetProyectoQuery } from "@/redux/features/proyectos/proyectosThunk";
 import { useCreateTaskMutation, useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "@/redux/features/tasks/tasksThunk";
 import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
-import { taskStatusTypes } from "@/types";
-import { Avatar, Checkbox, DatePicker, Divider, Dropdown, Form, Image, Input, Menu, MenuProps, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
+import { Avatar, Badge, Checkbox, DatePicker, Drawer, Dropdown, Form, Image, Input, MenuProps, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BiEdit, BiTrash } from "react-icons/bi";
-import { BsChatDots, BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
-import { FaEdit, FaEye, FaPlus, FaTrash, FaUser } from "react-icons/fa";
+import { BiTrash } from "react-icons/bi";
+import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
+import { FaEye } from "react-icons/fa";
 import { PiChatCircleDotsLight } from "react-icons/pi";
 import { RiUserAddFill } from "react-icons/ri";
+import TaskComentarios from "./TaskComentarios";
 
 interface TablaHitosProps {
     hito: HitosProps;
-    setSelectedTask: (task: TaskProps) => void
-    selectedTask: TaskProps | null
     options: Options
 }
 interface Options {
@@ -35,11 +31,12 @@ interface Options {
 
 const taskeableType = "HITO"
 
-export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: TablaHitosProps) => {
+export const TablaTask = ({ hito, options}: TablaHitosProps) => {
 
     const inputRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null);
     const [visiblePopoverId, setVisiblePopoverId] = useState<number | null>(null);
 
     const { data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
@@ -200,6 +197,10 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
         </Popconfirm>
         )
     }
+
+    const handleCloseComentarios = () => {
+        setSelectedTask(null)
+    }
     
     const defaultColumns:ColumnsType<TaskProps> = [
         {
@@ -239,14 +240,30 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
                             onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
                         />
                     </Tooltip>
-                    <button>
-                        <PiChatCircleDotsLight size={22} />
+                    <button onClick={() => setSelectedTask(record)} className='text-devarana-graph'>
+                        <Badge 
+                            count={record.comentarios?.length}
+                            offset={[0, 20]}
+                            size="small"
+                            className="flex items-center justify-center"
+                            styles={{
+                                indicator: {
+                                    display: 'flex',
+                                    alignItems: 'end',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#56739B',
+                                    height: '14px',
+                                },
+                            }}
+                        >
+                            <PiChatCircleDotsLight size={22} />
+                        </Badge>
                     </button>
                 </div>
             ),
             ellipsis: {
                 showTitle: false,
-            },
+            }
         },
         {
             title: () => ( <p className='tableTitle text-right'>Responsable</p>),
@@ -376,9 +393,23 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
                         
                         content={
                             <>
-                                <div className="flex gap-5">
-                                   
-                                </div>
+                                <Popconfirm 
+                                    title="¿Estás seguro de eliminar esta actividad?"
+                                    onConfirm={ () => handleDeleteTask(record) }
+                                    okText="Si"
+                                    placement="topLeft"
+                                    cancelText="No"
+                                    className="flex items-center gap-2 group"
+                                    okButtonProps={{
+                                        className: 'rounded-full mr-2 bg-primary'
+                                    }}
+                                    cancelButtonProps={{
+                                        className: 'rounded-full mr-2 bg-error-light text-white'
+                                    }}
+                                >
+                                <BiTrash className='text-default text-right group-hover:text-error-light cursor-pointer' />
+                                <p className='text-default text-right group-hover:text-error-light cursor-pointer'>Eliminar</p>
+                                </Popconfirm>
                             </>
                         }
                     >
@@ -517,8 +548,6 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
         }))
     }, [usuarios])
 
-  
-
     const renderedTask = useMemo(() => {
         
         const {} = options
@@ -538,6 +567,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
         
         
     return (
+       <>
         <div onClick={handleClickOutside}>
             <Table
                 loading={isLoading}
@@ -557,7 +587,7 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
                             setSelectedRecord(record);
                             setContextMenuPosition({ x: event.clientX, y: event.clientY });
                             setContextMenuVisible(true);
-                        }
+                        },
                     }
                 }}
             />
@@ -575,7 +605,18 @@ export const TablaTask = ({ hito, selectedTask, setSelectedTask , options}: Tabl
                     />
                 </Dropdown>
             )}
-       </div>
+        </div>
+        <Drawer
+            title={<p className='text-devarana-graph'>Comentarios</p>}
+            placement="right"
+            closable={true}
+            onClose={handleCloseComentarios}
+            open={selectedTask !== null}
+            width={ window.innerWidth > 768 ? 600 : '100%' }
+        >
+            <TaskComentarios activeTask={selectedTask} />
+        </Drawer>
+        </>
 
     )
 }

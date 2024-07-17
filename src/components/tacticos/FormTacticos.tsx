@@ -19,6 +19,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
 import { useGetDepartamentosQuery } from '@/redux/features/departamentos/departamentosThunks';
+import { useGetComentariosQuery } from '@/redux/features/comentarios/comentariosThunk';
 
 interface FormTacticoProps {
     handleCloseDrawer: () => void
@@ -33,7 +34,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     const [selectedArea, setSelectedArea] = useState<number>(0)
     const [selectedEquipo, setSelectedEquipo] = useState<number | string>()
 
-    const { comentarios } = useAppSelector(state => state.comentarios)
+    const { data: comentarios } = useGetComentariosQuery({comentableId: activeTactico.id, comentableType: 'TACTICO'})
     const { permisos} = useAppSelector(state => state.auth)
 
     const [updateTypeProgressMutation, { isLoading: isUpdatingTypeProgress }] = useUpdateTypeProgressMutation()
@@ -259,7 +260,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 <div className='flex gap-2 items-center justify-center'>
                     <p> Comentarios </p>
                     <div className='bg-gradient-to-t h-4 w-4 from-primary to-primary-light text-white rounded-full text-[11px] shadow-sm flex  items-center justify-center'>
-                        {comentarios.length} 
+                        {comentarios?.length || 0} 
                     </div>
                 </div>
             ),

@@ -62,9 +62,6 @@ export const deleteTaskThunk = createAsyncThunk(
         }
 })
 
-
-
-
 export const taskApi = createApi({
     reducerPath: 'taskApi',
     baseQuery: baseQuery,
@@ -132,9 +129,6 @@ export const taskApi = createApi({
 
                     dispatch(
                         taskApi.util.updateQueryData('getTasks', {taskeableId: task.taskeableId}, (draft) => {
-
-                            console.log('draft', draft);
-                            
                                 const index = draft.findIndex(task => task.id === temporaryId);
                                 if (index !== -1) {
                                     draft[index] = createdTask
@@ -157,6 +151,7 @@ export const taskApi = createApi({
             onQueryStarted: async ({taskId, hitoId}, { dispatch, queryFulfilled }) => {
                 const patchResult = dispatch(
                     taskApi.util.updateQueryData('getTasks', {taskeableId: hitoId}, (draft) => {
+                        
                         const index = draft.findIndex(task => task.id === taskId);
                         if (index !== -1) {
                             draft.splice(index, 1)

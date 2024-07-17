@@ -46,6 +46,15 @@ export const proyectosApi = createApi({
                 })
             )
 
+            const patchResultProyecto = dispatch(
+                proyectosApi.util.updateQueryData('getProyecto', {proyectoId: temporaryId}, (draft) => {
+                    draft = { 
+                        id: temporaryId,
+                        ...entries
+                    } as ProyectosProps
+                })
+            )
+
             try {
                 const {data: proyecto} = await queryFulfilled
 
@@ -57,8 +66,15 @@ export const proyectosApi = createApi({
                         }
                     })
                 )
+
+                dispatch (
+                    proyectosApi.util.updateQueryData('getProyecto', {proyectoId: temporaryId}, (draft) => {
+                        draft = proyecto as ProyectosProps
+                    })
+                )
             } catch (error) {
                 patchResult.undo()
+                patchResultProyecto.undo()
             }}
         }),
         updateProyecto: builder.mutation<ProyectosProps, { proyectoId: string, proyecto: FormData }>({

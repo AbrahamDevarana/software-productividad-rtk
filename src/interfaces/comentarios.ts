@@ -2,12 +2,12 @@ import { UsuarioProps } from "./usuario";
 
 
 export interface ComentarioProps {
-    id: string;
+    id: number;
     comentableId: string | number;
     comentableType: string;
     autorId: string;
     mensaje: string;
-    createdAt: Date;
+    createdAt?: string;
     autor: UsuarioProps;
 }
 

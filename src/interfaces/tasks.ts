@@ -14,5 +14,6 @@ export interface TaskProps {
     coResponsables: SinglePerfilProps[];
     visible?:      boolean;
     created?:     string;
+    comentarios?:  number[];
     propietario:   SinglePerfilProps;
 }

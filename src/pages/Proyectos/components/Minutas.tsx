@@ -56,6 +56,9 @@ export const Minutas = ({proyectoId}: Props) => {
     }
 
     const handleSelectMinuta = (minuta: MinutasProps) => {
+        if (minuta) {
+            provider?.destroy()
+        } 
         getMinuta({id: minuta.id})
         setShowForm(true)
     }

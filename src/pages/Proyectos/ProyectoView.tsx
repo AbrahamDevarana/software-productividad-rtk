@@ -2,14 +2,14 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import {  Avatar, Divider, Drawer, Image, Segmented, Skeleton, Tooltip } from 'antd';
+import {  Avatar, Divider, Drawer, Image, Modal, Segmented, Skeleton, Tooltip } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
 import { FormTask } from '../../components/tareas/FormTask';
 import { Icon } from '@/components/Icon';
 import { KanbanProyecto } from '@/pages/Proyectos/components/KanbanProyecto';
 import { Link } from 'react-router-dom';
-import { TaskProps } from '@/interfaces';
+import { ProyectosProps, TaskProps } from '@/interfaces';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { Minutas } from './components/Minutas';
@@ -17,22 +17,23 @@ import { Proximamente } from '@/components/ui';
 import { MdOutlineEditNote } from 'react-icons/md';
 import { FaCog } from 'react-icons/fa';
 import { IoInformationCircleOutline } from 'react-icons/io5';
+import { FormProyecto } from './components/FormProyecto';
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
-
-    const dispatch = useAppDispatch()
     const { id } = useParams<{ id: string }>()
 
 
     const { data: proyecto, isLoading } = useGetProyectoQuery({proyectoId: id}, { skip: !id})
     const { socket } = useAppSelector(state => state.socket)
+    const [ isModalVisible, setIsModalVisible ] = useState(false)
     const [value, setValue] = useState<SegmentTypes>('listado');
     const [visible, setVisible] = useState<boolean>(false);
     const [minutasVisible, setMinutasVisible] = useState<boolean>(false)
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
+    const [ selectedProyect, setSelectedProyect ] = useState<ProyectosProps | null>(null)
         
     const projectViewsOptions = [
         {
@@ -56,7 +57,16 @@ export const ProyectoView = () => {
     const handleClose = () => {
         setSelectedTask(null)
     }
-    
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+        setSelectedProyect(null)
+    }
+
+    const handleEdit = (proyecto : ProyectosProps) => {
+        setSelectedProyect(proyecto)
+        setIsModalVisible(true)
+    }
 
 
     // useEffect(() => {        
@@ -126,9 +136,13 @@ export const ProyectoView = () => {
                     </div>
                     <Divider type='vertical' className='h-20' style={{ borderColor: 'white', opacity: '.3'}}/>
                     <div className='flex flex-col gap-y-2'>
-                        <button>
-                            <FaCog color='white' size={16}/>
-                        </button>
+                        {
+                            proyecto && (
+                                <button onClick={() => handleEdit(proyecto)} className='justify-start'>
+                                    <FaCog color='white' size={16}/>
+                                </button>
+                            )
+                        }
                         <button className='justify-start' onClick={() => setMinutasVisible(true)}>
                             <MdOutlineEditNote color='white' size={18}/>
                         </button>
@@ -206,6 +220,16 @@ export const ProyectoView = () => {
                         )
                     }
                 </Drawer>
+                <Modal
+                    open={isModalVisible}
+                    onCancel={handleCancel}
+                    width={800}
+                    footer={null}
+                    closable={false}
+                    destroyOnClose={true}
+                >
+                    <FormProyecto currentProyecto={selectedProyect}  handleCancel={handleCancel} /> 
+                </Modal>
             </div>
        </>
 

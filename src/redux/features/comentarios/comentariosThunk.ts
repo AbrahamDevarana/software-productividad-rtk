@@ -1,68 +1,76 @@
-
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AppDispatch, RootState } from '@/redux/store';
-import { clientAxios } from '@/config/axios';
 import { ComentarioProps } from '@/interfaces';
+import { baseQuery } from "@/config/baseQuery";
+import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
+export const comentariosApi = createApi({
+    reducerPath: 'comentariosApi',
+    baseQuery: baseQuery,
+    tagTypes: ['Comentarios'],
+    endpoints: (build) => ({
+        getComentarios: build.query<ComentarioProps[], { comentableType?: string, comentableId?: string | number }>({
+            query: ({ comentableType, comentableId }) => ({
+                url: `comentarios`,
+                params: { comentableType, comentableId }
+            }),
+            transformResponse: ( response: { comentarios: ComentarioProps[] }) => response.comentarios || []
+        }),
+        createComentario: build.mutation<ComentarioProps, { mensaje: string, comentableType: string, comentableId: string | number }>({
+            query: ({ mensaje, comentableType, comentableId }) => ({
+                url: `comentarios`,
+                method: 'POST',
+                body: { mensaje, comentableType, comentableId }
+            }),
+            transformResponse: (response: { comentario: ComentarioProps }) => response.comentario,
+            onQueryStarted: async ({ mensaje, comentableType, comentableId }, { dispatch, queryFulfilled }) => {
+                const tempId = Date.now() + Math.random()
+                const patchResult = dispatch(comentariosApi.util.updateQueryData('getComentarios', { comentableType, comentableId }, (draft) => {
+                    const defaultProps: ComentarioProps = {
+                        id: tempId,
+                        mensaje,
+                        comentableType,
+                        comentableId,
+                        createdAt: new Date().toISOString()
+                    } as ComentarioProps
+                    draft?.push(defaultProps)
+                    })
+                )
 
-
-interface Props {
-    comentario: ComentarioProps
-    comentarios: ComentarioProps[]
-}
-
-export const createComentarioThunk = createAsyncThunk(
-    'comentarios/createComentario',
-    async ({ mensaje,
-        comentableType,
-        comentableId}: {
-            mensaje: string,
-            comentableType: string,
-            comentableId: string | number
-        }, {rejectWithValue, getState}) => {
-
-        const { accessToken } = (getState() as RootState).auth;
-
-        const config = {
-            headers: { "accessToken": `${accessToken}` }
-        }
-        try {
-            const response = await clientAxios.post<Props>(`/comentarios`, {
-                mensaje,
-                comentableType,
-                comentableId
-            }, config);            
-            return response.data.comentario
-        }
-
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-
-export const getComentariosThunk = createAsyncThunk(
-    'comentarios/getComentarios',
-    async ({ comentableType, comentableId }: { comentableType: string, comentableId: string | number }, { rejectWithValue, getState }) => {
-            
-        const { accessToken } = (getState() as RootState).auth;
-
-        const config = {
-            headers: { "accessToken": `${accessToken}` },
-            params : {
-                comentableType,
-                comentableId
+                try {
+                    
+                    const { data: comentario } = await queryFulfilled
+                    dispatch(comentariosApi.util.updateQueryData('getComentarios', { comentableType, comentableId }, (draft) => {
+                        const index = draft.findIndex(comment => comment.id === tempId);
+                        if (index !== -1) {
+                            draft[index] = comentario
+                        }
+                    }))
+                } catch (error) {
+                    patchResult.undo()
+                }
             }
-        }
-        try {
-            const response = await clientAxios.get<Props>(`/comentarios`, config);
+        }),
+        deleteComentario: build.mutation<ComentarioProps, { id: number, comentableId: string | number, comentableType: string }>({
+            query: ({id}) => ({
+                url: `comentarios/${id}`,
+                method: 'DELETE'
+            }),
+            onQueryStarted: async ({id, comentableId, comentableType}, { dispatch, queryFulfilled }) => {
+                const patchResult = dispatch(
+                    comentariosApi.util.updateQueryData('getComentarios', { comentableType, comentableId }, (draft) => {
+                    const index = draft.findIndex(comment => comment.id === id);
+                        if (index !== -1) {
+                            draft.splice(index, 1)
+                        }
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch (error) {
+                    patchResult.undo()
+                }
+            },
+        })
+    })
+})
 
-            return response.data.comentarios
-        }
-
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
+export const { useGetComentariosQuery, useCreateComentarioMutation, useDeleteComentarioMutation } = comentariosApi;

@@ -12,7 +12,6 @@ import tacticosSlice from "./features/tacticos/tacticosSlice";
 import operativosSlice from "./features/operativo/operativosSlice";
 import resultadosSlice from "./features/resultados/resultadosSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
-import comentariosSlice from "./features/comentarios/comentariosSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
 import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 import gestionSlice from "./features/gestion/gestionSlice";
@@ -35,6 +34,7 @@ import { hitosApi } from "./features/hitos/hitosThunk";
 import { taskApi } from "./features/tasks/tasksThunk";
 import { tiptapApi } from "./features/tiptap/tiptapApi";
 import { minutasApi } from "./features/minutas/minutasApi";
+import { comentariosApi } from "./features/comentarios/comentariosThunk";
 
 export const store = configureStore({
     reducer: {
@@ -58,6 +58,7 @@ export const store = configureStore({
         [taskApi.reducerPath]: taskApi.reducer,
         [minutasApi.reducerPath]: minutasApi.reducer,
         [tiptapApi.reducerPath]: tiptapApi.reducer,
+        [comentariosApi.reducerPath]: comentariosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -70,7 +71,6 @@ export const store = configureStore({
         operativos: operativosSlice,
         resultados: resultadosSlice,
         acciones: accionesSlice,
-        comentarios: comentariosSlice,
         galeria: galeriaSlice,
         evaluaciones: evaluacionsSlice,
         gestion: gestionSlice,
@@ -96,7 +96,8 @@ export const store = configureStore({
         .concat(hitosApi.middleware)
         .concat(taskApi.middleware)
         .concat(minutasApi.middleware)
-        .concat(tiptapApi.middleware),
+        .concat(tiptapApi.middleware)
+        .concat(comentariosApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

@@ -30,7 +30,7 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
     const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()
 
     // Filtros
-    const [activeAll, setActiveAll] = useState<boolean>(true)
+    const [active, setActive] = useState<string[]>([])
     const [search, setSearch] = useState<string>('')
     const [options, setOptions] = useState<Options>({
         responsables: [],
@@ -171,13 +171,6 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
             </div>
     )
 
-    const activeHitos = useMemo(() => {
-        if (!hitos) return []
-
-        if(activeAll) return hitos.map((hito: HitosProps) => hito.id)
-        else return []
-
-    }, [hitos, activeAll])
 
     const searchHitos = useMemo(() => {
         if(!hitos) return []
@@ -195,7 +188,13 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
         <>
         <div className='flex gap-x-5 gap-y-1 items-center justify-end flex-wrap'>
             <div style={{width: 180}}>
-                <Checkbox checked={activeAll} onChange={e => setActiveAll(e.target.checked)}>{ activeAll ? 'Ocultar' : 'Mostrar' } Secciones</Checkbox>
+                <Checkbox 
+                    checked={active.length !== 0}
+                    onChange={e => setActive(e.target.checked ? hitos?.map(hito => hito.id.toString())! : [])}
+                    indeterminate={active.length > 0 && active.length < hitos?.length!}
+                >
+                    Mostrar Todos
+                </Checkbox>
             </div>
             <Input placeholder='Buscar Sección' style={{width: 280}} onChange={e => setSearch(e.target.value)} />
             {/* <div style={{width: 280}}>
@@ -218,8 +217,9 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
             <Select placeholder='Filtrar por Responsable' style={{width: 280}} /> */}
         </div>
         <Collapse
-            activeKey={activeHitos}
+            activeKey={active}
             ghost
+            onChange={(key) => setActive(key as string[])}
         >
             {
                 searchHitos && searchHitos.map((hito: HitosProps, index: number) => (
@@ -229,7 +229,7 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
                         collapsible='icon'
                         id={`hitos-${hito.id}`}
                         header={genHeader(hito)}>
-                        <TablaTask hito={hito} selectedTask={selectedTask} setSelectedTask={setSelectedTask} options={options} />
+                        <TablaTask hito={hito} options={options} />
                     </Panel>
                 )) 
             }

@@ -171,7 +171,7 @@ export const Editor = ({provider, setFieldValue, minutaId, getMinutaContent, sta
     useEffect(() => {
         if(editor && currentUser) {
             localStorage.setItem('tiptap-user', JSON.stringify(currentUser))
-            // editor.chain().focus().updateUser(currentUser).run()
+            editor.chain().focus().updateUser(currentUser).run()
         }
     }, [editor, currentUser])
 
