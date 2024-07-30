@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useEffect, useMemo, useState } from 'react';
 import { ProyectosProps } from '@/interfaces'
 import { useCreateProyectoMutation, useGetProyectoQuery, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
 import dayjs from 'dayjs';
-import { DatePicker, Form, Image, Input, message, Select, Skeleton, Upload, UploadFile } from 'antd'
+import { DatePicker, Form, Image, Input, message, Select, SelectProps, Skeleton, Upload, UploadFile } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { RcFile, UploadProps } from 'antd/es/upload';
 import { getStorageUrl } from '@/helpers';
 import { FaTrash, FaUpload } from 'react-icons/fa';
 import { Button } from '../../../components/ui';
-import Loading from '../../../components/antd/Loading';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
+import ImgCrop from 'antd-img-crop';
+import { badgeItems } from '@/components/tasks';
+import { useGetCategoriasProyectoQuery } from '@/redux/features/categoriasApi';
 
 interface FormProyectoProps {
     currentProyecto?: ProyectosProps | null
@@ -22,6 +23,7 @@ const fallbackImage = `${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner
 export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps) => { 
 
     const { data: proyecto, isLoading: isLoadingProyecto } = useGetProyectoQuery( {proyectoId: currentProyecto?.id}, { skip: !currentProyecto} )
+    const { data: categorias } = useGetCategoriasProyectoQuery( {} )
 
     const {data : usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
@@ -101,9 +103,26 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
         itemRender:() => null,
         maxCount: 1,
         fileList,
+
     };
 
+    const itemsCategoria:SelectProps['options'] = useMemo(() => {
+
+        const emptyItem = { label: 'Sin categoria', value: '' }
+
+        const items = categorias?.map(categoria => ({ 
+            label: categoria.nombre, 
+            value: categoria.id 
+        })) || []
+
+        return [emptyItem, ...items]
+        
+    }, [categorias])
+
     if ( isLoadingProyecto ) return <Skeleton active paragraph={{  rows: 10 }} />
+
+    console.log(proyecto);
+    
 
     return (
         <Form 
@@ -117,6 +136,8 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                 fechaInicio: dayjs(proyecto?.fechaInicio).add(6, 'hour'),
                 fechaFin: dayjs(proyecto?.fechaFin).add(6, 'hour'),
                 participantes: proyecto?.usuariosProyecto.map((usuario) => usuario.id) || [],
+                status: proyecto?.status || 'SIN_INICIAR',
+                categoriaId: proyecto?.categorias[0]?.id || '',
             }}
         >
             <p className='text-devarana-graph col-span-12'>Banner {fileList.length > 0 ? '(Vista Previa)' : '(Original)'} </p>
@@ -133,21 +154,30 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                         />                        
                     }
                     <div className='absolute top-0 left-0 w-full h-full rounded-ext bg-black bg-opacity-50 gap-x-2 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300'>
-                        <Upload
-                            name='banner'
-                            {...props}
+                        <ImgCrop
+                            aspect={390 / 150}
+                            cropShape='rect'
+                            modalProps={{
+                                cancelButtonProps: { className: 'text-devarana-dark-graph' },
+                                okButtonProps: { className: 'text-white bg-primary-light' }
+                            }}
                         >
-                            <Button classColor='default' classType='icon' width={40} > <FaUpload /> </Button>
-                            
-                        </Upload>
+                            <Upload
+                                name='banner'
+                                {...props}
+                            >
+                                <button className='flex items-center gap-x-2 text-white' type='button'>
+                                    <FaUpload />
+                                </button>
+                            </Upload>
+                        </ImgCrop>
                         {
                             fileList.length > 0 && (
-                                <Button classColor='error' classType='icon' width={40} onClick={() => setFileList([])}> 
-                                    <FaTrash/> 
-                                </Button>
+                                <button className='flex items-center gap-x-2 text-white' type='button' onClick={() => setFileList([])}>
+                                    <FaTrash />
+                                </button>
                             )
                         }
-
                     </div>
                 </div>
                 
@@ -158,18 +188,19 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
             <Form.Item label="Descripcion" name="descripcion" className='col-span-12'>
                 <TextArea rows={5} />
             </Form.Item>
-            <Form.Item label="Participantes" name="participantes" className='col-span-12'>
+            <Form.Item label="Participantes" name="participantes" className='col-span-6'>
                 <Select
                         mode="multiple"
                         style={{ width: '100%' }}
                         placeholder="Selecciona los responsables"                      
                         allowClear
-                        bordered = {false}
+                        variant='borderless'
                         tagRender={tagRender}
                         onChange={(value) => setSelectedUsers(value)} 
                         value={selectedUsers}
                         maxLength={3}
                         showSearch
+                        className='cursor-pointer'
                         maxTagPlaceholder={(omittedValues) => (
                             <span className='text-devarana-graph'>+{omittedValues.length}</span>
                         )}
@@ -183,14 +214,33 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                         }
                     </Select>
             </Form.Item>
-            <Form.Item label="Fecha de inicio" name="fechaInicio" className='col-span-6'>
+            <Form.Item label="Categoria" name="categoriaId" className='col-span-6'>
+                <Select
+                    style={{ width: '100%' }}
+                    placeholder="Selecciona una categoria"
+                    variant='outlined'
+                    options={itemsCategoria}
+                    size='large'
+                >
+                </Select>
+            </Form.Item>
+            <Form.Item label="Fecha de inicio" name="fechaInicio" className='col-span-4'>
                 <DatePicker format={'DD/MM/YYYY'} className='w-full'/>
             </Form.Item>
-            <Form.Item label="Fecha de fin" name="fechaFin" className='col-span-6'>
+            <Form.Item label="Fecha de fin" name="fechaFin" className='col-span-4'>
                 <DatePicker format={'DD/MM/YYYY'} className='w-full' />
             </Form.Item>
+            <Form.Item label="Estatus" name="status" className='col-span-4'>
+                <Select
+                    style={{ width: '100%' }}
+                    placeholder="Selecciona un estatus"
+                    variant='outlined'
+                    options={badgeItems}
+                >
+                </Select>
+            </Form.Item>
 
-            <Form.Item shouldUpdate className='col-span-6'>
+            <Form.Item shouldUpdate className='col-span-12 flex justify-end'>
                 {() => (
                     <Button
                         classColor='primary'

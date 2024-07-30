@@ -31,3 +31,7 @@ export * from "./rendimiento";
 export * from "./ranking";
 export * from "./gestion";
 export * from "./minutas";
+export * from "./comites";
+export * from "./listados";
+
+export * from "./categorias";

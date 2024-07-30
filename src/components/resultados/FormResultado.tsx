@@ -15,7 +15,7 @@ import CountUp from 'react-countup';
 
 interface Props {
     resultado: ResultadoClaveProps
-    isClosed: boolean
+    isClosed?: boolean
     currentOperativo: OperativoProps
 }
 

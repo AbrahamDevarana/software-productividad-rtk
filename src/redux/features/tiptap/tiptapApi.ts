@@ -15,4 +15,4 @@ export const tiptapApi = createApi({
     }),
 });
 
-export const { useGetTipTapTokenQuery } = tiptapApi;
+export const { useGetTipTapTokenQuery, useLazyGetTipTapTokenQuery } = tiptapApi;

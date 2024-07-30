@@ -13,8 +13,7 @@ import { BsFillCalendarFill, BsThreeDots } from 'react-icons/bs';
 import { PopoverPrioridad } from './PopoverPrioridad';
 import { Prioridad, styles, taskStatusTypes } from '@/types';
 import { PopoverEstado } from './PopoverEstado';
-import { TaskProgress } from '../tareas/TaskProgressBar';
-import { TaskCheckbox } from '../tareas/TaskCheckbox';
+import { TaskProgress, TaskCheckbox } from '../tasks';
 import { BiTrash } from 'react-icons/bi';
 
 

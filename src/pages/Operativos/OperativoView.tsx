@@ -79,7 +79,7 @@ export const OperativoView = () => {
             </div>
 
             <div className='min-h-[500px]'>
-                <div className="flex w-full items-center px-5 py-5 relative border rounded-ext shadow-ext">
+                <div className="flex w-full items-center px-5 py-5 relative border justify-between rounded-ext shadow-ext bg-devarana-pearl flex-row gap-x-2">
                     <div>
                         <p className="text-base text-devarana-graph text-opacity-50"> Objetivo </p>
                         <h1 className="text-2xl">

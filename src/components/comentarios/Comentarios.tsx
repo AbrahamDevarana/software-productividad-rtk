@@ -2,16 +2,17 @@
 import { useState } from 'react';
 import { getStorageUrl } from '@/helpers'
 import { useAppSelector } from '@/redux/hooks'
-import { Avatar, Image, message, Popconfirm } from 'antd'
+import { Avatar, Image, Popconfirm } from 'antd'
 import dayjs from 'dayjs'
 import { BsSendFill } from 'react-icons/bs'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { useCreateComentarioMutation, useDeleteComentarioMutation, useGetComentariosQuery } from '@/redux/features/comentarios/comentariosThunk';
 import { ComentarioProps } from '@/interfaces';
 import { BiTrash } from 'react-icons/bi';
+import { toast } from 'sonner';
 
 interface Props {
-    comentableType: string
+    comentableType: 'TASK' | 'TACTICO' | 'ESTRATEGICO'
     comentableId: string | number
     maxSize?: number | 'auto'
 }
@@ -30,20 +31,23 @@ export const Comentarios = ({comentableType, comentableId, maxSize = 300}:Props)
     const handleCreateComentario = async () => {
 
         if(comentario.length > 0 && comentario.trim().length > 0){
-            createComentario({mensaje: comentario, comentableType, comentableId}).unwrap().then(() => {
-                message.success('Comentario creado')
-                setComentario('')
-            }).catch(() => {
-                message.error('Error al crear el comentario')
+
+            toast.promise( createComentario({mensaje: comentario, comentableType, comentableId}).unwrap(), {
+                loading: 'Creando comentario...',
+                success: 'Comentario creado',
+                error: 'Error al crear el comentario',
+                finally: () => {
+                    setComentario('')
+                }             
             })
         }
     }
 
     const handleDeleteComentario = async (comentario: ComentarioProps) => {
-        await deleteComentario({id: comentario.id, comentableId, comentableType}).unwrap().then(() => {
-            message.success('Comentario eliminado')
-        }).catch(() => {
-            message.error('Error al eliminar el comentario')
+        toast.promise( deleteComentario({id: comentario.id, comentableId, comentableType}).unwrap(), {
+            loading: 'Eliminando comentario...',
+            success: 'Comentario eliminado',
+            error: 'Error al eliminar el comentario',
         })
     }
 
@@ -72,22 +76,27 @@ export const Comentarios = ({comentableType, comentableId, maxSize = 300}:Props)
                                         { dayjs(comentario.createdAt).fromNow() }
                                     </span>
                                 </p>
-                                <Popconfirm
-                                    title="¿Estás seguro de eliminar este comentario?"
-                                    onConfirm={() => handleDeleteComentario(comentario)}
-                                    okText="Si"
-                                    cancelText="No"
-                                    okButtonProps={{
-                                        className: 'rounded-full mr-2 bg-primary'
-                                    }}
-                                    cancelButtonProps={{
-                                        className: 'rounded-full mr-2 bg-error-light text-white'
-                                    }}
-                                >
-                                    <button className='text-error-light'>
-                                        <BiTrash />
-                                    </button>
-                                </Popconfirm>
+                                {
+                                    comentario.autor?.id === userAuth.id && (
+                                        <Popconfirm
+                                        title="¿Estás seguro de eliminar este comentario?"
+                                        onConfirm={() => handleDeleteComentario(comentario)}
+                                        okText="Si"
+                                        cancelText="No"
+                                        okButtonProps={{
+                                            className: 'rounded-full mr-2 bg-primary'
+                                        }}
+                                        cancelButtonProps={{
+                                            className: 'rounded-full mr-2 bg-error-light text-white'
+                                        }}
+                                        >
+                                            <button className='text-error-light'>
+                                                <BiTrash />
+                                            </button>
+                                        </Popconfirm>
+                                    )
+                                }
+                               
                             </div>
                             <div className='mt-1 max-h-20 overflow-y-auto flex flex-row justify-between'>
                                 <div className='text-devarana-graph font-light text-sm w-full py-0.5'>

@@ -35,6 +35,9 @@ import { taskApi } from "./features/tasks/tasksThunk";
 import { tiptapApi } from "./features/tiptap/tiptapApi";
 import { minutasApi } from "./features/minutas/minutasApi";
 import { comentariosApi } from "./features/comentarios/comentariosThunk";
+import { comitesApi } from "./features/comitesApi";
+import { listadoApi } from "./features/listadoApi";
+import { categoriaProyectoApi } from "./features/categoriasApi";
 
 export const store = configureStore({
     reducer: {
@@ -59,6 +62,9 @@ export const store = configureStore({
         [minutasApi.reducerPath]: minutasApi.reducer,
         [tiptapApi.reducerPath]: tiptapApi.reducer,
         [comentariosApi.reducerPath]: comentariosApi.reducer,
+        [comitesApi.reducerPath]: comitesApi.reducer,
+        [listadoApi.reducerPath]: listadoApi.reducer,
+        [categoriaProyectoApi.reducerPath]: categoriaProyectoApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -97,7 +103,10 @@ export const store = configureStore({
         .concat(taskApi.middleware)
         .concat(minutasApi.middleware)
         .concat(tiptapApi.middleware)
-        .concat(comentariosApi.middleware),
+        .concat(comentariosApi.middleware)
+        .concat(comitesApi.middleware)
+        .concat(listadoApi.middleware)
+        .concat(categoriaProyectoApi.middleware),
         devTools: process.env.NODE_ENV === 'development',
 });
 

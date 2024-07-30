@@ -74,9 +74,6 @@ export const Editor = ({provider, setFieldValue, minutaId, getMinutaContent, sta
 
     const editor = useEditor({
         extensions: [
-            Document,
-            Paragraph,
-            Text,
             Collaboration.configure({
                 document: provider.document,
             }),

@@ -10,38 +10,42 @@ import { IoClose, IoCreate } from 'react-icons/io5'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 import { useGetTipTapTokenQuery } from '@/redux/features/tiptap/tiptapApi'
 import { useAppSelector } from '@/redux/hooks'
+import * as Y from 'yjs'
+import { toast } from 'sonner'
 
 interface Props {
-    proyectoId: string
+    minuteableId: string
+    minuteableType: minuteableType
 }
 
-type minuteableType = "PROYECTO" | "OBJETIVO_OPERATIVO" | undefined;
+type minuteableType = "PROYECTO" | "OBJETIVO_OPERATIVO" | "COMITÉ" |undefined;
 
-export const Minutas = ({proyectoId}: Props) => {
+export const Minutas = ({minuteableId, minuteableType}: Props) => {
 
     const {nombre, apellidoPaterno, id} = useAppSelector(state => state.auth.userAuth)
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [selectedMinuta, setSelectedMinuta] = useState<MinutasProps | null>(null)
     const [search, setSearch] = useState<string>('')
     const [showForm, setShowForm] = useState<boolean>(false)
+    const doc = new Y.Doc()
 
-    const {data: minutas, isLoading} = useGetMinutasQuery({proyectoId})   
-    const [ getMinuta, {data: minuta, isLoading:isMinutaLoading}] = useLazyGetMinutaQuery()
+    const {data: minutas, isLoading} = useGetMinutasQuery({minuteableId: minuteableId})   
+    const [ getMinuta, {data: minuta, isLoading:isMinutaLoading, }] = useLazyGetMinutaQuery()
+    const { data: token} = useGetTipTapTokenQuery({})
     const [ createMinuta, {isLoading: isCreating, isSuccess: isCreated} ] = useCreateMinutaMutation() 
     const [ updateMinuta, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateMinutaMutation()
     const [ deleteMinuta, {isLoading: isDeleting, isSuccess: isDeleted}] = useDeleteMinutaMutation()
-    const { data: token} = useGetTipTapTokenQuery({})
     const [form] = Form.useForm();
     const {setFieldValue, getFieldValue, resetFields, submit} = form
 
     const handleOnUpdate = () => {
         if(!minuta) return
         let query = {
-                minuteableId: proyectoId,
+                minuteableId: minuteableId,
                 titulo: getFieldValue('title'),
                 descripcion: getFieldValue('content'),
                 fecha: new Date(),
-                minuteableType: 'PROYECTO' as minuteableType,
+                minuteableType: minuteableType
         }
 
         updateMinuta({...query, id: minuta.id}).unwrap().then(() => (
@@ -59,34 +63,48 @@ export const Minutas = ({proyectoId}: Props) => {
         if (minuta) {
             provider?.destroy()
         } 
+        setSelectedMinuta(minuta)
         getMinuta({id: minuta.id})
         setShowForm(true)
     }
 
     const handleOnDelete = async () => {
         if (!minuta) return
-        
-        await deleteMinuta({minuta}).unwrap().then(() => {
-            message.success('Minuta eliminada')
-            setSelectedMinuta(null)
-            setShowForm(false)
-        }).catch(() => {
-            message.error('Error al eliminar minuta')
+
+        toast.promise( deleteMinuta({minuta}).unwrap(), {
+            loading: 'Eliminando minuta',
+            success: 'Minuta eliminada',
+            error: 'Error al eliminar minuta',
+            finally: () => {
+                setSelectedMinuta(null)
+                setShowForm(false)
+                provider?.destroy()
+            }
         })
+        
     }
 
     const handleOnCreate = async() => {
-       await createMinuta({
-            minuteableId: proyectoId,
-            minuteableType: 'PROYECTO' as minuteableType,
-        }).unwrap().then((data) => {
-            message.success('Minuta creada')
-            setSelectedMinuta(data)
-            setShowForm(true)
-        }).catch(() => {
-            message.error('Error al crear minuta')
+        toast.promise( createMinuta({
+            minuteableId: minuteableId,
+            minuteableType: minuteableType,
+        }).unwrap(), {
+            loading: 'Creando minuta',
+            success: (minuta) => {
+                getMinuta({id: minuta.id})
+                setSelectedMinuta(minuta)
+                setShowForm(true)
+                return 'Minuta creada'
+            },
+            error: 'Error al crear minuta',
         })
         
+    }
+
+    const handleOnClose = () => {
+        setSelectedMinuta(null)
+        setShowForm(false)
+        resetFields()
     }
     
 
@@ -110,14 +128,14 @@ export const Minutas = ({proyectoId}: Props) => {
 
 
     const provider = useMemo(() => {
-
+        
         if (!minuta || !token) return null
         
         return new TiptapCollabProvider({
             name: `minuta-${import.meta.env.VITE_TIP_TAP_ENV}-${minuta?.id}`,
             appId: import.meta.env.VITE_TIP_TAP_APP_ID, // Your app ID
             token: token, // Your app token
-            // document: doc
+            document: doc
         })
     }, [minuta])
 
@@ -146,7 +164,7 @@ export const Minutas = ({proyectoId}: Props) => {
                             <button key={key} 
                                 disabled={isUpdating}
                                 onClick={() => handleSelectMinuta(minuta)}
-                                className={`border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-graph bg-opacity-20' : ''}`}>
+                                className={`min-h-20 border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 pt-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-blue bg-opacity-30' : ''}`}>
                                 <h3 className='text-bold text-sm text-left'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
                                 <p className='line-clamp-3 text-devarana-graph text-xs text-left'>
                                     {convertToPlainText(minuta.descripcion).slice(0, 50)}...
@@ -164,7 +182,7 @@ export const Minutas = ({proyectoId}: Props) => {
                     isMinutaLoading || isCreating ? <div className='flex h-full w-full items-center align-middle justify-center'> <Spinner/> </div> :
                     <div>
                         <div className='flex items-center justify-end'>
-                            <button type='button' onClick={() => setShowForm(false)} className=' text-devarana-blue px-2 rounded-md'>
+                            <button type='button' onClick={handleOnClose} className=' text-devarana-blue px-2 rounded-md'>
                                 <IoClose size={18}/>
                             </button>
                             <button type='button' onClick={() => {
@@ -200,7 +218,7 @@ export const Minutas = ({proyectoId}: Props) => {
                                 <Input id="content" name="content" type='hidden' placeholder="Contenido" defaultValue={minuta?.descripcion} onChange={(e) => setFieldValue('content', e.target.value)} />
                             </Form.Item>
 
-                            { provider && (<Editor provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} getMinutaContent={getMinutaContent} status = {status} />)}
+                            { provider && (<Editor key={minuta?.id} provider={provider} setFieldValue={setFieldValue} minutaId={minuta?.id} getMinutaContent={getMinutaContent} status = {status} />)}
                             <button type='submit' className='bg-devarana-blue text-white px-5 py-2 my-3 rounded-md disabled:opacity-50 disabled:cursor-not-allowed'>Guardar</button>
                         </Form>
                     </div>

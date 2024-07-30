@@ -6,6 +6,7 @@ import { ProyectosProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
+import { statusColors } from '@/components/tasks/utils'
 
 interface Props {
 	proyecto: ProyectosProps
@@ -20,7 +21,7 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 	const { userAuth } = useAppSelector(state => state.auth)
 
 	return (
-		<Box className="2xl:col-span-3 lg:col-span-4 md:col-span-6 col-span-12">
+		<Box className="w-1/4 min-w-[390px]">
 			<div className="relative group z-0 pt-8">
 				<Image className="shadow-card-picture max-h-[150px] object-fill z-30 rounded-ext group-hover:-translate-y-12 transition-all duration-500 ease-out" preview={false} 
 					src={getStorageUrl(imagen)} 
@@ -51,7 +52,10 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 			</div>
 
 			<div className="pb-5 pt-5" style={{height: '150px', overflowY: 'auto'}}>
-				<h1 className="text-devarana-dark-graph text-xl font-bold">{titulo}</h1>
+                <div className='flex justify-between items-center'>
+                    <h1 className="text-devarana-dark-graph text-xl font-bold">{titulo}</h1>
+                    <p className="text-devarana-graph font-light text-xs"> Creado : { dayjs(fechaInicio).format('DD MMM') }</p>    
+                </div>
 				<p className="text-devarana-graph font-light pt-5">{descripcion}</p>
 			</div>
 
@@ -80,9 +84,10 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
                         ))
                     }
                 </Avatar.Group>
-				<div className="text-center">
-					<p className="text-devarana-graph font-light text-xs"> Creado : { dayjs(fechaInicio).format('DD MMM') }</p>
-				</div>
+                <div className="flex gap-x-2 items-center">
+                    <div className={`h-3 w-3 rounded-full ${statusColors[proyecto.status].gradient}`} />
+                    <p className={`text-${statusColors[proyecto.status].colorBase}`}>{statusColors[proyecto.status].label} </p>
+                </div>
 			</div>
 
 		</Box>

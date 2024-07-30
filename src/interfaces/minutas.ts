@@ -3,7 +3,7 @@ export interface MinutasProps {
     titulo: string;
     descripcion: string;
     fecha: Date;
-    minuteableType: 'PROYECTO' | 'OBJETIVO_OPERATIVO';
+    minuteableType: 'PROYECTO' | 'OBJETIVO_OPERATIVO' | 'COMITÉ'
     authorId: string;
     minuteableId: string;
     updatedAt: string

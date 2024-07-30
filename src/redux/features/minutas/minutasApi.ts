@@ -10,11 +10,11 @@ export const minutasApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Minutas'],
     endpoints: (builder) => ({
-        getMinutas: builder.query<MinutasProps[], {proyectoId: string}>({
-            query: ({proyectoId}) => ({
+        getMinutas: builder.query<MinutasProps[], {minuteableId: string}>({
+            query: ({minuteableId}) => ({
                 url: `minutas`,
                 params: {
-                    proyectoId
+                    minuteableId
                 }
             }),
             transformResponse: (response: {minutas: MinutasProps[]}) => response.minutas
@@ -34,10 +34,10 @@ export const minutasApi = createApi({
             onQueryStarted: async (body, {dispatch, queryFulfilled}) => {
                 const temporaryId = 'temporary-id-' + Math.random().toString(36).substr(2, 9);
                 const patchResult = dispatch(
-                    minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {
+                    minutasApi.util.updateQueryData('getMinutas', {minuteableId: body.minuteableId!}, (draft) => {
                         const defaultProps = {
                             id: temporaryId,
-                            minuteableType: 'PROYECTO',
+                            minuteableType: body.minuteableType,
                             minuteableId: body.minuteableId,
                         } as MinutasProps
 
@@ -48,7 +48,7 @@ export const minutasApi = createApi({
                 try {
                     const {data : minuta} = await queryFulfilled;
                     dispatch(
-                        minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {                            
+                        minutasApi.util.updateQueryData('getMinutas', {minuteableId: body.minuteableId!}, (draft) => {                            
 
                             const index = draft.findIndex(minuta => minuta.id === temporaryId);
                             if (index !== -1) {
@@ -87,7 +87,7 @@ export const minutasApi = createApi({
             },
             onQueryStarted: async ({id, ...body}, {dispatch, queryFulfilled}) => {
                 const patchResult = dispatch(
-                    minutasApi.util.updateQueryData('getMinutas', {proyectoId: body.minuteableId!}, (draft) => {
+                    minutasApi.util.updateQueryData('getMinutas', {minuteableId: body.minuteableId!}, (draft) => {
                         const index = draft.findIndex(minuta => minuta.id === id);
                         if (index !== -1) {
                             Object.assign(draft[index], body);
@@ -110,7 +110,7 @@ export const minutasApi = createApi({
             }),
             onQueryStarted: async ({minuta: {id, minuteableId}}, {dispatch, queryFulfilled}) => {
                 const patchResult = dispatch(
-                    minutasApi.util.updateQueryData('getMinutas', {proyectoId: minuteableId}, (draft) => {
+                    minutasApi.util.updateQueryData('getMinutas', {minuteableId: minuteableId}, (draft) => {
                         const index = draft.findIndex(minuta => minuta.id === id);
                         if (index !== -1) {
                             draft.splice(index, 1);

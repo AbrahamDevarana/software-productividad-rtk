@@ -1,27 +1,32 @@
 
-import { priorityItems, statusItems } from "@/components/tasks";
+import { priorityItems, statusItems, TaskCheckbox } from "@/components/tasks";
 import { getColor, getStorageUrl } from "@/helpers";
 import getBrokenUser from "@/helpers/getBrokenUser";
 import { useSelectUser } from "@/hooks/useSelectUser";
-import { HitosProps, TaskProps } from "@/interfaces";
-import { useGetProyectoQuery } from "@/redux/features/proyectos/proyectosThunk";
+import { HitosProps, ListadoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useCreateTaskMutation, useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "@/redux/features/tasks/tasksThunk";
 import { useGetUsuariosQuery } from "@/redux/features/usuarios/usuariosThunks";
-import { Avatar, Badge, Checkbox, DatePicker, Drawer, Dropdown, Form, Image, Input, MenuProps, message, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
+import { Avatar, Badge, Checkbox, DatePicker, Drawer, Dropdown, Form, Image, Input, MenuProps, Popconfirm, Popover, Select, Table, Tooltip } from "antd"
 import { DefaultOptionType } from "antd/es/select";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BiTrash } from "react-icons/bi";
 import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { PiChatCircleDotsLight } from "react-icons/pi";
 import { RiUserAddFill } from "react-icons/ri";
-import TaskComentarios from "./TaskComentarios";
+import { Comentarios } from "@/components/comentarios/Comentarios";
+import { TaskProgress } from "./TaskProgressBar";
+import { toast } from "sonner";
 
 interface TablaHitosProps {
-    hito: HitosProps;
+    data: HitosProps | ResultadoClaveProps | ListadoProps
     options: Options
+    taskeableType: 'HITO' | string
+    columnsVisible: any
+    columnsNames: any
+    isClosed?: boolean
 }
 interface Options {
     responsables: string[];
@@ -29,22 +34,18 @@ interface Options {
     prioridad: string[];
 }
 
-const taskeableType = "HITO"
 
-export const TablaTask = ({ hito, options}: TablaHitosProps) => {
+
+export const TablaTask = ({ data, options, taskeableType, columnsNames, columnsVisible, isClosed }: TablaHitosProps) => {
 
     const inputRef = useRef(null);
-    const [open, setOpen] = useState(false);
     const [visible, setVisible] = useState(false);
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null);
-    const [visiblePopoverId, setVisiblePopoverId] = useState<number | null>(null);
 
     const { data: usuarios} = useGetUsuariosQuery({status: 'ACTIVO'})
-    const { data: proyecto} = useGetProyectoQuery({proyectoId: hito.proyectoId})
-
     const { tagRender, spanUsuario } = useSelectUser(usuarios, 'default')
 
-    const {data: tasks, isLoading} = useGetTasksQuery({taskeableId: hito.id}, {skip: !hito.id})
+    const { data: tasks, isLoading } = useGetTasksQuery({taskeableId: data.id}, {skip: !data.id})
     const [ createTask, { isLoading: isCreatingTask, error: createTaskError } ] = useCreateTaskMutation()
     const [ updateTask, { isLoading: isUpdatingTask, error: updateTaskError } ] = useUpdateTaskMutation()
     const [ deleteTask, { isLoading: isDeletingTask, error: deleteTaskError } ] = useDeleteTaskMutation()
@@ -63,10 +64,10 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             [e.target.name]: e.target.value
         }
 
-        updateTask(query).unwrap().then(() => {
-            message.success('Actividad Actualizada')
-        }).catch((error) => {
-            message.error('Error al actualizar actividad')
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando actividad...',
+            success: 'Actividad actualizada',
+            error: 'Error al actualizar la actividad',
         })
     }
 
@@ -75,10 +76,11 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             ...task,
             propietarioId: value
         }
-        updateTask(query).unwrap().then(() => {
-            message.success('Propietario Actualizado')
-        }).catch((error) => {
-            message.error('Error al actualizar el propietario')
+
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando propietario...',
+            success: 'Propietario actualizado',
+            error: 'Error al actualizar el propietario',
         })
     }
 
@@ -87,23 +89,20 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             ...task,
             coResponsables: value
         }
-        updateTask(query).unwrap().then(() => {
-            message.success('Co Propietario Actualizado')
-        }).catch((error) => {
-            message.error('Error al actualizar el co propietario')
+
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando co propietario...',
+            success: 'Co propietario actualizado',
+            error: 'Error al actualizar el co propietario',
         })
     }
 
-    const handleVisibleChange = (newVisible: boolean, id: number) => {
-        setVisiblePopoverId(newVisible ? id : null);
-    };
-
     const handleUpdateStatus = (query: TaskProps) => {
-        handleVisibleChange(false, query.id)
-        updateTask(query).unwrap().then(() => {
-            message.success('Estatus Actualizado')
-        }).catch((error) => {
-            message.error('Error al actualizar el estatus')
+
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando estatus...',
+            success: 'Estatus actualizado',
+            error: 'Error al actualizar el estatus',
         })
     }
 
@@ -112,18 +111,19 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             ...task,
             prioridad: value
         }
-        updateTask(query).unwrap().then(() => {
-            message.success('Prioridad Actualizada')
-        }).catch((error) => {
-            message.error('Error al actualizar la prioridad')
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando prioridad...',
+            success: 'Prioridad actualizada',
+            error: 'Error al actualizar la prioridad',
         })
     }
 
     const handleDeleteTask = async (task: TaskProps, ) => {
-        await deleteTask({taskId: task.id, hitoId: hito.id}).unwrap().then(() => {
-            message.success('Actividad Eliminada')
-        }).catch((error) => {
-            message.error('Error al eliminar la actividad')
+
+        toast.promise( deleteTask({taskId: task.id, taskeableId: data.id}).unwrap(), {
+            loading: 'Eliminando actividad...',
+            success: 'Actividad eliminada',
+            error: 'Error al eliminar la actividad',
         })
     }
 
@@ -136,14 +136,10 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             fechaFin: dateString ? dayjs(dateString, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : task.fechaFin
         }
 
-        console.log(query.fechaFin);
-        
-
-        
-        updateTask(query).unwrap().then(() => {
-            message.success('Fecha Actualizada')
-        }).catch((error) => {
-            message.error('Error al actualizar la fecha')
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando fecha...',
+            success: 'Fecha actualizada',
+            error: 'Error al actualizar la fecha',
         })
     }
 
@@ -155,10 +151,11 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                 ...task,
                 created: dateString ? dayjs(dateString, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : task.created
             }
-            updateTask(query).unwrap().then(() => {
-                message.success('Fecha Actualizada')
-            }).catch((error) => {
-                message.error('Error al actualizar la fecha')
+
+            toast.promise( updateTask(query).unwrap(), {
+                loading: 'Actualizando fecha...',
+                success: 'Fecha actualizada',
+                error: 'Error al actualizar la fecha',
             })
     }
 
@@ -167,10 +164,11 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             ...task,
             visible: !task.visible
         }
-        updateTask(query).unwrap().then(() => {
-            message.success('Visibilidad Actualizada')
-        }).catch((error) => {
-            message.error('Error al actualizar la visibilidad')
+
+        toast.promise(updateTask(query).unwrap(), {
+            loading: 'Actualizando visibilidad...',
+            success: 'Visibilidad actualizada',
+            error: 'Error al actualizar la visibilidad',
         })
     }
 
@@ -204,19 +202,29 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
     
     const defaultColumns:ColumnsType<TaskProps> = [
         {
-            title: () => ( <p className='tableTitle text-center'>Creación</p>),
+            title: () => ( <p className='tableTitle text-center'>{columnsNames.id}</p>),
+            dataIndex: 'id',
+            key: 'id',
+            render: (text, record, index) => (
+                <div className='border-2 rounded-full mr-2 h-5 w-0' style={{ borderColor: getColor(record.status).color }}/> 
+            ),
+            width: 10,
+            hidden: columnsVisible.id
+        },
+        {
+            title: () => ( <p className='tableTitle text-center'> {columnsNames.created} </p>),
             dataIndex: 'created',
             key: 'created',
             render: (text, record, index) => (
                 <div className="flex">
-                <div className='border-2 rounded-full mr-2' style={{ borderColor: getColor(record.status).color }}/> 
+                
                 <div className='w-full text-devarana-graph text-center'>
-                    {/* { <span className='text-devarana-graph font-light'>{dayjs(record.created).format('DD MMM YY')} </span>  } */}
                     <DatePicker
                         className='w-full'
                         format={"DD-MMM-YYYY"}
                         defaultValue={ dayjs(record.created)  }
                         showNow
+                        disabled={isClosed}
                         onChange={(date, dateString) => handleUpdateCreatedDate(null, date, record)}
                         allowClear={false}
                         placeholder="Fecha Creación"
@@ -228,18 +236,22 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                 </div>
             ),
             width: 170,
+            hidden: columnsVisible.created
         },
         {
-            title: () => ( <p className='tableTitle'>Actividad</p>),
+            title: () => ( <p className='tableTitle'>{columnsNames.nombre}</p>),
             dataIndex: 'nombre',
             key: 'nombre',
             render: (text, record, index) => (
                 <div className="flex items-center gap-2">
                     <Tooltip title={record.nombre} >
-                        <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)}
+                        <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleUpdateTask(e, record)} disabled={isClosed}
                             onFocus={(e) => { e.currentTarget.select() }} onPressEnter={ (e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.blur() }}
                         />
                     </Tooltip>
+                    {
+                        !record.visible && <button onClick={() => handleOcultar(record)}><FaRegEyeSlash size={18} className='text-devarana-graph'  /></button>
+                    }
                     <button onClick={() => setSelectedTask(record)} className='text-devarana-graph'>
                         <Badge 
                             count={record.comentarios?.length}
@@ -259,61 +271,62 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                             <PiChatCircleDotsLight size={22} />
                         </Badge>
                     </button>
+                   
                 </div>
             ),
             ellipsis: {
                 showTitle: false,
-            }
+            },
+            hidden: columnsVisible.nombre
         },
         {
-            title: () => ( <p className='tableTitle text-right'>Responsable</p>),
-            key: 'usuariosTarea',
+            title: () => ( <p className='tableTitle text-right'>{ columnsNames.responsable }</p>),
+            key: 'responsable',
             render: (text, record, index) => (
                 <div className='w-full text-devarana-graph flex justify-end'>
                     <Select
+                        disabled={isClosed}
                         style={{ height: '100%' }}
                         showSearch
                         onChange={(value) => handleUpdateOwner(value, record)}
                         defaultValue={record.propietario?.id}
                         variant="borderless"
-                        options={userItems}
+                        options={singleUserItems}
                         optionRender={(option) => (
                             <div className='flex items-center gap-2'>
                               {option.data.item}
                             </div>
                         )}
+                        suffixIcon={false}
                         dropdownStyle={{width: '280px'}}
-                        // @ts-ignore
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
                     </Select>
                 </div>
             ),
             width: 120,
+            hidden: columnsVisible.responsable
         },  
         {
-            title: () => ( <p className='tableTitle text-right'>Co Responsable</p>),
-            key: 'usuariosTarea',
+            title: () => ( <p className='tableTitle'>{ columnsNames.coResponsable }</p>),
+            key: 'coResponsable',
             render: (text, record, index) => (
                 <div className='w-full text-devarana-graph flex justify-end'>
                     
                     <Select
+                        disabled={isClosed}
                         mode="multiple"
                         style={{ width: '100%' }}
-                        placeholder={
-                            <Avatar className="mx-auto flex" style={{backgroundColor: '#56739B', color: 'white'}} size={30} icon={<RiUserAddFill />} />
-                        }
+                        placeholder={<Avatar className="ml-0 flex" style={{backgroundColor: '#56739B', color: 'white'}} size={30} icon={<RiUserAddFill />} /> }
                         allowClear
                         variant="borderless"
                         tagRender={tagRender}
                         onChange={(value) => handleUpdateCoOwner(value, record)}
                         defaultValue={record.coResponsables?.map( usuario => usuario.id)}
                         maxTagCount={3}
-                        showSearch
-                        maxTagPlaceholder={(omittedValues) => (
-                            <span className='text-devarana-graph'>+{omittedValues.length}</span>
-                        )}
-                        // @ts-ignore
+                        showSearch 
+                        suffixIcon={false}
+                        maxTagPlaceholder={(omittedValues) => ( <span className='text-devarana-graph'>+{omittedValues.length}</span> )}
                         dropdownStyle={{width: '280px'}}
                         filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                     >
@@ -321,21 +334,22 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                             usuarios?.map(usuario => (
                                 <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                             ))
-                            // .filter( usuario => usuario.key !== record.propietario?.id)
                         }
                     </Select>
                 </div>
             ),
-            width: 180,
+            width: 190,
+            hidden: columnsVisible.coResponsable
         },  
         {
-            title: () => ( <p className='tableTitle text-right'>Estatus</p>),
+            title: () => ( <p className='tableTitle text-right'>{columnsNames.status}</p>),
             dataIndex: 'status',
             key: 'status',
             render: (text, record, index) => (
                  <Select
+                    disabled={isClosed}
                     className='w-[150px] flex items-end justify-end cursor-pointer'
-                    defaultValue={record.status}
+                    value={record.status}
                     onChange={(value) => handleUpdateStatus({ ...record, status: value })}
                     variant="borderless"
                     options={statusItems}
@@ -345,55 +359,88 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             width: 140
         },
         {
-            title: () => ( <p className='tableTitle text-right'>Prioridad</p>),
+            title: () => ( <p className='tableTitle text-right'>{columnsNames.prioridad}</p>),
             dataIndex: 'prioridad',
             key: 'prioridad',
             render: (text, record, index) => (
                 <Select
                     className='w-[150px] flex items-end justify-end cursor-pointer'
-                    defaultValue={record.prioridad}
+                    disabled={isClosed}
+                    value={record.prioridad}
                     onChange={(value) => handleUpdateTaskPriority(value, record)}
                     variant="borderless"
                     options={priorityItems}
                     suffixIcon={false}
                 />
             ),
-            width: 150
+            width: 150,
+            hidden: columnsVisible.prioridad
         },
         {
-            title: () => ( <p className='tableTitle text-right'>Fecha Compromiso</p>),
+            title: () => ( <p className='tableTitle text-right'>{columnsNames.fechaFin}</p>),
             dataIndex: 'fechaFin',
             key: 'fecha',
             render: (text, record, index) => {
                 return (
                     <DatePicker
-                    className='w-full' 
-                    format={"DD-MMM-YYYY"}
-                    defaultValue={ dayjs(record.fechaFin)  }
-                    showNow
-                    allowClear={false}
-                    variant="borderless"
-                    placeholder="Fecha Fin"
-                    name="fechaFin"
-                    suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    onChange={(date, dateString) => handleUpdateDate(null, date, record)}
-                />
+                        disabled={isClosed}
+                        className='w-full' 
+                        format={"DD-MMM-YYYY"}
+                        defaultValue={ dayjs(record.fechaFin)  }
+                        showNow
+                        allowClear={false}
+                        variant="borderless"
+                        placeholder="Fecha Fin"
+                        name="fechaFin"
+                        suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
+                        onChange={(date, dateString) => handleUpdateDate(null, date, record)}
+                    />
                 )
             },
-            width: 170
+            width: 170,
+            hidden: columnsVisible.fechaFin
         },
         {
-            title: () => ( <p className='tableTitle text-right'>Acciones</p>),
+            title: () => ( <p className='tableTitle text-right'>{columnsNames.progreso}</p>),
+            render: (text, record, index) => {
+                return (
+                    <div className="w-full">
+                        <TaskProgress record={record} disabled={isClosed} input={true}/>
+                    </div>
+                )
+            },
+            width: 250,
+            hidden: columnsVisible.progreso,
+        },
+        {
+            title: () => ( <p className='tableTitle text-right'>{columnsNames.completado}</p>),
+            render: (text, record, index) => {
+                return (
+                    <div className="w-full flex justify-end">
+                        <TaskCheckbox record={record} disabled={isClosed}/>  
+                    </div>
+                )
+            },
+            width: 120,
+            hidden: columnsVisible.completado
+        },
+        {
+            title: () => ( <p className='tableTitle text-right'>{ columnsNames.acciones }</p>),
+            key: 'acciones',
             render: (text, record, index) => {
                 return (
                     <Popover
                         trigger={'click'}
-                        className='cursor-pointer'
-                        onOpenChange={ (visible) => setOpen(visible)}
-                        
+                        className='cursor-pointer'                        
                         content={
                             <>
+                                <div className="flex items-center gap-2 group pb-2" onClick={() => handleOcultar(record)}>
+                                    <FaEye className='text-default cursor-pointer group-hover:text-primary' />
+                                    <p className="text-default cursor-pointer group-hover:text-primary"> {record?.visible ? 'Ocultar' : 'Mostrar'} </p>
+                                </div>
+                                <hr className="py-2"/>
                                 <Popconfirm 
+                                    disabled={isClosed}
                                     title="¿Estás seguro de eliminar esta actividad?"
                                     onConfirm={ () => handleDeleteTask(record) }
                                     okText="Si"
@@ -407,8 +454,8 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                                         className: 'rounded-full mr-2 bg-error-light text-white'
                                     }}
                                 >
-                                <BiTrash className='text-default text-right group-hover:text-error-light cursor-pointer' />
-                                <p className='text-default text-right group-hover:text-error-light cursor-pointer'>Eliminar</p>
+                                    <BiTrash className='text-default text-right group-hover:text-error-light cursor-pointer' />
+                                    <p className='text-default text-right group-hover:text-error-light cursor-pointer'>Eliminar</p>
                                 </Popconfirm>
                             </>
                         }
@@ -418,28 +465,29 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                 )
             },
             width: 100,
+            hidden: columnsVisible.acciones
         }
     ]
 
-    const FooterComp = (hito:HitosProps) => {
+    const FooterComp = (data: HitosProps | ResultadoClaveProps | ListadoProps) => {
 
-        const handleCreateTask = async (hito: HitosProps) => {
+        const handleCreateTask = async (data: HitosProps | ResultadoClaveProps | ListadoProps) => {
 
-        if(!form.getFieldValue('nombre')) return
-        
-        const query = {
+            if(!form.getFieldValue('nombre')) return
+            
+            const query = {
                 ...form.getFieldsValue(),
-                taskeableId: hito.id,
+                taskeableId: data.id,
                 taskeableType
             }
-
-            createTask(query).unwrap().then(() => {
-                message.success('Actividad Creada')
-                form.resetFields()
-            }).catch((error) => {
-                message.error('Error al crear la actividad')
-            })
-           
+            toast.promise(
+                createTask(query).unwrap(), {
+                    loading: 'Creando actividad...',
+                    success: 'Actividad creada',
+                    error: 'Error al crear la actividad',
+                    finally: () => form.resetFields()
+                }
+            )
         }
 
         const [form] = Form.useForm();
@@ -448,11 +496,11 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
            <div className="flex items-center flex-1 justify-between">
                 <div className="w-full">
                     <Form initialValues={{
-                        ...hito,
+                        ...data,
                         nombre: ''
                     }}
                     form={form}
-                    onBlur={ e => handleCreateTask(hito)}
+                    onBlur={ e => handleCreateTask(data)}
                     > 
                         <Form.Item name='nombre' className='mb-0'>
                             <Input placeholder='Agregar Nueva Actividad' onPressEnter={
@@ -466,9 +514,7 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                     </Form>
                 </div>
                 <div className="w-full text-right">
-                    <Checkbox
-                        onChange={(e) => setVisible(e.target.checked)}
-                    > Mostrar Actividades Ocultas</Checkbox>
+                    <Checkbox onChange={(e) => setVisible(e.target.checked)} > Mostrar Ocultos ({tasks?.filter(task => !task.visible).length}) </Checkbox>
                 </div>
             </div>
         )
@@ -510,27 +556,25 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
     
     useEffect(() => {
         const handleDocumentClick = (event: MouseEvent) => {
-        if (contextMenuVisible) {
-            setContextMenuVisible(false);
-        }
+            if (contextMenuVisible) {
+                setContextMenuVisible(false);
+            }
         };
-    
         document.addEventListener('click', handleDocumentClick);
-    
         return () => {
         document.removeEventListener('click', handleDocumentClick);
         };
     }, [contextMenuVisible]);
 
 
-    const userItems = useMemo(() => {
+    const singleUserItems = useMemo(() => {
 
         if(!usuarios) return []
 
         return usuarios.map(usuario => ({
             value: usuario.id,
             label: <Tooltip title={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno}>
-                    <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+                        <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} />
                     </Tooltip>,
             key: usuario.id,
             item: <div className='flex items-center gap-2'>
@@ -578,7 +622,7 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
                 pagination={false}
                 columns={defaultColumns}
                 dataSource={renderedTask}
-                footer={ () => FooterComp(hito) }
+                footer={ () => FooterComp(data) }
                 rowKey={(record: any) => record.id}
                 onRow={(record, rowIndex) => {
                     return {
@@ -614,7 +658,9 @@ export const TablaTask = ({ hito, options}: TablaHitosProps) => {
             open={selectedTask !== null}
             width={ window.innerWidth > 768 ? 600 : '100%' }
         >
-            <TaskComentarios activeTask={selectedTask} />
+            {
+                selectedTask && <Comentarios comentableId={selectedTask?.id} comentableType={'TASK'} maxSize={'auto'}/>
+            }
         </Drawer>
         </>
 

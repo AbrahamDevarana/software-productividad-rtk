@@ -1,7 +1,7 @@
 import { TaskProps } from '@/interfaces'
-import { updateTaskThunk } from '@/redux/features/tasks/tasksThunk'
+import { updateTaskThunk, useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
 import { useAppDispatch } from '@/redux/hooks'
-import { Checkbox } from 'antd'
+import { Checkbox, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 
 
@@ -13,6 +13,7 @@ interface TaskCheckboxProps {
 export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
 
     const [checked, setChecked] = useState<boolean>(record.status ===  'FINALIZADO' ? true : false)
+    const [ updateTask, { isLoading: isUpdatingTask, error: updateTaskError } ] = useUpdateTaskMutation()
     const dispatch = useAppDispatch()
     
     const handleCheckedChange = (value: boolean) => {
@@ -22,7 +23,12 @@ export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
         }
 
         setChecked(value ? true : false)
-        dispatch(updateTaskThunk(query))
+        // dispatch(updateTaskThunk(query))
+        updateTask(query).unwrap().then(() => {
+            message.success('Tarea actualizada')
+        }).catch((error) => {
+            message.error('Error al actualizar la tarea')
+        })
     }
     
     useEffect(() => {
@@ -31,6 +37,7 @@ export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
 
     return (
         <Checkbox
+            key={record.status}
             disabled={disabled}
             checked={checked}
             onChange={(e) => handleCheckedChange(e.target.checked ? true : false)}

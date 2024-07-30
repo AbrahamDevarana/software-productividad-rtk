@@ -1,49 +1,35 @@
 import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Avatar, Checkbox, Collapse, DatePicker, Form, Image, Input, Popconfirm, Popover, Select, Spin, Table, Tooltip, message } from "antd";
+import { Checkbox, Collapse, CollapseProps, Input, Select, Spin,message } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
-import type { ColumnsType } from 'antd/es/table';
-import { createTaskThunk, deleteTaskThunk, updateTaskThunk } from "@/redux/features/tasks/tasksThunk";
-import { BiTrash } from "react-icons/bi";
-import { BsFillCalendarFill, BsThreeDots } from "react-icons/bs";
-import dayjs from "dayjs";
 import EmptyResultado from "./EmptyResultado";
-import ResultadoClaveForm from "./FormResultado";
-import { Link } from "react-router-dom";
-import { getColor, getStorageUrl } from "@/helpers";
-import getBrokenUser from "@/helpers/getBrokenUser";
-import { getUsuariosThunk } from "@/redux/features/usuarios/usuariosThunks";
-import { PopoverPrioridad } from "./PopoverPrioridad";
-import { Prioridad, styles, taskStatusTypes } from "@/types";
-import { PopoverEstado } from "./PopoverEstado";
-import { TaskProgress } from "../tareas/TaskProgressBar";
-import { TaskCheckbox } from "../tareas/TaskCheckbox";
+import { TablaTask, taskResultadosHeader } from "../tasks";
+import { columnsNames, columnsVisible } from "@/pages/Operativos/utils";
 
 
 interface Props {
     currentOperativo: OperativoProps,
     isClosed: boolean
 }
-
-const taskeableType = "RESULTADO_CLAVE"
+interface Options {
+    responsables: string[];
+    estatus: string[];
+    prioridad: string[];
+}
 
 export default function ListadoResultados({ currentOperativo, isClosed }: Props) {
-
-    const { Panel } = Collapse;
     const dispatch = useAppDispatch()
     const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
-    const inputRef = useRef(null);
-    const [messageApi, contextHolder] = message.useMessage();
+    const [activeKeys, setActiveKeys] = useState<string[]>([])
     const [ sort, setSort ] = useState<string>('default')
     const [ filter, setFilter ] = useState<string>('')
-    const { year, quarter, status } = currentOperativo
-
-
-    useEffect(() => {
-        dispatch(getUsuariosThunk({}))
-    }, [])
+    const [options, setOptions] = useState<Options>({
+        responsables: [],
+        estatus: [],
+        prioridad: [],
+    })
 
     const handleNuevoResultado = async () => {
         await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
@@ -57,354 +43,12 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         })
     }
 
-    const handleOnUpdate = (e: any, record: TaskProps) => {
-        const query = {
-            ...record,
-            [e.target.name]: e.target.value,
-        }
-        
-        dispatch(updateTaskThunk(query))
-    }
-
-    const handleUpdateDate = (fechaInicio: any, fechaFin: any, record: TaskProps) => {
-        const query = {
-            ...record,
-            fechaFin: fechaFin ? dayjs(fechaFin, 'DD-MM-YYYY').format('YYYY-MM-DD 06:00:00') : record.fechaFin,
-        }    
-        dispatch(updateTaskThunk(query))
-    }
-
-    const priorityItems = [
-        {
-            label: (
-                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
-                    <p className="text-white">Baja</p>
-                </div>),
-            value: 'BAJA'
-        },
-        {
-            label: (
-                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
-                    <p className="text-white">Media</p>
-                </div>),
-            value: 'MEDIA'
-        },
-        {
-            label: (
-                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
-                    <p className="text-white">Alta</p>
-                </div>),
-            value: 'ALTA'
-        },
-        {
-            label: (
-                <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
-                    <p className="text-white">Crítica</p>
-                </div>),
-            value: 'CRÍTICA'
-        }
-]
-const statusItems = [
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-devarana-dark-graph to-devarana-graph text-center">
-                <p className="text-white">Sin Iniciar</p>
-            </div>),
-        value: 'SIN_INICIAR'
-    },
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-primary to-primary-light text-center">
-                <p className="text-white">En Proceso</p>
-            </div>),
-        value: 'EN_PROCESO'
-    },
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-success to-success-light text-center">
-                <p className="text-white">Finalizado</p>
-            </div>),
-        value: 'FINALIZADO'
-    },
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-error to-error-light text-center">
-                <p className="text-white">Cancelado</p>
-            </div>),
-        value: 'CANCELADO'
-    },
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-warning to-warning-light text-center">
-                <p className="text-white">Detenido</p>
-            </div>),
-        value: 'DETENIDO'
-    },
-    {
-        label: (
-            <div className="px-3 bg-current rounded-sm bg-gradient-to-r from-info to-info-light text-center">
-                <p className="text-white">Retrasado</p>
-            </div>),
-        value: 'RETRASADO'
-    }
-]
-    
-    const defaultColumns: ColumnsType<TaskProps> = [
-        {
-            title: () => ( <p className='tableTitlePrincipal'>Acciones</p>),
-            render: (text, record, index) => {
-                return (
-                    <div className='flex'>
-                        <div className='border-2 rounded-full mr-2 h-10' style={{ borderColor: getColor(record.status).color }}/> 
-                        <Input name="nombre" className="border-none disabled:bg-transparent" defaultValue={record.nombre} ref={inputRef} onBlur={(e) => handleOnUpdate(e, record)} onPressEnter={(e) => e.currentTarget.blur()} 
-                            onFocus={(e) => { e.currentTarget.select() }} disabled={isClosed}
-                        />
-                    </div>
-                )
-            },
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Responsable</p>),
-            render: (text, record, index) => {
-                return (
-                  <div className="flex justify-end">
-                      <Link key={index} to={`/perfil/${record.propietario?.slug}`} className={`rounded-full`}>
-                        <Tooltip title={`${record.propietario?.nombre} ${record.propietario?.apellidoPaterno}`} placement='top' key={index} >
-                            <Avatar key={index} src={<Image src={`${getStorageUrl(record.propietario?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                                {record.propietario?.iniciales} 
-                            </Avatar>
-                        </Tooltip>
-                    </Link>
-                  </div>
-                )
-
-            },
-            width: 100,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Fecha Fin</p>),
-            dataIndex: 'fechaFin',
-            key: 'fechaFin',
-            render: (text, record, index) => {
-
-                const disabledDate = (current: any) => {
-                    const month = quarter * 3 - 2    
-                    const startDate = dayjs(`${year}-${month}-01`)
-                    const endDate = startDate.add(3, 'month').subtract(1, 'day')
-                    return current < startDate || current > endDate;
-                }
-                
-                return (
-                <DatePicker 
-                    className='w-full' 
-                    format={"DD-MM-YYYY"}
-                    defaultValue={ dayjs(record.fechaFin)  }
-                    showToday
-                    clearIcon={null}
-                    disabledDate={disabledDate}
-                    placeholder="Fecha Fin"
-                    bordered={false}
-                    name="fechaFin"
-                    suffixIcon={<BsFillCalendarFill className='text-devarana-babyblue' />}
-                    onChange={(date, dateString) => handleUpdateDate(null, dateString, record)}
-                    disabled={isClosed}
-                />
-            )},
-            width: 170,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Prioridad</p>),
-            render: (text, record, index) => {
-                return ( 
-                    <Select
-                        className='w-[150px] flex items-end justify-end cursor-pointer'
-                        defaultValue={record.prioridad}
-                        onChange={(value) => handleOnUpdate({target: {name: 'prioridad', value}}, record)}
-                        variant="borderless"
-                        options={priorityItems}
-                        suffixIcon={false}
-                    />
-            ) 
-            },
-            width: 150,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Estatus</p>),
-            render: (text, record, index) => {
-                return ( 
-                    <Select
-                        className='w-[150px] flex items-end justify-end cursor-pointer'
-                        defaultValue={record.status}
-                        onChange={(value) => handleUpdateStatus(record, value)}
-                        variant="borderless"
-                        options={statusItems}
-                        suffixIcon={false}
-                    />
-                ) 
-            },
-            width: 150,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Avance</p>),
-            render: (text, record, index) => {
-                return (
-                    <div className="flex justify-end">
-                        <TaskProgress record={record} disabled={isClosed}/>
-                    </div>
-                )
-            },
-            width: 200,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Completado</p>),
-            render: (text, record, index) => {
-                return (
-                    <div className="flex justify-end">
-                        <TaskCheckbox record={record} disabled={isClosed}/>  
-                    </div>
-                )
-            },
-            width: 50,
-        },
-        {
-            title: () => ( <p className='tableTitle text-right'>Acciones</p>),
-            render: (text, record, index) => {
-                return (
-                    <Popover
-                        trigger={'click'}
-                        content={
-                            <div className="">
-                                <Popconfirm
-                                    disabled={isClosed}
-                                    title="¿Estas seguro de eliminar esta acción?"
-                                    onConfirm={ () => handleDeleteTask(record.id)}
-                                    onCancel={() => {}}
-                                    okText="Si"
-                                    cancelText="No"
-                                    placement="left"
-                                    okButtonProps={{
-                                        className: 'rounded-full mr-2 bg-primary'
-                                    }}
-                                    cancelButtonProps={{
-                                        className: 'rounded-full mr-2 bg-error-light text-white'
-                                    }}
-                                >
-                                    <BiTrash className='text-default text-right hover:text-error-light text-xl cursor-pointer' />
-                                </Popconfirm>
-                            </div>
-                        }
-                    >
-                            <BsThreeDots className='text-devarana-graph text-xl ml-auto' />
-                    </Popover>
-                )
-            },
-            width: 50,
-        }
-    ]
-
     useEffect(() => {
         if (currentOperativo.id !== '') {
             dispatch(getResultadosThunk(currentOperativo.id))
         }
     }, [currentOperativo])
-    
 
-    const activeKey = useMemo(() => {
-        if (resultadosClave.length > 0) {
-            return resultadosClave.map((resultado: ResultadoClaveProps, index) => index)
-        }
-        return []
-    }, [resultadosClave])
-
-
-    const footerComponent = (resultadoClave: ResultadoClaveProps) => {
-
-        const [form] = Form.useForm();
-        const handleCreateTask = () => {
-            const query = {
-                ...form.getFieldsValue(),
-                taskeableId: resultadoClave.id,
-                taskeableType
-            }
-            dispatch(createTaskThunk(query))
-            form.resetFields()
-        }
-        return (
-            <Form
-                initialValues={{
-                    ...resultadoClave,
-                    nombre: '',
-                }}
-                form={form}
-                onBlur={handleCreateTask}
-            >
-
-                <Form.Item name="nombre" className="mb-0">
-                    <Input placeholder="Crear Nueva Acción"
-                        onPressEnter={
-                            (e) => {
-                                e.preventDefault()
-                                e.stopPropagation()
-                                e.currentTarget.blur()
-                            }
-                        }
-                        className="min-w-[350px] w-min"
-                    />
-                </Form.Item>
-                
-            </Form>
-        )
-    }
-
-    const genHeader = (resultado: any) => (
-        <div onClick={ event => event.stopPropagation() }>
-            <ResultadoClaveForm resultado={resultado} isClosed={isClosed} currentOperativo={currentOperativo}/>
-        </div>
-    )
-
-    const handleDeleteTask = async (id: number) => {
-        await dispatch(deleteTaskThunk(id)).unwrap().then(() => {
-            messageApi.success('Acción eliminada.')
-        }).catch((err) => {
-            messageApi.error('Hubo un error al eliminar la acción.')
-        })
-    }
-    
-
-    const handleUpdateStatus = async (task: TaskProps, status: any) => {
-        const query = {
-            ...task,
-            status
-        }
-        dispatch(updateTaskThunk(query))
-    }
-
-    const sortedTasks = (resultado: ResultadoClaveProps) => {
-        // Función de comparación para ordenar las tareas
-           const compareTasks = (a:any, b:any) => {
-               // Coloca las tareas SIN_INICIAR primero
-               if (a.status === 'SIN_INICIAR' && b.status !== 'SIN_INICIAR') {
-               return -1;
-               }
-               if (a.status === 'EN_PROCESO' && b.status === 'EN_PROCESO') {
-                return b.progreso - a.progreso;
-              }
-               // Coloca las tareas FINALIZADAS al final
-               if (a.status === 'FINALIZADO' && b.status !== 'FINALIZADO') {
-                return 1;
-               }
-               if (a.status === 'CANCELADO' && b.status !== 'CANCELADO') {
-                return 1;
-              }
-               // Mantén el orden original en caso de que el estado sea el mismo
-               return 0;
-           };
-           // Copia el arreglo original para no modificar el estado directamente
-           const tasksCopy = [...resultado.task];
-           // Ordena el arreglo utilizando la función de comparación
-           tasksCopy.sort(compareTasks);
-           return tasksCopy;
-   }
 
    const normalizeString = (str: string) => {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -412,27 +56,35 @@ const statusItems = [
 
     const filteredAndSortedResultados = useMemo(() => {
         let resultados = [...resultadosClave];
-
+    
         if (filter) {
             const normalizedSearchTerm = normalizeString(filter.toLowerCase());
             resultados = resultados.filter(resultado =>
                 normalizeString(resultado.nombre.toLowerCase()).includes(normalizedSearchTerm)
             );
         }
-
+    
         if (sort) {
             resultados.sort((a, b) => {
                 if (sort === 'alphabetic-asc') {
                     return a.nombre.localeCompare(b.nombre);
-                }else if (sort === 'alphabetic-desc') {
+                } else if (sort === 'alphabetic-desc') {
                     return b.nombre.localeCompare(a.nombre);
                 }
                 return 0;
             });
         }
-
+    
         return resultados;
     }, [resultadosClave, filter, sort]);
+
+    const items: CollapseProps['items'] = useMemo(() => {
+        return filteredAndSortedResultados?.map((resultado: ResultadoClaveProps, index: number) => ({
+            key: resultado.id.toString(),
+            label: taskResultadosHeader({resultado, isClosed, currentOperativo}),
+            children: <TablaTask data={resultado} options={options} taskeableType='RESULTADO_CLAVE' columnsNames={columnsNames} columnsVisible={columnsVisible} isClosed={isClosed} />,
+        }))        
+    }, [filteredAndSortedResultados])
 
     if(isLoading) return ( <Loading /> )
     if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
@@ -440,6 +92,15 @@ const statusItems = [
     return (
         <>
             <div className="flex gap-x-5 max-w-5xl w-full ml-auto justify-end">
+            <div style={{width: 180}}>
+                <Checkbox 
+                    checked={activeKeys.length !== 0}
+                    onChange={e => setActiveKeys(e.target.checked ? resultadosClave.map(resultado => resultado.id.toString()) : [])}
+                    indeterminate={activeKeys.length > 0 && activeKeys.length < resultadosClave?.length!}
+                >
+                    Mostrar Todos
+                </Checkbox>
+            </div>
                 <Select placeholder="Ordenar por" className="w-[200px] text-devarana-graph" onChange={(value) => setSort(value)} value={sort}>
                     <Select.Option value="default"> <p className="text-devarana-graph"> Sin Ordenar </p></Select.Option>
                     <Select.Option value="alphabetic-asc"> <p className="text-devarana-graph"> Nombre: Ascendente </p></Select.Option>
@@ -450,50 +111,11 @@ const statusItems = [
             </div>
 
             <Collapse 
-                defaultActiveKey={activeKey}
+                activeKey={activeKeys}
+                items={items}
+                onChange={(key) => setActiveKeys(key as string[])}
                 ghost
-            >
-
-                {
-                    filteredAndSortedResultados.map((resultado: ResultadoClaveProps, index) => {
-
-                        const tasks = sortedTasks(resultado)
-                        return (
-                            <Panel
-                                key={resultado.id}
-                                header={genHeader(resultado) }
-                                className="customResultadosPanel"
-                                collapsible="icon"
-                                id={`resultado-${resultado.id}`}
-                            >
-                                
-                                <Table 
-                                    loading={isLoading}
-                                    scroll={{ x: 1000 }}
-                                    className="customTable"
-                                    pagination={false}
-                                    bordered={false}
-                                    columns={defaultColumns}
-                                    dataSource={tasks}
-                                    rowKey={record => record.id}
-                                    footer={() => (
-                                        isClosed ? null : footerComponent(resultado)
-                                    )}
-                                    rowClassName={ (record, index) => {
-                                        return 'group'
-                                    }}
-                                />
-                            </Panel>
-                        )
-                    })
-
-                }
-                
-
-            </Collapse>
-            {
-                contextHolder
-            }
+            />
             {
                 isCreatingResultado && <div className="h-56 w-full relative flex items-center justify-center"><Spin size="large" /></div>
             }

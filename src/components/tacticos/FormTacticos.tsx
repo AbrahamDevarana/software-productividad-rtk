@@ -13,7 +13,7 @@ import { getColor } from '@/helpers';
 import { statusType } from '@/types';
 import { useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
 import ReactQuill from 'react-quill';
-import { Comentarios } from '../general/Comentarios';
+import { Comentarios } from '../comentarios/Comentarios';
 import { Icon } from '../Icon';
 import { DefaultOptionType } from 'antd/es/select';
 import { BsFillCalendarFill } from 'react-icons/bs';

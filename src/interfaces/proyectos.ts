@@ -14,6 +14,7 @@ export interface ProyectosProps {
     usuariosProyecto: SinglePerfilProps[];
     fechaInicio: Date;
     fechaFin: Date;
+    categorias: any[];
     status: statusType;
 }
 

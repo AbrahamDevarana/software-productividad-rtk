@@ -143,14 +143,14 @@ export const taskApi = createApi({
             }
             
         }),
-        deleteTask: builder.mutation<string, {taskId: number, hitoId: string}>({
+        deleteTask: builder.mutation<string, {taskId: number, taskeableId: string}>({
             query: ({taskId}) => ({
                 url: `tasks/${taskId}`,
                 method: 'DELETE'
             }),
-            onQueryStarted: async ({taskId, hitoId}, { dispatch, queryFulfilled }) => {
+            onQueryStarted: async ({taskId, taskeableId}, { dispatch, queryFulfilled }) => {
                 const patchResult = dispatch(
-                    taskApi.util.updateQueryData('getTasks', {taskeableId: hitoId}, (draft) => {
+                    taskApi.util.updateQueryData('getTasks', {taskeableId: taskeableId}, (draft) => {
                         
                         const index = draft.findIndex(task => task.id === taskId);
                         if (index !== -1) {

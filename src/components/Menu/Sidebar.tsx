@@ -77,7 +77,7 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                         <span className="text-xs text-center font-light block">Proyectos</span>
                     </NavLink>
                     
-                    <NavLink to={'/comite'} className={`link nav-link text-center`}>
+                    <NavLink to={'/comites'} className={`link nav-link text-center`}>
                         <FaLayerGroup className="mx-auto text-xl" />
                         <span className="text-xs text-center font-light block">Comités</span>
                     </NavLink>

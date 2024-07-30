@@ -14,6 +14,7 @@ import './app.scss'
 import './index.css'
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import 'dayjs/locale/es'
+import { Toaster } from 'sonner';
 
 
 // process.env.NODE_ENV === 'development' ?  styleDevelopment : styleProduction 
@@ -34,6 +35,7 @@ export default function App() {
     return (
         
         <Provider store={store} >
+            <Toaster richColors position='top-left' duration={2000}/>
             <AnimatePresence mode='wait' initial={false}>
                     <Routes location={location} key={location.pathname}>
                         {

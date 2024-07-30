@@ -13,7 +13,7 @@ import { statusType } from '@/types';
 import { getColor } from '@/helpers';
 import { BsFillCalendarFill } from 'react-icons/bs';
 import { useSelectUser } from '@/hooks/useSelectUser';
-import { Comentarios } from '@/components/general/Comentarios';
+import { Comentarios } from '@/components/comentarios/Comentarios'
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import { useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
 

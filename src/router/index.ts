@@ -16,14 +16,15 @@ import { Usuarios } from '@/pages/admin/Usuarios';
 import { Departamentos } from '@/pages/admin/Departamentos';
 // import { ObjEstrategico } from '@/pages/Estrategia/ObjEstrategico';
 import { Tactico } from '@/pages/Tactico';
-import { Proyectos } from '@/pages/Proyectos';
+import { ProyectosCat } from '@/pages/Proyectos';
 import { ProyectoView } from '@/pages/Proyectos/ProyectoView';
 import { OperativoView } from '@/pages/Operativos/OperativoView';
 import { Actividades } from '@/pages/Actividades';
-import { Comite } from '@/pages/Comite';
+import { Comites } from '@/pages/Comites';
 import { Gestion } from '@/pages/Gestion';
 import { Roles } from '@/pages/admin/Roles/Roles';
 import { Permisos } from '@/pages/admin/Roles/Permisos';
+import { ListadoView } from '@/pages/Comites/ListadoView';
 
 
 interface Props {
@@ -135,7 +136,7 @@ export const  rutaPrivada:PrivateRouteProps[] = [
         title: "Proyectos",
         path: '/proyectos',
         layout: LayoutApp,
-        component: Proyectos
+        component: ProyectosCat
     },
     {
         title: "Actividades",
@@ -145,9 +146,15 @@ export const  rutaPrivada:PrivateRouteProps[] = [
     },
     {
         title: "Comité",
-        path: '/comite',
+        path: '/comites',
         layout: LayoutApp,
-        component: Comite
+        component: Comites
+    },
+    {
+        title: "Comité",
+        path: '/comites/:id',
+        layout: LayoutApp,
+        component: ListadoView
     },
     {
         title: "Gestión",

@@ -7,11 +7,11 @@ export const proyectosApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Proyecto'],
     endpoints: (builder) => ({
-        getProyectos: builder.query<ProyectosProps[], any>({
-            query: (filtros) => ({
+        getProyectos: builder.query<ProyectosProps[], {categoriaId?: string}>({
+            query: ({categoriaId}) => ({
                 url: '/proyectos',
                 method: 'GET',
-                params: filtros
+                params: {categoriaId}
             }),
             providesTags: ['Proyecto'],
             transformResponse: (response: {proyectos: ProyectosProps[]}) => response.proyectos

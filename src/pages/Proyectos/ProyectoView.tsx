@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import { useGetProyectoQuery } from '@/redux/features/proyectos/proyectosThunk'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { useAppSelector } from '@/redux/hooks'
 import {  Avatar, Divider, Drawer, Image, Modal, Segmented, Skeleton, Tooltip } from 'antd';
 import { Gantt } from '@/components/complexUI/Gantt';
 import { ListadoProyectos } from '@/pages/Proyectos/components/ListadoProyectos';
@@ -12,14 +12,14 @@ import { Link } from 'react-router-dom';
 import { ProyectosProps, TaskProps } from '@/interfaces';
 import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
-import { Minutas } from './components/Minutas';
+import { Minutas } from '@/components/minutas/Minutas';
 import { Proximamente } from '@/components/ui';
 import { MdOutlineEditNote } from 'react-icons/md';
 import { FaCog } from 'react-icons/fa';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { FormProyecto } from './components/FormProyecto';
 
-type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
+type SegmentTypes = 'actividades' | 'kanban' | 'gantt' | 'calendario'
 
 export const ProyectoView = () => {
 
@@ -29,7 +29,7 @@ export const ProyectoView = () => {
     const { data: proyecto, isLoading } = useGetProyectoQuery({proyectoId: id}, { skip: !id})
     const { socket } = useAppSelector(state => state.socket)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
-    const [value, setValue] = useState<SegmentTypes>('listado');
+    const [value, setValue] = useState<SegmentTypes>('actividades');
     const [visible, setVisible] = useState<boolean>(false);
     const [minutasVisible, setMinutasVisible] = useState<boolean>(false)
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
@@ -37,8 +37,8 @@ export const ProyectoView = () => {
         
     const projectViewsOptions = [
         {
-            label: 'Listado',
-            value: 'listado',
+            label: 'Actividades',
+            value: 'actividades',
             icon: <Icon iconName='faList' />
         },
         {
@@ -163,7 +163,7 @@ export const ProyectoView = () => {
                     proyecto && (
                         <>
                             {
-                                value === 'listado' && (
+                                value === 'actividades' && (
                                     <div>
                                         <ListadoProyectos 
                                             setSelectedTask={setSelectedTask}
@@ -216,7 +216,7 @@ export const ProyectoView = () => {
                 >
                     {
                         proyecto && (
-                            <Minutas proyectoId={proyecto.id} />
+                            <Minutas minuteableId={proyecto.id} minuteableType='PROYECTO' />
                         )
                     }
                 </Drawer>
