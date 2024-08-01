@@ -12,6 +12,7 @@ import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import ImgCrop from 'antd-img-crop';
 import { badgeItems } from '@/components/tasks';
 import { useGetCategoriasProyectoQuery } from '@/redux/features/categoriasApi';
+import { toast } from 'sonner';
 
 interface FormProyectoProps {
     currentProyecto?: ProyectosProps | null
@@ -61,20 +62,21 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
         });        
 
         if(currentProyecto) {
-            updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}).unwrap().then(() => {
-                message.success('Proyecto actualizado correctamente')
-            }).catch(() => {
-                message.error('Error al actualizar el proyecto')
+            toast.promise(updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}), {
+                loading: 'Guardando...',
+                success: 'Proyecto actualizado correctamente',
+                error: 'Error al actualizar el proyecto',
+                finally: () => handleCancel()
             })
         }
         else {
-            createProyecto(formData).unwrap().then(() => {
-                message.success('Proyecto creado correctamente')
-            }).catch(() => {
-                message.error('Error al crear el proyecto')
+            toast.promise(createProyecto(formData), {
+                loading: 'Guardando...',
+                success: 'Proyecto creado correctamente',
+                error: 'Error al crear el proyecto',
+                finally: () => handleCancel()
             })
         }
-        handleCancel()
     }
 
     const { tagRender, spanUsuario, selectedUsers, setSelectedUsers } = useSelectUser(usuarios)
@@ -120,8 +122,6 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
     }, [categorias])
 
     if ( isLoadingProyecto ) return <Skeleton active paragraph={{  rows: 10 }} />
-
-    console.log(proyecto);
     
 
     return (

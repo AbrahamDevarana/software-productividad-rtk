@@ -2,12 +2,14 @@ import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FormProyecto } from "@/pages/Proyectos/components/FormProyecto"
 import { useDeleteProyectoMutation,  } from "@/redux/features/proyectos/proyectosThunk"
-import { FaAdn, FaAlignRight, FaArrowRight, FaCaretLeft, FaMinus, FaPlus, FaProjectDiagram } from "react-icons/fa"
+import {  FaMinus, FaPlus, FaProjectDiagram } from "react-icons/fa"
 import { useAppSelector } from "@/redux/hooks"
-import { Button, Checkbox, FloatButton, Input, message, Modal } from "antd"
+import { Button, Checkbox, FloatButton, Input, message, Modal, Popconfirm } from "antd"
 import { ProyectosProps } from "@/interfaces"
-import { useAddProyectoToCategoriaMutation, useCreateCategoriaProyectoMutation, useGetCategoriasProyectoQuery } from "@/redux/features/categoriasApi"
+import { useCreateCategoriaProyectoMutation, useDeleteCategoriaProyectoMutation, useGetCategoriasProyectoQuery } from "@/redux/features/categoriasApi"
 import { Proyectos } from "./Proyectos"
+import { BiTrash } from "react-icons/bi"
+import { toast } from "sonner"
 
 export const ProyectosCat = () => {
 
@@ -21,10 +23,7 @@ export const ProyectosCat = () => {
     const [ deleteProyecto, { isLoading: isLoadingProyectoDelete } ] =  useDeleteProyectoMutation()
     const { data } = useGetCategoriasProyectoQuery({})
     const [createCategoria] = useCreateCategoriaProyectoMutation()
-    const [
-        addProyectoToCategoria,
-        { isLoading: isLoadingAddProyectoToCategoria }
-    ] = useAddProyectoToCategoriaMutation()
+    const [ deleteCategoria ] = useDeleteCategoriaProyectoMutation()
     
 
     const navigate = useNavigate()
@@ -44,24 +43,42 @@ export const ProyectosCat = () => {
     }
 
     const handleDelete = async (proyectoId: string) => {
-        deleteProyecto({ proyectoId }).unwrap().then(() => {
-            message.success('Proyecto eliminado correctamente')
-        }).catch(() => {
-            message.error('Error al eliminar el proyecto')
-        })
+
+        toast.promise(
+            deleteProyecto({ proyectoId }).unwrap(), {
+                loading: 'Eliminando proyecto...',
+                success: 'Proyecto eliminado correctamente',
+                error: 'Error al eliminar el proyecto'
+            }
+        )
     }
 
     const handleCreateCategoria = () => {
-        createCategoria({nombre: categoria, order: 1}).unwrap().then(() => {
-            message.success('Categoria creada correctamente')
-            setCategoria('')
-        })
+
+        toast.promise(
+            createCategoria({nombre: categoria, order: 1}).unwrap(), {
+                loading: 'Creando categoria...',
+                success: 'Categoria creada correctamente',
+                error: 'Error al crear la categoria',
+                finally: () => {
+                    setCategoria('')
+                }
+            }
+        )
     }
 
-    const handleAddProyectoToCategoria = ({categoriaId, proyectoId} : {categoriaId: number, proyectoId: string}) => {
-        addProyectoToCategoria({categoriaId, proyectoId}).unwrap().then(() => {
-            message.success('Proyecto agregado a la categoria correctamente')
-        })
+    const handleDeleteCategoria = (categoriaId: string) => {
+        
+        toast.promise(
+            deleteCategoria({categoriaId}).unwrap(), {
+                loading: 'Eliminando categoria...',
+                success: 'Espacio de trabajo eliminado correctamente',
+                error: 'Error al eliminar el espacio de trabajo',
+                finally: () => {
+                    setWorkspace(workspace.filter(id => id !== categoriaId))
+                }
+            }
+        )
     }
 
     // useEffect(() => {
@@ -117,7 +134,8 @@ export const ProyectosCat = () => {
                             <FaProjectDiagram />
                             <p className="text-default">Todos</p> 
                         </div>
-                        <Checkbox onClick={() => setWorkspace([])} checked={workspace.length === 0} />
+                        <Checkbox onClick={() => setWorkspace([])} checked={workspace.length === 0} /> 
+                                
                     </div>
                     {
                         data && data.length > 0 && data.map((categoria, index) => (
@@ -126,16 +144,36 @@ export const ProyectosCat = () => {
                                     <FaProjectDiagram />
                                     <p className="text-default">{categoria.nombre}</p>
                                 </div>
-                                <Checkbox 
-                                    checked={workspace.includes(categoria.id.toString())}
-                                    onClick={() => {
-                                        if(workspace.includes(categoria.id.toString())) {
-                                            setWorkspace(workspace.filter(id => id !== categoria.id.toString()))
-                                        } else {
-                                            setWorkspace([...workspace, categoria.id.toString()])
-                                        }
-                                    }}
-                                />
+                                <div className="flex gap-2">
+                                    <Checkbox 
+                                        checked={workspace.includes(categoria.id.toString())}
+                                        onClick={() => {
+                                            if(workspace.includes(categoria.id.toString())) {
+                                                setWorkspace(workspace.filter(id => id !== categoria.id.toString()))
+                                            } else {
+                                                setWorkspace([...workspace, categoria.id.toString()])
+                                            }
+                                        }}
+                                    />
+                                    <Popconfirm 
+                                        title='¿Estás seguro de eliminar este espacio de trabajo?'
+                                        onConfirm={() => {
+                                            handleDeleteCategoria(categoria.id.toString())
+                                        }}
+                                        okText='Si'
+                                        cancelText='No'
+                                        okButtonProps={{
+                                            className: 'rounded-full mr-2 bg-primary'
+                                        }}
+                                        cancelButtonProps={{
+                                            className: 'rounded-full mr-2 bg-error-light text-white'
+                                        }}
+                                    >
+                                        <button className='text-error-light'>
+                                            <BiTrash />
+                                        </button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                         ))
                     }
@@ -165,7 +203,7 @@ export const ProyectosCat = () => {
                     </div>
                </div>
             </div>
-            <div className="h-screen overflow-y-auto w-full flex flex-col gap-y-5">
+            <div className="h-screen overflow-y-auto w-full flex flex-col gap-y-5 pb-32">
                     {
                         categoriasSelected && categoriasSelected.length > 0 && categoriasSelected.map((categoria, index) => (
                         <div key={index}>
@@ -174,14 +212,14 @@ export const ProyectosCat = () => {
                         </div>
                         ))
                     }
-                {
-                    (workspace.includes('') || workspace.length === 0) &&
-                   ( <div>
-                        {/* Sin Categoria */}
-                        <h1 className='md:col-span-12 col-span-12 font-bold'>Sin Categoria</h1>
-                        <Proyectos key={0} categoriaId={''} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView} />
-                    </div>)
-                }
+                    {
+                        (workspace.includes('') || workspace.length === 0) &&
+                    ( <div>
+                            {/* Sin Categoria */}
+                            <h1 className='md:col-span-12 col-span-12 font-bold'>Sin Categoria</h1>
+                            <Proyectos key={0} categoriaId={''} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView}/>
+                        </div>)
+                    }
             </div>
         </div>
 

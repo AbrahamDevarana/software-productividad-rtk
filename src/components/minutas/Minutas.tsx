@@ -154,10 +154,7 @@ export const Minutas = ({minuteableId, minuteableType}: Props) => {
         <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-3 overflow-hidden'>
                 <Input placeholder='Buscar minuta' onChange={(e) => setSearch(e.target.value)} />
-                <div className='pt-5 flex flex-col gap-5 overflow-y-auto pr-3' style={{
-                    height: 'calc(100vh - 150px)'
-                
-                }}>
+                <div className='pt-5 flex flex-col gap-5 overflow-y-auto pr-3 h-[calc(100vh-150px)]'>
                     {
                         isLoading ? <div className='flex h-full w-full items-center align-middle justify-center'> <Spinner/> </div> :
                         searchedMinuta?.map((minuta, key) => (

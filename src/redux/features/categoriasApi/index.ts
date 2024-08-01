@@ -1,7 +1,6 @@
 import { CategoriaProyectosProps } from "@/interfaces";
 import { baseQuery } from "@/config/baseQuery";
-import { createApi } from '@reduxjs/toolkit/dist/query/react';
-
+import { createApi } from '@reduxjs/toolkit/dist/query/react';import { proyectosApi } from "../proyectos/proyectosThunk";
 
 export const categoriaProyectoApi = createApi({
     reducerPath: 'categoriaProyectoApi',
@@ -42,6 +41,32 @@ export const categoriaProyectoApi = createApi({
                 method: 'DELETE',
             }),
             invalidatesTags: ['Categoria'],
+            onQueryStarted: async ({categoriaId}, {dispatch, queryFulfilled}) => {
+                // delete or clean tag from proyectos
+                
+                const patchResult = dispatch(
+                    categoriaProyectoApi.util.updateQueryData('getCategoriasProyecto', {}, (draft) => {
+                        draft = draft.filter((categoria) => categoria.id !== categoriaId)
+                    })
+                )
+
+                const patchResultProyecto = dispatch(
+                    proyectosApi.util.updateQueryData('getProyectos', {}, (draft) => {
+                        draft.forEach((proyecto) => {
+                            proyecto.categorias = proyecto.categorias.filter((categoria) => categoria.id !== categoriaId)
+                        })
+                    }
+                ))
+
+                try {
+                    await queryFulfilled
+                }
+                catch (error) {
+                    patchResult.undo()
+                    patchResultProyecto.undo()
+                }
+
+            }
         }),
         updateCategoriaProyecto: builder.mutation<CategoriaProyectosProps, {categoriaId: string, categoria: CategoriaProyectosProps}>({
             query: ({categoriaId, categoria}) => ({
@@ -61,7 +86,7 @@ export const categoriaProyectoApi = createApi({
                     proyectoId
                 }
             }),
-            invalidatesTags: ['Categoria'],
+            invalidatesTags: ['Categoria']
         })
     })
 })
