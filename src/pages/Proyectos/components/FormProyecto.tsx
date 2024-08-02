@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ProyectosProps } from '@/interfaces'
 import { useCreateProyectoMutation, useGetProyectoQuery, useUpdateProyectoMutation } from '@/redux/features/proyectos/proyectosThunk';
 import dayjs from 'dayjs';
-import { DatePicker, Form, Image, Input, message, Select, SelectProps, Skeleton, Upload, UploadFile } from 'antd'
+import { DatePicker, Form, Image, Input, Select, SelectProps, Skeleton, Upload, UploadFile } from 'antd'
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { RcFile, UploadProps } from 'antd/es/upload';
 import { getStorageUrl } from '@/helpers';
@@ -27,6 +27,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
     const { data: categorias } = useGetCategoriasProyectoQuery( {} )
 
     const {data : usuarios } = useGetUsuariosQuery({status: 'ACTIVO'})
+    const [sizeAlert, setSizeAlert] = useState(false);
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
@@ -62,7 +63,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
         });        
 
         if(currentProyecto) {
-            toast.promise(updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}), {
+            toast.promise(updateProyecto({proyecto: formData, proyectoId:currentProyecto.id}).unwrap(), {
                 loading: 'Guardando...',
                 success: 'Proyecto actualizado correctamente',
                 error: 'Error al actualizar el proyecto',
@@ -70,7 +71,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
             })
         }
         else {
-            toast.promise(createProyecto(formData), {
+            toast.promise(createProyecto(formData).unwrap(), {
                 loading: 'Guardando...',
                 success: 'Proyecto creado correctamente',
                 error: 'Error al crear el proyecto',
@@ -96,6 +97,24 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
             setFileList(newFileList);
         },
         beforeUpload: (file) => {
+            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+            setSizeAlert(false);
+
+            if (!isJpgOrPng) {
+                toast.error('Solo puedes subir archivos JPG/PNG!');
+                return false;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {  
+                toast.error('El archivo debe ser menor a 2MB');
+                // setTimeOut then set sizeAlert to false
+                setSizeAlert(true);
+                setTimeout(() => {
+                    setSizeAlert(false);
+                }, 5000);
+                return false;
+            }
+            
             setFileList([...fileList, file]);
             getBase64(file, (result) => {
                 setPreviewImage(result as string);
@@ -105,7 +124,6 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
         itemRender:() => null,
         maxCount: 1,
         fileList,
-
     };
 
     const itemsCategoria:SelectProps['options'] = useMemo(() => {
@@ -156,6 +174,7 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                     <div className='absolute top-0 left-0 w-full h-full rounded-ext bg-black bg-opacity-50 gap-x-2 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300'>
                         <ImgCrop
                             aspect={390 / 150}
+                            quality={0.8}
                             cropShape='rect'
                             modalProps={{
                                 cancelButtonProps: { className: 'text-devarana-dark-graph' },
@@ -166,21 +185,29 @@ export const FormProyecto = ({currentProyecto, handleCancel}: FormProyectoProps)
                                 name='banner'
                                 {...props}
                             >
-                                <button className='flex items-center gap-x-2 text-white' type='button'>
+                                <button className='flex justify-center items-center gap-x-2 p-5 text-white' type='button'>
                                     <FaUpload />
                                 </button>
                             </Upload>
                         </ImgCrop>
                         {
                             fileList.length > 0 && (
-                                <button className='flex items-center gap-x-2 text-white' type='button' onClick={() => setFileList([])}>
+                                <button className='flex items-center gap-x-2 p-5 text-white' type='button' onClick={() => setFileList([])}>
                                     <FaTrash />
                                 </button>
                             )
                         }
+                       
                     </div>
+                    
                 </div>
-                
+                {
+                    sizeAlert && 
+                    <p className='text-red-500 text-[10px]'>
+                        El archivo debe ser menor a 2MB puedes comprimir tu imagen
+                        <a href='https://www.iloveimg.com/compress-image' target='_blank' rel='noreferrer' className='text-primary-light text-[10px]'> aquí </a>
+                    </p>
+                }
             </div>
             <Form.Item label="Titulo" name="titulo" required className='col-span-12'>
                 <Input />

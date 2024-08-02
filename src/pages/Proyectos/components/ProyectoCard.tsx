@@ -21,13 +21,14 @@ export const ProyectoCard = ({proyecto, handleView, handleEdit, handleDelete, }:
 	const { userAuth } = useAppSelector(state => state.auth)
 
 	return (
-		<Box className="w-1/4 min-w-[390px]">
+		<Box className="w-full">
 			<div className="relative group z-0 pt-8">
-				<Image className="shadow-card-picture max-h-[150px] object-fill z-30 rounded-ext group-hover:-translate-y-12 transition-all duration-500 ease-out" preview={false} 
+				<Image className="shadow-card-picture max-h-[150px] z-30 rounded-ext group-hover:-translate-y-12 transition-all duration-500 ease-out" preview={false} 
 					src={getStorageUrl(imagen)} 
 					fallback={`${import.meta.env.VITE_STORAGE_URL}custom-images/noBanner.png`}
 					wrapperStyle={{ width: '100%', height: '150px', objectFit: 'cover', objectPosition: 'center'}}
-					/>
+                    style={{ width: '100%', height: '150px', objectFit: 'cover', objectPosition: 'center'}}
+                />
 				<div className="flex absolute left-0 right-0 bottom-4 justify-center gap-x-5 -z-10 group-hover:z-10">
 						<Button className='text-xs' size='sm' classType='regular' classColor='primary' width={100}  onClick={ () => handleView(id)} >
                             Ver Proyecto

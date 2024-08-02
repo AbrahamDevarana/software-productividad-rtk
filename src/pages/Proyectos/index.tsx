@@ -116,18 +116,18 @@ export const ProyectosCat = () => {
     
     return (
         <>
-        <div className='flex gap-x-10 overflow-hidden' style={{
+        <div className='flex gap-x-10 gap-y-5 overflow-hidden sm:flex-row flex-col' style={{
             height: 'calc(100vh - 110px)'
         }}>
-            <div className={`${workspaceVisible ? 'w-[350px]' : 'w-0'} transition-all duration-300 relative h-full`}>
-                <div className={`absolute ${workspaceVisible ? 'right-0' : ''}`}>
+            <div className={`${workspaceVisible ? 'w-[350px] h-auto' : 'w-0'} transition-all duration-300 relative sm:h-full shadow`}>
+                <div className={`absolute ${workspaceVisible ? 'right-3 top-3' : 'top-3'}`}>
                     <button onClick={() => setWorkspaceVisible(!workspaceVisible)} className="bg-white rounded-full p-1 text-devarana-midnight">
                         {
                             workspaceVisible ? <FaMinus /> : <FaPlus />
                         }
                     </button>
                 </div>
-                <div className={`${ workspaceVisible ? 'block' : 'hidden'} bg-white p-5 h-full`}>
+                <div className={`${ workspaceVisible ? 'block' : 'hidden'} bg-white px-5 py-10 h-full`}>
                     <h1 className="text-sm font-light">Espacios de Trabajo</h1>
                     <div className="flex items-center text-default justify-between py-1 my-2 rounded-sm px-3">
                         <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export const ProyectosCat = () => {
                     {
                         categoriasSelected && categoriasSelected.length > 0 && categoriasSelected.map((categoria, index) => (
                         <div key={index}>
-                            <h1 className='md:col-span-12 col-span-12 font-bold'>{categoria.nombre}</h1>
+                            <h1 className='font-bold'>{categoria.nombre}</h1>
                             <Proyectos key={index} categoriaId={categoria.id.toString()} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView} />
                         </div>
                         ))
@@ -216,7 +216,7 @@ export const ProyectosCat = () => {
                         (workspace.includes('') || workspace.length === 0) &&
                     ( <div>
                             {/* Sin Categoria */}
-                            <h1 className='md:col-span-12 col-span-12 font-bold'>Sin Categoria</h1>
+                            <h1 className='font-bold'>Sin Categoria</h1>
                             <Proyectos key={0} categoriaId={''} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView}/>
                         </div>)
                     }
