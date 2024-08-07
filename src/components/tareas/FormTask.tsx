@@ -1,16 +1,14 @@
-import { DatePicker, Dropdown, Form, Input, message, Select, Skeleton } from 'antd'
+import { DatePicker, Form, Input, Skeleton } from 'antd'
 import { useState } from 'react'
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks'
 import { TaskProps } from '@/interfaces'
 import dayjs from 'dayjs';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import '@/assets/scss/quill.scss'
-import { TabStatus } from '@/components/ui/TabStatus';
-import { statusType, statusTypes } from '@/types'
-import type { MenuProps } from 'antd';
+import {statusTypes } from '@/types'
 import { useGetTaskQuery, useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
 import { BsFillCalendarFill } from 'react-icons/bs';
+import { toast } from 'sonner';
 
 
 
@@ -37,11 +35,11 @@ export const FormTask = ({selectedTask, handleClose}: Props) => {
             ...form.getFieldsValue()
         }
 
-        await updateTask(query).unwrap().then(() => {
-            message.success('Tarea actualizada correctamente')
-            handleClose()
-        }).catch(() => {
-            message.error('Ocurrió un error al actualizar la tarea')
+        toast.promise( updateTask(query).unwrap(), {
+            loading: 'Actualizando tarea...',
+            success: 'Tarea actualizada',
+            error: 'Error al actualizar la tarea',
+            finally: () => handleClose()
         })
 
 

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import Loading from '../../components/antd/Loading'
-import { Avatar, Checkbox, Image, Input, Modal, Table, Tooltip, message } from 'antd'
+import { Avatar, Checkbox, Image, Input, Modal, Table, Tooltip } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Box, Button } from '@/components/ui'
 import { FaEye } from 'react-icons/fa'
@@ -11,6 +11,7 @@ import { GestionEvaluaciones } from '@/components/gestion/GestionEvaluaciones'
 import { useGenerateAsignacionesEvaluacionMutation, useGetEvaluacionUsuariosQuery } from '@/redux/features/evaluaciones/evaluacionesThunk'
 import { useAppSelector } from '@/redux/hooks'
 import { LoadingMask } from '@/components/antd/LoadingMask'
+import { toast } from 'sonner'
 
 export const Competencias = () => {
 
@@ -281,13 +282,10 @@ export const Competencias = () => {
             okText: 'Generar',
             okType: 'danger',
             onOk() {
-                generateAsignacionesEvaluacion({year, quarter}).
-                unwrap().
-                then((args) => {
-                    message.success('Evaluaciones generadas correctamente')
-                }).
-                catch((err: any) => {
-                    message.error('Ocurrió un error al generar las evaluaciones')
+                toast.promise(generateAsignacionesEvaluacion({year, quarter}).unwrap(), {
+                    loading: 'Generando evaluaciones...',
+                    success: 'Evaluaciones generadas correctamente',
+                    error: 'Ocurrió un error al generar las evaluaciones',
                 })
             },
             onCancel() {

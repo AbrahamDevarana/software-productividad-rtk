@@ -1,8 +1,9 @@
 import { TaskProps } from '@/interfaces'
-import { updateTaskThunk, useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
+import { useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
 import { useAppDispatch } from '@/redux/hooks'
-import { Checkbox, message } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Checkbox } from 'antd'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 
 interface TaskCheckboxProps {
@@ -23,12 +24,15 @@ export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
         }
 
         setChecked(value ? true : false)
-        // dispatch(updateTaskThunk(query))
-        updateTask(query).unwrap().then(() => {
-            message.success('Tarea actualizada')
-        }).catch((error) => {
-            message.error('Error al actualizar la tarea')
-        })
+        
+
+        toast.promise(
+            updateTask(query).unwrap(), {
+                loading: 'Actualizando tarea...',
+                success: 'Tarea actualizada',
+                error: 'Error al actualizar la tarea'
+            }
+        )
     }
     
     useEffect(() => {

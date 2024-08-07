@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { useUpdateTypeProgressMutation, useGetTacticoQuery, useUpdateTacticoMutation, useUpdateTypMutation, useDeleteTacticoMutation } from '@/redux/features/tacticos/tacticosThunk';
 import { AreaProps, CoreProps, PerspectivaProps, TacticoProps, UsuarioProps } from '@/interfaces';
-import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, message, Switch, Tooltip, Spin, TreeSelect } from 'antd';
+import { Form, Input, Select, Radio, Divider, RadioChangeEvent, Dropdown, Slider, MenuProps, TabsProps, Tabs, Button, Modal, DatePicker, Switch, Tooltip, Spin, TreeSelect } from 'antd';
 import dayjs from 'dayjs';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
@@ -20,6 +20,7 @@ import { BsFillCalendarFill } from 'react-icons/bs';
 import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
 import { useGetDepartamentosQuery } from '@/redux/features/departamentos/departamentosThunks';
 import { useGetComentariosQuery } from '@/redux/features/comentarios/comentariosThunk';
+import { toast } from 'sonner';
 
 interface FormTacticoProps {
     handleCloseDrawer: () => void
@@ -153,9 +154,11 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                 async onOk() {
                     setIsEstrategico(e.target.value)
                     setSelectedPerspectiva(undefined)
-                    currentTactico && updateTypeMutation({ tacticoId: currentTactico.id, type: 'CORE' }).unwrap().then((res) => {
-                        message.success('Objetivo operativo actualizado')
-                    })
+                    currentTactico && toast.promise( updateTypeMutation({ tacticoId: currentTactico.id, type: 'CORE' }).unwrap(), {
+                        loading: 'Actualizando tipo de objetivo',
+                        success: 'Tipo de objetivo cambiado',
+                        error: 'Error al cambiar el tipo de objetivo'
+                    })                    
                 }
             });
         }else{
@@ -204,9 +207,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
     }
 
     const handleChangePerspectiva = async (e: string) => {
-       currentTactico && updateTypeMutation({ tacticoId: currentTactico.id, type: 'ESTRATEGICO', estrategicoId: e }).unwrap().then((res) => {
-            message.success('Objetivo estratégico actualizado')
+
+        currentTactico && toast.promise( updateTypeMutation({ tacticoId: currentTactico.id, type: 'ESTRATEGICO', estrategicoId: e }).unwrap(), {
+            loading: 'Actualizando objetivo estratégico',
+            success: 'Objetivo estratégico actualizado',
+            error: 'Error al actualizar el objetivo estratégico'
         })
+       
     }
 
     const handleChangeArea = (value: number) => {
@@ -283,12 +290,13 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
         });
     }
 
-    const handleSetTipo = (type: boolean) => {        
-
-        updateTypeProgressMutation({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' }).unwrap().then((res) => {            
-            message.success('Tipo de progreso cambiado')
-        })
+    const handleSetTipo = (type: boolean) => {     
         
+        toast.promise( updateTypeProgressMutation({ tacticoId: currentTactico.id, type: type ? 'PROMEDIO' : 'MANUAL' }).unwrap(), {
+            loading: 'Actualizando tipo de progreso',
+            success: 'Tipo de progreso cambiado',
+            error: 'Error al cambiar el tipo de progreso'
+        })
     }
   
     

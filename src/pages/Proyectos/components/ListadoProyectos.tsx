@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { useCreateHitoMutation, useDeleteHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
 import { HitosProps, ProyectosProps, TaskProps } from '@/interfaces'
-import { Checkbox, Collapse, CollapseProps, ColorPicker, FloatButton, Form, Input, message, Popconfirm, Popover, Select, Tooltip } from 'antd'
+import { Checkbox, Collapse, CollapseProps, FloatButton, Input, Select } from 'antd'
 import Loading from '@/components/antd/Loading'
 import { Icon } from '@/components/Icon'
 import { TablaTask } from '@/components/tasks/'
 import { taskHitosHeader } from '@/components/tasks/TaskHitosHeader'
 import { columnsVisible, columnsNames } from "@/pages/Proyectos/utils";
+import { toast } from 'sonner'
 interface TableProyectosProps {
     currentProyecto: ProyectosProps
     setSelectedTask: (task: TaskProps) => void
@@ -51,10 +52,10 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
             titulo: value
         }
 
-        await updateHito(query).unwrap().then(() => {
-            message.success('Hito Actualizado')
-        }).catch((error) => {
-            message.error('Error al actualizar el hito')
+        toast.promise(updateHito(query).unwrap(), {
+            loading: 'Actualizando hito...',
+            success: 'Hito actualizado',
+            error: 'Error al actualizar el hito'
         })
     };
 
@@ -63,23 +64,28 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
         const query = {
             proyectoId: currentProyecto.id,
         }
-        await createHito(query).unwrap().then(( data ) => {
-            message.success('Sección Creado')
-            const element = document.getElementById(`hitos-${data.id}`)
-            if(element) element.scrollIntoView({ behavior: 'smooth', block: 'end' })
-            if(element) element.classList.add('ant-collapse-item-active')
-        }).catch((error) => {
-            message.error('Error al crear la sección')
+
+        toast.promise(createHito(query).unwrap(), {
+            loading: 'Creando hito...',
+            success: (data) => {
+                const element = document.getElementById(`hitos-${data.id}`)
+                if(element) element.scrollIntoView({ behavior: 'smooth', block: 'end' })
+                if(element) element.classList.add('ant-collapse-item-active')
+                    return 'Hito creado'
+            },
+            error: 'Error al crear el hito',
         })
 
     };
 
     const handleDeleteHito = async (hito: HitosProps) => {
-        await deleteHito({hitoId: hito.id, proyectoId: currentProyecto.id}).unwrap().then(() => {
-            message.success('Sección Eliminada')
-        }).catch((error) => {
-            message.error('Error al eliminar la sección')
+
+        toast.promise(deleteHito({hitoId: hito.id, proyectoId: currentProyecto.id}).unwrap(), {
+            loading: 'Eliminando hito...',
+            success: 'Hito eliminado',
+            error: 'Error al eliminar el hito',
         })
+
     }
     
     const handleChangeColor = (hito: HitosProps, color: string) => {
@@ -87,10 +93,11 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
             ...hito,
             color: color
         }
-        updateHito(query).unwrap().then(() => {
-            message.success('Color Actualizado')
-        }).catch((error) => {
-            message.error('Error al actualizar el color')
+
+        toast.promise(updateHito(query).unwrap(), {
+            loading: 'Actualizando color...',
+            success: 'Color actualizado',
+            error: 'Error al actualizar el color',
         })
     }
 

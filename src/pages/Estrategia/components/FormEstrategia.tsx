@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, message, Tooltip, Switch } from 'antd';
+import { Form, DatePicker, Input, Select, Slider, Skeleton, MenuProps, Dropdown, Divider, Button, Space, Modal, Tabs, TabsProps, Tooltip, Switch } from 'antd';
 import { useAppSelector } from '@/redux/hooks';
 import { useChangeTypeProgressEstrategicoMutation, useDeleteEstrategicoMutation, useGetEstrategicoQuery, useUpdateEstrategicoMutation } from '@/redux/features/estrategicos/estrategicosThunk';
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
-import { PerspectivaProps } from '@/interfaces';
+import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -16,6 +16,7 @@ import { useSelectUser } from '@/hooks/useSelectUser';
 import { Comentarios } from '@/components/comentarios/Comentarios'
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import { useGetPerspectivasQuery } from '@/redux/features/perspectivas/perspectivasThunk';
+import { toast } from 'sonner';
 
 
 
@@ -66,9 +67,11 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
         delete query.status
         delete query.progreso
         
-        if(query.id){            
-            updateEstrategicoMutation(query).unwrap().then(() => {
-                message.success('Estrategia actualizada')
+        if(query.id){
+            toast.promise(updateEstrategicoMutation(query).unwrap(), {
+                loading: 'Actualizando estrategia',
+                success: 'Estrategia actualizada',
+                error: 'Error al actualizar estrategia'
             })
         }
     }
@@ -90,16 +93,19 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
         
         if(objetivosEstrategico.id && objetivosEstrategico.progreso !== value){
 
-            const updateEstrategico = {
+            const updateEstrategico: EstrategicoProps = {
                 ...objetivosEstrategico,
                 tipoProgreso: "MANUAL",
                 progreso: value,
                 year: dayjs(form.getFieldValue('year')).year(),
             }
-            // @ts-ignore
-            updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
-                message.success('Progreso actualizado')
+
+            toast.promise(updateEstrategicoMutation(updateEstrategico).unwrap(), {
+                loading: 'Actualizando progreso',
+                success: 'Progreso actualizado',
+                error: 'Error al actualizar progreso'
             })
+            
         }  
     }
 
@@ -110,10 +116,13 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
             status: value,
             year: dayjs(form.getFieldValue('year')).year(),
         }
-        
-        updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
-            message.success('Estatus actualizado')
-        })   
+        toast.promise(
+            updateEstrategicoMutation(updateEstrategico).unwrap(), {
+                loading: 'Actualizando estatus',
+                success: 'Estatus actualizado',
+                error: 'Error al actualizar estatus'
+            }
+        )
     }
 
     const handleChangePerspectiva = (value: string) => {
@@ -123,8 +132,10 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
             year: dayjs(form.getFieldValue('year')).year(),
         }
 
-        updateEstrategicoMutation(updateEstrategico).unwrap().then(() => {
-            message.success('Perspectiva actualizada')
+        toast.promise( updateEstrategicoMutation(updateEstrategico).unwrap(), {
+            loading: 'Actualizando perspectiva',
+            success: 'Perspectiva actualizada',
+            error: 'Error al actualizar perspectiva'
         })
     }
 
@@ -191,9 +202,12 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
             okType: 'danger',
             cancelText: 'No',
             async onOk() {
-                deleteEstrategicoMutation(objetivosEstrategico.id).unwrap().then(() => {
-                    message.success('Estrategia eliminada')
-                    handleCloseDrawer()
+
+                toast.promise( deleteEstrategicoMutation(objetivosEstrategico.id).unwrap(), {
+                    loading: 'Eliminando estrategia',
+                    success: 'Estrategia eliminada',
+                    error: 'Error al eliminar estrategia',
+                    finally: () => handleCloseDrawer()
                 })
             }
         });
@@ -202,8 +216,10 @@ export const FormEstrategia= ({handleCloseDrawer, estrategicoId}:Props) => {
     const handleSetTipo = (type: boolean) => {      
         const typeProgress = type ? 'PROMEDIO' : 'MANUAL'
 
-        changeTypeProgressEstrategicoMutation({estrategicoId: objetivosEstrategico.id, typeProgress}).unwrap().then(() => {
-            message.success('Tipo de progreso actualizado')
+        toast.promise( changeTypeProgressEstrategicoMutation({estrategicoId: objetivosEstrategico.id, typeProgress}).unwrap(), {
+            loading: 'Actualizando tipo de progreso',
+            success: 'Tipo de progreso actualizado',
+            error: 'Error al actualizar tipo de progreso'
         })
     }
   

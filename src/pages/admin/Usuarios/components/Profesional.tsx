@@ -1,4 +1,4 @@
-import { Select, Form, Input, Space, Skeleton, message } from 'antd';
+import { Select, Form, Input, Space, Skeleton } from 'antd';
 import { Button } from "@/components/ui";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +8,7 @@ import { clearLideresThunk, getDepartamentosThunk, getLideresDepartamentoThunk }
 import { useUpdateUsuarioMutation } from '@/redux/features/usuarios/usuariosThunks';
 import { useSelectUser } from '@/hooks/useSelectUser';
 import { FaArrowRight, FaSave } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 export const Profesional: React.FC<any> = ({handleSteps, handleCancel, currentUsuario}) => {
 
@@ -62,10 +63,15 @@ export const Profesional: React.FC<any> = ({handleSteps, handleCancel, currentUs
             ...form.getFieldsValue(),
             id: currentUsuario.id
         }
-        updateUser(query).unwrap().then(() => {
-            message.success('Usuario Actualizado Correctamente.')
+
+        toast.promise( updateUser(query).unwrap(), {
+            loading: 'Actualizando usuario...',
+            success: 'Usuario actualizado',
+            error: 'Error al actualizar el usuario',
+            finally: () => handleCancel()
         })
-        handleCancel()
+            
+        
     }
 
     const lidersList = useMemo(() => {

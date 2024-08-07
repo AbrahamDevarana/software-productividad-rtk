@@ -2,10 +2,11 @@ import { FormRoles } from '@/components/forms/FormRoles'
 import { Box, Button } from '@/components/ui'
 import { RoleProps } from '@/interfaces/rol'
 import { useDeleteRolMutation, useGetRolesQuery } from '@/redux/features/roles/rolesThunk'
-import { FloatButton, Input, Modal, Table, message } from 'antd'
+import { FloatButton, Input, Modal, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useMemo, useState } from 'react'
 import { FaPen, FaPlus, FaTrash } from 'react-icons/fa'
+import { toast } from 'sonner'
 
 export const Roles = () => {
 
@@ -88,11 +89,12 @@ export const Roles = () => {
 			okType: 'danger',
 			cancelText: 'Cancelar',
 			onOk: async () => {
-				await deleteRol(id).then(() => {
-					message.success('Rol eliminado correctamente')
-				}).catch(() => {
-					message.error('Ocurrió un error al eliminar el rol')
-				})
+
+                toast.promise(deleteRol(id).unwrap(), {
+                    loading: 'Eliminando rol...',
+                    success: 'Rol eliminado',
+                    error: 'Error al eliminar el rol',
+                })
 			},
 			onCancel() {
 				

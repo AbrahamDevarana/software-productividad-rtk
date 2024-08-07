@@ -1,5 +1,5 @@
 
-import { Input, Form, Upload, Modal, Skeleton, message, Select } from 'antd';
+import { Input, Form, Upload, Modal, Select } from 'antd';
 import { Button } from '@/components/ui';
 import { useCreateUsuarioMutation, useUpdateUsuarioMutation } from '@/redux/features/usuarios/usuariosThunks';
 import { uploadUserPicture } from '@/helpers';
@@ -7,6 +7,7 @@ import { useUploadAvatar } from '@/hooks/useUploadAvatar';
 import { uploadButton } from '@/components/ui/UploadButton';
 import ImgCrop from 'antd-img-crop';
 import { FaArrowRight, FaSave } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 
 export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
@@ -24,12 +25,16 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
             id: currentUsuario?.id,
         }
         if(currentUsuario && currentUsuario.id) {
-            await updateUser(query).unwrap().then(() => {
-                message.success('Usuario Actualizado Correctamente.')
+            toast.promise(updateUser(query).unwrap(), {
+                loading: 'Actualizando Usuario...',
+                success: 'Usuario Actualizado Correctamente.',
+                error: 'Error al actualizar el usuario'
             })
         }else {
-            await createUser(query).unwrap().then(() => {
-                message.success('Usuario Creado Correctamente.')  
+            toast.promise(createUser(query).unwrap(), {
+                loading: 'Creando Usuario...',
+                success: 'Usuario Creado Correctamente.',
+                error: 'Error al crear el usuario'
             })
         }
     }

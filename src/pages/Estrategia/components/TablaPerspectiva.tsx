@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Avatar, Drawer, Image, message, Progress, Skeleton, Table, Tooltip } from 'antd';
+import { Avatar, Drawer, Image, Progress, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EstrategicoProps, PerspectivaProps } from '@/interfaces';
 import { FormEstrategia } from './';
@@ -10,6 +10,7 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { FaPlus } from 'react-icons/fa';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import { extraerNumero } from '@/helpers/getNumberCode';
+import { toast } from 'sonner';
 
 interface TablaEstrategiaProps{
     perspectiva: PerspectivaProps;
@@ -144,16 +145,13 @@ export const TablaEstrategia = ({ perspectiva , year}: TablaEstrategiaProps) => 
         e.stopPropagation()
         e.preventDefault()
 
-        
-        createEstrategicoMutation({
-            perspectivaId: perspectiva.id,
-            year
 
-        }).unwrap().then(() => {
-            message.success('Estrategia creada correctamente')
-        }).catch(() => {
-            message.error('Error al crear la estrategia')
-        })
+        toast.promise( createEstrategicoMutation({ perspectivaId: perspectiva.id, year }), {
+                loading: 'Creando estrategia...',
+                success: 'Estrategia creada correctamente',
+                error: 'Error al crear la estrategia',
+            }
+        )
     }
 
     const handleCloseDrawer = () => {

@@ -1,7 +1,8 @@
-import { Divider, Form, Input, DatePicker, message } from 'antd'
+import { Divider, Form, Input, DatePicker } from 'antd'
 import { Button } from "@/components/ui"
 import dayjs from 'dayjs';
 import { useUpdateUsuarioMutation } from '@/redux/features/usuarios/usuariosThunks';
+import { toast } from 'sonner';
 
 
 export const Personal: React.FC<any> = ({currentUsuario, handleCancel}) => {
@@ -15,12 +16,14 @@ export const Personal: React.FC<any> = ({currentUsuario, handleCancel}) => {
             ...form.getFieldsValue(),
         }
 
-        
-        updateUser(query).unwrap().then(() => {
-            message.success('Usuario Actualizado Correctamente.')
+        toast.promise( updateUser(query).unwrap(), {
+            loading: 'Guardando...',
+            success: 'Usuario Actualizado Correctamente.',
+            error: 'Error al actualizar el usuario.',
+            finally: () => {
+                handleCancel()
+            }
         })
-        
-        handleCancel()
     }
    
 
