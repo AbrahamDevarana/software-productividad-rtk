@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { useCreateHitoMutation, useDeleteHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
+import { useCreateHitoMutation, useDeleteHitoMutation, useDuplicateHitoMutation, useGetHitosQuery, useUpdateHitoMutation } from '@/redux/features/hitos/hitosThunk'
 import { HitosProps, ProyectosProps, TaskProps } from '@/interfaces'
 import { Checkbox, Collapse, CollapseProps, FloatButton, Input, Select } from 'antd'
 import Loading from '@/components/antd/Loading'
@@ -26,6 +26,7 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
     const [ createHito, { isLoading: isCreatingHito, error: createHitoError }] = useCreateHitoMutation()
     const [ updateHito, { isLoading: isUpdatingHito, error: updateHitoError }] = useUpdateHitoMutation()
     const [ deleteHito, { isLoading: isDeletingHito, error: deleteHitoError }] = useDeleteHitoMutation()
+    const [ dupeHito ] = useDuplicateHitoMutation()
 
     // Filtros
     const [activeKeys, setActiveKeys] = useState<string[]>([])
@@ -101,6 +102,14 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
         })
     }
 
+    const handleDupliateResultado = async (id: string) => {
+       toast.promise( dupeHito({hitoId: id, proyectoId: currentProyecto.id}).unwrap(), {
+            loading: 'Duplicando hito...',
+            success: 'Hito duplicado',
+            error: 'Error al duplicar el hito',
+        })
+    }
+
     const filteredAndSortedSections = useMemo(() => {
         if (!hitos) return [];
         
@@ -122,7 +131,7 @@ export const ListadoProyectos = ({currentProyecto, selectedTask, setSelectedTask
    const items: CollapseProps['items'] = useMemo(() => {
         return filteredAndSortedSections?.map((hito: HitosProps, index: number) => ({
             key: hito.id.toString(),
-            label: taskHitosHeader({record: hito, handleChangeHito, handleChangeColor, handleDeleteHito}),
+            label: taskHitosHeader({record: hito, handleChangeHito, handleChangeColor, handleDeleteHito, handleDupliateResultado}),
             children: <TablaTask data={hito} options={options} taskeableType='HITO' columnsNames={columnsNames} columnsVisible={columnsVisible} />,
         }))        
     }, [filteredAndSortedSections, options])

@@ -18,8 +18,9 @@ import { MdOutlineEditNote } from 'react-icons/md';
 import { FaCog } from 'react-icons/fa';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 import { FormProyecto } from './components/FormProyecto';
+import { SegmentedOptions } from 'antd/es/segmented';
 
-type SegmentTypes = 'actividades' | 'kanban' | 'gantt' | 'calendario'
+type SegmentTypes = 'actividades' | 'kanban' | 'gantt' | 'minutas'
 
 export const ProyectoView = () => {
 
@@ -35,16 +36,16 @@ export const ProyectoView = () => {
     const [selectedTask, setSelectedTask] = useState<TaskProps | null>(null)
     const [ selectedProyect, setSelectedProyect ] = useState<ProyectosProps | null>(null)
         
-    const projectViewsOptions = [
-        {
-            label: 'Actividades',
-            value: 'actividades',
-            icon: <Icon iconName='faList' />
-        },
+    const projectViewsOptions: SegmentedOptions = [
         {
             label: 'Gantt',
             value: 'gantt',
             icon: <Icon iconName='faChartGantt' />
+        },
+        {
+            label: 'Actividades',
+            value: 'actividades',
+            icon: <Icon iconName='faList' />
         },
         {
             label: 'Kanban',
@@ -68,6 +69,10 @@ export const ProyectoView = () => {
         setIsModalVisible(true)
     }
 
+
+    const handleOnChangeSegment = (value: SegmentTypes ) => {
+        setValue(value)
+    }
 
     // useEffect(() => {        
     //     socket?.on('hitos:updated', (hito) => {                       
@@ -152,12 +157,17 @@ export const ProyectoView = () => {
                     </div>
                 </div>
 
-                <Segmented
-                    options={projectViewsOptions}
-                    value={value}
-                    onChange={(value) => setValue(value as SegmentTypes)}
-                    className='mt-5'
-                />
+                <div className='flex justify-start max-w-screen-md items-center py-5'> 
+                    <Segmented
+                        options={projectViewsOptions}
+                        value={value}
+                        onChange={(value) => handleOnChangeSegment(value as SegmentTypes)}
+                        // className='mt-5'
+                    />
+                    <button className='bg-devarana-blue text-white px-5 my-1 py-0.5 rounded shadow-sm flex items-center gap-1 hover:opacity-80 transition-all ease-in-out' onClick={() => setMinutasVisible(true)}>
+                        <MdOutlineEditNote className='text-white' size={18}/> Minutas 
+                    </button>
+                </div>
 
                 {
                     proyecto && (

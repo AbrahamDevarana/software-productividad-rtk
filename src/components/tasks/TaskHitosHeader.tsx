@@ -9,10 +9,11 @@ interface Props {
     handleDeleteHito: (hito: HitosProps) => void
     handleChangeHito: (hito: HitosProps, e: React.FocusEvent<HTMLInputElement, Element>) => void
     handleChangeColor: (hito: HitosProps, color: string) => void
+    handleDupliateResultado: (id: string) => void
     isClosed?: boolean
 }
 
-export const taskHitosHeader = ({ record, handleDeleteHito, handleChangeHito, handleChangeColor, isClosed }: Props) => (
+export const taskHitosHeader = ({ record, handleDeleteHito, handleChangeHito, handleChangeColor, handleDupliateResultado ,isClosed }: Props) => (
     <div className='flex items-center gap-x-5' onClick={e => e.stopPropagation()}>
         <Form
             layout='vertical'
@@ -57,7 +58,7 @@ export const taskHitosHeader = ({ record, handleDeleteHito, handleChangeHito, ha
                     <Popconfirm
                         disabled={isClosed}
                         title="¿Estas seguro de duplicar esta sección?"
-                        // onConfirm={ () => handleDupliateResultado( resultado.id )}
+                        onConfirm={ () => handleDupliateResultado( record.id )}
                         onCancel={() => {}}
                         okText="Si"
                         cancelText="No"
