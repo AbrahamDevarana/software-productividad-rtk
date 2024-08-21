@@ -154,19 +154,19 @@ export const Minutas = ({minuteableId, minuteableType}: Props) => {
         <div className='grid grid-cols-12 gap-10'>
             <div className='col-span-3 overflow-hidden'>
                 <Input placeholder='Buscar minuta' onChange={(e) => setSearch(e.target.value)} />
-                <div className='pt-5 grid gap-y-5 overflow-y-auto pr-3 h-[calc(100vh-150px)]'>
+                <div className='pt-5 overflow-y-auto pr-3 h-[calc(100vh-150px)]'>
                     {
                         isLoading ? <div className='flex h-full w-full items-center align-middle justify-center'> <Spinner/> </div> :
                         searchedMinuta?.map((minuta, key) => (
                             <button key={key} 
                                 disabled={isUpdating}
                                 onClick={() => handleSelectMinuta(minuta)}
-                                className={`h-20 w-full border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-5 py-2 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-blue bg-opacity-30' : ''}`}>
-                                <h3 className='text-bold text-sm text-left'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
-                                <p className='text-devarana-graph text-[12px] text-left font-light leading-4'>
-                                    {convertToPlainText(minuta.descripcion).slice(0, 50)}...
+                                className={`my-2 h-28 flex flex-col items-start w-full border border-devarana-graph border-opacity-40 overflow-hidden rounded-md px-4 py-3 hover:bg-devarana-graph transition-all duration-300 ease-in-out hover:bg-opacity-20 disabled:opacity-35 disabled:cursor-not-allowed cursor-pointer ${selectedMinuta?.id === minuta.id ? 'bg-devarana-blue bg-opacity-30' : ''}`}>
+                                <h3 className='text-bold text-xs text-left line-clamp-2'> {minuta.titulo ? minuta.titulo : 'Sin título'} </h3>
+                                <p className='text-devarana-graph text-[10px] text-left font-light leading-4 line-clamp-2 py-1'>
+                                    {convertToPlainText(minuta.descripcion).slice(0, 70)}...
                                 </p>
-                                <p className='text-right text-xs opacity-25'>{ dayjs(minuta.fecha).fromNow() }</p>
+                                <p className='text-right text-xs opacity-25 mt-auto ml-auto'>{ dayjs(minuta.fecha).fromNow() }</p>
                             </button>
                         ))
                     }
