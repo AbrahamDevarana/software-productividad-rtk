@@ -10,6 +10,7 @@ import { getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { hasGroupPermission } from '@/helpers/hasPermission';
 import bizneo from '@/assets/img/logos/b-icon.png';
+import { GiTicket } from 'react-icons/gi';
 
 
 interface LayoutSidebarProps {
@@ -53,6 +54,10 @@ export const Sidebar = ({optBarVisible, setOptBarVisible, setOptionalContent}:La
                             width={25}
                             preview={false} className="mx-auto" />
                         <span className="text-xs text-center font-light block">Bizneo</span>
+                    </NavLink>
+                    <NavLink target='_blank' to={'https://devaranasadecv.freshservice.com/support/home'} className={`link nav-link text-center`}>
+                        <GiTicket size={20} className='mx-auto mb-1' />    
+                        <span className="text-xs text-center font-light block">Ticket TI</span>
                     </NavLink>
                     <div className='bg-gradient-to-r from-transparent via-white  to-transparent h-0.5 w-full rounded-full opacity-20' />
                     <NavLink to={'/estrategia'} className={`link nav-link text-center`}>
