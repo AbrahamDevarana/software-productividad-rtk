@@ -1,11 +1,11 @@
 import { PerfilProps } from '@/interfaces';
-import { Input, message } from 'antd';
+import { Input } from 'antd';
 import { useState } from 'react';
-import { AiFillAccountBook, AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiOutlineLink } from 'react-icons/ai';
-import { IoShareSocialSharp } from 'react-icons/io5';
+import { AiFillFacebook, AiFillInstagram, AiFillLinkedin, AiOutlineLink } from 'react-icons/ai';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { Button } from '../ui';
+import { toast } from 'sonner';
 
 
 
@@ -18,9 +18,7 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
 
     const dispatch = useAppDispatch()
     const [ redes, setRedes ] = useState(usuarioActivo.social)
-    const [messageApi, contextHolder] = message.useMessage();
-
-
+    
 
     const handleOnChange = (e: any) => {
         const { name, value } = e.target
@@ -45,16 +43,18 @@ export const SocialInfo = ({usuarioActivo}: Props) => {
             social: redes
         }
 
-        await dispatch(updateProfileThunk(query)).unwrap().then(() => {
-            messageApi.success('Perfil actualizado')
-        }).catch((err) => {
-            messageApi.error('Error al actualizar el perfil')
-        })
+        toast.promise(
+            dispatch(updateProfileThunk(query)).unwrap(),
+            {
+                loading: 'Guardando...',
+                success: 'Perfil actualizado correctamente',
+                error: 'Ocurrió un error al actualizar el perfil'
+            }
+        )
     }
 
     return (
         <>
-            { contextHolder }
             <div className='grid grid-cols-2 gap-5'>
                 <div className='flex items-center justify-center gap-x-2 lg:col-span-1 col-span-2'>
                     <AiFillLinkedin className='text-4xl text-blue-500' />

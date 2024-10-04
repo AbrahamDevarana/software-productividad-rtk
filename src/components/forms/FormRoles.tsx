@@ -1,9 +1,10 @@
 import { useGetRolQuery, useUpdateRolMutation , useCreateRolMutation } from '@/redux/features/roles/rolesThunk'
-import { Checkbox, Divider, Form, Input, message } from 'antd'
+import { Checkbox, Divider, Form, Input } from 'antd'
 import { Spinner } from '../antd/Spinner'
 import { Button } from '../ui'
 import { FaSave } from 'react-icons/fa'
 import { useGetPermisosQuery } from '@/redux/features/permisos/PermisosThunk'
+import { toast } from 'sonner'
 
 export const FormRoles = ({roleId, handleClose}: { roleId: number, handleClose: () => void}) => {
 
@@ -20,21 +21,24 @@ export const FormRoles = ({roleId, handleClose}: { roleId: number, handleClose: 
     const handleSubmit = async () => {
         const query = form.getFieldsValue()
         if(roleId){
-            try{
-                await updateRol({id: roleId, ...query}).unwrap()
-                message.success('Rol actualizado correctamente')
-                handleClose()
-            }catch(e){
-                message.error('Ocurrió un error al actualizar el rol')
-            }
+
+            toast.promise(updateRol({id: roleId, ...query}).unwrap(), {
+                loading: 'Guardando...',
+                success: () => {
+                    handleClose()
+                    return 'Rol actualizado correctamente'
+                },
+                error: 'Ocurrió un error al actualizar el rol'
+            })
         }else{
-            try{
-                await createRol(query).unwrap()
-                message.success('Rol creado correctamente')
-                handleClose()
-            }catch(e){
-                message.error('Ocurrió un error al crear el rol')
-            }
+            toast.promise(createRol(query).unwrap(), {
+                loading: 'Guardando...',
+                success: () => {
+                    handleClose()
+                    return 'Rol creado correctamente'
+                },
+                error: 'Ocurrió un error al crear el rol'
+            })
         }
     }
 

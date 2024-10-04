@@ -3,8 +3,8 @@ import { useAppSelector } from '@/redux/hooks';
 import { useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 import { Spinner } from '../antd/Spinner';
-import { message } from 'antd';
 import { getValueColaborador } from '@/helpers/getValueComment';
+import { toast } from 'sonner';
 
 
 interface Props {
@@ -26,8 +26,8 @@ export const ResultadosCompetencias = ({usuarioId}: Props) => {
         setCategoria(categoria)
     }
 
-    !isLoadingCategorias && isErrorCategorias && message.error({content: 'Ocurrió un error al cargar las categorías', key: 'categoriasError'}, 2)
-    !isLoadingResultados && data?.resultado.respuestas.usuario.length === 0 && data?.resultado.respuestas.otras.length === 0 && message.info({content: 'No hay resultados para esta categoría', key: 'noResultados'}, 2)
+    !isLoadingCategorias && isErrorCategorias && toast.error('Ocurrió un error al cargar las categorías')
+    !isLoadingResultados && data?.resultado.respuestas.usuario.length === 0 && data?.resultado.respuestas.otras.length === 0 && toast.error('No hay resultados')
      
     return (
         <div className='grid grid-cols-12 gap-2 min-h-[500px] overflow-y-hidden'>

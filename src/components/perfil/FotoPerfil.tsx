@@ -1,4 +1,4 @@
-import { Image, Spin, Upload, message } from 'antd'
+import { Image, Spin, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import { Button } from '../ui'
 import { RcFile, UploadFile, UploadProps } from 'antd/es/upload';
@@ -9,6 +9,7 @@ import { FaUpload } from 'react-icons/fa';
 import { uploadProfilePictureThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import ImgCrop from 'antd-img-crop';
+import { toast } from 'sonner';
 
 
 interface Props {
@@ -20,7 +21,6 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
     const [ fileList, setFileList ] = useState<UploadFile[]>([]);
     const [ previewImage, setPreviewImage ] = useState<string>('');
     const [ uploading, setUploading ] = useState(false);
-    const [messageApi, contextHolder] = message.useMessage();
     const [error, setError] = useState<boolean>(false);
     const dispatch = useAppDispatch();
 
@@ -41,7 +41,7 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
         beforeUpload: (file) => {
             setError(false);
             if(file.size > 2097152){ 
-                messageApi.error('El tamaño de la imagen no debe ser mayor a 2MB')
+                toast.error('El tamaño de la imagen no debe ser mayor a 2MB');
                 setError(true);
 
                 setTimeout(() => {
@@ -68,15 +68,19 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
         });
 
         setUploading(true);
-        
-        await dispatch(uploadProfilePictureThunk({profile: formData, usuarioId: usuarioActivo.id})).unwrap().then(() => {
-            setUploading(false);
-            setFileList([]);
-            messageApi.success('Foto de perfil actualizada correctamente');
-        }).catch(() => {
-            setUploading(false);
-            messageApi.error('Ocurrió un error al actualizar la foto de perfil');
-        })        
+
+        toast.promise(
+            dispatch(uploadProfilePictureThunk({profile: formData, usuarioId: usuarioActivo.id})).unwrap(),
+            {
+                loading: 'Subiendo foto de perfil...',
+                success: () => {
+                    setUploading(false);
+                    setFileList([]);
+                    return 'Foto de perfil actualizada correctamente';
+                },
+                error: 'Ocurrió un error al actualizar la foto de perfil'
+            }
+        ) 
     }
 
     useEffect(() => {
@@ -89,9 +93,6 @@ export const FotoPerfil = ({usuarioActivo}: Props) => {
 
     return (
         <div>
-            {
-                contextHolder
-            }
             <div className='flex relative group rounded-full' style={{ width: 200, height: 200 }}>
             {
                 <Image

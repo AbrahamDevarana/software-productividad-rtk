@@ -10,11 +10,11 @@ import departamentosSlice from "./features/departamentos/departamentosSlice";
 import perspectivasSlice from "./features/perspectivas/perspectivasSlice";
 import tacticosSlice from "./features/tacticos/tacticosSlice";
 import operativosSlice from "./features/operativo/operativosSlice";
-import resultadosSlice from "./features/resultados/resultadosSlice";
 import accionesSlice from "./features/acciones/accionesSlice";
 import galeriaSlice from "./features/galeria/galeriaSlice";
 import evaluacionsSlice from "./features/evaluaciones/evaluacionsSlice";
 import gestionSlice from "./features/gestion/gestionSlice";
+import { resultadosApi } from "./features/resultados/resultadosThunk";
 import { rolesApi } from "./features/roles/rolesThunk";
 import { permisosApi } from "./features/permisos/PermisosThunk";
 import { gestionApi } from "./features/gestion/gestionThunk";
@@ -65,6 +65,7 @@ export const store = configureStore({
         [comitesApi.reducerPath]: comitesApi.reducer,
         [listadoApi.reducerPath]: listadoApi.reducer,
         [categoriaProyectoApi.reducerPath]: categoriaProyectoApi.reducer,
+        [resultadosApi.reducerPath]: resultadosApi.reducer,
         auth: authSlice,
         global: globalSlice,
         areas: areasSlice,
@@ -75,7 +76,6 @@ export const store = configureStore({
         perspectivas: perspectivasSlice,
         tacticos: tacticosSlice,
         operativos: operativosSlice,
-        resultados: resultadosSlice,
         acciones: accionesSlice,
         galeria: galeriaSlice,
         evaluaciones: evaluacionsSlice,
@@ -100,7 +100,7 @@ export const store = configureStore({
         .concat(areasApi.middleware)
         .concat(proyectosApi.middleware)
         .concat(hitosApi.middleware)
-        .concat(taskApi.middleware)
+        .concat(taskApi.middleware, resultadosApi.middleware)
         .concat(minutasApi.middleware)
         .concat(tiptapApi.middleware)
         .concat(comentariosApi.middleware)

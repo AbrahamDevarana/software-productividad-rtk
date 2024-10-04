@@ -3,9 +3,10 @@ import { getValueColaborador } from '@/helpers/getValueComment';
 import { PerfilProps } from '@/interfaces';
 import { postEvaluacionThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { Input, Rate, Spin, Steps, message } from 'antd'
+import { Input, Steps } from 'antd'
 import React, { useState } from 'react'
 import { Rating } from 'react-simple-star-rating';
+import { toast } from 'sonner';
 
 
 interface Respuesta {
@@ -93,7 +94,7 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
     
         const nextStep = async () => {
             if (!respuestas[currentStep]) {
-                message.error('Debes seleccionar una calificación');
+                toast.error('Debes seleccionar una calificación');
                 return;
             }
             // Validar que el usuario haya seleccionado un rate sino no dejar avanzar
@@ -101,17 +102,17 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             const { comentarios } = respuestas[currentStep];
 
             if (rate === 0) {
-                message.error('Debes seleccionar una calificación');
+                toast.error('Debes seleccionar una calificación');
                 return;
             }
 
             if (!comentarios && comentarios.trim() === '') {
-                message.error('Debes agregar un comentario');
+                toast.error('Debes agregar un comentario');
                 return;
             }
 
             if (comentarios.trim().length < 50) {
-                message.error('El comentario debe ser más largo');
+                toast.error('El comentario debe ser más largo');
                 return;
             }
         
@@ -121,7 +122,7 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             } else {
                 await dispatch(postEvaluacionThunk({respuestas, ...general})).unwrap().then(() => {
                     localStorage.removeItem(`res-${activeEvaluate}`);
-                    message.success('Evaluación enviada correctamente')
+                    toast.success('Evaluación enviada correctamente')
                 })
                 setActiveEvaluate('')
             }         

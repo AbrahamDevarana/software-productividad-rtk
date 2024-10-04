@@ -14,7 +14,7 @@ import { Button } from '@/components/ui'
 import { SocialInfo } from '@/components/perfil/SocialInfo'
 import { HiIdentification } from 'react-icons/hi'
 import { FotoPerfil } from '@/components/perfil/FotoPerfil'
-import { message } from 'antd'
+import { toast } from 'sonner'
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -25,7 +25,7 @@ export const EditarPerfil = ({usuarioActivo, visitante}:Props) => {
 
     const dispatch = useAppDispatch();
     const [responsabilidad, setResponsabilidad] = useState(usuarioActivo.responsabilidades)
-    const [messageApi, contextHolder] = message.useMessage();
+
 
     const handleChange = (value: string) => {
         setResponsabilidad(value)
@@ -36,20 +36,21 @@ export const EditarPerfil = ({usuarioActivo, visitante}:Props) => {
             ...usuarioActivo,
             responsabilidades: responsabilidad
         }
-        await dispatch(updateProfileThunk(query)).unwrap().then(() => {
-            messageApi.success('Perfil actualizado')
-        }).catch((err) => {
-            messageApi.error('Error al actualizar el perfil')
-        })
+
+        toast.promise(
+            dispatch(updateProfileThunk(query)).unwrap(),
+            {
+                loading: 'Guardando...',
+                success: 'Perfil actualizado correctamente',
+                error: 'Ocurrió un error al actualizar el perfil'
+            }
+        )
     }
 
 
     return (
 
         <div className="grid grid-cols-12 sm:gap-x-10 gap-y-10 relative">
-            {
-                contextHolder
-            }
             <div className="xl:col-span-3 md:col-span-4 col-span-12">
                 <Box className="mb-5 snap-center py-10">
                     <div className="flex pb-10">

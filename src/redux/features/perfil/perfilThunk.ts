@@ -24,28 +24,6 @@ interface Respuesta {
     comentarios: string;
   }
 
-
-export const getProfileThunk = createAsyncThunk(
-    'profile/getProfile',
-    async ({usuarioId, year, quarter}:{usuarioId: string, year: number, quarter: number}, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: {
-                    year,
-                    quarter
-                }
-            }
-            const response = await clientAxios.get<Props>(`/perfiles/${usuarioId}`, config);
-                    
-            return response.data.usuario
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
         
 export const updateProfileThunk = createAsyncThunk(
     'profile/updateProfile',
@@ -188,11 +166,20 @@ export const perfilApi = createApi({
                 return error
             }
         }),
+        getProfile: builder.query({
+            query: ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}) => ({
+                url: `/perfiles/${usuarioId}`,
+                params: { year, quarter },
+            }),
+            providesTags: ['Perfil'],
+            transformResponse: (response: {usuario: PerfilProps}) => response.usuario
+        }),
     }),
 })
 
 export const {
-    // useGetProfileQuery,
+    useGetProfileQuery,
+    useLazyGetProfileQuery,
     // useUpdateProfileMutation,
     // useUploadProfilePictureMutation,
     // useUpdateProfileConfigMutation,

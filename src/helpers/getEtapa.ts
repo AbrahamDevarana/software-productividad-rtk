@@ -3,6 +3,7 @@ import { getColor } from "./getColor";
 
 
 export const calcularEtapaActual = ({periodos, status}: any) => {
+
 	
     if (!periodos) {
       return {

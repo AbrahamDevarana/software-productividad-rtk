@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearProfileThunk, getProfileThunk, getRendimientoThunk } from "@/redux/features/perfil/perfilThunk";
+import { clearProfileThunk, getRendimientoThunk, useLazyGetProfileQuery } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";
@@ -16,8 +16,9 @@ const Perfil: React.FC = () => {
     const { id } = useParams<{id: string}>()
     const [ segment, setSegment ] = useState('Perfil');
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil, isLoading } = useAppSelector(state => state.profile)
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
+
+    const [getProfile, {data: perfil, isLoading}] = useLazyGetProfileQuery()
 
 
     const usuarioId = id || userAuth?.id    
@@ -26,11 +27,11 @@ const Perfil: React.FC = () => {
     useEffect(() => {
         if(id){
             setVisitante(true)
-            dispatch(getProfileThunk({usuarioId, year, quarter}))
+            getProfile({usuarioId, year, quarter})
         }else{
             setVisitante(false)
             if(userAuth){   
-                dispatch(getProfileThunk({usuarioId, year, quarter}))
+                getProfile({usuarioId: userAuth.id, year, quarter})
             }
         }
         
@@ -60,12 +61,14 @@ const Perfil: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
             >
-                <Header usuarioActivo={ perfil } segment={segment} setSegment={setSegment} visitante={visitante}  />
-                { segment === 'Perfil' 
+                {
+                    perfil && <Header usuarioActivo={ perfil } segment={segment} setSegment={setSegment} visitante={visitante}  />
+                }
+                { segment === 'Perfil' && perfil
                     ? <Profile usuarioActivo={ perfil } visitante={visitante} /> 
                     : segment === 'Actividad' 
                     ? <Actividad visitante={visitante}/>
-                    : segment === 'Configuración' 
+                    : segment === 'Configuración'  && perfil
                     ? <EditarPerfil usuarioActivo={ perfil } visitante={visitante}/> 
                     : null 
                 }

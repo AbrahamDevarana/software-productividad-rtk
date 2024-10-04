@@ -1,9 +1,9 @@
 import { useCreatePermisoMutation, useGetPermisoQuery, useUpdatePermisoMutation } from '@/redux/features/permisos/PermisosThunk'
-import { Form, Input, Radio, message } from 'antd'
-import React from 'react'
+import { Form, Input } from 'antd'
 import { Spinner } from '../antd/Spinner'
 import { FaSave } from 'react-icons/fa'
 import { Button } from '../ui'
+import { toast } from 'sonner'
 
 export const FormPermisos = ({permisoId, handleClose}: { permisoId:number, handleClose: () => void }) => {
 
@@ -19,21 +19,24 @@ export const FormPermisos = ({permisoId, handleClose}: { permisoId:number, handl
     const handleSubmit = async () => {
         const query = form.getFieldsValue()
         if(permisoId){
-            try{
-                await updatePermiso({id: permisoId, ...query}).unwrap()
-                message.success('Permiso actualizado correctamente')
-                handleClose()
-            }catch(e){
-                message.error('Ocurrió un error al actualizar el permiso')
-            }
+            toast.promise(updatePermiso({id: permisoId, ...query}).unwrap(), {
+                loading: 'Guardando...',
+                success: () => {
+                    handleClose()
+                    return 'Permiso actualizado correctamente'
+                },
+                error: 'Ocurrió un error al actualizar el permiso'
+            })
         }else{
-            try{
-                await createPermiso(query).unwrap()
-                message.success('Permiso creado correctamente')
-                handleClose()
-            }catch(e){
-                message.error('Ocurrió un error al crear el permiso')
-            }
+
+            toast.promise(createPermiso(query).unwrap(), {
+                loading: 'Guardando...',
+                success: () => {
+                    handleClose()
+                    return 'Permiso creado correctamente'
+                },
+                error: 'Ocurrió un error al crear el permiso'
+            })
         }
     }
 

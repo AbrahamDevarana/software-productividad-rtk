@@ -14,9 +14,7 @@ interface TaskCheckboxProps {
 export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
 
     const [checked, setChecked] = useState<boolean>(record.status ===  'FINALIZADO' ? true : false)
-    const [ updateTask, { isLoading: isUpdatingTask, error: updateTaskError } ] = useUpdateTaskMutation()
-    const dispatch = useAppDispatch()
-    
+    const [ updateTask, { isLoading: isUpdatingTask, error: updateTaskError } ] = useUpdateTaskMutation()    
     const handleCheckedChange = (value: boolean) => {
         const query = {
             ...record,
@@ -38,6 +36,7 @@ export const TaskCheckbox = ({record, disabled}: TaskCheckboxProps) => {
     useEffect(() => {
         setChecked(record.status ===  'FINALIZADO' ? true : false)
     }, [record])
+
 
     return (
         <Checkbox

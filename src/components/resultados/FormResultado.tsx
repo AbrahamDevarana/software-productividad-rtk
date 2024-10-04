@@ -1,9 +1,9 @@
-import  { useMemo, useRef, useState } from 'react';
-import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm, message } from 'antd';
-import dayjs, {Dayjs} from 'dayjs';
+import  { useMemo} from 'react';
+import { Form, Input, DatePicker, Radio, Progress, Popover, Slider, InputNumber, Row, Col, Tooltip, Avatar, Image, ColorPicker, Popconfirm } from 'antd';
+import dayjs from 'dayjs';
 import { BsThreeDots } from 'react-icons/bs';
-import { deleteResultadoThunk, duplicateResultadoThunk, updateResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useDeleteResultadoMutation, useDuplicateResultadoMutation, useUpdateResultadoMutation } from '@/redux/features/resultados/resultadosThunk';
+import { useAppDispatch } from '@/redux/hooks';
 import { OperativoProps, ResultadoClaveProps } from '@/interfaces';
 import { Link } from 'react-router-dom';
 import { getColor, getStorageUrl } from '@/helpers';
@@ -11,6 +11,7 @@ import getBrokenUser from '@/helpers/getBrokenUser';
 import { BiTrash } from 'react-icons/bi';
 import { FaCopy } from 'react-icons/fa';
 import CountUp from 'react-countup';
+import { toast } from 'sonner';
 
 
 interface Props {
@@ -21,10 +22,11 @@ interface Props {
 
 const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) => {
 
-    const dispatch = useAppDispatch()
-    const { usuarios } = useAppSelector(state => state.usuarios)
-    const [messageApi, contextHolder] = message.useMessage();
     const { year, quarter } = currentOperativo
+
+    const [updateResultado, {isLoading}] = useUpdateResultadoMutation()
+    const [deleteResultado, {isLoading: isDeleting}] = useDeleteResultadoMutation()
+    const [duplicateResultado, {isLoading: isDuplicating}] = useDuplicateResultadoMutation()
 
     const [form] = Form.useForm()
     const { RangePicker } = DatePicker
@@ -114,7 +116,14 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             ...resultado,
             nombre: value
         }
-        dispatch(updateResultadoThunk(query))
+
+        toast.promise(updateResultado(query).unwrap(),
+            {
+                loading: 'Actualizando...',
+                success: 'Resultado actualizado',
+                error: 'Error al actualizar el resultado'
+            }
+        )
     }
 
     const handleUpdateDate = (date: any, dateString: any) => {
@@ -123,8 +132,13 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             fechaInicio: dayjs(dateString[0], 'DD-MM-YYYY').format('YYYY-MM-DD'),
             fechaFin: dayjs(dateString[1], 'DD-MM-YYYY').format('YYYY-MM-DD')
         }
-
-        dispatch(updateResultadoThunk(query))
+        toast.promise(updateResultado(query).unwrap(),
+            {
+                loading: 'Actualizando...',
+                success: 'Resultado actualizado',
+                error: 'Error al actualizar el resultado'
+            }
+        )
     }
 
     const handleUpdateProgress = (value: any) => {
@@ -132,7 +146,13 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             ...resultado,
             progreso: Math.max(0, value)
         }
-        dispatch(updateResultadoThunk(query))
+        toast.promise(updateResultado(query).unwrap(),
+            {
+                loading: 'Actualizando...',
+                success: 'Resultado actualizado',
+                error: 'Error al actualizar el resultado'
+            }
+        )
     }
 
     const handleChangeTipoProgreso = (value: any) => {
@@ -140,7 +160,13 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             ...resultado,
             tipoProgreso: value
         }
-        dispatch(updateResultadoThunk(query))
+        toast.promise(updateResultado(query).unwrap(),
+            {
+                loading: 'Actualizando...',
+                success: 'Resultado actualizado',
+                error: 'Error al actualizar el resultado'
+            }
+        )
     }
 
     const handleChangeColor = (value: any) => {        
@@ -148,28 +174,40 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
             ...resultado,
             color: value
         }
-        dispatch(updateResultadoThunk(query))
+        
+        toast.promise(updateResultado(query).unwrap(),
+            {
+                loading: 'Actualizando...',
+                success: 'Resultado actualizado',
+                error: 'Error al actualizar el resultado'
+            }
+        )
     }
 
-    const handleDeleteResultado = (id: string) => {
-        dispatch(deleteResultadoThunk(id))
+    const handleDeleteResultado = (resultado: ResultadoClaveProps) => {
+        toast.promise(deleteResultado(resultado).unwrap(),
+            {
+                loading: 'Eliminando...',
+                success: 'Resultado eliminado',
+                error: 'Error al eliminar el resultado'
+            }
+        )
     }
 
-    const handleDupliateResultado = async (resultadoId: string) => {
-        await dispatch(duplicateResultadoThunk({resultadoId})).unwrap().then((data:any) => {
-            message.success('Resultado creado correctamente')
-            const element = document.getElementById(`resultado-${data.id}`)
-            element?.classList.add('ant-collapse-item-active')
-            element?.scrollIntoView({behavior: 'smooth'})
-        })
+    const handleDupliateResultado = async (resultado: ResultadoClaveProps) => {
+
+        toast.promise(duplicateResultado(resultado).unwrap(),
+            {
+                loading: 'Duplicando...',
+                success: 'Resultado duplicado',
+                error: 'Error al duplicar el resultado'
+            }
+        )
     }
 
 
     return (
         <>
-        {
-            contextHolder
-        }
         <div className='flex items-center gap-x-5'>
             <div className='flex flex-col w-full'>
                 <p className='text-devarana-graph text-[10px] font-mulish m-0 leading-0'>Resultado Clave</p>
@@ -204,7 +242,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                         style={{
                             width: '150px'
                         }}
-                        className='drop-shadow progressStyle' strokeWidth={15} percent={Number(resultado.progreso.toFixed(2))}
+                        className='drop-shadow progressStyle' strokeWidth={15} percent={Number(resultado?.progreso?.toFixed(2))}
                         strokeColor={{
                             '0%': getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').lowColor,
                             '100%': getColor(resultado.progreso === 0 ? 'SIN_INICIAR' : resultado.progreso === 100 ? 'FINALIZADO' : 'EN_PROCESO').color,
@@ -257,7 +295,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                             <Popconfirm
                                 disabled={isClosed}
                                 title="¿Estas seguro de duplicar este resultado clave?"
-                                onConfirm={ () => handleDupliateResultado( resultado.id )}
+                                onConfirm={ () => handleDupliateResultado( resultado )}
                                 onCancel={() => {}}
                                 okText="Si"
                                 cancelText="No"
@@ -277,7 +315,7 @@ const ResultadoClaveForm = ({ resultado, isClosed, currentOperativo }: Props ) =
                             <Popconfirm
                                     disabled={isClosed}
                                     title="¿Estas seguro de eliminar este resultado clave?"
-                                    onConfirm={ () => handleDeleteResultado( resultado.id )}
+                                    onConfirm={ () => handleDeleteResultado( resultado )}
                                     onCancel={() => {}}
                                     okText="Si"
                                     cancelText="No"

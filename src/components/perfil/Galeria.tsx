@@ -1,7 +1,5 @@
-import { Divider, Image, Modal, Progress, Upload, message } from 'antd'
+import { Divider, Image, Modal, Progress, Upload } from 'antd'
 import { useEffect, useState } from 'react'
-import { Button } from '../ui/Button'
-import { AiFillSave } from 'react-icons/ai'
 import Loading from '../antd/Loading'
 import { getBase64, getStorageUrl } from '@/helpers'
 import { FaCheck, FaEye, FaPlus, FaTrash } from 'react-icons/fa'
@@ -11,6 +9,7 @@ import ImgCrop from 'antd-img-crop'
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { updatePortraitThunk } from '@/redux/features/perfil/perfilThunk'
 import { GaleriaProps, PerfilProps } from '@/interfaces'
+import { toast } from 'sonner'
 
 interface Props {
 	usuarioActivo: PerfilProps
@@ -40,7 +39,7 @@ export const GaleriaPerfil = ({usuarioActivo}: Props) => {
 	const props: UploadProps = {
 		beforeUpload: (file) => {
 			if (file.size > 2097152) {
-				message.error('El tamaño de la imagen no debe ser mayor a 2MB');
+				toast.error('El tamaño de la imagen no debe ser mayor a 2MB');
 				return false;
 			}
 			setFileList(fileList => [...fileList, file]);
@@ -64,10 +63,10 @@ export const GaleriaPerfil = ({usuarioActivo}: Props) => {
 		.then(() => {
 			setUploading(false);
 			setFileList([]);
-			message.success('Imagen subida con éxito');
+			toast.success('Imagen subida con éxito');
 		}).catch(() => {
 			setUploading(false);
-			message.error('Ocurrió un error al subir la imagen');
+			toast.error('Ocurrió un error al subir la imagen');
 		})
 	}
 
@@ -100,9 +99,9 @@ export const GaleriaPerfil = ({usuarioActivo}: Props) => {
 	const handleGallery = (pictureUrl: string) => {
         dispatch(updatePortraitThunk({ id: usuarioActivo.id,  portadaPerfil: pictureUrl })).unwrap().then(() => {
 			setPicture(pictureUrl);
-			message.success('Imagen de portada actualizada');
+			toast.success('Imagen de portada actualizada');
 		}).catch(() => {
-			message.error('Ocurrió un error al actualizar la imagen de portada');
+			toast.error('Ocurrió un error al actualizar la imagen de portada');
 		})
     }
 
@@ -121,13 +120,13 @@ export const GaleriaPerfil = ({usuarioActivo}: Props) => {
 			cancelText: 'Cancelar',
 			onOk() {
 				dispatch(deleteGaleriaUsuarioThunk({id: file.id})).unwrap().then(() => {
-					message.success('Imagen eliminada con éxito');
+					toast.success('Imagen eliminada con éxito');
 				}).catch(() => {
-					message.error('Ocurrió un error al eliminar la imagen');
+					toast.error('Ocurrió un error al eliminar la imagen');
 				})
 			},
 			onCancel() {
-				message.info('Acción cancelada');
+				toast.info('Acción cancelada');
 			},
 		});
 	}

@@ -1,66 +1,7 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import { TaskProps} from "@/interfaces";
-import { AppDispatch, RootState } from "@/redux/store";
-import { clientAxios } from "@/config/axios";
-
-
 import { baseQuery } from "@/config/baseQuery";
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
-
-
-interface Props {
-    task: TaskProps
-    tasks: TaskProps[]
-}
-
-export const createTaskThunk = createAsyncThunk(
-    'tasks/createTask',
-    async (task: TaskProps, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-
-            const response = await clientAxios.post<Props>(`/tasks`, task, config);
-            return response.data.task
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-})
-
-export const updateTaskThunk = createAsyncThunk(
-    'tasks/updateTask',
-    async (task: TaskProps, { rejectWithValue, getState }) => {
-
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-
-            const response = await clientAxios.put<Props>(`/tasks/${task.id}`, task, config);
-            
-            return response.data.task
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-})
-
-export const deleteTaskThunk = createAsyncThunk(
-    'tasks/deleteTask',
-    async (taskId: number, { rejectWithValue, getState }) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const response = await clientAxios.delete<Props>(`/tasks/${taskId}`, config);
-            return response.data.task
-        } catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-})
+import { resultadosApi } from "../resultados/resultadosThunk";
 
 export const taskApi = createApi({
     reducerPath: 'taskApi',
@@ -81,31 +22,40 @@ export const taskApi = createApi({
             }),
             transformResponse: (response: {tasks: TaskProps[]}) => response.tasks,
         }),
-        updateTask: builder.mutation<void, Pick<TaskProps, 'id'> & Partial<TaskProps>>({
+        updateTask: builder.mutation<TaskProps, Pick<TaskProps, 'id'> & Partial<TaskProps>>({
             query: ({id, ...patch}) => ({
                 url: `tasks/${id}`,
                 method: 'PUT',
                 body: patch
             }),
+            transformResponse: (response: {task: TaskProps}) => response.task,
             onQueryStarted: async ({id, ...patch}, { dispatch, queryFulfilled }) => {
-                const patchResult = dispatch(
-                    taskApi.util.updateQueryData('getTasks', {taskeableId: patch.taskeableId!}, (draft) => {
-
+                const patchResult = dispatch(taskApi.util.updateQueryData('getTasks', {taskeableId: patch.taskeableId!}, (draft) => {
                         const index = draft.findIndex(task => task.id === id);
-
-                        console.log('index', index);
-                        
                         if (index !== -1) {
-                            Object.assign(draft[index], patch);
+                            Object.assign(draft[index], patch)
                         }
                     })
                 )
+                
                 try {
-                    await queryFulfilled
+                    const {data: updatedTask} = await queryFulfilled
+                    dispatch(
+                        taskApi.util.updateQueryData('getTasks', {taskeableId: patch.taskeableId!}, (draft) => {
+                            const index = draft.findIndex(task => task.id === id);
+                            if (index !== -1) {
+                                draft[index] = updatedTask
+                            }
+                        })
+                    )
+                    dispatch(
+                        resultadosApi.util.invalidateTags(['Resultados'])
+                    )
+                   
                 } catch (error) {
                     patchResult.undo()
             }
-        }
+            },
         }),
         createTask: builder.mutation<TaskProps, any>({
             query: (task) => ({

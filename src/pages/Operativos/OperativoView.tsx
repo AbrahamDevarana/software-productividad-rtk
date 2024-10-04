@@ -6,11 +6,12 @@ import { getStorageUrl } from "@/helpers"
 import getBrokenUser from "@/helpers/getBrokenUser"
 import { useOperativo } from "@/hooks/useOperativo"
 import { clearObjetivoThunk, getOperativoThunk } from "@/redux/features/operativo/operativosThunk"
-import { clearResultadoThunk, createResultadoThunk } from "@/redux/features/resultados/resultadosThunk"
+import { useCreateResultadoMutation } from "@/redux/features/resultados/resultadosThunk"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { Avatar, FloatButton, Image, Input, Segmented, Select, Tooltip } from "antd"
 import { useEffect, useMemo, useState } from "react"
 import { Link, useParams,  } from "react-router-dom"
+import { toast } from "sonner"
 
 type SegmentTypes = 'listado' | 'kanban' | 'gantt' | 'calendario'
 
@@ -20,8 +21,8 @@ export const OperativoView = () => {
     const { id } = useParams<{ id: string }>()
     const [value, setValue] = useState<SegmentTypes>('listado');
     const { currentOperativo, isLoadingObjetivo } = useAppSelector(state => state.operativos)
-    const { resultadosClave } = useAppSelector(state => state.resultados)
-    const [ isCreating , setIsCreating ] = useState(false)
+    const [ createResultado, { isLoading: isCreatingResultado, error: createResultadoError } ] = useCreateResultadoMutation()
+    
 
     const options = [
         {
@@ -42,14 +43,15 @@ export const OperativoView = () => {
     ]
 
     const handleNuevoResultado = async () => {
-        setIsCreating(true)
-        await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
-            const element = document.getElementById(`resultado-${data.id}`)
-            element?.classList.add('ant-collapse-item-active')
-            element?.scrollIntoView({behavior: 'smooth'})
-        })
-        setIsCreating(false)
-        
+        toast.promise(createResultado({operativoId: currentOperativo.id}).unwrap(),
+            {
+                loading: 'Creando resultado',
+                success: (data) => {
+                    return 'Resultado creado correctamente'
+                },
+                error: 'Hubo un error al crear el resultado'
+            }
+        )
     }
 
     useEffect(() => {
@@ -59,7 +61,6 @@ export const OperativoView = () => {
 
         return () => {
             dispatch(clearObjetivoThunk())
-            dispatch(clearResultadoThunk())
         }
     }, [id])
 
@@ -153,11 +154,12 @@ export const OperativoView = () => {
             </div>
 
             {
-                resultadosClave && resultadosClave.length > 0 && !isClosed && (
+                !isClosed && (
                     (
                         <FloatButton
+                        
                             onClick={() => {
-                                isCreating ? null :
+                                isCreatingResultado ? null :
                                 handleNuevoResultado()
                             }}
                             icon={<Icon iconName='faPlus' />}

@@ -1,15 +1,14 @@
-import {useState,} from 'react'
 import { Link } from 'react-router-dom';
 import { OperativoProps } from '@/interfaces'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { cambioEstatusObjetivoThunk, getOperativoThunk } from '@/redux/features/operativo/operativosThunk';
-import { Avatar, Divider, Image, Modal, Space, Switch, Tooltip, message } from 'antd'
+import { Avatar, Divider, Image, Modal, Space, Switch, Tooltip } from 'antd'
 import { getColor, getStorageUrl } from '@/helpers';
 import getBrokenUser from '@/helpers/getBrokenUser';
 import { ProgressBar } from '../complexUI/ProgressDoughtnut';
 import { useOperativo } from '@/hooks/useOperativo';
 import { FaEdit, FaEye } from 'react-icons/fa';
-import { IoCopyOutline } from 'react-icons/io5';
+import { toast } from 'sonner';
 
 
 interface Props {
@@ -66,7 +65,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                 </div>,
                 async onOk() {
                    await dispatch(cambioEstatusObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
-                        message.success('Objetivo cerrado correctamente')
+                        toast.success('Objetivo cerrado correctamente')
                    })
                 },
                 onCancel() {
@@ -96,7 +95,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                 </div>,
                 async onOk() {
                    await dispatch(cambioEstatusObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
-                        message.success('Objetivo abierto correctamente')
+                        toast.success('Objetivo abierto correctamente')
                    })
                 },
                 onCancel() {
@@ -134,7 +133,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                 </div>,
                 async onOk() {
                 await dispatch(cambioEstatusObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
-                        message.success('Objetivo abierto correctamente')
+                        toast.success('Objetivo abierto correctamente')
                 })
                 },
                 onCancel() {
@@ -164,7 +163,7 @@ export const CardObjetivo = ({objetivo, setFormVisible, etapa, handleCopyObjetiv
                 </div>,
                 async onOk() {
                 await dispatch(cambioEstatusObjetivoThunk({ operativoId: objetivo.id, checked})).unwrap().then(() => {
-                        message.success('Objetivo abierto correctamente')
+                        toast.success('Objetivo abierto correctamente')
                 })
                 },
                 onCancel() {

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { PerfilState } from '@/interfaces';
-import { getProfileThunk, updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk } from './perfilThunk';
+import { updateProfileConfigThunk, updateProfileThunk, uploadProfilePictureThunk, updatePortraitThunk, getRendimientoThunk } from './perfilThunk';
 import { postEvaluacionThunk } from '../evaluaciones/evaluacionesThunk';
 
 
@@ -112,20 +112,6 @@ const profileSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getProfileThunk.pending, (state) => {
-                state.isLoading = true
-            })
-            .addCase(getProfileThunk.fulfilled, (state, action) => {
-                state.isLoading = false
-                state.perfil = {
-                    ...state.perfil,
-                    ...action.payload
-                }
-            })
-            .addCase(getProfileThunk.rejected, (state, action) => {
-                state.isLoading = false
-                state.error = action.error.message
-            })
             .addCase(updateProfileThunk.pending, (state) => {
                 state.isUpdating = true
             })

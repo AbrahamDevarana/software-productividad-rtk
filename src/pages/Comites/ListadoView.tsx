@@ -152,12 +152,16 @@ export const ListadoView = () => {
                     </div>
                 </div>
 
-                <Segmented
-                    options={projectViewsOptions}
-                    value={value}
-                    onChange={(value) => setValue(value as SegmentTypes)}
-                    className='mt-5'
-                />
+                <div className='flex justify-start max-w-screen-md items-center py-5'> 
+                    <Segmented
+                        options={projectViewsOptions}
+                        value={value}
+                        onChange={(value) => setValue(value as SegmentTypes)}
+                    />
+                     <button className='bg-devarana-blue text-white px-5 my-1 py-0.5 rounded shadow-sm flex items-center gap-1 hover:opacity-80 transition-all ease-in-out' onClick={() => setMinutasVisible(true)}>
+                        <MdOutlineEditNote className='text-white' size={18}/> Minutas 
+                    </button>
+                </div>
 
                 {
                     comite && (

@@ -1,5 +1,5 @@
 import { useCopyOperativoMutation, useGetOperativoQuery } from '@/redux/features/operativo/operativosThunk'
-import { DatePicker, Input, Spin, Transfer, Tree, message } from 'antd'
+import { DatePicker, Input, Transfer, Tree } from 'antd'
 import { Key, useMemo, useState } from 'react'
 import { Button } from '../ui'
 import { Spinner } from '../antd/Spinner'
@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import { useAppSelector } from '@/redux/hooks'
 import { useGetHistorialQuery } from '@/redux/features/perfil/perfilThunk'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { toast } from 'sonner'
 
 interface Props {
     objetivoId: string
@@ -70,7 +71,7 @@ export const FormCopy = ({ objetivoId }: Props) => {
 	
 	const handleSubmitCopy = async () => {
 
-		if(!nuevoObjetivo.fecha) return message.error('Selecciona una periodo')
+		if(!nuevoObjetivo.fecha) return toast.error('Selecciona un periodo para el nuevo objetivo')
 
 		const newYear = dayjs(nuevoObjetivo.fecha).year()
 		const newQuarter = dayjs(nuevoObjetivo.fecha).quarter()

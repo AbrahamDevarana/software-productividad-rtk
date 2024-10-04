@@ -24,12 +24,11 @@ interface Props {
         color: string,
         isClosed: boolean
     }
+    rendimiento:any
 }
-export const CardAvance = ( { operativos, periodos }: Props ) => {
-
+export const CardAvance = ( { operativos, periodos, rendimiento }: Props ) => {
     const { perfil } = useAppSelector(state => state.profile)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
-    const { perfil: { rendimiento }} = useAppSelector(state => state.profile)
     const { resultados } = useAppSelector(state => state.evaluaciones)
     const [ isModalVisible, setIsModalVisible ] = useState(false)
 
@@ -46,10 +45,12 @@ export const CardAvance = ( { operativos, periodos }: Props ) => {
     
 
     const calculoAvance = useMemo(() => {
-        const {resultadoCompetencias, resultadoObjetivos}  = rendimiento     
+
+        if(!rendimiento) return 0
+        const { resultadoCompetencias, resultadoObjetivos }  = rendimiento
         const total = resultadoCompetencias + resultadoObjetivos
         return total
-    }, [ponderacionObjetivos, resultados])
+    }, [ponderacionObjetivos, resultados, rendimiento])
 
     const calculoBono = useCalculoBono(calculoAvance)
 

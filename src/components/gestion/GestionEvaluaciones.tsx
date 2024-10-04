@@ -1,12 +1,13 @@
 import { useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGetEvaluacionUsuarioQuery } from '@/redux/features/evaluaciones/evaluacionesThunk'
 import { useAppSelector } from '@/redux/hooks'
-import { Avatar, Image, Select, Tooltip, message } from 'antd'
+import { Avatar, Image, Select, Tooltip } from 'antd'
 import { useMemo } from 'react'
 import { Spinner } from '../antd/Spinner'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks'
 import { DefaultOptionType } from 'antd/es/select'
+import { toast } from 'sonner'
 
 export const GestionEvaluaciones = ({usuarioId}: {usuarioId:string}) => {
 	const { currentConfig: { quarter, year } } = useAppSelector((state) => state.global)
@@ -97,7 +98,7 @@ export const GestionEvaluaciones = ({usuarioId}: {usuarioId:string}) => {
 			year,
 			quarter
 		}).unwrap().then(() => {
-			message.success('Evaluación agregada')
+            toast.success('Evaluación agregada correctamente')
 		})
 	}
 
@@ -109,7 +110,7 @@ export const GestionEvaluaciones = ({usuarioId}: {usuarioId:string}) => {
 			year,
 			quarter
 		}).unwrap().then(() => {
-			message.success('Evaluación eliminada')
+            toast.success('Evaluación eliminada correctamente')
 		})
 	}
 

@@ -2,8 +2,9 @@ import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
 import { useGetRankingsQuery } from '@/redux/features/ranking/rankingThunk'
 import { useAppSelector } from '@/redux/hooks'
-import { Avatar, Image, Segmented, message } from 'antd'
+import { Avatar, Image, Segmented } from 'antd'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const CardRanking = () => {
 
@@ -12,11 +13,7 @@ export const CardRanking = () => {
 
     const [ranking , setRanking] = useState<string | number>('ranking')
     
-    isError && message.error( {
-        content: 'Error al cargar el ranking',
-        key: 'ranking',
-        duration: 2
-    })
+    isError && toast.error('Ocurrió un error al cargar los datos')
     
     return (
             <>

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
-import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
-import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery } from '@/redux/features/perfil/perfilThunk';
+import { useGetColaboradoresQuery, useGetEquipoQuery, useGetProfileQuery, useGetRendimientoQuery, useLazyGetProfileQuery } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -29,7 +28,6 @@ export const Objetivos : React.FC = () => {
 
     const { operativos, isLoading } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
-    const { perfil }  = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
@@ -40,23 +38,16 @@ export const Objetivos : React.FC = () => {
     const [objetivoId, setObjetivoId] = useState<string>('')
     const [visibleFormCopy, setVisibleFormCopy] = useState<boolean>(false)
 
-
+    const { data: perfil, isLoading: isLoadingProfile} = useGetProfileQuery({usuarioId: userAuth?.id, quarter, year}, {skip: !userAuth?.id})
     const { data: periodos, isLoading: isLoadingRules } = useGetGestionPeriodosQuery({year, quarter})
-    
-    const etapa = calcularEtapaActual({periodos, status: perfil.rendimiento.status})
-
-    const { rendimiento } = perfil
-
-    
-    const {data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
-    const {data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
+    const { data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
+    const { data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
+    const { data: rendimiento } = useGetRendimientoQuery({usuarioId: userAuth?.id, year, quarter})
     
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
             await Promise.all([
-                dispatch(getRendimientoThunk({year, quarter, usuarioId: userAuth?.id})),
-                dispatch(getProfileThunk({usuarioId: userAuth?.id, year, quarter})),
                 dispatch(getOperativosThunk({year, quarter, usuarioId: userAuth?.id})),
                 dispatch(getEvaluacionResultadosThunk({usuarioId: userAuth.id, year, quarter })),
                 dispatch(getUsuariosAEvaluarThunk({usuarioId: userAuth.id, year, quarter })),
@@ -67,11 +58,11 @@ export const Objetivos : React.FC = () => {
         (userAuth) && fetchData()
     }, [userAuth, year, quarter])
     
+    const etapa = calcularEtapaActual({periodos, status: perfil?.rendimiento?.status})
 
     const handleCancelForm = () => {
         setFormVisible(false)
         dispatch(clearObjetivoThunk())
-        dispatch(clearResultadoThunk())
     }
 
     const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
@@ -101,10 +92,10 @@ export const Objetivos : React.FC = () => {
         <>
             <div className="grid 2xl:grid-cols-11 lg:grid-cols-12 md:grid-cols-6 grid-cols-12 gap-5">
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa}/>
+                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa} perfil={perfil}/>
                 </Box>
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full'>
-                    <CardAvance operativos={operativos} periodos={periodos} etapa={etapa}/>
+                    <CardAvance operativos={operativos} periodos={periodos} etapa={etapa} rendimiento={rendimiento} />
                 </Box>
                 <Box className='2xl:col-span-4 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full flex justify-center'>
                     <CardDesempeno />

@@ -1,12 +1,13 @@
-import { OperativoProps, ResultadoClaveProps, TaskProps } from "@/interfaces";
+import { OperativoProps, ResultadoClaveProps } from "@/interfaces";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { Checkbox, Collapse, CollapseProps, Input, Select, Spin,message } from "antd";
+import { Checkbox, Collapse, CollapseProps, Input, Select, Spin } from "antd";
 import Loading from "../antd/Loading";
-import { useEffect, useMemo, useState } from "react";
-import { createResultadoThunk, getResultadosThunk } from "@/redux/features/resultados/resultadosThunk";
+import { useMemo, useState } from "react";
+import { useCreateResultadoMutation, useGetResultadosQuery } from "@/redux/features/resultados/resultadosThunk";
 import EmptyResultado from "./EmptyResultado";
 import { TablaTask, taskResultadosHeader } from "../tasks";
 import { columnsNames, columnsVisible } from "@/pages/Operativos/utils";
+import { toast } from "sonner";
 
 
 interface Props {
@@ -20,8 +21,10 @@ interface Options {
 }
 
 export default function ListadoResultados({ currentOperativo, isClosed }: Props) {
-    const dispatch = useAppDispatch()
-    const { isLoading, resultadosClave, isCreatingResultado } = useAppSelector(state => state.resultados)
+
+    const { data: resultadosClave, isLoading } = useGetResultadosQuery({operativoId: currentOperativo.id}, {skip: currentOperativo.id === ''})
+    const [ createResultado, { isLoading: isCreatingResultado, error: createResultadoError } ] = useCreateResultadoMutation()
+
     const [activeKeys, setActiveKeys] = useState<string[]>([])
     const [ sort, setSort ] = useState<string>('default')
     const [ filter, setFilter ] = useState<string>('')
@@ -31,31 +34,25 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
         prioridad: [],
     })
 
-    const handleNuevoResultado = async () => {
-        await dispatch(createResultadoThunk({operativoId: currentOperativo.id})).unwrap().then((data) => {
-            message.success('Resultado creado correctamente')
-            const element = document.getElementById(`resultado-${data.id}`)
-            element?.classList.add('ant-collapse-item-active')
-            element?.scrollIntoView({behavior: 'smooth'})
-        
-        }).catch((err) => {
-            message.error('Hubo un error al crear el resultado')
-        })
+    const handleNuevoResultado = () => {   
+        toast.promise(
+            createResultado({operativoId: currentOperativo.id}).unwrap(),
+            {
+                loading: 'Creando resultado',
+                success: (data) => {
+                    return 'Resultado creado correctamente'
+                },
+                error: 'Hubo un error al crear el resultado'
+            }
+        )
     }
-
-    useEffect(() => {
-        if (currentOperativo.id !== '') {
-            dispatch(getResultadosThunk(currentOperativo.id))
-        }
-    }, [currentOperativo])
-
 
    const normalizeString = (str: string) => {
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     };
 
     const filteredAndSortedResultados = useMemo(() => {
-        let resultados = [...resultadosClave];
+        let resultados = [...resultadosClave || []];
     
         if (filter) {
             const normalizedSearchTerm = normalizeString(filter.toLowerCase());
@@ -87,7 +84,7 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
     }, [filteredAndSortedResultados])
 
     if(isLoading) return ( <Loading /> )
-    if(resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
+    if(resultadosClave && resultadosClave.length === 0) return ( <EmptyResultado handleCreate={handleNuevoResultado} /> )
 
     return (
         <>
@@ -95,7 +92,7 @@ export default function ListadoResultados({ currentOperativo, isClosed }: Props)
             <div style={{width: 180}}>
                 <Checkbox 
                     checked={activeKeys.length !== 0}
-                    onChange={e => setActiveKeys(e.target.checked ? resultadosClave.map(resultado => resultado.id.toString()) : [])}
+                    onChange={e => setActiveKeys(e.target.checked ? filteredAndSortedResultados?.map(resultado => resultado.id.toString()) || [] : [])}
                     indeterminate={activeKeys.length > 0 && activeKeys.length < resultadosClave?.length!}
                 >
                     Mostrar Todos

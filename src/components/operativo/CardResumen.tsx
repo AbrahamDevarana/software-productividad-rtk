@@ -1,5 +1,5 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
-import { OperativoProps } from '@/interfaces'
+import { OperativoProps, PerfilProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
@@ -17,13 +17,14 @@ interface Props {
 		color: string,
 		isClosed: boolean
 	}
+    perfil?: PerfilProps
 }
 
-export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible, etapa }:Props) => {
-	const { perfil } = useAppSelector(state => state.profile)
+export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible, etapa, perfil}:Props) => {
+    
+	
 	const { currentConfig: {year, quarter}, periodControls } = useAppSelector(state => state.global)
 	
-	const { rendimiento } = perfil
 	const { taskCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount,  } = useObjetivo({operativos})
 
 
@@ -38,10 +39,10 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 			<h1 className='text-primary font-medium text-[16px]'>Resumen</h1>
 		</div>
 		<div className='my-5 p-5 flex flex-wrap bg-primary bg-opacity-20 rounded gap-x-5 gap-y-3 items-center justify-center'>
-			<Avatar className='w-20 h-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil.foto)}`} preview={false} fallback={getBrokenUser()} />} />
+			<Avatar className='w-20 h-20 border-primary border-2' src={<Image src={`${getStorageUrl(perfil?.foto)}`} preview={false} fallback={getBrokenUser()} />} />
 			<div className=''>
 				<p className='font-medium text-devarana-graph text-xl'
-				>{perfil.nombre}</p>
+				>{perfil?.nombre}</p>
 			</div>
 		</div>
 		<div>
@@ -72,7 +73,7 @@ export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVis
 					<p className='text-xs drop-shadow text-center'> { etapa.etapaActual } </p> 
 				</div>
 				<button 
-				disabled={rendimiento.status === 'CERRADO'  || etapa.isClosed }
+				disabled={perfil?.rendimiento?.status === 'CERRADO'  || etapa.isClosed }
 				className='border border-devarana-dark-graph py-0.5 px-2.5 text-devarana-dark-graph shadow
 							text-xs rounded-ext font-light disabled:cursor-not-allowed hover:opacity-70 transition duration-100' 
 				onClick={ () => setPonderacionVisible(true)}>

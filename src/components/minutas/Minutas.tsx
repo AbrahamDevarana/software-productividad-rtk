@@ -1,6 +1,6 @@
 import { Editor } from '@/components/ui'
 import { useCreateMinutaMutation, useDeleteMinutaMutation, useGetMinutasQuery, useLazyGetMinutaQuery, useUpdateMinutaMutation } from '@/redux/features/minutas/minutasApi'
-import { Input, Form, message, Popconfirm } from 'antd'
+import { Input, Form, Popconfirm } from 'antd'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import { MinutasProps } from '@/interfaces'
@@ -52,7 +52,7 @@ export const Minutas = ({minuteableId, minuteableType}: Props) => {
             setStatus('success')
         )).catch(() => {
             setStatus('error'),
-            message.error('Error al actualizar minuta')
+            toast.error('Error al actualizar minuta')
         }).finally(() => {
             setStatus('idle')
         })

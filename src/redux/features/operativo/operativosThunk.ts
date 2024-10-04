@@ -254,7 +254,12 @@ export const operativosApi = createApi({
             invalidatesTags: ['Operativos'],
             transformResponse: (response: { operativo: OperativoProps }) => response.operativo
         }),
+        getOperativos: builder.query({
+            query: (filtros) => `/operativos`,
+            providesTags: ['Operativos'],
+            transformResponse: (response: { operativos: OperativoProps[] }) => response.operativos ?? []
+        }),
     })
 })
 
-export const { useGetOperativoQuery, useCopyOperativoMutation } = operativosApi;
+export const { useGetOperativoQuery, useCopyOperativoMutation, useGetOperativosQuery } = operativosApi;

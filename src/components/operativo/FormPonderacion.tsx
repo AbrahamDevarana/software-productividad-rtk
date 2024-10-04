@@ -1,9 +1,10 @@
 	import { OperativoProps } from '@/interfaces';
 	import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-	import { Input, message } from 'antd'; // Import message from antd for alerts
+	import { Input } from 'antd'; // Import message from antd for alerts
 	import { useState, useMemo } from 'react';
 	import { Button } from '../ui';
 	import { setPonderacionesThunk } from '@/redux/features/operativo/operativosThunk';
+import { toast } from 'sonner';
 
 	interface Props {
 	operativos: OperativoProps[];
@@ -58,10 +59,7 @@
 		const newTotal = updatedPonderaciones.reduce((acc, ponderacion) => acc + ponderacion.progresoAsignado, 0);
 
 		if (newTotal > 100) {
-			message.error({
-				key: 'ponderacion',
-				content: 'La suma de todas las ponderaciones no puede ser mayor al 100%'
-			});
+            toast.error('La suma de todas las ponderaciones no puede ser mayor al 100%')
 		return;
 		}
 
@@ -69,11 +67,9 @@
 	};
 
 	const handleUpdate = () => {
+        
 		dispatch(setPonderacionesThunk({ ponderaciones, usuarioId: userAuth.id})).unwrap().then(() => {
-			message.success({
-				key: 'ponderacion',
-				content: 'Ponderaciones actualizadas correctamente'
-			});
+            toast.success('Ponderaciones actualizadas correctamente')
 			handleCancelPonderacion()
 		})
 	};

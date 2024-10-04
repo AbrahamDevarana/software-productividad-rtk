@@ -1,9 +1,10 @@
 import { useDebounceCallback } from '@/hooks'
 import { TaskProps } from '@/interfaces'
-import { updateTaskThunk, useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
+import { useUpdateTaskMutation } from '@/redux/features/tasks/tasksThunk'
 import { useAppDispatch } from '@/redux/hooks'
 import { InputNumber, message, Slider } from 'antd'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 
 interface TaskProgressProps {
@@ -22,15 +23,13 @@ export const TaskProgress = ({ record, disabled, input = false }: TaskProgressPr
             ...record,
             progreso: value
         }
-        await updateTask(query).unwrap().then(() => {
-            message.open({
-                type: 'success',
-                content: 'Tarea actualizada',
-                key: 'task-progress'
-            })
-        }).catch((error) => {
-            message.error('Error al actualizar la tarea')
+
+        toast.promise(updateTask(query).unwrap(), {
+            loading: 'Guardando...',
+            success: 'Tarea actualizada',
+            error: 'Error al actualizar la tarea'
         })
+      
     }
 
     useEffect(() => {
@@ -45,7 +44,7 @@ export const TaskProgress = ({ record, disabled, input = false }: TaskProgressPr
     return (
         <div className='flex gap-1 w-full'>
             <Slider
-                key={record.id}
+                key={'sld' + record.id}
                 value={progress}
                 onChange={(value) => {
                     setProgress(value)
@@ -60,7 +59,7 @@ export const TaskProgress = ({ record, disabled, input = false }: TaskProgressPr
            {
                 input && (
                     <InputNumber
-                        key={record.id}
+                        key={'inpt' + record.id}
                         min={0}
                         max={100}
                         variant='borderless'

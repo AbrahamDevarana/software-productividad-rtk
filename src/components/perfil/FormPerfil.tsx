@@ -1,10 +1,11 @@
 
-import { DatePicker, Form, Input, message } from 'antd';
+import { DatePicker, Form, Input } from 'antd';
 import { updateProfileThunk } from '@/redux/features/perfil/perfilThunk';
 import { useAppDispatch } from '@/redux/hooks';
 import { PerfilProps } from "@/interfaces";
 import dayjs from 'dayjs';
 import { Button } from '../ui';
+import { toast } from 'sonner';
 
 interface Props {
     usuarioActivo: PerfilProps
@@ -14,7 +15,6 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
 
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-    const [messageApi, contextHolder] = message.useMessage();
 
     const handleonSubmit = async () => {
 
@@ -23,12 +23,16 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             ...values,
             id: usuarioActivo.id,
         }
+
+        toast.promise(
+            dispatch(updateProfileThunk(query)).unwrap(),
+            {
+                loading: 'Guardando...',
+                success: 'Perfil actualizado correctamente',
+                error: 'Ocurrió un error al actualizar el perfil'
+            }
+        )
         
-        await dispatch(updateProfileThunk(query)).unwrap().then(() => {
-            messageApi.success('Perfil actualizado correctamente')
-        }).catch((err) => {
-            messageApi.error('Error al actualizar el perfil')
-        })
     }
 
 
@@ -46,9 +50,6 @@ export const FormPerfil = ({usuarioActivo}: Props) => {
             form={form}
             
         >
-            {
-                contextHolder
-            }
             <Form.Item 
                 className="col-span-12 xl:col-span-4 md:col-span-6"
                 name="nombre"
