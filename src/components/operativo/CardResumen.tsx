@@ -1,5 +1,5 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
-import { OperativoProps } from '@/interfaces'
+import { OperativoProps, PerfilProps, RendimientoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
@@ -9,6 +9,8 @@ import { FormPonderacion } from './FormPonderacion'
 
 
 interface Props {
+    perfil: PerfilProps
+    rendimiento: RendimientoProps
 	operativos: OperativoProps[]
 	isPonderacionVisible: boolean
 	setPonderacionVisible: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,11 +21,10 @@ interface Props {
 	}
 }
 
-export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible, etapa }:Props) => {
-	const { perfil } = useAppSelector(state => state.profile)
+export const CardResumen = ({operativos, isPonderacionVisible, setPonderacionVisible, etapa, perfil, rendimiento }:Props) => {
+
 	const { currentConfig: {year, quarter}, periodControls } = useAppSelector(state => state.global)
 	
-	const { rendimiento } = perfil
 	const { taskCount, misObjetivosCount, objetivosCompartidosCount, resultadosClaveCount,  } = useObjetivo({operativos})
 
 

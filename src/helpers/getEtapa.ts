@@ -2,9 +2,9 @@ import { getColor } from "./getColor";
 
 
 
-export const calcularEtapaActual = ({periodos, status}: any) => {
+export const calcularEtapaActual = ({periodos, status}: {periodos: any, status?: string}) => {
 	
-    if (!periodos) {
+    if (!periodos || !status) {
       return {
         etapaActual: "Sin Iniciar",
         color: getColor('SIN_INICIAR').color,

@@ -54,7 +54,7 @@ export interface EvaluacionRespuestaProps {
 }
 
 
-export interface ResultadosEvaluacionProsp {
+export interface ResultadosEvaluacionProps {
     categoria: string;
     resultado: Resultado;
 }

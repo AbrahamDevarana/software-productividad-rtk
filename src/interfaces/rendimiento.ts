@@ -1,5 +1,5 @@
 
-export interface Rendimiento {
+export interface RendimientoProps {
 
     id: string;
     year: number;
