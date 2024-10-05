@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearObjetivoThunk, getOperativosThunk, useGetOperativosQuery } from '@/redux/features/operativo/operativosThunk';
-import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
 import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery, useGetPerfilQuery, useGetRendimientoByUserQuery } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
