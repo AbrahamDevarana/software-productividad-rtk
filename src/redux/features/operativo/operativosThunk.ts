@@ -7,6 +7,7 @@ import { OperativoProps } from '@/interfaces';
 
 import { baseQuery } from "@/config/baseQuery";
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
+import { get } from 'http';
 
 
 interface Props {
@@ -255,9 +256,12 @@ export const operativosApi = createApi({
             transformResponse: (response: { operativo: OperativoProps }) => response.operativo
         }),
         getOperativos: builder.query({
-            query: (filtros) => `/operativos`,
+            query: ({ year, quarter, usuarioId }: { year: number, quarter: number, usuarioId: string }) => ({
+                url: '/operativos',
+                params: { year, quarter, usuarioId }
+            }),
             providesTags: ['Operativos'],
-            transformResponse: (response: { operativos: OperativoProps[] }) => response.operativos ?? []
+            transformResponse: (response: { operativos: OperativoProps[] }) => response.operativos
         }),
     })
 })

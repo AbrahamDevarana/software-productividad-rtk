@@ -1,4 +1,4 @@
-import { Rendimiento } from "./rendimiento";
+import { RendimientoProps } from "./rendimiento";
 import { InitialState } from "./slice";
 
 
@@ -12,7 +12,7 @@ export interface Ranking {
     foto: string;
     slug: string;
     leaderId: string;
-    rendimiento: Rendimiento[];
+    rendimiento: RendimientoProps[];
 }
 
 

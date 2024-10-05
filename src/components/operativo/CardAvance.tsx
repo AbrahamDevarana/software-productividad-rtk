@@ -1,6 +1,6 @@
 import { useObjetivo } from '@/hooks/useObjetivos'
 import { Divider, Modal, Progress, Tooltip } from 'antd'
-import { OperativoProps } from '@/interfaces'
+import { OperativoProps, PerfilProps, RendimientoProps } from '@/interfaces'
 import { useAppSelector } from '@/redux/hooks'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
@@ -15,8 +15,11 @@ import { IoIosEye } from "react-icons/io";
 import { verificarPeriodo } from '@/helpers/getValidEtapa';
 import useCalculoBono from '@/hooks/useBono';
 import { ResultadosCompetencias } from './ResultadosCompetencias';
+import { useGetEvaluacionResultadosQuery } from '@/redux/features/evaluaciones/evaluacionesThunk';
 
 interface Props {
+    perfil: PerfilProps
+    rendimiento: RendimientoProps
     operativos: OperativoProps[]
     periodos: any
     etapa: {
@@ -24,10 +27,10 @@ interface Props {
         color: string,
         isClosed: boolean
     }
-    rendimiento:any
 }
-export const CardAvance = ( { operativos, periodos, rendimiento }: Props ) => {
-    const { perfil } = useAppSelector(state => state.profile)
+export const CardAvance = ( { operativos, periodos, perfil, rendimiento }: Props ) => {
+
+    const { currentConfig: {year, quarter} } = useAppSelector(state => state.global)
     const { ponderacionObjetivos } = useObjetivo({ operativos })
     const { resultados } = useAppSelector(state => state.evaluaciones)
     const [ isModalVisible, setIsModalVisible ] = useState(false)

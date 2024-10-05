@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearObjetivoThunk, getOperativosThunk } from '@/redux/features/operativo/operativosThunk';
-import { useGetColaboradoresQuery, useGetEquipoQuery, useGetProfileQuery, useGetRendimientoQuery, useLazyGetProfileQuery } from '@/redux/features/perfil/perfilThunk';
+import { clearObjetivoThunk, getOperativosThunk, useGetOperativosQuery } from '@/redux/features/operativo/operativosThunk';
+import { clearResultadoThunk } from '@/redux/features/resultados/resultadosThunk';
+import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery, useGetPerfilQuery, useGetRendimientoByUserQuery } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
 import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
@@ -25,9 +26,9 @@ import { calcularEtapaActual } from '@/helpers/getEtapa';
 export const Objetivos : React.FC = () => {
 
     const dispatch = useAppDispatch()    
-
-    const { operativos, isLoading } = useAppSelector(state => state.operativos)
+    const { operativos, isLoading: isLoadingObjetivo } = useAppSelector(state => state.operativos)
     const { userAuth } = useAppSelector(state => state.auth)
+    // const { perfil }  = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
@@ -38,11 +39,15 @@ export const Objetivos : React.FC = () => {
     const [objetivoId, setObjetivoId] = useState<string>('')
     const [visibleFormCopy, setVisibleFormCopy] = useState<boolean>(false)
 
-    const { data: perfil, isLoading: isLoadingProfile} = useGetProfileQuery({usuarioId: userAuth?.id, quarter, year}, {skip: !userAuth?.id})
+    const { data: perfil, isLoading: isLoadingPerfil } = useGetPerfilQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
+    const { data: rendimiento, isLoading: isLoadingRendimiento } = useGetRendimientoByUserQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
     const { data: periodos, isLoading: isLoadingRules } = useGetGestionPeriodosQuery({year, quarter})
-    const { data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
-    const { data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
-    const { data: rendimiento } = useGetRendimientoQuery({usuarioId: userAuth?.id, year, quarter})
+    // const { data: operativos, isLoading: isLoadingObjetivo} = useGetOperativosQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
+
+    const {data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
+    const {data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
+
+    const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
     
     useEffect(() => {
         setGettingProfile(true)
@@ -58,16 +63,21 @@ export const Objetivos : React.FC = () => {
         (userAuth) && fetchData()
     }, [userAuth, year, quarter])
     
-    const etapa = calcularEtapaActual({periodos, status: perfil?.rendimiento?.status})
 
     const handleCancelForm = () => {
         setFormVisible(false)
         dispatch(clearObjetivoThunk())
     }
 
-    const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
+    const etapa = useMemo(() => {
+        return calcularEtapaActual({periodos, status: rendimiento?.status})
+    }, [periodos, rendimiento])
 
-    if(isLoadingRules || gettingProfile) return <Loading dynamic={true}/>
+    
+    if( gettingProfile ) return <Loading dynamic={true}/>
+    
+    if(!perfil || !rendimiento || !operativos || isLoadingPerfil || isLoadingRendimiento || isLoadingRules ) return <Loading dynamic={true}/>
+    
 
     const handleOpenAdminModal = (usuario: SinglePerfilProps) => {
         setActiveUsuarioReview(usuario)
@@ -92,10 +102,10 @@ export const Objetivos : React.FC = () => {
         <>
             <div className="grid 2xl:grid-cols-11 lg:grid-cols-12 md:grid-cols-6 grid-cols-12 gap-5">
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full px-5 text-devarana-graph flex flex-col'>
-                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa} perfil={perfil}/>
+                    <CardResumen operativos={operativos} isPonderacionVisible={isPonderacionVisible} setPonderacionVisible={setPonderacionVisible} etapa={etapa} perfil={perfil} rendimiento={rendimiento}/>
                 </Box>
                 <Box className='2xl:col-span-2 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full'>
-                    <CardAvance operativos={operativos} periodos={periodos} etapa={etapa} rendimiento={rendimiento} />
+                    <CardAvance operativos={operativos} periodos={periodos} etapa={etapa} perfil={perfil} rendimiento={rendimiento} />
                 </Box>
                 <Box className='2xl:col-span-4 xl:col-span-3 lg:col-span-6 md:col-span-6 col-span-12 w-full flex justify-center'>
                     <CardDesempeno />
@@ -124,7 +134,7 @@ export const Objetivos : React.FC = () => {
             <div className='grid grid-cols-12 gap-5'>
                 <div className='xl:col-span-9 lg:col-span-8 col-span-12 py-5 grid grid-cols-12 gap-5'>
                     {
-                        isLoading && operativos.length === 0 ? 
+                        isLoadingObjetivo ?
                             <div className='col-span-12'>
                                 <Loading  />
                             </div>

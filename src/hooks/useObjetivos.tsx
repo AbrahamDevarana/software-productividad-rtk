@@ -3,13 +3,26 @@ import { useAppSelector } from "@/redux/hooks"
 import { useMemo } from "react"
 
 interface Props {
-    operativos: OperativoProps[]
+    operativos?: OperativoProps[]
 }
 
 
 export const useObjetivo = ({operativos}:Props) => {
 
         const { userAuth } = useAppSelector(state => state.auth)
+
+        if (!operativos) return  {
+            ponderacionObjetivos: 0,
+            misObjetivosCount: 0,
+            objetivosCompartidosCount: 0,
+            resultadosClaveCount: 0,
+            taskCount: 0,
+            misObjetivos: [],
+            objetivosCompartidos: [],
+            scoreLeft: 0
+        }
+
+        
         // HOOKS
         const ponderacionObjetivos = useMemo(() => {
             let total = 0

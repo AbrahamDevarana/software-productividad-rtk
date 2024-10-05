@@ -1,4 +1,4 @@
-import { DepartamentoProps, EvaluacionesProps, OperativoProps, ProyectosProps, Rendimiento } from "./";
+import { DepartamentoProps, EvaluacionesProps, OperativoProps, ProyectosProps, RendimientoProps } from "./";
 
 
 
@@ -79,8 +79,8 @@ export interface PerfilProps extends SinglePerfilProps {
         evaluacion: EvaluacionesProps
         resultados: number;
     }
-    rendimiento: Rendimiento;
-    historialRendimiento: Rendimiento[];
+    rendimiento: RendimientoProps;
+    historialRendimiento: RendimientoProps[];
 }
 
 

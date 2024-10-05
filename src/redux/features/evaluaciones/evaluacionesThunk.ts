@@ -2,7 +2,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
-import { EvaluacionResultadosProps, ResultadosEvaluacionProsp, SinglePerfilProps, UsuarioProps } from "@/interfaces";
+import { EvaluacionResultadosProps, ResultadosEvaluacionProps, SinglePerfilProps, UsuarioProps } from "@/interfaces";
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { baseQuery } from "@/config/baseQuery";
 
@@ -208,11 +208,22 @@ export const evaluacionApi = createApi({
                 params: { year, quarter, usuarioId, categoriaId },
             }),
             providesTags: ['Resultados'],
-            transformResponse: (response: { evaluacion: ResultadosEvaluacionProsp }) => response.evaluacion,
+            transformResponse: (response: { evaluacion: ResultadosEvaluacionProps }) => response.evaluacion,
             transformErrorResponse: (response: any) => response
         }),
+
+        getEvaluacionResultados: builder.query({
+            query: ({year, quarter, usuarioId}: {year:number, quarter:number, usuarioId:string}) => ({
+                url: `evaluacion/resultados/${usuarioId}`,
+                params: { year, quarter },
+            }),
+            providesTags: ['Resultados'],
+            transformResponse: (response: { resultados: ResultadosEvaluacionProps }) => response.resultados,
+            transformErrorResponse: (response: any) => response
+        }),
+
     }),
 })
 
 
-export const { useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGenerateAsignacionesEvaluacionMutation, useGetEvaluacionResultadosCategoriaQuery, useGetCategoriasResultadosQuery } = evaluacionApi;
+export const { useGetEvaluacionResultadosQuery, useGetEvaluacionUsuariosQuery, useGetEvaluacionUsuarioQuery, useCreateAsignacionEvaluacionMutation, useDeleteAsignacionEvaluacionMutation, useGenerateAsignacionesEvaluacionMutation, useGetEvaluacionResultadosCategoriaQuery, useGetCategoriasResultadosQuery } = evaluacionApi;

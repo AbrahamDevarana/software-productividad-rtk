@@ -2,7 +2,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { clientAxios } from "@/config/axios";
-import { PerfilProps, Rendimiento, SinglePerfilProps } from "@/interfaces";
+import { PerfilProps, RendimientoProps, SinglePerfilProps } from "@/interfaces";
 import { clearProfile } from "./perfilSlice";
 
 import { createApi } from '@reduxjs/toolkit/dist/query/react';
@@ -15,15 +15,28 @@ interface Props {
 }
 
 
-interface Respuesta {
-    id: string;
-    preguntaId: string;
-    evaluacionId: number;
-    usuarioId: string;
-    rate: number;
-    comentarios: string;
-  }
 
+export const getProfileThunk = createAsyncThunk(
+    'profile/getProfile',
+    async ({usuarioId, year, quarter}:{usuarioId: string, year: number, quarter: number}, {rejectWithValue, getState}) => {
+        try {
+            const { accessToken } = (getState() as RootState).auth;
+            const config = {
+                headers: { "accessToken": `${accessToken}` },
+                params: {
+                    year,
+                    quarter
+                }
+            }
+            const response = await clientAxios.get<Props>(`/perfiles/${usuarioId}`, config);
+                    
+            return response.data.usuario
+        }
+        catch (error: any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
         
 export const updateProfileThunk = createAsyncThunk(
     'profile/updateProfile',
@@ -140,7 +153,7 @@ export const perfilApi = createApi({
                 params: { year },
             }),
             providesTags: ['Perfil'],
-            transformResponse: (response: {rendimientos: Rendimiento[]}) => response.rendimientos
+            transformResponse: (response: {rendimientos: RendimientoProps[]}) => response.rendimientos
         }),
         getEquipo: builder.query({
             query: ({usuarioId}:{usuarioId: string}) => `/perfiles/get-equipo/${usuarioId}`,
@@ -161,12 +174,12 @@ export const perfilApi = createApi({
                 params: { year, quarter },
             }),
             providesTags: ['Perfil'],
-            transformResponse: (response: {rendimiento: Rendimiento}) => response.rendimiento,
+            transformResponse: (response: {rendimiento: RendimientoProps}) => response.rendimiento,
             transformErrorResponse : (error: any) => {
                 return error
             }
         }),
-        getProfile: builder.query({
+        getPerfil: builder.query({
             query: ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}) => ({
                 url: `/perfiles/${usuarioId}`,
                 params: { year, quarter },
@@ -174,16 +187,20 @@ export const perfilApi = createApi({
             providesTags: ['Perfil'],
             transformResponse: (response: {usuario: PerfilProps}) => response.usuario
         }),
+        getRendimientoByUser: builder.query({
+            query: ({usuarioId, year, quarter}:{usuarioId: string, year:number, quarter:number}) => ({
+                url: `/rendimiento/avance/${usuarioId}`,
+                params: { year, quarter },
+            }),
+            providesTags: ['Perfil'],
+            transformResponse: (response: {rendimiento: RendimientoProps}) => response.rendimiento
+        }),
     }),
 })
 
 export const {
-    useGetProfileQuery,
-    useLazyGetProfileQuery,
-    // useUpdateProfileMutation,
-    // useUploadProfilePictureMutation,
-    // useUpdateProfileConfigMutation,
-    // useUpdatePortraitMutation,
+    useGetPerfilQuery,
+    useGetRendimientoByUserQuery,
     useGetRendimientoQuery,
     useGetColaboradoresQuery,
     useGetEquipoQuery,
