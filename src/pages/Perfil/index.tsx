@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { clearProfileThunk, getRendimientoThunk, useLazyGetProfileQuery } from "@/redux/features/perfil/perfilThunk";
+import { clearProfileThunk, getRendimientoThunk, useLazyGetPerfilQuery } from "@/redux/features/perfil/perfilThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Actividad from "./actividad";
 import Header from "../../components/perfil/HeaderPerfil";
@@ -18,7 +18,7 @@ const Perfil: React.FC = () => {
     const { userAuth } = useAppSelector(state => state.auth)
     const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
-    const [getProfile, {data: perfil, isLoading}] = useLazyGetProfileQuery()
+    const [getProfile, {data: perfil, isLoading}] = useLazyGetPerfilQuery()
 
 
     const usuarioId = id || userAuth?.id    

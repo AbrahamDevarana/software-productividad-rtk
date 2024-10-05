@@ -199,6 +199,7 @@ export const perfilApi = createApi({
 })
 
 export const {
+    useLazyGetPerfilQuery,
     useGetPerfilQuery,
     useGetRendimientoByUserQuery,
     useGetRendimientoQuery,
