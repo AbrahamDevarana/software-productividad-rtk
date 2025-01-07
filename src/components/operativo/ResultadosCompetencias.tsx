@@ -75,7 +75,9 @@ export const ResultadosCompetencias = ({usuarioId}: Props) => {
                     }}>
                         <h3 className='text-devarana-dark-graph pb-5'>Resultado</h3>
                         <div className='flex justify-center items-center'>
-                                <Rating initialValue={Number(data?.resultado?.promedio) || 0} size={45} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }} fillColor='rgba(9, 103, 201, 1)'
+                                <Rating initialValue={Number(data?.resultado?.promedio) || 0} size={45} readonly allowFraction transition emptyStyle={{ display: "flex" }} 
+                                    fillColor='rgba(9, 103, 201, 1)'
+                                    SVGstyle={{ display: "inline-block", marginBottom: 10 }}
                                 />
                                 
                             <p className='px-2 text-2xl text-devarana-graph'>

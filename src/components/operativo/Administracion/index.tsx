@@ -205,7 +205,9 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 								
 								<div className='text-center pb-5 flex items-center justify-center gap-5'>
 									<Tooltip title={promedioEvaluaciones} >
-										<Rating initialValue={Number(promedioEvaluaciones)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+										<Rating initialValue={Number(promedioEvaluaciones)} readonly allowFraction transition emptyStyle={{ display: "flex" }} 
+                                            SVGstyle={{ display: "inline-block", marginBottom: 10 }}
+                                        />
 									</Tooltip>
 									<button onClick={() => setIsModalVisible(true)}>
 										<IoIosEye className='text-devarana-dark-graph hover:text-devarana-graph transition-all duration-300' size={20} />

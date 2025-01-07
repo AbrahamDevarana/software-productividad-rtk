@@ -154,7 +154,9 @@ export const EncuestaPreguntas = ({perfil, activeEvaluate, setRespuestas, respue
             <div className="p-5">
                 <div>
                     <h2 className="text-devarana-dark-graph pb-2 text-xl font-light">{preguntasEvaluacion[currentStep].texto}</h2>
-                    <Rating fillColor={isLider ? '#56739B' : '#d64767'} onClick={handleRateChange} initialValue={Number(respuestas[currentStep]?.rate || 0)} allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+                    <Rating fillColor={isLider ? '#56739B' : '#d64767'} onClick={handleRateChange} initialValue={Number(respuestas[currentStep]?.rate || 0)} allowFraction transition emptyStyle={{ display: "flex" }} 
+                        SVGstyle={{ display: "inline-block", marginBottom: 10 }}
+                    />
                     <div className=' text-default'> { isLider? '' : getValueColaborador(Number(respuestas[currentStep]?.rate || 0) ) } </div>
                     <p className="text-devarana-graph py-2">Comentarios:</p>
                     <TextArea

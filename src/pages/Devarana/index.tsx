@@ -25,7 +25,7 @@ export const Devarana: React.FC = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getUsuariosThunk({}))
+        dispatch(getUsuariosThunk({ filtros: {status : 'ACTIVO'}}))
     }, [])
 
 

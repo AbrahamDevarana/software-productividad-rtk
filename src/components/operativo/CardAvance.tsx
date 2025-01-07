@@ -123,7 +123,8 @@ return (
                         </Tooltip>
                     </div>
                     <Tooltip title={resultados} >
-                        <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}
+                        <Rating initialValue={Number(resultados)} readonly allowFraction transition emptyStyle={{ display: "flex" }} 
+                            SVGstyle={{ display: "inline-block", marginBottom: 10 }}
                             fillColor='rgba(9, 103, 201, 1)'
                         />
                     </Tooltip>
