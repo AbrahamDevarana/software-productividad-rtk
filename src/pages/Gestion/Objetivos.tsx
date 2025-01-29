@@ -1,4 +1,4 @@
-import { Input, Modal, Select, Table } from 'antd'
+import { Avatar, Image, Input, Modal, Select, Table } from 'antd'
 import { useState } from 'react'
 import { Button } from '../../components/ui'
 import { Administracion } from '../../components/operativo'
@@ -7,11 +7,17 @@ import { SinglePerfilProps, UsuarioGestion } from '@/interfaces'
 import { ColumnsType } from 'antd/es/table'
 import { generarReporteRendimientoThunk, useGetGestionObjetivosQuery } from '@/redux/features/gestion/gestionThunk'
 import { FaEye } from 'react-icons/fa'
-import { getColor } from '@/helpers'
+import { getColor, getStorageUrl } from '@/helpers'
 import { LuRefreshCw } from "react-icons/lu";
 import { periodoTypesGestion } from '@/types'
+import getBrokenUser from '@/helpers/getBrokenUser'
+import { ModalReport } from './components/ModalReport'
+
+
 
 export const Objetivos = () => {
+    
+    const [modalReportVisible, setModalReportVisible] = useState(false)
 
     const [search, setSearch] = useState('')
 	const [status, setStatus] = useState('')
@@ -31,9 +37,12 @@ export const Objetivos = () => {
 			title: () => ( <p className='tableTitlePrincipal'>Nombre</p>),
 			key: 'name',
 			render: (text, record) => (
-				<p className='text-devarana-graph'>
-					{record.nombre} {record.apellidoPaterno}  {record.apellidoMaterno} 
-				</p>
+				<div className='flex items-center gap-x-2'>
+                    <Avatar shape='circle' size={'large'}  src={<Image className='w-full' src={getStorageUrl(record.foto)} preview={false} fallback={getBrokenUser()} /> } />
+                    <p className='text-devarana-graph'>
+                        {record.nombre} {record.apellidoPaterno}  {record.apellidoMaterno} 
+                    </p>
+                </div>
 			)
 		},
 		{
@@ -100,7 +109,7 @@ export const Objetivos = () => {
         setIsAdminModalVisible(false)
     }
 
-    const handleGenerateReport = () => {
+    const handleGenerateExcel = () => {
 		dispatch(generarReporteRendimientoThunk({ quarter, year, search, status, statusUsuario }))
 	}
 	
@@ -150,10 +159,15 @@ export const Objetivos = () => {
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
-                <Button classType='regular' classColor='primary' onClick={handleGenerateReport} disabled={isGeneratingReport} width={150}
+                <Button classType='regular' classColor='primary' onClick={handleGenerateExcel} disabled={isGeneratingReport} width={150}
                 >
-                    <p>Exportar</p>
+                    <p>Generar Excel</p>
                 </Button>
+
+                <Button classType='regular' classColor='secondary' width={150} onClick={ () => setModalReportVisible(true)} disabled={isGeneratingReport}>
+                    <p>Generar Pdf</p>
+                </Button>
+
 				<Button classColor='dark' classType='regular' width={50} onClick={() => refetch()}>
 					<LuRefreshCw className='text-white text-2xl' />
 				</Button>
@@ -169,22 +183,26 @@ export const Objetivos = () => {
 
             </Table>
             <Modal
-                    open={isAdminModalVisible}
-                    onCancel={handleCloseAdminModal}
-                    footer={null}
-                    width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
-                    style={{
-                        top: 50,
-                        left: 35,
-                        bottom: 0,
-                        height: 'calc(100% - 150px)',
-                        overflowY: 'hidden',
-                        borderRadius: '10px'
-                    }}
-                    destroyOnClose={true}
-                >
+                open={isAdminModalVisible}
+                onCancel={handleCloseAdminModal}
+                footer={null}
+                width={window.innerWidth > 1200 ? 'calc(95% - 80px)' : '100%' }
+                style={{
+                    top: 50,
+                    left: 35,
+                    bottom: 0,
+                    height: 'calc(100% - 150px)',
+                    overflowY: 'hidden',
+                    borderRadius: '10px'
+                }}
+                destroyOnClose={true}
+            >
                     <Administracion activeUsuario={activeUsuarioReview} isLeader={false}/>
             </Modal>
+
+            <ModalReport modalReportVisible={modalReportVisible} setModalReportVisible={setModalReportVisible} />
+
+            
             </>
     )
 }

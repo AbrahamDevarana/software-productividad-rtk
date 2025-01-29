@@ -136,6 +136,9 @@ export const Usuarios: React.FC = () => {
         setFormVisible(status)
     }
 
+    console.log(usuarios);
+    
+
     return (
         <>
             <Box className="overflow-auto animate__animated animate__fadeIn">

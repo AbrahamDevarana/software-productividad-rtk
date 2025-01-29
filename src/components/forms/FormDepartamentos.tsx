@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { clearCurrentDepartamentoThunk, createDepartamentoThunk, updateDepartamentoThunk } from '@/redux/features/departamentos/departamentosThunks';
 import { useGetAreasQuery } from '@/redux/features/areas/areasThunks';
 import { useEffect, useState } from 'react';
-import { getUsuariosThunk } from '@/redux/features/usuarios/usuariosThunks';
+import { getUsuariosThunk, useGetUsuariosQuery } from '@/redux/features/usuarios/usuariosThunks';
 import { Select, Input, Form, Skeleton, ColorPicker, Space } from 'antd'
 import { DefaultOptionType } from 'antd/es/select';
 import { useSelectUser } from '@/hooks/useSelectUser';
@@ -20,7 +20,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
     const dispatch = useAppDispatch();
     
     const { currentDepartamento, isLoadingCurrent } = useAppSelector(state => state.departamentos)
-    const { usuarios } = useAppSelector(state => state.usuarios)
+    const { data: usuarios, isFetching } = useGetUsuariosQuery({status: 'ACTIVO'})
     const [ color, setColor ] = useState<string>('#000000')
 
     const { data, isLoading, isError } = useGetAreasQuery({})
@@ -98,7 +98,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                                 filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                             >
                                 {
-                                    usuarios.map((usuario) => (
+                                    usuarios?.map((usuario) => (
                                         <Select.Option key={usuario.id} value={usuario.id} dataName={usuario.nombre + ' ' + usuario.apellidoPaterno + ' ' + usuario.apellidoMaterno} >{ spanUsuario(usuario) }</Select.Option>
                                     ))
                                 }
@@ -117,7 +117,7 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                                 filterOption={(input, option) => (option as DefaultOptionType)?.dataName!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").indexOf(input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")) >= 0 }
                             >
                                 {
-                                    data?.areas.rows.map((area) => (
+                                    data?.rows.map((area) => (
                                         <Select.Option key={area.id} value={area.id} dataName={area.nombre} >
                                             <p className='text-devarana-graph'> {area.nombre} </p>
                                         </Select.Option>
@@ -138,6 +138,16 @@ export const FormDepartamentos = ({handleClose} : Props ) => {
                                 />                            
                             </Space>
                         </Form.Item>
+                        <Form.Item
+                        label="Reportable"
+                        name="isEvaluableDepartment"
+                        tooltip="¿El se muestra en los reportes?"
+                    >
+                        <Select>
+                            <Select.Option value={true}> <p className='text-devarana-graph'>Si</p> </Select.Option>
+                            <Select.Option value={false}> <p className='text-devarana-graph'>No</p> </Select.Option>
+                        </Select>
+                    </Form.Item>
                     </div>
                     <div className='py-4 flex justify-end'>
                         <Button classColor="primary" classType='regular' width={'auto'} type="submit" > <FaSave /> </Button>

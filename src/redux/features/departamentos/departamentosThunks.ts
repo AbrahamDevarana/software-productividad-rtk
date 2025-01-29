@@ -10,14 +10,18 @@ import { createApi } from '@reduxjs/toolkit/dist/query/react';
 
 interface Props {
     departamento: DepartamentoProps
-    departamentos: {
-        rows: DepartamentoProps[]
-        totalItem: number
-        totalPages: number
-        currentPage: number
-    }
+    departamentos: DepartamentoData
     lideres: any[]
 }
+
+
+
+interface DepartamentoData {
+    rows: DepartamentoProps[];
+    totalItem: number;
+    totalPages: number;
+    currentPage: number;
+  }
 
 
 
@@ -169,12 +173,13 @@ export const departamentosApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Departamentos'],
     endpoints: (builder) => ({
-        getDepartamentos: builder.query<Props, {areaId: number}>({
+        getDepartamentos: builder.query<DepartamentoData, {areaId?: number}>({
             query: (filtros) => ({
                 url: `/departamentos`,
                 params: filtros
             }),
-            providesTags: ['Departamentos']
+            providesTags: ['Departamentos'],
+            transformResponse: (response: { departamentos: DepartamentoData }) => response.departamentos
         }),
     })
 })

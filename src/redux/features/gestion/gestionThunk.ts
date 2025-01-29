@@ -35,6 +35,7 @@ export const generarReporteRendimientoThunk = createAsyncThunk(
                 link.setAttribute('download', `ReporteRendimiento-${year}-${quarter}.xlsx`);
                 document.body.appendChild(link);
                 link.click();
+                window.URL.revokeObjectURL(url);
                 return response.data
             }).catch( (error) => {
                 console.log('Error al generar el reporte de rendimiento', error);
@@ -91,7 +92,7 @@ export const gestionApi = createApi({
                 return error
             }
         }),
-
+     
     })
 })
 

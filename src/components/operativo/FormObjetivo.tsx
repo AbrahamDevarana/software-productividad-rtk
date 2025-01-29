@@ -286,14 +286,6 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
 
                 <Divider className='col-span-12' />
                 {
-                    (year >= 2024 && quarter < 2) 
-                    ? (
-                        <div className='col-span-12'>
-                            <p className='text-devarana-graph font-medium pb-5'>Contribuye a:</p>
-                            <Proximamente avance={99}  text='Comenzará' />
-                        </div>
-                    ) 
-                    : 
                     (
                     <> 
                         <Segmented className='col-span-12 mb-3' block options={[{
@@ -390,7 +382,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                                 <label className='block pb-3'>Áreas: </label>
                                     <div className='flex flex-wrap gap-3 col-span-12 pb-3'>
                                     {
-                                        areas?.areas && areas?.areas.rows.map((area: AreaProps) => (
+                                        areas && areas?.rows.map((area: AreaProps) => (
                                             <button
                                                 type='button'
                                                 onClick={(e) => {
@@ -421,7 +413,7 @@ export const FormObjetivo = ({handleCancel, setPonderacionVisible}:Props) => {
                                         allowClear
                                         disabled={!selectedArea}
                                         options={
-                                            departamentos?.departamentos.rows.map((departamentos) => ({
+                                            departamentos?.rows.map((departamentos) => ({
                                                 label: (
                                                 <Tooltip title={departamentos.nombre}>
                                                     <p className='text-devarana-graph'>{departamentos.nombre}</p>

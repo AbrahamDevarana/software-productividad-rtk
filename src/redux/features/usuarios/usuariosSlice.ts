@@ -49,6 +49,7 @@ const initialState: UsuariosState = {
             leaderId: '',
             slug: '',
             usuario: [],
+            isEvaluableDepartment: true,
             leader: {
                 id: '',
                 nombre: '',

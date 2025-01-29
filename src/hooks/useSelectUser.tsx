@@ -30,9 +30,21 @@ export const useSelectUser = (usuarios?:UsuarioProps[], size?: AvatarSize) => {
                         marginRight: -5
                     }}
                     size={size ? size : 'large'}
+                    className="relative"
                 >
                     {usuario?.iniciales}
                 </Avatar>
+                {closable && (
+                <span
+                    className='absolute -top-3 -right-3 text-xs text-white cursor-pointer z-10 bg-devarana-midnight rounded-full h-4 w-4 flex items-center justify-center'
+                    onClick={(e) => {
+                        e.stopPropagation(); // Evita que se abra el menú al cerrar la etiqueta
+                        onClose();
+                    }}
+                >
+                    ✕
+                </span>
+            )}
             </Tooltip>
         );
     }

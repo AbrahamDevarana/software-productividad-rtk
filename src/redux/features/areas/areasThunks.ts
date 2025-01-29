@@ -130,12 +130,12 @@ export const areasApi = createApi({
     baseQuery: baseQuery,
     tagTypes: ['Area'],
     endpoints: (builder) => ({
-        getAreas: builder.query<Props, any>({
+        getAreas: builder.query({
             query: (filtros) => ({
                 url: `/areas`,
                 params: filtros
             }),
-
+            transformResponse: (response: { areas: AreasData }) => response.areas
         }),
         
         getArea: builder.query({

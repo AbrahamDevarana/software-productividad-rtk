@@ -177,7 +177,7 @@ export const usuariosApi =  createApi({
                     search
                 },
             }),
-            transformResponse: (response: { usuarios: IUsuariosResponse } ) => response.usuarios.rows,
+            transformResponse: (response: { usuarios: UsuarioProps[] } ) => response.usuarios,
             providesTags: ['Usuarios']
         }),
         getUsuario: builder.query({

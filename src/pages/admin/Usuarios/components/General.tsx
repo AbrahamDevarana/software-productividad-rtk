@@ -141,6 +141,16 @@ export const General: React.FC<any> = ({handleSteps, currentUsuario}) => {
                             <Select.Option value="INACTIVO"> <p className='text-devarana-graph'>Inactivo</p> </Select.Option>
                         </Select>
                     </Form.Item>
+                    <Form.Item
+                        label="Evaluable"
+                        name="isEvaluable"
+                        tooltip="¿El usuario se puede evaluar?"
+                    >
+                        <Select>
+                            <Select.Option value={true}> <p className='text-devarana-graph'>Si</p> </Select.Option>
+                            <Select.Option value={false}> <p className='text-devarana-graph'>No</p> </Select.Option>
+                        </Select>
+                    </Form.Item>
                 </div>
             </div>
             <div className="flex justify-end mt-2 gap-x-2">

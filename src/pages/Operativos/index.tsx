@@ -1,9 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearObjetivoThunk, getOperativosThunk, useGetOperativosQuery } from '@/redux/features/operativo/operativosThunk';
-import { getProfileThunk, getRendimientoThunk, useGetColaboradoresQuery, useGetEquipoQuery, useGetPerfilQuery, useGetRendimientoByUserQuery } from '@/redux/features/perfil/perfilThunk';
+import { clearObjetivoThunk, useGetOperativosQuery } from '@/redux/features/operativo/operativosThunk';
+import { useGetColaboradoresQuery, useGetEquipoQuery, useGetPerfilQuery, useGetRendimientoByUserQuery } from '@/redux/features/perfil/perfilThunk';
 import { FormObjetivo, CardAvance, CardDesempeno, CardEquipo, CardObjetivo, CardResumen, Administracion, CardRanking, FormCopy } from '@/components/operativo';
-import { useObjetivo } from '@/hooks/useObjetivos';
 import { Box } from '@/components/ui';
 import {Drawer, FloatButton, Modal } from 'antd'
 import Loading from '@/components/antd/Loading';
@@ -18,16 +17,15 @@ import { SinglePerfilProps } from '@/interfaces';
 import { getEvaluacionResultadosThunk, getUsuariosAEvaluarThunk } from '@/redux/features/evaluaciones/evaluacionesThunk';
 import { useGetGestionPeriodosQuery } from '@/redux/features/gestion/gestionThunk';
 import { calcularEtapaActual } from '@/helpers/getEtapa';
+import { useOrderObjetivo } from '@/hooks';
 
 
 
 
 export const Objetivos : React.FC = () => {
 
-    const dispatch = useAppDispatch()    
-    const { operativos, isLoading: isLoadingObjetivo } = useAppSelector(state => state.operativos)
+    const dispatch = useAppDispatch()
     const { userAuth } = useAppSelector(state => state.auth)
-    // const { perfil }  = useAppSelector(state => state.profile)
     const [ isFormVisible, setFormVisible ] = useState(false)
     const [ isAdminModalVisible, setIsAdminModalVisible ] = useState(false)
 	const [ isPonderacionVisible, setPonderacionVisible ] = useState(false)
@@ -38,21 +36,20 @@ export const Objetivos : React.FC = () => {
     const [objetivoId, setObjetivoId] = useState<string>('')
     const [visibleFormCopy, setVisibleFormCopy] = useState<boolean>(false)
 
+    const { data: operativos = [], isLoading: isLoadingObjetivo } = useGetOperativosQuery({year, quarter, usuarioId: userAuth?.id}, {skip: !userAuth})
     const { data: perfil, isLoading: isLoadingPerfil } = useGetPerfilQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
     const { data: rendimiento, isLoading: isLoadingRendimiento } = useGetRendimientoByUserQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
     const { data: periodos, isLoading: isLoadingRules } = useGetGestionPeriodosQuery({year, quarter})
-    // const { data: operativos, isLoading: isLoadingObjetivo} = useGetOperativosQuery({usuarioId: userAuth?.id, year, quarter}, {skip: !userAuth})
 
-    const {data: equipo} = useGetEquipoQuery({usuarioId: userAuth?.id})
-    const {data: colaboradores} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
+    const {data: equipo = []} = useGetEquipoQuery({usuarioId: userAuth?.id})
+    const {data: colaboradores = []} = useGetColaboradoresQuery({usuarioId: userAuth?.id, year, quarter})
 
-    const { misObjetivos, objetivosCompartidos } = useObjetivo({operativos})
+    const { misObjetivos, objetivosCompartidos } = useOrderObjetivo({operativos: operativos, userAuth})
     
     useEffect(() => {
         setGettingProfile(true)
         const fetchData = async () => {
             await Promise.all([
-                dispatch(getOperativosThunk({year, quarter, usuarioId: userAuth?.id})),
                 dispatch(getEvaluacionResultadosThunk({usuarioId: userAuth.id, year, quarter })),
                 dispatch(getUsuariosAEvaluarThunk({usuarioId: userAuth.id, year, quarter })),
             ])

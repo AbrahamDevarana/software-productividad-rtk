@@ -1,6 +1,6 @@
 import { OperativoState } from "@/interfaces/operativos";
 import { createSlice } from "@reduxjs/toolkit";
-import { cambioEstatusObjetivoThunk, cierreCicloThunk, cierreObjetivoLiderThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, getOperativosUsuarioThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
+import { cambioEstatusObjetivoThunk, cierreObjetivoLiderThunk, createOperativoThunk, deleteOperativoThunk, getOperativoThunk, getOperativosThunk, setPonderacionesThunk, updateOperativoThunk } from "./operativosThunk";
 
 
 const initialState: OperativoState = {
@@ -114,18 +114,6 @@ const operativoSlice = createSlice({
         })
         .addCase(setPonderacionesThunk.rejected, (state) => {
         })
-        .addCase(getOperativosUsuarioThunk.pending, (state) => {
-            state.isLoadingOperativosUsuario = true
-        })
-        .addCase(getOperativosUsuarioThunk.fulfilled, (state, { payload }) => {
-            state.isLoadingOperativosUsuario = false
-            state.operativosUsuario = payload
-        })
-        .addCase(getOperativosUsuarioThunk.rejected, (state) => {
-            state.isLoadingOperativosUsuario = false
-            state.error = true
-        })
-
         .addCase(cambioEstatusObjetivoThunk.pending, (state) => {
         })
         .addCase(cambioEstatusObjetivoThunk.fulfilled, (state, { payload }) => {
@@ -178,33 +166,6 @@ const operativoSlice = createSlice({
         })
         .addCase(cierreObjetivoLiderThunk.rejected, (state) => {
         })
-
-
-
-        .addCase(cierreCicloThunk.pending, (state) => {
-            state.isClosingCicle = true
-        })
-        .addCase(cierreCicloThunk.fulfilled, (state, { payload }) => {
-            const { pivot } = payload
-            state.isClosingCicle = false
-            pivot.map((objetivo:any) => {
-                const findObjetivo = state.operativosUsuario.find(operativo => operativo.id === objetivo.objetivoOperativoId)
-                if (findObjetivo) {
-                    findObjetivo.status = objetivo.status
-
-                    findObjetivo.operativosResponsable.forEach((pivot:any) => {                
-                        if (pivot.id === objetivo.usuarioId) {
-                             pivot.scoreCard.status = objetivo.status
-                        }
-                    })
-                }
-            })
-        })
-        .addCase(cierreCicloThunk.rejected, (state) => {
-            state.isClosingCicle = false
-        })
-
-
     }
 })
 

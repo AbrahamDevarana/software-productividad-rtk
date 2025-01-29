@@ -36,13 +36,6 @@ interface CierreProps {
    objetivo: OperativoProps
 }
 
-interface CierreCicloProps {
-    ok: boolean
-    objetivos: OperativoProps[]
-    pivot: any
-}
-
-
 
 export const getOperativosThunk = createAsyncThunk(
     'operativos/getOperativos',
@@ -55,25 +48,6 @@ export const getOperativosThunk = createAsyncThunk(
             }
 
 
-            const response = await clientAxios.get<Props>(`/operativos`, config);
-            return response.data.operativos
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-// Obtener los objetivos de un usuario
-export const getOperativosUsuarioThunk = createAsyncThunk(
-    'operativos/getOperativosUsuario',
-    async (filtros: Filtros, {rejectWithValue, getState}) => {
-        try {
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` },
-                params: filtros
-            }
-                
             const response = await clientAxios.get<Props>(`/operativos`, config);
             return response.data.operativos
         }
@@ -190,23 +164,6 @@ export const cambioEstatusObjetivoThunk = createAsyncThunk(
     }
 )
 
-export const cierreCicloThunk = createAsyncThunk(
-    'operativos/cierreCiclo',
-    async ( { usuarioId, year, quarter, objetivosId }:{usuarioId: string, year:number, quarter:number, objetivosId:string[]}, {rejectWithValue, getState}) => {
-        try {   
-            const { accessToken } = (getState() as RootState).auth;
-            const config = {
-                headers: { "accessToken": `${accessToken}` }
-            }
-            const result = await clientAxios.post<CierreCicloProps>(`/operativos/cierre-ciclo`, {usuarioId, year, quarter, objetivosId}, config);                                    
-            return result.data
-        }
-        catch (error: any) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
 export const cierreObjetivoLiderThunk = createAsyncThunk(
     'operativos/cierreObjetivoLider',
     async ( { usuarioId, objetivoId, checked }:{usuarioId: string, objetivoId:string, checked:boolean}, {rejectWithValue, getState}) => {
@@ -263,7 +220,30 @@ export const operativosApi = createApi({
             providesTags: ['Operativos'],
             transformResponse: (response: { operativos: OperativoProps[] }) => response.operativos
         }),
+        cierreCiclo: builder.mutation({
+            query: ({ usuarioId, year, quarter, objetivosId }: { usuarioId: string, year: number, quarter: number, objetivosId: string[] }) => ({
+                url: '/operativos/cierre-ciclo',
+                method: 'POST',
+                body: { usuarioId, year, quarter, objetivosId }
+            }),
+            invalidatesTags: ['Operativos'],
+            transformResponse: (response: { ok: boolean, objetivos: OperativoProps[] }) => response.objetivos,
+            onQueryStarted: async (body, { dispatch, queryFulfilled }) => {
+                const { data } = await queryFulfilled;
+                dispatch(operativosApi.util.updateQueryData('getOperativos', { year: body.year, quarter: body.quarter, usuarioId: body.usuarioId }, (draft) => {
+                    draft = data;
+                }))
+            }
+        }),
+        getOperativosUsuario: builder.query({
+            query: ({ year, quarter, usuarioId }: Filtros) => ({
+                url: '/operativos',
+                params: { year, quarter, usuarioId }
+            }),
+            providesTags: ['Operativos'],
+            transformResponse: (response: { operativos: OperativoProps[] }) => response.operativos
+        }),
     })
 })
 
-export const { useGetOperativoQuery, useCopyOperativoMutation, useGetOperativosQuery } = operativosApi;
+export const { useGetOperativoQuery, useCopyOperativoMutation, useGetOperativosQuery, useCierreCicloMutation, useGetOperativosUsuarioQuery } = operativosApi;

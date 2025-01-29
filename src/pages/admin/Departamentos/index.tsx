@@ -37,10 +37,10 @@ export const Departamentos: React.FC = () => {
             key: "leader",
             render: (text, record, index) => ( 
             <div className='flex items-center gap-x-2'>
-                   <Avatar src={<Image src={`${getStorageUrl(record.leader.foto)}`} preview={false} fallback={getBrokenUser()} />} >
-                        {record.leader.iniciales}
+                   <Avatar src={<Image src={`${getStorageUrl(record?.leader?.foto)}`} preview={false} fallback={getBrokenUser()} />} >
+                        {record?.leader?.iniciales}
                     </Avatar>
-                <p className="text-devarana-graph"> { record.leader && record.leader.nombre + ' ' + record.leader.apellidoPaterno } </p>
+                <p className="text-devarana-graph"> { record?.leader && record?.leader?.nombre + ' ' + record?.leader?.apellidoPaterno } </p>
             </div>
             ),
         },
@@ -52,7 +52,7 @@ export const Departamentos: React.FC = () => {
                     >
                         {
                             record.usuario.map((usuario, index) => (
-                                <Tooltip key={index} title={`${usuario.nombre} ${usuario.apellidoPaterno}`} placement="top">
+                                <Tooltip key={index} title={`${usuario?.nombre} ${usuario?.apellidoPaterno}`} placement="top">
                                     <Avatar src={<Image src={`${getStorageUrl(usuario.foto)}`} preview={false} fallback={getBrokenUser()} />} >
                                         {usuario.iniciales}
                                     </Avatar>
@@ -65,7 +65,7 @@ export const Departamentos: React.FC = () => {
         {
             title: () => ( <p className='tableTitle'>Área</p>),
             key: "area",
-            render: (text, record, index) => ( <p className="text-devarana-graph"> { record.area && record.area.nombre } </p>),
+            render: (text, record, index) => ( <p className="text-devarana-graph"> { record?.area && record?.area?.nombre } </p>),
             ellipsis: true
         }, 
         {

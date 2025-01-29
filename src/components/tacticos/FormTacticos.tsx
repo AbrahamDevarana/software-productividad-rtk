@@ -516,7 +516,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                         <label className='block pb-3'>Áreas: </label>
                            <div className='flex flex-wrap gap-3 col-span-12 pb-3'>
                            {
-                               areas?.areas && areas.areas.rows.map((area: AreaProps) => (
+                               areas && areas.rows.map((area: AreaProps) => (
                                    <button
                                        type='button'
                                        onClick={(e) => {
@@ -548,7 +548,7 @@ export const FormTactico:React.FC<FormTacticoProps> = ({handleCloseDrawer, year,
                                allowClear
                                disabled={!selectedArea}
                                options={
-                                   departamentos?.departamentos.rows.map((departamentos) => ({
+                                   departamentos?.rows.map((departamentos) => ({
                                        label: (
                                        <Tooltip title={departamentos.nombre}>
                                            <p className='text-devarana-graph'>{departamentos.nombre}</p>

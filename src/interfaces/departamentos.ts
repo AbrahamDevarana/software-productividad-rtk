@@ -26,4 +26,5 @@ export interface DepartamentoProps {
     color:    string;
     order?:     number;
     usuario: SinglePerfilProps[];
+    isEvaluableDepartment: boolean;
 }

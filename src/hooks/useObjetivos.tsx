@@ -21,8 +21,6 @@ export const useObjetivo = ({operativos}:Props) => {
             objetivosCompartidos: [],
             scoreLeft: 0
         }
-
-        
         // HOOKS
         const ponderacionObjetivos = useMemo(() => {
             let total = 0
@@ -72,6 +70,7 @@ export const useObjetivo = ({operativos}:Props) => {
             return total
         }, [operativos])
     
+        // Proceso de eliminación de objetivos
         const misObjetivos = useMemo(() => {
             // buscar al objetivo operativo.operativosResponsable. propietario true
             const objetivos = operativos.filter( operativo => operativo.operativosResponsable.find( responsable => responsable.id === userAuth?.id && responsable.scoreCard.propietario === true))
@@ -84,7 +83,7 @@ export const useObjetivo = ({operativos}:Props) => {
             objetivos.sort((a, b) => b.operativosResponsable[0].scoreCard.progresoAsignado - a.operativosResponsable[0].scoreCard.progresoAsignado)
             return objetivos
         }, [operativos])
-    
+        // Fin
         const scoreLeft = useMemo(() => {
         
             let score = 0

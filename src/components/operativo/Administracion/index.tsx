@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { SinglePerfilProps } from '@/interfaces'
 import { getStorageUrl } from '@/helpers'
 import getBrokenUser from '@/helpers/getBrokenUser'
-import { cierreCicloThunk, getOperativosUsuarioThunk } from '@/redux/features/operativo/operativosThunk'
+import { useCierreCicloMutation, useGetOperativosUsuarioQuery } from '@/redux/features/operativo/operativosThunk'
 import { CardObjetivoSimple } from './CardObjetivoSimple'
 import { Button } from '@/components/ui'
 import { getEvaluacionResultadosLiderThunk } from '@/redux/features/evaluaciones/evaluacionesThunk'
@@ -15,6 +15,7 @@ import {getMesFin, getMesInicio} from '@/helpers'
 import { ResultadosCompetencias } from '../ResultadosCompetencias'
 import { IoIosEye } from 'react-icons/io'
 import useCalculoBono from '@/hooks/useBono'
+import { toast } from 'sonner'
 
 interface Props {
 	activeUsuario: SinglePerfilProps
@@ -25,22 +26,21 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 	
 	const { year, quarter } = useAppSelector(state => state.global.currentConfig)
 
-	const { operativosUsuario, isLoadingOperativosUsuario, isClosingCicle } = useAppSelector(state => state.operativos)
 	const { evaluacionResultados, evaluacionResultadosColaboradores } = useAppSelector(state => state.evaluaciones)
 	const [ isModalVisible, setIsModalVisible ] = useState(false)
 	
-	
+    const [ cierreCicloThunk, {isLoading: isClosingCicle}] = useCierreCicloMutation()
+    const { data: operativosUsuario, isLoading: isLoadingOperativosUsuario } = useGetOperativosUsuarioQuery({usuarioId: activeUsuario.id, year, quarter}, {skip: !activeUsuario})
 
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		if(!activeUsuario) return
-		dispatch(getOperativosUsuarioThunk({usuarioId: activeUsuario.id, year, quarter}))
 		dispatch(getEvaluacionResultadosLiderThunk({usuarioId: activeUsuario.id, year, quarter}))
 	}, [activeUsuario])
 
 	const { confirm } = Modal;
-	const { ponderacionObjetivos } = useOtherObjetivo({operativos: operativosUsuario, usuarioId: activeUsuario.id})
+	const { ponderacionObjetivos } = useOtherObjetivo({operativos: operativosUsuario || [], usuarioId: activeUsuario.id})
 	const { resultadoMisEvaluaciones, resultadoMisEvaluados, ponderacionEvaluciones, promedioOjetivos, finalEvaluaciones, promedioEvaluaciones } = usePonderaciones({evaluacionResultados, evaluacionResultadosColaboradores, ponderacionObjetivos})
 
 
@@ -52,8 +52,8 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 	}, [resultadoMisEvaluaciones, resultadoMisEvaluados])
 
 	const allClosed = useMemo(() => {
-		if(operativosUsuario.length === 0) return false
-		const operativos = operativosUsuario.every(operativo => operativo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status === 'APROBADO')
+		if(operativosUsuario && operativosUsuario?.length === 0) return false
+		const operativos = operativosUsuario?.every(operativo => operativo.operativosResponsable.find(responsable => responsable.id === activeUsuario.id)?.scoreCard.status === 'APROBADO')
 		const evaluaciones = evaluacionesCheck
 		return operativos && evaluaciones
 	}, [operativosUsuario])
@@ -63,11 +63,13 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 	
 
 	const objetivosId = useMemo(() => {
-		return operativosUsuario.map(operativo => operativo.id)
+		return operativosUsuario?.map(operativo => operativo.id) || []
 	}, [operativosUsuario])
 
 
 	const handleCierraObjetivos = () => {
+
+    
 
 		confirm({
 			title: <h1 className='text-devarana-dark-graph'> Autorizar Cierre </h1>,
@@ -79,7 +81,11 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 			},
 			cancelText: 'Cancelar',
 			onOk() {
-				dispatch(cierreCicloThunk({usuarioId: activeUsuario.id, year, quarter, objetivosId}))
+                toast.promise( cierreCicloThunk({usuarioId: activeUsuario.id, year, quarter, objetivosId}).unwrap(), {
+                    loading: 'Cerrando ciclo...',
+                    success: 'Ciclo cerrado correctamente',
+                    error: 'Ocurrió un error al cerrar el ciclo'
+                })
 			},
 			onCancel() {
 				
@@ -91,6 +97,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 
 
 	const orderedObjetivos = useMemo(() => {
+        if(!operativosUsuario) return []
 		return operativosUsuario
 			.filter(item => item.operativosResponsable && item.operativosResponsable.length > 0) // Filtrar los elementos con operativosResponsable definido y no vacío
 			.sort((a, b) => {
@@ -257,7 +264,7 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 								}							
 							</div>
 							<Divider className='my-5' />
-							{
+							{/* {
 								isLeader && (
 								<div className="flex items-center">
 									<Button 
@@ -267,8 +274,12 @@ export const Administracion = ({activeUsuario, isLeader}:Props) => {
 									</Button>
 								</div>
 								)
-							}
-							
+							} */}
+                            <Button 
+                                    classColor='dark' classType='regular' onClick={handleCierraObjetivos} >
+                                    { isClosingCicle ? <Spin /> : 'Autorizar Cierre' }
+                            </Button>
+                        
 						</div>
 					</div>
 				</div>

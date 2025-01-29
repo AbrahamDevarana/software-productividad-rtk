@@ -24,6 +24,7 @@ const initialState: DepartamentoState = {
         leaderId: '',
         status: true,
         usuario: [],
+        isEvaluableDepartment: true,
         color: '#000000',
         leader: {
             id: '',
