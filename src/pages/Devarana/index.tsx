@@ -44,7 +44,7 @@ export const Devarana: React.FC = () => {
                     <div className="scroller-container">
                         <div className='scroller'>
                             { 
-                                usuarios?.map( (item, i) => (
+                                usuarios && usuarios?.map( (item, i) => (
                                     <div className="scroller-item" key={i}>
                                             <Link key={i} to={`/perfil/${item.slug}`}>
                                                 <Avatar shape='circle' rootClassName='' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />}>{item.iniciales}</Avatar> 
@@ -55,7 +55,7 @@ export const Devarana: React.FC = () => {
                         </div>
                         <div className='scroller'>
                             { 
-                                usuarios?.map( (item, i) => (
+                                usuarios && usuarios?.map( (item, i) => (
                                     <div className="scroller-item" key={i}>
                                             <Link key={i} to={`/perfil/${item.slug}`}>
                                                 <Avatar shape='circle' className="border-devarana-pink border-2 w-16 h-16 mx-3" src={<Image src={`${getStorageUrl(item.foto)}`} preview={false} fallback={getBrokenUser()} />}>{item.iniciales}</Avatar> 
